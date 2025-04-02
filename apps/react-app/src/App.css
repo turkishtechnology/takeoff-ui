@@ -1,0 +1,16 @@
+header {
+  height: 60px;
+  background-color: var(--static-light);
+  box-shadow: var(--effect-1-default-sm);
+  margin-bottom: 24px;
+}
+
+header .container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+main {
+  max-width: 1240px;
+  margin: 0 auto;
+}

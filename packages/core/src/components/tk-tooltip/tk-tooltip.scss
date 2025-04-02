@@ -1,0 +1,293 @@
+.tk-tooltip {
+  position: relative;
+}
+
+.tk-tooltip-content {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  color: var(--static-white);
+  padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
+  border-radius: var(--tooltips-base-radius, 8px);
+  opacity: 0;
+  pointer-events: none;
+  width: max-content;
+  max-width: 300px;
+  z-index: 1000;
+
+  &.tk-tooltip-dark {
+    background: var(--background-darkest);
+    line-height: 20px;
+    border: 1px solid var(--border-dark);
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 20px;
+        color: var(--icon-lightest);
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-lightest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-sub-base);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background: var(--background-darkest);
+    }
+  }
+
+  &.tk-tooltip-white {
+    border: 1px solid var(--border-light);
+    background: var(--background-lightest);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 20px;
+        color: var(--icon-darkest);
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background: var(--background-lightest);
+    }
+  }
+
+  &.tk-tooltip-info {
+    border: 1px solid var(--states-info-light);
+    background-color: var(--states-info-lightest);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 14px;
+        border: 1px solid var(--border-sub-base);
+        background-color: var(--static-white);
+        border-radius: 3px;
+        padding: 2px;
+        color: var(--states-info-dark);
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 700,
+          'GRAD' 0,
+          'opsz' 48;
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background-color: var(--states-info-lightest);
+    }
+  }
+
+  &.tk-tooltip-success {
+    border: 1px solid var(--states-success-light);
+    background-color: var(--states-success-lightest);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 14px;
+        border: 1px solid var(--states-success-light);
+        background-color: var(--static-white);
+        border-radius: 3px;
+        padding: 2px;
+        color: var(--states-success-dark);
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 700,
+          'GRAD' 0,
+          'opsz' 48;
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background-color: var(--states-success-lightest);
+    }
+  }
+
+  &.tk-tooltip-danger {
+    border: 1px solid var(--states-danger-light);
+    background-color: var(--states-danger-lightest);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 14px;
+        border: 1px solid var(--states-danger-light);
+        background-color: var(--static-white);
+        border-radius: 3px;
+        padding: 2px;
+        color: var(--states-danger-dark);
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 700,
+          'GRAD' 0,
+          'opsz' 48;
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background-color: var(--states-danger-lightest);
+    }
+  }
+
+  &.tk-tooltip-warning {
+    border: 1px solid var(--states-warning-light);
+    background-color: var(--states-warning-lightest);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 14px;
+        border: 1px solid var(--states-warning-light);
+        background-color: var(--static-white);
+        border-radius: 3px;
+        padding: 2px;
+        color: var(--states-warning-dark);
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 700,
+          'GRAD' 0,
+          'opsz' 48;
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background-color: var(--states-warning-lightest);
+    }
+  }
+
+  &.tk-tooltip-neutral {
+    border: 1px solid var(--states-light);
+    background-color: var(--background-light);
+    line-height: 20px;
+
+    .tk-tooltip-icon {
+      .tk-tooltip-item-icon {
+        font-size: 14px;
+        border: 1px solid var(--states-light);
+        background-color: var(--static-white);
+        border-radius: 3px;
+        padding: 2px;
+        color: var(--background-dark);
+      }
+    }
+
+    .tk-tooltip-header {
+      text-align: left;
+      color: var(--text-darkest);
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .tk-tooltip-description {
+      color: var(--text-dark);
+      font-weight: 300;
+      font-size: var(--desktop-body-xs-size);
+    }
+
+    .tk-tooltip-arrow {
+      background-color: var(--background-light);
+    }
+  }
+}
+
+.tk-tooltip-content.visible {
+  opacity: 1;
+}
+
+.tk-tooltip-icon {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.tk-tooltip-arrow {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  transform: rotate(45deg);
+  z-index: 1000;
+}

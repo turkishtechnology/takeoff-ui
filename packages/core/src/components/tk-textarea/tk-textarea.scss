@@ -1,0 +1,164 @@
+:host {
+  display: block;
+}
+
+.tk-textarea-container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--input-external-label-large-container-gap);
+  width: 100%;
+
+  .label {
+    color: var(--text-darkest);
+    font-weight: 400;
+
+    .asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height);
+    }
+  }
+
+  .tk-textarea {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    border: 1px solid var(--border-light);
+    border-radius: var(--spacing-m-base);
+    background-color: var(--static-light);
+    // width: 100%;
+    width: -webkit-fill-available;
+
+    textarea {
+      outline: none;
+      border: none;
+      background-color: transparent;
+      color: var(--text-darkest);
+      padding: 0px;
+      width: 100%;
+      line-height: var(--desktop-body-m-base-line-height);
+      resize: vertical;
+
+      &::placeholder {
+        color: var(--text-sub-base);
+      }
+    }
+
+    &:hover:not(.tk-textarea-container[aria-disabled] .tk-textarea) {
+      background-color: var(--background-lightest);
+    }
+  }
+
+  .hint {
+    color: var(--text-base);
+    line-height: var(--desktop-label-s-line-height);
+    font-size: var(--desktop-label-s-size);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+
+    & i {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
+  }
+
+  &.large {
+    & .label {
+      font-size: var(--desktop-label-l-size);
+      line-height: var(--desktop-label-l-line-height);
+      padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
+    }
+
+    & .tk-textarea {
+      padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+
+      & textarea {
+        font-family: var(--desktop-body-m-base-font);
+        font-size: var(--desktop-body-m-base-size);
+        line-height: var(--desktop-body-m-base-line-height);
+      }
+    }
+  }
+
+  &.base {
+    & .label {
+      font-size: var(--desktop-label-m-base-size);
+      line-height: var(--desktop-label-m-base-line-height);
+      padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
+    }
+
+    & .tk-textarea {
+      padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
+
+      & textarea {
+        font-family: var(--desktop-body-s-font);
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
+    }
+  }
+
+  &.small {
+    & .label {
+      font-size: var(--desktop-label-s-size);
+      line-height: var(--desktop-label-s-line-height);
+      padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
+    }
+
+    & .tk-textarea {
+      padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
+
+      & textarea {
+        font-family: var(--desktop-body-xs-font);
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-body-xs-line-height);
+      }
+    }
+  }
+
+  &.focus .tk-textarea {
+    border: var(--spacing-px) solid var(--states-info-base);
+  }
+
+  &[aria-disabled] {
+    & .label,
+    & .hint,
+    .tk-textarea textarea {
+      color: var(--text-sub-base);
+      pointer-events: none;
+    }
+
+    .tk-textarea {
+      background-color: var(--background-lightest);
+    }
+  }
+
+  &[aria-readonly] {
+    & .label,
+    & .hint {
+      color: var(--text-sub-base);
+    }
+
+    .tk-textarea {
+      background-color: var(--background-lightest);
+    }
+  }
+
+  &[aria-invalid] {
+    & .tk-textarea {
+      border-color: var(--states-danger-base);
+      background-color: var(--background-lightest);
+    }
+
+    & .hint,
+    & .hint i {
+      color: var(--states-danger-base);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@takeoff-ui/angular",
+  "version": "1.6.2",
+  "description": "Angular components library designed for Turkish Technology.",
+  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
+  "homepage": "https://takeoffui.thy.com",
+  "peerDependencies": {
+    "@angular/common": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@takeoff-ui/core": "^1.5.1-alpha.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "publishConfig": {
+    "registry": "https://artifactory.thy.com/artifactory/api/npm/npm/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.thy.com/scm/okhh/takeoff-ui.git"
+  },
+  "scripts": {
+    "build": "ng build"
+  },
+  "sideEffects": false
+}

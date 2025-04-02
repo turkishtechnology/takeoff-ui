@@ -1,0 +1,526 @@
+:host {
+  display: block;
+}
+
+.tk-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--editor-gap);
+  width: 100%;
+
+  .tk-editor-label {
+    color: var(--text-darkest);
+    font-family: var(--desktop-label-s-font);
+    font-size: var(--desktop-label-l-size);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--desktop-label-l-line-height);
+    padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
+
+    .tk-editor-label-asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height);
+    }
+  }
+
+  .tk-editor-supporting-text {
+    color: var(--text-base);
+    font-family: var(--desktop-label-s-font);
+    font-size: var(--desktop-label-s-size);
+    font-style: normal;
+    font-weight: 300;
+    line-height: var(--desktop-label-s-line-height);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+    padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
+
+    .tk-editor-supporting-text-icon {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
+  }
+
+  &.tk-editor-focused {
+    .tk-editor {
+      border-color: var(--states-info-base);
+    }
+  }
+
+  &.tk-editor-invalid {
+    .tk-editor-supporting-text {
+
+      span,
+      .tk-editor-supporting-text-icon {
+        color: var(--states-danger-base);
+      }
+    }
+
+    .tk-editor {
+      border-color: var(--states-danger-base);
+    }
+  }
+
+  &.tk-editor-readonly,
+  &.tk-editor-disabled {
+    .tk-editor-label {
+      color: var(--text-sub-base);
+    }
+
+    .tk-editor-supporting-text {
+      .tk-editor-supporting-text-icon {
+        color: var(--icon-sub-base);
+      }
+
+      span {
+        color: var(--text-sub-base);
+      }
+    }
+  }
+
+  &.tk-editor-disabled {
+    .tk-editor-content {
+      .ProseMirror {
+        color: var(--text-sub-base);
+      }
+    }
+  }
+
+  &:not(.tk-editor-disabled) {
+    .tk-editor {
+      box-shadow: var(--effect-1-hover-sm);
+    }
+  }
+
+
+  .tk-editor {
+    position: relative;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: var(--effect-1-default-sm);
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .tk-editor-toolbar {
+      display: flex;
+      padding: var(--editor-header-compact-v-padding) var(--editor-header-compact-h-padding);
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--editor-header-compact-gap);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--background-lightest);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+
+      .tk-editor-controlsgroup-container {
+        display: flex;
+        align-items: center;
+        gap: var(--editor-header-compact-operation-gap);
+        flex-wrap: wrap;
+        width: 100%;
+
+        .tk-editor-controlsgroup {
+          display: inline-flex;
+          flex-wrap: nowrap;
+
+          /* Workaround for temp svg */
+          :not(.tk-editor-button-heading):not(.tk-editor-button-undo):not(.tk-editor-button-redo) {
+
+            &.tk-editor-button-readonly,
+            &.tk-editor-button-disabled {
+              svg {
+                path {
+                  fill: var(--icon-light);
+                }
+              }
+            }
+          }
+
+          &[data-tk-editor-group='history'],
+          &[data-tk-editor-group='alignment'] {
+            .tk-editor-button {
+
+              &:not(.tk-editor-button-readonly),
+              &:not(.tk-editor-button-disabled) {
+                color: var(--text-sub-base);
+
+                &:hover {
+                  background-color: var(--background-light);
+                  color: var(--text-darkest);
+                }
+
+                &.tk-editor-button-active {
+                  background-color: transparent;
+                  color: var(--text-sub-base);
+
+                  &:hover {
+                    background-color: var(--background-light);
+                    color: var(--text-darkest);
+                  }
+                }
+              }
+            }
+          }
+
+          .tk-editor-button {
+            display: flex;
+            height: 36px;
+            min-width: 36px;
+            padding: var(--segmented-button-sizes-small-v-padding) var(--segmented-button-sizes-small-h-padding);
+            align-items: center;
+            justify-content: center;
+            gap: var(--segmented-button-sizes-small-gap);
+            background-color: var(--static-light);
+            border: 1px solid var(--border-sub-base);
+            outline: 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            border-radius: 0;
+
+            &:first-of-type {
+              border-start-start-radius: 8px;
+              border-end-start-radius: 8px;
+            }
+
+            &:last-of-type {
+              border-start-end-radius: 8px;
+              border-end-end-radius: 8px;
+            }
+
+            &:not(:last-of-type) {
+              border-inline-end: 0;
+            }
+
+            &.tk-editor-button-active {
+              background-color: var(--primary-sub-base);
+              border-color: var(--primary-sub-base);
+              color: var(--static-light);
+
+              &:hover {
+                background-color: var(--primary-base);
+                border-color: var(--primary-base);
+              }
+
+              svg {
+                path {
+                  &:not(.tk-editor-button-heading svg path) {
+                    fill: var(--static-light);
+                  }
+
+                  color: var(--static-light);
+                }
+              }
+            }
+
+            &:not(.tk-editor-button-readonly) {
+              &:not(.tk-editor-button-disabled) {
+                &:not(.tk-editor-button-active) {
+                  &:hover {
+                    background-color: var(--background-light);
+                  }
+
+                  &:focus {
+                    position: relative;
+                    z-index: 1;
+                    outline: none;
+                  }
+
+                  &.tk-editor-button-undo-disabled,
+                  &.tk-editor-button-redo-disabled {
+                    background-color: var(--background-lightest);
+
+                    svg {
+                      path {
+                        color: var(--icon-light);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            &.tk-editor-button-readonly,
+            &.tk-editor-button-disabled {
+              cursor: not-allowed;
+              background-color: var(--background-lightest);
+
+              &:not(.tk-editor-button-heading svg path) {
+                svg {
+                  path {
+                    color: var(--icon-light);
+                  }
+                }
+              }
+
+              &:not(:last-of-type) {
+                border-right: none;
+              }
+
+              &:not(:first-of-type) {
+                border-left: none;
+              }
+            }
+
+            svg {
+              width: 16px;
+              height: 16px;
+              flex-shrink: 0;
+            }
+
+            &[data-tk-editor-custom-button="true"] {
+              svg {
+                color: var(--text-sub-base);
+
+                path {
+                  transition: all 0.2s ease;
+                  stroke: currentColor;
+
+                  &[fill]:not([fill="none"]) {
+                    fill: currentColor;
+                  }
+                }
+              }
+
+              &:not(.tk-editor-button-readonly),
+              &:not(.tk-editor-button-disabled) {
+                &.tk-editor-button-active {
+                  svg {
+                    color: var(--static-light);
+                  }
+                }
+
+                &:hover {
+                  svg {
+                    color: var(--text-darkest);
+                  }
+                }
+
+                &:focus {
+                  box-shadow: var(--secondary-light-focus);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .tk-editor-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--editor-body-v-padding) var(--editor-body-h-padding);
+      gap: var(--editor-body-gap);
+      align-self: stretch;
+      background-color: var(--static-light);
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 2px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 3px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        &::-webkit-scrollbar {
+          background: var(--background-lightest);
+          opacity: 1;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: var(--background-lightest);
+          opacity: 1;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: var(--secondary-sub-base);
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.ProseMirror {
+  width: 100%;
+  outline: none;
+  min-height: 120px;
+  color: var(--text-darkest);
+  font-family: var(--desktop-body-s-font);
+  font-size: var(--desktop-body-s-size);
+  line-height: var(--desktop-body-s-line-height);
+
+  * {
+    font-family: inherit;
+  }
+
+  strong,
+  b {
+    font-family: inherit;
+    font-weight: 700;
+  }
+
+  em,
+  i {
+    font-family: inherit;
+    font-style: italic;
+  }
+
+  u {
+    font-family: inherit;
+    text-decoration: underline;
+  }
+
+  s {
+    font-family: inherit;
+    text-decoration: line-through;
+  }
+
+  h1 {
+    font-family: inherit;
+    font-size: 2em;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-family: inherit;
+    font-size: 1.5em;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-family: inherit;
+    font-size: 1.17em;
+    font-weight: 700;
+  }
+
+  h4 {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 700;
+  }
+
+  p {
+    font-family: inherit;
+    margin: 0;
+  }
+
+  >* {
+    margin: 0;
+    padding: 0;
+  }
+
+  >*+* {
+    margin-top: var(--editor-body-gap);
+  }
+
+  p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    pointer-events: none;
+    user-select: none;
+    float: left;
+    height: 0;
+    color: var(--text-secondary);
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+
+    li {
+      margin: 2px 0;
+
+      >p {
+        margin: 0;
+      }
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin-top: 0;
+  }
+
+  pre {
+    font-family: var(--desktop-body-s-font-monospace);
+    border-radius: 4px;
+    padding: var(--editor-body-v-padding) var(--editor-body-h-padding);
+    background-color: var(--border-light);
+
+    code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+  }
+
+  mark {
+    background-color: #faf594;
+    color: inherit;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 2px solid var(--border-light);
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 8px;
+    position: relative;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: var(--background-lightest);
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .selectedCell:after {
+    background: var(--primary-sub-base);
+    content: '';
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+  }
+}
