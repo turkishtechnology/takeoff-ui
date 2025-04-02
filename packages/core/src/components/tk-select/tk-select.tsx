@@ -1,0 +1,656 @@
+import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
+import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
+import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
+import _ from 'lodash';
+
+/**
+ * TkSelect component description.
+ * @slot empty-data - Set how the dropdown will appear when there is no data
+ * @react `import { TkSelect } from '@takeoff-ui/react'`
+ * @vue `import { TkSelect } from '@takeoff-ui/vue'`
+ * @angular `import { TkSelect } from '@takeoff-ui/angular'`
+ */
+@Component({
+  tag: 'tk-select',
+  styleUrl: 'tk-select.scss',
+  formAssociated: true,
+})
+export class TkSelect implements ComponentInterface {
+  private hasEmptyDataSlot: boolean = false;
+  private selectedItem: any;
+  private inputRef?: HTMLTkInputElement;
+  private panelRef?: HTMLDivElement;
+  private dialogRef?: HTMLTkDialogElement;
+  private uniqueId: string;
+  private filterDebounceTimeout;
+  private windowClickHandler: (event: MouseEvent) => void;
+  private cleanup;
+
+  constructor() {
+    this.uniqueId = uuidv4();
+    this.windowClickHandler = this.handleWindowClick.bind(this);
+  }
+
+  @Element() el!: HTMLTkSelectElement;
+
+  @State() hasFocus = false;
+  @State() renderOptions: any[];
+  @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged(newValue: boolean) {
+    if (newValue) {
+      setTimeout(() => {
+        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
+          animationFrame: true,
+        });
+        this.bindWindowClickListener();
+      }, 50);
+    } else {
+      this.panelRef.remove();
+      this.cleanup();
+      this.unbindWindowClickListener();
+    }
+  }
+
+  @AttachInternals() internals: ElementInternals;
+
+  /**
+   * Represents whether the options are fethecd from service or not.
+   * If true renders spinner in options dropdown.
+   */
+  @Prop() loading: boolean = false;
+
+  /**
+   * Enables users to enter custom values that are not part of the predefined options.
+   * @defaultValue false
+   */
+  @Prop() allowCustomValue: boolean = false;
+
+  /**
+   * Indicates whether the input can be cleared
+   * @defaultValue false
+   */
+  @Prop() clearable: boolean = false;
+
+  /**
+   * If `true`, the user cannot interact with the input.
+   * @defaultValue false
+   */
+  @Prop() disabled = false;
+
+  /**
+   * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
+   * @defaultValue match-parent
+   */
+  @Prop() dropdownWidthMode: 'match-parent' | 'auto' | string = 'match-parent';
+
+  /**
+   * This property determines whether the input field within the select box is editable.
+   * @defaultValue false
+   */
+  @Prop() editable: boolean = false;
+
+  /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error: string;
+
+  /**
+   * The message to display when there is no data available.
+   */
+  @Prop() emptyMessage: string = 'No options available';
+
+  /**
+   *  Function used to filter current options based on the input value. Comes with a default filter function, but can be overridden with a custom function.
+   */
+  @Prop() filter: Function = this.defaultFilter;
+
+  /**
+   * Sets the delay (in ms) before triggering the filter function.
+   */
+  @Prop() filterDebounceDelay: number = 0;
+
+  /**
+   * Provided a hint or additional information about the input.
+   */
+  @Prop() hint: string;
+
+  /**
+   * Indicates whether the input is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
+
+  /**
+   * Defines the label for the element.
+   */
+  @Prop() label: string;
+
+  /**
+   *
+   */
+  @Prop() multiple: boolean;
+
+  /**
+   * The name of the control, which is submitted with the form data.
+   */
+  @Prop() name: string;
+
+  /**
+   * Placeholder text displayed when the input is empty.
+   */
+  @Prop() placeholder?: string | null;
+
+  /**
+   * If `true`, the user cannot modify the value.
+   * @defaultValue false
+   */
+  @Prop() readonly: boolean = false;
+
+  /**
+   * Sets size for the component.
+   * @defaultValue base
+   */
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
+
+  /**
+   * Displays a red asterisk (*) next to the label for visual emphasis.
+   */
+  @Prop() showAsterisk: boolean = false;
+
+  /**
+   * The list of options to be displayed in the select box.
+   */
+  @Prop() options: any[];
+
+  @Watch('options')
+  protected optionsChanged(newValue: any[], oldValue: any[]) {
+    if (_.isEqual(newValue, oldValue)) return;
+
+    this.renderOptions = [...this.options];
+    if (this.multiple) {
+      this.inputRef.value = this.value;
+    } else {
+      this.setValue();
+    }
+  }
+
+  /**
+   * Provides a function to customize the options.
+   */
+  @Prop() optionHtml: Function;
+
+  /**
+   * The key to use for option labels
+   * @defaultValue label
+   */
+  @Prop() optionLabelKey: string = 'label';
+
+  /**
+   * The key to use for option values
+   * @defaultValue value
+   */
+  @Prop() optionValueKey: string;
+
+  /**
+   * The value of the input.
+   */
+  @Prop({ mutable: true }) value?: any | any[];
+
+  /**
+   * Update the native input element when the value changes
+   */
+  @Watch('value')
+  protected valueChanged(newValue: any, oldValue: any) {
+    if (_.isEqual(newValue, oldValue)) return;
+
+    if (this.multiple) {
+      this.inputRef.value = this.value;
+    } else {
+      this.setValue();
+    }
+  }
+
+  /**
+   * Emitted when the value has changed.
+   */
+  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
+
+  componentWillLoad(): void {
+    this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+
+    this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
+  }
+
+  componentDidLoad(): void {
+    if (this.multiple && this.value?.length > 0) {
+      this.inputRef.value = this.value;
+    } else if (this.value) {
+      this.setValue();
+    }
+
+    this.internals?.form?.addEventListener('reset', () => {
+      this.handleFormReset();
+    });
+
+    // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
+    // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
+    if (this.multiple && this.editable) {
+      const nativeInput = this.inputRef.querySelector('input');
+      nativeInput.addEventListener('input', async () => {
+        this.renderOptions = await this.filter(nativeInput.value, this.options);
+      });
+    }
+
+    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
+    this.dialogRef = this.el.closest('tk-dialog');
+
+    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+  }
+
+  disconnectedCallback() {
+    this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
+    this.unbindWindowClickListener();
+    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
+  }
+
+  formResetCallback() {
+    this.value = null;
+    this.tkChange.emit(null);
+  }
+
+  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
+  private handleDialogScroll() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
+  }
+
+  private async defaultFilter(text: string, options: any[]) {
+    if (text) {
+      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text?.toLowerCase()) > -1);
+    } else {
+      return [...this.options];
+    }
+  }
+
+  private updatePosition() {
+    const tkInputRootEl = this.inputRef.querySelector('.tk-input');
+    const dropdownWidthMode = this.dropdownWidthMode;
+
+    if (tkInputRootEl && this.panelRef) {
+      computePosition(tkInputRootEl, this.panelRef, {
+        strategy: 'fixed',
+        placement: 'bottom-start',
+        middleware: [
+          offset(4),
+          flip(),
+          shift({ padding: 5 }),
+          size({
+            apply({ rects, elements }) {
+              if (dropdownWidthMode === 'match-parent') {
+                Object.assign(elements.floating.style, {
+                  width: `${rects.reference.width}px`,
+                });
+              } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
+                Object.assign(elements.floating.style, {
+                  width: dropdownWidthMode,
+                });
+              }
+            },
+          }),
+        ],
+      }).then(({ x, y }) => {
+        Object.assign(this.panelRef.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
+    }
+  }
+
+  private bindWindowClickListener() {
+    window.addEventListener('click', this.windowClickHandler);
+  }
+
+  private unbindWindowClickListener() {
+    window.removeEventListener('click', this.windowClickHandler);
+  }
+
+  private getOptionLabel(item: any): string {
+    return typeof item === 'object' ? this.getNestedValue(item, this.optionLabelKey) : item;
+  }
+
+  private getOptionValue(item: any): any {
+    if (typeof item === 'object') {
+      if (this.optionValueKey?.length > 0) {
+        return this.getNestedValue(item, this.optionValueKey);
+      } else {
+        return item;
+      }
+    } else {
+      return item;
+    }
+  }
+
+  private getSelectedItem() {
+    if (this.renderOptions?.length > 0) {
+      if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
+        // value ve her bir option object değilse. Yani bu primitive tiplerle çalışan bir selectbox ise
+
+        return this.renderOptions.find(item => item == this.value);
+      } else if (this.renderOptions?.every(item => typeof item === 'object')) {
+        if (this.optionValueKey?.length > 0) {
+          return this.renderOptions.find(item => this.getOptionValue(item) == this.value);
+        } else {
+          return this.renderOptions.find(item => _.isEqual(item, this.value));
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private setValue() {
+    this.selectedItem = this.getSelectedItem();
+
+    if (!this.selectedItem && this.editable && this.allowCustomValue) {
+      this.inputRef.value = this.value;
+    } else if (!this.selectedItem && !this.allowCustomValue) {
+      this.inputRef.value = null;
+    } else if (this.selectedItem) {
+      this.inputRef.value = this.getOptionLabel(this.selectedItem);
+    }
+  }
+
+  private getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, obj);
+  }
+
+  private scrollItem(item: HTMLDivElement) {
+    item.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    });
+  }
+
+  private handleFormReset() {
+    this.value = null;
+    this.tkChange.emit(null);
+  }
+
+  private handleWindowClick(event: MouseEvent) {
+    const isInnerClicked = event.composedPath().some(item => item == this.el);
+    if (!isInnerClicked) {
+      this.isOpen = false;
+      this.unbindWindowClickListener();
+    }
+  }
+
+  private isItemClickFlag = false;
+
+  private async handleItemClick(item) {
+    this.isItemClickFlag = true;
+    if (this.multiple) {
+      let tmpValue = this.value;
+      if (!tmpValue) tmpValue = [];
+
+      const tmpItem = this.getOptionValue(item);
+      if (_.some(tmpValue, itemValue => _.isEqual(itemValue, this.getOptionValue(tmpItem)))) {
+        // tıklanan item zaten seçili ise seçimi kaldırır
+        _.remove(tmpValue, itemValue => _.isEqual(itemValue, tmpItem));
+      } else {
+        // tıklanan item seçili değilse ekler
+        tmpValue.push(tmpItem);
+      }
+
+      // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
+      if (this.multiple && this.editable) {
+        this.inputRef.querySelector('input').value = null;
+        this.renderOptions = await this.filter(null, this.options);
+      }
+
+      this.inputRef.value = [...tmpValue];
+      this.value = [...tmpValue];
+      this.tkChange.emit([...tmpValue]);
+    } else {
+      this.value = this.getOptionValue(item);
+      this.tkChange.emit(this.getOptionValue(item));
+      this.isOpen = false;
+    }
+  }
+
+  private async handleInputChange(value) {
+    if (this.multiple) {
+      this.value = [...value];
+      this.tkChange.emit([...value]);
+    } else {
+      this.isOpen = true;
+
+      if (this.editable && this.allowCustomValue) {
+        this.value = value;
+        this.tkChange.emit(value);
+      }
+
+      // hızlıca inputda arama yapılırsa verilen filterDebounceDelay süresi içinde
+      // tekrar inputda değişiklik yapılırsa sadece bir defa filtre fonksiyonu çalıştırma için yapıldı.
+      if (this.filterDebounceDelay > 0) {
+        clearTimeout(this.filterDebounceTimeout);
+        this.filterDebounceTimeout = setTimeout(async () => {
+          this.renderOptions = await this.filter(value, this.options);
+        }, this.filterDebounceDelay);
+      } else {
+        this.renderOptions = await this.filter(value, this.options);
+      }
+    }
+  }
+
+  private handleInputClick() {
+    if (!this.isOpen && !this.disabled) {
+      this.hasFocus = true;
+      this.isOpen = true;
+      this.bindWindowClickListener();
+    }
+  }
+
+  private async handleInputBlur() {
+    if (this.multiple) return;
+
+    if (this.editable && !this.allowCustomValue) {
+      const selectedItem = this.getSelectedItem();
+      // custom value'ya izin verilmiyor ise inputu boşalt
+      if (
+        !this.isItemClickFlag &&
+        // seçili item yok ise ama inutda bir değer var ise
+        ((!selectedItem && this.inputRef.querySelector('input').value) ||
+          // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
+          (selectedItem && this.getOptionLabel(selectedItem) != this.inputRef.querySelector('input').value))
+      ) {
+        this.value = null;
+        this.tkChange.emit(null);
+        this.renderOptions = await this.filter(null, this.options);
+      } else {
+        this.isItemClickFlag = false;
+      }
+    }
+  }
+
+  private async handleInputKeydown(e) {
+    const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+    const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
+    if (e.key == 'ArrowDown') {
+      if (activeItem) {
+        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
+        if (newActiveItem) {
+          activeItem.setAttribute('data-active', 'false');
+          newActiveItem.setAttribute('data-active', 'true');
+          this.scrollItem(newActiveItem);
+        }
+      } else {
+        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
+        if (newActiveItem) {
+          newActiveItem.setAttribute('data-active', 'true');
+          this.scrollItem(newActiveItem);
+        }
+      }
+    } else if (e.key == 'ArrowUp') {
+      //
+      if (activeItem) {
+        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
+        if (newActiveItem) {
+          activeItem.setAttribute('data-active', 'false');
+          newActiveItem.setAttribute('data-active', 'true');
+          this.scrollItem(newActiveItem);
+        }
+      } else {
+        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
+        if (newActiveItem) {
+          newActiveItem.setAttribute('data-active', 'true');
+          this.scrollItem(newActiveItem);
+        }
+      }
+    } else if (e.key == 'Enter') {
+      if (this.multiple && this.editable && this.allowCustomValue) {
+        const nativeInput = this.inputRef.querySelector('input');
+        nativeInput.dispatchEvent(new InputEvent('input', { bubbles: true }));
+      }
+
+      activeItem?.click();
+    } else if (e.key == 'Tab') {
+      this.hasFocus = false;
+      this.isOpen = false;
+    }
+  }
+
+  private handleClearClick() {
+    this.value = null;
+    this.tkChange.emit(null);
+  }
+
+  private renderInput() {
+    return (
+      <tk-input
+        ref={el => (this.inputRef = el as HTMLTkInputElement)}
+        class={classNames('tk-select-input', {
+          'editable-select': this.editable,
+          'tk-table-input': this.el.classList.contains('tk-table-select'),
+          'multiple-select': this.multiple,
+          'allow-custom-value-select': this.allowCustomValue,
+        })}
+        label={this.label}
+        size={this.size}
+        showAsterisk={this.showAsterisk}
+        hint={this.hint}
+        placeholder={this.value?.length > 0 ? '' : this.placeholder}
+        invalid={this.invalid}
+        error={this.error}
+        icon="keyboard_arrow_down"
+        iconPosition="right"
+        mode={this.multiple ? 'chips' : 'text'}
+        chipLabelKey={this.optionLabelKey}
+        readonly={this.readonly}
+        disabled={this.disabled}
+        clearable={this.clearable}
+        aria-describedby="dropdown"
+        aria-expanded={!!this.isOpen}
+        onClick={() => this.handleInputClick()}
+        onTk-change={e => {
+          e.stopPropagation();
+          this.handleInputChange(e.detail);
+        }}
+        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
+        onTk-clear-click={() => this.handleClearClick()}
+        onKeyDown={e => this.handleInputKeydown(e)}
+      ></tk-input>
+    );
+  }
+
+  private createOptionItem(options: any[]) {
+    return options?.map((item, index) => {
+      let itemProps = {};
+      let children;
+      if (this.multiple) {
+        if (this.optionHtml != undefined) {
+          children = (
+            <Fragment>
+              <tk-checkbox
+                value={_.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)))}
+                onTk-change={e => e.stopPropagation()}
+                onClick={e => e.preventDefault()}
+              ></tk-checkbox>
+              <div innerHTML={this.optionHtml(item)}></div>
+            </Fragment>
+          );
+        } else {
+          children = (
+            <Fragment>
+              <tk-checkbox
+                value={_.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)))}
+                onTk-change={e => e.stopPropagation()}
+                onClick={e => e.preventDefault()}
+              ></tk-checkbox>
+              <div>{this.getOptionLabel(item)}</div>
+            </Fragment>
+          );
+        }
+      } else {
+        if (this.optionHtml != undefined) {
+          itemProps = { innerHTML: this.optionHtml(item) };
+        } else {
+          itemProps = { innerHTML: this.getOptionLabel(item) };
+        }
+      }
+
+      return (
+        <div
+          class={classNames('dropdown-item', { multiple: this.multiple })}
+          data-option-index={index}
+          data-active={index == 0 ? 'true' : 'false'}
+          onClick={() => this.handleItemClick(item)}
+          {...itemProps}
+        >
+          {children}
+        </div>
+      );
+    });
+  }
+
+  private createOptions() {
+    return this.createOptionItem(this.renderOptions);
+  }
+
+  private renderDropdown() {
+    if (!this.isOpen) return null;
+    return (
+      <div class="tk-select-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
+        <div class="dropdown-item-holder">
+          {this.loading ? (
+            <tk-spinner size={this.size}></tk-spinner>
+          ) : this.renderOptions?.length > 0 ? (
+            this.createOptions()
+          ) : this.hasEmptyDataSlot ? (
+            <slot name="empty-data"></slot>
+          ) : (
+            this.emptyMessage
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const rootClasses = classNames('tk-select-container', this.size, { focus: this.hasFocus });
+
+    return (
+      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
+        {this.renderInput()}
+        {this.renderDropdown()}
+      </div>
+    );
+  }
+}

@@ -1,0 +1,272 @@
+tk-dialog {
+  display: none;
+
+  &[visible], &[visible="true"] {
+    display: block;
+  }
+}
+
+.tk-dialog-mask {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1101;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  .tk-dialog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  &.tk-dialog-visible {
+    opacity: 1;
+  }
+
+  &.tk-dialog-mask-hidden {
+    background-color: transparent;
+  }
+
+  &:not(.tk-dialog-mask-hidden) {
+    &.tk-dialog-mask-lightest {
+      background-color: var(--overlay-black-lightest);
+    }
+
+    &.tk-dialog-mask-light {
+      background-color: var(--overlay-black-light);
+    }
+
+    &.tk-dialog-mask-base {
+      background-color: var(--overlay-black-base);
+    }
+
+    &.tk-dialog-mask-dark {
+      background-color: var(--overlay-black-dark);
+    }
+
+    &.tk-dialog-mask-darkest {
+      background-color: var(--overlay-black-darkest);
+    }
+  }
+}
+
+.tk-dialog {
+  font-family: var(--family-title);
+  display: flex;
+  max-height: 90%;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-lightest);
+  background: var(--static-light);
+  box-shadow: var(--effect-1-default-base);
+  z-index: 1;
+
+  .tk-dialog-header {
+    display: flex;
+    padding: var(--dialog-header-base-v-padding) var(--dialog-header-base-h-padding);
+    justify-content: space-between;
+    align-items: flex-start;
+    align-self: stretch;
+
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
+
+    .tk-dialog-header-content {
+      display: flex;
+      align-items: center;
+      gap: var(--dialog-header-base-gap);
+
+      .tk-dialog-sign {
+        display: flex;
+        padding: 12px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 8px;
+        background: var(--background-lightest);
+
+        .tk-dialog-sign-icon {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .tk-dialog-title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .tk-dialog-title {
+          color: var(--text-darkest);
+          font-family: var(--desktop-title-h5-font);
+          font-size: var(--desktop-title-h5-size);
+          font-style: normal;
+          font-weight: 400;
+          line-height: var(--desktop-title-h5-line-height);
+          /* 125% */
+        }
+
+        .tk-dialog-subtitle {
+          color: var(--text-base);
+          font-family: var(--desktop-subheading-xs-font);
+          font-size: var(--desktop-subheading-xs-size);
+          font-style: normal;
+          font-weight: 400;
+          line-height: var(--desktop-subheading-xs-line-height);
+          /* 150% */
+        }
+      }
+    }
+
+    .tk-dialog-header-close-button {
+      display: flex;
+      color: var(--icon-sub-base);
+      width: var(--dialog-header-base-close-icon-size);
+      height: var(--dialog-header-base-close-icon-size);
+      padding: var(--sizes-small-full-padding, 6px);
+      justify-content: center;
+      align-items: center;
+      gap: var(--dialog-header-small-gap);
+      border-radius: var(--sizes-small-radius, 8px);
+
+      &:focus {
+        box-shadow: var(--neutral-focus);
+      }
+    }
+
+    &.tk-dialog-header-divided {
+      border-bottom: var(--spacing-px) solid var(--border-light);
+    }
+
+    &.tk-dialog-header-light {
+      border-bottom: var(--spacing-px) solid var(--border-light);
+      background: var(--background-lightest);
+    }
+
+    &.tk-dialog-header-dark {
+      background: var(--background-darkest);
+
+      .tk-dialog-title-container {
+        .tk-dialog-subtitle {
+          color: var(--text-sub-base);
+        }
+
+        .tk-dialog-title {
+          color: var(--text-lightest);
+        }
+      }
+
+      .tk-dialog-header-close-button {
+        color: var(--icon-base);
+      }
+    }
+
+    &.tk-dialog-header-primary {
+      background: var(--primary-base);
+
+      .tk-dialog-title-container {
+        .tk-dialog-subtitle {
+          color: var(--primary-lightest);
+        }
+
+        .tk-dialog-title {
+          color: var(--text-lightest);
+        }
+      }
+
+      .tk-dialog-header-close-button {
+        color: var(--primary-lightest);
+      }
+    }
+  }
+
+  .tk-dialog-content {
+    padding: var(--dialog-body-base-v-padding) var(--dialog-body-base-h-padding);
+    align-self: stretch;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      background: var(--background-lightest);
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--background-lightest);
+      border-radius: 2px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--secondary-sub-base);
+      border-radius: 3px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  .tk-dialog-footer {
+    display: flex;
+    padding: var(--dialog-footer-base-v-padding) var(--dialog-footer-base-h-padding);
+    justify-content: flex-end;
+    align-self: stretch;
+
+    ::slotted([slot='footer-actions']) {
+      display: flex;
+      align-items: center;
+      gap: var(--dialog-footer-base-gap);
+    }
+  }
+
+  &.tk-dialog-info {
+    .tk-dialog-sign {
+      border: 1px solid var(--states-info-sub-base);
+
+      .tk-dialog-sign-icon {
+        color: var(--states-info-dark);
+      }
+    }
+  }
+
+  &.tk-dialog-success {
+    .tk-dialog-sign {
+      border: 1px solid var(--states-success-sub-base);
+
+      .tk-dialog-sign-icon {
+        color: var(--states-success-dark);
+      }
+    }
+  }
+
+  &.tk-dialog-warning {
+    .tk-dialog-sign {
+      border: 1px solid var(--states-warning-sub-base);
+
+      .tk-dialog-sign-icon {
+        color: var(--states-warning-dark);
+      }
+    }
+  }
+
+  &.tk-dialog-danger {
+    .tk-dialog-sign {
+      border: 1px solid var(--states-danger-sub-base);
+
+      .tk-dialog-sign-icon {
+        color: var(--states-danger-dark);
+      }
+    }
+  }
+}

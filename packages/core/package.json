@@ -1,0 +1,62 @@
+{
+  "name": "@takeoff-ui/core",
+  "version": "1.6.2",
+  "description": "Core components library designed for Turkish Technology.",
+  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
+  "homepage": "https://takeoffui.thy.com",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/core/core.esm.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "stencil build",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --detectOpenHandles --silent",
+    "test.coverage": "stencil test --spec --coverage --detectOpenHandles --silent",
+    "test.watch": "stencil test --spec --watchAll --detectOpenHandles --silent",
+    "generate": "stencil generate"
+  },
+  "devDependencies": {
+    "@stencil/core": "4.26.0",
+    "@stencil/sass": "3.0.12",
+    "@types/jest": "^29.5.6",
+    "@types/node": "^16.18.11",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "puppeteer": "^21.9.0",
+    "rollup": "^4.18.0"
+  },
+  "license": "MIT",
+  "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.11",
+    "@stencil/angular-output-target": "0.10.1",
+    "@stencil/react-output-target": "0.8.0",
+    "@stencil/vue-output-target": "0.8.9",
+    "@tiptap/core": "^2.11.0",
+    "@tiptap/extension-font-family": "^2.1.12",
+    "@tiptap/extension-image": "^2.11.0",
+    "@tiptap/extension-link": "^2.11.0",
+    "@tiptap/extension-text-align": "^2.11.0",
+    "@tiptap/extension-text-style": "^2.1.12",
+    "@tiptap/extension-underline": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
+    "@types/cleave.js": "^1.4.12",
+    "classnames": "^2.5.1",
+    "cleave.js": "^1.6.0",
+    "date-fns": "^3.6.0",
+    "exceljs": "^4.4.0",
+    "filesize": "^10.1.6",
+    "json-server": "^1.0.0-beta.2",
+    "jspdf": "^3.0.0",
+    "jspdf-autotable": "^5.0.2",
+    "lodash": "^4.17.21",
+    "mime": "^4.0.6",
+    "uuid": "^11.0.5"
+  }
+}

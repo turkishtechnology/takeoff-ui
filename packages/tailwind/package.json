@@ -1,0 +1,27 @@
+{
+  "name": "@takeoff-ui/tailwind",
+  "version": "1.6.2",
+  "description": "Tailwind CSS plugin for Takeoff UI",
+  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
+  "homepage": "https://takeoffui.thy.com",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "format": "prettier --write \"**/*.js\" --cache"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.1.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.1.0"
+  }
+}

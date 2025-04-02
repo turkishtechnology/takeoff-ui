@@ -1,0 +1,59 @@
+{
+  "name": "takeoff-ui",
+  "private": true,
+  "version": "1.6.2",
+  "description": "Takeoff UI - Turkish Technology",
+  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
+  "homepage": "https://takeoffui.thy.com",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "packages/angular/projects/*"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@stencil-community/eslint-plugin": "^0.9.0",
+    "@types/node": "^20.13.0",
+    "@types/react": "^18.3.5",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lerna": "8.1.9",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
+  },
+  "scripts": {
+    "build": "lerna run build --scope @takeoff-ui/core && lerna run build --scope @takeoff-ui/vue && lerna run build --scope @takeoff-ui/angular && lerna run build --scope @takeoff-ui/react && lerna run build --scope @takeoff-ui/tailwind",
+    "build:react": "lerna run build --scope @takeoff-ui/core && lerna run build --scope @takeoff-ui/react",
+    "dev:vue": "lerna run build --scope @takeoff-ui/core && lerna run build --scope @takeoff-ui/vue && lerna run dev --scope vue-app",
+    "dev:react": "lerna run build --scope @takeoff-ui/core && lerna run build --scope @takeoff-ui/react && lerna run dev --scope react-app",
+    "dev:ng": "lerna run build --scope @takeoff-ui/core && lerna run build --scope @takeoff-ui/angular && lerna run start --scope angular",
+    "prepare": "husky",
+    "format": "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache",
+    "lint": "eslint --fix",
+    "clean:node_modules": "rimraf node_modules package_lock.json",
+    "clean:core": "rimraf packages/core/node_modules packages/core/dist packages/core/loader packages/core/.stencil packages/core/www",
+    "clean:vue": "rimraf packages/vue/node_modules packages/vue/dist",
+    "clean:react": "rimraf packages/react/node_modules packages/react/dist",
+    "clean:angular": "rimraf packages/angular/node_modules packages/angular/.angular packages/angular/node_modules packages/angular/projects/library/dist",
+    "clean:vue-app": "rimraf apps/vue-app/node_modules apps/vue-app/dist",
+    "clean:react-app": "rimraf apps/react-app/node_modules apps/react-app/dist",
+    "clean:tailwind": "rimraf packages/tailwind/node_modules packages/tailwind/dist",
+    "clean": "npm run clean:core && npm run clean:vue && npm run clean:react && npm run clean:react && npm run clean:angular && npm run clean:react-app && npm run clean:vue-app && npm run clean:tailwind"
+  },
+  "lint-staged": {
+    "*.{tsx,ts,js}": [
+      "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache"
+    ]
+  },
+  "engines": {
+    "node": ">= 20.12.2",
+    "npm": ">= 10.5.0"
+  }
+}

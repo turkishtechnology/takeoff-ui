@@ -1,0 +1,32 @@
+{
+  "name": "@takeoff-ui/react",
+  "version": "1.6.2",
+  "description": "React components library designed for Turkish Technology.",
+  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
+  "homepage": "https://takeoffui.thy.com",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "node ./__tests__/react-library.test.js",
+    "build": "npm run tsc",
+    "tsc": "tsc -p . --outDir ./dist"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@takeoff-ui/core": "^1.6.2"
+  }
+}

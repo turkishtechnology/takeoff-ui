@@ -1,0 +1,212 @@
+:host {
+  display: block;
+}
+
+.tk-currency-input-container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  .label {
+    color: var(--text-darkest);
+    font-weight: 400;
+  }
+
+  .tk-currency-input {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    border: 1px solid var(--border-light);
+    border-radius: var(--spacing-m-base);
+    background-color: var(--static-light);
+    // width: 100%;
+    width: -webkit-fill-available;
+
+    i {
+      color: var(--icon-base);
+
+      &.clickable {
+        cursor: pointer;
+      }
+    }
+
+    input {
+      outline: none;
+      border: none;
+      background-color: transparent;
+      color: var(--text-darkest);
+      padding: 0px;
+      width: 100%;
+      line-height: var(--desktop-body-m-base-line-height);
+
+      &::placeholder {
+        color: var(--text-sub-base);
+      }
+    }
+
+    &:hover {
+      background-color: var(--background-lightest);
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding-left: var(--spacing-m-base);
+      border-left: var(--spacing-px) solid var(--border-light);
+      cursor: pointer;
+
+      .flag {
+        border-radius: var(--radius-full);
+      }
+    }
+  }
+
+  .hint {
+    color: var(--text-base);
+    line-height: var(--desktop-body-m-base-line-height);
+    font-size: var(--size-xs);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+
+    i {
+      font-size: var(--size-base);
+    }
+  }
+
+  &.large {
+    .label {
+      font-size: var(--size-base);
+      line-height: 24px;
+      padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
+    }
+
+    .tk-currency-input {
+      padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+
+      i {
+        font-size: var(--size-2xl);
+      }
+
+      input {
+        font-size: var(--size-base);
+      }
+
+      .options {
+        .current-currency {
+          font-size: var(--desktop-body-m-base-size);
+        }
+      }
+    }
+  }
+
+  &.base {
+    .label {
+      font-size: var(--size-sm);
+      line-height: 20px;
+      padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
+    }
+
+    .tk-currency-input {
+      padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
+
+      i {
+        font-size: var(--size-xl);
+      }
+
+      input {
+        font-size: var(--size-sm);
+      }
+
+      .options {
+        .current-currency {
+          font-size: var(--desktop-body-s-size);
+        }
+      }
+    }
+  }
+
+  &.small {
+    .label {
+      font-size: var(--size-xs);
+      line-height: 18px;
+      padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
+    }
+
+    .tk-currency-input {
+      padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
+
+      i {
+        font-size: var(--size-xl);
+      }
+
+      input {
+        font-size: var(--size-xs);
+      }
+
+      .options {
+        .current-currency {
+          font-size: var(--desktop-body-xs-size);
+        }
+      }
+    }
+  }
+
+  &.focus .tk-currency-input {
+    border-color: var(--states-info-base);
+  }
+
+  &[aria-disabled] {
+
+    & .label,
+    & .hint,
+    .tk-currency-input input {
+      color: var(--text-sub-base);
+      pointer-events: none;
+    }
+
+    & .tk-currency-input i {
+      color: var(--icon-sub-base);
+    }
+  }
+
+  &[aria-readonly] {
+
+    .label,
+    .hint {
+      color: var(--text-sub-base);
+    }
+
+    .tk-currency-input i {
+      color: var(--icon-sub-base);
+    }
+  }
+
+  &[aria-invalid] {
+    .tk-currency-input {
+      border-color: var(--states-danger-base);
+    }
+
+    .hint {
+      color: var(--states-danger-base);
+    }
+  }
+
+  &.counter {
+    input {
+      text-align: center;
+      appearance: none;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}

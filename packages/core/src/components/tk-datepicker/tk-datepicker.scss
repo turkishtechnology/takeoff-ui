@@ -1,0 +1,377 @@
+:host {
+  display: block;
+}
+
+.tk-datepicker-container {
+  position: relative;
+  display: block;
+}
+
+.tk-datepicker-panel {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--effect-1-default-base);
+  background: var(--static-light);
+
+  &:not(.tk-datepicker-panel-inline) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  &.tk-datepicker-panel-inline {
+    position: static;
+    box-shadow: none;
+    border: 1px solid var(--border-light);
+  }
+}
+
+.tk-datepicker-header {
+  display: flex;
+  width: 336px;
+  padding: var(--datepicker-header-base-top-padding) var(--datepicker-header-base-h-padding) var(--datepicker-header-base-bottom-padding) var(--datepicker-header-base-h-padding);
+  flex-direction: column;
+  align-items: flex-start;
+
+  &.tk-datepicker-header-basic {
+    border-bottom: var(--spacing-px) solid var(--border-light);
+  }
+
+  &.tk-datepicker-header-divided {
+    .tk-datepicker-header-content {
+      border: 1px solid var(--border-light);
+    }
+  }
+
+  &.tk-datepicker-header-light {
+    .tk-datepicker-header-content {
+      background: var(--background-lightest);
+    }
+  }
+
+  &.tk-datepicker-header-primary {
+    .tk-datepicker-header-content {
+      background: var(--primary-base);
+    }
+  }
+
+  &.tk-datepicker-header-dark {
+    .tk-datepicker-header-content {
+      background: var(--background-darkest);
+    }
+  }
+
+  .tk-datepicker-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    width: 100%;
+    border-radius: 8px;
+
+    .tk-datepicker-select-container {
+      display: flex;
+      padding: 0px var(--datepicker-header-base-date-text-h-padding);
+      align-items: center;
+      gap: var(--datepicker-header-base-date-text-gap);
+
+      .tk-datepicker-select-month {
+        color: var(--text-darkest);
+      }
+
+      .tk-datepicker-select-year {
+        color: var(--text-base);
+      }
+
+      .tk-datepicker-select-month,
+      .tk-datepicker-select-year {
+        text-align: center;
+        font-family: var(--desktop-body-s-font, Geologica);
+        font-size: var(--desktop-body-s-size);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--desktop-body-s-line-height);
+        cursor: pointer;
+      }
+    }
+
+    .tk-datepicker-header-content-start,
+    .tk-datepicker-header-content-end {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--datepicker-header-base-navigation-gap);
+    }
+
+    .tk-datepicker-divider {
+      width: 1px;
+      height: 16px;
+      background-color: var(--border-light);
+    }
+  }
+
+  &.tk-datepicker-header-primary,
+  &.tk-datepicker-header-dark {
+    .tk-datepicker-header-icon-button {
+      color: var(--icon-darkest);
+    }
+
+    .tk-datepicker-header-content {
+      .tk-datepicker-select-container {
+
+        .tk-datepicker-select-month,
+        .tk-datepicker-select-year {
+          color: var(--text-lightest);
+        }
+      }
+    }
+  }
+}
+
+.tk-datepicker-body {
+  display: flex;
+  width: 336px;
+  padding: var(--datepicker-body-base-day-v-padding) var(--datepicker-body-base-day-h-padding);
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  .tk-datepicker-table {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 8px;
+  }
+
+  &.tk-datepicker-months-view,
+  &.tk-datepicker-years-view {
+    height: 260px;
+  }
+
+}
+
+.tk-datepicker-week-day-cell {
+  width: var(--datepicker-items-base-size);
+  height: var(--datepicker-items-base-size);
+  min-width: var(--datepicker-items-base-size);
+  min-height: var(--datepicker-items-base-size);
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+
+  .tk-datepicker-week-day {
+    color: var(--text-base, #717784);
+    text-align: center;
+    font-family: var(--desktop-body-s-font, Geologica);
+    font-size: var(--desktop-body-s-size);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--desktop-body-s-line-height);
+  }
+}
+
+.tk-datepicker-day-cell {
+  position: relative;
+  min-width: var(--datepicker-items-base-size);
+  height: var(--datepicker-items-base-size);
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    height: 40px;
+    z-index: 0;
+  }
+
+  .tk-datepicker-day {
+    display: inline-block;
+    position: relative;
+    min-width: var(--datepicker-items-base-size);
+    height: var(--datepicker-items-base-size);
+    line-height: var(--datepicker-items-base-size);
+    z-index: 1;
+    text-align: center;
+    color: var(--text-darkest);
+    font-family: var(--desktop-body-s-font, Geologica);
+    font-size: var(--desktop-body-s-size);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  &.disabled,
+  &.adjacent-month {
+    pointer-events: none;
+    user-select: none;
+
+    .tk-datepicker-day {
+      color: var(--text-sub-base);
+    }
+  }
+
+  &.selected {
+    .tk-datepicker-day {
+      color: var(--text-lightest);
+      background: var(--primary-base);
+      border-radius: var(--datepicker-items-base-radius);
+    }
+  }
+
+  &.today {
+    .tk-datepicker-day {
+      border-radius: var(--datepicker-items-base-radius);
+      border: var(--spacing-px) solid var(--states-info-sub-base);
+      background: var(--background-lightest);
+    }
+  }
+
+  &.in-range {
+    &:first-child {
+      &::before {
+        border-top-left-radius: var(--datepicker-items-base-radius);
+        border-bottom-left-radius: var(--datepicker-items-base-radius);
+      }
+    }
+
+    &:last-child {
+      &::before {
+        border-top-right-radius: var(--datepicker-items-base-radius);
+        border-bottom-right-radius: var(--datepicker-items-base-radius);
+      }
+    }
+
+    &::before {
+      background: var(--primary-lightest);
+      width: 100%;
+    }
+  }
+
+  &.range-start {
+
+    &:has(+ .in-range),
+    &:has(+ .range-end) {
+      &::before {
+        background: var(--primary-lightest);
+        width: 100%;
+        border-top-left-radius: var(--datepicker-items-base-radius);
+        border-bottom-left-radius: var(--datepicker-items-base-radius);
+      }
+    }
+
+    &:not(.range-end) {
+      .tk-datepicker-day {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+
+  &.range-end {
+    &:not(.range-start) {
+      .tk-datepicker-day {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+
+  &:not(.selected):not(.disabled):not(.in-range):hover {
+    .tk-datepicker-day {
+      background: var(--background-lightest);
+      border-radius: var(--datepicker-items-base-radius);
+    }
+  }
+}
+
+.tk-datepicker-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tk-datepicker-months {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+.tk-datepicker-month-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tk-datepicker-month,
+.tk-datepicker-year {
+  display: flex;
+  width: var(--datepicker-items-base-size);
+  height: var(--datepicker-items-base-size);
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--datepicker-items-base-radius);
+  background: var(--static-light);
+
+  color: var(--text-darkest);
+  text-align: center;
+  font-family: var(--desktop-body-s-font, Geologica);
+  font-size: var(--desktop-body-s-size);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--desktop-body-s-line-height);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--background-lightest);
+  }
+
+  &.selected {
+    background: var(--primary-base);
+    color: var(--text-lightest);
+  }
+
+  &.disabled {
+    color: var(--text-sub-base);
+    pointer-events: none;
+  }
+}
+
+.tk-datepicker-years {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+.tk-datepicker-year-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tk-datepicker-footer {
+  display: flex;
+  padding: var(--datepicker-footer-base-v-padding) var(--datepicker-footer-base-h-padding);
+  align-items: center;
+  align-self: stretch;
+
+  &.tk-datepicker-footer-divided,
+  &.tk-datepicker-footer-light {
+    border-top: 1px solid var(--border-light);
+  }
+
+  &.tk-datepicker-footer-light {
+    background: var(--background-lightest);
+    border-bottom-left-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+  }
+}

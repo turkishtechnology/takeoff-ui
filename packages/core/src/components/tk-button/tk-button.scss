@@ -1,0 +1,761 @@
+:host {
+  display: inline-block;
+}
+
+:host(.full-width) {
+  width: 100%;
+
+  .tk-button {
+    width: 100%;
+  }
+}
+
+.tk-button {
+  font-family: 'Geologica', sans-serif;
+  font-weight: 400;
+  line-height: var(--desktop-body-m-base-line-height);
+  transition: all 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+
+  &.primary {
+    border: 0px;
+    color: var(--static-white);
+
+    &.filled {
+      background-color: var(--primary-base);
+
+      &:hover {
+        background-color: var(--primary-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--primary-base);
+        box-shadow: var(--primary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--frames-sub-base);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--primary-base);
+      border: 1px solid var(--primary-base);
+
+      &:hover {
+        background-color: var(--primary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--primary-focus);
+      }
+
+      &:disabled {
+        color: var(--text-sub-base);
+        border: 1px solid var(--border-sub-base);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--primary-base);
+
+      &:hover {
+        background-color: var(--primary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--primary-lightest);
+        box-shadow: var(--primary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+      }
+    }
+
+    &.link {
+      color: var(--primary-base);
+
+      &:hover {
+        color: var(--primary-dark);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.secondary {
+    border: 0px;
+    color: var(--text-lightest);
+
+    &.filled {
+      background-color: var(--secondary-darkest);
+
+      &:hover {
+        background-color: var(--secondary-dark);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--secondary-darkest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--frames-sub-base);
+        color: var(--text-lightest);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--secondary-base);
+      border: 1px solid var(--secondary-base);
+
+      &:hover {
+        background-color: var(--secondary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--text-sub-base);
+        border-color: var(--border-sub-base);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--secondary-base);
+
+      &:hover {
+        background-color: var(--secondary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--secondary-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+      }
+    }
+
+    &.link {
+      color: var(--secondary-dark);
+
+      &:hover {
+        color: var(--secondary-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.neutral {
+    border: 0px;
+    color: var(--text-lightest);
+
+    &.filled {
+      background-color: var(--frames-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--frames-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--frames-base);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--frames-sub-base);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--text-darkest);
+      border: 1px solid var(--border-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        background-color: var(--frames-lightest);
+        border: 1px solid var(--border-base);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        border: 1px solid var(--border-base);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--text-sub-base);
+        border-color: var(--border-sub-base);
+
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--text-darkest);
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        background-color: var(--frames-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--frames-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
+    }
+
+    &.link {
+      color: var(--text-dark);
+
+      &:hover {
+        color: var(--text-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.info {
+    border: 0px;
+    color: var(--text-lightest);
+
+    &.filled {
+      background-color: var(--states-info-dark);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-info-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-info-base);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--states-info-sub-base);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--states-info-dark);
+      border: 1px solid var(--states-info-dark);
+
+      &:hover {
+        background-color: var(--states-info-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--states-info-light);
+        border: 1px solid var(--states-info-light);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--states-info-dark);
+
+      &:hover {
+        background-color: var(--states-info-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-info-light);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--states-info-light);
+      }
+    }
+
+    &.link {
+      color: var(--states-info-dark);
+
+      &:hover {
+        color: var(--states-info-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.success {
+    border: 0px;
+    color: var(--text-lightest);
+
+    &.filled {
+      background-color: var(--states-success-dark);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-success-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-success-dark);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--states-success-sub-base);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--states-success-dark);
+      border: 1px solid var(--states-success-dark);
+
+      &:hover {
+        background-color: var(--states-success-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--states-success-light);
+        border: 1px solid var(--states-success-light);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--states-success-dark);
+
+      &:hover {
+        background-color: var(--states-success-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-success-light);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--states-success-light);
+      }
+    }
+
+    &.link {
+      color: var(--states-success-dark);
+
+      &:hover {
+        color: var(--states-success-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.danger {
+    border: 0px;
+    color: var(--states-danger-dark);
+
+    &.filled {
+      background-color: var(--states-danger-dark);
+      color: var(--text-lightest);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-danger-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-danger-dark);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--states-danger-light);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      border: 1px solid var(--states-danger-dark);
+
+      &:hover {
+        background-color: var(--states-danger-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--states-danger-light);
+        border: 1px solid var(--states-danger-light);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--states-danger-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-danger-light);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--states-danger-light);
+      }
+    }
+
+    &.link {
+      color: var(--states-danger-dark);
+
+      &:hover {
+        color: var(--states-danger-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.warning {
+    border: 0px;
+    color: var(--states-warning-dark);
+
+    &.filled {
+      background-color: var(--states-warning-dark);
+      color: var(--text-lightest);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-warning-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-warning-dark);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: var(--states-warning-sub-base);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      border: 1px solid var(--states-warning-dark);
+
+      &:hover {
+        background-color: var(--states-warning-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-light);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        color: var(--states-warning-light);
+        border: 1px solid var(--states-warning-light);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--states-warning-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-warning-light);
+        box-shadow: var(--secondary-focus);
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: var(--states-warning-light);
+      }
+    }
+
+    &.link {
+      color: var(--states-warning-dark);
+
+      &:hover {
+        color: var(--states-warning-darkest);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.white {
+    border: 0px;
+    box-shadow: var(--secondary-focus);
+
+    &.filled {
+      background-color: var(--static-light);
+      color: var(--text-darkest);
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        background-color: var(--background-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--static-light);
+      }
+
+      &:disabled {
+        background-color: var(--static-light);
+        color: var(--text-lightest);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--static-light);
+      border: 1px solid var(--static-light);
+
+      &:hover {
+        background-color: var(--overlay-white-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+      }
+
+      &:disabled {
+        color: var(--text-sub-base);
+        border-color: var(--border-sub-base);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--static-light);
+      box-shadow: none;
+
+      &:hover {
+        color: var(--text-dark);
+        background-color: var(--overlay-white-light);
+        cursor: pointer;
+      }
+    }
+
+    &.link {
+      color: var(--text-lightest);
+
+      &:hover {
+        color: var(--text-light);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+
+  &.small {
+    height: 32px;
+    font-size: var(--desktop-body-xs-size);
+    border-radius: var(--button-sizes-small-radius);
+    padding: var(--button-sizes-small-v-padding) var(--button-sizes-small-h-padding);
+    gap: var(--button-sizes-small-gap);
+
+    &.rounded {
+      height: unset;
+      border-radius: 100%;
+      padding: var(--fab-button-sizes-small-v-padding) var(--fab-button-sizes-small-h-padding);
+    }
+
+    i {
+      font-size: var(--button-sizes-small-icon-size);
+      width: var(--button-sizes-small-icon-size);
+      height: var(--button-sizes-small-icon-size);
+      line-height: unset;
+    }
+  }
+
+  &.base {
+    height: 40px;
+    font-size: var(--desktop-body-s-size);
+    border-radius: var(--button-sizes-base-radius);
+    padding: var(--button-sizes-base-v-padding) var(--button-sizes-base-h-padding);
+    gap: var(--button-sizes-base-gap);
+
+    &.rounded {
+      height: unset;
+      border-radius: 100%;
+      padding: var(--fab-button-sizes-base-v-padding) var(--fab-button-sizes-base-h-padding);
+    }
+
+    i {
+      font-size: var(--button-sizes-base-icon-size);
+      width: var(--button-sizes-base-icon-size);
+      height: var(--button-sizes-base-icon-size);
+      line-height: unset;
+    }
+  }
+
+  &.large {
+    height: 48px;
+    font-size: var(--desktop-body-m-base-size);
+    border-radius: var(--button-sizes-large-radius);
+    padding: var(--button-sizes-large-v-padding) var(--button-sizes-large-h-padding);
+    gap: var(--button-sizes-large-gap);
+
+    &.rounded {
+      height: unset;
+      border-radius: 100%;
+      padding: var(--fab-button-sizes-large-v-padding) var(--fab-button-sizes-large-h-padding);
+    }
+
+    i {
+      font-size: var(--button-sizes-large-icon-size);
+      width: var(--button-sizes-large-icon-size);
+      height: var(--button-sizes-large-icon-size);
+      line-height: unset;
+    }
+  }
+
+  &.link {
+    padding: 0;
+    background-color: transparent;
+    text-decoration: none;
+
+    &.underline span {
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      color: var(--text-sub-base);
+    }
+
+    &.small {
+      height: 18px;
+
+      i {
+        font-size: var(--link-button-sizes-small-icon-size);
+        width: var(--link-button-sizes-small-icon-size);
+        height: var(--link-button-sizes-small-icon-size);
+      }
+    }
+
+    &.base {
+      height: 20px;
+
+      i {
+        font-size: var(--link-button-sizes-base-icon-size);
+        width: var(--link-button-sizes-base-icon-size);
+        height: var(--link-button-sizes-base-icon-size);
+      }
+    }
+
+    &.large {
+      height: 24px;
+
+      i {
+        font-size: var(--link-button-sizes-large-icon-size);
+        width: var(--link-button-sizes-large-icon-size);
+        height: var(--link-button-sizes-large-icon-size);
+      }
+    }
+  }
+
+  i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

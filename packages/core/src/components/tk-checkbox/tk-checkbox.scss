@@ -1,0 +1,116 @@
+tk-checkbox {
+  display: inline-block;
+}
+
+.tk-checkbox-container {
+  label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-s);
+    color: var(--text-darkest);
+    font-size: var(--size-sm);
+    cursor: pointer;
+    user-select: none;
+
+    input[type='checkbox'] {
+      margin: 0;
+      appearance: none;
+      outline: none;
+      display: none;
+    }
+
+    .mask {
+      width: 20px;
+      height: 20px;
+      background-color: var(--static-light);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-s);
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      padding: 2px;
+
+      i {
+        display: none;
+        font-size: 12px;
+        color: var(--static-light);
+        border-radius: var(--radius-xs);
+        background-color: var(--states-info-base);
+      }
+    }
+  }
+
+  &:hover {
+    label {
+      .mask {
+        background-color: var(--background-lightest);
+      }
+    }
+  }
+
+  label input:focus-visible+.mask {
+    border-color: var(--states-info-base);
+    background-color: var(--static-light);
+  }
+
+  label input:checked+.mask,
+  label input:indeterminate+.mask {
+    border-color: var(--states-info-light);
+    background-color: var(--static-light);
+
+    i {
+      display: block;
+    }
+  }
+
+  label:hover input:checked+.mask,
+  label:hover input:indeterminate+.mask {
+    border-color: var(--states-info-sub-base);
+    background-color: var(--states-info-light);
+  }
+
+  &[aria-disabled],
+  &[disabled] {
+    label {
+      color: var(--text-sub-base);
+
+      input+.mask {
+        border: 2px solid var(--border-light);
+        background-color: var(--background-light);
+
+        i {
+          background-color: var(--background-sub-base);
+        }
+      }
+    }
+  }
+
+  &[aria-invalid] {
+    label {
+      .mask {
+        border: 2px solid var(--states-danger-base);
+        background: var(--static-light);
+      }
+
+      input:checked+.mask,
+      input:indeterminate+.mask {
+        border-color: var(--states-danger-light);
+
+        i {
+          background-color: var(--states-danger-base);
+        }
+      }
+
+      &:hover {
+
+        input:checked+.mask,
+        input:indeterminate+.mask {
+          border-color: var(--states-danger-sub-base);
+          background-color: var(--states-danger-light);
+        }
+      }
+    }
+  }
+}
