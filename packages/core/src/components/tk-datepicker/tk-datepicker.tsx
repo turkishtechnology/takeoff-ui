@@ -1,5 +1,5 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
-import { computePosition, flip, shift, offset } from '@floating-ui/dom';
+import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
@@ -62,14 +62,14 @@ export class TkDatePicker {
 
   private today = new Date();
   private debounceTimer: number;
-  private resizeObserver: ResizeObserver;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
+  private cleanup;
+
   constructor() {
     this.uniqueId = uuidv4();
-
     this.windowClickHandler = this.handleWindowClick.bind(this);
   }
   /**
@@ -99,6 +99,12 @@ export class TkDatePicker {
    * Whether the datepicker is in an invalid state
    */
   @Prop() invalid: boolean = false;
+
+  /**
+   * Indicates whether the input of datepicker can be cleared
+   * @defaultValue false
+   */
+  @Prop() clearable: boolean = false;
 
   /**
    * Error message to display
@@ -187,6 +193,14 @@ export class TkDatePicker {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Defines the first day of the week. 0 for Monday, 1 for Tuesday, ..., 6 for Sunday.
+   * If not provided, the first day of the week is determined by the `locale` prop.
+   * If neither `firstDayOfWeekIndex` nor `locale` provide a value, defaults to Monday (0).
+   * Providing this prop overrides the locale setting for the start of the week.
+   */
+  @Prop() firstDayOfWeekIndex?: number;
+
+  /**
    * Emitted on input value changes
    */
   @Event({ eventName: 'tk-input-change' }) tkInputChange: EventEmitter<string>;
@@ -217,21 +231,53 @@ export class TkDatePicker {
   }
 
   componentDidLoad() {
-    if (!this.inline && this.panelRef) {
-      this.initializeResizeObserver();
-    }
-
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
   }
 
-  disconnectedCallback() {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
+  componentDidUpdate() {
+    if (this.isOpen) {
+      this.cleanup = autoUpdate(this.inputRef, this.panelRef, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+      this.bindWindowClickListener();
+    } else {
+      this.cleanup && this.cleanup();
+      this.unbindWindowClickListener();
     }
+  }
+
+  disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
     this.unbindWindowClickListener();
+  }
+
+  private getResolvedFirstDayIndex(): number {
+    if (this.firstDayOfWeekIndex !== undefined && this.firstDayOfWeekIndex !== null) {
+      if (this.firstDayOfWeekIndex >= 0 && this.firstDayOfWeekIndex <= 6) {
+        return this.firstDayOfWeekIndex;
+      } else {
+        console.warn(`Invalid firstDayOfWeekIndex value: ${this.firstDayOfWeekIndex}. Defaulting to 0 (Monday).`);
+        return 0;
+      }
+    }
+
+    try {
+      const resolvedLocale = this.locale || 'en';
+      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Intl.Locale.prototype.hasOwnProperty('weekInfo')) {
+        // @ts-ignore: Accessing weekInfo from potentially unknown Intl.Locale type
+        const localeInfo = new Intl.Locale(resolvedLocale).getWeekInfo();
+        if (localeInfo && localeInfo.firstDay !== undefined) {
+          // Formula: (IntlDay + 6) % 7 maps 1(Mon) to 0, 7(Sun) to 6
+          return (localeInfo.firstDay + 6) % 7;
+        }
+      }
+    } catch (e) {
+      console.warn(`Could not determine first day of week from locale '${this.locale}'. Error or unsupported: ${e}`);
+    }
+
+    return 0;
   }
 
   private getMaskOptionsFromDateFormat(format: string): IInputMaskOptions {
@@ -312,16 +358,6 @@ export class TkDatePicker {
     this.processDateValue(this.value, true);
   }
 
-  private initializeResizeObserver() {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.updatePosition();
-    });
-
-    if (this.panelRef) {
-      this.resizeObserver.observe(this.panelRef);
-    }
-  }
-
   private updatePosition() {
     if (this.inputRef && this.panelRef) {
       computePosition(this.inputRef, this.panelRef, {
@@ -337,28 +373,13 @@ export class TkDatePicker {
     }
   }
 
-  private requestAnimationFrame(fn) {
-    const timeout = fn => setTimeout(fn, 0);
-    let frame = window.requestAnimationFrame || timeout;
-    return frame(fn);
-  }
-
   private onTkInputClick = (e: MouseEvent) => {
     if (this.disabled) {
       e.preventDefault();
       return;
     }
 
-    if (this.isOpen) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    } else {
-      this.isOpen = true;
-      this.requestAnimationFrame(() => {
-        this.updatePosition();
-        this.bindWindowClickListener();
-      });
-    }
+    this.isOpen = !this.isOpen;
   };
 
   private normalizeDate(date: Date): Date {
@@ -509,6 +530,13 @@ export class TkDatePicker {
     this.tkInputChange.emit(this.inputValue);
   };
 
+  private onTkClearClick = () => {
+    if (this.clearable) {
+      this.value = null;
+      this.tkChange.emit(null);
+    }
+  };
+
   private onTkInputBlur = () => {
     if (this.disableMask || this.mode === 'range') return;
 
@@ -632,6 +660,7 @@ export class TkDatePicker {
         class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}
         name={this.name}
         hint={this.hint}
+        clearable={this.clearable}
         disabled={this.disabled}
         invalid={this.invalid || this.isInvalid}
         error={this.error}
@@ -639,6 +668,7 @@ export class TkDatePicker {
         value={this.inputValue}
         maskOptions={shouldUseMask ? this.maskOptions : undefined}
         onTk-change={this.onTkInputChange}
+        onTk-clear-click={this.onTkClearClick}
         onTk-blur={this.onTkInputBlur}
         onKeyDown={this.onTkInputKeyDown}
         onClick={this.onTkInputClick}
@@ -714,7 +744,16 @@ export class TkDatePicker {
   }
 
   private createWeekDayNames() {
-    const weekdays = [...Array(7)].map((_, i) => new Date(2023, 0, i + 1).toLocaleString(this.locale, { weekday: 'short' }));
+    const startOfWeekIndex = this.getResolvedFirstDayIndex();
+    // Use a known Monday as a base to generate other days reliably
+    const baseMonday = new Date(2023, 0, 2);
+
+    const weekdays = [...Array(7)].map((_, i) => {
+      const dayOffset = (i + startOfWeekIndex) % 7;
+      const dateForDay = new Date(baseMonday);
+      dateForDay.setDate(baseMonday.getDate() + dayOffset);
+      return dateForDay.toLocaleString(this.locale, { weekday: 'short' });
+    });
 
     return (
       <thead>
@@ -735,9 +774,12 @@ export class TkDatePicker {
     const daysInCurrentMonth = lastDayOfMonth.getDate();
     const weeks = [];
     let days = [];
-    const startOfWeek = 0;
+    const resolvedStartOfWeekIndex = this.getResolvedFirstDayIndex();
+
+    const startOfWeekForGetDay = (resolvedStartOfWeekIndex + 1) % 7;
+
     const firstDayOfWeek = firstDayOfMonth.getDay();
-    let emptyCells = (firstDayOfWeek - startOfWeek + 7) % 7;
+    let emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
 
     // Previous month's days
     for (let i = emptyCells - 1; i >= 0; i--) {

@@ -48,10 +48,13 @@ tk-select {
           gap: 8px;
         }
 
-        &:hover,
-        &[data-active='true'] {
+        &:hover {
           cursor: pointer;
           background: var(--background-lightest);
+        }
+        &[data-active="true"] {
+          cursor: pointer;
+          background: var(--states-info-light);
         }
       }
     }

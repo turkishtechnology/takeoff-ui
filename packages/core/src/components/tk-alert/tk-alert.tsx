@@ -13,7 +13,6 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 @Component({
   tag: 'tk-alert',
   styleUrl: 'tk-alert.scss',
-  shadow: true,
 })
 export class TkAlert implements ComponentInterface {
   private hasRightActionSlot: boolean = false;
@@ -104,7 +103,7 @@ export class TkAlert implements ComponentInterface {
     }
 
     return (
-      <div class={classNames('tk-alert-content', !this.header && 'message-content')}>
+      <div class={classNames('tk-alert-content')}>
         <div>
           {header}
           {message}

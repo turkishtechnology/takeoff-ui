@@ -31,7 +31,7 @@ export class TkChips implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop({ mutable: true }) icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions;
 
   /**
    * The label to display inside the chip.

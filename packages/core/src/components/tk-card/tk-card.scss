@@ -157,7 +157,7 @@
     }
   }
 
-  .tk-card-body {
+  .tk-card-content {
     display: flex;
     flex-direction: column;
     align-self: stretch;
@@ -204,7 +204,7 @@
       }
     }
 
-    .tk-card-body {
+    .tk-card-content {
       color: var(--text-light, #e1e4ea);
     }
   }

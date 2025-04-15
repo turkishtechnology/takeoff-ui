@@ -23,6 +23,7 @@ export class TkTextarea implements ComponentInterface {
 
   @State() hasFocus = false;
   @State() passwordStrength: number = 0;
+  @State() charCount: number = 0;
 
   @AttachInternals() internals: ElementInternals;
 
@@ -84,6 +85,10 @@ export class TkTextarea implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Limits the number of characters.
+   */
+  @Prop() maxLength?: number;
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | number | null = '';
@@ -94,6 +99,7 @@ export class TkTextarea implements ComponentInterface {
   @Watch('value')
   protected valueChanged() {
     this.tkChange.emit(this.value);
+    this.updateCharCount();
   }
 
   /**
@@ -163,6 +169,12 @@ export class TkTextarea implements ComponentInterface {
     this.tkFocus.emit();
   };
 
+  private updateCharCount = () => {
+    if (this.maxLength) {
+      this.charCount = this.value.toString().trim().length;
+    }
+  };
+
   render() {
     let label: HTMLLabelElement;
 
@@ -190,9 +202,19 @@ export class TkTextarea implements ComponentInterface {
 
     if (this.error?.length > 0) {
       hint = (
-        <span class="hint">
+        <span class="hint error">
           <i class="material-symbols-outlined">info</i>
           {this.error}
+        </span>
+      );
+    }
+
+    let counter: HTMLSpanElement;
+    const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
+    if (this.maxLength) {
+      counter = (
+        <span class={counterClasses}>
+          {this.charCount}/{this.maxLength}
         </span>
       );
     }
@@ -208,6 +230,7 @@ export class TkTextarea implements ComponentInterface {
             autoComplete="off"
             name={this.name}
             rows={this.rows}
+            maxLength={this.maxLength}
             placeholder={this.placeholder || ''}
             readOnly={this.readonly}
             tabindex={this.tabindex}
@@ -217,6 +240,7 @@ export class TkTextarea implements ComponentInterface {
           >
             {this.value}
           </textarea>
+          {counter}
         </label>
         {hint}
       </div>

@@ -37,6 +37,10 @@ export class TkRadioGroup implements ComponentInterface {
       });
     }
   }
+  /**
+   * Determines the position of the radio group and label.
+   */
+  @Prop() position: 'left' | 'right' = 'left';
 
   /**
    * The value of the input.
@@ -48,6 +52,7 @@ export class TkRadioGroup implements ComponentInterface {
    */
   @Watch('value')
   protected valueChanged() {
+    this.updateTkRadio();
     this.tkChange.emit(this.value);
   }
 

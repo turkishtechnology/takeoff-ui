@@ -37,29 +37,29 @@ export class TkAccordion implements ComponentInterface {
    * Sets the position of opening and closing chevrons.
    * @defaultValue 'right'
    */
-  @Prop({ reflect: true }) arrowPosition: 'left' | 'right' = 'right';
+  @Prop() arrowPosition: 'left' | 'right' = 'right';
 
   /**
    *
    */
-  @Prop({ reflect: true }) expandIcon: string | IIconOptions = 'keyboard_arrow_down';
+  @Prop() expandIcon: string | IIconOptions = 'keyboard_arrow_down';
 
   /**
    *
    */
-  @Prop({ reflect: true }) collapseIcon: string | IIconOptions = 'keyboard_arrow_up';
+  @Prop() collapseIcon: string | IIconOptions = 'keyboard_arrow_up';
 
   /**
    * Whether to hide the arrow icons.
    * @defaultValue false
    */
-  @Prop({ reflect: true }) hideArrows: boolean = false;
+  @Prop() hideArrows: boolean = false;
 
   /**
    * Sets accordion style for the component.
    * @defaultValue 'grouped'
    */
-  @Prop({ reflect: true }) type: 'grouped' | 'divided' = 'grouped';
+  @Prop() type: 'grouped' | 'divided' = 'grouped';
 
   /**
    * Emitted when an accordion item is selected

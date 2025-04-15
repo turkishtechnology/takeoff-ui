@@ -43,6 +43,12 @@
       height: var(--size-base);
       color: var(--icon-base);
     }
+    &.error {
+      span,
+      .tk-editor-supporting-text-icon {
+        color: var(--states-danger-base);
+      }
+    }
   }
 
   &.tk-editor-focused {
@@ -53,7 +59,6 @@
 
   &.tk-editor-invalid {
     .tk-editor-supporting-text {
-
       span,
       .tk-editor-supporting-text-icon {
         color: var(--states-danger-base);
@@ -70,14 +75,18 @@
     .tk-editor-label {
       color: var(--text-sub-base);
     }
-
     .tk-editor-supporting-text {
       .tk-editor-supporting-text-icon {
         color: var(--icon-sub-base);
+        span {
+          color: var(--text-sub-base);
+        }
       }
-
-      span {
-        color: var(--text-sub-base);
+      &.error {
+        span,
+        .tk-editor-supporting-text-icon {
+          color: var(--states-danger-base);
+        }
       }
     }
   }
@@ -95,7 +104,6 @@
       box-shadow: var(--effect-1-hover-sm);
     }
   }
-
 
   .tk-editor {
     position: relative;
@@ -133,7 +141,6 @@
 
           /* Workaround for temp svg */
           :not(.tk-editor-button-heading):not(.tk-editor-button-undo):not(.tk-editor-button-redo) {
-
             &.tk-editor-button-readonly,
             &.tk-editor-button-disabled {
               svg {
@@ -144,10 +151,9 @@
             }
           }
 
-          &[data-tk-editor-group='history'],
-          &[data-tk-editor-group='alignment'] {
+          &[data-tk-editor-group="history"],
+          &[data-tk-editor-group="alignment"] {
             .tk-editor-button {
-
               &:not(.tk-editor-button-readonly),
               &:not(.tk-editor-button-disabled) {
                 color: var(--text-sub-base);
@@ -429,12 +435,12 @@
     margin: 0;
   }
 
-  >* {
+  > * {
     margin: 0;
     padding: 0;
   }
 
-  >*+* {
+  > * + * {
     margin-top: var(--editor-body-gap);
   }
 
@@ -454,7 +460,7 @@
     li {
       margin: 2px 0;
 
-      >p {
+      > p {
         margin: 0;
       }
     }
@@ -514,7 +520,7 @@
 
   .selectedCell:after {
     background: var(--primary-sub-base);
-    content: '';
+    content: "";
     left: 0;
     right: 0;
     top: 0;

@@ -94,6 +94,15 @@ export class TkEditor {
    */
   @Prop() hint?: string;
   /**
+   * Indicates whether the editor is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
+  /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error: string;
+  /**
    * Displays a red asterisk (*) next to the label for visual emphasis.
    */
   @Prop() showAsterisk: boolean = false;
@@ -384,18 +393,30 @@ export class TkEditor {
         {this.showAsterisk && <span class="tk-editor-label-asterisk">*</span>}
       </label>
     );
-    const hint = this.hint && (
-      <div class="tk-editor-supporting-text">
-        <i class="material-symbols-outlined tk-editor-supporting-text-icon">info</i>
-        <span>{this.hint}</span>
-      </div>
-    );
+    let hint: HTMLDivElement;
+    if (this.hint?.length > 0) {
+      hint = (
+        <div class="tk-editor-supporting-text">
+          <i class="material-symbols-outlined tk-editor-supporting-text-icon">info</i>
+          <span>{this.hint}</span>
+        </div>
+      );
+    }
+    if (this.error?.length > 0) {
+      hint = (
+        <div class="tk-editor-supporting-text error">
+          <i class="material-symbols-outlined tk-editor-supporting-text-icon">info</i>
+          <span>{this.error}</span>
+        </div>
+      );
+    }
     return (
       <div
         class={classNames('tk-editor-container', {
           'tk-editor-focused': this.isFocused,
           'tk-editor-disabled': this.disabled,
           'tk-editor-readonly': this.readonly,
+          'tk-editor-invalid': this.invalid,
         })}
       >
         {labelElement}

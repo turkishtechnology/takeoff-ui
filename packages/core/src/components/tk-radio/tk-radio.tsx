@@ -17,7 +17,7 @@ export class TkRadio implements ComponentInterface {
   @Element() el: HTMLTkRadioElement;
 
   @AttachInternals() internals: ElementInternals;
-
+  private parentEl: HTMLTkRadioGroupElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
 
@@ -52,6 +52,11 @@ export class TkRadio implements ComponentInterface {
   @Prop() label: string;
 
   /**
+   * Determines the position of the radio and label.
+   */
+  @Prop() position?: 'left' | 'right';
+
+  /**
    * Marks the radio button as checked or unchecked.
    * @defaultValue false
    */
@@ -81,7 +86,13 @@ export class TkRadio implements ComponentInterface {
       }
     }
   }
+  componentWillLoad(): void {
+    this.parentEl = this.el.closest('tk-radio-group');
 
+    if (this.parentEl && !this.position) {
+      this.position = this.parentEl.position;
+    }
+  }
   componentDidRender(): void {
     this.bindWindowClickListener();
   }
@@ -118,7 +129,7 @@ export class TkRadio implements ComponentInterface {
     return (
       <Host data-tk-radio-id={this.uniqueId}>
         <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
-          <label htmlFor={this.uniqueId} class={classNames({ 'width-description': this.description })}>
+          <label htmlFor={this.uniqueId} class={(classNames({ 'width-description': this.description }), this.position)}>
             <input id={this.uniqueId} type="radio" checked={this.checked} value={this.value} disabled={this.disabled} onChange={this.handleChange.bind(this)} name={this.name} />
             <div class="mask">
               <div></div>

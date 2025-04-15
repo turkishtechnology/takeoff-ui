@@ -91,7 +91,7 @@ export class TkToggle implements ComponentInterface {
    * The current state of the toggle.
    * @defaultValue false
    */
-  @Prop({ reflect: true, mutable: true }) value: boolean = false;
+  @Prop({ mutable: true }) value: boolean = false;
   @Watch('value')
   valueChanged(newValue: boolean, oldValue: boolean) {
     if (newValue !== oldValue) {

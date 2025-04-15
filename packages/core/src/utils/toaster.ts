@@ -7,7 +7,7 @@ export interface IToast {
   actions?: IAlertActionButton[];
   variant: 'success' | 'warning' | 'info' | 'danger' | 'neutral';
   icon?: string;
-  iconSize?: string;
+  iconSize?: 'small' | 'base' | 'large';
   type: 'filled' | 'filledlight' | 'outlined' | 'gradient';
   removable?: boolean;
   timeout?: number;
@@ -27,16 +27,14 @@ export const createToast = (options: IToast) => {
     document.querySelector('body').append(toaster);
   }
 
-  const tkAlert = document.createElement('tk-alert');
-  if (options.header?.length > 0) tkAlert.setAttribute('header', options.header);
-  if (options.message?.length > 0) tkAlert.setAttribute('message', options.message);
+  const tkAlert: HTMLTkAlertElement = document.createElement('tk-alert');
+  if (options.header?.length > 0) tkAlert.header = options.header;
+  if (options.message?.length > 0) tkAlert.message = options.message;
   tkAlert.setAttribute('type', options.type);
   tkAlert.setAttribute('variant', options.variant);
-  if (options.icon?.length > 0) tkAlert.setAttribute('icon', options.icon);
-  if (options.iconSize?.length > 0) tkAlert.setAttribute('icon-size', options.iconSize);
-  if (options.removable) tkAlert.setAttribute('removable', options.removable.toString());
-  // TODO: toaster dan action kullanımı için daha sonra tekrar geliştirilecek
-  // tkAlert.actions = options.actions;
+  if (options.icon?.length > 0) tkAlert.icon = options.icon;
+  if (options.iconSize?.length > 0) tkAlert.iconSize = options.iconSize;
+  if (options.removable) tkAlert.removable = options.removable;
   if (options.actions?.length > 0) {
     const slotFooterAction = document.createElement('div');
     slotFooterAction.setAttribute('slot', 'footer-action');

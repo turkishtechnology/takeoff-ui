@@ -37,21 +37,6 @@ export class TkSelect implements ComponentInterface {
   @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
-  @Watch('isOpen')
-  isOpenChanged(newValue: boolean) {
-    if (newValue) {
-      setTimeout(() => {
-        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
-          animationFrame: true,
-        });
-        this.bindWindowClickListener();
-      }, 50);
-    } else {
-      this.panelRef.remove();
-      this.cleanup();
-      this.unbindWindowClickListener();
-    }
-  }
 
   @AttachInternals() internals: ElementInternals;
 
@@ -221,6 +206,19 @@ export class TkSelect implements ComponentInterface {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
+  }
+
+  componentDidUpdate() {
+    if (this.isOpen) {
+      this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+      this.bindWindowClickListener();
+    } else {
+      this.panelRef?.remove();
+      this.cleanup && this.cleanup();
+      this.unbindWindowClickListener();
+    }
   }
 
   componentDidLoad(): void {
@@ -427,8 +425,12 @@ export class TkSelect implements ComponentInterface {
 
   private async handleInputChange(value) {
     if (this.multiple) {
-      this.value = [...value];
-      this.tkChange.emit([...value]);
+      if (value == null) {
+        this.value = [];
+      } else {
+        this.value = [...value];
+      }
+      this.tkChange.emit(this.value);
     } else {
       this.isOpen = true;
 
@@ -481,9 +483,9 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleInputKeydown(e) {
-    const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-    const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
     if (e.key == 'ArrowDown') {
+      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+      const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
       if (activeItem) {
         const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
         if (newActiveItem) {
@@ -499,7 +501,8 @@ export class TkSelect implements ComponentInterface {
         }
       }
     } else if (e.key == 'ArrowUp') {
-      //
+      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+      const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
       if (activeItem) {
         const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
         if (newActiveItem) {
@@ -515,6 +518,7 @@ export class TkSelect implements ComponentInterface {
         }
       }
     } else if (e.key == 'Enter') {
+      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
       if (this.multiple && this.editable && this.allowCustomValue) {
         const nativeInput = this.inputRef.querySelector('input');
         nativeInput.dispatchEvent(new InputEvent('input', { bubbles: true }));
@@ -574,26 +578,19 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
+      let checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
             <Fragment>
-              <tk-checkbox
-                value={_.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)))}
-                onTk-change={e => e.stopPropagation()}
-                onClick={e => e.preventDefault()}
-              ></tk-checkbox>
+              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
           children = (
             <Fragment>
-              <tk-checkbox
-                value={_.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)))}
-                onTk-change={e => e.stopPropagation()}
-                onClick={e => e.preventDefault()}
-              ></tk-checkbox>
+              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div>{this.getOptionLabel(item)}</div>
             </Fragment>
           );
@@ -610,7 +607,7 @@ export class TkSelect implements ComponentInterface {
         <div
           class={classNames('dropdown-item', { multiple: this.multiple })}
           data-option-index={index}
-          data-active={index == 0 ? 'true' : 'false'}
+          data-active={this.multiple && checking ? 'true' : this.value == item ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
         >

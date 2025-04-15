@@ -1,11 +1,12 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse } from './interfaces';
-import { createDropdown, filterAndSort, handleInputKeydown } from './helpers';
+import { filterAndSort, handleInputKeydown } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
+import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.
@@ -20,11 +21,12 @@ import ExcelJs from 'exceljs';
 })
 export class TkTable implements ComponentInterface {
   private elements: ICustomElement[] = [];
-  private selectAllRef: HTMLTkCheckboxElement;
+  private refSelectAll: HTMLTkCheckboxElement;
+  private cleanupFilterPanel;
+  private elFilterPanelElement: HTMLElement;
 
   @Element() el: HTMLTkTableElement;
 
-  @State() elActivePopper: HTMLDivElement;
   @State() elActiveSearchIcon: HTMLElement;
   @State() selectColumn: ITableColumn;
   @State() sortField: string;
@@ -34,6 +36,7 @@ export class TkTable implements ComponentInterface {
   @State() renderData: any[] = [];
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
+  @State() isFilterOpen: boolean = false;
 
   /**
    * The column definitions (Array of Objects)
@@ -81,9 +84,19 @@ export class TkTable implements ComponentInterface {
         this.renderData = newValue?.length > 0 ? [...newValue] : [];
       }
 
-      if (this.selectAllRef) this.selectAllRef.value = false;
+      if (this.refSelectAll) this.refSelectAll.value = false;
       this.handleSelectAll(false);
       this.expandedRows = [];
+
+      // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+      const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
+      if (slotEmptyData) {
+        if (newValue?.length > 0) {
+          slotEmptyData.style.display = 'none';
+        } else {
+          slotEmptyData.style.display = 'block';
+        }
+      }
     }
   }
 
@@ -121,7 +134,7 @@ export class TkTable implements ComponentInterface {
    * The type of the pagination
    * @defaultValue 'outlined'
    */
-  @Prop({ reflect: true }) paginationType: 'outlined' | 'text' | 'grouped' = 'outlined';
+  @Prop() paginationType: 'outlined' | 'text' | 'grouped' = 'outlined';
 
   /**
    * Displays a loading indicator while data is being fetched or processed.
@@ -165,6 +178,11 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-cell-edit' }) tkCellEdit: EventEmitter<ITableCellEdit>;
 
+  /**
+   *
+   */
+  @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
+
   componentWillLoad(): Promise<void> | void {
     this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
@@ -174,33 +192,36 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  componentDidUpdate() {
+    if (this.isFilterOpen) {
+      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+    } else {
+      this.elFilterPanelElement?.remove();
+      this.cleanupFilterPanel && this.cleanupFilterPanel();
+    }
+  }
+
   componentDidRender(): void {
     this.elements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
   }
 
-  // outside click of search popper for close
+  // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
-    if (this.elActivePopper != undefined) {
+    if (this.isFilterOpen) {
       let isInside = false;
       ev.composedPath().forEach((item: HTMLElement) => {
-        if (this.elActivePopper == item || this.elActiveSearchIcon == item) {
+        if (this.elFilterPanelElement == item || this.elActiveSearchIcon == item) {
           isInside = true;
           return;
         }
       });
 
-      if (!isInside) this.elActivePopper.style.display = 'none';
-    }
-  }
-
-  // to close search popper during resize resize
-  @Listen('resize', { target: 'window' })
-  checkForResize() {
-    if (this.elActivePopper != undefined) {
-      this.elActivePopper.style.display = 'none';
+      if (!isInside) this.isFilterOpen = false;
     }
   }
 
@@ -302,7 +323,7 @@ export class TkTable implements ComponentInterface {
     const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
     this.generateRenderData(tmpData, Number(e.detail.page));
     // sayfa değişikliğinde seçilen değerler sıfırlanır
-    if (this.selectAllRef) this.selectAllRef.value = false;
+    if (this.refSelectAll) this.refSelectAll.value = false;
     this.handleSelectAll(false);
   }
 
@@ -337,42 +358,94 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private async handleSearchIconClick(refSearchIcon: HTMLElement, refDropdown: HTMLDivElement, refSearchInput: HTMLTkInputElement) {
-    this.el.querySelectorAll('.popper').forEach((item: HTMLElement) => {
-      item.style.display = 'none';
-    });
-    this.elActivePopper = refDropdown;
-    this.elActiveSearchIcon = refSearchIcon;
-    await createDropdown(refSearchIcon, refDropdown, refSearchInput);
-  }
-
-  private handleSearchButtonClick(refSearchInput: HTMLTkInputElement, columnField, refDropdown: HTMLDivElement) {
-    if (refSearchInput.value.toString().length > 0) {
-      // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
-      // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
-      const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
-      if (filterIndex > -1) {
-        this.filters[filterIndex].value = refSearchInput.value.toString();
-      } else {
-        this.filters.push({ field: columnField, value: refSearchInput.value } as ITableFilter);
-      }
-
-      // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-      if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-        this.generateRenderData(tmpData, 1);
-      } else {
-        this.currentPage = 1;
-      }
+  private updatePosition() {
+    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
+      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
+        strategy: 'fixed',
+        placement: 'bottom',
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.elFilterPanelElement.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
     }
-    refDropdown.style.display = 'none';
   }
 
-  private handleSearchCancelButtonClick(refSearchInput: HTMLTkInputElement, columnField, refDropdown: HTMLDivElement) {
+  private createFilterPanel(refSearchIcon: HTMLElement, field: string) {
+    this.elActiveSearchIcon = refSearchIcon;
+    this.elFilterPanelElement = document.createElement('div');
+    this.elFilterPanelElement.classList.add('tk-table-filter-panel');
+
+    const input: HTMLTkInputElement = document.createElement('tk-input');
+    input.placeholder = 'Search';
+    input.setFocus();
+    input.value = this.filters?.find(item => item.field == field)?.value;
+    const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
+    searchButton.label = 'Search';
+    searchButton.fullWidth = true;
+    searchButton.addEventListener('tk-click', () => {
+      this.handleSearchButtonClick(field);
+      this.isFilterOpen = false;
+    });
+    const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
+    cancelButton.label = 'Remove';
+    cancelButton.type = 'outlined';
+    cancelButton.fullWidth = true;
+    cancelButton.addEventListener('tk-click', () => {
+      this.handleSearchCancelButtonClick(field);
+      this.isFilterOpen = false;
+    });
+    const buttons = document.createElement('div');
+    buttons.classList.add('tk-table-filter-panel-buttons');
+    this.elFilterPanelElement.appendChild(input);
+    buttons.appendChild(cancelButton);
+    buttons.appendChild(searchButton);
+
+    this.elFilterPanelElement.appendChild(buttons);
+    document.body.appendChild(this.elFilterPanelElement);
+    this.isFilterOpen = true;
+  }
+
+  private async handleSearchIconClick(refSearchIcon: HTMLElement, field: string) {
+    if (!this.isFilterOpen) {
+      this.createFilterPanel(refSearchIcon, field);
+    } else if (this.elActiveSearchIcon != refSearchIcon) {
+      this.isFilterOpen = false;
+      this.createFilterPanel(refSearchIcon, field);
+    }
+  }
+
+  private handleSearchButtonClick(columnField) {
+    // if (refSearchInput.value.toString().length > 0) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+
+    // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
+    // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
+    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (filterIndex > -1) {
+      this.filters[filterIndex].value = searchInput.value.toString();
+    } else {
+      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
+    }
+
+    // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+    if (this.currentPage == 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+  }
+
+  private handleSearchCancelButtonClick(columnField) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+
     const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (removeFilterIndex > -1) {
       this.filters.splice(removeFilterIndex, 1);
-      refSearchInput.value = '';
+      searchInput.value = '';
 
       // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
       if (this.currentPage == 1) {
@@ -382,8 +455,6 @@ export class TkTable implements ComponentInterface {
         this.currentPage = 1;
       }
     }
-
-    refDropdown.style.display = 'none';
   }
 
   private handleInputBlur(row, index: number, colField: string, editableInputRef) {
@@ -491,7 +562,7 @@ export class TkTable implements ComponentInterface {
     if (this.selectionMode === 'checkbox') {
       selectionTh = (
         <th style={{ width: '20px', maxWidth: '20px' }} class="non-text">
-          <tk-checkbox ref={el => (this.selectAllRef = el)} onTk-change={e => this.handleSelectAll(e.detail)}></tk-checkbox>
+          <tk-checkbox ref={el => (this.refSelectAll = el)} onTk-change={e => this.handleSelectAll(e.detail)}></tk-checkbox>
         </th>
       );
     } else if (this.selectionMode === 'radio') {
@@ -505,8 +576,6 @@ export class TkTable implements ComponentInterface {
           {this.columns.map(col => {
             let refSortIcon: HTMLElement;
             let refSearchIcon: HTMLElement;
-            let refSearchInput: HTMLTkInputElement;
-            let refDropdown: HTMLDivElement;
             let _icons;
 
             // generate expander th
@@ -524,11 +593,7 @@ export class TkTable implements ComponentInterface {
                     </i>
                   )}
                   {col.searchable && (
-                    <i
-                      ref={el => (refSearchIcon = el)}
-                      class="material-symbols-outlined filter-icon"
-                      onClick={() => this.handleSearchIconClick(refSearchIcon, refDropdown, refSearchInput)}
-                    >
+                    <i ref={el => (refSearchIcon = el)} class="material-symbols-outlined filter-icon" onClick={() => this.handleSearchIconClick(refSearchIcon, col.field)}>
                       search
                     </i>
                   )}
@@ -553,32 +618,6 @@ export class TkTable implements ComponentInterface {
                     )}
                   </div>
                   {_icons}
-                </div>
-                <div ref={el => (refDropdown = el)} class="popper">
-                  <div id="arrow"></div>
-                  <div class="container">
-                    <tk-input
-                      ref={el => (refSearchInput = el)}
-                      onTk-change={e => {
-                        refSearchInput.value = e.detail;
-                      }}
-                      placeholder="Search"
-                    ></tk-input>
-                    <div class="buttons">
-                      <div>
-                        <tk-button
-                          variant="primary"
-                          label="Remove"
-                          fullWidth
-                          type="outlined"
-                          onTk-click={() => this.handleSearchCancelButtonClick(refSearchInput, col.field, refDropdown)}
-                        ></tk-button>
-                      </div>
-                      <div>
-                        <tk-button variant="primary" label="Search" fullWidth onTk-click={() => this.handleSearchButtonClick(refSearchInput, col.field, refDropdown)}></tk-button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </th>
             );
@@ -623,7 +662,7 @@ export class TkTable implements ComponentInterface {
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)}>
+                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
@@ -773,7 +812,7 @@ export class TkTable implements ComponentInterface {
             this.rowsPerPage = e.detail;
             const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
             this.generateRenderData(tmpData, 1);
-            if (this.selectAllRef) this.selectAllRef.value = false;
+            if (this.refSelectAll) this.refSelectAll.value = false;
             if (this.selection?.length > 0) this.handleSelectAll(false);
           }}
         ></tk-pagination>

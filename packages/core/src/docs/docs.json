@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-03-23T23:30:58",
+  "timestamp": "2025-04-14T04:29:39",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -102,7 +102,7 @@
           },
           "mutable": false,
           "attr": "arrow-position",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "Sets the position of opening and closing chevrons.",
           "docsTags": [
             {
@@ -142,7 +142,7 @@
           },
           "mutable": false,
           "attr": "collapse-icon",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "",
           "docsTags": [],
           "default": "'keyboard_arrow_up'",
@@ -175,7 +175,7 @@
           },
           "mutable": false,
           "attr": "expand-icon",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "",
           "docsTags": [],
           "default": "'keyboard_arrow_down'",
@@ -202,7 +202,7 @@
           },
           "mutable": false,
           "attr": "hide-arrows",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "Whether to hide the arrow icons.",
           "docsTags": [
             {
@@ -231,7 +231,7 @@
           },
           "mutable": false,
           "attr": "type",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "Sets accordion style for the component.",
           "docsTags": [
             {
@@ -494,7 +494,7 @@
     },
     {
       "filePath": "src/components/tk-alert/tk-alert.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "none",
       "tag": "tk-alert",
       "docs": "The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.",
       "docsTags": [
@@ -2477,14 +2477,14 @@
           "mutable": false,
           "attr": "avatar-props",
           "reflectToAttr": false,
-          "docs": "TO DO State hata verdiği için buraya alındı, düzeltilecek\nTkAvatar component properties",
+          "docs": "TO DO State hata verdiği için buraya alındı, düzeltilecek\r\nTkAvatar component properties",
           "docsTags": [
             {
               "name": "defaultValue",
               "text": "{ severity: 'light', background: 'solid', rounded: true }"
             }
           ],
-          "default": "{\n    severity: 'light',\n    background: 'solid',\n    rounded: true,\n  }",
+          "default": "{\r\n    severity: 'light',\r\n    background: 'solid',\r\n    rounded: true,\r\n  }",
           "values": [
             {
               "type": "any"
@@ -2507,6 +2507,30 @@
           "attr": "container-style",
           "reflectToAttr": false,
           "docs": "The style attribute of container element",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "contentStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "content-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of content element",
           "docsTags": [],
           "default": "null",
           "values": [
@@ -2780,20 +2804,20 @@
           "name": "imageOptions",
           "type": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\" | \"right\"; windowed?: boolean; background?: boolean; backgroundUrl?: string; position?: \"top\" | \"left\" | \"right\" | \"background\"; }",
           "complexType": {
-            "original": "{\n    badge?: string;\n    badgeIcon?: string;\n    badgeIconPosition?: 'left' | 'right';\n    windowed?: boolean;\n    background?: boolean;\n    backgroundUrl?: string;\n    position?: 'top' | 'left' | 'right' | 'background';\n  }",
+            "original": "{\r\n    badge?: string;\r\n    badgeIcon?: string;\r\n    badgeIconPosition?: 'left' | 'right';\r\n    windowed?: boolean;\r\n    background?: boolean;\r\n    backgroundUrl?: string;\r\n    position?: 'top' | 'left' | 'right' | 'background';\r\n  }",
             "resolved": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\" | \"right\"; windowed?: boolean; background?: boolean; backgroundUrl?: string; position?: \"top\" | \"left\" | \"right\" | \"background\"; }",
             "references": {}
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "TO DO\nOptions for the image display",
+          "docs": "TO DO\r\nOptions for the image display",
           "docsTags": [
             {
               "name": "defaultValue",
               "text": "{ position: 'top', background: false, windowed: false }"
             }
           ],
-          "default": "{\n    position: 'top',\n    background: false,\n    windowed: true,\n  }",
+          "default": "{\r\n    position: 'top',\r\n    background: false,\r\n    windowed: true,\r\n  }",
           "values": [
             {
               "type": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\""
@@ -2969,6 +2993,29 @@
       "usage": {},
       "props": [
         {
+          "name": "description",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "description",
+          "reflectToAttr": false,
+          "docs": "The description sub text displayed.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "disabled",
           "type": "boolean",
           "complexType": {
@@ -3083,6 +3130,35 @@
           "docsTags": [],
           "values": [
             {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"card\" | \"default\"",
+          "complexType": {
+            "original": "'default' | 'card'",
+            "resolved": "\"card\" | \"default\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "Determines the appearance types of the checkbox.",
+          "docsTags": [],
+          "default": "'default'",
+          "values": [
+            {
+              "value": "card",
+              "type": "string"
+            },
+            {
+              "value": "default",
               "type": "string"
             }
           ],
@@ -3244,7 +3320,7 @@
               }
             }
           },
-          "mutable": true,
+          "mutable": false,
           "attr": "icon",
           "reflectToAttr": false,
           "docs": "Specifies a material icon name to be displayed.",
@@ -4055,6 +4131,35 @@
           "setter": false
         },
         {
+          "name": "clearable",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "clearable",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the input of datepicker can be cleared",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "dateFormat",
           "type": "string",
           "complexType": {
@@ -4183,6 +4288,29 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "firstDayOfWeekIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "first-day-of-week-index",
+          "reflectToAttr": false,
+          "docs": "Defines the first day of the week. 0 for Monday, 1 for Tuesday, ..., 6 for Sunday.\nIf not provided, the first day of the week is determined by the `locale` prop.\nIf neither `firstDayOfWeekIndex` nor `locale` provide a value, defaults to Monday (0).\nProviding this prop overrides the locale setting for the start of the week.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -5090,7 +5218,7 @@
           },
           "signature": "close() => Promise<void>",
           "parameters": [],
-          "docs": "Requests to close the dialog by emitting a tk-close event.\nNote: This method only emits an event. The dialog will only close if the parent component\nlistens for this event and updates the 'visible' prop to false.",
+          "docs": "Requests to close the dialog by emitting a tk-close event.\r\nNote: This method only emits an event. The dialog will only close if the parent component\r\nlistens for this event and updates the 'visible' prop to false.",
           "docsTags": []
         },
         {
@@ -5112,7 +5240,7 @@
           },
           "signature": "open() => Promise<void>",
           "parameters": [],
-          "docs": "Requests to open the dialog by emitting a tk-open event.\nNote: This method only emits an event. The dialog will only open if the parent component\nlistens for this event and updates the 'visible' prop to true.",
+          "docs": "Requests to open the dialog by emitting a tk-open event.\r\nNote: This method only emits an event. The dialog will only open if the parent component\r\nlistens for this event and updates the 'visible' prop to true.",
           "docsTags": []
         }
       ],
@@ -5916,6 +6044,35 @@
       "usage": {},
       "props": [
         {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": false,
+          "docs": "The disabled status.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "emptyMessage",
           "type": "string",
           "complexType": {
@@ -6342,6 +6499,29 @@
           "setter": false
         },
         {
+          "name": "error",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": false,
+          "docs": "This is the error message that will be displayed.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "extensions",
           "type": "AnyExtension[]",
           "complexType": {
@@ -6418,6 +6598,35 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "invalid",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the editor is in an invalid state",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -6701,6 +6910,270 @@
           "docsTags": []
         }
       ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/tk-icon/tk-icon.tsx",
+      "encapsulation": "none",
+      "tag": "tk-icon",
+      "docs": "The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkIcon } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkIcon } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkIcon } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "color",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "color",
+          "reflectToAttr": false,
+          "docs": "The color of the icon",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "fill",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "fill",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the icon should be filled",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconType",
+          "type": "\"outlined\" | \"rounded\" | \"sharp\"",
+          "complexType": {
+            "original": "'rounded' | 'outlined' | 'sharp'",
+            "resolved": "\"outlined\" | \"rounded\" | \"sharp\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-type",
+          "reflectToAttr": false,
+          "docs": "Specifies the type of the icon to be displayed.",
+          "docsTags": [],
+          "default": "'outlined'",
+          "values": [
+            {
+              "value": "outlined",
+              "type": "string"
+            },
+            {
+              "value": "rounded",
+              "type": "string"
+            },
+            {
+              "value": "sharp",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Sets size for the component.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'base'"
+            }
+          ],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"card\" | \"default \"",
+          "complexType": {
+            "original": "'default ' | 'card'",
+            "resolved": "\"card\" | \"default \"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "This field specifies the type of the component.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'default'"
+            }
+          ],
+          "default": "'default '",
+          "values": [
+            {
+              "value": "card",
+              "type": "string"
+            },
+            {
+              "value": "default ",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"danger\" | \"info\" | \"neutral\" | \"primary\" | \"secondary\" | \"success\" | \"warning\" | \"white\"",
+          "complexType": {
+            "original": "'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white'",
+            "resolved": "\"danger\" | \"info\" | \"neutral\" | \"primary\" | \"secondary\" | \"success\" | \"warning\" | \"white\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": false,
+          "docs": "This field specifies the variant of icon.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'primary'"
+            }
+          ],
+          "default": "'primary'",
+          "values": [
+            {
+              "value": "danger",
+              "type": "string"
+            },
+            {
+              "value": "info",
+              "type": "string"
+            },
+            {
+              "value": "neutral",
+              "type": "string"
+            },
+            {
+              "value": "primary",
+              "type": "string"
+            },
+            {
+              "value": "secondary",
+              "type": "string"
+            },
+            {
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "value": "warning",
+              "type": "string"
+            },
+            {
+              "value": "white",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
       "listeners": [],
       "styles": [],
       "slots": [],
@@ -7324,7 +7797,7 @@
           },
           "signature": "setFocus() => Promise<void>",
           "parameters": [],
-          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\n`input.focus()`.",
+          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\r\n`input.focus()`.",
           "docsTags": []
         }
       ],
@@ -7929,6 +8402,34 @@
           "setter": false
         },
         {
+          "name": "position",
+          "type": "\"left\" | \"right\"",
+          "complexType": {
+            "original": "'left' | 'right'",
+            "resolved": "\"left\" | \"right\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "position",
+          "reflectToAttr": false,
+          "docs": "Determines the position of the radio and label.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "any",
           "complexType": {
@@ -8064,6 +8565,35 @@
           "docsTags": [],
           "values": [
             {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "position",
+          "type": "\"left\" | \"right\"",
+          "complexType": {
+            "original": "'left' | 'right'",
+            "resolved": "\"left\" | \"right\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "position",
+          "reflectToAttr": false,
+          "docs": "Determines the position of the radio group and label.",
+          "docsTags": [],
+          "default": "'left'",
+          "values": [
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
               "type": "string"
             }
           ],
@@ -9327,13 +9857,339 @@
       }
     },
     {
-      "filePath": "src/components/tk-stepper/tk-stepper.tsx",
-      "encapsulation": "shadow",
-      "tag": "tk-stepper",
-      "docs": "",
+      "filePath": "src/components/tk-stepper/tk-step.tsx",
+      "encapsulation": "none",
+      "tag": "tk-step",
+      "docs": "TkStep sub-component for individual steps in TkStepper.",
       "docsTags": [],
       "usage": {},
       "props": [
+        {
+          "name": "activeIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "active-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for active steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "complete",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "complete",
+          "reflectToAttr": false,
+          "docs": "Indicates if the step has been completed.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "completeIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "complete-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for completed steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": false,
+          "docs": "Indicates if the step is disabled (cannot be selected or interacted with).",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": false,
+          "docs": "Indicates if the step has encountered an error.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "errorIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "error-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for error steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "header",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "header",
+          "reflectToAttr": false,
+          "docs": "The header text to be displayed for the step.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "icon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "Icon to be displayed for the step. Can be either a string (icon name) or an IIconOptions object.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "inactiveIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "inactive-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for inactive steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "index",
+          "reflectToAttr": false,
+          "docs": "The index of the step in the stepper.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "isActive",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "is-active",
+          "reflectToAttr": false,
+          "docs": "Indicates if the step is currently active.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "isClickable",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "is-clickable",
+          "reflectToAttr": false,
+          "docs": "Whether the step is clickable.",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "labelPosition",
           "type": "\"flip\" | \"non-flip\"",
@@ -9345,7 +10201,7 @@
           "mutable": false,
           "attr": "label-position",
           "reflectToAttr": false,
-          "docs": "Controls the label position of the stepper component.",
+          "docs": "Controls the label position of the step.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -9361,6 +10217,329 @@
             {
               "value": "non-flip",
               "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "stepMode",
+          "type": "\"basic\" | \"number\"",
+          "complexType": {
+            "original": "'basic' | 'number'",
+            "resolved": "\"basic\" | \"number\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "step-mode",
+          "reflectToAttr": false,
+          "docs": "Controls the step mode of the stepper component.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'basic'"
+            }
+          ],
+          "default": "'basic'",
+          "values": [
+            {
+              "value": "basic",
+              "type": "string"
+            },
+            {
+              "value": "number",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "subheader",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "subheader",
+          "reflectToAttr": false,
+          "docs": "Optional subheader text to provide additional context for the step.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/tk-stepper/tk-stepper.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-stepper",
+      "docs": "TkStepper component for managing a series of steps.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkStepper, TkStep } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkStepper, TkStep } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkStepper, TkStep } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "active",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "active",
+          "reflectToAttr": false,
+          "docs": "Currently active step index",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "0"
+            }
+          ],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "activeIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "active-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for active steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "completeIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "complete-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for completed steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "containerStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "container-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of container element",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "contentStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "content-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of content elements",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "errorIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "error-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for error steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "inactiveIcon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "inactive-icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon or icon options for inactive steps.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "linear",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "linear",
+          "reflectToAttr": false,
+          "docs": "Whether the steps follow a linear progression (can only navigate to the next step when current step is completed).",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
             }
           ],
           "optional": false,
@@ -9403,11 +10582,64 @@
           "setter": false
         },
         {
-          "name": "stepMode",
-          "type": "\"basic\" | \"icon\" | \"number\"",
+          "name": "showCompleteState",
+          "type": "boolean",
           "complexType": {
-            "original": "'basic' | 'icon' | 'number'",
-            "resolved": "\"basic\" | \"icon\" | \"number\"",
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "show-complete-state",
+          "reflectToAttr": false,
+          "docs": "Whether to show completed steps with the complete state.\r\nIf false, completed steps will appear as just passed and not with complete styling.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "signStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sign-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of step sign elements",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "stepMode",
+          "type": "\"basic\" | \"number\"",
+          "complexType": {
+            "original": "'basic' | 'number'",
+            "resolved": "\"basic\" | \"number\"",
             "references": {}
           },
           "mutable": false,
@@ -9427,10 +10659,6 @@
               "type": "string"
             },
             {
-              "value": "icon",
-              "type": "string"
-            },
-            {
               "value": "number",
               "type": "string"
             }
@@ -9439,42 +10667,85 @@
           "required": false,
           "getter": false,
           "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "setActive",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(index: number) => Promise<void>",
+            "parameters": [
+              {
+                "name": "index",
+                "type": "number",
+                "docs": "- The index of the step to set as active."
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "setActive(index: number) => Promise<void>",
+          "parameters": [
+            {
+              "name": "index",
+              "type": "number",
+              "docs": "- The index of the step to set as active."
+            }
+          ],
+          "docs": "Sets the active step index.",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "index - The index of the step to set as active."
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": "tkStepChange",
+          "detail": "number",
+          "bubbles": true,
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the active step changes.",
+          "docsTags": []
         },
         {
-          "name": "steps",
-          "type": "string | { number: number; label: string; description: string; icon?: string; status?: string; }[]",
+          "event": "tkStepClick",
+          "detail": "IStepClickDetail",
+          "bubbles": true,
           "complexType": {
-            "original": "| string\r\n    | Array<{\r\n        number: number;\r\n        label: string;\r\n        description: string;\r\n        icon?: string;\r\n        status?: string;\r\n      }>",
-            "resolved": "string | { number: number; label: string; description: string; icon?: string; status?: string; }[]",
+            "original": "IStepClickDetail",
+            "resolved": "IStepClickDetail",
             "references": {
-              "Array": {
-                "location": "global",
-                "id": "global::Array"
+              "IStepClickDetail": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-stepper/interfaces.ts::IStepClickDetail"
               }
             }
           },
-          "mutable": false,
-          "attr": "steps",
-          "reflectToAttr": false,
-          "docs": "Sets the steps of stepper component.",
-          "docsTags": [],
-          "default": "'[]'",
-          "values": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "{ number: number; label: string; description: string; icon?: string; status?: string; }[]"
-            }
-          ],
-          "optional": false,
-          "required": false,
-          "getter": false,
-          "setter": false
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when a step is clicked.",
+          "docsTags": []
         }
       ],
-      "methods": [],
-      "events": [],
       "listeners": [],
       "styles": [],
       "slots": [],
@@ -9553,7 +10824,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "Provides a function to customize cell styles.\r\nThis function takes row and column information and returns a style for a specific cell.",
+          "docs": "Provides a function to customize cell styles.\nThis function takes row and column information and returns a style for a specific cell.",
           "docsTags": [],
           "values": [
             {
@@ -9752,7 +11023,7 @@
           },
           "mutable": false,
           "attr": "pagination-type",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "The type of the pagination",
           "docsTags": [
             {
@@ -9796,7 +11067,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "Provides a function to customize row styles.\r\nThis function takes row information and returns a style for a specific row.",
+          "docs": "Provides a function to customize row styles.\nThis function takes row information and returns a style for a specific row.",
           "docsTags": [],
           "values": [
             {
@@ -10112,6 +11383,20 @@
           "docsTags": []
         },
         {
+          "event": "tk-row-click",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        },
+        {
           "event": "tk-selection-change",
           "detail": "any",
           "bubbles": true,
@@ -10132,12 +11417,6 @@
           "target": "window",
           "capture": false,
           "passive": false
-        },
-        {
-          "event": "resize",
-          "target": "window",
-          "capture": false,
-          "passive": true
         }
       ],
       "styles": [],
@@ -10150,17 +11429,17 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
-        "tk-checkbox",
         "tk-input",
         "tk-button",
+        "tk-checkbox",
         "tk-radio",
         "tk-pagination"
       ],
       "dependencyGraph": {
         "tk-table": [
-          "tk-checkbox",
           "tk-input",
           "tk-button",
+          "tk-checkbox",
           "tk-radio",
           "tk-pagination"
         ],
@@ -10970,6 +12249,29 @@
           "setter": false
         },
         {
+          "name": "maxLength",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-length",
+          "reflectToAttr": false,
+          "docs": "Limits the number of characters.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "name",
           "type": "string",
           "complexType": {
@@ -11240,6 +12542,107 @@
           "docsTags": []
         }
       ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/tk-timeline/tk-timeline.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-timeline",
+      "docs": "Timeline component to display a sequence of events.",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "alternate",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "alternate",
+          "reflectToAttr": false,
+          "docs": "Whether to alternate the position of timeline items relative to the line.",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "items",
+          "type": "TimelineItem[]",
+          "complexType": {
+            "original": "TimelineItem[]",
+            "resolved": "TimelineItem[]",
+            "references": {
+              "TimelineItem": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-timeline/interfaces.ts::TimelineItem"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "An array of objects representing the items to display on the timeline.\r\nEach object should have at least a `title`. `description` and `date` are optional.",
+          "docsTags": [],
+          "default": "[]",
+          "values": [
+            {
+              "type": "TimelineItem[]"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "complexType": {
+            "original": "'horizontal' | 'vertical'",
+            "resolved": "\"horizontal\" | \"vertical\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "orientation",
+          "reflectToAttr": false,
+          "docs": "The orientation of the timeline.",
+          "docsTags": [],
+          "default": "'horizontal'",
+          "values": [
+            {
+              "value": "horizontal",
+              "type": "string"
+            },
+            {
+              "value": "vertical",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
       "listeners": [],
       "styles": [],
       "slots": [],
@@ -11551,7 +12954,7 @@
           },
           "mutable": true,
           "attr": "value",
-          "reflectToAttr": true,
+          "reflectToAttr": false,
           "docs": "The current state of the toggle.",
           "docsTags": [
             {
@@ -12051,6 +13454,29 @@
           "setter": false
         },
         {
+          "name": "error",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": false,
+          "docs": "Provided a error about the upload.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "hint",
           "type": "string",
           "complexType": {
@@ -12084,7 +13510,7 @@
           "mutable": false,
           "attr": "invalid",
           "reflectToAttr": false,
-          "docs": "Indicates whether the upload is in an invalid state",
+          "docs": "Indicates whether the upload is in an invalid state, uploads will fail eventually",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -12503,6 +13929,11 @@
       "docstring": "See cleave.js documentation https://nosir.github.io/cleave.js",
       "path": "src/components/tk-input/interfaces.ts"
     },
+    "src/components/tk-stepper/interfaces.ts::IStepClickDetail": {
+      "declaration": "export interface IStepClickDetail {\n  index: number;\n  status: 'completed' | 'active' | 'inactive' | 'error' | 'disabled';\n}",
+      "docstring": "",
+      "path": "src/components/tk-stepper/interfaces.ts"
+    },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
       "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n}",
       "docstring": "Defines the columns for the table",
@@ -12532,6 +13963,11 @@
       "declaration": "export interface ITabsIconOptions {\n  /**\n   * Material symbols icon name\n   */\n  name: string;\n  /**\n   * The color of the icon\n   */\n  color?: string;\n  /**\n   * The style of the icon\n   */\n  style?: 'outlined' | 'rounded' | 'sharp';\n  /**\n   * Indicates whether the icon should be filled\n   */\n  fill?: boolean;\n}",
       "docstring": "Defines the options for configuring icons in the Tabs Item component",
       "path": "src/components/tk-tabs/interfaces.ts"
+    },
+    "src/components/tk-timeline/interfaces.ts::TimelineItem": {
+      "declaration": "export interface TimelineItem {\n  title: string;\n  description?: string;\n  date?: string;\n}",
+      "docstring": "",
+      "path": "src/components/tk-timeline/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableFilter": {
       "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value: string;\n  /** The field to which the filter is applied */\n  field: string;\n}",

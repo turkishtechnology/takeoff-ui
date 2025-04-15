@@ -23,7 +23,7 @@ export class TkCard implements ComponentInterface {
 
   @State() hasHeaderSlot: boolean;
   @State() hasAvatarSlot: boolean;
-  @State() hasBodySlot: boolean;
+  @State() hasContentSlot: boolean;
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
   @State() hasDefaultSlotBody: boolean;
@@ -120,11 +120,15 @@ export class TkCard implements ComponentInterface {
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
+  /**
+   * The style attribute of content element
+   */
+  @Prop() contentStyle?: any = null;
 
   componentWillLoad() {
     this.hasHeaderSlot = !!this.el.querySelector('[slot="header"]');
     this.hasAvatarSlot = !!this.el.querySelector('[slot="avatar"]');
-    this.hasBodySlot = !!this.el.querySelector('[slot="body"]');
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
     this.hasFooterSlot = !!this.el.querySelector('[slot="footer"]');
     this.hasFooterActionsSlot = !!this.el.querySelector('[slot="footer-actions"]');
     this.hasDefaultSlotBody = Array.from(this.el.childNodes).some(node => {
@@ -181,12 +185,12 @@ export class TkCard implements ComponentInterface {
     );
   }
 
-  private createBody() {
-    if (this.hasBodySlot) {
+  private createContent() {
+    if (this.hasContentSlot) {
       return <slot name="content"></slot>;
     } else if (this.hasDefaultSlotBody) {
       return (
-        <div class="tk-card-body">
+        <div class="tk-card-content" style={this.contentStyle}>
           <slot></slot>
         </div>
       );
@@ -214,7 +218,7 @@ export class TkCard implements ComponentInterface {
   private renderCardContent() {
     const header = this.createHeader();
     const image = this.createImage();
-    const content = this.createBody();
+    const content = this.createContent();
     const footer = this.createFooter();
     const imageOption = this.imageOptions.position;
 

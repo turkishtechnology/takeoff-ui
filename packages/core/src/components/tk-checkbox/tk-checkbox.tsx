@@ -1,4 +1,5 @@
 import { Component, Prop, h, Element, Watch, EventEmitter, Event, ComponentInterface, AttachInternals } from '@stencil/core';
+import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -26,6 +27,11 @@ export class TkCheckbox implements ComponentInterface {
   @Prop() disabled: boolean = false;
 
   /**
+   * The description sub text displayed.
+   */
+  @Prop() description: string;
+
+  /**
    * Indicates whether the input is in an invalid state
    * @defaultValue false
    */
@@ -40,6 +46,11 @@ export class TkCheckbox implements ComponentInterface {
    * Name of the checkbox
    */
   @Prop() name: string;
+
+  /**
+   * Determines the appearance types of the checkbox.
+   */
+  @Prop() type: 'default' | 'card' = 'default';
 
   /**
    * If true, the checkbox will be indeterminate.
@@ -98,8 +109,8 @@ export class TkCheckbox implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-checkbox-container" aria-disabled={this.disabled} aria-invalid={this.invalid}>
-        <label htmlFor={this.uniqueId}>
+      <div class={classNames('tk-checkbox-container', this.type)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+        <label htmlFor={this.uniqueId} class={classNames({ 'width-description': this.description })}>
           <input
             id={this.uniqueId}
             type="checkbox"
@@ -113,7 +124,10 @@ export class TkCheckbox implements ComponentInterface {
           <div class="mask">
             <i class="material-symbols-outlined">{this.indeterminate ? 'remove' : 'check'}</i>
           </div>
-          {this.label}
+          <div class="tk-checkbox-text-holder">
+            <div class="tk-checkbox-label">{this.label}</div>
+            <div class="tk-checkbox-description">{this.description}</div>
+          </div>
         </label>
       </div>
     );

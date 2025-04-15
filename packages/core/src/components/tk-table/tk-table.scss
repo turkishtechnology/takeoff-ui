@@ -113,45 +113,6 @@
             }
           }
 
-          .popper {
-            width: 220px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 16px;
-            border: 1px solid var(--border-light);
-            background-color: var(--static-light);
-            display: none;
-            padding: 8px;
-            z-index: 1;
-            box-shadow: var(--effect-1-default-sm);
-
-            .container {
-              display: flex;
-              flex-direction: column;
-              padding: 8px;
-              gap: 8px;
-
-              .buttons {
-                display: flex;
-                gap: 8px;
-
-                div {
-                  flex: 1;
-                }
-              }
-            }
-
-            #arrow {
-              position: absolute;
-              width: 0;
-              height: 0;
-              border-left: 8px solid transparent;
-              border-right: 8px solid transparent;
-              border-bottom: 8px solid var(--static-light);
-            }
-          }
-
           th:first-child {
             border-top-left-radius: var(--radius-m-base);
           }
@@ -231,7 +192,7 @@
           }
 
           &.selected td {
-            background-color: var(--states-info-lightest);
+            background-color: var(--states-info-light);
           }
 
           &.selected:hover td {
@@ -274,15 +235,16 @@
     table thead tr th {
       background-color: var(--secondary-lightest);
     }
-    table tbody tr{
+    table tbody tr {
       &:nth-child(even) td {
         background-color: var(--background-lightest);
       }
-      &:nth-child(even):hover td{
+      &:hover td {
         background-color: var(--states-info-light);
       }
-      &:nth-child(odd):hover td{
-        background-color: var(--background-lightest);
+
+      &.selected td {
+        background-color: var(--states-info-light);
       }
     }
   }
@@ -307,5 +269,29 @@
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+.tk-table-filter-panel {
+  width: 220px;
+  position: fixed;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background-color: var(--static-light);
+  padding: 8px;
+  z-index: 1400;
+  box-shadow: var(--effect-1-default-base);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+
+  .tk-table-filter-panel-buttons {
+    display: flex;
+    gap: 8px;
+
+    tk-button {
+      flex: 1;
+    }
   }
 }

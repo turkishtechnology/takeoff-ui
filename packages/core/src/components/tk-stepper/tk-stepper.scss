@@ -1,509 +1,263 @@
 :host {
-  --circle-size: clamp(1.5rem, 5vw, 2rem);
-  --spacing: clamp(0.25rem, 2vw, 0.5rem);
+  display: block;
 }
 
 .tk-stepper {
-  list-style-type: none;
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Geologica';
+  text-align: initial;
+  list-style: none;
+  box-sizing: border-box;
 
-  &.horizontal {
-    display: flex;
+  &.tk-stepper-horizontal {
+    flex-direction: row;
+    overflow-x: auto;
 
-    .tk-stepper-item {
-      &.flip {
-        &::after {
-          top: calc(var(--circle-size) * 2) !important;
-        }
+    .tk-step-item {
+      flex: 1;
+
+      &:last-child {
+        flex: none;
       }
-    }
 
-    .tk-stepper-content {
-      &.flip {
-        display: flex;
-        flex-direction: column-reverse;
-        .tk-step-info {
+      .tk-step {
+        .tk-step-sign {
+          margin-inline-start: 40px;
+          margin-inline-end: 8px;
+          vertical-align: top;
+        }
+
+        .tk-step-rail {
+          position: absolute;
+          top: calc(28px / 2);
+          font-size: 0px;
+          width: calc(100% - 48px);
+          padding: 0 24px;
+          inset-inline-start: 0;
+          margin-inline-start: calc(32px / 2 + 40px);
+
+          &::after {
+            content: '';
+            display: inline-block;
+            height: 2px;
+            width: 100%;
+            background-color: var(--border-light);
+            border-radius: var(--radius-full);
+          }
+        }
+
+        .tk-step-content {
           display: flex;
+          width: calc((32px / 2 + 40px) * 2);
+          margin-top: var(--stepper-items-content-gap);
+          text-align: center;
           flex-direction: column;
-          margin-bottom: 0.5rem;
-          line-height: 1;
-        }
-      }
-    }
-
-
-    &.basic {
-      .tk-stepper-item {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        text-align: center;
-
-
-        &:not(:last-child) {
-          &:after {
-            content: "";
-            position: relative;
-            top: calc(var(--circle-size) / 2);
-            width: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-            left: calc(50% + calc(var(--circle-size) / 2 + var(--spacing)));
-            height: 2px;
-            background-color: var(--background-light);
-            order: -1;
-          }
-        }
-
-        .tk-stepper-icon {
-          --size: 5rem;
-          content: "";
-          display: flex;
           align-items: center;
-          justify-content: center;
-          width: var(--circle-size);
-          height: var(--circle-size);
-          border-radius: 50%;
-          margin: 0 auto 1rem;
-          color: white;
+          flex-shrink: 0;
         }
-
-        &.completed {
-          .tk-stepper-icon {
-            background-color: var(--static-light);
-            border: 2px solid var(--primary-base);
-            color: var(--primary-base);
-          }
-          &::after {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        &.active {
-          .tk-stepper-icon {
-            background-color: var(--primary-base);
-            border: 2px solid var(--primary-base);
-            color: var(--static-light);
-          }
-        }
-
-        &.inactive {
-          .tk-stepper-icon {
-            background-color: var(--icon-light);
-            border: 2px solid var(--border-light);
-            color: var(--static-light);
-          }
-        }
-
       }
     }
-
-    &.icon {
-      .tk-stepper-item {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        text-align: center;
-
-        &:not(:last-child) {
-          &:after {
-            content: "";
-            position: relative;
-            top: calc(var(--circle-size) / 2);
-            width: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-            left: calc(50% + calc(var(--circle-size) / 2 + var(--spacing)));
-            height: 2px;
-            background-color: var(--background-light);
-            order: -1;
-          }
-        }
-
-
-
-
-        .tk-stepper-icon {
-          --size: 5rem;
-          content: "";
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: var(--circle-size);
-          height: var(--circle-size);
-          border-radius: 50%;
-          margin: 0 auto 1rem;
-          color: white;
-        }
-
-        &.completed {
-          .tk-stepper-icon {
-            background-color: var(--static-light);
-            border: 2px solid var(--primary-base);
-            color: var(--primary-base);
-          }
-          &::after {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        &.active {
-          .tk-stepper-icon {
-            background-color: var(--primary-base);
-            border: 2px solid var(--primary-base);
-            color: var(--static-light);
-          }
-        }
-
-        &.inactive {
-          .tk-stepper-icon {
-            background-color: var(--icon-light);
-            border: 2px solid var(--border-light);
-            color: var(--static-light);
-          }
-        }
-
-      }
-    }
-
-    &.number {
-      .tk-stepper-item {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        text-align: center;
-
-        &:not(:last-child) {
-          &:after {
-            content: "";
-            position: relative;
-            top: calc(var(--circle-size) / 2);
-            width: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-            left: calc(50% + calc(var(--circle-size) / 2 + var(--spacing)));
-            height: 2px;
-            background-color: var(--background-light);
-            order: -1;
-          }
-        }
-
-
-        .tk-stepper-icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: var(--circle-size);
-          height: var(--circle-size);
-          border-radius: 50%;
-          margin: 0 auto 1rem;
-          color: var(--static-light);
-          font-family: "Geologica", sans-serif;
-          font-size: var(--desktop-body-xs-font);
-          font-weight: bold;
-        }
-
-        &.completed {
-          .tk-stepper-icon {
-            background-color: var(--static-light);
-            border: 2px solid var(--primary-base);
-            color: var(--primary-base);
-          }
-          &::after {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        &.active {
-          .tk-stepper-icon {
-            background-color: var(--primary-base);
-            border: 2px solid var(--primary-base);
-            color: var(--static-light);
-          }
-        }
-
-        &.inactive {
-          .tk-stepper-icon {
-            background-color: var(--icon-light);
-            border: 2px solid var(--border-light);
-            color: var(--static-light);
-          }
-        }
-
-      }
-    }
-
   }
 
-  &.vertical {
-    max-width: 256px;
-    &.basic {
-     .tk-stepper-item {
-       position: relative;
-       display: flex;
-       gap: 1.5rem;
+  &.tk-stepper-vertical {
+    flex-direction: column;
+    align-items: flex-start;
 
-       &:last-child {
-         .tk-stepper-content {
-           &:before {
-             display: none;
-           }
-         }
-       }
+    .tk-step-item {
+      display: block;
+      flex: 1 0 auto;
+      padding-inline-start: 0;
+      overflow: visible;
 
-       &.completed {
-         .tk-stepper-icon {
-           background-color: var(--static-light);
-           border: 2px solid var(--primary-base);
-           color: var(--primary-base);
-         }
-         .tk-stepper-content {
-           &::before {
-             background-color: var(--primary-base) !important;
-           }
-         }
-       }
+      &:last-child {
+        flex: none;
+      }
 
-       &.active {
-         .tk-stepper-icon {
-           background-color: var(--primary-base);
-           border: 2px solid var(--primary-base);
-           color: var(--static-light);
-         }
-         &::before {
-           background-color: var(--primary-base) !important;
-         }
-       }
-
-       &.inactive {
-         .tk-stepper-icon {
-           background-color: var(--icon-light);
-           border: 2px solid var(--border-light);
-           color: var(--static-light);
-         }
-         &::before {
-           background-color: var(--primary-base) !important;
-         }
-       }
-
-       .tk-stepper-icon {
-         position: absolute;
-         left: -16px;
-         z-index: 2;
-         background-color: red;
-         border-radius: 50%;
-         width: var(--circle-size);
-         height: var(--circle-size);
-         display: flex;
-         justify-content: center;
-         align-items: center;
-       }
-
-
-     }
-   }
-
-    &.icon {
-      .tk-stepper-item {
-        position: relative;
+      .tk-step {
         display: flex;
-        gap: 1.5rem;
+        flex-direction: row;
+        align-items: flex-start;
 
-        &:last-child {
-          .tk-stepper-content {
-            &:before {
-              display: none;
-            }
-          }
+        .tk-step-sign {
+          float: left;
+          margin-inline-end: 8px;
         }
 
-        &.completed {
-          .tk-stepper-icon {
-            background-color: var(--static-light);
-            border: 2px solid var(--primary-base);
-            color: var(--primary-base);
-          }
-          .tk-stepper-content {
-            &::before {
-              background-color: var(--primary-base) !important;
-            }
-          }
-        }
-
-        &.active {
-          .tk-stepper-icon {
-            background-color: var(--primary-base);
-            border: 2px solid var(--primary-base);
-            color: var(--static-light);
-          }
-          &::before {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        &.inactive {
-          .tk-stepper-icon {
-            background-color: var(--icon-light);
-            border: 2px solid var(--border-light);
-            color: var(--static-light);
-          }
-          &::before {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        .tk-stepper-icon {
+        .tk-step-rail {
           position: absolute;
-          left: -16px;
-          z-index: 2;
-          background-color: red;
-          border-radius: 50%;
-          width: var(--circle-size);
-          height: var(--circle-size);
+          top: 0px;
+          font-size: 0px;
+          height: calc(100% - 48px);
+          padding: 40px 0;
+          width: 2px;
+          inset-inline-start: calc(30px / 2);
+
+          &::after {
+            content: '';
+            display: inline-block;
+            width: 2px;
+            height: 100%;
+            background-color: var(--border-light);
+            border-radius: var(--radius-full);
+          }
+        }
+
+        .tk-step-content {
+          display: block;
+          min-height: calc(32px * 2.5);
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  .tk-step-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    overflow: visible;
+
+    &:last-child {
+      .tk-step-rail {
+        display: none;
+      }
+    }
+
+    .tk-step-container {
+      outline: none;
+
+      .tk-step {
+        cursor: pointer;
+
+        .tk-step-sign {
           display: flex;
           justify-content: center;
           align-items: center;
+          width: 28px;
+          height: 28px;
+          border: 2px solid var(--border-light);
+          background-color: var(--static-white);
+          border-radius: var(--radius-full);
+          text-align: center;
+
+          .tk-step-icon,
+          .tk-step-number,
+          .tk-step-icon-error,
+          svg {
+            position: relative;
+            line-height: 1;
+            font-size: var(--size-xl);
+            width: 20px;
+            height: 20px;
+          }
+
+          .tk-step-icon-dot svg {
+            width: 12px;
+            height: 12px;
+          }
+
+          .tk-step-icon-complete svg {
+            width: 14px;
+            height: 12px;
+          }
         }
 
+        .tk-step-rail::after {
+          transition: background-color .2s ease-in-out;
+        }
 
-      }
-    }
-
-    &.number {
-      .tk-stepper-item {
-        position: relative;
-        display: flex;
-        gap: 1.5rem;
-
-        &.flip {
-          flex-direction: row-reverse;
-          align-items: center;
-          .tk-stepper-icon {
-            order: 2;
-            right: -18px;
-            left: unset;
+        .tk-step-content {
+          .tk-step-header {
+            color: var(--text-dark);
+            font-family: var(--desktop-family-body);
+            font-size: var(--desktop-size-sm);
+            font-weight: var(--desktop-weight-medium);
+            line-height: var(--desktop-line-height-sm-normal);
           }
-          .tk-stepper-content {
-            order: 1;
-            text-align: right;
+
+          .tk-step-subheader {
+            color: var(--text-base);
+            font-family: var(--desktop-family-body);
+            font-size: var(--desktop-size-xs, 12px);
+            font-weight: var(--desktop-weight-regular, 400);
+            line-height: var(--desktop-line-height-xs-normal, 1.5);
           }
-          .tk-step-info {
-            margin-right: 30px;
-            .tk-step-desc {
-              padding-right: 0;
+        }
+
+        &.tk-step-disabled {
+          cursor: not-allowed;
+        }
+
+        &:not(.tk-step-disabled) {
+          &.tk-step-active {
+            .tk-step-sign {
+              border-color: var(--primary-base);
+              background-color: var(--primary-base);
+              color: var(--static-white);
+
+              .tk-step-icon,
+              svg {
+                color: var(--static-white);
+              }
+            }
+
+            .tk-step-header {
+              color: var(--text-darkest);
+            }
+          }
+
+          &.tk-step-inactive {
+            .tk-step-sign {
+              border-color: var(--border-light);
+              color: var(--border-light);
+
+              svg circle {
+                fill: var(--border-light);
+              }
+            }
+          }
+
+          &.tk-step-completed {
+            .tk-step-sign {
+              border-color: var(--primary-base);
+              color: var(--primary-base);
+
+              .tk-step-icon {
+                color: var(--primary-base);
+              }
+            }
+
+            .tk-step-rail::after {
+              background-color: var(--primary-base);
+            }
+          }
+
+          &.tk-step-error {
+            .tk-step-sign {
+              border-color: var(--states-danger-base);
+              color: var(--states-danger-base);
+              background: var(--states-danger-base);
+
+              .tk-step-icon {
+                color: var(--static-light);
+              }
+
+              svg path {
+                fill: var(--static-light);
+              }
+            }
+
+            .tk-step-content {
+              .tk-step-header {
+                color: var(--states-danger-base);
+              }
             }
           }
         }
-
-        &:last-child {
-          .tk-stepper-content {
-            &:before {
-              display: none;
-            }
-          }
-        }
-
-        &.completed {
-          .tk-stepper-icon {
-            background-color: var(--static-light);
-            border: 2px solid var(--primary-base);
-            color: var(--primary-base);
-          }
-          .tk-stepper-content {
-            &::before {
-              background-color: var(--primary-base) !important;
-            }
-          }
-        }
-
-        &.active {
-          .tk-stepper-icon {
-            background-color: var(--primary-base);
-            border: 2px solid var(--primary-base);
-            color: var(--static-light);
-          }
-          &::before {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        &.inactive {
-          .tk-stepper-icon {
-            background-color: var(--icon-light);
-            border: 2px solid var(--border-light);
-            color: var(--static-light);
-          }
-          &::before {
-            background-color: var(--primary-base) !important;
-          }
-        }
-
-        .tk-stepper-icon {
-          position: absolute;
-          left: -16px;
-          z-index: 2;
-          background-color: red;
-          border-radius: 50%;
-          width: var(--circle-size);
-          height: var(--circle-size);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-family: "Geologica", sans-serif;
-          font-size: var(--desktop-body-xs-font);
-          font-weight: bold;
-        }
       }
     }
-
-
-
-    .tk-stepper-content {
-      padding-bottom: 5rem;
-
-      &:before {
-        content: "";
-        position: absolute;
-        top: calc(var(--circle-size) + var(--spacing));
-        height: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-        width: 2px;
-        background-color: lightgrey;
-      }
-
-
-      &:after {
-        content: "";
-        position: absolute;
-        left: calc(0px - 12px);
-        top: 0;
-        width: 20px;
-        height: 20px;
-        z-index: 1;
-        border-radius: 50%;
-      }
-    }
-
-    .tk-step-label, .tk-step-desc {
-      margin-left: 30px;
-      padding-left: 0;
-    }
-
-  }
-
-  /* ************************************************************ */
-
-  .tk-step-label {
-    font-size: var(--desktop-body-s-font);
-    color: var(--text-dark);
-    margin-bottom: 0.2rem;
-  }
-
-  .tk-step-desc {
-    color: var(--text-base);
-    font-size: var(--desktop-body-xs-font);
-    padding-left: var(--spacing);
-    padding-right: var(--spacing);
   }
 }
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment } from '@stencil/core';
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
@@ -35,6 +35,11 @@ export class TkUpload implements ComponentInterface {
    * Provided a hint or additional information about the input.
    */
   @Prop() hint?: string;
+
+  /**
+   * Provided a error about the upload.
+   */
+  @Prop() error?: string;
 
   /**
    * Displays a red asterisk (*) next to the label for visual emphasis.
@@ -85,6 +90,10 @@ export class TkUpload implements ComponentInterface {
    * The file value of the upload.
    */
   @Prop({ mutable: true }) value: File[] = [];
+  @Watch('value')
+  valueChanged(newValue: File[]) {
+    if (!newValue || newValue?.length <= 0) this.inputRef.value = null;
+  }
 
   /**
    * Description displayed under the title.
@@ -92,7 +101,7 @@ export class TkUpload implements ComponentInterface {
   @Prop() description: string = 'JPEG, PNG, PDF and MP4 formats, up to 50 MB.';
 
   /**
-   * Indicates whether the upload is in an invalid state
+   * Indicates whether the upload is in an invalid state, uploads will fail eventually
    * @defaultValue false
    */
   @Prop() invalid: boolean = false;
@@ -269,8 +278,17 @@ export class TkUpload implements ComponentInterface {
       );
     }
 
+    if (this.error?.length > 0) {
+      hint = (
+        <span class="hint">
+          <i class="material-symbols-outlined">info</i>
+          {this.error}
+        </span>
+      );
+    }
+
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         {label}
         <div class={classNames('tk-upload-dropzone', this.type)}>
           <div class="tk-upload-icon">

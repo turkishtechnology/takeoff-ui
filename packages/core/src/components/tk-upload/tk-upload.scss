@@ -34,7 +34,15 @@
       color: var(--icon-base);
     }
   }
-
+  &[aria-invalid] {
+    .tk-upload-dropzone {
+      border-color: var(--states-danger-base);
+    }
+    .hint,
+    .hint i {
+      color: var(--states-danger-base);
+    }
+  }
   .tk-upload-dropzone {
     padding: 12px;
     border-radius: 8px;
@@ -94,7 +102,7 @@
       align-items: center;
 
       .tk-upload-icon {
-        justify-self: center;
+        text-align: center;
 
         .icon {
           font-size: 40px;

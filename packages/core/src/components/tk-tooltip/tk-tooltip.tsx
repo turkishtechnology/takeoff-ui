@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Fragment } from '@stencil/core';
-import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
+import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
@@ -19,8 +19,11 @@ export class TkTooltip implements ComponentInterface {
   private tooltipElement: HTMLElement;
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
+  private cleanup;
 
   @Element() el: HTMLTkTooltipElement;
+
+  @State() isOpen: boolean = false;
 
   /**
    * Sets header text for the tooltip.
@@ -59,11 +62,7 @@ export class TkTooltip implements ComponentInterface {
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
-  /**
-   * Controls if tooltip is visible.
-   * @defaultValue false
-   */
-  @State() isVisible: boolean = false;
+
   /**
    * Controls if tooltip has custom content.
    * @defaultValue false
@@ -80,20 +79,18 @@ export class TkTooltip implements ComponentInterface {
   componentDidLoad() {
     this.triggerElement = this.el.querySelector('[slot="trigger"]');
 
-    if (this.triggerElement && this.tooltipElement && this.arrowElement) {
-      this.triggerElement.addEventListener('mouseenter', this.handleMouseEnter);
-      this.triggerElement.addEventListener('mouseleave', this.handleMouseLeave);
-
-      this.requestAnimationFrame(() => {
-        this.updatePosition();
-      });
-    }
+    this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
+    this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
   }
 
-  private requestAnimationFrame(fn) {
-    const timeout = fn => setTimeout(fn, 0);
-    let frame = window.requestAnimationFrame || timeout;
-    return frame(fn);
+  componentDidUpdate() {
+    if (this.isOpen) {
+      this.cleanup = autoUpdate(this.triggerElement, this.tooltipElement, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+    } else {
+      this.cleanup && this.cleanup();
+    }
   }
 
   private updatePosition() {
@@ -136,14 +133,11 @@ export class TkTooltip implements ComponentInterface {
   }
 
   private handleMouseEnter = () => {
-    this.requestAnimationFrame(() => {
-      this.updatePosition();
-    });
-    this.isVisible = true;
+    this.isOpen = true;
   };
 
   private handleMouseLeave = () => {
-    this.isVisible = false;
+    this.isOpen = false;
   };
 
   render() {
@@ -170,29 +164,31 @@ export class TkTooltip implements ComponentInterface {
     return (
       <div class="tk-tooltip">
         <slot name="trigger" />
-        <div
-          ref={el => (this.tooltipElement = el as HTMLElement)}
-          class={{
-            'tk-tooltip-content': true,
-            [`tk-tooltip-${this.variant}`]: !!this.variant,
-            'visible': this.isVisible,
-          }}
-          style={{ ...this.containerStyle }}
-          role="tooltip"
-        >
-          {this.hasContentSlot ? (
-            <slot name="content" />
-          ) : (
-            <Fragment>
-              {_icon}
-              <div>
-                <div class="tk-tooltip-header">{this.header}</div>
-                <div class="tk-tooltip-description">{this.description}</div>
-              </div>
-            </Fragment>
-          )}
-          <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
-        </div>
+
+        {this.isOpen && (
+          <div
+            ref={el => (this.tooltipElement = el as HTMLElement)}
+            class={{
+              'tk-tooltip-content': true,
+              [`tk-tooltip-${this.variant}`]: !!this.variant,
+            }}
+            style={{ ...this.containerStyle }}
+            role="tooltip"
+          >
+            {this.hasContentSlot ? (
+              <slot name="content" />
+            ) : (
+              <Fragment>
+                {_icon}
+                <div>
+                  <div class="tk-tooltip-header">{this.header}</div>
+                  <div class="tk-tooltip-description">{this.description}</div>
+                </div>
+              </Fragment>
+            )}
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
+          </div>
+        )}
       </div>
     );
   }

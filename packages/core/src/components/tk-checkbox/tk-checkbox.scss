@@ -3,6 +3,20 @@ tk-checkbox {
 }
 
 .tk-checkbox-container {
+  &.card {
+    border-radius: var(--radius-m-base);
+    border: 1px solid var(--border-light);
+    background: var(--static-Light);
+    gap: var(--card-radio-container-gap);
+    padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
+
+    &:hover {
+      background-color: var(--background-lightest);
+    }
+    .mask {
+      align-self: center;
+    }
+  }
   label {
     display: flex;
     flex-direction: row;
@@ -14,7 +28,11 @@ tk-checkbox {
     cursor: pointer;
     user-select: none;
 
-    input[type='checkbox'] {
+    &.width-description {
+      align-items: start;
+    }
+
+    input[type="checkbox"] {
       margin: 0;
       appearance: none;
       outline: none;
@@ -40,6 +58,13 @@ tk-checkbox {
         background-color: var(--states-info-base);
       }
     }
+    .tk-checkbox-text-holder {
+      .tk-checkbox-description {
+        color: var(--text-base);
+        font-size: var(--size-xs);
+        font-weight: var(--weight-regular);
+      }
+    }
   }
 
   &:hover {
@@ -50,13 +75,13 @@ tk-checkbox {
     }
   }
 
-  label input:focus-visible+.mask {
+  label input:focus-visible + .mask {
     border-color: var(--states-info-base);
     background-color: var(--static-light);
   }
 
-  label input:checked+.mask,
-  label input:indeterminate+.mask {
+  label input:checked + .mask,
+  label input:indeterminate + .mask {
     border-color: var(--states-info-light);
     background-color: var(--static-light);
 
@@ -65,8 +90,8 @@ tk-checkbox {
     }
   }
 
-  label:hover input:checked+.mask,
-  label:hover input:indeterminate+.mask {
+  label:hover input:checked + .mask,
+  label:hover input:indeterminate + .mask {
     border-color: var(--states-info-sub-base);
     background-color: var(--states-info-light);
   }
@@ -76,7 +101,7 @@ tk-checkbox {
     label {
       color: var(--text-sub-base);
 
-      input+.mask {
+      input + .mask {
         border: 2px solid var(--border-light);
         background-color: var(--background-light);
 
@@ -94,8 +119,8 @@ tk-checkbox {
         background: var(--static-light);
       }
 
-      input:checked+.mask,
-      input:indeterminate+.mask {
+      input:checked + .mask,
+      input:indeterminate + .mask {
         border-color: var(--states-danger-light);
 
         i {
@@ -104,9 +129,8 @@ tk-checkbox {
       }
 
       &:hover {
-
-        input:checked+.mask,
-        input:indeterminate+.mask {
+        input:checked + .mask,
+        input:indeterminate + .mask {
           border-color: var(--states-danger-sub-base);
           background-color: var(--states-danger-light);
         }

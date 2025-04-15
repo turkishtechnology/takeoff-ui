@@ -521,6 +521,8 @@ export class TkInput implements ComponentInterface {
       );
     }
 
+    let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
+
     if (this.el.classList.contains('tk-select-input')) {
       readOnly = !this.el.classList.contains('editable-select');
     } else {
@@ -561,7 +563,7 @@ export class TkInput implements ComponentInterface {
             onFocus={this.handleFocus}
             onKeyDown={this.handleKeyDown}
           />
-          {this.clearable && this.value && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearClick(e)}></tk-button>}
+          {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearClick(e)}></tk-button>}
           {this.icon && this.iconPosition === 'right' && _icon}
           {!this.icon && this.iconPosition !== 'right' && passwordRightIcon}
           {rightButton}

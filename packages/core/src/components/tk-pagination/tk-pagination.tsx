@@ -218,6 +218,7 @@ export class TkPagination implements ComponentInterface {
       if (pageNumber === this.ellipsis) {
         return <span class="tk-pagination-ellipsis">...</span>;
       }
+
       return (
         <button
           class={classNames('tk-pagination-cell tk-pagination-page', { 'tk-pagination-page-active': pageNumber === this.internalCurrentPage })}

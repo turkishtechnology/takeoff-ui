@@ -1,4 +1,4 @@
-:host {
+tk-alert {
   display: block;
 }
 
@@ -60,14 +60,10 @@
 
   .tk-alert-content {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     gap: var(--toast-base-content-gap);
     width: 100%;
-
-    &.message-content {
-      justify-content: center;
-    }
   }
 
   .tk-alert-content {

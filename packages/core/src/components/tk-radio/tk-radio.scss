@@ -14,7 +14,9 @@ tk-radio {
     font-weight: var(--weight-medium);
     cursor: pointer;
     user-select: none;
-
+    &.right {
+      flex-direction: row-reverse;
+    }
     &.width-description {
       align-items: start;
     }
@@ -65,12 +67,12 @@ tk-radio {
     }
   }
 
-  label input:focus-visible+.mask {
+  label input:focus-visible + .mask {
     border-color: var(--states-info-base);
     background-color: var(--static-light);
   }
 
-  label input:checked+.mask {
+  label input:checked + .mask {
     border-color: var(--states-info-lightest);
     background-color: var(--static-light);
 
@@ -79,7 +81,7 @@ tk-radio {
     }
   }
 
-  label:hover input:checked+.mask {
+  label:hover input:checked + .mask {
     border-color: var(--states-info-light);
     background-color: var(--states-info-lightest);
   }
@@ -89,7 +91,7 @@ tk-radio {
     label {
       color: var(--text-sub-base);
 
-      input+.mask {
+      input + .mask {
         border: 2px solid var(--border-light);
         background-color: var(--background-light);
 
@@ -107,7 +109,7 @@ tk-radio {
         background: var(--static-light);
       }
 
-      input:checked+.mask {
+      input:checked + .mask {
         border-color: var(--states-danger-light);
 
         div {

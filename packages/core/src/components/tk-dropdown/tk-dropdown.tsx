@@ -1,5 +1,5 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
-import { computePosition, offset, flip, shift } from '@floating-ui/dom';
+import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, h } from '@stencil/core';
+import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 
@@ -22,24 +22,21 @@ export class TkDropdown implements ComponentInterface {
   private uniqueId: string;
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
-  private resizeObserver: ResizeObserver;
   private windowClickHandler: (event: MouseEvent) => void;
+  private cleanup;
 
   constructor() {
     this.uniqueId = uuidv4();
-
     this.windowClickHandler = this.handleWindowClick.bind(this);
   }
 
   @State() isOpen: boolean = false;
-  @Watch('isOpen')
-  isOpenChanged(newValue: boolean) {
-    if (newValue) {
-      this.bindWindowClickListener();
-    } else {
-      this.unbindWindowClickListener();
-    }
-  }
+
+  /**
+   * The disabled status.
+   * @defaultValue false
+   */
+  @Prop() disabled: boolean = false;
 
   /**
    * The message to display when there is no data available.
@@ -102,32 +99,28 @@ export class TkDropdown implements ComponentInterface {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
     this.triggerRef = this.el.querySelector('[slot="trigger"]');
-    if (this.triggerRef) {
+    if (this.triggerRef && !this.disabled) {
       this.triggerRef.style.cursor = 'pointer';
       this.triggerRef.addEventListener('click', () => {
         this.isOpen = !this.isOpen;
-        this.requestAnimationFrame(() => {
-          this.updatePosition();
-        });
       });
     }
   }
 
-  componentDidLoad(): void {
-    this.initializeResizeObserver();
+  componentDidUpdate() {
+    if (this.isOpen) {
+      this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+      this.bindWindowClickListener();
+    } else {
+      this.cleanup && this.cleanup();
+      this.unbindWindowClickListener();
+    }
   }
 
   disconnectedCallback() {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
     this.unbindWindowClickListener();
-  }
-
-  private requestAnimationFrame(fn) {
-    const timeout = fn => setTimeout(fn, 0);
-    let frame = window.requestAnimationFrame || timeout;
-    return frame(fn);
   }
 
   private isGrouped(): boolean {
@@ -136,16 +129,6 @@ export class TkDropdown implements ComponentInterface {
 
   private getOptionLabel(item: any): string {
     return typeof item === 'object' ? item[this.optionLabelKey] : item;
-  }
-
-  private initializeResizeObserver() {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.updatePosition();
-    });
-
-    if (this.panelRef) {
-      this.resizeObserver.observe(this.panelRef);
-    }
   }
 
   private bindWindowClickListener() {
@@ -157,12 +140,8 @@ export class TkDropdown implements ComponentInterface {
   }
 
   private handleWindowClick(event: MouseEvent) {
-    const clickedElement = event.target as any;
-    if (!this.isOpen) return;
-
-    const clickedDatepickerId = clickedElement?.querySelector('.tk-dropdown-panel')?.getAttribute('data-tk-dropdown-id');
-    const isOutsideClicked = !(this.el.contains(clickedElement) || clickedDatepickerId === this.uniqueId);
-    if (isOutsideClicked) {
+    const isInnerClicked = event.composedPath().some(item => item == this.el);
+    if (!isInnerClicked) {
       this.isOpen = false;
       this.unbindWindowClickListener();
     }
