@@ -15,12 +15,9 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://artifactory.thy.com/artifactory/api/npm/npm/"
-  },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.thy.com/scm/okhh/takeoff-ui.git"
+    "url": "https://github.com/turkishtechnology/takeoff-ui.git"
   },
   "scripts": {
     "test": "node ./__tests__/react-library.test.js",
@@ -34,6 +31,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@takeoff-ui/core": "^1.6.2"
+    "@takeoff-ui/core": "workspace:*",
+    "@stencil/react-output-target": "0.8.0"
   }
 }

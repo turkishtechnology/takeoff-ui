@@ -9,3 +9,4 @@
 /packages/react/lib/components/stencil-generated
 /packages/angular/projects/library/src/lib/stencil-generated
 .DS_Store
+.turbo

@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@takeoff-ui/vue": "^1.6.2",
+    "@takeoff-ui/vue": "workspace:*",
     "vue": "^3.4.21"
   },
   "devDependencies": {
