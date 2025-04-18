@@ -4,3 +4,5 @@ packages:
   - 'packages/vue'
   - 'packages/core'
   - 'packages/tailwind'
+  - 'apps/react-app'
+  - 'apps/vue-app'
