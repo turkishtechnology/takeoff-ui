@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/core",
-  "version": "1.6.2",
+  "version": "0.0.1-beta.2",
   "description": "Core components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.thy.com",
@@ -16,6 +16,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/turkishtechnology/takeoff-ui.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "stencil build",

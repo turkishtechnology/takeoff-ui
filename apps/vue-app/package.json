@@ -1,6 +1,6 @@
 {
   "name": "vue-app",
-  "version": "1.6.2",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {

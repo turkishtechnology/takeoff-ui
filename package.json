@@ -1,7 +1,7 @@
 {
   "name": "takeoff-ui",
   "private": true,
-  "version": "1.6.2",
+  "version": "0.0.0",
   "description": "Takeoff UI - Turkish Technology",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.thy.com",
@@ -23,18 +23,19 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.1",
     "rimraf": "^6.0.1",
-    "turbo": "^1.13.3",
+    "turbo": "^2.5.0",
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "build": "turbo run build --filter=!react-app --filter=!vue-app --filter=!angular-package --filter=!projects/app",
-    "dev:vue": "turbo run dev --filter=vue-app",
-    "dev:react": "turbo run dev --filter=react-app",
-    "dev:ng": "turbo run dev --filter=angular",
+    "build": "turbo run build",
+    "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
+    "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",
+    "dev:ng": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd packages/angular && pnpm run start",
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache",
     "lint": "eslint --fix",
-    "clean": "pnpm -r exec rimraf dist node_modules .stencil .angular .next .output .turbo node_modules"
+    "clean": "pnpm -r exec rimraf dist node_modules .stencil .angular .next .output .turbo",
+    "publish": "pnpm run build && npm publish --workspace=* --access public"
   },
   "lint-staged": {
     "*.{tsx,ts,js}": [
@@ -51,5 +52,6 @@
     "@takeoff-ui/core": "workspace:*",
     "@takeoff-ui/react": "workspace:*",
     "@takeoff-ui/vue": "workspace:*"
-  }
+  },
+  "packageManager": "pnpm@10.8.1"
 }

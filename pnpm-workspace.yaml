@@ -1,4 +1,6 @@
 packages:
-  - 'packages/*'
-  - 'apps/*'
-  - 'packages/angular/projects/*' 
+  - 'packages/angular/projects/library'
+  - 'packages/react'
+  - 'packages/vue'
+  - 'packages/core'
+  - 'packages/tailwind'
