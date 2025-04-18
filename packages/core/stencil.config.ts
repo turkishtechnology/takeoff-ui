@@ -99,11 +99,15 @@ export const config: Config = {
     },
   ],
   testing: {
-    browserHeadless: 'new',
+    browserHeadless: true,
   },
   plugins: [
     sass({
       injectGlobalPaths: ['src/global/sass/fonts/_material-symbols.scss'],
     }),
   ],
+  buildEs5: 'prod',
+  minifyJs: true,
+  minifyCss: true,
+  sourceMap: false,
 };
