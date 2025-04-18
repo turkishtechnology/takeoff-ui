@@ -53,6 +53,7 @@
     "@tiptap/extension-underline": "^2.11.0",
     "@tiptap/starter-kit": "^2.11.0",
     "@types/cleave.js": "^1.4.12",
+    "chart.js": "^4.4.9",
     "classnames": "^2.5.1",
     "cleave.js": "^1.6.0",
     "date-fns": "^3.6.0",
