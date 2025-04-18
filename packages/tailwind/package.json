@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/tailwind",
-  "version": "1.6.2",
+  "version": "0.0.1-beta.2",
   "description": "Tailwind CSS plugin for Takeoff UI",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.thy.com",
@@ -24,11 +24,11 @@
     "prettier": "^2.8.8",
     "tailwindcss": "^3.1.0"
   },
-  "publishConfig": {
-    "registry": "https://artifactory.thy.com/artifactory/api/npm/npm/"
-  },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.thy.com/scm/okhh/takeoff-ui.git"
+    "url": "https://github.com/turkishtechnology/takeoff-ui.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

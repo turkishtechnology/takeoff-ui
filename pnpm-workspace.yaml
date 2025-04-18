@@ -1,0 +1,6 @@
+packages:
+  - 'packages/angular/projects/library'
+  - 'packages/react'
+  - 'packages/vue'
+  - 'packages/core'
+  - 'packages/tailwind'
