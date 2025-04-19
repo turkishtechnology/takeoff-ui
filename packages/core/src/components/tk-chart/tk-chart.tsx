@@ -1,4 +1,4 @@
-import { Component, h, Element, ComponentInterface, Prop, State } from '@stencil/core';
+import { Component, h, Element, ComponentInterface, Prop } from '@stencil/core';
 import Chart, { ChartOptions } from 'chart.js/auto';
 
 /**
@@ -38,16 +38,47 @@ export class TkChart implements ComponentInterface {
     indexAxis: 'y',
     plugins: {
       legend: {
-        position: 'bottom',
-        labels: {
-          boxWidth: 10,
-          boxHeight: 10,
-          usePointStyle: true,
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+    scales: {
+      x: {
+        display: false,
+        beginAtZero: true,
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        type: 'category',
+        display: false,
+        position: 'left',
+        offset: true,
+        grid: {
+          display: true,
+          z: 1,
+          color: 'rgba(0, 0, 0, 0.1)',
+        },
+        ticks: {
+          padding: 10,
+          color: '#333',
+          font: {
+            size: 14,
+            weight: 500,
+          },
+          callback: function (index) {
+            // Get labels from the data
+            const labels = this.chart.data.labels;
+            // Ensure we return a string or empty string
+            return labels && labels[index] ? String(labels[index]) : '';
+          },
         },
       },
     },
   };
-
   /**
    * Chart height in pixels
    */
@@ -57,6 +88,8 @@ export class TkChart implements ComponentInterface {
    * Chart width in pixels
    */
   @Prop() width: number = 600;
+
+  @Prop() paddingUp: number = 15;
 
   @Prop() mode: 'pie' | 'bar' = 'bar';
 
@@ -76,10 +109,72 @@ export class TkChart implements ComponentInterface {
       const ctx = this.chartCanvas.getContext('2d');
 
       if (ctx) {
+        // Create plugin for displaying labels inside bars
+        const labelPlugin = {
+          id: 'barLabelsPlugin',
+          afterDraw: chart => {
+            const { ctx, data } = chart;
+            if (!data || !data.datasets || !data.datasets[0] || !data.datasets[0].data) return;
+
+            // Debug: Print chart information
+            // console.log(chart);
+            // Get the minimum x position of the chart area
+            // const chartAreaMinX = chart.chartArea.left;
+
+            // Get y-axis position - this is where labels would be
+            // const yAxisPosition = chart.scales.y ? chart.scales.y.left : 0;
+
+            // Set text style, font, color, alignment, and baseline these will be props
+            ctx.save();
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+
+            const meta = chart.getDatasetMeta(0);
+
+            // Process each data point
+            data.datasets[0].data.forEach((value, index) => {
+              if (meta.data[index]) {
+                const bar = meta.data[index];
+                const props = bar.getProps(['x', 'y', 'width', 'height'], chart.ctx);
+                console.log(props);
+                // Get label from data labels
+                const label = data.labels && data.labels[index] ? data.labels[index] : '';
+
+                // Position text inside bar - add a little extra padding since we have labels
+                const textX = 0;
+                const textY = props.y - props.height / 2 - this.paddingUp;
+
+                // Add visual debugging - draw a point at the label position
+                ctx.save();
+                ctx.fillStyle = 'red';
+                ctx.beginPath();
+                ctx.arc(textX, textY, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+
+                // Show different formats based on available width
+                if (props.width > 50) {
+                  // Full format with label and value
+                  ctx.fillText(`${label}: ${value}`, textX, textY);
+                } else if (props.width > 30) {
+                  // Just show the value
+                  ctx.fillText(value.toString(), textX, textY);
+                }
+                // For very narrow bars, don't show any text
+              }
+            });
+
+            ctx.restore();
+          },
+        };
+
         this.chartInstance = new Chart(ctx, {
           type: this.mode,
           data: this.data,
           options: this.options,
+          plugins: [labelPlugin],
         });
       }
     }
@@ -87,7 +182,7 @@ export class TkChart implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-chart-container" style={{ width: `${this.width}px`, height: `${this.height}px` }}>
+      <div class="tk-chart-container" style={{ minHeight: `${this.height}px` }}>
         <canvas ref={el => (this.chartCanvas = el)}></canvas>
       </div>
     );
