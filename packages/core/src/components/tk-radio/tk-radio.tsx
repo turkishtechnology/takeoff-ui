@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host } from '@stencil/core';
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -74,17 +74,26 @@ export class TkRadio implements ComponentInterface {
   @Prop() value: any;
 
   /**
+   * Controls if tooltip has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
+
+  /**
    * Emitted when the radio button's checked state changes.
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<any>;
 
   componentWillLoad(): void {
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
+
     this.parentEl = this.el.closest('tk-radio-group');
 
     if (this.parentEl && !this.position) {
       this.position = this.parentEl.position;
     }
   }
+
   componentDidRender(): void {
     this.bindWindowClickListener();
   }
@@ -144,10 +153,14 @@ export class TkRadio implements ComponentInterface {
             <div class="mask">
               <div></div>
             </div>
-            <div class="tk-radio-text-holder">
-              <div class="tk-radio-label">{this.label}</div>
-              <div class="tk-radio-description">{this.description}</div>
-            </div>
+            {this.hasContentSlot ? (
+              <slot name="content" />
+            ) : (
+              <div class="tk-radio-text-holder">
+                <div class="tk-radio-label">{this.label}</div>
+                <div class="tk-radio-description">{this.description}</div>
+              </div>
+            )}
           </label>
         </div>
       </Host>
