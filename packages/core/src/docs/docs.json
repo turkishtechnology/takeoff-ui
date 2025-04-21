@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-18T00:39:06",
+  "timestamp": "2025-04-21T07:39:44",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -143,8 +143,13 @@
           "mutable": false,
           "attr": "collapse-icon",
           "reflectToAttr": false,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Sets the collapse icon",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'keyboard_arrow_up'"
+            }
+          ],
           "default": "'keyboard_arrow_up'",
           "values": [
             {
@@ -176,8 +181,13 @@
           "mutable": false,
           "attr": "expand-icon",
           "reflectToAttr": false,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Sets the expand icon",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'keyboard_arrow_down'"
+            }
+          ],
           "default": "'keyboard_arrow_down'",
           "values": [
             {
@@ -489,12 +499,18 @@
       ],
       "parts": [],
       "dependents": [],
-      "dependencies": [],
-      "dependencyGraph": {}
+      "dependencies": [
+        "tk-icon"
+      ],
+      "dependencyGraph": {
+        "tk-accordion-item": [
+          "tk-icon"
+        ]
+      }
     },
     {
       "filePath": "src/components/tk-alert/tk-alert.tsx",
-      "encapsulation": "none",
+      "encapsulation": "shadow",
       "tag": "tk-alert",
       "docs": "The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.",
       "docsTags": [
@@ -558,7 +574,7 @@
               }
             }
           },
-          "mutable": true,
+          "mutable": false,
           "attr": "icon",
           "reflectToAttr": false,
           "docs": "The icon displayed in the alert. If not provided, a default icon is used based on the variant.",
@@ -578,10 +594,10 @@
         },
         {
           "name": "iconSize",
-          "type": "\"base\" | \"large\" | \"small\"",
+          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
           "complexType": {
-            "original": "'small' | 'base' | 'large'",
-            "resolved": "\"base\" | \"large\" | \"small\"",
+            "original": "'small' | 'base' | 'large' | 'xlarge'",
+            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
             "references": {}
           },
           "mutable": false,
@@ -594,7 +610,7 @@
               "text": "'base'"
             }
           ],
-          "default": "'base'",
+          "default": "'large'",
           "values": [
             {
               "value": "base",
@@ -606,6 +622,10 @@
             },
             {
               "value": "small",
+              "type": "string"
+            },
+            {
+              "value": "xlarge",
               "type": "string"
             }
           ],
@@ -775,14 +795,17 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
+        "tk-icon",
         "tk-button"
       ],
       "dependencyGraph": {
         "tk-alert": [
+          "tk-icon",
           "tk-button"
         ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     },
@@ -1561,8 +1584,13 @@
       "dependents": [
         "tk-tabs"
       ],
-      "dependencies": [],
+      "dependencies": [
+        "tk-icon"
+      ],
       "dependencyGraph": {
+        "tk-badge": [
+          "tk-icon"
+        ],
         "tk-tabs": [
           "tk-badge"
         ]
@@ -1740,11 +1768,16 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
+        "tk-icon",
         "tk-breadcrumb-item"
       ],
       "dependencyGraph": {
         "tk-breadcrumb": [
+          "tk-icon",
           "tk-breadcrumb-item"
+        ],
+        "tk-breadcrumb-item": [
+          "tk-icon"
         ]
       }
     },
@@ -1897,8 +1930,13 @@
       "dependents": [
         "tk-breadcrumb"
       ],
-      "dependencies": [],
+      "dependencies": [
+        "tk-icon"
+      ],
       "dependencyGraph": {
+        "tk-breadcrumb-item": [
+          "tk-icon"
+        ],
         "tk-breadcrumb": [
           "tk-breadcrumb-item"
         ]
@@ -2389,11 +2427,13 @@
         "tk-upload"
       ],
       "dependencies": [
-        "tk-spinner"
+        "tk-spinner",
+        "tk-icon"
       ],
       "dependencyGraph": {
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-alert": [
           "tk-button"
@@ -2967,7 +3007,8 @@
           "tk-button"
         ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     },
@@ -3553,8 +3594,13 @@
       "dependents": [
         "tk-input"
       ],
-      "dependencies": [],
+      "dependencies": [
+        "tk-icon"
+      ],
       "dependencyGraph": {
+        "tk-chips": [
+          "tk-icon"
+        ],
         "tk-input": [
           "tk-chips"
         ]
@@ -4714,7 +4760,7 @@
       ],
       "methods": [
         {
-          "name": "handleToday",
+          "name": "setToday",
           "returns": {
             "type": "Promise<void>",
             "docs": ""
@@ -4730,7 +4776,7 @@
             },
             "return": "Promise<void>"
           },
-          "signature": "handleToday() => Promise<void>",
+          "signature": "setToday() => Promise<void>",
           "parameters": [],
           "docs": "Sets the date to today",
           "docsTags": []
@@ -4787,20 +4833,25 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
-        "tk-input",
-        "tk-button"
+        "tk-button",
+        "tk-input"
       ],
       "dependencyGraph": {
         "tk-datepicker": [
-          "tk-input",
-          "tk-button"
+          "tk-button",
+          "tk-input"
+        ],
+        "tk-button": [
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-input": [
           "tk-chips",
+          "tk-icon",
           "tk-button"
         ],
-        "tk-button": [
-          "tk-spinner"
+        "tk-chips": [
+          "tk-icon"
         ]
       }
     },
@@ -5319,14 +5370,17 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
+        "tk-icon",
         "tk-button"
       ],
       "dependencyGraph": {
         "tk-dialog": [
+          "tk-icon",
           "tk-button"
         ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     },
@@ -6010,7 +6064,8 @@
           "tk-button"
         ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     },
@@ -6915,8 +6970,14 @@
       "slots": [],
       "parts": [],
       "dependents": [],
-      "dependencies": [],
-      "dependencyGraph": {}
+      "dependencies": [
+        "tk-icon"
+      ],
+      "dependencyGraph": {
+        "tk-editor": [
+          "tk-icon"
+        ]
+      }
     },
     {
       "filePath": "src/components/tk-icon/tk-icon.tsx",
@@ -6939,6 +7000,52 @@
       ],
       "usage": {},
       "props": [
+        {
+          "name": "backgroundColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "background-color",
+          "reflectToAttr": false,
+          "docs": "The background color of the sign (custom variant)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "borderColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "border-color",
+          "reflectToAttr": false,
+          "docs": "The border color of the sign (custom variant)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "color",
           "type": "string",
@@ -7009,6 +7116,63 @@
           "setter": false
         },
         {
+          "name": "iconColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-color",
+          "reflectToAttr": false,
+          "docs": "The color of the icon (custom variant)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconTag",
+          "type": "\"i\" | \"span\"",
+          "complexType": {
+            "original": "'i' | 'span'",
+            "resolved": "\"i\" | \"span\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-tag",
+          "reflectToAttr": false,
+          "docs": "The HTML tag to use for the icon element.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'i'"
+            }
+          ],
+          "default": "'i'",
+          "values": [
+            {
+              "value": "i",
+              "type": "string"
+            },
+            {
+              "value": "span",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "iconType",
           "type": "\"outlined\" | \"rounded\" | \"sharp\"",
           "complexType": {
@@ -7042,11 +7206,40 @@
           "setter": false
         },
         {
-          "name": "size",
-          "type": "\"base\" | \"large\" | \"small\"",
+          "name": "sign",
+          "type": "boolean",
           "complexType": {
-            "original": "'large' | 'base' | 'small'",
-            "resolved": "\"base\" | \"large\" | \"small\"",
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sign",
+          "reflectToAttr": false,
+          "docs": "Controls whether the icon is shown as a sign (previously 'card' type)",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
+          "complexType": {
+            "original": "'xlarge' | 'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
             "references": {}
           },
           "mutable": false,
@@ -7072,39 +7265,9 @@
             {
               "value": "small",
               "type": "string"
-            }
-          ],
-          "optional": false,
-          "required": false,
-          "getter": false,
-          "setter": false
-        },
-        {
-          "name": "type",
-          "type": "\"card\" | \"default \"",
-          "complexType": {
-            "original": "'default ' | 'card'",
-            "resolved": "\"card\" | \"default \"",
-            "references": {}
-          },
-          "mutable": false,
-          "attr": "type",
-          "reflectToAttr": false,
-          "docs": "This field specifies the type of the component.",
-          "docsTags": [
-            {
-              "name": "defaultValue",
-              "text": "'default'"
-            }
-          ],
-          "default": "'default '",
-          "values": [
-            {
-              "value": "card",
-              "type": "string"
             },
             {
-              "value": "default ",
+              "value": "xlarge",
               "type": "string"
             }
           ],
@@ -7124,7 +7287,7 @@
           "mutable": false,
           "attr": "variant",
           "reflectToAttr": false,
-          "docs": "This field specifies the variant of icon.",
+          "docs": "The variant of the icon.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -7178,9 +7341,71 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "tk-accordion-item",
+        "tk-alert",
+        "tk-badge",
+        "tk-breadcrumb",
+        "tk-breadcrumb-item",
+        "tk-button",
+        "tk-chips",
+        "tk-dialog",
+        "tk-editor",
+        "tk-input",
+        "tk-pagination",
+        "tk-table",
+        "tk-tabs",
+        "tk-tooltip",
+        "tk-upload"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "tk-accordion-item": [
+          "tk-icon"
+        ],
+        "tk-alert": [
+          "tk-icon"
+        ],
+        "tk-badge": [
+          "tk-icon"
+        ],
+        "tk-breadcrumb": [
+          "tk-icon"
+        ],
+        "tk-breadcrumb-item": [
+          "tk-icon"
+        ],
+        "tk-button": [
+          "tk-icon"
+        ],
+        "tk-chips": [
+          "tk-icon"
+        ],
+        "tk-dialog": [
+          "tk-icon"
+        ],
+        "tk-editor": [
+          "tk-icon"
+        ],
+        "tk-input": [
+          "tk-icon"
+        ],
+        "tk-pagination": [
+          "tk-icon"
+        ],
+        "tk-table": [
+          "tk-icon"
+        ],
+        "tk-tabs": [
+          "tk-icon"
+        ],
+        "tk-tooltip": [
+          "tk-icon"
+        ],
+        "tk-upload": [
+          "tk-icon"
+        ]
+      }
     },
     {
       "filePath": "src/components/tk-input/tk-input.tsx",
@@ -7871,15 +8096,21 @@
       ],
       "dependencies": [
         "tk-chips",
+        "tk-icon",
         "tk-button"
       ],
       "dependencyGraph": {
         "tk-input": [
           "tk-chips",
+          "tk-icon",
           "tk-button"
         ],
+        "tk-chips": [
+          "tk-icon"
+        ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-datepicker": [
           "tk-input"
@@ -8187,7 +8418,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
+          "docs": "RowsPerPage change event",
           "docsTags": []
         }
       ],
@@ -8200,23 +8431,30 @@
       ],
       "dependencies": [
         "tk-input",
+        "tk-icon",
         "tk-select"
       ],
       "dependencyGraph": {
         "tk-pagination": [
           "tk-input",
+          "tk-icon",
           "tk-select"
         ],
         "tk-input": [
           "tk-chips",
+          "tk-icon",
           "tk-button"
         ],
+        "tk-chips": [
+          "tk-icon"
+        ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-select": [
-          "tk-input",
           "tk-checkbox",
+          "tk-input",
           "tk-spinner"
         ],
         "tk-table": [
@@ -9322,7 +9560,7 @@
           "mutable": false,
           "attr": "multiple",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "If `true` the user can make multiple selections.",
           "docsTags": [],
           "values": [
             {
@@ -9631,22 +9869,27 @@
         "tk-pagination"
       ],
       "dependencies": [
-        "tk-input",
         "tk-checkbox",
+        "tk-input",
         "tk-spinner"
       ],
       "dependencyGraph": {
         "tk-select": [
-          "tk-input",
           "tk-checkbox",
+          "tk-input",
           "tk-spinner"
         ],
         "tk-input": [
           "tk-chips",
+          "tk-icon",
           "tk-button"
         ],
+        "tk-chips": [
+          "tk-icon"
+        ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-pagination": [
           "tk-select"
@@ -11432,6 +11675,7 @@
         "tk-input",
         "tk-button",
         "tk-checkbox",
+        "tk-icon",
         "tk-radio",
         "tk-pagination"
       ],
@@ -11440,23 +11684,30 @@
           "tk-input",
           "tk-button",
           "tk-checkbox",
+          "tk-icon",
           "tk-radio",
           "tk-pagination"
         ],
         "tk-input": [
           "tk-chips",
+          "tk-icon",
           "tk-button"
         ],
+        "tk-chips": [
+          "tk-icon"
+        ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ],
         "tk-pagination": [
           "tk-input",
+          "tk-icon",
           "tk-select"
         ],
         "tk-select": [
-          "tk-input",
           "tk-checkbox",
+          "tk-input",
           "tk-spinner"
         ]
       }
@@ -11522,7 +11773,7 @@
           "mutable": false,
           "attr": "align-headers",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Sets the alignment of the header.",
           "docsTags": [],
           "default": "'start'",
           "values": [
@@ -11909,12 +12160,17 @@
       "dependents": [],
       "dependencies": [
         "tk-tabs-item",
+        "tk-icon",
         "tk-badge"
       ],
       "dependencyGraph": {
         "tk-tabs": [
           "tk-tabs-item",
+          "tk-icon",
           "tk-badge"
+        ],
+        "tk-badge": [
+          "tk-icon"
         ]
       }
     },
@@ -13309,8 +13565,14 @@
       ],
       "parts": [],
       "dependents": [],
-      "dependencies": [],
-      "dependencyGraph": {}
+      "dependencies": [
+        "tk-icon"
+      ],
+      "dependencyGraph": {
+        "tk-tooltip": [
+          "tk-icon"
+        ]
+      }
     },
     {
       "filePath": "src/components/tk-upload/tk-upload.tsx",
@@ -13870,15 +14132,18 @@
       "dependents": [],
       "dependencies": [
         "tk-spinner",
+        "tk-icon",
         "tk-button"
       ],
       "dependencyGraph": {
         "tk-upload": [
           "tk-spinner",
+          "tk-icon",
           "tk-button"
         ],
         "tk-button": [
-          "tk-spinner"
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     }

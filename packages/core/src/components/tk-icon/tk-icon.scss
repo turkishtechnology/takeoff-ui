@@ -1,229 +1,117 @@
 tk-icon {
-    display: inline-block;
+    display: flex;
 }
 
 .tk-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    .tk-small {
+
+    &.tk-icon-small {
         font-size: var(--size-sm);
     }
 
-    .tk-base {
+    &.tk-icon-base {
         font-size: var(--size-base);
     }
 
-    .tk-large {
+    &.tk-icon-large {
         font-size: var(--size-2xl);
     }
 
-    &.tk-primary {
+    &.tk-icon-xlarge {
+        font-size: var(--size-3xl);
+    }
+
+    &.tk-icon-primary {
         color: var(--primary-dark);
-        &.tk-icon-card {
-            border-color: var(--primary-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--primary-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--primary-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--primary-lightest);
-            }
-        }
     }
-    &.tk-secondary {
+
+    &.tk-icon-secondary {
         color: var(--secondary-dark);
-        &.tk-icon-card {
-            border-color: var(--secondary-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--secondary-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--secondary-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--secondary-lightest);
-            }
-        }
     }
-    &.tk-neutral {
+
+    &.tk-icon-neutral {
         color: var(--background-dark);
-        &.tk-icon-card {
-            border-color: (--background-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--background-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--background-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--background-lightest);
-            }
-        }
     }
-    &.tk-info {
+
+    &.tk-icon-info {
         color: var(--states-info-dark);
-        &.tk-icon-card {
-            border-color: var(--states-info-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--states-info-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--states-info-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--states-info-lightest);
-            }
-        }
     }
-    &.tk-success {
+
+    &.tk-icon-success {
         color: var(--states-success-dark);
-        &.tk-icon-card {
-            border-color: var(--states-success-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--states-success-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--states-success-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--states-success-lightest);
-            }
-        }
     }
-    &.tk-danger {
+
+    &.tk-icon-danger {
         color: var(--states-danger-dark);
-        &.tk-icon-card {
-            border-color: var(--states-danger-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--states-danger-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--states-danger-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--states-danger-lightest);
-            }
-        }
     }
-    &.tk-warning {
+
+    &.tk-icon-warning {
         color: var(--states-warning-dark);
-        &.tk-icon-card {
-            border-color: var(--states-warning-sub-base);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--states-warning-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--states-warning-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--states-warning-lightest);
-            }
-        }
     }
-    &.tk-white {
+
+    &.tk-icon-white {
         color: var(--secondary-sub-base);
-        &.tk-icon-card {
+    }
+
+    &.tk-icon-sign {
+        background-color: var(--background-lightest);
+        &.tk-icon-small {
+            border: 1px solid;
+            border-radius: var(--radius-s);
+            padding: 2px;
+        }
+
+        &.tk-icon-base {
+            border: 1px solid;
+            border-radius: var(--radius-m-base);
+            padding: 4px;
+        }
+
+        &.tk-icon-large {
+            border: 1px solid;
+            border-radius: var(--radius-l);
+            padding: 6px;
+        }
+
+        &.tk-icon-xlarge {
+            border: 1px solid;
+            border-radius: var(--radius-l);
+            padding: 6px;
+        }
+
+        &.tk-icon-primary {
+            border-color: var(--primary-sub-base);
+        }
+
+        &.tk-icon-secondary {
+            border-color: var(--secondary-sub-base);
+           
+        }
+
+        &.tk-icon-neutral {
+            border-color: var(--background-sub-base);
+        }
+
+        &.tk-icon-info {
+            border-color: var(--states-info-sub-base);
+        }
+
+        &.tk-icon-success {
+            border-color: var(--states-success-sub-base);
+        }
+
+        &.tk-icon-danger {
+            border-color: var(--states-danger-sub-base);
+        }
+
+        &.tk-icon-warning {
+            border-color: var(--states-warning-sub-base);
+        }
+
+        &.tk-icon-white {
             border-color: var(--secondary-light);
-            .tk-small {
-                border: 1px solid;
-                border-radius: var(--radius-s);
-                padding: 2px;
-                background-color: var(--secondary-lightest);
-            }
-
-            .tk-base {
-                border: 1px solid;
-                border-radius: var(--radius-m-base);
-                padding: 4px;
-                background-color: var(--secondary-lightest);
-            }
-
-            .tk-large {
-                border: 1px solid;
-                border-radius: var(--radius-l);
-                padding: 6px;
-                background-color: var(--secondary-lightest);
-            }
         }
     }
 }

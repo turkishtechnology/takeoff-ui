@@ -56,7 +56,6 @@ export class TkCheckbox implements ComponentInterface {
    * If true, the checkbox will be indeterminate.
    */
   @Prop({ mutable: true }) indeterminate: boolean = false;
-
   @Watch('indeterminate')
   indeterminateChanged(newValue: boolean, oldValue: boolean) {
     if (newValue !== oldValue) {
@@ -69,7 +68,6 @@ export class TkCheckbox implements ComponentInterface {
    * Sets the checkbox value
    */
   @Prop({ mutable: true }) value: boolean = false;
-
   @Watch('value')
   valueChanged(newValue: boolean, oldValue: boolean) {
     if (newValue !== oldValue) {

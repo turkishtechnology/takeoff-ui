@@ -24,7 +24,22 @@ export interface IDateSelection {
   formAssociated: true,
 })
 export class TkDatePicker {
+  private today = new Date();
+  private debounceTimer: number;
+  private inputRef?: HTMLTkInputElement;
+  private panelRef?: HTMLDivElement;
+  private uniqueId: string;
+  private windowClickHandler: (event: MouseEvent) => void;
+  private cleanup;
+
   @Element() el: HTMLTkDatepickerElement;
+
+  @AttachInternals() internals: ElementInternals;
+
+  constructor() {
+    this.uniqueId = uuidv4();
+    this.windowClickHandler = this.handleWindowClick.bind(this);
+  }
 
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
@@ -58,20 +73,6 @@ export class TkDatePicker {
     }
   }
 
-  @AttachInternals() internals: ElementInternals;
-
-  private today = new Date();
-  private debounceTimer: number;
-  private inputRef?: HTMLTkInputElement;
-  private panelRef?: HTMLDivElement;
-  private uniqueId: string;
-  private windowClickHandler: (event: MouseEvent) => void;
-  private cleanup;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
-  }
   /**
    * The value representing the selected date(s)
    */
@@ -84,6 +85,7 @@ export class TkDatePicker {
 
     this.processDateValue(newValue, true);
   }
+
   /**
    * Defines the label for the input
    */
@@ -120,6 +122,7 @@ export class TkDatePicker {
    * Minimum selectable date
    */
   @Prop() minDate: string = '';
+
   /**
    * Maximum selectable date
    */
@@ -136,32 +139,38 @@ export class TkDatePicker {
    * Note: Format should match dateFormat prop
    */
   @Prop() allowedDates?: string[] = [];
+
   /**
    * Array of dates that are disabled for selection.
    *
    * Format should match dateFormat prop
    */
   @Prop() disabledDates?: string[] = [];
+
   /**
    * Whether to display inline panel
    * @defaultValue false
    */
   @Prop() inline: boolean = false;
+
   /**
    * The selection mode of the date picker: 'single' for single date selection, 'range' for date range selection.
    * @defaultValue single
    */
   @Prop() mode: 'single' | 'range' = 'single';
+
   /**
    * Locale for date formatting
    * @defaultValue en
    */
   @Prop() locale: string = 'en';
+
   /**
    * The visual variant of the footer: 'basic', 'divided', or 'light'.
    * @defaultValue basic
    */
   @Prop() footerType: 'basic' | 'divided' | 'light' = 'basic';
+
   /**
    * Date format pattern
    * @defaultValue yyyy-MM-dd
@@ -177,11 +186,13 @@ export class TkDatePicker {
    * @defaultValue false
    */
   @Prop() disableMask?: boolean = false;
+
   /**
    * Header visual variant
    * @defaultValue basic
    */
   @Prop() headerType: 'basic' | 'divided' | 'light' | 'primary' | 'dark' = 'basic';
+
   /**
    * Input placeholder text
    */
@@ -253,6 +264,31 @@ export class TkDatePicker {
     this.unbindWindowClickListener();
   }
 
+  /**
+   * Sets the date to today
+   */
+  @Method()
+  async setToday() {
+    const today = this.normalizeDate(new Date());
+    this.currentMonth = today;
+    this.internalSelectedDates = { start: today, end: null };
+    this.inputValue = this.formatDate(today);
+
+    if (this.mode === 'range') {
+      this.tkChange.emit({
+        start: this.formatDate(today),
+        end: null,
+      });
+    } else {
+      this.tkChange.emit(this.formatDate(today));
+    }
+
+    this.currentView = 'days';
+    if (!this.inline && this.isOpen) {
+      this.isOpen = false;
+    }
+  }
+
   private getResolvedFirstDayIndex(): number {
     if (this.firstDayOfWeekIndex !== undefined && this.firstDayOfWeekIndex !== null) {
       if (this.firstDayOfWeekIndex >= 0 && this.firstDayOfWeekIndex <= 6) {
@@ -304,12 +340,6 @@ export class TkDatePicker {
       delimiter,
       datePattern,
     };
-  }
-
-  private handleFormReset() {
-    this.inputValue = '';
-    this.internalSelectedDates = { start: null, end: null };
-    this.tkChange.emit(undefined);
   }
 
   private processDateValue(value: string | IDateSelection, updateCurrentMonth: boolean = false): void {
@@ -373,15 +403,6 @@ export class TkDatePicker {
     }
   }
 
-  private onTkInputClick = (e: MouseEvent) => {
-    if (this.disabled) {
-      e.preventDefault();
-      return;
-    }
-
-    this.isOpen = !this.isOpen;
-  };
-
   private normalizeDate(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
@@ -434,6 +455,63 @@ export class TkDatePicker {
 
     return false;
   }
+
+  private formatInputValue(selectedDate = this.internalSelectedDates): string {
+    if (typeof selectedDate === 'object') {
+      const { start, end } = selectedDate;
+
+      if (start) {
+        if (this.mode === 'range' && end) {
+          return `${this.formatDate(start)} - ${this.formatDate(end)}`;
+        }
+
+        return this.formatDate(start);
+      }
+    } else if (typeof selectedDate === 'string') {
+      return this.formatDate(selectedDate);
+    }
+
+    return '';
+  }
+
+  private isToday(date: Date): boolean {
+    return date.getDate() === this.today.getDate() && date.getMonth() === this.today.getMonth() && date.getFullYear() === this.today.getFullYear();
+  }
+
+  private bindWindowClickListener() {
+    window.addEventListener('click', this.windowClickHandler);
+  }
+
+  private unbindWindowClickListener() {
+    window.removeEventListener('click', this.windowClickHandler);
+  }
+
+  private handleWindowClick(event: MouseEvent) {
+    if (this.inline) return;
+    const clickedElement = event.target as any;
+
+    const clickedDatepickerId = clickedElement?.el?.shadowRoot.querySelector('.tk-datepicker-panel')?.getAttribute('data-tk-datepicker-id');
+    const isOutsideClicked = !(
+      this.el.contains(clickedElement) ||
+      clickedDatepickerId === this.uniqueId ||
+      event.composedPath().some(item => item == this.inputRef) ||
+      event.composedPath().some(item => item == this.el)
+    );
+    if (isOutsideClicked) {
+      this.isOpen = false;
+      this.unbindWindowClickListener();
+    }
+  }
+
+  private handleInputClick = (e: MouseEvent) => {
+    if (this.disabled) {
+      e.preventDefault();
+      return;
+    }
+
+    this.isOpen = !this.isOpen;
+  };
+
   private handleDateClick = (date: Date) => {
     if (this.isDateDisabled(date)) return;
 
@@ -483,44 +561,14 @@ export class TkDatePicker {
     }
   };
 
-  private handleDateHover = (date: Date) => {
-    if (this.mode === 'range' && this.internalSelectedDates.start && !this.internalSelectedDates.end) {
-      this.hoverDate = date;
-    }
-  };
-
-  private handleMonthChange = (increment: number) => {
-    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + increment);
-  };
-
-  private handleYearChange = (increment: number) => {
-    if (this.currentView === 'years') {
-      this.currentMonth = new Date(this.currentMonth.getFullYear() + increment * 12, this.currentMonth.getMonth());
-      return;
-    }
-
-    this.currentMonth = new Date(this.currentMonth.getFullYear() + increment, this.currentMonth.getMonth());
-  };
-
-  private handleYearSelect(e: MouseEvent, year: number): void {
-    e.stopPropagation();
-    this.currentMonth = new Date(year, this.currentMonth.getMonth());
-    this.currentView = 'months';
-  }
-
-  private handleViewChange = (e: MouseEvent, view: 'days' | 'months' | 'years') => {
-    e.stopPropagation();
-    this.currentView = view;
-  };
-
-  private onTkInputKeyDown = (event: KeyboardEvent) => {
+  private handleInputKeyDown = (event: KeyboardEvent) => {
     if (this.disableMask || this.mode === 'range') {
       event.preventDefault();
     }
     //TODO: Add other keydown event actions
   };
 
-  private onTkInputChange = (event: CustomEvent) => {
+  private handleInputChange = (event: CustomEvent) => {
     if (this.disableMask || this.mode === 'range') {
       event.preventDefault();
       return;
@@ -530,14 +578,14 @@ export class TkDatePicker {
     this.tkInputChange.emit(this.inputValue);
   };
 
-  private onTkClearClick = () => {
+  private handleInputClearClick = () => {
     if (this.clearable) {
       this.value = null;
       this.tkChange.emit(null);
     }
   };
 
-  private onTkInputBlur = () => {
+  private handleInputBlur = () => {
     if (this.disableMask || this.mode === 'range') return;
 
     clearTimeout(this.debounceTimer);
@@ -574,199 +622,80 @@ export class TkDatePicker {
     }, 300);
   };
 
-  private formatInputValue(selectedDate = this.internalSelectedDates): string {
-    if (typeof selectedDate === 'object') {
-      const { start, end } = selectedDate;
+  private handleDateHover = (date: Date) => {
+    if (this.mode === 'range' && this.internalSelectedDates.start && !this.internalSelectedDates.end) {
+      this.hoverDate = date;
+    }
+  };
 
-      if (start) {
-        if (this.mode === 'range' && end) {
-          return `${this.formatDate(start)} - ${this.formatDate(end)}`;
-        }
+  private handleMonthChange = (increment: number) => {
+    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + increment);
+  };
 
-        return this.formatDate(start);
+  private handleYearChange = (increment: number) => {
+    if (this.currentView === 'years') {
+      this.currentMonth = new Date(this.currentMonth.getFullYear() + increment * 12, this.currentMonth.getMonth());
+      return;
+    }
+
+    this.currentMonth = new Date(this.currentMonth.getFullYear() + increment, this.currentMonth.getMonth());
+  };
+
+  private handleYearSelect(e: MouseEvent, year: number): void {
+    e.stopPropagation();
+    this.currentMonth = new Date(year, this.currentMonth.getMonth());
+    this.currentView = 'months';
+  }
+
+  private handleViewChange = (e: MouseEvent, view: 'days' | 'months' | 'years') => {
+    e.stopPropagation();
+    this.currentView = view;
+  };
+
+  private handleFormReset() {
+    this.inputValue = '';
+    this.internalSelectedDates = { start: null, end: null };
+    this.tkChange.emit(undefined);
+  }
+
+  private createDayCell(date: Date, isAdjacentMonth: boolean) {
+    const { start = null, end = null } = this.internalSelectedDates;
+    const dateTime = date.getTime();
+    const isSelectedStart = start && dateTime === start.getTime();
+    const isSelectedEnd = start && end && dateTime === end.getTime();
+    const isSelected = isSelectedStart || isSelectedEnd;
+    let isInRange = false;
+
+    if (start && (end || this.hoverDate)) {
+      const rangeEnd = (end || this.hoverDate) as Date;
+      if (start.getTime() < rangeEnd.getTime()) {
+        isInRange = dateTime > start.getTime() && dateTime < rangeEnd.getTime();
+      } else {
+        isInRange = dateTime > rangeEnd.getTime() && dateTime < start.getTime();
       }
-    } else if (typeof selectedDate === 'string') {
-      return this.formatDate(selectedDate);
     }
-
-    return '';
-  }
-
-  private isToday(date: Date): boolean {
-    return date.getDate() === this.today.getDate() && date.getMonth() === this.today.getMonth() && date.getFullYear() === this.today.getFullYear();
-  }
-
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    if (this.inline) return;
-    const clickedElement = event.target as any;
-
-    const clickedDatepickerId = clickedElement?.el?.shadowRoot.querySelector('.tk-datepicker-panel')?.getAttribute('data-tk-datepicker-id');
-    const isOutsideClicked = !(
-      this.el.contains(clickedElement) ||
-      clickedDatepickerId === this.uniqueId ||
-      event.composedPath().some(item => item == this.inputRef) ||
-      event.composedPath().some(item => item == this.el)
-    );
-    if (isOutsideClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
-  }
-
-  /**
-   * Sets the date to today
-   */
-  @Method()
-  async handleToday() {
-    const today = this.normalizeDate(new Date());
-    this.currentMonth = today;
-    this.internalSelectedDates = { start: today, end: null };
-    this.inputValue = this.formatDate(today);
-
-    if (this.mode === 'range') {
-      this.tkChange.emit({
-        start: this.formatDate(today),
-        end: null,
-      });
-    } else {
-      this.tkChange.emit(this.formatDate(today));
-    }
-
-    this.currentView = 'days';
-    if (!this.inline && this.isOpen) {
-      this.isOpen = false;
-    }
-  }
-
-  private renderInput() {
-    if (this.inline) return null;
-
-    const shouldUseMask = this.mode === 'single' && !this.disableMask;
+    const isDisabled = this.isDateDisabled(date);
+    const isToday = this.isToday(date);
 
     return (
-      <tk-input
-        ref={el => (this.inputRef = el as HTMLTkInputElement)}
-        label={this.label}
-        mode="text"
-        icon="calendar_month"
-        class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}
-        name={this.name}
-        hint={this.hint}
-        clearable={this.clearable}
-        disabled={this.disabled}
-        invalid={this.invalid || this.isInvalid}
-        error={this.error}
-        placeholder={this.placeholder || this.dateFormat.toUpperCase()}
-        value={this.inputValue}
-        maskOptions={shouldUseMask ? this.maskOptions : undefined}
-        onTk-change={this.onTkInputChange}
-        onTk-clear-click={this.onTkClearClick}
-        onTk-blur={this.onTkInputBlur}
-        onKeyDown={this.onTkInputKeyDown}
-        onClick={this.onTkInputClick}
-        aria-expanded={!!this.isOpen}
-        aria-haspopup="true"
-        data-tk-datepicker-id={this.uniqueId}
-        showAsterisk={this.showAsterisk}
-      />
+      <td
+        class={classNames('tk-datepicker-day-cell', {
+          'selected': isSelected,
+          'in-range': isInRange,
+          'range-start': isSelectedStart && this.mode === 'range',
+          'range-end': isSelectedEnd && this.mode === 'range',
+          'today': isToday && !isSelected && !isInRange,
+          'disabled': isDisabled,
+          'adjacent-month': isAdjacentMonth,
+        })}
+        onClick={() => !isDisabled && this.handleDateClick(date)}
+        onMouseEnter={() => this.handleDateHover(date)}
+      >
+        <span class="tk-datepicker-day">{date.getDate()}</span>
+      </td>
     );
   }
 
-  private renderPanel() {
-    if (!this.isOpen && !this.inline) return null;
-    const panelClasses = classNames('tk-datepicker-panel', {
-      'tk-datepicker-panel-inline': this.inline,
-    });
-    const bodyClasses = classNames('tk-datepicker-body', {
-      'tk-datepicker-months-view': this.currentView === 'months',
-      'tk-datepicker-years-view': this.currentView === 'years',
-    });
-
-    return (
-      <div class={panelClasses} ref={el => (this.panelRef = el as HTMLDivElement)} role={!this.inline ? 'dialog' : null} aria-modal="true" data-tk-datepicker-id={this.uniqueId}>
-        {this.createHeader()}
-        <div class={bodyClasses}>
-          <table class="tk-datepicker-table">
-            {this.currentView === 'days' && (
-              <Fragment>
-                {this.createWeekDayNames()}
-                {this.createWeekDays()}
-              </Fragment>
-            )}
-            {this.currentView === 'months' && this.createMonths()}
-            {this.currentView === 'years' && this.createYears()}
-          </table>
-        </div>
-        {this.createFooter()}
-      </div>
-    );
-  }
-
-  private createHeader() {
-    const monthName = this.currentMonth.toLocaleString(this.locale, {
-      month: 'long',
-    });
-    const year = this.currentMonth.getFullYear().toString();
-    const headerClasses = classNames('tk-datepicker-header', `tk-datepicker-header-${this.headerType}`);
-
-    return (
-      <div class={headerClasses}>
-        <div class="tk-datepicker-header-content">
-          <div class="tk-datepicker-header-content-start">
-            <tk-button variant="neutral" icon="keyboard_double_arrow_left" onTk-click={() => this.handleYearChange(-1)} type="text"></tk-button>
-            <span class="tk-datepicker-divider"></span>
-            <tk-button variant="neutral" icon="chevron_left" onTk-click={() => this.handleMonthChange(-1)} type="text"></tk-button>
-          </div>
-          <div class="tk-datepicker-select-container">
-            <div class="tk-datepicker-select-month" onClick={e => this.handleViewChange(e, 'months')}>
-              {monthName}
-            </div>
-            <div class="tk-datepicker-select-year" onClick={e => this.handleViewChange(e, 'years')}>
-              {year}
-            </div>
-          </div>
-          <div class="tk-datepicker-header-content-end">
-            <tk-button variant="neutral" icon="chevron_right" onTk-click={() => this.handleMonthChange(1)} type="text"></tk-button>
-            <span class="tk-datepicker-divider"></span>
-            <tk-button variant="neutral" icon="keyboard_double_arrow_right" onTk-click={() => this.handleYearChange(1)} type="text"></tk-button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private createWeekDayNames() {
-    const startOfWeekIndex = this.getResolvedFirstDayIndex();
-    // Use a known Monday as a base to generate other days reliably
-    const baseMonday = new Date(2023, 0, 2);
-
-    const weekdays = [...Array(7)].map((_, i) => {
-      const dayOffset = (i + startOfWeekIndex) % 7;
-      const dateForDay = new Date(baseMonday);
-      dateForDay.setDate(baseMonday.getDate() + dayOffset);
-      return dateForDay.toLocaleString(this.locale, { weekday: 'short' });
-    });
-
-    return (
-      <thead>
-        <tr class="tk-datepicker-week-days">
-          {weekdays.map(day => (
-            <th class="tk-datepicker-week-day-cell">
-              <span class="tk-datepicker-week-day">{day}</span>
-            </th>
-          ))}
-        </tr>
-      </thead>
-    );
-  }
   private createWeekDays() {
     const firstDayOfMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth(), 1);
     const lastDayOfMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 0);
@@ -811,41 +740,28 @@ export class TkDatePicker {
     return <tbody class="tk-datepicker-days">{weeks}</tbody>;
   }
 
-  private createDayCell(date: Date, isAdjacentMonth: boolean) {
-    const { start = null, end = null } = this.internalSelectedDates;
-    const dateTime = date.getTime();
-    const isSelectedStart = start && dateTime === start.getTime();
-    const isSelectedEnd = start && end && dateTime === end.getTime();
-    const isSelected = isSelectedStart || isSelectedEnd;
-    let isInRange = false;
+  private createWeekDayNames() {
+    const startOfWeekIndex = this.getResolvedFirstDayIndex();
+    // Use a known Monday as a base to generate other days reliably
+    const baseMonday = new Date(2023, 0, 2);
 
-    if (start && (end || this.hoverDate)) {
-      const rangeEnd = (end || this.hoverDate) as Date;
-      if (start.getTime() < rangeEnd.getTime()) {
-        isInRange = dateTime > start.getTime() && dateTime < rangeEnd.getTime();
-      } else {
-        isInRange = dateTime > rangeEnd.getTime() && dateTime < start.getTime();
-      }
-    }
-    const isDisabled = this.isDateDisabled(date);
-    const isToday = this.isToday(date);
+    const weekdays = [...Array(7)].map((_, i) => {
+      const dayOffset = (i + startOfWeekIndex) % 7;
+      const dateForDay = new Date(baseMonday);
+      dateForDay.setDate(baseMonday.getDate() + dayOffset);
+      return dateForDay.toLocaleString(this.locale, { weekday: 'short' });
+    });
 
     return (
-      <td
-        class={classNames('tk-datepicker-day-cell', {
-          'selected': isSelected,
-          'in-range': isInRange,
-          'range-start': isSelectedStart && this.mode === 'range',
-          'range-end': isSelectedEnd && this.mode === 'range',
-          'today': isToday && !isSelected && !isInRange,
-          'disabled': isDisabled,
-          'adjacent-month': isAdjacentMonth,
-        })}
-        onClick={() => !isDisabled && this.handleDateClick(date)}
-        onMouseEnter={() => this.handleDateHover(date)}
-      >
-        <span class="tk-datepicker-day">{date.getDate()}</span>
-      </td>
+      <thead>
+        <tr class="tk-datepicker-week-days">
+          {weekdays.map(day => (
+            <th class="tk-datepicker-week-day-cell">
+              <span class="tk-datepicker-week-day">{day}</span>
+            </th>
+          ))}
+        </tr>
+      </thead>
     );
   }
 
@@ -907,6 +823,39 @@ export class TkDatePicker {
     return <tbody class="tk-datepicker-years">{rows}</tbody>;
   }
 
+  private createHeader() {
+    const monthName = this.currentMonth.toLocaleString(this.locale, {
+      month: 'long',
+    });
+    const year = this.currentMonth.getFullYear().toString();
+    const headerClasses = classNames('tk-datepicker-header', `tk-datepicker-header-${this.headerType}`);
+
+    return (
+      <div class={headerClasses}>
+        <div class="tk-datepicker-header-content">
+          <div class="tk-datepicker-header-content-start">
+            <tk-button variant="neutral" icon="keyboard_double_arrow_left" onTk-click={() => this.handleYearChange(-1)} type="text"></tk-button>
+            <span class="tk-datepicker-divider"></span>
+            <tk-button variant="neutral" icon="chevron_left" onTk-click={() => this.handleMonthChange(-1)} type="text"></tk-button>
+          </div>
+          <div class="tk-datepicker-select-container">
+            <div class="tk-datepicker-select-month" onClick={e => this.handleViewChange(e, 'months')}>
+              {monthName}
+            </div>
+            <div class="tk-datepicker-select-year" onClick={e => this.handleViewChange(e, 'years')}>
+              {year}
+            </div>
+          </div>
+          <div class="tk-datepicker-header-content-end">
+            <tk-button variant="neutral" icon="chevron_right" onTk-click={() => this.handleMonthChange(1)} type="text"></tk-button>
+            <span class="tk-datepicker-divider"></span>
+            <tk-button variant="neutral" icon="keyboard_double_arrow_right" onTk-click={() => this.handleYearChange(1)} type="text"></tk-button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   private createFooter() {
     if (this.hasFooterSlot) {
       return <slot name="footer"></slot>;
@@ -920,6 +869,71 @@ export class TkDatePicker {
     }
     return null;
   }
+
+  private renderInput() {
+    if (this.inline) return null;
+
+    const shouldUseMask = this.mode === 'single' && !this.disableMask;
+
+    return (
+      <tk-input
+        ref={el => (this.inputRef = el as HTMLTkInputElement)}
+        label={this.label}
+        mode="text"
+        icon="calendar_month"
+        class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}
+        name={this.name}
+        hint={this.hint}
+        clearable={this.clearable}
+        disabled={this.disabled}
+        invalid={this.invalid || this.isInvalid}
+        error={this.error}
+        placeholder={this.placeholder || this.dateFormat.toUpperCase()}
+        value={this.inputValue}
+        maskOptions={shouldUseMask ? this.maskOptions : undefined}
+        onTk-change={this.handleInputChange}
+        onTk-clear-click={this.handleInputClearClick}
+        onTk-blur={this.handleInputBlur}
+        onKeyDown={this.handleInputKeyDown}
+        onClick={this.handleInputClick}
+        aria-expanded={!!this.isOpen}
+        aria-haspopup="true"
+        data-tk-datepicker-id={this.uniqueId}
+        showAsterisk={this.showAsterisk}
+      />
+    );
+  }
+
+  private renderPanel() {
+    if (!this.isOpen && !this.inline) return null;
+    const panelClasses = classNames('tk-datepicker-panel', {
+      'tk-datepicker-panel-inline': this.inline,
+    });
+    const bodyClasses = classNames('tk-datepicker-body', {
+      'tk-datepicker-months-view': this.currentView === 'months',
+      'tk-datepicker-years-view': this.currentView === 'years',
+    });
+
+    return (
+      <div class={panelClasses} ref={el => (this.panelRef = el as HTMLDivElement)} role={!this.inline ? 'dialog' : null} aria-modal="true" data-tk-datepicker-id={this.uniqueId}>
+        {this.createHeader()}
+        <div class={bodyClasses}>
+          <table class="tk-datepicker-table">
+            {this.currentView === 'days' && (
+              <Fragment>
+                {this.createWeekDayNames()}
+                {this.createWeekDays()}
+              </Fragment>
+            )}
+            {this.currentView === 'months' && this.createMonths()}
+            {this.currentView === 'years' && this.createYears()}
+          </table>
+        </div>
+        {this.createFooter()}
+      </div>
+    );
+  }
+
   render() {
     return (
       <div class="tk-datepicker-container">

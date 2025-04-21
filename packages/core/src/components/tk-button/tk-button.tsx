@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * TkButton is an extension to standard input element with icons and theming.
@@ -134,20 +135,11 @@ export class TkButton implements ComponentInterface {
     );
 
     let icon;
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        icon = <i class="material-symbols-outlined tk-button-icon">{this.icon}</i>;
-      } else {
-        icon = (
-          <i class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''} tk-button-icon`} style={{ color: this.icon?.color || 'inherit' }}>
-            {this.icon.name}
-          </i>
-        );
-      }
-    }
-
+    const spinnerElement = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
     if (this.loading) {
-      icon = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
+      icon = spinnerElement;
+    } else if (this.icon) {
+      icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-button-icon', variant: 'secondary' })} />;
     }
 
     let Tag;

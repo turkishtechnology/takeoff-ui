@@ -34,15 +34,18 @@
       color: var(--icon-base);
     }
   }
+
   &[aria-invalid] {
     .tk-upload-dropzone {
       border-color: var(--states-danger-base);
     }
+
     .hint,
     .hint i {
       color: var(--states-danger-base);
     }
   }
+
   .tk-upload-dropzone {
     padding: 12px;
     border-radius: 8px;
@@ -52,7 +55,7 @@
     &.default {
       display: flex;
 
-      .tk-upload-icon .icon {
+      .tk-upload-icon .icon i{
         font-size: 40px;
         color: var(--primary-base);
       }
@@ -70,7 +73,8 @@
             font-family: var(--desktop-body-s-font, Geologica);
             font-size: var(--desktop-body-s-size, 14px);
             font-weight: 400;
-            line-height: var(--desktop-body-s-line-height, 20px); /* 142.857% */
+            line-height: var(--desktop-body-s-line-height, 20px);
+            /* 142.857% */
           }
 
           .tk-upload-description {
@@ -81,7 +85,8 @@
             font-size: var(--desktop-body-xs-size, 12px);
             font-style: normal;
             font-weight: 300;
-            line-height: var(--desktop-body-xs-line-height, 18px); /* 150% */
+            line-height: var(--desktop-body-xs-line-height, 18px);
+            /* 150% */
           }
         }
 
@@ -91,7 +96,7 @@
         }
       }
 
-      .tk-upload-icon .icon {
+      .tk-upload-icon .icon i {
         font-size: 40px;
         color: var(--primary-base);
       }
@@ -105,9 +110,14 @@
         text-align: center;
 
         .icon {
-          font-size: 40px;
-          color: var(--primary-base);
-          padding: 8px;
+          justify-content: center;
+
+          i {
+            font-size: 40px;
+            color: var(--primary-base);
+            padding: 8px;
+          }
+
         }
       }
 
@@ -128,7 +138,8 @@
             font-family: var(--desktop-body-s-font, Geologica);
             font-size: var(--desktop-body-s-size, 14px);
             font-weight: 400;
-            line-height: var(--desktop-body-s-line-height, 20px); /* 142.857% */
+            line-height: var(--desktop-body-s-line-height, 20px);
+            /* 142.857% */
           }
 
           .tk-upload-description {
@@ -139,7 +150,8 @@
             font-size: var(--desktop-body-xs-size, 12px);
             font-style: normal;
             font-weight: 300;
-            line-height: var(--desktop-body-xs-line-height, 18px); /* 150% */
+            line-height: var(--desktop-body-xs-line-height, 18px);
+            /* 150% */
           }
         }
 
@@ -151,6 +163,7 @@
       }
     }
   }
+
   .tk-upload-file-holder {
     display: flex;
     flex-direction: column;
@@ -230,8 +243,7 @@
         }
       }
 
-      .tk-upload-file-icon {
-      }
+      .tk-upload-file-icon {}
 
       .tk-upload-file-content {
         display: flex;
@@ -253,8 +265,7 @@
           font-weight: 300;
           margin-top: 6px;
 
-          .tk-upload-size {
-          }
+          .tk-upload-size {}
 
           .tk-upload-state {
             display: flex;

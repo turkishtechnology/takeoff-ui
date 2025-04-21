@@ -1,5 +1,6 @@
 import { Component, Method, Prop, State, Watch, h, Event, EventEmitter, Element, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The `TkDialog` component provides a customizable modal dialog for displaying important information or requesting user input. It supports various configurations including different header types, variants, and customizable content.
@@ -18,7 +19,17 @@ import classNames from 'classnames';
   styleUrl: 'tk-dialog.scss',
 })
 export class TkDialog implements ComponentInterface {
+  private bodyOverflow: string;
+  private bodyPaddingRight: string;
+
   @Element() el: HTMLTkDialogElement;
+
+  @State() hasContainerSlot: boolean;
+  @State() hasContentSlot: boolean;
+  @State() hasDefaultSlotContent: boolean;
+  @State() hasFooterActionsSlot: boolean;
+  @State() hasFooterSlot: boolean;
+  @State() hasHeaderSlot: boolean;
 
   /**
    * Controls the visibility of the dialog
@@ -38,12 +49,6 @@ export class TkDialog implements ComponentInterface {
       }
     }
   }
-  @State() hasContainerSlot: boolean;
-  @State() hasContentSlot: boolean;
-  @State() hasDefaultSlotContent: boolean;
-  @State() hasFooterActionsSlot: boolean;
-  @State() hasFooterSlot: boolean;
-  @State() hasHeaderSlot: boolean;
 
   /**
    * The header text
@@ -118,15 +123,6 @@ export class TkDialog implements ComponentInterface {
    */
   @Event({ eventName: 'tk-visible-change' }) tkVisibleChange: EventEmitter<boolean>;
 
-  private bodyOverflow: string;
-  private bodyPaddingRight: string;
-
-  disconnectedCallback() {
-    if (!this.hideBackdrop) {
-      this.unblockBodyScroll();
-    }
-  }
-
   componentWillLoad() {
     this.hasContainerSlot = !!this.el.querySelector('[slot="container"]');
     this.hasHeaderSlot = !!this.el.querySelector('[slot="header"]');
@@ -137,6 +133,12 @@ export class TkDialog implements ComponentInterface {
     this.hasDefaultSlotContent = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
     });
+  }
+
+  disconnectedCallback() {
+    if (!this.hideBackdrop) {
+      this.unblockBodyScroll();
+    }
   }
 
   /**
@@ -174,18 +176,6 @@ export class TkDialog implements ComponentInterface {
     document.body.style.paddingRight = this.bodyPaddingRight;
   }
 
-  private handleCloseButtonClick = () => {
-    this.tkClose.emit();
-    this.tkVisibleChange.emit(false);
-  };
-
-  private handleOverlayClick = () => {
-    if (!this.preventDismiss) {
-      this.tkClose.emit();
-      this.tkVisibleChange.emit(false);
-    }
-  };
-
   private getVariantIcon() {
     switch (this.variant) {
       case 'success':
@@ -199,6 +189,18 @@ export class TkDialog implements ComponentInterface {
     }
   }
 
+  private handleCloseButtonClick = () => {
+    this.tkClose.emit();
+    this.tkVisibleChange.emit(false);
+  };
+
+  private handleOverlayClick = () => {
+    if (!this.preventDismiss) {
+      this.tkClose.emit();
+      this.tkVisibleChange.emit(false);
+    }
+  };
+
   private createHeader() {
     if (this.showHeader) {
       if (this.hasHeaderSlot) {
@@ -210,9 +212,11 @@ export class TkDialog implements ComponentInterface {
           <div class={headerClasses}>
             <div class="tk-dialog-header-content">
               {this.showVariantSign && (
-                <div class="tk-dialog-sign">
-                  <span class={`material-symbols-rounded fill tk-dialog-sign-icon`}>{this.getVariantIcon()}</span>
-                </div>
+                <tk-icon
+                  sign
+                  size="xlarge"
+                  {...getIconElementProps(this.getVariantIcon(), { class: classNames('fill tk-dialog-sign-icon'), variant: this.variant }, 'rounded', 'span')}
+                />
               )}
               <div class="tk-dialog-title-container">
                 {this.subheader && <span class="tk-dialog-subtitle">{this.subheader}</span>}
@@ -260,7 +264,7 @@ export class TkDialog implements ComponentInterface {
     return null;
   }
 
-  private renderDialog() {
+  private createDialog() {
     const header = this.createHeader();
     const content = this.createContent();
     const footer = this.createFooter();
@@ -283,7 +287,7 @@ export class TkDialog implements ComponentInterface {
   }
 
   private renderMask() {
-    const dialog = this.hasContainerSlot ? <slot name="container"></slot> : this.renderDialog();
+    const dialog = this.hasContainerSlot ? <slot name="container"></slot> : this.createDialog();
     const maskClasses = classNames('tk-dialog-mask', `tk-dialog-mask-${this.maskVariant}`, {
       'tk-dialog-visible': this.visible,
       'tk-dialog-mask-hidden': this.hideBackdrop,

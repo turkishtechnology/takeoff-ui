@@ -27,6 +27,7 @@ export class TkCard implements ComponentInterface {
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
   @State() hasDefaultSlotBody: boolean;
+
   /**
    * TO DO
    * Options for the image display
@@ -51,6 +52,7 @@ export class TkCard implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() showAvatar: boolean = false;
+
   /**
    * TO DO State hata verdiği için buraya alındı, düzeltilecek
    * TkAvatar component properties
@@ -61,22 +63,19 @@ export class TkCard implements ComponentInterface {
     background: 'solid',
     rounded: true,
   };
-  @State() internalAvatarProps: any = {
-    severity: 'light',
-    background: 'solid',
-    rounded: true,
-    ...this.avatarProps,
-  };
+
   /**
    * Controls whether the header is hidden
    * @defaultValue false
    */
   @Prop() hideHeader: boolean = false;
+
   /**
    * Controls whether the menu button is shown
    * @defaultValue false
    */
   @Prop() showMenuButton: boolean = false;
+
   /**
    * The image source for the card
    * @defaultValue null
@@ -88,38 +87,46 @@ export class TkCard implements ComponentInterface {
    * @defaultValue 'top'
    */
   @Prop() headerPosition: 'top' | 'bottom' = 'top';
+
   /**
    * The header text
    */
   @Prop() header: string;
+
   /**
    * The subheader text
    */
   @Prop() subheader: string;
+
   /**
    * The type of the header
    * @defaultValue 'basic'
    */
   @Prop() headerType: 'basic' | 'divided' | 'light' | 'dark' | 'primary' = 'basic';
+
   /**
    * Controls whether the card is displayed horizontally
    * @defaultValue false
    */
   @Prop() horizontal: boolean = false;
+
   /**
    * The mode of the footer
    * @defaultValue 'basic'
    */
   @Prop() footerType: 'basic' | 'divided' | 'light' = 'basic';
+
   /**
    * Controls whether the card shows a hover shadow effect
    * @defaultValue false
    */
   @Prop() enableHoverShadow: boolean = false;
+
   /**
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
+
   /**
    * The style attribute of content element
    */
@@ -156,7 +163,7 @@ export class TkCard implements ComponentInterface {
                 {this.showAvatar && (
                   <div class="tk-card-avatar">
                     {' '}
-                    <tk-avatar {...this.internalAvatarProps}></tk-avatar>
+                    <tk-avatar {...this.avatarProps}></tk-avatar>
                   </div>
                 )}
               </Fragment>

@@ -2,6 +2,7 @@ import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, S
 import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The TkUpload component is an interface element that allows users to select and upload files from their devices to a server or a target location. It typically includes a "Choose File" button and a field displaying the selected file's name. This component simplifies the process of file selection and uploading.
@@ -14,9 +15,9 @@ import { filesize } from 'filesize';
   styleUrl: 'tk-upload.scss',
 })
 export class TkUpload implements ComponentInterface {
-  @Element() el: HTMLTkUploadElement;
-
   private inputRef: HTMLInputElement;
+
+  @Element() el: HTMLTkUploadElement;
 
   @State() errorMessages: string[] = [];
 
@@ -207,7 +208,7 @@ export class TkUpload implements ComponentInterface {
     this.tkUpload.emit(this.value);
   }
 
-  private createFilePreview(file: File) {
+  private renderFilePreview(file: File) {
     if (this.isImageFile(file)) {
       return <img src={URL.createObjectURL(file)} width={50} height={50}></img>;
     } else {
@@ -232,7 +233,7 @@ export class TkUpload implements ComponentInterface {
     }
   }
 
-  private createState() {
+  private renderState() {
     let iconName = 'check_circle';
     let state = 'added';
 
@@ -246,7 +247,7 @@ export class TkUpload implements ComponentInterface {
 
     return (
       <label class={classNames('tk-upload-state', state)}>
-        {state == 'loading' ? <tk-spinner type="three-dots" size="xsmall"></tk-spinner> : <span class="material-symbols-outlined fill icon">{iconName}</span>}
+        {state == 'loading' ? <tk-spinner type="three-dots" size="xsmall"></tk-spinner> : <tk-icon {...getIconElementProps(iconName, { class: 'fill' }, undefined, 'span')} />}
 
         {state}
       </label>
@@ -292,7 +293,7 @@ export class TkUpload implements ComponentInterface {
         {label}
         <div class={classNames('tk-upload-dropzone', this.type)}>
           <div class="tk-upload-icon">
-            <span class="material-symbols-outlined fill icon">file_upload</span>
+            <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xlarge' }, undefined, 'span')} />
           </div>
           <div class="tk-upload-content">
             <div class="tk-upload-text-holder">
@@ -334,13 +335,13 @@ export class TkUpload implements ComponentInterface {
         <div class="tk-upload-file-holder">
           {this.value?.map((item, index) => (
             <div class="tk-upload-file-item" key={index}>
-              <div class="tk-upload-file-preview">{this.createFilePreview(item)}</div>
+              <div class="tk-upload-file-preview">{this.renderFilePreview(item)}</div>
               <div class="tk-upload-file-content">
                 <div>
                   <div class="tk-upload-file-name">{item.name}</div>
                   <div class="tk-upload-file-size-state">
                     <span class="tk-upload-size">{filesize(item.size, { standard: 'jedec' })}</span>
-                    {this.createState()}
+                    {this.renderState()}
                   </div>
                 </div>
                 <div class="tk-upload-file-delete">

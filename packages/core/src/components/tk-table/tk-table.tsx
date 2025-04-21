@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.
@@ -183,32 +184,6 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
 
-  componentWillLoad(): Promise<void> | void {
-    this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
-    this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
-
-    if (this.data?.length > 0) {
-      this.generateRenderData(this.data, this.currentPage, true);
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.isFilterOpen) {
-      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
-        animationFrame: true,
-      });
-    } else {
-      this.elFilterPanelElement?.remove();
-      this.cleanupFilterPanel && this.cleanupFilterPanel();
-    }
-  }
-
-  componentDidRender(): void {
-    this.elements?.forEach(element => {
-      element?.ref?.replaceChildren(element.element);
-    });
-  }
-
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -225,6 +200,32 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  componentWillLoad(): Promise<void> | void {
+    this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
+    this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+
+    if (this.data?.length > 0) {
+      this.generateRenderData(this.data, this.currentPage, true);
+    }
+  }
+
+  componentDidRender(): void {
+    this.elements?.forEach(element => {
+      element?.ref?.replaceChildren(element.element);
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.isFilterOpen) {
+      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+    } else {
+      this.elFilterPanelElement?.remove();
+      this.cleanupFilterPanel && this.cleanupFilterPanel();
+    }
+  }
+
   /**
    * Allows tk-request event to be triggered manually
    */
@@ -237,6 +238,71 @@ export class TkTable implements ComponentInterface {
       sortOrder: this.sortOrder,
       filters: this.filters,
     } as ITableRequest);
+  }
+
+  /**
+   *
+   * @param options
+   */
+  @Method()
+  async exportFile(options: ITableExportOptions) {
+    let _data;
+
+    if (options.scope == 'all') {
+      _data = this.data;
+    } else if (options.scope == 'selected') {
+      _data = this.selection;
+    } else if (!options.scope || options.scope == 'current-page') {
+      _data = this.renderData;
+    }
+
+    if (options.type == 'pdf') {
+      const doc = new jsPDF(options.orientation === 'horizontal' ? 'l' : 'p');
+
+      autoTable(doc, {
+        head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
+        body: _data.map(
+          row => this.columns.map(col => this.getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
+        ),
+        theme: 'striped',
+        // styles: { halign: 'center', fontSize: 10 },
+        headStyles: { fillColor: [201, 0, 25] },
+      });
+
+      doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
+    } else if (options.type == 'excel') {
+      const workbook = new ExcelJs.Workbook();
+      const worksheet = workbook.addWorksheet('Sheet 1');
+
+      worksheet.columns = this.columns
+        .filter(item => !options.ignoreColumnsFields?.includes(item.field))
+        .map(item => {
+          return { header: item.header, key: item.field, width: 20 };
+        });
+      worksheet.addRows(_data);
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${options.fileName ?? 'tk-table'}.xlsx`;
+      link.click();
+    } else if (options.type == 'csv') {
+      const headers = this.columns.map(col => col.header).join(',');
+      const rows = _data.map(row => this.columns.map(col => this.getNestedValue(row, col.field) || '').join(',')).join('\n');
+      const csvContent = headers + '\n' + rows;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      if (link.download !== undefined) {
+        link.setAttribute('href', URL.createObjectURL(blob));
+        link.setAttribute('download', `${options.fileName ?? 'tk-table'}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
   }
 
   private getNestedValue(obj, path) {
@@ -287,6 +353,92 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = newExpandedRows;
 
     this.tkExpandedRowsChange.emit(this.expandedRows);
+  }
+
+  private updatePosition() {
+    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
+      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
+        strategy: 'fixed',
+        placement: 'bottom',
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.elFilterPanelElement.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
+    }
+  }
+
+  private async handleSearchIconClick(refSearchIcon: HTMLElement, field: string) {
+    if (!this.isFilterOpen) {
+      this.isFilterOpen = true;
+      this.createFilterPanel(refSearchIcon, field);
+    } else if (this.elActiveSearchIcon != refSearchIcon) {
+      this.isFilterOpen = false;
+      this.createFilterPanel(refSearchIcon, field);
+    }
+  }
+
+  private handleSearchButtonClick(columnField) {
+    // if (refSearchInput.value.toString().length > 0) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+
+    // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
+    // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
+    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (filterIndex > -1) {
+      this.filters[filterIndex].value = searchInput.value.toString();
+    } else {
+      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
+    }
+
+    // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+    if (this.currentPage == 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+  }
+
+  private handleSearchCancelButtonClick(columnField) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+
+    const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (removeFilterIndex > -1) {
+      this.filters.splice(removeFilterIndex, 1);
+      searchInput.value = '';
+
+      // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+      if (this.currentPage == 1) {
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        this.generateRenderData(tmpData, 1);
+      } else {
+        this.currentPage = 1;
+      }
+    }
+  }
+
+  private handleInputBlur(row, index: number, colField: string, editableInputRef) {
+    const cellEdit: ITableCellEdit = {
+      rowId: row[this.dataKey],
+      rowIndex: index,
+      field: colField,
+      value: editableInputRef.value,
+    };
+    this.tkCellEdit.emit(cellEdit);
+  }
+
+  private handleSelectAll(value: boolean) {
+    if (value) {
+      this.selection = [...this.renderData];
+      this.el.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
+    } else {
+      this.selection = [];
+      this.el.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
+    }
+    this.tkSelectionChange.emit(this.selection);
   }
 
   private handleCheckboxSelectChange(isSelect: boolean, trElRef: HTMLTableRowElement, row) {
@@ -358,22 +510,9 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private updatePosition() {
-    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
-        strategy: 'fixed',
-        placement: 'bottom',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        Object.assign(this.elFilterPanelElement.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
-  }
-
   private createFilterPanel(refSearchIcon: HTMLElement, field: string) {
+    if (this.elFilterPanelElement) this.elFilterPanelElement?.remove();
+
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
@@ -406,153 +545,6 @@ export class TkTable implements ComponentInterface {
     this.elFilterPanelElement.appendChild(buttons);
     document.body.appendChild(this.elFilterPanelElement);
     this.isFilterOpen = true;
-  }
-
-  private async handleSearchIconClick(refSearchIcon: HTMLElement, field: string) {
-    if (!this.isFilterOpen) {
-      this.createFilterPanel(refSearchIcon, field);
-    } else if (this.elActiveSearchIcon != refSearchIcon) {
-      this.isFilterOpen = false;
-      this.createFilterPanel(refSearchIcon, field);
-    }
-  }
-
-  private handleSearchButtonClick(columnField) {
-    // if (refSearchInput.value.toString().length > 0) {
-    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
-
-    // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
-    // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
-    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (filterIndex > -1) {
-      this.filters[filterIndex].value = searchInput.value.toString();
-    } else {
-      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
-    }
-
-    // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-    if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-      this.generateRenderData(tmpData, 1);
-    } else {
-      this.currentPage = 1;
-    }
-  }
-
-  private handleSearchCancelButtonClick(columnField) {
-    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
-
-    const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (removeFilterIndex > -1) {
-      this.filters.splice(removeFilterIndex, 1);
-      searchInput.value = '';
-
-      // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-      if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-        this.generateRenderData(tmpData, 1);
-      } else {
-        this.currentPage = 1;
-      }
-    }
-  }
-
-  private handleInputBlur(row, index: number, colField: string, editableInputRef) {
-    const cellEdit: ITableCellEdit = {
-      rowId: row[this.dataKey],
-      rowIndex: index,
-      field: colField,
-      value: editableInputRef.value,
-    };
-    this.tkCellEdit.emit(cellEdit);
-  }
-
-  private handleSelectAll(value: boolean) {
-    if (value) {
-      this.selection = [...this.renderData];
-      this.el.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
-    } else {
-      this.selection = [];
-      this.el.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
-    }
-    this.tkSelectionChange.emit(this.selection);
-  }
-
-  /**
-   *
-   * @param options
-   */
-  @Method()
-  async exportFile(options: ITableExportOptions) {
-    let _data;
-
-    if (options.scope == 'all') {
-      _data = this.data;
-    } else if (options.scope == 'selected') {
-      _data = this.selection;
-    } else if (!options.scope || options.scope == 'current-page') {
-      _data = this.renderData;
-    }
-
-    if (options.type == 'pdf') {
-      const doc = new jsPDF(options.orientation === 'horizontal' ? 'l' : 'p');
-
-      autoTable(doc, {
-        head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
-        body: _data.map(
-          row => this.columns.map(col => this.getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
-        ),
-        theme: 'striped',
-        // styles: { halign: 'center', fontSize: 10 },
-        headStyles: { fillColor: [201, 0, 25] },
-      });
-
-      doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
-    } else if (options.type == 'excel') {
-      const workbook = new ExcelJs.Workbook();
-      const worksheet = workbook.addWorksheet('Sheet 1');
-
-      worksheet.columns = this.columns
-        .filter(item => !options.ignoreColumnsFields?.includes(item.field))
-        .map(item => {
-          return { header: item.header, key: item.field, width: 20 };
-        });
-      worksheet.addRows(_data);
-
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${options.fileName ?? 'tk-table'}.xlsx`;
-      link.click();
-    } else if (options.type == 'csv') {
-      const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => this.getNestedValue(row, col.field) || '').join(',')).join('\n');
-      const csvContent = headers + '\n' + rows;
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      if (link.download !== undefined) {
-        link.setAttribute('href', URL.createObjectURL(blob));
-        link.setAttribute('download', `${options.fileName ?? 'tk-table'}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
-  }
-
-  private renderHeader() {
-    if (this.cardTitle || this.hasHeaderRightSlot)
-      return (
-        <div class="tk-table-header">
-          <div>{this.cardTitle}</div>
-          <div>
-            <slot name="header-right"></slot>
-          </div>
-        </div>
-      );
   }
 
   private createHead() {
@@ -588,14 +580,24 @@ export class TkTable implements ComponentInterface {
               _icons = (
                 <div class="icons">
                   {col.sortable && (
-                    <i ref={el => (refSortIcon = el)} class="material-symbols-outlined sort-icon" onClick={() => this.handleSortIconClick(refSortIcon, col)}>
-                      swap_vert
-                    </i>
+                    <tk-icon
+                      {...getIconElementProps('swap_vert', {
+                        class: classNames('sort-icon'),
+                        variant: null,
+                        ref: (el: any) => (refSortIcon = el),
+                        onClick: () => this.handleSortIconClick(refSortIcon, col),
+                      })}
+                    />
                   )}
                   {col.searchable && (
-                    <i ref={el => (refSearchIcon = el)} class="material-symbols-outlined filter-icon" onClick={() => this.handleSearchIconClick(refSearchIcon, col.field)}>
-                      search
-                    </i>
+                    <tk-icon
+                      {...getIconElementProps('search', {
+                        class: classNames('filter-icon'),
+                        variant: null,
+                        ref: (el: any) => (refSearchIcon = el),
+                        onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
+                      })}
+                    />
                   )}
                 </div>
               );
@@ -767,6 +769,18 @@ export class TkTable implements ComponentInterface {
         </tbody>
       );
     }
+  }
+
+  private renderHeader() {
+    if (this.cardTitle || this.hasHeaderRightSlot)
+      return (
+        <div class="tk-table-header">
+          <div>{this.cardTitle}</div>
+          <div>
+            <slot name="header-right"></slot>
+          </div>
+        </div>
+      );
   }
 
   private renderTable() {

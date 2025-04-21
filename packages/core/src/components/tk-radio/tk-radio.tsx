@@ -14,12 +14,13 @@ import { v4 as uuidv4 } from 'uuid';
   formAssociated: true,
 })
 export class TkRadio implements ComponentInterface {
-  @Element() el: HTMLTkRadioElement;
-
-  @AttachInternals() internals: ElementInternals;
   private parentEl: HTMLTkRadioGroupElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
+
+  @Element() el: HTMLTkRadioElement;
+
+  @AttachInternals() internals: ElementInternals;
 
   constructor() {
     this.uniqueId = uuidv4();
@@ -77,15 +78,6 @@ export class TkRadio implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<any>;
 
-  private handleChange() {
-    if (!this.disabled) {
-      this.checked = !this.checked;
-
-      if (this.checked) {
-        this.tkChange.emit(this.value);
-      }
-    }
-  }
   componentWillLoad(): void {
     this.parentEl = this.el.closest('tk-radio-group');
 
@@ -121,6 +113,16 @@ export class TkRadio implements ComponentInterface {
     }
   }
 
+  private handleInputChange() {
+    if (!this.disabled) {
+      this.checked = !this.checked;
+
+      if (this.checked) {
+        this.tkChange.emit(this.value);
+      }
+    }
+  }
+
   render() {
     const rootClasses = classNames('tk-radio-container', {
       disabled: this.disabled,
@@ -130,7 +132,15 @@ export class TkRadio implements ComponentInterface {
       <Host data-tk-radio-id={this.uniqueId}>
         <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
           <label htmlFor={this.uniqueId} class={(classNames({ 'width-description': this.description }), this.position)}>
-            <input id={this.uniqueId} type="radio" checked={this.checked} value={this.value} disabled={this.disabled} onChange={this.handleChange.bind(this)} name={this.name} />
+            <input
+              id={this.uniqueId}
+              type="radio"
+              checked={this.checked}
+              value={this.value}
+              disabled={this.disabled}
+              onChange={this.handleInputChange.bind(this)}
+              name={this.name}
+            />
             <div class="mask">
               <div></div>
             </div>

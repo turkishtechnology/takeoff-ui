@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * TkPagination component description.
@@ -90,7 +91,7 @@ export class TkPagination implements ComponentInterface {
   @Event({ eventName: 'tk-prev-page' }) tkPrevPage: EventEmitter<{ page: number }>;
 
   /**
-   *
+   * RowsPerPage change event
    */
   @Event({ eventName: 'tk-rows-per-page-change' }) tkRowsPerPageChange: EventEmitter<number>;
 
@@ -167,6 +168,28 @@ export class TkPagination implements ComponentInterface {
     }
   }
 
+  private validateAndUpdatePage() {
+    const pageNumber = parseInt(this.inputValue, 10);
+    const totalPages = this.getTotalPages();
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+      this.handlePageClick(pageNumber);
+    } else {
+      this.updateInputValue(this.internalCurrentPage);
+    }
+  }
+
+  private emitPageChangeEvents() {
+    const totalPages = this.getTotalPages();
+    const startItem = (this.internalCurrentPage - 1) * this.rowsPerPage + 1;
+    const endItem = Math.min(this.internalCurrentPage * this.rowsPerPage, this.totalItems);
+    this.tkPageChange.emit({
+      page: this.internalCurrentPage,
+      totalPages,
+      startItem,
+      endItem,
+    });
+  }
+
   private handlePageClick = (page: number) => {
     if (page >= 1 && page <= this.getTotalPages()) {
       this.internalCurrentPage = page;
@@ -191,29 +214,7 @@ export class TkPagination implements ComponentInterface {
     this.inputValue = value.replace(/[^0-9]/g, '');
   }
 
-  private validateAndUpdatePage() {
-    const pageNumber = parseInt(this.inputValue, 10);
-    const totalPages = this.getTotalPages();
-    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
-      this.handlePageClick(pageNumber);
-    } else {
-      this.updateInputValue(this.internalCurrentPage);
-    }
-  }
-
-  private emitPageChangeEvents() {
-    const totalPages = this.getTotalPages();
-    const startItem = (this.internalCurrentPage - 1) * this.rowsPerPage + 1;
-    const endItem = Math.min(this.internalCurrentPage * this.rowsPerPage, this.totalItems);
-    this.tkPageChange.emit({
-      page: this.internalCurrentPage,
-      totalPages,
-      startItem,
-      endItem,
-    });
-  }
-
-  private renderPageNumbers() {
+  private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
         return <span class="tk-pagination-ellipsis">...</span>;
@@ -285,7 +286,7 @@ export class TkPagination implements ComponentInterface {
           />
           <span class="tk-pagination-current-label">/ {totalPages} pages</span>
           <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
-            <i class="material-symbols-outlined tk-pagination-cell-icon">chevron_right</i>
+            <tk-icon {...getIconElementProps('chevron-right', { class: 'tk-pagination-cell-icon', variant: null })} />
           </button>
         </Fragment>
       );
@@ -299,21 +300,21 @@ export class TkPagination implements ComponentInterface {
         <Fragment>
           <div class="tk-pagination-prev-actions">
             <button class="tk-pagination-cell tk-pagination-first" type="button" onClick={() => this.handlePageClick(1)} disabled={this.internalCurrentPage === 1}>
-              <i class="material-symbols-outlined tk-pagination-cell-icon">keyboard_double_arrow_left</i>
+              <tk-icon {...getIconElementProps('keyboard_double_arrow_left', { class: 'tk-pagination-cell-icon', variant: null })} />
             </button>
             {this.type === 'grouped' && <span class="tk-pagination-divider"></span>}
             <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
-              <i class="material-symbols-outlined tk-pagination-cell-icon">chevron_left</i>
+              <tk-icon {...getIconElementProps('chevron_left', { class: 'tk-pagination-cell-icon', variant: null })} />{' '}
             </button>
           </div>
-          {this.renderPageNumbers()}
+          {this.createPageNumbers()}
           <div class="tk-pagination-next-actions">
             <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
-              <i class="material-symbols-outlined tk-pagination-cell-icon">chevron_right</i>
+              <tk-icon {...getIconElementProps('chevron_right', { class: 'tk-pagination-cell-icon', variant: null })} />
             </button>
             {this.type === 'grouped' && <span class="tk-pagination-divider"></span>}
             <button class="tk-pagination-cell tk-pagination-last" type="button" onClick={() => this.handlePageClick(totalPages)} disabled={this.internalCurrentPage === totalPages}>
-              <i class="material-symbols-outlined tk-pagination-cell-icon">keyboard_double_arrow_right</i>
+              <tk-icon {...getIconElementProps('keyboard_double_arrow_right', { class: 'tk-pagination-cell-icon', variant: null })} />
             </button>
           </div>
         </Fragment>

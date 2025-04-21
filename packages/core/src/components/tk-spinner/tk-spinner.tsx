@@ -13,11 +13,14 @@ import classNames from 'classnames';
   shadow: true,
 })
 export class TkSpinner {
-  @Element() el: HTMLTkSpinnerElement;
   private isButton = false;
+
+  @Element() el: HTMLTkSpinnerElement;
+
   constructor() {
     this.isButton = this.el.closest('button')?.classList.contains('tk-button');
   }
+
   /**
    * Controls the orientation of the spinner component.
    * @defaultValue 'horizontal'

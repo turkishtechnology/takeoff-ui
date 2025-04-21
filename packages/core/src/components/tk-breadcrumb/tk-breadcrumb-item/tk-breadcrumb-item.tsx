@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../../utils/icon-props';
 import { IIconOptions } from '../../../global/interfaces/IIconOptions';
 
 @Component({
@@ -45,21 +46,7 @@ export class TkBreadcrumbItem implements ComponentInterface {
       ...(this.isExternal && { target: '_blank', rel: 'noopener noreferrer' }),
     };
 
-    let icon;
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        icon = <span class="material-symbols-outlined tk-breadcrumb-item-icon">{this.icon}</span>;
-      } else {
-        icon = (
-          <span
-            class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''} tk-breadcrumb-item-icon`}
-            style={{ color: this.icon?.color || 'inherit' }}
-          >
-            {this.icon.name}
-          </span>
-        );
-      }
-    }
+    const icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-breadcrumb-item-icon', variant: null }, undefined, 'span')} />;
 
     return (
       <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null}>

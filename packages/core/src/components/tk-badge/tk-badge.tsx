@@ -1,5 +1,6 @@
 import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-props';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
@@ -104,18 +105,7 @@ export class TkBadge implements ComponentInterface {
       'count': isCountOnly,
     });
 
-    let icon;
-    if (this.icon && !this.dot) {
-      if (typeof this.icon == 'string') {
-        icon = <i class="material-symbols-outlined tk-badge-icon">{this.icon}</i>;
-      } else {
-        icon = (
-          <i class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''} tk-badge-icon`} style={{ color: this.icon?.color || 'inherit' }}>
-            {this.icon.name}
-          </i>
-        );
-      }
-    }
+    const icon = !this.dot ? <tk-icon {...getIconElementProps(this.icon, { variant: null })} /> : null;
 
     let content;
     if (!this.dot) {

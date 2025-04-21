@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -28,14 +29,17 @@ export class TkAccordionItem implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() active: boolean = false;
+
   /**
    * Optional key for the accordion item.
    */
   @Prop({ attribute: 'item-key', reflect: true }) itemKey?: string;
+
   /**
    * Header text to display.
    */
   @Prop() header?: string;
+
   /**
    * Toggle's the accordion item.
    */
@@ -67,7 +71,6 @@ export class TkAccordionItem implements ComponentInterface {
 
   private createIcon() {
     if (this.hideArrows) return null;
-    let _icon!: HTMLSpanElement;
     let _renderIcon: string | IIconOptions;
 
     if (this.active) {
@@ -76,17 +79,13 @@ export class TkAccordionItem implements ComponentInterface {
       _renderIcon = this.expandIcon;
     }
 
-    if (typeof _renderIcon == 'string') {
-      _icon = <span class={`material-symbols-outlined ${this.active && 'tk-accordion-item-icon-collapse'}`}>{_renderIcon}</span>;
-    } else if (typeof _renderIcon == 'object') {
-      _icon = (
-        <span class={`material-symbols-${_renderIcon?.style || 'outlined'} ${_renderIcon?.fill && 'fill'}`} style={{ color: _renderIcon?.color || 'inherit' }}>
-          {_renderIcon?.name}
-        </span>
-      );
-    }
+    const icon = (
+      <tk-icon
+        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'span')}
+      ></tk-icon>
+    );
 
-    return <span class="icon">{_icon}</span>;
+    return <span class="icon">{icon}</span>;
   }
 
   private createHeader() {
@@ -101,21 +100,7 @@ export class TkAccordionItem implements ComponentInterface {
       open: this.active,
     });
 
-    let icon;
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        icon = <span class="material-symbols-outlined tk-accordion-item-icon">{this.icon}</span>;
-      } else {
-        icon = (
-          <span
-            class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''} tk-accordion-item-icon`}
-            style={{ color: this.icon?.color || 'inherit' }}
-          >
-            {this.icon.name}
-          </span>
-        );
-      }
-    }
+    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
 
     return (
       <Host>

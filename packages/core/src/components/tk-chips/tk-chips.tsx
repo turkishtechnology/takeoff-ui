@@ -1,6 +1,7 @@
 import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
@@ -77,18 +78,7 @@ export class TkChips implements ComponentInterface {
       removable: this.removable,
     });
 
-    let icon;
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        icon = <i class="material-symbols-outlined">{this.icon}</i>;
-      } else {
-        icon = (
-          <i class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''}`} style={{ color: this.icon?.color || 'inherit' }}>
-            {this.icon.name}
-          </i>
-        );
-      }
-    }
+    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
 
     return (
       <div class={rootClasses}>
