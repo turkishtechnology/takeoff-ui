@@ -133,11 +133,11 @@ export class TkCard implements ComponentInterface {
   @Prop() contentStyle?: any = null;
 
   componentWillLoad() {
-    this.hasHeaderSlot = !!this.el.querySelector('[slot="header"]');
-    this.hasAvatarSlot = !!this.el.querySelector('[slot="avatar"]');
-    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector('[slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector('[slot="footer-actions"]');
+    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
+    this.hasAvatarSlot = !!this.el.querySelector(':scope > [slot="avatar"]');
+    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
+    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
+    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
     this.hasDefaultSlotBody = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
     });

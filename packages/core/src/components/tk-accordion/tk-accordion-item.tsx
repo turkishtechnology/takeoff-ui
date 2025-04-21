@@ -66,7 +66,7 @@ export class TkAccordionItem implements ComponentInterface {
       this.collapseIcon = this.parentEl.collapseIcon;
       this.hideArrows = this.parentEl.hideArrows;
     }
-    this.hasHeaderSlot = !!this.el.querySelector('[slot="header"]');
+    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
   }
 
   private createIcon() {
