@@ -305,6 +305,45 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  /**
+   * Clears all filters for server side pagination
+   */
+  @Method()
+  async clearFilters() {
+    if (this.filters?.length > 0) {
+      this.filters = [];
+      this.currentPage = 1;
+
+      this.tkRequest.emit({
+        currentPage: this.currentPage,
+        rowsPerPage: this.rowsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        filters: this.filters,
+      } as ITableRequest);
+    }
+  }
+
+  /**
+   * Clears all sorting for server side pagination
+   */
+  @Method()
+  async clearSorting() {
+    if (this.sortField) {
+      this.sortField = null;
+      this.sortOrder = null;
+      this.currentPage = 1;
+
+      this.tkRequest.emit({
+        currentPage: this.currentPage,
+        rowsPerPage: this.rowsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        filters: this.filters,
+      } as ITableRequest);
+    }
+  }
+
   private getNestedValue(obj, path) {
     return path.split('.').reduce((acc, key) => {
       return acc && acc[key] !== undefined ? acc[key] : undefined;

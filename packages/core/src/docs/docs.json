@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-21T08:03:18",
+  "timestamp": "2025-04-21T11:24:26",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -11498,6 +11498,60 @@
         }
       ],
       "methods": [
+        {
+          "name": "clearFilters",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "ITableRequest": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-table/interfaces.ts::ITableRequest"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "clearFilters() => Promise<void>",
+          "parameters": [],
+          "docs": "Clears all filters for server side pagination",
+          "docsTags": []
+        },
+        {
+          "name": "clearSorting",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "ITableRequest": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-table/interfaces.ts::ITableRequest"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "clearSorting() => Promise<void>",
+          "parameters": [],
+          "docs": "Clears all sorting for server side pagination",
+          "docsTags": []
+        },
         {
           "name": "exportFile",
           "returns": {
