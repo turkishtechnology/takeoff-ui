@@ -72,10 +72,6 @@ export class TkIcon implements ComponentInterface {
    */
   @Prop() iconTag: 'i' | 'span' = 'i';
 
-  componentWillRender(): Promise<void> | void {
-    console.log(this.icon);
-  }
-
   private getIconStyles = () => {
     const style: Record<string, string> = {};
     if (this.color) {
