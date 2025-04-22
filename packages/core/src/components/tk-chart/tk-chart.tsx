@@ -24,18 +24,15 @@ export class TkChart implements ComponentInterface {
       {
         label: 'Sample Dataset',
         data: [12, 19, 3, 5],
-        backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'],
-        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
-        borderWidth: 1,
         hoverOffset: 4,
       },
     ],
   };
 
-  @Prop() options: ChartOptions = {
+  private internalOptions: ChartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: 'y',
+    maintainAspectRatio: true,
+    indexAxis: 'x', //vertical bar chart
     plugins: {
       legend: {
         display: false,
@@ -44,41 +41,98 @@ export class TkChart implements ComponentInterface {
         enabled: false,
       },
     },
+    elements: {
+      bar: {
+        backgroundColor: '#3B82F6',
+        borderSkipped: 'start',
+        borderRadius: 20,
+      },
+    },
+    layout: {
+      padding: 0,
+    },
+
     scales: {
       x: {
-        display: false,
-        beginAtZero: true,
+        border: {
+          display: false,
+        },
         grid: {
           display: false,
         },
+        offset: true,
+        ticks: {
+          color: '#525866',
+          font: {
+            family: 'Geologica',
+            size: 12,
+            style: 'normal',
+            weight: 400,
+            lineHeight: 1.5,
+          },
+        },
       },
       y: {
-        type: 'category',
-        display: false,
-        position: 'left',
-        offset: true,
-        grid: {
+        backgroundColor: '#F9FAFC',
+        border: {
           display: true,
-          z: 1,
-          color: 'rgba(0, 0, 0, 0.1)',
         },
+        grid: {
+          display: false,
+          drawOnChartArea: false,
+        },
+        offset: false,
         ticks: {
-          padding: 10,
-          color: '#333',
+          padding: 0,
+          showLabelBackdrop: true,
+          color: '#525866',
           font: {
-            size: 14,
-            weight: 500,
-          },
-          callback: function (index) {
-            // Get labels from the data
-            const labels = this.chart.data.labels;
-            // Ensure we return a string or empty string
-            return labels && labels[index] ? String(labels[index]) : '';
+            family: 'Geologica',
+            size: 12,
+            style: 'normal',
+            weight: 400,
+            lineHeight: 1.5,
           },
         },
       },
     },
+    // it works for horizontal bar chart
+    // scales: {
+    //   x: {
+    //     display: false,
+    //     beginAtZero: true,
+    //     grid: {
+    //       display: false,
+    //     },
+    //   },
+    //   y: {
+    //     type: 'category',
+    //     display: false,
+    //     position:'left',
+    //     grid: {
+    //       display: true,
+    //       z: 1,
+    //       color: 'rgba(0, 0, 0, 0.1)',
+    //     },
+    //     ticks: {
+    //       padding: 10,
+    //       color: '#333',
+    //       font: {
+    //         size: 14,
+    //         weight: 500,
+    //       },
+    //       callback: function (index) {
+    //         // Get labels from the data
+    //         const labels = this.chart.data.labels;
+    //         // Ensure we return a string or empty string
+    //         return labels && labels[index] ? String(labels[index]) : '';
+    //       },
+    //     },
+    //   },
+    // },
   };
+
+  @Prop() options: ChartOptions;
   /**
    * Chart height in pixels
    */
@@ -94,6 +148,13 @@ export class TkChart implements ComponentInterface {
   @Prop() mode: 'pie' | 'bar' = 'bar';
 
   componentDidLoad() {
+    if (this.options) {
+      this.internalOptions = {
+        ...this.internalOptions,
+        ...this.options,
+      };
+    }
+
     this.initChart();
   }
 
@@ -147,12 +208,12 @@ export class TkChart implements ComponentInterface {
                 const textY = props.y - props.height / 2 - this.paddingUp;
 
                 // Add visual debugging - draw a point at the label position
-                ctx.save();
-                ctx.fillStyle = 'red';
-                ctx.beginPath();
-                ctx.arc(textX, textY, 3, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.restore();
+                // ctx.save();
+                // ctx.fillStyle = 'red';
+                // ctx.beginPath();
+                // ctx.arc(textX, textY, 3, 0, 2 * Math.PI);
+                // ctx.fill();
+                // ctx.restore();
 
                 // Show different formats based on available width
                 if (props.width > 50) {
@@ -169,14 +230,13 @@ export class TkChart implements ComponentInterface {
             ctx.restore();
           },
         };
-
-        this.chartInstance = new Chart(ctx, {
-          type: this.mode,
-          data: this.data,
-          options: this.options,
-          plugins: [labelPlugin],
-        });
       }
+      this.chartInstance = new Chart(ctx, {
+        type: this.mode,
+        data: this.data,
+        options: this.internalOptions,
+        plugins: [],
+      });
     }
   }
 
