@@ -6,5 +6,4 @@ labels: question
 assignees: ''
 ---
 
-**What's your question or idea?**  
-Describe it clearly.
+For questions or general discussions, please use the [GitHub Discussions](https://github.com/turkishtechnology/takeoff-ui/discusssions) section of the repository.

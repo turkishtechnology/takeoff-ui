@@ -8,7 +8,7 @@ assignees: ''
 
 **What's wrong or missing in the docs?**
 
-**What should be added or fixed?**
+**Which component needs documentation or improvements?**
 
-**Where is it located?**  
-(e.g. which page or file?)
+**What specific features need demo or more detailed explanation?**
+
