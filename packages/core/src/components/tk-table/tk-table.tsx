@@ -88,16 +88,6 @@ export class TkTable implements ComponentInterface {
       if (this.refSelectAll) this.refSelectAll.value = false;
       this.handleSelectAll(false);
       this.expandedRows = [];
-
-      // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
-      const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
-      if (slotEmptyData) {
-        if (newValue?.length > 0) {
-          slotEmptyData.style.display = 'none';
-        } else {
-          slotEmptyData.style.display = 'block';
-        }
-      }
     }
   }
 
@@ -213,6 +203,19 @@ export class TkTable implements ComponentInterface {
     this.elements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
+  }
+
+  componentWillUpdate(): Promise<void> | void {
+    // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+    const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
+    console.log(slotEmptyData, this.data);
+    if (slotEmptyData) {
+      if (this.loading || this.data?.length > 0) {
+        slotEmptyData.style.display = 'none';
+      } else {
+        slotEmptyData.style.display = 'block';
+      }
+    }
   }
 
   componentDidUpdate() {
