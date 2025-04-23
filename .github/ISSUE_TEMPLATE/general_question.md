@@ -6,4 +6,4 @@ labels: question
 assignees: ''
 ---
 
-For questions or general discussions, please use the [GitHub Discussions](https://github.com/turkishtechnology/takeoff-ui/discusssions) section of the repository.
+For questions or general discussions, please use the [GitHub Discussions](https://github.com/turkishtechnology/takeoff-ui/discussions) section of the repository.

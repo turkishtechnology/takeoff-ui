@@ -52,6 +52,6 @@ Add screenshots to help explain your problem.
 - Any relevant packages or dependencies: [e.g. React version, Node version]
 
 **Need further help?**
-If you're unsure or need further clarification, please reach out through the [Discussions](https://github.com/turkishtechnology/takeoff-ui/discusssions).
+If you're unsure or need further clarification, please reach out through the [Discussions](https://github.com/turkishtechnology/takeoff-ui/discussions).
 
 
