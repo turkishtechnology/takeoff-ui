@@ -1,0 +1,120 @@
+name: "Bug Report"
+about: Report a bug or unexpected behavior
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for taking the time to create a bug report. Before opening a new issue, please search existing issues to avoid duplicates.
+ 
+  - type: markdown
+    attributes:
+      value: |
+        #### If you aren't sure this is a bug or not, please open a discussion instead:
+        - [Discussions](https://github.com/turkishtechnology/takeoff-ui/discussionsl)
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is. If you intend to submit a PR for this issue, tell us how in the description. Thanks!
+      placeholder: Bug description
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component-affected
+    attributes:
+      label: Affected component
+      description: Which takeoff-ui component is affected?
+      options:
+      -label: tk-accordion
+      -label: tk-alert
+      -label: tk-avatar
+      -label: tk-badge
+      -label: tk-breadcrumb
+      -label: tk-button
+      -label: tk-card
+      -label: tk-checkbox
+      -label: tk-chips
+      -label: tk-currency-input
+      -label: tk-datepicker
+      -label: tk-dialog
+      -label: tk-divider
+      -label: tk-drawer
+      -label: tk-dropdown
+      -label: tk-editor
+      -label: tk-icon
+      -label: tk-input
+      -label: tk-pagination
+      -label: tk-radio
+      -label: tk-rating
+      -label: tk-select
+      -label: tk-spinner
+      -label: tk-stepper
+      -label: tk-table
+      -label: tk-tabs
+      -label: tk-textarea
+      -label: tk-timeline
+      -label: tk-toggle
+      -label: tk-tooltip
+      -label: tk-upload
+    validations:
+      required: true
+
+  - type: dropdown
+    id: framework-affected
+    attributes:
+      label: Affected framework
+      description: Which takeoff-ui framework is affected?
+      options:
+      -label: React
+      -label: Vue
+      -label: Angular
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "Please specify the version you are having trouble with.
+      placeholder: "V1.0.0"
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: "Please add a screenshot of the error or the situation you are dealing with."
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: "Please include browser console and server logs around the time this bug occurred. Optional if provided reproduction. Please try not to insert an image but copy paste the log text."
+      render: bash
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      description:  A step-by-step description of how to reproduce the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. See error
+    validations:
+      required: true
+
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      description: By submitting this issue, you agree to follow our [Contributing Guidelines](https://github.com/turkishtechnology/takeoff-ui/blob/develop/CONTRIBUTING.md).
+      options:
+        - label: I've made research efforts and searched the documentation
+          required: true
+        - label: I've searched for existing issues
+          required: true

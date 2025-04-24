@@ -1,0 +1,82 @@
+name: "Feature request"
+description: Create a feature request
+title: 'feat: '
+labels: ['new feature']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for taking the time to create a feature request! Before opening a new issue, please search existing issues to avoid duplicates.
+ 
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      description: Tell us about your feature request
+      placeholder: 'I think this feature would be great because...'
+      value: 'Describe your feature request...'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component-affected
+    attributes:
+      label: Affected component
+      description: Which takeoff-ui component is affected?
+      options:
+      -label: tk-accordion
+      -label: tk-alert
+      -label: tk-avatar
+      -label: tk-badge
+      -label: tk-breadcrumb
+      -label: tk-button
+      -label: tk-card
+      -label: tk-checkbox
+      -label: tk-chips
+      -label: tk-currency-input
+      -label: tk-datepicker
+      -label: tk-dialog
+      -label: tk-divider
+      -label: tk-drawer
+      -label: tk-dropdown
+      -label: tk-editor
+      -label: tk-icon
+      -label: tk-input
+      -label: tk-pagination
+      -label: tk-radio
+      -label: tk-rating
+      -label: tk-select
+      -label: tk-spinner
+      -label: tk-stepper
+      -label: tk-table
+      -label: tk-tabs
+      -label: tk-textarea
+      -label: tk-timeline
+      -label: tk-toggle
+      -label: tk-tooltip
+      -label: tk-upload
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the feature here.
+      placeholder: ex. screenshots, Stack Overflow links, forum links, etc.
+      value: 'Additional details here...'
+    validations:
+      required: false
+
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      description: By submitting this issue, you agree to follow our [Contributing Guidelines](https://github.com/turkishtechnology/takeoff-ui/blob/develop/CONTRIBUTING.md).
+      options:
+        - label: I've made research efforts and searched the documentation
+          required: true
+        - label: I've searched for existing issues
+          required: true
