@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * The TkCheckbox component is another basic element for user input. You can use this to supply a way for the user to toggle an option.
+ * @slot content - Custom content template.
  * @react `import { TkCheckbox } from '@takeoff-ui/react'`
  * @vue `import { TkCheckbox } from '@takeoff-ui/vue'`
  * @angular `import { TkCheckbox } from '@takeoff-ui/angular'`
