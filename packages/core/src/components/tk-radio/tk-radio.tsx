@@ -31,6 +31,12 @@ export class TkRadio implements ComponentInterface {
   }
 
   /**
+   * Controls if radio has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
+
+  /**
    * Disables the radio button if true.
    * @defaultValue false
    */
@@ -72,12 +78,6 @@ export class TkRadio implements ComponentInterface {
    * The value of the radio button.
    */
   @Prop() value: any;
-
-  /**
-   * Controls if tooltip has custom content.
-   * @defaultValue false
-   */
-  @State() hasContentSlot: boolean = false;
 
   /**
    * Emitted when the radio button's checked state changes.

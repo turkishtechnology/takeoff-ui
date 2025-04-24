@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element, Watch, EventEmitter, Event, ComponentInterface, AttachInternals } from '@stencil/core';
+import { Component, Prop, State, h, Element, Watch, EventEmitter, Event, ComponentInterface, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,6 +20,12 @@ export class TkCheckbox implements ComponentInterface {
   @Element() el: HTMLTkCheckboxElement;
 
   @AttachInternals() internals: ElementInternals;
+
+  /**
+   * Controls if checkbox has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
 
   /**
    * If true, the user cannot interact with the checkbox.
@@ -84,6 +90,7 @@ export class TkCheckbox implements ComponentInterface {
 
   componentWillLoad() {
     if (this.indeterminate) this.value = null;
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
   }
 
   formResetCallback() {
@@ -122,10 +129,14 @@ export class TkCheckbox implements ComponentInterface {
           <div class="mask">
             <i class="material-symbols-outlined">{this.indeterminate ? 'remove' : 'check'}</i>
           </div>
-          <div class="tk-checkbox-text-holder">
-            <div class="tk-checkbox-label">{this.label}</div>
-            <div class="tk-checkbox-description">{this.description}</div>
-          </div>
+          {this.hasContentSlot ? (
+            <slot name="content" />
+          ) : (
+            <div class="tk-checkbox-text-holder">
+              <div class="tk-checkbox-label">{this.label}</div>
+              <div class="tk-checkbox-description">{this.description}</div>
+            </div>
+          )}
         </label>
       </div>
     );
