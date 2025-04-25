@@ -124,11 +124,11 @@ export class TkDialog implements ComponentInterface {
   @Event({ eventName: 'tk-visible-change' }) tkVisibleChange: EventEmitter<boolean>;
 
   componentWillLoad() {
-    this.hasContainerSlot = !!this.el.querySelector('[slot="container"]');
-    this.hasHeaderSlot = !!this.el.querySelector('[slot="header"]');
-    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector('[slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector('[slot="footer-actions"]');
+    this.hasContainerSlot = !!this.el.querySelector(':scope > [slot="container"]');
+    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
+    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
+    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
+    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
 
     this.hasDefaultSlotContent = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
