@@ -1,8 +1,14 @@
-import { Component, h, Element, ComponentInterface, Prop } from '@stencil/core';
-import Chart, { ChartOptions } from 'chart.js/auto';
+import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
+import Chart, { ChartType, ChartData, ChartOptions } from 'chart.js/auto';
+import { getDefaultOptionsForType } from './defaults';
+import { merge } from 'lodash';
+
+// Define types directly in the component file
+export type TkChartStyle = 'basic' | 'divided' | 'light';
+export type TkChartVariant = 'basic' | 'lined' | 'railed';
 
 /**
- * The TkChart component allows users to visualize data in a pie chart format using Chart.js.
+ * The TkChart component allows users to visualize data in various chart formats using Chart.js.
  * @react `import { TkChart } from '@takeoff-ui/react'`
  * @vue `import { TkChart } from '@takeoff-ui/vue'`
  * @angular `import { TkChart } from '@takeoff-ui/angular'`
@@ -11,6 +17,7 @@ import Chart, { ChartOptions } from 'chart.js/auto';
 @Component({
   tag: 'tk-chart',
   styleUrl: 'tk-chart.scss',
+  shadow: false,
 })
 export class TkChart implements ComponentInterface {
   private chartCanvas?: HTMLCanvasElement;
@@ -18,232 +25,182 @@ export class TkChart implements ComponentInterface {
 
   @Element() el: HTMLTkChartElement;
 
-  @Prop() data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green'],
-    datasets: [
-      {
-        label: 'Sample Dataset',
-        data: [12, 19, 3, 5],
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  private internalOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: true,
-    indexAxis: 'x', //vertical bar chart
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false,
-      },
-    },
-    elements: {
-      bar: {
-        backgroundColor: '#3B82F6',
-        borderSkipped: 'start',
-        borderRadius: 20,
-      },
-    },
-    layout: {
-      padding: 0,
-    },
-
-    scales: {
-      x: {
-        border: {
-          display: false,
-        },
-        grid: {
-          display: false,
-        },
-        offset: true,
-        ticks: {
-          color: '#525866',
-          font: {
-            family: 'Geologica',
-            size: 12,
-            style: 'normal',
-            weight: 400,
-            lineHeight: 1.5,
-          },
-        },
-      },
-      y: {
-        backgroundColor: '#F9FAFC',
-        border: {
-          display: true,
-        },
-        grid: {
-          display: false,
-          drawOnChartArea: false,
-        },
-        offset: false,
-        ticks: {
-          padding: 0,
-          showLabelBackdrop: true,
-          color: '#525866',
-          font: {
-            family: 'Geologica',
-            size: 12,
-            style: 'normal',
-            weight: 400,
-            lineHeight: 1.5,
-          },
-        },
-      },
-    },
-    // it works for horizontal bar chart
-    // scales: {
-    //   x: {
-    //     display: false,
-    //     beginAtZero: true,
-    //     grid: {
-    //       display: false,
-    //     },
-    //   },
-    //   y: {
-    //     type: 'category',
-    //     display: false,
-    //     position:'left',
-    //     grid: {
-    //       display: true,
-    //       z: 1,
-    //       color: 'rgba(0, 0, 0, 0.1)',
-    //     },
-    //     ticks: {
-    //       padding: 10,
-    //       color: '#333',
-    //       font: {
-    //         size: 14,
-    //         weight: 500,
-    //       },
-    //       callback: function (index) {
-    //         // Get labels from the data
-    //         const labels = this.chart.data.labels;
-    //         // Ensure we return a string or empty string
-    //         return labels && labels[index] ? String(labels[index]) : '';
-    //       },
-    //     },
-    //   },
-    // },
-  };
-
-  @Prop() options: ChartOptions;
-  /**
-   * Chart height in pixels
-   */
-  @Prop() height: number = 600;
+  @State() private internalOptions: any;
 
   /**
-   * Chart width in pixels
+   * The mode (type) of chart to render
    */
-  @Prop() width: number = 600;
+  @Prop() mode: ChartType = 'bar';
 
-  @Prop() paddingUp: number = 15;
+  /**
+   * The chart data
+   */
+  @Prop() data: ChartData = { datasets: [] };
 
-  @Prop() mode: 'pie' | 'bar' = 'bar';
+  /**
+   * Chart options
+   */
+  @Prop() options?: ChartOptions;
+
+  /**
+   * Width of the chart container
+   */
+  @Prop() width?: string = '100%';
+
+  /**
+   * Height of the chart container in pixels
+   */
+  @Prop() height?: number = 300;
+
+  /**
+   * Custom plugins to use with chart
+   */
+  @Prop() plugins?: any[] = [];
+
+  /**
+   * Accessibility label for the chart
+   */
+  @Prop() accessibilityLabel?: string;
+
+  /**
+   * Visual style of the chart (affects colors and backgrounds)
+   */
+  @Prop() chartStyle: TkChartStyle = 'basic';
+
+  /**
+   * Variant of the chart (affects grid lines and chart features)
+   */
+  @Prop() variant: TkChartVariant = 'basic';
+
+  @Watch('data')
+  handleDataChange() {
+    this.updateChart();
+  }
+
+  @Watch('options')
+  handleOptionsChange() {
+    this.mergeOptions();
+    this.updateChart();
+  }
+
+  @Watch('mode')
+  handleModeChange() {
+    this.destroyChart();
+    this.mergeOptions();
+    this.initChart();
+  }
+
+  @Watch('chartStyle')
+  @Watch('variant')
+  handleStyleChange() {
+    this.mergeOptions();
+    this.updateChart();
+  }
+
+  componentWillLoad() {
+    this.mergeOptions();
+  }
 
   componentDidLoad() {
-    if (this.options) {
-      this.internalOptions = {
-        ...this.internalOptions,
-        ...this.options,
-      };
-    }
-
     this.initChart();
   }
 
   disconnectedCallback() {
-    // Clean up chart instance when component is removed
+    this.destroyChart();
+  }
+
+  /**
+   * Get the chart instance
+   */
+  @Method()
+  async getChart(): Promise<any> {
+    return this.chartInstance;
+  }
+
+  /**
+   * Get the canvas element
+   */
+  @Method()
+  async getCanvas(): Promise<HTMLCanvasElement | undefined> {
+    return this.chartCanvas;
+  }
+
+  /**
+   * Get base64 image of the chart
+   */
+  @Method()
+  async getBase64Image(): Promise<string | undefined> {
+    return this.chartInstance?.toBase64Image();
+  }
+
+  /**
+   * Refresh the chart
+   */
+  @Method()
+  async refresh(): Promise<void> {
     if (this.chartInstance) {
-      this.chartInstance.destroy();
+      this.chartInstance.update();
     }
+  }
+
+  private mergeOptions() {
+    // Get type/style/variant-specific default options
+    const typeDefaults = getDefaultOptionsForType(this.mode, this.chartStyle, this.variant);
+
+    // Merge with user options
+    this.internalOptions = merge({}, typeDefaults, this.options);
+    // Bu kullanım nested objectlerde sorun çıkarıyor.
+    //this.internalOptions = {...this.internalOptions, ...typeDefaults}
+    console.log('Internal options:', this.internalOptions);
   }
 
   private initChart() {
     if (this.chartCanvas) {
       const ctx = this.chartCanvas.getContext('2d');
-
       if (ctx) {
-        // Create plugin for displaying labels inside bars
-        const labelPlugin = {
-          id: 'barLabelsPlugin',
-          afterDraw: chart => {
-            const { ctx, data } = chart;
-            if (!data || !data.datasets || !data.datasets[0] || !data.datasets[0].data) return;
+        this.chartInstance = new Chart(ctx, {
+          type: this.mode,
+          data: this.data,
+          options: this.internalOptions,
+          plugins: this.plugins,
+        });
 
-            // Debug: Print chart information
-            // console.log(chart);
-            // Get the minimum x position of the chart area
-            // const chartAreaMinX = chart.chartArea.left;
-
-            // Get y-axis position - this is where labels would be
-            // const yAxisPosition = chart.scales.y ? chart.scales.y.left : 0;
-
-            // Set text style, font, color, alignment, and baseline these will be props
-            ctx.save();
-            ctx.font = 'bold 14px Arial';
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-
-            const meta = chart.getDatasetMeta(0);
-
-            // Process each data point
-            data.datasets[0].data.forEach((value, index) => {
-              if (meta.data[index]) {
-                const bar = meta.data[index];
-                const props = bar.getProps(['x', 'y', 'width', 'height'], chart.ctx);
-                console.log(props);
-                // Get label from data labels
-                const label = data.labels && data.labels[index] ? data.labels[index] : '';
-
-                // Position text inside bar - add a little extra padding since we have labels
-                const textX = 0;
-                const textY = props.y - props.height / 2 - this.paddingUp;
-
-                // Add visual debugging - draw a point at the label position
-                // ctx.save();
-                // ctx.fillStyle = 'red';
-                // ctx.beginPath();
-                // ctx.arc(textX, textY, 3, 0, 2 * Math.PI);
-                // ctx.fill();
-                // ctx.restore();
-
-                // Show different formats based on available width
-                if (props.width > 50) {
-                  // Full format with label and value
-                  ctx.fillText(`${label}: ${value}`, textX, textY);
-                } else if (props.width > 30) {
-                  // Just show the value
-                  ctx.fillText(value.toString(), textX, textY);
-                }
-                // For very narrow bars, don't show any text
-              }
-            });
-
-            ctx.restore();
-          },
-        };
+        // Log created chart
+        console.log('Chart instance created:', this.chartInstance);
       }
-      this.chartInstance = new Chart(ctx, {
-        type: this.mode,
-        data: this.data,
-        options: this.internalOptions,
-        plugins: [],
-      });
+    }
+  }
+
+  private updateChart() {
+    if (this.chartInstance) {
+      // Don't directly assign to type as it's not supported
+      this.chartInstance.data = this.data;
+      this.chartInstance.options = this.internalOptions;
+
+      this.chartInstance.update();
+    }
+  }
+
+  private destroyChart() {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+      this.chartInstance = undefined;
     }
   }
 
   render() {
+    const title = this.options?.plugins?.title?.text;
+    const accessibilityLabel = this.accessibilityLabel || title || 'Chart';
+
     return (
-      <div class="tk-chart-container" style={{ minHeight: `${this.height}px` }}>
-        <canvas ref={el => (this.chartCanvas = el)}></canvas>
+      <div
+        class={`tk-chart-container tk-chart-${this.chartStyle} tk-chart-${this.variant}`}
+        style={{
+          width: this.width,
+          height: `${this.height}px`,
+        }}
+      >
+        <canvas ref={el => (this.chartCanvas = el)} role="img" aria-label={accessibilityLabel}></canvas>
       </div>
     );
   }
