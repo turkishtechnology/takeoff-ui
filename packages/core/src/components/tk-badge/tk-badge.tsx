@@ -105,7 +105,7 @@ export class TkBadge implements ComponentInterface {
       'count': isCountOnly,
     });
 
-    const icon = !this.dot ? <tk-icon {...getIconElementProps(this.icon, { variant: null })} /> : null;
+    const icon = !this.dot && this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
 
     let content;
     if (!this.dot) {
