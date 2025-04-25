@@ -19,6 +19,7 @@ import { getIconElementProps } from '../../utils/icon-props';
 @Component({
   tag: 'tk-table',
   styleUrl: 'tk-table.scss',
+  shadow: true,
 })
 export class TkTable implements ComponentInterface {
   private elements: ICustomElement[] = [];
@@ -208,7 +209,7 @@ export class TkTable implements ComponentInterface {
   componentWillUpdate(): Promise<void> | void {
     // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
-    console.log(slotEmptyData, this.data);
+
     if (slotEmptyData) {
       if (this.loading || this.data?.length > 0) {
         slotEmptyData.style.display = 'none';
@@ -412,7 +413,7 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private async handleSearchIconClick(refSearchIcon: HTMLElement, field: string) {
+  private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
     if (!this.isFilterOpen) {
       this.isFilterOpen = true;
       this.createFilterPanel(refSearchIcon, field);
@@ -475,10 +476,10 @@ export class TkTable implements ComponentInterface {
   private handleSelectAll(value: boolean) {
     if (value) {
       this.selection = [...this.renderData];
-      this.el.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
+      this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];
-      this.el.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
+      this.el.shadowRoot.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
     }
     this.tkSelectionChange.emit(this.selection);
   }
@@ -505,7 +506,7 @@ export class TkTable implements ComponentInterface {
 
   private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
     // seçili satırların stilinin kaldırılması
-    this.el.querySelector('table tr.selected')?.classList.remove('selected');
+    this.el.shadowRoot.querySelector('table tr.selected')?.classList.remove('selected');
 
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
@@ -521,26 +522,26 @@ export class TkTable implements ComponentInterface {
     this.handleSelectAll(false);
   }
 
-  private handleSortIconClick(refSearchIcon: HTMLElement, col: ITableColumn) {
+  private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
     if (!col.sortable) return;
 
     this.sortField = col.field;
 
-    const icon = refSearchIcon.innerHTML;
+    const icon = refSortIcon.icon;
 
     // tüm sort iconlar default duruma getirilir.
-    this.el.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach(icon => (icon.innerHTML = 'swap_vert'));
+    this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
     if (icon == 'swap_vert') {
       this.sortOrder = 'asc';
-      refSearchIcon.innerHTML = 'arrow_drop_up';
+      refSortIcon.icon = 'arrow_drop_up';
     } else if (icon == 'arrow_drop_up') {
       this.sortOrder = 'desc';
-      refSearchIcon.innerHTML = 'arrow_drop_down';
+      refSortIcon.icon = 'arrow_drop_down';
     } else if (icon == 'arrow_drop_down') {
       this.sortField = null;
       this.sortOrder = null;
-      refSearchIcon.innerHTML = 'swap_vert';
+      refSortIcon.icon = 'swap_vert';
     }
 
     // // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
@@ -608,8 +609,8 @@ export class TkTable implements ComponentInterface {
         <tr>
           {selectionTh}
           {this.columns.map(col => {
-            let refSortIcon: HTMLElement;
-            let refSearchIcon: HTMLElement;
+            let refSortIcon: HTMLTkIconElement;
+            let refSearchIcon: HTMLTkIconElement;
             let _icons;
 
             // generate expander th

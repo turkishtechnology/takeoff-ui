@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-22T18:12:08",
+  "timestamp": "2025-04-25T20:18:06",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -11166,7 +11166,7 @@
     },
     {
       "filePath": "src/components/tk-table/tk-table.tsx",
-      "encapsulation": "none",
+      "encapsulation": "shadow",
       "tag": "tk-table",
       "docs": "TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.",
       "docsTags": [

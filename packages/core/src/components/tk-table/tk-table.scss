@@ -280,27 +280,3 @@ tk-table>[slot="empty-data"] {
     transform: rotate(360deg);
   }
 }
-
-.tk-table-filter-panel {
-  width: 220px;
-  position: fixed;
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-  background-color: var(--static-light);
-  padding: 8px;
-  z-index: 1400;
-  box-shadow: var(--effect-1-default-base);
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  gap: 8px;
-
-  .tk-table-filter-panel-buttons {
-    display: flex;
-    gap: 8px;
-
-    tk-button {
-      flex: 1;
-    }
-  }
-}
