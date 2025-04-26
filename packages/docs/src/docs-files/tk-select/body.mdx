@@ -1,0 +1,68 @@
+import Basic from "./Examples/Basic";
+import Filter from "./Examples/Filter";
+import CustomItem from "./Examples/CustomItem";
+import Multiple from "./Examples/Multiple";
+import Size from "./Examples/Size";
+import State from "./Examples/State";
+import OptionValueKey from "./Examples/OptionValueKey"
+import Clearable from "./Examples/Clearable"
+import Loading from "./Examples/Loading"
+import {TkAlert} from "@takeoff-ui/react"
+
+## Basic
+
+<Basic />
+
+## Filter
+
+You can perform filtering either server-side or client-side using the filter emit.
+
+<Filter />
+
+## Loading
+
+You can use `loading` prop for waiting the response from the server-side.
+
+<Loading />
+
+## Custom Item
+
+You can provide a template as an HTML string using the optionHtml prop.
+
+<CustomItem />
+
+{/* TODO: selectbox da group kullanımı kaldırıldı o yüzden bu demoda pasif hale getirildi. İlerine select de group options özelliği istenirse geliştirilip bu demo aktif hale getirilebilir. */}
+{/* ## Grouped Options
+
+Allows grouping of options under labeled categories within the select box for better organization and clarity.
+
+<GroupOption /> */}
+
+## Multiple Select
+
+<Multiple />
+
+## Size
+
+The "size" prop can be used with one of the sizes "small", "base", and "large". The default value is "base".
+
+<Size />
+
+## State
+
+<State />
+
+## OptionValueKey
+
+Allows usage of Key for option values.
+
+<OptionValueKey />
+
+## Clearable
+
+This example clears the input of the select.
+<TkAlert header="Note" variant="warning" message="This feature works in conjunction with the `editable` prop set to `true`." filledlight />
+<br/>
+<Clearable />
+
+

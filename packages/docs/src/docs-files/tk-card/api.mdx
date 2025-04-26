@@ -1,0 +1,32 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="avatarProps" variant="primary" size="large" type="filledlight"/> | <code>any</code> | `{ severity: 'light', background: 'solid', rounded: true, }` | TO DO State hata verdiği için buraya alındı, düzeltilecek TkAvatar component properties |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="contentStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of content element |
+| <TkBadge label="enableHoverShadow" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the card shows a hover shadow effect |
+| <TkBadge label="footerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | The mode of the footer |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The header text |
+| <TkBadge label="headerPosition" variant="primary" size="large" type="filledlight"/> | <code>"bottom", "top"</code> | 'top' | The position of the header |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "divided", "light", "primary"</code> | 'basic' | The type of the header |
+| <TkBadge label="hideHeader" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the header is hidden |
+| <TkBadge label="horizontal" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the card is displayed horizontally |
+| <TkBadge label="image" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The image source for the card |
+| <TkBadge label="imageOptions" variant="primary" size="large" type="filledlight"/> | <code>`{ badge?: string; badgeIcon?: string; badgeIconPosition?: "left", "right"; windowed?: boolean; background?: boolean; backgroundUrl?: string; position?: "top", "left", "right", "background"; }`</code> | `{ position: 'top', background: false, windowed: true, }` | TO DO Options for the image display |
+| <TkBadge label="showAvatar" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the header avatar is shown |
+| <TkBadge label="showMenuButton" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the menu button is shown |
+| <TkBadge label="subheader" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The subheader text |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| avatar | Custom avatar template of card header. |
+| content | Custom content template. |
+| default | Default slot to detect child to inner body. |
+| footer | Custom footer template. |
+| footer-actions | Custom actions template to default footer. |
+| header | Custom header template. |

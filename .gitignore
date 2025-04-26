@@ -10,3 +10,5 @@
 /packages/angular/projects/library/src/lib/stencil-generated
 .DS_Store
 .turbo
+.docusaurus
+build
