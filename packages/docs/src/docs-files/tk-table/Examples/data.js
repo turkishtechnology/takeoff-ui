@@ -1,0 +1,192 @@
+export const basicData = [
+  {
+    id: 'f230fh0g3',
+    name: 'Bamboo Watch',
+    category: 'Accessories',
+    quantity: 24,
+  },
+  {
+    id: 'nvklal433',
+    name: 'Black Watch',
+    category: 'Onyama',
+    quantity: 42,
+  },
+  {
+    id: 'zz21cz3c1',
+    name: 'Blue Band',
+    category: 'Accessories',
+    quantity: 87,
+  },
+  {
+    id: '244wgerg2',
+    name: 'Blue T-Shirt',
+    category: 'Fitness',
+    quantity: 12,
+  },
+  {
+    id: 'h456wer53',
+    name: 'Bracelet',
+    category: 'Clothing',
+    quantity: 45,
+  },
+];
+
+export const headerTypeData = [
+  {
+    id: 'f230fh0g3',
+    name: 'Bamboo Watch',
+    category: 'Accessories',
+    quantity: 24,
+  },
+  {
+    id: 'nvklal433',
+    name: 'Black Watch',
+    category: 'Onyama',
+    quantity: 42,
+  },
+];
+
+export const data = [
+  {
+    id: 'f230fh0g3',
+    name: 'Bamboo Watch',
+    category: 'Accessories',
+    quantity: 24,
+  },
+  {
+    id: 'nvklal433',
+    name: 'Black Watch',
+    category: 'Onyama',
+    quantity: 42,
+  },
+  {
+    id: 'zz21cz3c1',
+    name: 'Blue Band',
+    category: 'Accessories',
+    quantity: 87,
+  },
+  {
+    id: '244wgerg2',
+    name: 'Blue T-Shirt',
+    category: 'Fitness',
+    quantity: 12,
+  },
+  {
+    id: 'h456wer53',
+    name: 'Bracelet',
+    category: 'Clothing',
+    quantity: 45,
+  },
+  {
+    id: '344wgerg2',
+    name: 'Art Venere',
+    category: 'Accessories',
+    quantity: 23,
+  },
+  {
+    id: '144wgerg3',
+    name: 'Simona Morasca',
+    category: 'Clothing',
+    quantity: 56,
+  },
+  {
+    id: '444wgerg6',
+    name: 'Leota Dilliard',
+    category: 'Fitness',
+    quantity: 89,
+  },
+  {
+    id: 'k14wgerj1',
+    name: 'Sage Wieser',
+    category: 'Accessories',
+    quantity: 77,
+  },
+  {
+    id: 'fq4wgergq',
+    name: 'Kris Marrier',
+    category: 'Clothing',
+    quantity: 65,
+  },
+  {
+    id: '764wger11',
+    name: 'Abel Maclead',
+    category: 'Clothing',
+    quantity: 61,
+  },
+  {
+    id: '08ge885f',
+    name: 'Mattie Poquette',
+    category: 'Fitness',
+    quantity: 42,
+  },
+  {
+    id: 'wg57erg2',
+    name: 'Meaghan Garufi',
+    category: 'Accessories',
+    quantity: 99,
+  },
+  {
+    id: '264w3erg2',
+    name: 'Gladys Rim',
+    category: 'Magalhaes',
+    quantity: 92,
+  },
+];
+export const stickyData = [
+  {
+    id: 'f230fh0g3',
+    name: 'Bamboo Watch',
+    category: 'Accessories',
+    quantity: 24,
+    startDate: '12.20',
+    endDate: '13.20',
+    duration: '60 minutes',
+    place: 'Ankara',
+    status: 'Onboard',
+  },
+  {
+    id: 'nvklal433',
+    name: 'Black Watch',
+    category: 'Onyama',
+    quantity: 42,
+    startDate: '11.40',
+    endDate: '15.20',
+    duration: '220 minutes',
+    place: 'Istanbul',
+    status: 'Boarding',
+  },
+  {
+    id: 'zz21cz3c1',
+    name: 'Blue Band',
+    category: 'Accessories',
+    quantity: 87,
+    startDate: '09.00',
+    endDate: '15.00',
+    duration: '360 minutes',
+    place: 'Paris',
+    status: 'Departed',
+  },
+  {
+    id: '244wgerg2',
+    name: 'Blue T-Shirt',
+    category: 'Fitness',
+    quantity: 12,
+    startDate: '07.30',
+    endDate: '14.20',
+    duration: '410 minutes',
+    place: 'London',
+    status: 'Arrived',
+  },
+  {
+    id: 'h456wer53',
+    name: 'Bracelet',
+    category: 'Clothing',
+    quantity: 45,
+    startDate: '18.20',
+    endDate: '06.20',
+    duration: '720 minutes',
+    place: 'Tokyo',
+    status: 'Checked-in',
+  },
+];
+export default { basicData, headerTypeData, data, stickyData };

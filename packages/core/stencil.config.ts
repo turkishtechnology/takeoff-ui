@@ -70,7 +70,7 @@ export const config: Config = {
     }),
     {
       type: 'docs-json',
-      file: 'src/docs/docs.json',
+      file: '../docs/src/docs-files/docs.json',
       supplementalPublicTypes: 'src/components/tk-table/interfaces.ts',
     },
     {

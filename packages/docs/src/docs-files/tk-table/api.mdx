@@ -1,0 +1,169 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
+| <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize cell styles. This function takes row and column information and returns a style for a specific cell. |
+| <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
+| <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
+| <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
+| <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
+| <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
+| <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
+| <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
+| <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize row styles. This function takes row information and returns a style for a specific row. |
+| <TkBadge label="rowsPerPage" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 6 | Number of items per page. |
+| <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/> | <code>number[]</code> | null | Number of rows per page options |
+| <TkBadge label="selection" variant="primary" size="large" type="filledlight"/> | <code>any</code> | [] | List of the selected |
+| <TkBadge label="selectionMode" variant="primary" size="large" type="filledlight"/> | <code>"checkbox", "radio"</code> | null | Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection). |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="striped" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables or disables alternating row background colors for easier readability. |
+| <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Number of total items. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-cell-edit |  |
+| tk-expanded-rows-change |  |
+| tk-request |  |
+| tk-row-click |  |
+| tk-selection-change |  |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| clearFilters | Clears all filters for server side pagination |
+| clearSorting | Clears all sorting for server side pagination |
+| exportFile |  |
+| serverRequest | Allows tk-request event to be triggered manually |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| empty-data | Set how the table will appear when there is no data |
+
+### Interfaces
+
+Defines the columns for the table
+
+```typescript
+interface ITableColumn {
+  /** Defines the field for the column */
+  field: string;
+  /** Defines heading for the column */
+  header: string;
+  /** Defines sub heading for the column */
+  subHeader?: string;
+  /** Defines width for the column */
+  width?: string;
+  /** Indicates if the column supports sorting */
+  sortable?: boolean;
+  /** Custom sort function for the column */
+  sorter?: Function;
+  /** Custom filter function for the column */
+  filter?: Function;
+  /** Indicates if the column is searchable */
+  searchable?: boolean;
+  /** Indicates if the column is editable */
+  editable?: boolean;
+  /** Specifies the input type for editable columns */
+  inputType?: string;
+  /** Indicates if the column contains selection checkboxes */
+  selectColumn?: boolean;
+  /** Indicates if the column acts as an expander */
+  expander?: boolean;
+  /** Custom rendering function for HTML content in the column */
+  html?: Function;
+  /** */
+  fixed?: 'left' | 'right';
+}
+```
+
+
+
+```typescript
+interface ITableRowCellStyleResponse {
+  background?: string;
+  color?: string;
+}
+```
+
+It is the return type of the tkRequest event.
+
+```typescript
+interface ITableRequest {
+  /** The current page number */
+  currentPage: number;
+  /** The total number of pages */
+  totalPages: number;
+  /** The starting index of the items on the current page */
+  startItem: number;
+  /** The ending index of the items on the current page */
+  endItem: number;
+  /** The number of rows per page */
+  rowsPerPage: number;
+  /** The field by which the table is sorted */
+  sortField: string;
+  /** The order of sorting: 'asc' or 'desc' */
+  sortOrder: string;
+  /** A list of filters applied to the table */
+  filters: ITableFilter[];
+}
+```
+
+It is the return type of the tkCellEdit event.
+
+```typescript
+interface ITableCellEdit {
+  /** The unique identifier of the row being edited. Contains the value of the dataKey prop in the edited row */
+  rowId: string;
+  /** The index of the row being edited */
+  rowIndex: number;
+  /** The field being edited */
+  field: string;
+  /** The new value for the field */
+  value: string;
+}
+```
+
+
+
+```typescript
+interface ITableExportOptions {
+  /** only works when type is `pdf`. Default value is `vertical` */
+  orientation?: 'horizontal' | 'vertical';
+  fileName?: string;
+  type?: 'csv' | 'pdf' | 'excel';
+  /** `all` working only client side pagination. Default value is `current-page` */
+  scope?: 'current-page' | 'selected' | 'all';
+  /** Ignore Columns Fields array */
+  ignoreColumnsFields?: string[];
+}
+```
+
+Represents a filter applied to a table
+
+```typescript
+interface ITableFilter {
+  /** The value of the filter */
+  value: string;
+  /** The field to which the filter is applied */
+  field: string;
+}
+```
+
+
+
+```typescript
+interface ICustomElement {
+  ref: HTMLElement;
+  element: HTMLElement;
+}
+```
+

@@ -1,0 +1,45 @@
+import Variant from "./Examples/Variant";
+import Type from "./Examples/Type";
+import Size from "./Examples/Size";
+import Icon from "./Examples/Icon";
+import Count from "./Examples/Count";
+import Floating from "./Examples/Floating";
+import { TkAlert } from "@takeoff-ui/react"
+
+## Variant
+
+The variant of the badge for styling.
+
+<Variant />
+
+## Type
+
+This prop specifies the design type of the component. "filled", "filledlight", "outlined", "text" designs are available
+
+<Type />
+
+## Size
+
+The "size" prop can be used with one of the sizes "small", "base", and "large". The default value is "base"
+
+<Size />
+
+## Icon
+
+It can be used with icons. You can also specify the icon direction. You should use Material Symbols icons.
+
+<Icon />
+
+## Count
+
+The `count` property can be used in more compact cases where only numbers will be shown.
+
+<TkAlert header="Note" variant="warning" iconSize="small" message="Recommended for use with 2 digits" filledlight />
+<br/>
+<Count />
+
+## Floating
+
+You can use slot for floating mode
+
+<Floating />

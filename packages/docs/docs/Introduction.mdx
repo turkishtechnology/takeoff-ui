@@ -1,0 +1,108 @@
+---
+sidebar_position: 1
+title: Introduction
+---
+
+# Takeoff UI Design System
+
+Takeoff UI is a comprehensive design system providing framework-agnostic web components developed with [Stencil.js](https://stenciljs.com/). The system is managed as a monorepo using [Turborepo](https://turbo.build/), enabling fast, incremental builds and consistent workflows across multiple packages.
+
+## Technical Architecture
+
+### Monorepo Structure
+
+The project follows a structured Turborepo-driven monorepo architecture:
+
+```plaintext
+packages/
+├── core/       # Stencil.js web components
+│   ├── src/
+│   │   ├── components/   # Web component implementations
+│   │   ├── global/       # Shared styles & utilities
+│   │   └── docs/         # Documentation resources
+├── angular/    # Angular integration package
+├── react/      # React integration package
+├── vue/        # Vue integration package
+└── tailwind/   # Tailwind CSS plugin package
+```
+
+The root contains a `turbo.json` file that defines build, dev, lint, test and publish pipelines across all packages.
+
+### Core Package Architecture
+
+The core package (`@takeoff-ui/core`) contains:
+
+- `components/`: Individual web components (tk-button, tk-input, etc.)
+- `global/`: Shared SASS modules, assets, and interfaces
+- `utils/`: Utility functions and helpers
+
+### Framework Integration
+
+We use Stencil’s output targets to generate framework-specific bindings:
+
+#### Vue.js Integration
+
+```typescript
+vueOutputTarget({
+  componentCorePackage: '@takeoff-ui/core',
+  proxiesFile:      '../vue/lib/components.ts',
+  componentModels:  vueComponentModels,
+  includePolyfills: true
+})
+```
+
+- Supports two-way binding via `v-model`
+- Event handlers with `@tk-change`
+
+#### React Integration
+
+```typescript
+reactOutputTarget({
+  outDir:               '../react/lib/components/stencil-generated/',
+  stencilPackageName:   '@takeoff-ui/core'
+})
+```
+
+- JSX support
+- React prop types
+- Event handlers with `onTkChange`
+
+#### Angular Integration
+
+```typescript
+angularOutputTarget({
+  componentCorePackage: '@takeoff-ui/core',
+  outputType:           'component',
+  directivesProxyFile:  '../angular/projects/library/src/lib/stencil-generated/components.ts',
+  directivesArrayFile:  '../angular/projects/library/src/lib/stencil-generated/index.ts',
+  valueAccessorConfigs: angularValueAccessorBindings
+})
+```
+
+- FormControl integration
+- NgModel compatibility
+- Event bindings with `(tkChange)`
+
+## Component Implementation
+
+Each component in the core package follows:
+
+```plaintext
+tk-component/
+├── tk-component.tsx       # Logic
+├── tk-component.scss      # Styles
+├── interfaces.ts          # Type definitions
+└── test/
+    ├── tk-component.spec.tsx  # Unit tests
+    └── tk-component.e2e.tsx   # E2E tests
+```
+
+## Build Configuration
+
+- **Stencil.js** for component compilation  
+- **SASS** for style processing  
+- **Turborepo** for orchestrating builds and caching  
+- Custom output targets for Vue, React, and Angular  
+- Documentation generation via our docs pipeline  
+
+Refer to the Installation Guide for setup and usage details.

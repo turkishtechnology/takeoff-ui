@@ -1,0 +1,44 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="footerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | The mode of the footer |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Text to display in the drawer header |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "divided", "light", "primary"</code> | 'basic' | The type of the header |
+| <TkBadge label="hideBackdrop" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the backdrop is shown |
+| <TkBadge label="hideCloseIcon" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether to hide the close icon |
+| <TkBadge label="maskVariant" variant="primary" size="large" type="filledlight"/> | <code>"base", "dark", "darkest", "light", "lightest"</code> | 'base' | Appearance of the mask |
+| <TkBadge label="open" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the drawer is open or closed |
+| <TkBadge label="position" variant="primary" size="large" type="filledlight"/> | <code>"bottom", "full-screen", "left", "right", "top"</code> | 'right' | Determines the position of the drawer |
+| <TkBadge label="preventDismiss" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Prevents the drawer from being dismissed by clicking outside |
+| <TkBadge label="unblockScroll" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether to unblock scrolling when the drawer is open |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-drawer-change | Emitted when the drawer's open state changes |
+| tk-drawer-close | Emitted when the drawer is closed |
+| tk-drawer-enter | Emitted when the drawer starts to enter |
+| tk-drawer-leave | Emitted when the drawer starts to leave |
+| tk-drawer-open | Emitted when the drawer is opened |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| close | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
+| show | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| container | Custom container template. |
+| content | Custom inner body template. |
+| footer | Custom footer template. |
+| header | Custom header template. |
+| header-action | Custom actions template of header. |

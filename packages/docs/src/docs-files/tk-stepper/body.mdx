@@ -1,0 +1,42 @@
+import Orientation from "./Examples/Orientation";
+import StepMode from "./Examples/StepMode";
+import LinearMode from "./Examples/LinearMode";
+import ControlledStepper from "./Examples/ControlledStepper";
+import CustomIcons from "./Examples/CustomIcons";
+import StyleProps from "./Examples/StyleProps";
+
+## Step Mode
+
+Stepper component supports different step modes: `basic` and `number`. Control this with the `stepMode` property.
+
+<StepMode />
+
+## Linear Mode
+
+Enable linear progression mode to ensure users can only navigate to the next step or previous steps, but cannot skip ahead. Control this with the `linear` property.
+
+<LinearMode />
+
+## Controlled Stepper
+
+The stepper component can be controlled externally using the controlled component pattern. Set the active step with the `active` prop and listen for step changes with the `tkStepChange` event.
+
+<ControlledStepper />
+
+## Custom Icons
+
+Icons throughout the stepper can be customized. Each step can have its own icon, or you can set global icon styles using properties like `completeIcon`, `errorIcon`, etc.
+
+<CustomIcons />
+
+## Style Customization
+
+The stepper component offers three style props for visual customization: `containerStyle`, `contentStyle`, and `signStyle`. Each targets a specific part of the component.
+
+<StyleProps />
+
+## Orientation
+
+Stepper component provides both `horizontal` and `vertical` orientations via the `orientation` property.
+
+<Orientation />

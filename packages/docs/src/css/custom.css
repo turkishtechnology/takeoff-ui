@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: var(--primary-500);
+  --ifm-color-primary-dark: var(--primary-400);
+  --ifm-color-primary-darker: var(--primary-600);
+  --ifm-color-primary-darkest: var(--primary-800);
+  --ifm-color-primary-light: var(--primary-300);
+  --ifm-color-primary-lighter: var(--primary-200);
+  --ifm-color-primary-lightest: var(--primary-100);
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-container-width-xl: 1600px;
+  --ifm-container-width: 1280px;
+  --ifm-navbar-padding-vertical: 12px;
+  --ifm-navbar-link-color: var(--text-base);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+  --ifm-color-primary: #db5465;
+  --ifm-color-primary-dark: var(--primary-300);
+  --ifm-color-primary-darker: var(--primary-200);
+  --ifm-color-primary-darkest: var(--primary-100);
+  --ifm-color-primary-light: var(--primary-700);
+  --ifm-color-primary-lighter: var(--primary-800);
+  --ifm-color-primary-lightest: var(--primary-900);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* sadece overview sayfasında container daha geniş olması sağlandı */
+@media (min-width: 1440px) {
+  .docs-doc-id-Components\/Overview .container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .docs-doc-id-Components\/Overview .container > .row > .col {
+    max-width: 100% !important;
+  }
+}
+
+body {
+  /* background-color: var(--static-light); */
+  overflow-x: hidden !important;
+}
+
+.plugin-pages body {
+  background-image: url("/img/bg-body.png");
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 200px;
+}
+
+.plugin-pages .navbar {
+  margin: 12px auto;
+  border-radius: 8px;
+  border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .plugin-pages .navbar {
+    max-width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .plugin-pages .navbar {
+    max-width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .plugin-pages .navbar {
+    max-width: 1170px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .plugin-pages .navbar {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+}
+
+.bg-point {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  border-radius: 100%;
+  opacity: 0.5;
+  background: var(--primary-base, #c90019);
+  filter: blur(150px);
+  z-index: -1;
+}
+
+.bg-point.top-right {
+  top: -250px;
+  right: -250px;
+}
+
+.bg-point.middle-left {
+  top: 1300px;
+  right: -350px;
+}
+
+.bg-point.middle-right {
+  top: 700px;
+  left: -250px;
+}
+
+@import "./docs/docs.css";
+
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.page-header {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.page-header .container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-header .container h1 {
+  color: var(--text-darkest, #222530);
+
+  /* Title/H1-60 */
+  font-family: "Geologica";
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 100%;
+}
+
+.page-header .container .description {
+  width: 50%;
+  color: var(--text-base);
+  font-size: var(--desktop-body-m-base-size);
+}
+
+.section-image .holder {
+  margin: 32px 0;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+.section-image .holder .image {
+  width: 100%;
+  height: 240px;
+  background-image: url("/img/footer-image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+[data-theme="dark"] .section-image .holder .image {
+  background-image: url("/img/footer-image-dark.png");
+}
+
+@media screen and (max-width: 996px) {
+  .page-header {
+    padding: 2rem;
+  }
+
+  .page-header .container .description {
+    width: 100%;
+  }
+}
+
+.release-notes .release-item {
+  /*margin-bottom: 48px;*/
+}
+
+.release-notes .release-item .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  border-bottom: 2px solid var(--background-dark, #525866);
+}
+
+.release-notes .release-item .title .version {
+  color: var(--background-light);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: var(--border-base);
+  font-family: var(--desktop-title-h2-font, "Geologica");
+  font-size: var(--desktop-title-h2-size, 48px);
+  line-height: var(--desktop-title-h2-line-height, 48px);
+}
+
+.release-notes .release-item span {
+  color: var(--text-base, #717784);
+  font-family: var(--body-s-font, "Geologica");
+  font-size: var(--body-s-size, 14px);
+  line-height: var(--body-s-line-height, 20px);
+}
+
+.release-notes .release-item h2 {
+  color: var(--text-darkest, #222530);
+  margin: 0px;
+}
+
+.release-notes .release-item h1 {
+  color: var(--text-darkest, #222530);
+  font-family: var(--title-h3-font, "Geologica");
+  font-size: var(--title-h3-size, 36px);
+  line-height: var(--title-h3-line-height, 36px);
+  margin: 0px;
+}
+
+.release-notes .release-item .tags {
+  display: flex;
+  gap: 8px;
+}
+
+.release-notes .release-item .description {
+  margin-top: 16px;
+}
+
+.release-notes .release-item .body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+.release-notes .release-item .body .title-line {
+  height: 11px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--background-darkest);
+  position: relative;
+}
+
+.release-notes .release-item .body label {
+  color: var(--text-darkest, #222530);
+  font-family: "Geologica";
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.section-frameworks {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.section-frameworks .titleDesc {
+  color: var(--text-base);
+}
+
+.section-frameworks .framework {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 16px;
+  border: 2px solid var(--border-light);
+  background: var(--static-light);
+  padding: 16px;
+  height: 100%;
+}
+
+.section-frameworks .framework .frameworkSvg {
+  height: 40px;
+  width: 40px;
+  padding: 8px;
+  border-radius: 100%;
+  border: 2px solid var(--surface-light);
+  background: var(--static-light);
+}
+
+.section-frameworks .framework .frameworkDesc {
+  color: var(--text-base);
+  font-size: 14px;
+}
+
+.footer {
+  margin-top: 24px;
+  background-color: var(--static-light);
+}
+.code-block-deprecated-usage {
+  background-color: var(--primary-darkest);
+}
+.code-block-new-usage {
+  background-color: var(--states-success-darkest);
+}
