@@ -206,6 +206,12 @@ export class TkDatePicker {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Disabled week days (0-6, where 0 is Sunday and 6 is Saturday)
+   * Example: [0,6] will disable Sunday and Saturday
+   */
+  @Prop() disabledWeekDays?: number[] = [];
+
+  /**
    * Whether to show the timepicker panel next to the calendar.
    * @defaultValue false
    */
@@ -605,6 +611,11 @@ export class TkDatePicker {
         const parsedDisabledDate = this.parseInputDate(disabledDate);
         return parsedDisabledDate && this.formatDate(this.normalizeDate(parsedDisabledDate)) === dateStr;
       });
+    }
+
+    if (this.disabledWeekDays && this.disabledWeekDays.length > 0) {
+      const dayOfWeek = date.getDay();
+      return this.disabledWeekDays.includes(dayOfWeek);
     }
 
     return false;
