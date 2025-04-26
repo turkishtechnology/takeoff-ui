@@ -611,7 +611,8 @@ export class TkTable implements ComponentInterface {
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
             let refSearchIcon: HTMLTkIconElement;
-            let _icons;
+            let _sortIcon;
+            let _searchIcon;
 
             // generate expander th
             if (col.expander) {
@@ -619,31 +620,34 @@ export class TkTable implements ComponentInterface {
             }
 
             // generate head sort and search icons
-            if (col.sortable || col.searchable) {
-              _icons = (
-                <div class="icons">
-                  {col.sortable && (
-                    <tk-icon
-                      {...getIconElementProps('swap_vert', {
-                        class: classNames('sort-icon'),
-                        variant: null,
-                        ref: (el: any) => (refSortIcon = el),
-                        onClick: () => this.handleSortIconClick(refSortIcon, col),
-                      })}
-                    />
-                  )}
-                  {col.searchable && (
-                    <tk-icon
-                      {...getIconElementProps('search', {
-                        class: classNames('filter-icon'),
-                        variant: null,
-                        ref: (el: any) => (refSearchIcon = el),
-                        onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
-                      })}
-                    />
-                  )}
-                </div>
+
+            _sortIcon = col.sortable && (
+              <tk-icon
+                {...getIconElementProps('swap_vert', {
+                  class: classNames('sort-icon'),
+                  variant: null,
+                  ref: (el: any) => (refSortIcon = el),
+                  onClick: () => this.handleSortIconClick(refSortIcon, col),
+                })}
+              />
+            );
+
+            if (col.searchable) {
+              _searchIcon = (
+                <tk-icon
+                  {...getIconElementProps('search', {
+                    class: classNames('filter-icon'),
+                    variant: null,
+                    ref: (el: any) => (refSearchIcon = el),
+                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
+                  })}
+                />
               );
+
+              // filtrelenmiş ise badge ile göster
+              if (this.filters.findIndex(item => item.field == col.field) > -1) {
+                _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
+              }
             }
 
             return (
@@ -662,7 +666,12 @@ export class TkTable implements ComponentInterface {
                       </div>
                     )}
                   </div>
-                  {_icons}
+                  {(col.sortable || col.searchable) && (
+                    <div class="icons">
+                      {_sortIcon}
+                      {_searchIcon}
+                    </div>
+                  )}
                 </div>
               </th>
             );
@@ -834,7 +843,7 @@ export class TkTable implements ComponentInterface {
           {this.loading ? (
             <tbody>
               <tr>
-                <td colSpan={this.columns.length}>
+                <td colSpan={this.columns.length + 1}>
                   <div class="loading">
                     <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
