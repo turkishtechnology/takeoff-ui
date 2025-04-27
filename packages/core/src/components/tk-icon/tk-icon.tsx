@@ -2,6 +2,8 @@ import { Component, Prop, Element, h, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 /**
  * The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.
+ * This component uses Google's Material Symbols icons. For a complete list of available icon names, please visit:
+ * https://fonts.google.com/icons?icon.set=Material+Symbols
  * @react `import { TkIcon } from '@takeoff-ui/react'`
  * @vue `import { TkIcon } from '@takeoff-ui/vue'`
  * @angular `import { TkIcon } from '@takeoff-ui/angular'`
@@ -29,7 +31,7 @@ export class TkIcon implements ComponentInterface {
    * Sets size for the component.
    * @defaultValue 'base'
    */
-  @Prop() size: 'xlarge' | 'large' | 'base' | 'small' = 'base';
+  @Prop() size: 'xxlarge' | 'xlarge' | 'large' | 'base' | 'small' = 'base';
 
   /**
    * Indicates whether the icon should be filled
