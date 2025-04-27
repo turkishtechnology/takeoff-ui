@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-26T21:12:32",
+  "timestamp": "2025-04-27T04:02:06",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -7154,7 +7154,7 @@
       "filePath": "src/components/tk-icon/tk-icon.tsx",
       "encapsulation": "none",
       "tag": "tk-icon",
-      "docs": "The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.",
+      "docs": "The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.\nThis component uses Google's Material Symbols icons. For a complete list of available icon names, please visit:\nhttps://fonts.google.com/icons?icon.set=Material+Symbols",
       "docsTags": [
         {
           "name": "react",
@@ -7407,10 +7407,10 @@
         },
         {
           "name": "size",
-          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
+          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xxlarge\"",
           "complexType": {
-            "original": "'xlarge' | 'large' | 'base' | 'small'",
-            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\"",
+            "original": "'xxlarge' | 'xlarge' | 'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xxlarge\"",
             "references": {}
           },
           "mutable": false,
@@ -7439,6 +7439,10 @@
             },
             {
               "value": "xlarge",
+              "type": "string"
+            },
+            {
+              "value": "xxlarge",
               "type": "string"
             }
           ],

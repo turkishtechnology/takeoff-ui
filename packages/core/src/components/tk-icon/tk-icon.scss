@@ -23,6 +23,10 @@ tk-icon {
         font-size: var(--size-3xl);
     }
 
+    &.tk-icon-xxlarge {
+        font-size: var(--size-4xl);
+    }
+
     &.tk-icon-primary {
         color: var(--primary-dark);
     }
@@ -79,6 +83,12 @@ tk-icon {
             border: 1px solid;
             border-radius: var(--radius-l);
             padding: 6px;
+        }
+
+        &.tk-icon-xxlarge {
+            border: 1px solid;
+            border-radius: var(--radius-l);
+            padding: 8px;
         }
 
         &.tk-icon-primary {

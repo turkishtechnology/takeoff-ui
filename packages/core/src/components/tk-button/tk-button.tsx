@@ -139,7 +139,7 @@ export class TkButton implements ComponentInterface {
     if (this.loading) {
       icon = spinnerElement;
     } else if (this.icon) {
-      icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-button-icon', variant: 'secondary' })} />;
+      icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-button-icon', variant: null })} />;
     }
 
     let Tag;
