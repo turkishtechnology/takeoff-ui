@@ -36,7 +36,7 @@
     "format": "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache",
     "lint": "eslint --fix",
     "clean": "pnpm -r exec rimraf dist node_modules .stencil .angular .next .output .turbo",
-    "publish": "pnpm run build && pnpm publish --filter=\"./packages/**\" --access public --no-git-checks"
+    "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --access public --no-git-checks"
   },
   "lint-staged": {
     "*.{tsx,ts,js}": [
