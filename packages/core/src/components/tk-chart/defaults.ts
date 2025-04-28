@@ -60,7 +60,7 @@ export const HORIZONTAL_BAR_CHART_OPTIONS: any = {
   indexAxis: 'y',
   elements: {
     bar: {
-      backgroundColor: '#3B82F6',
+      backgroundColor: 'black',
       borderRadius: 4,
     },
   },
@@ -126,17 +126,7 @@ export const DOUGHNUT_CHART_OPTIONS: any = {
   cutout: '50%',
 };
 
-// Simple color palettes for different chart styles
-const CHART_COLORS = {
-  basic: ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#2563EB'],
-  light: ['#93C5FD', '#BFDBFE', '#DBEAFE', '#D6E6FD', '#EFF6FF'],
-  divided: ['#3B82F6', '#2563EB', '#1D4ED8', '#1E40AF', '#1E3A8A'],
-};
-
-/**
- * Get default options based on chart type, style, and variant
- */
-export function getDefaultOptionsForType(type: string, chartStyle: string = 'basic', variant: string = 'basic'): any {
+export function getDefaultOptionsForType(type: string): any {
   // Get base options
   let options;
 
@@ -144,7 +134,6 @@ export function getDefaultOptionsForType(type: string, chartStyle: string = 'bas
     case 'bar':
       options = merge({}, DEFAULT_CHART_OPTIONS, BAR_CHART_OPTIONS);
       break;
-    case 'horizontalBar':
     case 'horizontal-bar':
       options = merge({}, DEFAULT_CHART_OPTIONS, HORIZONTAL_BAR_CHART_OPTIONS);
       break;
@@ -156,17 +145,6 @@ export function getDefaultOptionsForType(type: string, chartStyle: string = 'bas
       break;
     default:
       options = merge({}, DEFAULT_CHART_OPTIONS);
-  }
-
-  // Set colors based on style
-  const colors = CHART_COLORS[chartStyle] || CHART_COLORS.basic;
-
-  // Store colors for later use
-  options.colorPalette = colors;
-
-  // For bar charts, update the bar color
-  if ((type === 'bar' || type === 'horizontalBar' || type === 'horizontal-bar') && options.elements?.bar) {
-    options.elements.bar.backgroundColor = colors[0];
   }
 
   return options;

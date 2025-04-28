@@ -10,29 +10,16 @@
     }
     
     // Style-based classes
-    &.tk-chart-basic {
+    &.tk-chart-bar {
         background-color: transparent;
+        
     }
     
-    &.tk-chart-divided {
+    &.tk-chart-pie {
         background-color: #F9FAFB;
         border-radius: 8px;
         padding: 16px;
     }
     
-    &.tk-chart-light {
-        background-color: #F0F9FF;
-        border-radius: 8px;
-        padding: 16px;
-    }
-    
-    // Variant-based classes
-    &.tk-chart-lined {
-        border: 1px solid #F1F5F9;
-    }
-    
-    &.tk-chart-railed {
-        border-bottom: 2px solid #E2E8F0;
-        border-left: 2px solid #E2E8F0;
-    }
+ 
 }

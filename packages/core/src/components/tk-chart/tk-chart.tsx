@@ -2,10 +2,7 @@ import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface }
 import Chart, { ChartType, ChartData, ChartOptions } from 'chart.js/auto';
 import { getDefaultOptionsForType } from './defaults';
 import { merge } from 'lodash';
-
-// Define types directly in the component file
-export type TkChartStyle = 'basic' | 'divided' | 'light';
-export type TkChartVariant = 'basic' | 'lined' | 'railed';
+import classNames from 'classnames';
 
 /**
  * The TkChart component allows users to visualize data in various chart formats using Chart.js.
@@ -20,7 +17,7 @@ export type TkChartVariant = 'basic' | 'lined' | 'railed';
   shadow: false,
 })
 export class TkChart implements ComponentInterface {
-  private chartCanvas?: HTMLCanvasElement;
+  private chartRef?: HTMLCanvasElement;
   private chartInstance?: Chart;
 
   @Element() el: HTMLTkChartElement;
@@ -28,14 +25,14 @@ export class TkChart implements ComponentInterface {
   @State() private internalOptions: any;
 
   /**
-   * The mode (type) of chart to render
+   * The type of chart to render
    */
-  @Prop() mode: ChartType = 'bar';
+  @Prop() type: ChartType = 'bar';
 
   /**
    * The chart data
    */
-  @Prop() data: ChartData = { datasets: [] };
+  @Prop() data: ChartData;
 
   /**
    * Chart options
@@ -45,12 +42,12 @@ export class TkChart implements ComponentInterface {
   /**
    * Width of the chart container
    */
-  @Prop() width?: string = '100%';
+  @Prop() width?: string = null;
 
   /**
    * Height of the chart container in pixels
    */
-  @Prop() height?: number = 300;
+  @Prop() height?: number = null;
 
   /**
    * Custom plugins to use with chart
@@ -61,16 +58,6 @@ export class TkChart implements ComponentInterface {
    * Accessibility label for the chart
    */
   @Prop() accessibilityLabel?: string;
-
-  /**
-   * Visual style of the chart (affects colors and backgrounds)
-   */
-  @Prop() chartStyle: TkChartStyle = 'basic';
-
-  /**
-   * Variant of the chart (affects grid lines and chart features)
-   */
-  @Prop() variant: TkChartVariant = 'basic';
 
   @Watch('data')
   handleDataChange() {
@@ -83,18 +70,11 @@ export class TkChart implements ComponentInterface {
     this.updateChart();
   }
 
-  @Watch('mode')
-  handleModeChange() {
+  @Watch('type')
+  handleTypeChange() {
     this.destroyChart();
     this.mergeOptions();
     this.initChart();
-  }
-
-  @Watch('chartStyle')
-  @Watch('variant')
-  handleStyleChange() {
-    this.mergeOptions();
-    this.updateChart();
   }
 
   componentWillLoad() {
@@ -122,7 +102,7 @@ export class TkChart implements ComponentInterface {
    */
   @Method()
   async getCanvas(): Promise<HTMLCanvasElement | undefined> {
-    return this.chartCanvas;
+    return this.chartRef;
   }
 
   /**
@@ -144,29 +124,21 @@ export class TkChart implements ComponentInterface {
   }
 
   private mergeOptions() {
-    // Get type/style/variant-specific default options
-    const typeDefaults = getDefaultOptionsForType(this.mode, this.chartStyle, this.variant);
-
+    const typeDefaults = getDefaultOptionsForType(this.type);
     // Merge with user options
     this.internalOptions = merge({}, typeDefaults, this.options);
-    // Bu kullanım nested objectlerde sorun çıkarıyor.
-    //this.internalOptions = {...this.internalOptions, ...typeDefaults}
-    console.log('Internal options:', this.internalOptions);
   }
 
   private initChart() {
-    if (this.chartCanvas) {
-      const ctx = this.chartCanvas.getContext('2d');
+    if (this.chartRef) {
+      const ctx = this.chartRef.getContext('2d');
       if (ctx) {
         this.chartInstance = new Chart(ctx, {
-          type: this.mode,
+          type: this.type,
           data: this.data,
           options: this.internalOptions,
           plugins: this.plugins,
         });
-
-        // Log created chart
-        console.log('Chart instance created:', this.chartInstance);
       }
     }
   }
@@ -176,7 +148,6 @@ export class TkChart implements ComponentInterface {
       // Don't directly assign to type as it's not supported
       this.chartInstance.data = this.data;
       this.chartInstance.options = this.internalOptions;
-
       this.chartInstance.update();
     }
   }
@@ -194,13 +165,13 @@ export class TkChart implements ComponentInterface {
 
     return (
       <div
-        class={`tk-chart-container tk-chart-${this.chartStyle} tk-chart-${this.variant}`}
+        class={classNames('tk-chart-container', `tk-chart-${this.type}`)}
         style={{
           width: this.width,
           height: `${this.height}px`,
         }}
       >
-        <canvas ref={el => (this.chartCanvas = el)} role="img" aria-label={accessibilityLabel}></canvas>
+        <canvas ref={el => (this.chartRef = el)} role="img" aria-label={accessibilityLabel}></canvas>
       </div>
     );
   }
