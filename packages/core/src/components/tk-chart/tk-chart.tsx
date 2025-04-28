@@ -1,5 +1,5 @@
 import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
-import Chart, { ChartType, ChartData, ChartOptions } from 'chart.js/auto';
+import Chart, { ChartType, ChartOptions } from 'chart.js/auto';
 import { getDefaultOptionsForType } from './defaults';
 import { merge } from 'lodash';
 import classNames from 'classnames';
@@ -32,7 +32,7 @@ export class TkChart implements ComponentInterface {
   /**
    * The chart data
    */
-  @Prop() data: ChartData;
+  @Prop() data: any;
 
   /**
    * Chart options
