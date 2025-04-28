@@ -26,19 +26,20 @@ export class TkSelect implements ComponentInterface {
   private filterDebounceTimeout;
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
+  private isItemClickFlag = false;
+
+  @Element() el!: HTMLTkSelectElement;
+
+  @AttachInternals() internals: ElementInternals;
 
   constructor() {
     this.uniqueId = uuidv4();
     this.windowClickHandler = this.handleWindowClick.bind(this);
   }
 
-  @Element() el!: HTMLTkSelectElement;
-
   @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
-
-  @AttachInternals() internals: ElementInternals;
 
   /**
    * Represents whether the options are fethecd from service or not.
@@ -113,7 +114,7 @@ export class TkSelect implements ComponentInterface {
   @Prop() label: string;
 
   /**
-   *
+   * If `true` the user can make multiple selections.
    */
   @Prop() multiple: boolean;
 
@@ -148,7 +149,6 @@ export class TkSelect implements ComponentInterface {
    * The list of options to be displayed in the select box.
    */
   @Prop() options: any[];
-
   @Watch('options')
   protected optionsChanged(newValue: any[], oldValue: any[]) {
     if (_.isEqual(newValue, oldValue)) return;
@@ -208,19 +208,6 @@ export class TkSelect implements ComponentInterface {
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
 
-  componentDidUpdate() {
-    if (this.isOpen) {
-      this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
-        animationFrame: true,
-      });
-      this.bindWindowClickListener();
-    } else {
-      this.panelRef?.remove();
-      this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
-    }
-  }
-
   componentDidLoad(): void {
     if (this.multiple && this.value?.length > 0) {
       this.inputRef.value = this.value;
@@ -247,6 +234,19 @@ export class TkSelect implements ComponentInterface {
     this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
   }
 
+  componentDidUpdate() {
+    if (this.isOpen) {
+      this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+      this.bindWindowClickListener();
+    } else {
+      this.panelRef?.remove();
+      this.cleanup && this.cleanup();
+      this.unbindWindowClickListener();
+    }
+  }
+
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
@@ -256,13 +256,6 @@ export class TkSelect implements ComponentInterface {
   formResetCallback() {
     this.value = null;
     this.tkChange.emit(null);
-  }
-
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll() {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
   }
 
   private async defaultFilter(text: string, options: any[]) {
@@ -306,14 +299,6 @@ export class TkSelect implements ComponentInterface {
         });
       });
     }
-  }
-
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
   }
 
   private getOptionLabel(item: any): string {
@@ -377,6 +362,21 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
+  private bindWindowClickListener() {
+    window.addEventListener('click', this.windowClickHandler);
+  }
+
+  private unbindWindowClickListener() {
+    window.removeEventListener('click', this.windowClickHandler);
+  }
+
+  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
+  private handleDialogScroll() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
+  }
+
   private handleFormReset() {
     this.value = null;
     this.tkChange.emit(null);
@@ -389,8 +389,6 @@ export class TkSelect implements ComponentInterface {
       this.unbindWindowClickListener();
     }
   }
-
-  private isItemClickFlag = false;
 
   private async handleItemClick(item) {
     this.isItemClickFlag = true;
@@ -531,47 +529,9 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private handleClearClick() {
+  private handleInputClearClick() {
     this.value = null;
     this.tkChange.emit(null);
-  }
-
-  private renderInput() {
-    return (
-      <tk-input
-        ref={el => (this.inputRef = el as HTMLTkInputElement)}
-        class={classNames('tk-select-input', {
-          'editable-select': this.editable,
-          'tk-table-input': this.el.classList.contains('tk-table-select'),
-          'multiple-select': this.multiple,
-          'allow-custom-value-select': this.allowCustomValue,
-        })}
-        label={this.label}
-        size={this.size}
-        showAsterisk={this.showAsterisk}
-        hint={this.hint}
-        placeholder={this.value?.length > 0 ? '' : this.placeholder}
-        invalid={this.invalid}
-        error={this.error}
-        icon="keyboard_arrow_down"
-        iconPosition="right"
-        mode={this.multiple ? 'chips' : 'text'}
-        chipLabelKey={this.optionLabelKey}
-        readonly={this.readonly}
-        disabled={this.disabled}
-        clearable={this.clearable}
-        aria-describedby="dropdown"
-        aria-expanded={!!this.isOpen}
-        onClick={() => this.handleInputClick()}
-        onTk-change={e => {
-          e.stopPropagation();
-          this.handleInputChange(e.detail);
-        }}
-        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
-        onTk-clear-click={() => this.handleClearClick()}
-        onKeyDown={e => this.handleInputKeydown(e)}
-      ></tk-input>
-    );
   }
 
   private createOptionItem(options: any[]) {
@@ -619,6 +579,44 @@ export class TkSelect implements ComponentInterface {
 
   private createOptions() {
     return this.createOptionItem(this.renderOptions);
+  }
+
+  private renderInput() {
+    return (
+      <tk-input
+        ref={el => (this.inputRef = el as HTMLTkInputElement)}
+        class={classNames('tk-select-input', {
+          'editable-select': this.editable,
+          'tk-table-input': this.el.classList.contains('tk-table-select'),
+          'multiple-select': this.multiple,
+          'allow-custom-value-select': this.allowCustomValue,
+        })}
+        label={this.label}
+        size={this.size}
+        showAsterisk={this.showAsterisk}
+        hint={this.hint}
+        placeholder={this.value?.length > 0 ? '' : this.placeholder}
+        invalid={this.invalid}
+        error={this.error}
+        icon="keyboard_arrow_down"
+        iconPosition="right"
+        mode={this.multiple ? 'chips' : 'text'}
+        chipLabelKey={this.optionLabelKey}
+        readonly={this.readonly}
+        disabled={this.disabled}
+        clearable={this.clearable}
+        aria-describedby="dropdown"
+        aria-expanded={!!this.isOpen}
+        onClick={() => this.handleInputClick()}
+        onTk-change={e => {
+          e.stopPropagation();
+          this.handleInputChange(e.detail);
+        }}
+        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
+        onTk-clear-click={() => this.handleInputClearClick()}
+        onKeyDown={e => this.handleInputKeydown(e)}
+      ></tk-input>
+    );
   }
 
   private renderDropdown() {

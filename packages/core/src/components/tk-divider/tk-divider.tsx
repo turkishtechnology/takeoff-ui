@@ -14,16 +14,20 @@ import classNames from 'classnames';
 })
 export class TkDivider implements ComponentInterface {
   @Element() el: HTMLTkDividerElement;
+
   @State() hasDefaultSlot: boolean;
+
   /**
    * Controls the orientation of the divider component.
    * @defaultValue horizontal
    */
   @Prop() orientation: 'horizontal' | 'vertical' = 'horizontal';
+
   /**
    * Controls vertical spacing
    */
   @Prop() mx?: string | number;
+
   /**
    * Controls horizontal spacing
    */
@@ -34,6 +38,7 @@ export class TkDivider implements ComponentInterface {
       node => (node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot')) || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim().length > 0),
     );
   }
+
   private getRootStyles() {
     const styles: { [key: string]: string } = {};
     if (this.my) {

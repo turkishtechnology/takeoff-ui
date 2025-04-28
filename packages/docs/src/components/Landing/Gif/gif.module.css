@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
+
+.scope {
+  color: var(--text-sub-base, #99a0ae);
+  font-family: var(--desktop-body-s-font, Geologica);
+  line-height: 100%;
+}
+
+.slash {
+  font-size: 24px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-sub-base, #99a0ae);
+  font-weight: 200;
+  line-height: 100%;
+}
+
+.package {
+  color: var(--text-base, #99a0ae);
+  line-height: 100%;
+
+  margin-left: "8px";
+  position: "relative";
+  display: "inline-block";
+  transition: "opacity 0.5s ease-in-out";
+}
+
+.shuffleLetter {
+  display: "inline-block";
+  transition: "transform 0.2s ease-in-out";
+  transform: "rotate(360deg)";
+}
+.normalLetter {
+  display: "inline-block";
+  transition: "transform 0.2s ease-in-out";
+}

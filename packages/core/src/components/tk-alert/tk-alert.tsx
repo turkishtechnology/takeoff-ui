@@ -1,6 +1,7 @@
 import { Component, Prop, h, ComponentInterface, Element } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.
@@ -13,6 +14,7 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 @Component({
   tag: 'tk-alert',
   styleUrl: 'tk-alert.scss',
+  shadow: true,
 })
 export class TkAlert implements ComponentInterface {
   private hasRightActionSlot: boolean = false;
@@ -39,13 +41,13 @@ export class TkAlert implements ComponentInterface {
   /**
    * The icon displayed in the alert. If not provided, a default icon is used based on the variant.
    */
-  @Prop({ mutable: true }) icon: string | IIconOptions;
+  @Prop() icon: string | IIconOptions;
 
   /**
    * Size of the icon displayed in the alert ('small', 'base', or 'large').
    * @defaultValue 'base'
    */
-  @Prop() iconSize: 'small' | 'base' | 'large' = 'base';
+  @Prop() iconSize: 'small' | 'base' | 'large' | 'xlarge' = 'large';
 
   /**
    * This field specifies the design type of the component.
@@ -64,29 +66,14 @@ export class TkAlert implements ComponentInterface {
   }
 
   private renderIcon() {
-    const iconClasses = classNames('icon', this.iconSize);
-
-    if (this.icon == undefined) {
-      if (this.variant == 'success') this.icon = 'check_circle';
-      else if (this.variant == 'info') this.icon = 'info';
-      else if (this.variant == 'danger') this.icon = 'error';
-      else if (this.variant == 'warning') this.icon = 'warning';
+    let iconValue = this.icon;
+    if (iconValue == undefined) {
+      if (this.variant == 'success') iconValue = 'check_circle';
+      else if (this.variant == 'info') iconValue = 'info';
+      else if (this.variant == 'danger') iconValue = 'error';
+      else if (this.variant == 'warning') iconValue = 'warning';
     }
-
-    let icon;
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        icon = <i class="material-symbols-rounded fill">{this.icon}</i>;
-      } else {
-        icon = (
-          <i class={`material-symbols-${this.icon?.style || 'rounded'} ${this.icon?.fill ? 'fill' : ''}`} style={{ color: this.icon?.color || 'inherit' }}>
-            {this.icon.name}
-          </i>
-        );
-      }
-    }
-
-    return <div class={iconClasses}>{icon}</div>;
+    return <tk-icon fill {...getIconElementProps(iconValue, { variant: this.variant, sign: true, size: this.iconSize }, 'rounded', 'i')} />;
   }
 
   private renderContent() {
@@ -103,7 +90,7 @@ export class TkAlert implements ComponentInterface {
     }
 
     return (
-      <div class={classNames('tk-alert-content')}>
+      <div class={classNames('tk-alert-content', !this.header && 'message-content')}>
         <div>
           {header}
           {message}
@@ -113,7 +100,7 @@ export class TkAlert implements ComponentInterface {
     );
   }
 
-  private renderClose() {
+  private renderCloseButton() {
     if (!this.removable) return null;
 
     const buttonVariant = this.type == 'filled' ? 'white' : 'neutral';
@@ -126,13 +113,16 @@ export class TkAlert implements ComponentInterface {
     this.hasFooterActionSlot = !!this.el.querySelector('[slot="footer-action"]');
 
     const rootClasses = classNames('tk-alert-container', this.variant, this.type);
+    const icon = this.renderIcon();
+    const content = this.renderContent();
+    const closeButton = this.renderCloseButton();
 
     return (
       <div class={rootClasses}>
-        {this.renderIcon()}
-        {this.renderContent()}
+        {icon}
+        {content}
         {this.hasRightActionSlot && <slot name="right-action"></slot>}
-        {this.renderClose()}
+        {closeButton}
       </div>
     );
   }

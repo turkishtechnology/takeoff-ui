@@ -1,0 +1,31 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 16px;
+  border: 2px solid var(--border-light);
+  background: var(--static-light);
+  padding: 16px;
+  height: 100%;
+}
+
+.featureSvg {
+  height: 64px;
+  width: 64px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid var(--surface-light);
+  background: var(--static-light);
+}
+
+.featureDesc {
+  color: var(--text-base);
+  font-size: 14px;
+}

@@ -7,9 +7,10 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
- * TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.
+ * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
  * @react `import { TkTable } from '@takeoff-ui/react'`
  * @vue `import { TkTable } from '@takeoff-ui/vue'`
  * @angular `import { TkTable } from '@takeoff-ui/angular'`
@@ -18,6 +19,7 @@ import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/d
 @Component({
   tag: 'tk-table',
   styleUrl: 'tk-table.scss',
+  shadow: true,
 })
 export class TkTable implements ComponentInterface {
   private elements: ICustomElement[] = [];
@@ -87,16 +89,6 @@ export class TkTable implements ComponentInterface {
       if (this.refSelectAll) this.refSelectAll.value = false;
       this.handleSelectAll(false);
       this.expandedRows = [];
-
-      // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
-      const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
-      if (slotEmptyData) {
-        if (newValue?.length > 0) {
-          slotEmptyData.style.display = 'none';
-        } else {
-          slotEmptyData.style.display = 'block';
-        }
-      }
     }
   }
 
@@ -183,32 +175,6 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
 
-  componentWillLoad(): Promise<void> | void {
-    this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
-    this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
-
-    if (this.data?.length > 0) {
-      this.generateRenderData(this.data, this.currentPage, true);
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.isFilterOpen) {
-      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
-        animationFrame: true,
-      });
-    } else {
-      this.elFilterPanelElement?.remove();
-      this.cleanupFilterPanel && this.cleanupFilterPanel();
-    }
-  }
-
-  componentDidRender(): void {
-    this.elements?.forEach(element => {
-      element?.ref?.replaceChildren(element.element);
-    });
-  }
-
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -225,6 +191,45 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  componentWillLoad(): Promise<void> | void {
+    this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
+    this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+
+    if (this.data?.length > 0) {
+      this.generateRenderData(this.data, this.currentPage, true);
+    }
+  }
+
+  componentDidRender(): void {
+    this.elements?.forEach(element => {
+      element?.ref?.replaceChildren(element.element);
+    });
+  }
+
+  componentWillUpdate(): Promise<void> | void {
+    // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+    const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
+
+    if (slotEmptyData) {
+      if (this.loading || this.data?.length > 0) {
+        slotEmptyData.style.display = 'none';
+      } else {
+        slotEmptyData.style.display = 'block';
+      }
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.isFilterOpen) {
+      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+    } else {
+      this.elFilterPanelElement?.remove();
+      this.cleanupFilterPanel && this.cleanupFilterPanel();
+    }
+  }
+
   /**
    * Allows tk-request event to be triggered manually
    */
@@ -237,245 +242,6 @@ export class TkTable implements ComponentInterface {
       sortOrder: this.sortOrder,
       filters: this.filters,
     } as ITableRequest);
-  }
-
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
-  }
-
-  private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
-    let _data = [...data];
-    this.currentPage = currentPage;
-    this.totalItems = _data?.length;
-
-    // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
-    if (!isWillLoad) {
-      this.tkRequest.emit({
-        currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
-        sortField: this.sortField,
-        sortOrder: this.sortOrder,
-        filters: this.filters,
-      } as ITableRequest);
-    }
-
-    if (this.paginationMethod == 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
-      this.renderData = _data.slice(startIndex, endIndex);
-    } else {
-      this.renderData = _data;
-    }
-
-    this.expandedRows = [];
-  }
-
-  private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
-    let newExpandedRows = this.expandedRows;
-
-    const findIndex = newExpandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]);
-    if (findIndex > -1) {
-      tdExpanderButtonRef.icon = 'keyboard_arrow_down';
-      newExpandedRows.splice(findIndex, 1); // Eğer zaten genişlemişse kapat
-    } else {
-      tdExpanderButtonRef.icon = 'keyboard_arrow_up';
-      newExpandedRows.push(row); // Değilse genişlet
-    }
-
-    this.expandedRows = newExpandedRows;
-
-    this.tkExpandedRowsChange.emit(this.expandedRows);
-  }
-
-  private handleCheckboxSelectChange(isSelect: boolean, trElRef: HTMLTableRowElement, row) {
-    let tmpSelection = this.selection;
-    const hasSelect = _.includes(tmpSelection, row);
-    if (!tmpSelection) tmpSelection = [];
-
-    if (isSelect == false && hasSelect) {
-      // seçili ise ve silinmek isteniyor ise
-      _.pull(tmpSelection, row);
-      trElRef.classList.remove('selected');
-      this.selection = [...tmpSelection];
-      this.tkSelectionChange.emit(this.selection);
-    } else if (isSelect == true && !hasSelect) {
-      // seçili değilse ve eklenmek isteniyor ise
-      tmpSelection.push(row);
-      trElRef.classList.add('selected');
-      this.selection = [...tmpSelection];
-      this.tkSelectionChange.emit(this.selection);
-    }
-  }
-
-  private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
-    // seçili satırların stilinin kaldırılması
-    this.el.querySelector('table tr.selected')?.classList.remove('selected');
-
-    this.selection = row;
-    this.tkSelectionChange.emit(this.selection);
-
-    trElRef.classList.add('selected');
-  }
-
-  private handlePageChange(e) {
-    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-    this.generateRenderData(tmpData, Number(e.detail.page));
-    // sayfa değişikliğinde seçilen değerler sıfırlanır
-    if (this.refSelectAll) this.refSelectAll.value = false;
-    this.handleSelectAll(false);
-  }
-
-  private handleSortIconClick(refSearchIcon: HTMLElement, col: ITableColumn) {
-    if (!col.sortable) return;
-
-    this.sortField = col.field;
-
-    const icon = refSearchIcon.innerHTML;
-
-    // tüm sort iconlar default duruma getirilir.
-    this.el.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach(icon => (icon.innerHTML = 'swap_vert'));
-
-    if (icon == 'swap_vert') {
-      this.sortOrder = 'asc';
-      refSearchIcon.innerHTML = 'arrow_drop_up';
-    } else if (icon == 'arrow_drop_up') {
-      this.sortOrder = 'desc';
-      refSearchIcon.innerHTML = 'arrow_drop_down';
-    } else if (icon == 'arrow_drop_down') {
-      this.sortField = null;
-      this.sortOrder = null;
-      refSearchIcon.innerHTML = 'swap_vert';
-    }
-
-    // // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-    if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-      this.generateRenderData(tmpData, 1);
-    } else {
-      this.currentPage = 1;
-    }
-  }
-
-  private updatePosition() {
-    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
-        strategy: 'fixed',
-        placement: 'bottom',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        Object.assign(this.elFilterPanelElement.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
-  }
-
-  private createFilterPanel(refSearchIcon: HTMLElement, field: string) {
-    this.elActiveSearchIcon = refSearchIcon;
-    this.elFilterPanelElement = document.createElement('div');
-    this.elFilterPanelElement.classList.add('tk-table-filter-panel');
-
-    const input: HTMLTkInputElement = document.createElement('tk-input');
-    input.placeholder = 'Search';
-    input.setFocus();
-    input.value = this.filters?.find(item => item.field == field)?.value;
-    const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
-    searchButton.label = 'Search';
-    searchButton.fullWidth = true;
-    searchButton.addEventListener('tk-click', () => {
-      this.handleSearchButtonClick(field);
-      this.isFilterOpen = false;
-    });
-    const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
-    cancelButton.label = 'Remove';
-    cancelButton.type = 'outlined';
-    cancelButton.fullWidth = true;
-    cancelButton.addEventListener('tk-click', () => {
-      this.handleSearchCancelButtonClick(field);
-      this.isFilterOpen = false;
-    });
-    const buttons = document.createElement('div');
-    buttons.classList.add('tk-table-filter-panel-buttons');
-    this.elFilterPanelElement.appendChild(input);
-    buttons.appendChild(cancelButton);
-    buttons.appendChild(searchButton);
-
-    this.elFilterPanelElement.appendChild(buttons);
-    document.body.appendChild(this.elFilterPanelElement);
-    this.isFilterOpen = true;
-  }
-
-  private async handleSearchIconClick(refSearchIcon: HTMLElement, field: string) {
-    if (!this.isFilterOpen) {
-      this.createFilterPanel(refSearchIcon, field);
-    } else if (this.elActiveSearchIcon != refSearchIcon) {
-      this.isFilterOpen = false;
-      this.createFilterPanel(refSearchIcon, field);
-    }
-  }
-
-  private handleSearchButtonClick(columnField) {
-    // if (refSearchInput.value.toString().length > 0) {
-    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
-
-    // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
-    // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
-    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (filterIndex > -1) {
-      this.filters[filterIndex].value = searchInput.value.toString();
-    } else {
-      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
-    }
-
-    // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-    if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-      this.generateRenderData(tmpData, 1);
-    } else {
-      this.currentPage = 1;
-    }
-  }
-
-  private handleSearchCancelButtonClick(columnField) {
-    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
-
-    const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (removeFilterIndex > -1) {
-      this.filters.splice(removeFilterIndex, 1);
-      searchInput.value = '';
-
-      // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-      if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-        this.generateRenderData(tmpData, 1);
-      } else {
-        this.currentPage = 1;
-      }
-    }
-  }
-
-  private handleInputBlur(row, index: number, colField: string, editableInputRef) {
-    const cellEdit: ITableCellEdit = {
-      rowId: row[this.dataKey],
-      rowIndex: index,
-      field: colField,
-      value: editableInputRef.value,
-    };
-    this.tkCellEdit.emit(cellEdit);
-  }
-
-  private handleSelectAll(value: boolean) {
-    if (value) {
-      this.selection = [...this.renderData];
-      this.el.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
-    } else {
-      this.selection = [];
-      this.el.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
-    }
-    this.tkSelectionChange.emit(this.selection);
   }
 
   /**
@@ -543,16 +309,370 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private renderHeader() {
-    if (this.cardTitle || this.hasHeaderRightSlot)
-      return (
-        <div class="tk-table-header">
-          <div>{this.cardTitle}</div>
-          <div>
-            <slot name="header-right"></slot>
-          </div>
-        </div>
-      );
+  /**
+   * Clears all filters for server side pagination
+   */
+  @Method()
+  async clearFilters() {
+    if (this.filters?.length > 0) {
+      this.filters = [];
+      this.currentPage = 1;
+
+      this.tkRequest.emit({
+        currentPage: this.currentPage,
+        rowsPerPage: this.rowsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        filters: this.filters,
+      } as ITableRequest);
+    }
+  }
+
+  /**
+   * Clears all sorting for server side pagination
+   */
+  @Method()
+  async clearSorting() {
+    if (this.sortField) {
+      this.sortField = null;
+      this.sortOrder = null;
+      this.currentPage = 1;
+
+      this.tkRequest.emit({
+        currentPage: this.currentPage,
+        rowsPerPage: this.rowsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        filters: this.filters,
+      } as ITableRequest);
+    }
+  }
+
+  private getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, obj);
+  }
+
+  private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
+    let _data = [...data];
+    this.currentPage = currentPage;
+    this.totalItems = _data?.length;
+
+    // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
+    if (!isWillLoad) {
+      this.tkRequest.emit({
+        currentPage: this.currentPage,
+        rowsPerPage: this.rowsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        filters: this.filters,
+      } as ITableRequest);
+    }
+
+    if (this.paginationMethod == 'client') {
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
+      const endIndex = startIndex + this.rowsPerPage;
+      this.renderData = _data.slice(startIndex, endIndex);
+    } else {
+      this.renderData = _data;
+    }
+
+    this.expandedRows = [];
+  }
+
+  private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
+    let newExpandedRows = this.expandedRows;
+
+    const findIndex = newExpandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]);
+    if (findIndex > -1) {
+      tdExpanderButtonRef.icon = 'keyboard_arrow_down';
+      newExpandedRows.splice(findIndex, 1); // Eğer zaten genişlemişse kapat
+    } else {
+      tdExpanderButtonRef.icon = 'keyboard_arrow_up';
+      newExpandedRows.push(row); // Değilse genişlet
+    }
+
+    this.expandedRows = newExpandedRows;
+
+    this.tkExpandedRowsChange.emit(this.expandedRows);
+  }
+
+  private updatePosition() {
+    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
+      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
+        strategy: 'fixed',
+        placement: 'bottom',
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.elFilterPanelElement.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
+    }
+  }
+
+  private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
+    if (!this.isFilterOpen) {
+      this.isFilterOpen = true;
+      this.createFilterPanel(refSearchIcon, field);
+    } else if (this.elActiveSearchIcon != refSearchIcon) {
+      this.isFilterOpen = false;
+      this.createFilterPanel(refSearchIcon, field);
+    }
+  }
+
+  private handleInputFilterApply(columnField) {
+    // if (refSearchInput.value.toString().length > 0) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+
+    // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
+    // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
+    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (filterIndex > -1) {
+      this.filters[filterIndex].value = searchInput.value.toString();
+    } else {
+      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
+    }
+
+    // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+    if (this.currentPage == 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+  }
+
+  private handleSearchCancelButtonClick(columnField) {
+    const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (removeFilterIndex > -1) {
+      this.filters.splice(removeFilterIndex, 1);
+
+      // Reset input value if it's a text filter
+      const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+      if (searchInput) searchInput.value = '';
+
+      // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+      if (this.currentPage == 1) {
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        this.generateRenderData(tmpData, 1);
+      } else {
+        this.currentPage = 1;
+      }
+    }
+  }
+
+  private handleInputBlur(row, index: number, colField: string, editableInputRef) {
+    const cellEdit: ITableCellEdit = {
+      rowId: row[this.dataKey],
+      rowIndex: index,
+      field: colField,
+      value: editableInputRef.value,
+    };
+    this.tkCellEdit.emit(cellEdit);
+  }
+
+  private handleSelectAll(value: boolean) {
+    if (value) {
+      this.selection = [...this.renderData];
+      this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
+    } else {
+      this.selection = [];
+      this.el.shadowRoot.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
+    }
+    this.tkSelectionChange.emit(this.selection);
+  }
+
+  private handleCheckboxSelectChange(isSelect: boolean, trElRef: HTMLTableRowElement, row) {
+    let tmpSelection = this.selection;
+    const hasSelect = _.includes(tmpSelection, row);
+    if (!tmpSelection) tmpSelection = [];
+
+    if (isSelect == false && hasSelect) {
+      // seçili ise ve silinmek isteniyor ise
+      _.pull(tmpSelection, row);
+      trElRef.classList.remove('selected');
+      this.selection = [...tmpSelection];
+      this.tkSelectionChange.emit(this.selection);
+    } else if (isSelect == true && !hasSelect) {
+      // seçili değilse ve eklenmek isteniyor ise
+      tmpSelection.push(row);
+      trElRef.classList.add('selected');
+      this.selection = [...tmpSelection];
+      this.tkSelectionChange.emit(this.selection);
+    }
+  }
+
+  private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
+    // seçili satırların stilinin kaldırılması
+    this.el.shadowRoot.querySelector('table tr.selected')?.classList.remove('selected');
+
+    this.selection = row;
+    this.tkSelectionChange.emit(this.selection);
+
+    trElRef.classList.add('selected');
+  }
+
+  private handlePageChange(e) {
+    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+    this.generateRenderData(tmpData, Number(e.detail.page));
+    // sayfa değişikliğinde seçilen değerler sıfırlanır
+    if (this.refSelectAll) this.refSelectAll.value = false;
+    this.handleSelectAll(false);
+  }
+
+  private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
+    if (!col.sortable) return;
+
+    this.sortField = col.field;
+
+    const icon = refSortIcon.icon;
+
+    // tüm sort iconlar default duruma getirilir.
+    this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
+
+    if (icon == 'swap_vert') {
+      this.sortOrder = 'asc';
+      refSortIcon.icon = 'arrow_drop_up';
+    } else if (icon == 'arrow_drop_up') {
+      this.sortOrder = 'desc';
+      refSortIcon.icon = 'arrow_drop_down';
+    } else if (icon == 'arrow_drop_down') {
+      this.sortField = null;
+      this.sortOrder = null;
+      refSortIcon.icon = 'swap_vert';
+    }
+
+    // // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
+    if (this.currentPage == 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+  }
+
+  private createFilterPanel(refSearchIcon: HTMLElement, field: string) {
+    if (this.elFilterPanelElement) this.elFilterPanelElement?.remove();
+
+    this.elActiveSearchIcon = refSearchIcon;
+    this.elFilterPanelElement = document.createElement('div');
+    this.elFilterPanelElement.classList.add('tk-table-filter-panel');
+
+    // Find the column configuration for this field
+    const column = this.columns.find(col => col.field === field);
+
+    // Check if the column has a filterType property and it's set to 'checkbox'
+    if (column?.filterType === 'checkbox' && column.filterOptions?.length > 0) {
+      // Create checkbox filter
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-checkbox-container');
+
+      // Get current filter values for this field
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const selectedValues = currentFilter?.values || [];
+
+      // Create checkboxes for each option
+      column.filterOptions.forEach(option => {
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+
+        const checkbox = document.createElement('tk-checkbox');
+        checkbox.value = selectedValues.includes(option.value);
+        checkbox.label = option.label || option.value;
+
+        checkboxWrapper.appendChild(checkbox);
+        filterContainer.appendChild(checkboxWrapper);
+      });
+
+      this.elFilterPanelElement.appendChild(filterContainer);
+    } else {
+      // Default text input filter
+      const input: HTMLTkInputElement = document.createElement('tk-input');
+      input.placeholder = 'Search';
+      input.setFocus();
+      input.value = this.filters?.find(item => item.field == field)?.value;
+      this.elFilterPanelElement.appendChild(input);
+    }
+
+    // Create buttons container
+    const buttons = document.createElement('div');
+    buttons.classList.add('tk-table-filter-panel-buttons');
+
+    // Create cancel button
+    const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
+    cancelButton.label = 'Remove';
+    cancelButton.type = 'outlined';
+    cancelButton.fullWidth = true;
+    cancelButton.addEventListener('tk-click', () => {
+      this.handleSearchCancelButtonClick(field);
+      this.isFilterOpen = false;
+    });
+
+    // Create search/apply button
+    const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
+    searchButton.label = 'Apply';
+    searchButton.fullWidth = true;
+    searchButton.addEventListener('tk-click', () => {
+      if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
+        this.handleCheckboxFilterApply(field);
+      } else {
+        this.handleInputFilterApply(field);
+      }
+      console.log(this.filters);
+      this.isFilterOpen = false;
+    });
+
+    buttons.appendChild(cancelButton);
+    buttons.appendChild(searchButton);
+    this.elFilterPanelElement.appendChild(buttons);
+
+    document.body.appendChild(this.elFilterPanelElement);
+    this.isFilterOpen = true;
+  }
+
+  private handleCheckboxFilterApply(columnField: string) {
+    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox'));
+    const column = this.columns.find(col => col.field === columnField);
+
+    if (!column || !column.filterOptions || checkboxes.length === 0) return;
+
+    // Get selected values
+    const selectedValues = [];
+    checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
+      if (checkbox.value && column.filterOptions[index]) {
+        selectedValues.push(column.filterOptions[index].value);
+      }
+    });
+
+    // Update filter
+    const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
+
+    if (selectedValues.length > 0) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].values = selectedValues;
+        this.filters[filterIndex].type = 'checkbox';
+      } else {
+        this.filters.push({
+          field: columnField,
+          values: selectedValues,
+          type: 'checkbox',
+        } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if no values selected
+      this.filters.splice(filterIndex, 1);
+    }
+
+    // Apply filter
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
   }
 
   private createHead() {
@@ -574,9 +694,10 @@ export class TkTable implements ComponentInterface {
         <tr>
           {selectionTh}
           {this.columns.map(col => {
-            let refSortIcon: HTMLElement;
-            let refSearchIcon: HTMLElement;
-            let _icons;
+            let refSortIcon: HTMLTkIconElement;
+            let refSearchIcon: HTMLTkIconElement;
+            let _sortIcon;
+            let _searchIcon;
 
             // generate expander th
             if (col.expander) {
@@ -584,21 +705,34 @@ export class TkTable implements ComponentInterface {
             }
 
             // generate head sort and search icons
-            if (col.sortable || col.searchable) {
-              _icons = (
-                <div class="icons">
-                  {col.sortable && (
-                    <i ref={el => (refSortIcon = el)} class="material-symbols-outlined sort-icon" onClick={() => this.handleSortIconClick(refSortIcon, col)}>
-                      swap_vert
-                    </i>
-                  )}
-                  {col.searchable && (
-                    <i ref={el => (refSearchIcon = el)} class="material-symbols-outlined filter-icon" onClick={() => this.handleSearchIconClick(refSearchIcon, col.field)}>
-                      search
-                    </i>
-                  )}
-                </div>
+
+            _sortIcon = col.sortable && (
+              <tk-icon
+                {...getIconElementProps('swap_vert', {
+                  class: classNames('sort-icon'),
+                  variant: null,
+                  ref: (el: any) => (refSortIcon = el),
+                  onClick: () => this.handleSortIconClick(refSortIcon, col),
+                })}
+              />
+            );
+
+            if (col.searchable) {
+              _searchIcon = (
+                <tk-icon
+                  {...getIconElementProps('search', {
+                    class: classNames('filter-icon'),
+                    variant: null,
+                    ref: (el: any) => (refSearchIcon = el),
+                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
+                  })}
+                />
               );
+
+              // filtrelenmiş ise badge ile göster
+              if (this.filters.findIndex(item => item.field == col.field) > -1) {
+                _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
+              }
             }
 
             return (
@@ -617,7 +751,12 @@ export class TkTable implements ComponentInterface {
                       </div>
                     )}
                   </div>
-                  {_icons}
+                  {(col.sortable || col.searchable) && (
+                    <div class="icons">
+                      {_sortIcon}
+                      {_searchIcon}
+                    </div>
+                  )}
                 </div>
               </th>
             );
@@ -769,6 +908,18 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  private renderHeader() {
+    if (this.cardTitle || this.hasHeaderRightSlot)
+      return (
+        <div class="tk-table-header">
+          <div>{this.cardTitle}</div>
+          <div>
+            <slot name="header-right"></slot>
+          </div>
+        </div>
+      );
+  }
+
   private renderTable() {
     return (
       <div class="table-holder">
@@ -777,7 +928,7 @@ export class TkTable implements ComponentInterface {
           {this.loading ? (
             <tbody>
               <tr>
-                <td colSpan={this.columns.length}>
+                <td colSpan={this.columns.length + 1}>
                   <div class="loading">
                     <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path

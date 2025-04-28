@@ -21,11 +21,11 @@ export class TkTextarea implements ComponentInterface {
 
   @Element() el!: HTMLTkTextareaElement;
 
+  @AttachInternals() internals: ElementInternals;
+
   @State() hasFocus = false;
   @State() passwordStrength: number = 0;
   @State() charCount: number = 0;
-
-  @AttachInternals() internals: ElementInternals;
 
   /**
    * If `true`, the user cannot interact with the input.
@@ -151,6 +151,12 @@ export class TkTextarea implements ComponentInterface {
     this.nativeInput?.focus();
   }
 
+  private updateCharCount = () => {
+    if (this.maxLength) {
+      this.charCount = this.value.toString().trim().length;
+    }
+  };
+
   private handleInput = (ev: Event) => {
     const input = ev.target as HTMLTextAreaElement | null;
 
@@ -167,12 +173,6 @@ export class TkTextarea implements ComponentInterface {
     this.hasFocus = true;
 
     this.tkFocus.emit();
-  };
-
-  private updateCharCount = () => {
-    if (this.maxLength) {
-      this.charCount = this.value.toString().trim().length;
-    }
   };
 
   render() {

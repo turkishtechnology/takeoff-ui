@@ -1,0 +1,132 @@
+---
+sidebar_position: 2
+---
+
+# Installation
+
+This guide will show you how to install Takeoff UI from the public npm registry and integrate it into your project.
+
+## Prerequisites
+
+- Node.js ≥ 16.x  
+- One of: npm, Yarn, or pnpm  
+
+## Install Packages
+
+Takeoff UI is published under the `@takeoff-ui` scope on npm. You can install the core package alone, or add framework-specific bindings:
+
+Using npm:
+```bash
+npm install @takeoff-ui/core           # core web components
+npm install @takeoff-ui/react          # React bindings
+npm install @takeoff-ui/vue            # Vue bindings
+npm install @takeoff-ui/angular        # Angular bindings
+```
+
+Using pnpm:
+```bash
+pnpm add @takeoff-ui/core @takeoff-ui/react @takeoff-ui/vue @takeoff-ui/angular
+```
+
+Using Yarn:
+```bash
+yarn add @takeoff-ui/core @takeoff-ui/react @takeoff-ui/vue @takeoff-ui/angular
+```
+
+## Quick Start
+
+After installing, import the core CSS and register the component library for your framework of choice.
+
+### React
+
+Add the core stylesheet in your entry point (e.g. `src/main.tsx`):
+```jsx
+import "@takeoff-ui/core/dist/core/core.css";
+```
+
+Then use a component:
+```jsx title="/src/App.tsx"
+
+import { TkButton } from "@takeoff-ui/react";
+
+export default function App() {
+  return <TkButton label="Click me" />;
+}
+```
+
+### Vue
+
+Add core.css and ComponentLibrary to main.ts file.
+
+```typescript title="/src/main.ts"
+import "@takeoff-ui/core/dist/core/core.css";
+import { createApp } from "vue";
+import { ComponentLibrary } from "@takeoff-ui/vue";
+import App from "./App.vue";
+
+createApp(App)
+  .use(ComponentLibrary)
+  .mount("#app");
+```
+
+```jsx title="/src/App.vue"
+<template>
+  <TkButton label="Click me" />
+</template>
+```
+
+### Angular
+
+
+```css title="/src/styles.css"
+@import url("@takeoff-ui/core/dist/core/core.css");
+```
+
+Add ComponentLibraryModule to app.module.ts file.
+```typescript title="/src/app/app.module.ts"
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { ComponentLibraryModule } from "@takeoff-ui/angular/dist";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, ComponentLibraryModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+In a component template:
+```html
+<tk-button label="Click me"></tk-button>
+```
+
+### Next.js (App Router)
+
+In `src/app/layout.tsx` or `src/app/page.tsx`:
+```tsx
+import "@takeoff-ui/core/dist/core/core.css";
+```
+
+If you need dynamic imports for client-only components:
+```tsx
+"use client";
+
+import dynamic from "next/dynamic";
+const TkButton = dynamic(
+  () => import("@takeoff-ui/react").then((mod) => mod.TkButton),
+  { ssr: false }
+);
+
+export default function Example() {
+  return <TkButton label="Click me" />;
+}
+```
+
+## Next Steps
+
+Now that Takeoff UI is installed, head over to the **Components** section in this documentation to explore available widgets, their props, and usage examples. Happy building!  

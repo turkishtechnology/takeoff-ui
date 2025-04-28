@@ -18,6 +18,9 @@ export class TkToggle implements ComponentInterface {
   private nativeInput?: HTMLInputElement;
 
   @Element() el: HTMLTkToggleElement;
+
+  @AttachInternals() internals: ElementInternals;
+
   @State() hasDefaultSlot: boolean;
 
   /**
@@ -25,8 +28,6 @@ export class TkToggle implements ComponentInterface {
    * @defaultValue false
    */
   @State() checked: boolean = false;
-
-  @AttachInternals() internals: ElementInternals;
 
   /**
    * The aria-labelledby attribute of the toggle.
@@ -136,7 +137,7 @@ export class TkToggle implements ComponentInterface {
     return Promise.resolve(this.nativeInput);
   }
 
-  private handleChange = (event: Event) => {
+  private handleInputChange = (event: Event) => {
     if (!this.disabled) {
       const target = event.target as HTMLInputElement;
       this.value = target.checked;
@@ -163,7 +164,7 @@ export class TkToggle implements ComponentInterface {
               role="switch"
               disabled={this.disabled}
               checked={this.checked}
-              onChange={this.handleChange}
+              onChange={this.handleInputChange}
               tabIndex={this.tabindex}
               aria-checked={this.checked.toString()}
               aria-disabled={this.disabled}

@@ -1,0 +1,76 @@
+import Basic from "./Examples/Basic";
+import Inline from "./Examples/Inline";
+import Range from "./Examples/Range";
+import DateFormat from "./Examples/DateFormat";
+import Locale from "./Examples/Locale";
+import HeaderTypes from "./Examples/HeaderTypes";
+import FooterCustomization from "./Examples/FooterCustomization";
+import AllowDisabledDates from "./Examples/AllowDisabledDates";
+import FirstDayOfWeek from "./Examples/FirstDayOfWeek";
+import DisabledWeekDays from "./Examples/DisabledWeekDays";
+
+import {TkAlert} from "@takeoff-ui/react"
+
+
+## Basic
+
+A simple `TkDatepicker` is created using default properties, allowing for single date selection.
+
+<Basic />
+
+## Inline Mode
+
+Demonstrates how to use the `TkDatepicker` in inline mode, where the calendar is always visible.
+
+<Inline />
+
+## Date Range Selection
+
+Shows how to enable date range selection using the `mode="range"` property.
+
+<Range />
+
+## Custom Date Format
+
+Illustrates how to customize the date display format using the `dateFormat` property.
+
+<DateFormat />
+
+## Allowed and Disabled Dates
+
+Demonstrates how to restrict or enable specific dates using `allowedDates` and `disabledDates` properties.
+
+<AllowDisabledDates />
+
+## Disabled Week Days
+
+Demonstrates how to disable specific days of the week using the `disabledWeekDays` property.
+
+<DisabledWeekDays />
+
+## Localization
+
+Demonstrates how to set different locales for the `TkDatepicker` using the `locale` property.
+
+<Locale />
+ 
+## First Day Of Week
+
+Demonstrates how to change  `firstDayOfWeekIndex` property. 
+
+<TkAlert header="Note" variant="info" message="'locale' prop set 'en' as default, so First Day of Week is Sunday." filledlight/>
+<br/>
+<FirstDayOfWeek/>
+
+## Header Types
+
+Illustrates different header styles available via the `headerType` property.
+
+<HeaderTypes />
+
+## Footer Customization
+
+Demonstrates how to customize the footer using the `footerType` and `footerVariant` properties. When the footer is in `triple` mode, a `Today` button appears alongside the 'Cancel' and 'Continue' buttons.
+<TkAlert header="Note" variant="info" message="Clicking the 'Today' button selects the current date, updates the input field, and highlights today's date in the calendar view." filledlight />
+<br/>
+<FooterCustomization />

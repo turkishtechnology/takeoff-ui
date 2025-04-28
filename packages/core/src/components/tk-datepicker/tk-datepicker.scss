@@ -17,6 +17,8 @@
 
   &:not(.tk-datepicker-panel-inline) {
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 1000;
   }
 
@@ -24,6 +26,21 @@
     position: static;
     box-shadow: none;
     border: 1px solid var(--border-light);
+  }
+
+  .tk-datepicker-panel-inner {
+    display: inline-flex;
+
+    .tk-datepicker-calendar-container {
+      display: inline-flex;
+      flex-direction: column;
+    }
+
+    .tk-datepicker-timepicker-panel {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border-light);
+    }
   }
 }
 
@@ -372,4 +389,90 @@
     border-bottom-left-radius: var(--radius-xl);
     border-bottom-right-radius: var(--radius-xl);
   }
+}
+
+.tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
+  height: 40px;
+  padding: 8px 16px 4px;
+  border-bottom: 1px solid var(--border-light);
+  border-top-right-radius: var(--radius-sm);
+  border-top-left-radius: var(--radius-sm);
+}
+
+.tk-datepicker-timepicker-header-colon {
+  margin: 0 var(--spacing-1);
+}
+
+.tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body {
+  display: flex;
+  gap: 4px;
+  padding: var(--datepicker-body-base-day-v-padding) var(--datepicker-body-base-day-h-padding);
+  flex: none;
+  height: calc(var(--datepicker-items-base-size) * 4 + (var(--spacing-1) * 3));
+  overflow-y: auto;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    height: 40px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    background: var(--background-lightest);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.tk-datepicker-timepicker-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.tk-datepicker-timepicker-label {
+  font-family: var(--desktop-body-xs-font, Geologica);
+  font-size: var(--desktop-body-xs-size);
+  font-weight: 400;
+  color: var(--text-base);
+}
+
+.tk-datepicker-timepicker-arrow {
+  background: none;
+  border: none;
+  color: var(--icon-base);
+  cursor: pointer;
+  padding: 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.tk-datepicker-timepicker-value {
+  font-family: var(--desktop-body-s-font, Geologica);
+  font-size: var(--desktop-body-s-size);
+  color: var(--text-darkest);
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.tk-datepicker-timepicker-value-selected {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.tk-datepicker-timepicker-separator {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-light);
 }

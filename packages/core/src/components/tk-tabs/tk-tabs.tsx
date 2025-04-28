@@ -1,6 +1,7 @@
 import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { ITabsIconOptions } from './interfaces';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * TkTabs component description.
@@ -20,7 +21,7 @@ export class TkTabs implements ComponentInterface {
   @State() internalTabItems: HTMLTkTabsItemElement[] = [];
 
   /**
-   *
+   * Sets the alignment of the header.
    */
   @Prop() alignHeaders: 'start' | 'center' | 'end' = 'start';
 
@@ -36,6 +37,19 @@ export class TkTabs implements ComponentInterface {
    * @defaultValue 0
    */
   @Prop({ mutable: true, reflect: true }) activeIndex?: number = 0;
+  @Watch('activeIndex')
+  activeIndexChanged(newValue: number) {
+    if (newValue !== undefined && newValue !== this.internalActiveIndex) {
+      if (newValue >= 0 && newValue < this.internalTabItems.length) {
+        this.internalActiveIndex = newValue;
+        this.activeIndex = newValue;
+        this.tkTabChange.emit(this.internalActiveIndex);
+      } else {
+        this.activeIndex = this.internalActiveIndex;
+        console.warn('Invalid tab index provided');
+      }
+    }
+  }
 
   /**
    * Controls if tabs are closable.
@@ -99,20 +113,6 @@ export class TkTabs implements ComponentInterface {
    */
   @Event({ eventName: 'tk-tab-change' }) tkTabChange: EventEmitter<number>;
 
-  @Watch('activeIndex')
-  handleActiveIndexChange(newValue: number) {
-    if (newValue !== undefined && newValue !== this.internalActiveIndex) {
-      if (newValue >= 0 && newValue < this.internalTabItems.length) {
-        this.internalActiveIndex = newValue;
-        this.activeIndex = newValue;
-        this.tkTabChange.emit(this.internalActiveIndex);
-      } else {
-        this.activeIndex = this.internalActiveIndex;
-        console.warn('Invalid tab index provided');
-      }
-    }
-  }
-
   componentWillLoad() {
     const tabs: NodeListOf<HTMLTkTabsItemElement> = this.el.querySelectorAll(':scope > tk-tabs-item');
     this.internalTabItems = Array.from(tabs).map(tab => {
@@ -140,29 +140,12 @@ export class TkTabs implements ComponentInterface {
     this.el.removeEventListener('badgeUpdated', this.handleBadgeUpdate.bind(this));
   }
 
-  /**
-   * Handles badge update events from tab items
-   */
-  private handleBadgeUpdate(event: CustomEvent) {
-    const tab = event.composedPath().find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'tk-tabs-item') as HTMLTkTabsItemElement;
-    if (tab) {
-      const index = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')).indexOf(tab);
-      if (index !== -1 && this.internalTabItems[index]) {
-        this.internalTabItems[index].badgeCount = event.detail.badgeCount;
-      }
-    }
-  }
-
   private selectTab(index: number) {
     if (index >= 0 && index < this.internalTabItems.length && !this.internalTabItems[index].disabled) {
       this.internalActiveIndex = index;
       this.activeIndex = index;
       this.tkTabChange.emit(this.internalActiveIndex);
     }
-  }
-
-  private handleTabClick(index: number) {
-    this.selectTab(index);
   }
 
   private closeTab(index: number) {
@@ -193,16 +176,29 @@ export class TkTabs implements ComponentInterface {
     this.tkTabChange.emit(this.internalActiveIndex);
   }
 
+  /**
+   * Handles badge update events from tab items
+   */
+  private handleBadgeUpdate(event: CustomEvent) {
+    const tab = event.composedPath().find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'tk-tabs-item') as HTMLTkTabsItemElement;
+    if (tab) {
+      const index = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')).indexOf(tab);
+      if (index !== -1 && this.internalTabItems[index]) {
+        this.internalTabItems[index].badgeCount = event.detail.badgeCount;
+      }
+    }
+  }
+
+  private handleTabClick(index: number) {
+    this.selectTab(index);
+  }
+
   private renderTabItemIcon(tab: HTMLTkTabsItemElement) {
     if (tab.icon && typeof tab.icon === 'string') {
       return <span class="material-symbols-outlined tk-tabs-item-icon">{tab.icon}</span>;
     } else if (tab.icon && typeof tab.icon === 'object') {
       const icon: ITabsIconOptions = tab.icon;
-      return (
-        <span class={`material-symbols-${icon?.style || 'outlined'} ${icon?.fill ? 'fill' : ''} tk-tabs-item-icon`} style={{ color: icon?.color || 'inherit' }}>
-          {icon.name}
-        </span>
-      );
+      return <tk-icon {...getIconElementProps(icon, { class: classNames('tk-tabs-item-icon') })} />;
     }
   }
 
@@ -266,11 +262,7 @@ export class TkTabs implements ComponentInterface {
               </div>
             );
           })}
-          {this.isExtendable && (
-            <span class="material-symbols-outlined tk-tabs-item-add-icon" onClick={() => this.addTab()}>
-              add
-            </span>
-          )}
+          {this.isExtendable && <tk-icon {...getIconElementProps('add', { class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })} />}
         </div>
         <div {...contentProps}>
           {this.internalTabItems.map((_tab, index) => (

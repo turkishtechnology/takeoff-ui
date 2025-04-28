@@ -15,11 +15,16 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
   shadow: true,
 })
 export class TkStepper implements ComponentInterface {
+  private mutationObserver: MutationObserver | null = null;
+
   @Element() el: HTMLTkStepperElement;
 
   @State() private steps: IStep[] = [];
   @State() private internalActive: number = 0;
-
+  @Watch('internalActive')
+  internalActiveChanged(newValue: number) {
+    this.updateStepsState(newValue);
+  }
   /**
    * Controls the orientation of the stepper component.
    * @defaultValue 'horizontal'
@@ -43,6 +48,22 @@ export class TkStepper implements ComponentInterface {
    * @defaultValue 0
    */
   @Prop() active: number = 0;
+  @Watch('active')
+  activeChanged(newValue: number) {
+    if (this.steps.length > 0) {
+      const targetStep = this.steps[newValue];
+      if (targetStep && !targetStep.disabled) {
+        this.internalActive = newValue;
+        this.updateStepsState(newValue);
+      } else {
+        setTimeout(() => {
+          this.el.setAttribute('active', this.internalActive.toString());
+        }, 0);
+      }
+    } else {
+      this.internalActive = newValue;
+    }
+  }
 
   /**
    * Whether to show completed steps with the complete state.
@@ -50,6 +71,10 @@ export class TkStepper implements ComponentInterface {
    * @defaultValue true
    */
   @Prop() showCompleteState: boolean = true;
+  @Watch('showCompleteState')
+  showCompleteStateChanged() {
+    this.updateStepsState(this.internalActive);
+  }
 
   /**
    * Specifies a material icon or icon options for completed steps.
@@ -109,34 +134,17 @@ export class TkStepper implements ComponentInterface {
     this.mutationObserver?.disconnect();
   }
 
-  @Watch('active')
-  activeChanged(newValue: number) {
-    if (this.steps.length > 0) {
-      const targetStep = this.steps[newValue];
-      if (targetStep && !targetStep.disabled) {
-        this.internalActive = newValue;
-        this.updateStepsState(newValue);
-      } else {
-        setTimeout(() => {
-          this.el.setAttribute('active', this.internalActive.toString());
-        }, 0);
-      }
-    } else {
-      this.internalActive = newValue;
+  /**
+   * Sets the active step index.
+   * @param index - The index of the step to set as active.
+   */
+  @Method()
+  async setActive(index: number) {
+    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index)) {
+      this.internalActive = index;
+      this.tkStepChange.emit(index);
     }
   }
-
-  @Watch('internalActive')
-  internalActiveChanged(newValue: number) {
-    this.updateStepsState(newValue);
-  }
-
-  @Watch('showCompleteState')
-  showCompleteStateChanged() {
-    this.updateStepsState(this.internalActive);
-  }
-
-  private mutationObserver: MutationObserver | null = null;
 
   private setupMutationObserver() {
     this.mutationObserver = new MutationObserver(() => {
@@ -180,18 +188,6 @@ export class TkStepper implements ComponentInterface {
     return false;
   }
 
-  /**
-   * Sets the active step index.
-   * @param index - The index of the step to set as active.
-   */
-  @Method()
-  async setActive(index: number) {
-    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index)) {
-      this.internalActive = index;
-      this.tkStepChange.emit(index);
-    }
-  }
-
   private getIconElement(icon: string | IIconOptions): JSX.Element {
     const iconClasses = 'tk-step-icon';
     let iconProps: { class: string } | { class: string; style: any };
@@ -211,6 +207,16 @@ export class TkStepper implements ComponentInterface {
 
     return <i {...iconProps}>{iconName}</i>;
   }
+
+  private handleStepClick = (index: number) => {
+    const step = this.steps[index];
+    const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
+    this.tkStepClick.emit({ index, status });
+
+    if (this.canStepBeSelected(index)) {
+      this.setActive(index);
+    }
+  };
 
   private createStepIcon(step: IStep, index: number): JSX.Element {
     if (step.disabled) {
@@ -285,16 +291,6 @@ export class TkStepper implements ComponentInterface {
       </span>
     );
   }
-
-  private handleStepClick = (index: number) => {
-    const step = this.steps[index];
-    const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
-    this.tkStepClick.emit({ index, status });
-
-    if (this.canStepBeSelected(index)) {
-      this.setActive(index);
-    }
-  };
 
   private createStepSign(step: IStep, index: number): JSX.Element {
     return (

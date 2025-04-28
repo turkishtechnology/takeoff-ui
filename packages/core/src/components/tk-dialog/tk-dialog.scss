@@ -86,21 +86,6 @@ tk-dialog {
       align-items: center;
       gap: var(--dialog-header-base-gap);
 
-      .tk-dialog-sign {
-        display: flex;
-        padding: 12px;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        border-radius: 8px;
-        background: var(--background-lightest);
-
-        .tk-dialog-sign-icon {
-          width: 24px;
-          height: 24px;
-        }
-      }
-
       .tk-dialog-title-container {
         display: flex;
         flex-direction: column;
@@ -227,46 +212,6 @@ tk-dialog {
       display: flex;
       align-items: center;
       gap: var(--dialog-footer-base-gap);
-    }
-  }
-
-  &.tk-dialog-info {
-    .tk-dialog-sign {
-      border: 1px solid var(--states-info-sub-base);
-
-      .tk-dialog-sign-icon {
-        color: var(--states-info-dark);
-      }
-    }
-  }
-
-  &.tk-dialog-success {
-    .tk-dialog-sign {
-      border: 1px solid var(--states-success-sub-base);
-
-      .tk-dialog-sign-icon {
-        color: var(--states-success-dark);
-      }
-    }
-  }
-
-  &.tk-dialog-warning {
-    .tk-dialog-sign {
-      border: 1px solid var(--states-warning-sub-base);
-
-      .tk-dialog-sign-icon {
-        color: var(--states-warning-dark);
-      }
-    }
-  }
-
-  &.tk-dialog-danger {
-    .tk-dialog-sign {
-      border: 1px solid var(--states-danger-sub-base);
-
-      .tk-dialog-sign-icon {
-        color: var(--states-danger-dark);
-      }
     }
   }
 }

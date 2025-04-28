@@ -82,19 +82,14 @@ export class TkAvatar implements ComponentInterface {
     );
   }
 
-  private getContainerClasses() {
-    return classNames('tk-avatar-container', `tk-avatar-${this.size}`);
-  }
-  private getRootClasses() {
-    return classNames('tk-avatar', `tk-avatar-${this.variant}`, `tk-avatar-${this.background}`, {
+  render() {
+    const containerClasses = classNames('tk-avatar-container', `tk-avatar-${this.size}`);
+    const rootClasses = classNames('tk-avatar', `tk-avatar-${this.variant}`, `tk-avatar-${this.background}`, {
       'tk-avatar-rounded': this.rounded,
     });
-  }
-
-  render() {
     return (
-      <div class={this.getContainerClasses()} part={`avatar ${this.size}`}>
-        <div class={this.getRootClasses()} part="avatar" aria-label={this.name} aria-labelledby={this.ariaLabelledby}>
+      <div class={containerClasses} part={`avatar ${this.size}`}>
+        <div class={rootClasses} part="avatar" aria-label={this.name} aria-labelledby={this.ariaLabelledby}>
           {this.label && <span class="tk-avatar-label">{this.label}</span>}
           {this.image && <img class="tk-avatar-image" src={this.image} alt={this.name} />}
           {!this.label && !this.image && this.renderDefaultSvg()}

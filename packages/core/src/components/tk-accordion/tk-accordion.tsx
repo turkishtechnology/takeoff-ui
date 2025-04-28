@@ -26,6 +26,10 @@ export class TkAccordion implements ComponentInterface {
    * When allowMultiple is false, only the last value in the array will be used.
    */
   @Prop({ mutable: true }) activeIndex?: string | number | string[] | number[];
+  @Watch('activeIndex')
+  activeIndexChanged() {
+    this.updateItems();
+  }
 
   /**
    * Allows multiple accordion items to be expanded simultaneously.
@@ -40,12 +44,14 @@ export class TkAccordion implements ComponentInterface {
   @Prop() arrowPosition: 'left' | 'right' = 'right';
 
   /**
-   *
+   * Sets the expand icon
+   * @defaultValue 'keyboard_arrow_down'
    */
   @Prop() expandIcon: string | IIconOptions = 'keyboard_arrow_down';
 
   /**
-   *
+   * Sets the collapse icon
+   * @defaultValue 'keyboard_arrow_up'
    */
   @Prop() collapseIcon: string | IIconOptions = 'keyboard_arrow_up';
 
@@ -65,10 +71,7 @@ export class TkAccordion implements ComponentInterface {
    * Emitted when an accordion item is selected
    */
   @Event() tkAccordionItemSelected: EventEmitter<IAccordionItemSelect>;
-  @Watch('activeIndex')
-  activeIndexChanged() {
-    this.updateItems();
-  }
+
   componentDidLoad() {
     this.updateItems();
   }

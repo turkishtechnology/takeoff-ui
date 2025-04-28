@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Prop, Element, h, State, Fragment } from '@stencil/core';
 import classNames from 'classnames';
 import { IBreadcrumbModel } from './interfaces';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The `TkBreadcrumb` provides a navigational aid, allowing users to keep track of their location within the application's hierarchy.
@@ -66,7 +67,7 @@ export class TkBreadcrumb implements ComponentInterface {
       'tk-breadcrumb-vertical-separator': this.separator === 'vertical',
     });
     if (this.separator === 'icon') {
-      return <span class={separatorClasses}>{this.separatorIcon}</span>;
+      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, variant: null }, undefined, 'span')} />;
     }
     return <span class={separatorClasses} />;
   }

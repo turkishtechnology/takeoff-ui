@@ -33,7 +33,8 @@ export class TkTimeline implements ComponentInterface {
     const isEvenItem = index % 2 === 0;
     return isEvenItem ? 'end' : 'start';
   }
-  private renderItemContent(item: TimelineItem) {
+
+  private createItemContent(item: TimelineItem) {
     return (
       <Fragment>
         <div class="tk-timeline-item-content-inner">
@@ -44,6 +45,7 @@ export class TkTimeline implements ComponentInterface {
       </Fragment>
     );
   }
+
   private renderTimelineItem(item: TimelineItem, index: number) {
     const contentPlacement = this.determineContentPlacement(index);
     const isFirst = index === 0;
@@ -56,15 +58,16 @@ export class TkTimeline implements ComponentInterface {
 
     return (
       <li class={itemClasses}>
-        <div class="tk-timeline-item-content tk-timeline-item-content-start">{contentPlacement === 'start' && this.renderItemContent(item)}</div>
+        <div class="tk-timeline-item-content tk-timeline-item-content-start">{contentPlacement === 'start' && this.createItemContent(item)}</div>
         <div class="tk-timeline-item-separator">
           <div class="tk-timeline-item-point"></div>
           <div class="tk-timeline-item-connector"></div>
         </div>
-        <div class="tk-timeline-item-content tk-timeline-item-content-end">{contentPlacement === 'end' && this.renderItemContent(item)}</div>
+        <div class="tk-timeline-item-content tk-timeline-item-content-end">{contentPlacement === 'end' && this.createItemContent(item)}</div>
       </li>
     );
   }
+
   render() {
     const hostClasses = classNames('tk-timeline', `tk-timeline-${this.orientation}`);
 

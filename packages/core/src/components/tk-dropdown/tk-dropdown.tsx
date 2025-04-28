@@ -16,14 +16,14 @@ import classNames from 'classnames';
   styleUrl: 'tk-dropdown.scss',
 })
 export class TkDropdown implements ComponentInterface {
-  @Element() el: HTMLTkDropdownElement;
-
   private hasEmptyDataSlot: boolean = false;
   private uniqueId: string;
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
+
+  @Element() el: HTMLTkDropdownElement;
 
   constructor() {
     this.uniqueId = uuidv4();
@@ -123,6 +123,20 @@ export class TkDropdown implements ComponentInterface {
     this.unbindWindowClickListener();
   }
 
+  private updatePosition() {
+    if (this.triggerRef && this.panelRef) {
+      computePosition(this.triggerRef, this.panelRef, {
+        placement: this.position,
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.panelRef.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
+    }
+  }
+
   private isGrouped(): boolean {
     return this.options?.length > 0 && this.options[0].hasOwnProperty(this.groupNameKey);
   }
@@ -144,20 +158,6 @@ export class TkDropdown implements ComponentInterface {
     if (!isInnerClicked) {
       this.isOpen = false;
       this.unbindWindowClickListener();
-    }
-  }
-
-  private updatePosition() {
-    if (this.triggerRef && this.panelRef) {
-      computePosition(this.triggerRef, this.panelRef, {
-        placement: this.position,
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
     }
   }
 
@@ -186,7 +186,7 @@ export class TkDropdown implements ComponentInterface {
     });
   }
 
-  private renderOptions() {
+  private createOptions() {
     if (this.isGrouped()) {
       return this.options?.map(group => {
         return (
@@ -209,7 +209,7 @@ export class TkDropdown implements ComponentInterface {
 
     return (
       <div class="tk-dropdown-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-dropdown-id={this.uniqueId}>
-        <div class="tk-dropdown-item-holder">{this.options?.length > 0 ? this.renderOptions() : this.hasEmptyDataSlot ? <slot name="empty-data"></slot> : this.emptyMessage}</div>
+        <div class="tk-dropdown-item-holder">{this.options?.length > 0 ? this.createOptions() : this.hasEmptyDataSlot ? <slot name="empty-data"></slot> : this.emptyMessage}</div>
       </div>
     );
   }

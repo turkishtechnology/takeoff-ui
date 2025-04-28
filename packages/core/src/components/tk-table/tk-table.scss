@@ -53,6 +53,7 @@
           background: none;
           background-color: none;
           border: none;
+
           th {
             font-size: var(--desktop-body-s-size);
             color: var(--text-darkest);
@@ -142,6 +143,7 @@
           background: none;
           background-color: none;
           border: none;
+
           td {
             font-size: var(--desktop-body-s-size);
             color: var(--text-dark);
@@ -217,6 +219,7 @@
       }
     }
   }
+
   &.small {
     table thead tr th {
       padding: var(--table-items-head-small-text-v-padding) var(--table-items-head-small-text-h-padding);
@@ -235,10 +238,12 @@
     table thead tr th {
       background-color: var(--secondary-lightest);
     }
+
     table tbody tr {
       &:nth-child(even) td {
         background-color: var(--background-lightest);
       }
+
       &:hover td {
         background-color: var(--states-info-light);
       }
@@ -269,29 +274,5 @@
 
   to {
     transform: rotate(360deg);
-  }
-}
-
-.tk-table-filter-panel {
-  width: 220px;
-  position: fixed;
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-  background-color: var(--static-light);
-  padding: 8px;
-  z-index: 1400;
-  box-shadow: var(--effect-1-default-base);
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  gap: 8px;
-
-  .tk-table-filter-panel-buttons {
-    display: flex;
-    gap: 8px;
-
-    tk-button {
-      flex: 1;
-    }
   }
 }

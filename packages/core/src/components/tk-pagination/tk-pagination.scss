@@ -65,7 +65,7 @@ tk-pagination {
         color: var(--text-darkest);
       }
 
-      .tk-pagination-cell-icon {
+      .tk-pagination-cell-icon i {
         font-size: 20px;
         width: 20px;
         height: 20px;
@@ -82,7 +82,7 @@ tk-pagination {
 
       &:disabled {
         .tk-pagination-page-label,
-        .tk-pagination-cell-icon {
+        .tk-pagination-cell-icon i{
           color: var(--text-sub-base, #99a0ae);
         }
       }

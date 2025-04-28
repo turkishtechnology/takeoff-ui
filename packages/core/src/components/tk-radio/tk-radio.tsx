@@ -1,9 +1,10 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host } from '@stencil/core';
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
  * The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.
+ * @slot content - Custom content template.
  * @react `import { TkRadio } from '@takeoff-ui/react'`
  * @vue `import { TkRadio } from '@takeoff-ui/vue'`
  * @angular `import { TkRadio } from '@takeoff-ui/angular'`
@@ -14,12 +15,13 @@ import { v4 as uuidv4 } from 'uuid';
   formAssociated: true,
 })
 export class TkRadio implements ComponentInterface {
-  @Element() el: HTMLTkRadioElement;
-
-  @AttachInternals() internals: ElementInternals;
   private parentEl: HTMLTkRadioGroupElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
+
+  @Element() el: HTMLTkRadioElement;
+
+  @AttachInternals() internals: ElementInternals;
 
   constructor() {
     this.uniqueId = uuidv4();
@@ -28,6 +30,12 @@ export class TkRadio implements ComponentInterface {
       this.windowClickHandler = this.handleWindowClick.bind(this);
     }
   }
+
+  /**
+   * Controls if radio has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
 
   /**
    * Disables the radio button if true.
@@ -77,22 +85,16 @@ export class TkRadio implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<any>;
 
-  private handleChange() {
-    if (!this.disabled) {
-      this.checked = !this.checked;
-
-      if (this.checked) {
-        this.tkChange.emit(this.value);
-      }
-    }
-  }
   componentWillLoad(): void {
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
+
     this.parentEl = this.el.closest('tk-radio-group');
 
     if (this.parentEl && !this.position) {
       this.position = this.parentEl.position;
     }
   }
+
   componentDidRender(): void {
     this.bindWindowClickListener();
   }
@@ -121,6 +123,16 @@ export class TkRadio implements ComponentInterface {
     }
   }
 
+  private handleInputChange() {
+    if (!this.disabled) {
+      this.checked = !this.checked;
+
+      if (this.checked) {
+        this.tkChange.emit(this.value);
+      }
+    }
+  }
+
   render() {
     const rootClasses = classNames('tk-radio-container', {
       disabled: this.disabled,
@@ -130,14 +142,26 @@ export class TkRadio implements ComponentInterface {
       <Host data-tk-radio-id={this.uniqueId}>
         <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
           <label htmlFor={this.uniqueId} class={(classNames({ 'width-description': this.description }), this.position)}>
-            <input id={this.uniqueId} type="radio" checked={this.checked} value={this.value} disabled={this.disabled} onChange={this.handleChange.bind(this)} name={this.name} />
+            <input
+              id={this.uniqueId}
+              type="radio"
+              checked={this.checked}
+              value={this.value}
+              disabled={this.disabled}
+              onChange={this.handleInputChange.bind(this)}
+              name={this.name}
+            />
             <div class="mask">
               <div></div>
             </div>
-            <div class="tk-radio-text-holder">
-              <div class="tk-radio-label">{this.label}</div>
-              <div class="tk-radio-description">{this.description}</div>
-            </div>
+            {this.hasContentSlot ? (
+              <slot name="content" />
+            ) : (
+              <div class="tk-radio-text-holder">
+                <div class="tk-radio-label">{this.label}</div>
+                <div class="tk-radio-description">{this.description}</div>
+              </div>
+            )}
           </label>
         </div>
       </Host>

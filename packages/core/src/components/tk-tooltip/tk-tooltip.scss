@@ -19,13 +19,6 @@
     line-height: 20px;
     border: 1px solid var(--border-dark);
 
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 20px;
-        color: var(--icon-lightest);
-      }
-    }
-
     .tk-tooltip-header {
       text-align: left;
       color: var(--text-lightest);
@@ -49,13 +42,6 @@
     border: 1px solid var(--border-light);
     background: var(--background-lightest);
     line-height: 20px;
-
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 20px;
-        color: var(--icon-darkest);
-      }
-    }
 
     .tk-tooltip-header {
       text-align: left;
@@ -81,22 +67,6 @@
     background-color: var(--states-info-lightest);
     line-height: 20px;
 
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 14px;
-        border: 1px solid var(--border-sub-base);
-        background-color: var(--static-white);
-        border-radius: 3px;
-        padding: 2px;
-        color: var(--states-info-dark);
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 700,
-          'GRAD' 0,
-          'opsz' 48;
-      }
-    }
-
     .tk-tooltip-header {
       text-align: left;
       color: var(--text-darkest);
@@ -120,22 +90,6 @@
     border: 1px solid var(--states-success-light);
     background-color: var(--states-success-lightest);
     line-height: 20px;
-
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 14px;
-        border: 1px solid var(--states-success-light);
-        background-color: var(--static-white);
-        border-radius: 3px;
-        padding: 2px;
-        color: var(--states-success-dark);
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 700,
-          'GRAD' 0,
-          'opsz' 48;
-      }
-    }
 
     .tk-tooltip-header {
       text-align: left;
@@ -161,22 +115,6 @@
     background-color: var(--states-danger-lightest);
     line-height: 20px;
 
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 14px;
-        border: 1px solid var(--states-danger-light);
-        background-color: var(--static-white);
-        border-radius: 3px;
-        padding: 2px;
-        color: var(--states-danger-dark);
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 700,
-          'GRAD' 0,
-          'opsz' 48;
-      }
-    }
-
     .tk-tooltip-header {
       text-align: left;
       color: var(--text-darkest);
@@ -200,22 +138,6 @@
     border: 1px solid var(--states-warning-light);
     background-color: var(--states-warning-lightest);
     line-height: 20px;
-
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 14px;
-        border: 1px solid var(--states-warning-light);
-        background-color: var(--static-white);
-        border-radius: 3px;
-        padding: 2px;
-        color: var(--states-warning-dark);
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 700,
-          'GRAD' 0,
-          'opsz' 48;
-      }
-    }
 
     .tk-tooltip-header {
       text-align: left;
@@ -241,17 +163,6 @@
     background-color: var(--background-light);
     line-height: 20px;
 
-    .tk-tooltip-icon {
-      .tk-tooltip-item-icon {
-        font-size: 14px;
-        border: 1px solid var(--states-light);
-        background-color: var(--static-white);
-        border-radius: 3px;
-        padding: 2px;
-        color: var(--background-dark);
-      }
-    }
-
     .tk-tooltip-header {
       text-align: left;
       color: var(--text-darkest);
@@ -270,13 +181,6 @@
       background-color: var(--background-light);
     }
   }
-}
-
-.tk-tooltip-icon {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  align-self: stretch;
 }
 
 .tk-tooltip-arrow {

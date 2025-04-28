@@ -4,6 +4,7 @@ import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { DEFAULT_EXTENSIONS, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
@@ -38,16 +39,18 @@ export class TkEditor {
    */
   @Prop({ mutable: true }) value: string = '';
   @Watch('value')
-  handleValueChange(newValue: string) {
+  valueChanged(newValue: string) {
     if (this.editor && newValue !== this.editor.getHTML()) {
       this.editor.commands.setContent(newValue);
     }
   }
+
   /**
    * Whether the editor is disabled
    * @default false
    */
   @Prop() disabled: boolean = false;
+
   /**
    * Whether the editor is readonly
    * @default false
@@ -55,77 +58,83 @@ export class TkEditor {
   @Prop() readonly: boolean = false;
   @Watch('disabled')
   @Watch('readonly')
-  handleEditableChange() {
+  editableChanged() {
     if (this.editor) {
       this.editor.setEditable(!this.disabled && !this.readonly);
     }
   }
+
   /**
    * The placeholder text when editor is empty
    */
   @Prop() placeholder?: string;
+
   /**
    * Whether to hide the toolbar
    * @default false
    */
   @Prop() hideToolbar: boolean = false;
+
   /**
    * The style attribute of tabs item element
    */
   @Prop() contentStyle?: any = null;
+
   /**
    * Custom extensions
    */
   @Prop() extensions?: AnyExtension[] = [];
+
   /**
    * Custom toolbar buttons for extensions
    */
   @Prop() customToolbarButtons?: TkEditorCustomButton[] = [];
+
   /**
    * Toolbar configuration
    */
   @Prop() toolbar?: TkEditorToolbarConfig;
+
   /**
    * The label for the toggle
    */
   @Prop() label?: string;
+
   /**
    * Provided a hint or additional information about the input.
    */
   @Prop() hint?: string;
+
   /**
    * Indicates whether the editor is in an invalid state
    * @defaultValue false
    */
   @Prop() invalid: boolean = false;
+
   /**
    * This is the error message that will be displayed.
    */
   @Prop() error: string;
+
   /**
    * Displays a red asterisk (*) next to the label for visual emphasis.
    */
   @Prop() showAsterisk: boolean = false;
+
   /**
    * Emitted when editor content changes
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string>;
+
   /**
    * Emitted when editor gets focus
    */
   @Event() tkFocus: EventEmitter<void>;
+
   /**
    * Emitted when editor loses focus
    */
   @Event() tkBlur: EventEmitter<void>;
-
-  private get activeExtensions() {
-    return [...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
-  }
-
-  private command() {
-    return this.editor?.chain().focus();
-  }
 
   componentDidLoad() {
     this.initEditor();
@@ -166,6 +175,14 @@ export class TkEditor {
       this.value = content;
       this.editor.commands.setContent(content);
     }
+  }
+
+  private get activeExtensions() {
+    return [...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
+  }
+
+  private command() {
+    return this.editor?.chain().focus();
   }
 
   private initEditor() {
@@ -264,46 +281,6 @@ export class TkEditor {
     return actionMap[button];
   }
 
-  private renderToolbar() {
-    if (this.hideToolbar) return null;
-    const toolbarConfig = this.toolbar || DEFAULT_TOOLBAR_CONFIG;
-    return (
-      <div class="tk-editor-toolbar">
-        <div class="tk-editor-controlsgroup-container">
-          {toolbarConfig.map((group, groupIndex) => (
-            <div class="tk-editor-controlsgroup" key={groupIndex}>
-              {group.map(button => {
-                const buttonConfig = typeof button === 'string' ? this.getDefaultButtonConfig(button) : button;
-                return this.renderToolbarButton(buttonConfig);
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  private renderToolbarButton(button: TkEditorCustomButton) {
-    const isCustomButton = !TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS];
-    const iconContent = TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS] || button.icon;
-    return (
-      <button
-        class={classNames('tk-editor-button', `tk-editor-button-${button.action}`, `tk-editor-button-${button.behavior}`, {
-          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button) && !this.disabled,
-          'tk-editor-button-disabled': this.disabled,
-          'tk-editor-button-readonly': this.readonly,
-          [`tk-editor-button-${button.action}-disabled`]: (button.action === 'undo' || button.action === 'redo') && this.isHistoryButtonDisabled(button.action),
-        })}
-        type="button"
-        title={button.label}
-        disabled={this.disabled || this.readonly}
-        innerHTML={iconContent}
-        onClick={() => !this.disabled && this.handleToolbarAction(button)}
-        data-tk-editor-custom-button={isCustomButton}
-      />
-    );
-  }
-
   private isButtonActive(button: TkEditorCustomButton): boolean {
     if (!this.editor) return false;
     if (button.command) {
@@ -385,6 +362,46 @@ export class TkEditor {
     }
   };
 
+  private createToolbarButton(button: TkEditorCustomButton) {
+    const isCustomButton = !TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS];
+    const iconContent = TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS] || button.icon;
+    return (
+      <button
+        class={classNames('tk-editor-button', `tk-editor-button-${button.action}`, `tk-editor-button-${button.behavior}`, {
+          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button) && !this.disabled,
+          'tk-editor-button-disabled': this.disabled,
+          'tk-editor-button-readonly': this.readonly,
+          [`tk-editor-button-${button.action}-disabled`]: (button.action === 'undo' || button.action === 'redo') && this.isHistoryButtonDisabled(button.action),
+        })}
+        type="button"
+        title={button.label}
+        disabled={this.disabled || this.readonly}
+        innerHTML={iconContent}
+        onClick={() => !this.disabled && this.handleToolbarAction(button)}
+        data-tk-editor-custom-button={isCustomButton}
+      />
+    );
+  }
+
+  private renderToolbar() {
+    if (this.hideToolbar) return null;
+    const toolbarConfig = this.toolbar || DEFAULT_TOOLBAR_CONFIG;
+    return (
+      <div class="tk-editor-toolbar">
+        <div class="tk-editor-controlsgroup-container">
+          {toolbarConfig.map((group, groupIndex) => (
+            <div class="tk-editor-controlsgroup" key={groupIndex}>
+              {group.map(button => {
+                const buttonConfig = typeof button === 'string' ? this.getDefaultButtonConfig(button) : button;
+                return this.createToolbarButton(buttonConfig);
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const contentStyle = this.contentStyle;
     const labelElement = this.label && (
@@ -397,7 +414,7 @@ export class TkEditor {
     if (this.hint?.length > 0) {
       hint = (
         <div class="tk-editor-supporting-text">
-          <i class="material-symbols-outlined tk-editor-supporting-text-icon">info</i>
+          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
           <span>{this.hint}</span>
         </div>
       );
@@ -405,7 +422,7 @@ export class TkEditor {
     if (this.error?.length > 0) {
       hint = (
         <div class="tk-editor-supporting-text error">
-          <i class="material-symbols-outlined tk-editor-supporting-text-icon">info</i>
+          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
           <span>{this.error}</span>
         </div>
       );

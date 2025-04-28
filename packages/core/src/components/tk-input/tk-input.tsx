@@ -6,6 +6,7 @@ import { IInputMaskOptions } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
+import { getIconElementProps } from '../../utils/icon-props';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -26,13 +27,13 @@ export class TkInput implements ComponentInterface {
 
   @Element() el!: HTMLTkInputElement;
 
+  @AttachInternals() internals: ElementInternals;
+
   @State() hasFocus = false;
   @State() inputType: string;
   @State() isCounter = false;
   @State() isPassword = false;
   @State() passwordStrength: number = 0;
-
-  @AttachInternals() internals: ElementInternals;
 
   /**
    * the user cannot interact with the input.
@@ -216,60 +217,6 @@ export class TkInput implements ComponentInterface {
     this.nativeInput?.focus();
   }
 
-  private handleInput = (ev: Event) => {
-    if (this.mode != 'chips') {
-      const input = ev.target as HTMLInputElement;
-      let _value;
-      if (this.mode == 'number') {
-        _value = input.value ? Number(input.value) : null;
-      } else {
-        _value = input.value || '';
-      }
-
-      // masklı kullanımlar için value'yu formatlama yapılıyor.
-      if (this.maskOptions && this.cleaveInstance) {
-        this.cleaveInstance?.setRawValue(_value);
-        _value = this.cleaveInstance?.getFormattedValue();
-      }
-
-      if (!_.isEqual(this.value, _value)) {
-        this.value = _value;
-        this.tkChange.emit(_value);
-      }
-    }
-
-    if (this.mode == 'password' && this.showSafetyStatus) {
-      this.passwordStrength = this.calculatePasswordStrength(String(this.value));
-    }
-  };
-
-  private handleBlur = () => {
-    this.hasFocus = false;
-    this.validateMinMax();
-    this.tkBlur.emit();
-  };
-
-  // for add chip
-  private handleKeyDown = (e: KeyboardEvent) => {
-    if (
-      e.key == 'Enter' &&
-      this.nativeInput.value.trim() &&
-      this.mode == 'chips' &&
-      // (!this.value || (this.value as string[])?.indexOf(this.nativeInput.value) == -1) &&
-      (this.el.classList.contains('allow-custom-value-select') || !this.el.classList.contains('tk-select-input'))
-    ) {
-      if (this.value) {
-        this.value = [...(this.value as string[]), this.nativeInput.value];
-        this.tkChange.emit(this.value);
-      } else {
-        this.value = [this.nativeInput.value];
-        this.tkChange.emit([this.nativeInput.value]);
-      }
-
-      this.nativeInput.value = '';
-    }
-  };
-
   private validateMinMax() {
     if (this.mode === 'text' && this.min !== undefined && this.max !== undefined) {
       const numValue = parseInt(this.value as string, 10);
@@ -284,20 +231,6 @@ export class TkInput implements ComponentInterface {
       }
     }
   }
-
-  private handleFocus = () => {
-    this.hasFocus = true;
-
-    this.tkFocus.emit();
-  };
-
-  private handleMouseDown = (event: MouseEvent) => {
-    this.visiblePassword(event, true);
-  };
-
-  private handleMouseUp = (event: MouseEvent) => {
-    this.visiblePassword(event, false);
-  };
 
   /**
    * Toggles the visibility of the password input field.
@@ -342,6 +275,108 @@ export class TkInput implements ComponentInterface {
     return strength;
   }
 
+  private handleInput = (ev: Event) => {
+    if (this.mode != 'chips') {
+      const input = ev.target as HTMLInputElement;
+      let _value;
+      if (this.mode == 'number') {
+        _value = input.value ? Number(input.value) : null;
+      } else {
+        _value = input.value || '';
+      }
+
+      // masklı kullanımlar için value'yu formatlama yapılıyor.
+      if (this.maskOptions && this.cleaveInstance) {
+        this.cleaveInstance?.setRawValue(_value);
+        _value = this.cleaveInstance?.getFormattedValue();
+      }
+
+      if (!_.isEqual(this.value, _value)) {
+        this.value = _value;
+        this.tkChange.emit(_value);
+      }
+    }
+
+    if (this.mode == 'password' && this.showSafetyStatus) {
+      this.passwordStrength = this.calculatePasswordStrength(String(this.value));
+    }
+  };
+
+  private handleInputBlur = () => {
+    this.hasFocus = false;
+    this.validateMinMax();
+    this.tkBlur.emit();
+  };
+
+  // for add chip
+  private handleInputKeyDown = (e: KeyboardEvent) => {
+    if (
+      e.key == 'Enter' &&
+      this.nativeInput.value.trim() &&
+      this.mode == 'chips' &&
+      // (!this.value || (this.value as string[])?.indexOf(this.nativeInput.value) == -1) &&
+      (this.el.classList.contains('allow-custom-value-select') || !this.el.classList.contains('tk-select-input'))
+    ) {
+      if (this.value) {
+        this.value = [...(this.value as string[]), this.nativeInput.value];
+        this.tkChange.emit(this.value);
+      } else {
+        this.value = [this.nativeInput.value];
+        this.tkChange.emit([this.nativeInput.value]);
+      }
+
+      this.nativeInput.value = '';
+    }
+  };
+
+  private handleMinusButtonClick() {
+    if (!this.disabled && (this.min == undefined || Number(this.value) > Number(this.min))) {
+      this.value = Number(this.value) - 1;
+      this.tkChange.emit(this.value);
+    }
+  }
+
+  private handlePlusButtonClick() {
+    if (this.value == '' && this.min != undefined) {
+      this.value = this.min;
+      this.tkChange.emit(this.min);
+    } else if (!this.disabled && (this.max == undefined || Number(this.value) < Number(this.max))) {
+      this.value = Number(this.value) + 1;
+      this.tkChange.emit(this.value);
+    }
+  }
+
+  private handleChipsRemove(item: any) {
+    const chipsArr = [...(this.value as any[])];
+
+    if (_.includes(chipsArr, item)) {
+      _.pull(chipsArr, item);
+      this.value = chipsArr;
+      this.tkChange.emit(chipsArr);
+    }
+  }
+
+  private handleClearButtonClick(e) {
+    e.stopPropagation();
+    this.value = null;
+    this.tkChange.emit(null);
+    this.tkClearClick.emit();
+  }
+
+  private handleInputFocus = () => {
+    this.hasFocus = true;
+
+    this.tkFocus.emit();
+  };
+
+  private handleMouseDown = (event: MouseEvent) => {
+    this.visiblePassword(event, true);
+  };
+
+  private handleMouseUp = (event: MouseEvent) => {
+    this.visiblePassword(event, false);
+  };
+
   /**
    * Renders the password strength indicator lines.
    *
@@ -368,40 +403,6 @@ export class TkInput implements ComponentInterface {
     return lines;
   }
 
-  private handleMinusButtonClick() {
-    if (!this.disabled && (this.min == undefined || Number(this.value) > Number(this.min))) {
-      this.value = Number(this.value) - 1;
-      this.tkChange.emit(this.value);
-    }
-  }
-
-  private handlePlusButtonClick() {
-    if (this.value == '' && this.min != undefined) {
-      this.value = this.min;
-      this.tkChange.emit(this.min);
-    } else if (!this.disabled && (this.max == undefined || Number(this.value) < Number(this.max))) {
-      this.value = Number(this.value) + 1;
-      this.tkChange.emit(this.value);
-    }
-  }
-
-  private handleChipsTkRemove(item: any) {
-    const chipsArr = [...(this.value as any[])];
-
-    if (_.includes(chipsArr, item)) {
-      _.pull(chipsArr, item);
-      this.value = chipsArr;
-      this.tkChange.emit(chipsArr);
-    }
-  }
-
-  private handleClearClick(e) {
-    e.stopPropagation();
-    this.value = null;
-    this.tkChange.emit(null);
-    this.tkClearClick.emit();
-  }
-
   private renderChips() {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
@@ -413,7 +414,7 @@ export class TkInput implements ComponentInterface {
             <tk-chips
               label={item[this.chipLabelKey]}
               removable
-              onTk-remove={() => this.handleChipsTkRemove(item)}
+              onTk-remove={() => this.handleChipsRemove(item)}
               variant="neutral"
               type="outlined"
               key={index}
@@ -425,7 +426,7 @@ export class TkInput implements ComponentInterface {
             <tk-chips
               label={item}
               removable
-              onTk-remove={(e: CustomEvent) => this.handleChipsTkRemove(e.detail)}
+              onTk-remove={(e: CustomEvent) => this.handleChipsRemove(e.detail)}
               variant="neutral"
               type="outlined"
               key={index}
@@ -439,9 +440,9 @@ export class TkInput implements ComponentInterface {
 
   render() {
     let label: HTMLLabelElement;
-    let _icon: HTMLElement;
-    let passwordLeftIcon: HTMLElement;
-    let passwordRightIcon: HTMLElement;
+    let _icon: HTMLTkIconElement;
+    let passwordLeftIcon: HTMLTkIconElement;
+    let passwordRightIcon: HTMLTkIconElement;
     let leftButton: HTMLTkButtonElement;
     let rightButton: HTMLTkButtonElement;
     let safetyStatus: HTMLElement;
@@ -461,24 +462,21 @@ export class TkInput implements ComponentInterface {
     }
 
     if (this.icon && !this.isCounter) {
-      if (typeof this.icon == 'string') {
-        _icon = <i class="material-symbols-outlined">{this.icon}</i>;
-      } else {
-        _icon = (
-          <i class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''}`} style={{ color: this.icon?.color || 'inherit' }}>
-            {this.icon.name}
-          </i>
-        );
-      }
+      _icon = <tk-icon {...getIconElementProps(this.icon)} />;
     }
 
     if (this.inputType == 'password') {
-      passwordLeftIcon = <i class="material-symbols-outlined">lock</i>;
+      passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
       passwordRightIcon = (
-        <i class="material-symbols-outlined clickable" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
-          visibility
-        </i>
+        <tk-icon
+          {...getIconElementProps('visibility', {
+            class: 'clickable',
+            onMouseDown: this.handleMouseDown,
+            onMouseUp: this.handleMouseUp,
+          })}
+        />
       );
+
       if (this.showSafetyStatus) {
         safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;
       }
@@ -486,36 +484,51 @@ export class TkInput implements ComponentInterface {
 
     if (this.isCounter) {
       leftButton = (
-        <span
-          class={classNames('material-symbols-outlined counter-icon', { disabled: this.disabled || Number(this.value) <= Number(this.min) })}
-          onClick={this.handleMinusButtonClick.bind(this)}
-        >
-          remove
-        </span>
+        <tk-icon
+          {...getIconElementProps(
+            'remove',
+            {
+              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
+              onClick: this.handleMinusButtonClick.bind(this),
+            },
+            undefined,
+            'span',
+          )}
+        />
       );
+
       rightButton = (
-        <span
-          class={classNames('material-symbols-outlined counter-icon', { disabled: this.disabled || Number(this.value) >= Number(this.max) })}
-          onClick={this.handlePlusButtonClick.bind(this)}
-        >
-          add
-        </span>
+        <tk-icon
+          {...getIconElementProps(
+            'add',
+            {
+              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
+              onClick: this.handlePlusButtonClick.bind(this),
+            },
+            undefined,
+            'span',
+          )}
+        />
       );
     }
     let hint: string;
     if (this.hint?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
       hint = (
         <span class="hint">
-          <i class="material-symbols-outlined">info</i>
+          {hintIcon}
           {this.hint}
         </span>
       );
     }
 
     if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
       hint = (
         <span class="hint">
-          <i class="material-symbols-outlined">info</i>
+          {hintIcon}
           {this.error}
         </span>
       );
@@ -559,11 +572,11 @@ export class TkInput implements ComponentInterface {
             tabindex={this.tabindex}
             value={this.mode == 'chips' ? undefined : this.value}
             onInput={this.handleInput}
-            onBlur={this.handleBlur}
-            onFocus={this.handleFocus}
-            onKeyDown={this.handleKeyDown}
+            onBlur={this.handleInputBlur}
+            onFocus={this.handleInputFocus}
+            onKeyDown={this.handleInputKeyDown}
           />
-          {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearClick(e)}></tk-button>}
+          {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)}></tk-button>}
           {this.icon && this.iconPosition === 'right' && _icon}
           {!this.icon && this.iconPosition !== 'right' && passwordRightIcon}
           {rightButton}

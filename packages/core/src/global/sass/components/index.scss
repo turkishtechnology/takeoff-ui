@@ -1,1 +1,40 @@
 @import 'toaster';
+
+
+.tk-table-filter-panel {
+    width: 220px;
+    position: fixed;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    background-color: var(--static-light);
+    padding: 8px;
+    z-index: 1400;
+    box-shadow: var(--effect-1-default-base);
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 8px;
+  
+    .tk-table-filter-checkbox-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      
+      .tk-table-filter-checkbox-item {
+        display: flex;
+        align-items: center;
+        padding: 4px 0;
+      }
+    }
+  
+    .tk-table-filter-panel-buttons {
+      display: flex;
+      gap: 8px;
+  
+      tk-button {
+        flex: 1;
+      }
+    }
+  }

@@ -1,6 +1,8 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Fragment } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps } from '../../utils/icon-props';
+import classNames from 'classnames';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -20,10 +22,17 @@ export class TkTooltip implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
+  private currentPosition: 'top' | 'bottom' | 'left' | 'right' = 'right';
 
   @Element() el: HTMLTkTooltipElement;
 
   @State() isOpen: boolean = false;
+
+  /**
+   * Controls if tooltip has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
 
   /**
    * Sets header text for the tooltip.
@@ -62,14 +71,6 @@ export class TkTooltip implements ComponentInterface {
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
-
-  /**
-   * Controls if tooltip has custom content.
-   * @defaultValue false
-   */
-  @State() hasContentSlot: boolean = false;
-
-  private currentPosition: 'top' | 'bottom' | 'left' | 'right' = 'right';
 
   componentWillLoad() {
     this.currentPosition = this.position || 'right';
@@ -141,25 +142,13 @@ export class TkTooltip implements ComponentInterface {
   };
 
   render() {
-    let _icon: HTMLElement;
+    let _icon: HTMLTkIconElement;
+    let iconVariant;
 
-    if (this.icon) {
-      if (typeof this.icon == 'string') {
-        _icon = (
-          <div class="tk-tooltip-icon">
-            <span class="material-symbols-outlined tk-tooltip-item-icon">{this.icon}</span>
-          </div>
-        );
-      } else {
-        _icon = (
-          <div class="tk-tooltip-icon">
-            <span class={`material-symbols-${this.icon?.style || 'outlined'} ${this.icon?.fill ? 'fill' : ''}`} style={{ color: this.icon?.color || 'inherit' }}>
-              {this.icon.name}
-            </span>
-          </div>
-        );
-      }
-    }
+    if (this.variant == 'dark') iconVariant = 'neutral';
+    else iconVariant = this.variant;
+
+    _icon = <tk-icon {...getIconElementProps(this.icon, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
 
     return (
       <div class="tk-tooltip">

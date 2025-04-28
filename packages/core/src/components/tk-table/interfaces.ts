@@ -30,6 +30,20 @@ export interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
+  /** Defines the filter type for this column (text or checkbox) */
+  filterType?: 'text' | 'checkbox';
+  /** Defines options for checkbox filter type */
+  filterOptions?: IFilterOption[];
+}
+
+/**
+ * Defines options for checkbox filter
+ */
+export interface IFilterOption {
+  /** The value of the option */
+  value: string;
+  /** The display label of the option */
+  label?: string;
 }
 
 /** It is the return type of the tkRequest event. */
@@ -55,9 +69,13 @@ export interface ITableRequest {
 /** Represents a filter applied to a table */
 export interface ITableFilter {
   /** The value of the filter */
-  value: string;
+  value?: string;
   /** The field to which the filter is applied */
   field: string;
+  /** The type of the filter (text or checkbox) */
+  type?: 'text' | 'checkbox';
+  /** The values for checkbox filter */
+  values?: string[];
 }
 
 /** It is the return type of the tkCellEdit event. */
