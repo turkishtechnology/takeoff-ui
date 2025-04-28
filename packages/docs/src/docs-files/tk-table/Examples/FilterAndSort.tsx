@@ -2,7 +2,6 @@ import { ITableColumn } from '@takeoff-ui/core';
 import { TkTable } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
-import { basicData } from './data';
 
 const Example = () => {
   const column: ITableColumn[] = [
@@ -23,16 +22,15 @@ const Example = () => {
           .indexOf(value.toString().toLowerCase() as string) > -1,
     },
     {
-      field: 'category',
-      header: 'Category',
+      field: 'status',
+      header: 'Status',
       searchable: true,
-      sortable: true,
-      sorter: (a: any, b: any) => (a.category > b.category ? 1 : -1),
-      filter: (value: string, row: any) =>
-        row.category
-          .toString()
-          .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+      filterType: 'checkbox',
+      filterOptions: [
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'Inactive' },
+        { value: 'pending', label: 'Pending' },
+      ],
     },
     {
       field: 'quantity',
@@ -43,7 +41,39 @@ const Example = () => {
     },
   ];
 
-  return <TkTable columns={column} data={basicData} />;
+  const data = [
+    {
+      id: 'f230fh0g3',
+      name: 'Bamboo Watch',
+      status: 'active',
+      quantity: 24,
+    },
+    {
+      id: 'nvklal433',
+      name: 'Black Watch',
+      status: 'inactive',
+      quantity: 42,
+    },
+    {
+      id: 'zz21cz3c1',
+      name: 'Blue Band',
+      status: 'active',
+      quantity: 87,
+    },
+    {
+      id: '244wgerg2',
+      name: 'Blue T-Shirt',
+      status: 'pending',
+      quantity: 12,
+    },
+    {
+      id: 'h456wer53',
+      name: 'Bracelet',
+      status: 'inactive',
+      quantity: 45,
+    },
+  ];
+  return <TkTable columns={column} data={data} />;
 };
 
 const FilterAndSort = () => {
@@ -62,13 +92,15 @@ const FilterAndSort = () => {
         row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase() as string) > -1,
     },
     {
-      field: "category",
-      header: "Category",
+      field: "status",
+      header: "Status",
       searchable: true,
-      sortable: true,
-      sorter: (a: any, b: any) => (a.category > b.category ? 1 : -1),
-      filter: (value: string, row: any) =>
-        row.category.toString().toLowerCase().indexOf(value.toString().toLowerCase() as string) > -1,
+      filterType: 'checkbox',
+      filterOptions: [
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'Inactive' },
+        { value: 'pending', label: 'Pending' },
+      ],
     },
     {
       field: "quantity",
@@ -98,13 +130,15 @@ const column = [
       row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
   },
   {
-    field: "category",
-    header: "Category",
+    field: "status",
+    header: "Status",
     searchable: true,
-    sortable: true,
-    sorter: (a, b) => (a.category > b.category ? 1 : -1),
-    filter: (value, row) =>
-      row.category.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
+    filterType: 'checkbox',
+    filterOptions: [
+      { value: 'active', label: 'Active' },
+      { value: 'inactive', label: 'Inactive' },
+      { value: 'pending', label: 'Pending' },
+    ],
   },
   {
     field: "quantity",

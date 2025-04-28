@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-27T04:02:06",
+  "timestamp": "2025-04-28T05:40:43",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -11176,7 +11176,7 @@
       "filePath": "src/components/tk-table/tk-table.tsx",
       "encapsulation": "shadow",
       "tag": "tk-table",
-      "docs": "TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.",
+      "docs": "TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.",
       "docsTags": [
         {
           "name": "react",
@@ -11901,9 +11901,9 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
+        "tk-checkbox",
         "tk-input",
         "tk-button",
-        "tk-checkbox",
         "tk-icon",
         "tk-badge",
         "tk-radio",
@@ -11911,9 +11911,9 @@
       ],
       "dependencyGraph": {
         "tk-table": [
+          "tk-checkbox",
           "tk-input",
           "tk-button",
-          "tk-checkbox",
           "tk-icon",
           "tk-badge",
           "tk-radio",
@@ -14434,7 +14434,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text or checkbox) */\n  filterType?: 'text' | 'checkbox';\n  /** Defines options for checkbox filter type */\n  filterOptions?: IFilterOption[];\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },
@@ -14468,8 +14468,13 @@
       "docstring": "",
       "path": "src/components/tk-timeline/interfaces.ts"
     },
+    "src/components/tk-table/interfaces.ts::IFilterOption": {
+      "declaration": "export interface IFilterOption {\n  /** The value of the option */\n  value: string;\n  /** The display label of the option */\n  label?: string;\n}",
+      "docstring": "Defines options for checkbox filter",
+      "path": "src/components/tk-table/interfaces.ts"
+    },
     "src/components/tk-table/interfaces.ts::ITableFilter": {
-      "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value: string;\n  /** The field to which the filter is applied */\n  field: string;\n}",
+      "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value?: string;\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n  /** The values for checkbox filter */\n  values?: string[];\n}",
       "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },

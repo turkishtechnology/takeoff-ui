@@ -33,6 +33,11 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
 
   sortAndFilterData = _data.filter(row =>
     filters.every(filter => {
+      if (filter.type === 'checkbox' && filter.values?.length > 0) {
+        const fieldValue = row[filter.field]?.toString();
+        return filter.values.includes(fieldValue);
+      }
+
       const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;

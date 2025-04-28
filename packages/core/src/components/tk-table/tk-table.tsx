@@ -10,7 +10,7 @@ import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-props';
 
 /**
- * TkTable is a component that allows you to display data in a tabular manner. It’s generally called a datatable.
+ * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
  * @react `import { TkTable } from '@takeoff-ui/react'`
  * @vue `import { TkTable } from '@takeoff-ui/vue'`
  * @angular `import { TkTable } from '@takeoff-ui/angular'`
@@ -423,7 +423,7 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private handleSearchButtonClick(columnField) {
+  private handleInputFilterApply(columnField) {
     // if (refSearchInput.value.toString().length > 0) {
     const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
 
@@ -446,12 +446,13 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleSearchCancelButtonClick(columnField) {
-    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
-
     const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (removeFilterIndex > -1) {
       this.filters.splice(removeFilterIndex, 1);
-      searchInput.value = '';
+
+      // Reset input value if it's a text filter
+      const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+      if (searchInput) searchInput.value = '';
 
       // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
       if (this.currentPage == 1) {
@@ -560,17 +561,47 @@ export class TkTable implements ComponentInterface {
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
 
-    const input: HTMLTkInputElement = document.createElement('tk-input');
-    input.placeholder = 'Search';
-    input.setFocus();
-    input.value = this.filters?.find(item => item.field == field)?.value;
-    const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
-    searchButton.label = 'Search';
-    searchButton.fullWidth = true;
-    searchButton.addEventListener('tk-click', () => {
-      this.handleSearchButtonClick(field);
-      this.isFilterOpen = false;
-    });
+    // Find the column configuration for this field
+    const column = this.columns.find(col => col.field === field);
+
+    // Check if the column has a filterType property and it's set to 'checkbox'
+    if (column?.filterType === 'checkbox' && column.filterOptions?.length > 0) {
+      // Create checkbox filter
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-checkbox-container');
+
+      // Get current filter values for this field
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const selectedValues = currentFilter?.values || [];
+
+      // Create checkboxes for each option
+      column.filterOptions.forEach(option => {
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+
+        const checkbox = document.createElement('tk-checkbox');
+        checkbox.value = selectedValues.includes(option.value);
+        checkbox.label = option.label || option.value;
+
+        checkboxWrapper.appendChild(checkbox);
+        filterContainer.appendChild(checkboxWrapper);
+      });
+
+      this.elFilterPanelElement.appendChild(filterContainer);
+    } else {
+      // Default text input filter
+      const input: HTMLTkInputElement = document.createElement('tk-input');
+      input.placeholder = 'Search';
+      input.setFocus();
+      input.value = this.filters?.find(item => item.field == field)?.value;
+      this.elFilterPanelElement.appendChild(input);
+    }
+
+    // Create buttons container
+    const buttons = document.createElement('div');
+    buttons.classList.add('tk-table-filter-panel-buttons');
+
+    // Create cancel button
     const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
     cancelButton.label = 'Remove';
     cancelButton.type = 'outlined';
@@ -579,15 +610,69 @@ export class TkTable implements ComponentInterface {
       this.handleSearchCancelButtonClick(field);
       this.isFilterOpen = false;
     });
-    const buttons = document.createElement('div');
-    buttons.classList.add('tk-table-filter-panel-buttons');
-    this.elFilterPanelElement.appendChild(input);
+
+    // Create search/apply button
+    const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
+    searchButton.label = 'Apply';
+    searchButton.fullWidth = true;
+    searchButton.addEventListener('tk-click', () => {
+      if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
+        this.handleCheckboxFilterApply(field);
+      } else {
+        this.handleInputFilterApply(field);
+      }
+      console.log(this.filters);
+      this.isFilterOpen = false;
+    });
+
     buttons.appendChild(cancelButton);
     buttons.appendChild(searchButton);
-
     this.elFilterPanelElement.appendChild(buttons);
+
     document.body.appendChild(this.elFilterPanelElement);
     this.isFilterOpen = true;
+  }
+
+  private handleCheckboxFilterApply(columnField: string) {
+    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox'));
+    const column = this.columns.find(col => col.field === columnField);
+
+    if (!column || !column.filterOptions || checkboxes.length === 0) return;
+
+    // Get selected values
+    const selectedValues = [];
+    checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
+      if (checkbox.value && column.filterOptions[index]) {
+        selectedValues.push(column.filterOptions[index].value);
+      }
+    });
+
+    // Update filter
+    const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
+
+    if (selectedValues.length > 0) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].values = selectedValues;
+        this.filters[filterIndex].type = 'checkbox';
+      } else {
+        this.filters.push({
+          field: columnField,
+          values: selectedValues,
+          type: 'checkbox',
+        } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if no values selected
+      this.filters.splice(filterIndex, 1);
+    }
+
+    // Apply filter
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
   }
 
   private createHead() {
