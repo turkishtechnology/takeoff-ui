@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-28T07:10:57",
+  "timestamp": "2025-04-28T10:26:28",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -11804,11 +11804,70 @@
               "docs": ""
             }
           ],
-          "docs": "",
+          "docs": "Exports the table data to a file",
           "docsTags": [
             {
               "name": "param",
               "text": "options"
+            }
+          ]
+        },
+        {
+          "name": "getFilters",
+          "returns": {
+            "type": "Promise<ITableFilter[]>",
+            "docs": "The current filters"
+          },
+          "complexType": {
+            "signature": "() => Promise<ITableFilter[]>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "ITableFilter": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-table/interfaces.ts::ITableFilter"
+              }
+            },
+            "return": "Promise<ITableFilter[]>"
+          },
+          "signature": "getFilters() => Promise<ITableFilter[]>",
+          "parameters": [],
+          "docs": "Returns the current filters",
+          "docsTags": [
+            {
+              "name": "returns",
+              "text": "The current filters"
+            }
+          ]
+        },
+        {
+          "name": "getSorting",
+          "returns": {
+            "type": "Promise<{ field: string; order: \"desc\" | \"asc\"; }>",
+            "docs": "The current sorting settings"
+          },
+          "complexType": {
+            "signature": "() => Promise<{ field: string; order: \"desc\" | \"asc\"; }>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<{ field: string; order: \"desc\" | \"asc\"; }>"
+          },
+          "signature": "getSorting() => Promise<{ field: string; order: \"desc\" | \"asc\"; }>",
+          "parameters": [],
+          "docs": "Returns the current sorting settings",
+          "docsTags": [
+            {
+              "name": "returns",
+              "text": "The current sorting settings"
             }
           ]
         },
@@ -14499,6 +14558,11 @@
       "docstring": "",
       "path": "src/components/tk-table/interfaces.ts"
     },
+    "src/components/tk-table/interfaces.ts::ITableFilter": {
+      "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value?: string;\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n  /** The values for checkbox filter */\n  values?: string[];\n}",
+      "docstring": "Represents a filter applied to a table",
+      "path": "src/components/tk-table/interfaces.ts"
+    },
     "src/components/tk-tabs/interfaces.ts::ITabsIconOptions": {
       "declaration": "export interface ITabsIconOptions {\n  /**\n   * Material symbols icon name\n   */\n  name: string;\n  /**\n   * The color of the icon\n   */\n  color?: string;\n  /**\n   * The style of the icon\n   */\n  style?: 'outlined' | 'rounded' | 'sharp';\n  /**\n   * Indicates whether the icon should be filled\n   */\n  fill?: boolean;\n}",
       "docstring": "Defines the options for configuring icons in the Tabs Item component",
@@ -14512,11 +14576,6 @@
     "src/components/tk-table/interfaces.ts::IFilterOption": {
       "declaration": "export interface IFilterOption {\n  /** The value of the option */\n  value: string;\n  /** The display label of the option */\n  label?: string;\n}",
       "docstring": "Defines options for checkbox filter",
-      "path": "src/components/tk-table/interfaces.ts"
-    },
-    "src/components/tk-table/interfaces.ts::ITableFilter": {
-      "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value?: string;\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n  /** The values for checkbox filter */\n  values?: string[];\n}",
-      "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ICustomElement": {
