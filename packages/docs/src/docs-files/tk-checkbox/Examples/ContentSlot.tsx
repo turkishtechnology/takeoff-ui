@@ -3,32 +3,26 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const ContentSlot = () => {
-  const reactCode = `<TkCheckbox>
-  <TkBadge
-    slot="content"
-    icon="warning"
-    variant="warning"
-    label="warning"
-  />
+  const reactCode = `<TkCheckbox type="card">
+  <div slot="content" className="flex items-center gap-2">
+    <div>Label</div>
+    <TkBadge icon="info" variant="info" label="İnformation" size="small" />
+  </div>
 </TkCheckbox>`;
 
-  const vueCode = `<TkCheckbox>
-  <TkBadge
-    slot="content"
-    icon="warning"
-    variant="warning"
-    label="warning"
-  />
+  const vueCode = `<TkCheckbox type="card">
+  <div slot="content" className="flex items-center gap-2">
+    <div>Label</div>
+    <TkBadge icon="info" variant="info" label="İnformation" size="small" />
+  </div>
 </TkCheckbox>`;
 
   const demo = (
-    <TkCheckbox>
-      <TkBadge
-        slot="content"
-        icon="warning"
-        variant="warning"
-        label="warning"
-      />
+    <TkCheckbox type="card">
+      <div slot="content" className="flex items-center gap-2">
+        <div>Label</div>
+        <TkBadge icon="info" variant="info" label="İnformation" size="small" />
+      </div>
     </TkCheckbox>
   );
 

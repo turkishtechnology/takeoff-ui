@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-28T05:40:43",
+  "timestamp": "2025-04-28T07:04:47",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -3023,6 +3023,10 @@
       "docs": "The TkCheckbox component is another basic element for user input. You can use this to supply a way for the user to toggle an option.",
       "docsTags": [
         {
+          "name": "slot",
+          "text": "content - Custom content template."
+        },
+        {
           "name": "react",
           "text": "`import { TkCheckbox } from '@takeoff-ui/react'`"
         },
@@ -3256,7 +3260,12 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "content",
+          "docs": "Custom content template."
+        }
+      ],
       "parts": [],
       "dependents": [
         "tk-select",
@@ -4312,6 +4321,29 @@
           "values": [
             {
               "type": "string[]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "disabledWeekDays",
+          "type": "number[]",
+          "complexType": {
+            "original": "number[]",
+            "resolved": "number[]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Disabled week days (0-6, where 0 is Sunday and 6 is Saturday)\nExample: [0,6] will disable Sunday and Saturday",
+          "docsTags": [],
+          "default": "[]",
+          "values": [
+            {
+              "type": "number[]"
             }
           ],
           "optional": true,
@@ -8644,6 +8676,10 @@
       "docs": "The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.",
       "docsTags": [
         {
+          "name": "slot",
+          "text": "content - Custom content template."
+        },
+        {
           "name": "react",
           "text": "`import { TkRadio } from '@takeoff-ui/react'`"
         },
@@ -8885,7 +8921,12 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "content",
+          "docs": "Custom content template."
+        }
+      ],
       "parts": [],
       "dependents": [
         "tk-table"

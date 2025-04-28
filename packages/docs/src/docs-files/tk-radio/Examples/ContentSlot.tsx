@@ -3,37 +3,49 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const ContentSlot = () => {
-  const reactCode = `<TkRadioGroup>
-    <TkRadio>
-        <TkBadge
-            slot="content"
-            icon="warning"
-            variant="warning"
-            label="warning"
-        />
-    </TkRadio>
+  const reactCode = `<TkRadioGroup type="card" value="0" spread>
+  <TkRadio value="0">
+    <div slot="content" className="flex items-center gap-2">
+      <div>Label</div>
+      <TkBadge icon="info" variant="info" label="İnformation" />
+    </div>
+  </TkRadio>
+  <TkRadio value="1">
+    <div slot="content" className="flex items-center gap-2">
+      <div>Label</div>
+      <TkBadge icon="info" variant="info" label="İnformation" />
+    </div>
+  </TkRadio>
 </TkRadioGroup>`;
 
-  const vueCode = `<TkRadioGroup>
-    <TkRadio>
-        <TkBadge
-            slot="content"
-            icon="warning"
-            variant="warning"
-            label="warning"
-        />
-    </TkRadio>
+  const vueCode = `<TkRadioGroup type="card" value="0" spread>
+  <TkRadio value="0">
+    <div slot="content" className="flex items-center gap-2">
+      <div>Label</div>
+      <TkBadge icon="info" variant="info" label="İnformation" />
+    </div>
+  </TkRadio>
+  <TkRadio value="1">
+    <div slot="content" className="flex items-center gap-2">
+      <div>Label</div>
+      <TkBadge icon="info" variant="info" label="İnformation" />
+    </div>
+  </TkRadio>
 </TkRadioGroup>`;
 
   const demo = (
-    <TkRadioGroup>
-      <TkRadio>
-        <TkBadge
-          slot="content"
-          icon="warning"
-          variant="warning"
-          label="warning"
-        />
+    <TkRadioGroup type="card" value="0" spread>
+      <TkRadio value="0">
+        <div slot="content" className="flex items-center gap-2">
+          <div>Label</div>
+          <TkBadge icon="info" variant="info" label="İnformation" />
+        </div>
+      </TkRadio>
+      <TkRadio value="1">
+        <div slot="content" className="flex items-center gap-2">
+          <div>Label</div>
+          <TkBadge icon="info" variant="info" label="İnformation" />
+        </div>
       </TkRadio>
     </TkRadioGroup>
   );
