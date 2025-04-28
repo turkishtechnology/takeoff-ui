@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.
+ * @slot content - Custom content template.
  * @react `import { TkRadio } from '@takeoff-ui/react'`
  * @vue `import { TkRadio } from '@takeoff-ui/vue'`
  * @angular `import { TkRadio } from '@takeoff-ui/angular'`
@@ -29,6 +30,12 @@ export class TkRadio implements ComponentInterface {
       this.windowClickHandler = this.handleWindowClick.bind(this);
     }
   }
+
+  /**
+   * Controls if radio has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
 
   /**
    * Disables the radio button if true.
@@ -72,12 +79,6 @@ export class TkRadio implements ComponentInterface {
    * The value of the radio button.
    */
   @Prop() value: any;
-
-  /**
-   * Controls if tooltip has custom content.
-   * @defaultValue false
-   */
-  @State() hasContentSlot: boolean = false;
 
   /**
    * Emitted when the radio button's checked state changes.
