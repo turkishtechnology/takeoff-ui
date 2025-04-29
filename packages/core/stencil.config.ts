@@ -106,7 +106,6 @@ export const config: Config = {
       injectGlobalPaths: ['src/global/sass/fonts/_material-symbols.scss'],
     }),
   ],
-  buildEs5: 'prod',
   minifyJs: true,
   minifyCss: true,
   sourceMap: false,

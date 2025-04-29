@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-29T14:24:02",
+  "timestamp": "2025-04-29T14:45:00",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -3062,25 +3062,34 @@
         },
         {
           "name": "data",
-          "type": "ChartData",
+          "type": "ChartData<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>",
           "complexType": {
             "original": "ChartData",
-            "resolved": "ChartData",
+            "resolved": "ChartData<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>",
             "references": {
               "ChartData": {
-                "location": "global",
-                "id": "global::ChartData"
+                "location": "import",
+                "path": "chart.js/auto",
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData"
               }
             }
           },
           "mutable": false,
-          "attr": "data",
           "reflectToAttr": false,
           "docs": "Chart data prop is used to define chart data supported by the Chart.js library. With this prop, you can specify chart data described in the Chart.js documentation (https://www.chartjs.org/docs/latest/general/data-structures.html).",
           "docsTags": [],
           "values": [
             {
-              "type": "ChartData"
+              "type": "ChartData<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>"
             }
           ],
           "optional": false,
@@ -3114,25 +3123,170 @@
         },
         {
           "name": "options",
-          "type": "ChartOptions",
+          "type": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\" | \"y\"; clip?: number | false | _DeepPartialObject<ChartArea>; color?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false | _DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false | _DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\" | keyof CartesianScaleTypeRegistry>; }>; }",
           "complexType": {
             "original": "ChartOptions",
-            "resolved": "ChartOptions",
+            "resolved": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\" | \"y\"; clip?: number | false | _DeepPartialObject<ChartArea>; color?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false | _DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false | _DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\" | keyof CartesianScaleTypeRegistry>; }>; }",
             "references": {
               "ChartOptions": {
-                "location": "global",
-                "id": "global::ChartOptions"
+                "location": "import",
+                "path": "chart.js/auto",
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
               }
             }
           },
           "mutable": false,
-          "attr": "options",
           "reflectToAttr": false,
           "docs": "Chart options prop is used to define chart options supported by the Chart.js library. With this prop, you can specify any chart options described in the Chart.js documentation (https://www.chartjs.org/docs/latest/general/options.html).",
           "docsTags": [],
           "values": [
             {
-              "type": "ChartOptions"
+              "type": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\""
+            },
+            {
+              "type": "\"y\"; clip?: number"
+            },
+            {
+              "value": "false",
+              "type": "boolean"
+            },
+            {
+              "type": "_DeepPartialObject<ChartArea>; color?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false"
+            },
+            {
+              "type": "_DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false"
+            },
+            {
+              "type": "_DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\""
+            },
+            {
+              "type": "keyof CartesianScaleTypeRegistry>; }>; }"
             }
           ],
           "optional": true,
@@ -3165,14 +3319,15 @@
         },
         {
           "name": "type",
-          "type": "ChartType",
+          "type": "\"bar\" | \"bubble\" | \"doughnut\" | \"line\" | \"pie\" | \"polarArea\" | \"radar\" | \"scatter\"",
           "complexType": {
             "original": "ChartType",
-            "resolved": "ChartType",
+            "resolved": "\"bar\" | \"bubble\" | \"doughnut\" | \"line\" | \"pie\" | \"polarArea\" | \"radar\" | \"scatter\"",
             "references": {
               "ChartType": {
-                "location": "global",
-                "id": "global::ChartType"
+                "location": "import",
+                "path": "chart.js/auto",
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType"
               }
             }
           },
@@ -3184,7 +3339,36 @@
           "default": "'bar'",
           "values": [
             {
-              "type": "ChartType"
+              "value": "bar",
+              "type": "string"
+            },
+            {
+              "value": "bubble",
+              "type": "string"
+            },
+            {
+              "value": "doughnut",
+              "type": "string"
+            },
+            {
+              "value": "line",
+              "type": "string"
+            },
+            {
+              "value": "pie",
+              "type": "string"
+            },
+            {
+              "value": "polarArea",
+              "type": "string"
+            },
+            {
+              "value": "radar",
+              "type": "string"
+            },
+            {
+              "value": "scatter",
+              "type": "string"
             }
           ],
           "optional": false,
@@ -14833,6 +15017,21 @@
       "declaration": "export interface IBreadcrumbModel {\n  /** Label text for the item */\n  label: string;\n  /** URL for the item */\n  href?: string;\n  /** Icon to display alongside the label */\n  icon?: string;\n  /** Whether the item is an external url */\n  isExternal?: boolean;\n}",
       "docstring": "",
       "path": "src/components/tk-breadcrumb/interfaces.ts"
+    },
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType": {
+      "declaration": "any",
+      "docstring": "",
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+    },
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData": {
+      "declaration": "any",
+      "docstring": "",
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+    },
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
+      "declaration": "any",
+      "docstring": "",
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
     "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
