@@ -53,7 +53,7 @@ body:
         - tk-toggle
         - tk-tooltip
         - tk-upload
-      default: tk-accordion
+      default: 0
     validations:
       required: true
   - type: textarea
