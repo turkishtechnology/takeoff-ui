@@ -73,13 +73,14 @@ body:
       default: 0
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: version
     attributes:
       label: Version
       description: 'Please specify the version you are having trouble with.'
       placeholder: 'V1.0.0'
-    required: true
+    validations:
+      required: true
   - type: textarea
     id: screenshot
     attributes:
