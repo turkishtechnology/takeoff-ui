@@ -66,6 +66,7 @@ body:
       label: Affected framework
       description: Which takeoff-ui framework is affected?
       options:
+        - All
         - React
         - Vue
         - Angular
@@ -78,6 +79,8 @@ body:
       label: Version
       description: 'Please specify the version you are having trouble with.'
       placeholder: 'V1.0.0'
+      validations:
+        required: true
   - type: textarea
     id: screenshot
     attributes:
