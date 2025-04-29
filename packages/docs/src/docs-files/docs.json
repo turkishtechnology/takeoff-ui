@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -3017,6 +3017,480 @@
       }
     },
     {
+      "filePath": "src/components/tk-chart/tk-chart.tsx",
+      "encapsulation": "none",
+      "tag": "tk-chart",
+      "docs": "The TkChart component allows users to visualize data in various chart formats using Chart.js.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkChart } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkChart } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkChart } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "accessibilityLabel",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "accessibility-label",
+          "reflectToAttr": false,
+          "docs": "Accessibility label for the chart",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "data",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "data",
+          "reflectToAttr": false,
+          "docs": "The chart data",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "height",
+          "reflectToAttr": false,
+          "docs": "Height of the chart container in pixels",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "options",
+          "type": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\" | \"y\"; clip?: number | false | _DeepPartialObject<ChartArea>; color?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false | _DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false | _DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\" | keyof CartesianScaleTypeRegistry>; }>; }",
+          "complexType": {
+            "original": "ChartOptions",
+            "resolved": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\" | \"y\"; clip?: number | false | _DeepPartialObject<ChartArea>; color?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern> | readonly (string | _DeepPartialObject<CanvasGradient> | _DeepPartialObject<CanvasPattern>)[] | ((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false | _DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false | _DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number | Point | [number, number] | BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\" | keyof CartesianScaleTypeRegistry>; }>; }",
+            "references": {
+              "ChartOptions": {
+                "location": "import",
+                "path": "chart.js/auto",
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Chart options",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "{ datasets?: _DeepPartialObject<{ line: LineControllerDatasetOptions & FillerControllerDatasetOptions; bar: BarControllerDatasetOptions; scatter: LineControllerDatasetOptions; bubble: BubbleControllerDatasetOptions; pie: DoughnutControllerDatasetOptions; doughnut: DoughnutControllerDatasetOptions; polarArea: PolarAreaControllerDatasetOptions; radar: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; indexAxis?: \"x\""
+            },
+            {
+              "type": "\"y\"; clip?: number"
+            },
+            {
+              "value": "false",
+              "type": "boolean"
+            },
+            {
+              "type": "_DeepPartialObject<ChartArea>; color?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); backgroundColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBackgroundColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); borderColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); hoverBorderColor?: string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>"
+            },
+            {
+              "type": "readonly (string"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasGradient>"
+            },
+            {
+              "type": "_DeepPartialObject<CanvasPattern>)[]"
+            },
+            {
+              "type": "((ctx: ScriptableContext<keyof ChartTypeRegistry>, options: AnyObject) => Color); font?: _DeepPartialObject<Partial<FontSpec>>; responsive?: boolean; maintainAspectRatio?: boolean; resizeDelay?: number; aspectRatio?: number; locale?: string; onResize?: (chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, size: { width: number; height: number; }) => void; devicePixelRatio?: number; interaction?: _DeepPartialObject<CoreInteractionOptions>; hover?: _DeepPartialObject<CoreInteractionOptions>; events?: _DeepPartialArray<keyof HTMLElementEventMap>; onHover?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>) => void; onClick?: (event: ChartEvent, elements: ActiveElement[], chart: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>) => void; layout?: _DeepPartialObject<Partial<{ autoPadding: boolean; padding: Scriptable<Padding, ScriptableContext<keyof ChartTypeRegistry>>; }>>; parsing?: false"
+            },
+            {
+              "type": "_DeepPartialObject<{ [key: string]: string; }>; normalized?: boolean; animation?: false"
+            },
+            {
+              "type": "_DeepPartialObject<AnimationSpec<keyof ChartTypeRegistry> & { onProgress?: (this: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; onComplete?: (this: Chart<keyof ChartTypeRegistry, (number"
+            },
+            {
+              "type": "Point"
+            },
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "BubbleDataPoint)[], unknown>, event: AnimationEvent) => void; }>; animations?: _DeepPartialObject<AnimationsSpec<keyof ChartTypeRegistry>>; transitions?: _DeepPartialObject<TransitionsSpec<keyof ChartTypeRegistry>>; elements?: _DeepPartialObject<ElementOptionsByType<keyof ChartTypeRegistry>>; plugins?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>>; line?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions & FillerControllerDatasetOptions; }>; bar?: _DeepPartialObject<{ datasets: BarControllerDatasetOptions; }>; scatter?: _DeepPartialObject<{ datasets: LineControllerDatasetOptions; }>; bubble?: _DeepPartialObject<{ datasets: BubbleControllerDatasetOptions; }>; pie?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; doughnut?: _DeepPartialObject<{ datasets: DoughnutControllerDatasetOptions; }>; polarArea?: _DeepPartialObject<{ datasets: PolarAreaControllerDatasetOptions; }>; radar?: _DeepPartialObject<{ datasets: RadarControllerDatasetOptions & FillerControllerDatasetOptions; }>; scales?: _DeepPartialObject<{ [key: string]: ScaleOptionsByType<\"radialLinear\""
+            },
+            {
+              "type": "keyof CartesianScaleTypeRegistry>; }>; }"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "plugins",
+          "type": "any[]",
+          "complexType": {
+            "original": "any[]",
+            "resolved": "any[]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Custom plugins to use with chart",
+          "docsTags": [],
+          "default": "[]",
+          "values": [
+            {
+              "type": "any[]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"bar\" | \"bubble\" | \"doughnut\" | \"line\" | \"pie\" | \"polarArea\" | \"radar\" | \"scatter\"",
+          "complexType": {
+            "original": "ChartType",
+            "resolved": "\"bar\" | \"bubble\" | \"doughnut\" | \"line\" | \"pie\" | \"polarArea\" | \"radar\" | \"scatter\"",
+            "references": {
+              "ChartType": {
+                "location": "import",
+                "path": "chart.js/auto",
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "The type of chart to render",
+          "docsTags": [],
+          "default": "'bar'",
+          "values": [
+            {
+              "value": "bar",
+              "type": "string"
+            },
+            {
+              "value": "bubble",
+              "type": "string"
+            },
+            {
+              "value": "doughnut",
+              "type": "string"
+            },
+            {
+              "value": "line",
+              "type": "string"
+            },
+            {
+              "value": "pie",
+              "type": "string"
+            },
+            {
+              "value": "polarArea",
+              "type": "string"
+            },
+            {
+              "value": "radar",
+              "type": "string"
+            },
+            {
+              "value": "scatter",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "width",
+          "reflectToAttr": false,
+          "docs": "Width of the chart container",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getBase64Image",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getBase64Image() => Promise<string | undefined>",
+          "parameters": [],
+          "docs": "Get base64 image of the chart",
+          "docsTags": []
+        },
+        {
+          "name": "getCanvas",
+          "returns": {
+            "type": "Promise<HTMLCanvasElement>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<HTMLCanvasElement | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "HTMLCanvasElement": {
+                "location": "global",
+                "id": "global::HTMLCanvasElement"
+              }
+            },
+            "return": "Promise<HTMLCanvasElement>"
+          },
+          "signature": "getCanvas() => Promise<HTMLCanvasElement | undefined>",
+          "parameters": [],
+          "docs": "Get the canvas element",
+          "docsTags": []
+        },
+        {
+          "name": "getChart",
+          "returns": {
+            "type": "Promise<any>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<any>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<any>"
+          },
+          "signature": "getChart() => Promise<any>",
+          "parameters": [],
+          "docs": "Get the chart instance",
+          "docsTags": []
+        },
+        {
+          "name": "refresh",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "refresh() => Promise<void>",
+          "parameters": [],
+          "docs": "Refresh the chart",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
       "filePath": "src/components/tk-checkbox/tk-checkbox.tsx",
       "encapsulation": "none",
       "tag": "tk-checkbox",
@@ -4937,7 +5411,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -4996,7 +5470,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -14502,6 +14976,16 @@
       "declaration": "export interface IBreadcrumbModel {\n  /** Label text for the item */\n  label: string;\n  /** URL for the item */\n  href?: string;\n  /** Icon to display alongside the label */\n  icon?: string;\n  /** Whether the item is an external url */\n  isExternal?: boolean;\n}",
       "docstring": "",
       "path": "src/components/tk-breadcrumb/interfaces.ts"
+    },
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType": {
+      "declaration": "any",
+      "docstring": "",
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+    },
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
+      "declaration": "any",
+      "docstring": "",
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
     "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
