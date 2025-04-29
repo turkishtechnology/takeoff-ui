@@ -177,6 +177,14 @@ export class TkEditor {
     }
   }
 
+  /**
+   * Returns the Tiptap Editor instance
+   */
+  @Method()
+  async getEditor(): Promise<Editor> {
+    return this.editor;
+  }
+
   private get activeExtensions() {
     return [...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
   }
