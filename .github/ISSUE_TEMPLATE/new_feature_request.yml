@@ -1,4 +1,4 @@
-name: "Feature request"
+name: 'New Feature request'
 description: Create a feature request
 title: 'feat: '
 labels: ['new feature']
@@ -16,43 +16,43 @@ body:
       value: 'Describe your feature request...'
     validations:
       required: true
- - type: dropdown
+  - type: dropdown
     id: component-affected
     attributes:
       label: Affected component
       description: Which takeoff-ui component is affected?
       options:
-      - tk-accordion
-      - tk-alert
-      - tk-avatar
-      - tk-badge
-      - tk-breadcrumb
-      - tk-button
-      - tk-card
-      - tk-checkbox
-      - tk-chips
-      - tk-currency-input
-      - tk-datepicker
-      - tk-dialog
-      - tk-divider
-      - tk-drawer
-      - tk-dropdown
-      - tk-editor
-      - tk-icon
-      - tk-input
-      - tk-pagination
-      - tk-radio
-      - tk-rating
-      - tk-select
-      - tk-spinner
-      - tk-stepper
-      - tk-table
-      - tk-tabs
-      - tk-textarea
-      - tk-timeline
-      - tk-toggle
-      - tk-tooltip
-      - tk-upload
+        - tk-accordion
+        - tk-alert
+        - tk-avatar
+        - tk-badge
+        - tk-breadcrumb
+        - tk-button
+        - tk-card
+        - tk-checkbox
+        - tk-chips
+        - tk-currency-input
+        - tk-datepicker
+        - tk-dialog
+        - tk-divider
+        - tk-drawer
+        - tk-dropdown
+        - tk-editor
+        - tk-icon
+        - tk-input
+        - tk-pagination
+        - tk-radio
+        - tk-rating
+        - tk-select
+        - tk-spinner
+        - tk-stepper
+        - tk-table
+        - tk-tabs
+        - tk-textarea
+        - tk-timeline
+        - tk-toggle
+        - tk-tooltip
+        - tk-upload
       default: tk-accordion
     validations:
       required: true

@@ -1,5 +1,5 @@
 name: 'Bug Report'
-about: Report a bug or unexpected behavior
+description: Report a bug or unexpected behavior
 title: 'bug: '
 labels: ['bug']
 body:
@@ -78,6 +78,7 @@ body:
       label: Version
       description: 'Please specify the version you are having trouble with.'
       placeholder: 'V1.0.0'
+      inputType: text
   - type: textarea
     id: screenshot
     attributes:
