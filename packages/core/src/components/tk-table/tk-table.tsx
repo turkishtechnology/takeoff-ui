@@ -221,9 +221,11 @@ export class TkTable implements ComponentInterface {
 
   componentDidUpdate() {
     if (this.isFilterOpen) {
-      this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      if (this.elActiveSearchIcon && this.elFilterPanelElement) {
+        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
+          animationFrame: true,
+        });
+      }
     } else {
       this.elFilterPanelElement?.remove();
       this.cleanupFilterPanel && this.cleanupFilterPanel();
@@ -245,7 +247,7 @@ export class TkTable implements ComponentInterface {
   }
 
   /**
-   *
+   * Exports the table data to a file
    * @param options
    */
   @Method()
@@ -318,13 +320,18 @@ export class TkTable implements ComponentInterface {
       this.filters = [];
       this.currentPage = 1;
 
-      this.tkRequest.emit({
-        currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
-        sortField: this.sortField,
-        sortOrder: this.sortOrder,
-        filters: this.filters,
-      } as ITableRequest);
+      if (this.paginationMethod === 'client') {
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        this.generateRenderData(tmpData, 1);
+      } else {
+        this.tkRequest.emit({
+          currentPage: this.currentPage,
+          rowsPerPage: this.rowsPerPage,
+          sortField: this.sortField,
+          sortOrder: this.sortOrder,
+          filters: this.filters,
+        } as ITableRequest);
+      }
     }
   }
 
@@ -338,14 +345,40 @@ export class TkTable implements ComponentInterface {
       this.sortOrder = null;
       this.currentPage = 1;
 
-      this.tkRequest.emit({
-        currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
-        sortField: this.sortField,
-        sortOrder: this.sortOrder,
-        filters: this.filters,
-      } as ITableRequest);
+      if (this.paginationMethod === 'client') {
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        this.generateRenderData(tmpData, 1);
+      } else {
+        this.tkRequest.emit({
+          currentPage: this.currentPage,
+          rowsPerPage: this.rowsPerPage,
+          sortField: this.sortField,
+          sortOrder: this.sortOrder,
+          filters: this.filters,
+        } as ITableRequest);
+      }
     }
+  }
+
+  /**
+   * Returns the current filters
+   * @returns {Object} The current filters
+   */
+  @Method()
+  async getFilters() {
+    return this.filters;
+  }
+
+  /**
+   * Returns the current sorting settings
+   * @returns {Object} The current sorting settings
+   */
+  @Method()
+  async getSorting() {
+    return {
+      field: this.sortField,
+      order: this.sortOrder,
+    };
   }
 
   private getNestedValue(obj, path) {

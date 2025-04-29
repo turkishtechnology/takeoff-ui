@@ -39,7 +39,9 @@ import { TkBadge } from "@takeoff-ui/react";
 | ---- | ----------- |
 | clearFilters | Clears all filters for server side pagination |
 | clearSorting | Clears all sorting for server side pagination |
-| exportFile |  |
+| exportFile | Exports the table data to a file |
+| getFilters | Returns the current filters |
+| getSorting | Returns the current sorting settings |
 | serverRequest | Allows tk-request event to be triggered manually |
 
 ### Slots
@@ -151,17 +153,6 @@ interface ITableExportOptions {
 }
 ```
 
-Defines options for checkbox filter
-
-```typescript
-interface IFilterOption {
-  /** The value of the option */
-  value: string;
-  /** The display label of the option */
-  label?: string;
-}
-```
-
 Represents a filter applied to a table
 
 ```typescript
@@ -174,6 +165,17 @@ interface ITableFilter {
   type?: 'text' | 'checkbox';
   /** The values for checkbox filter */
   values?: string[];
+}
+```
+
+Defines options for checkbox filter
+
+```typescript
+interface IFilterOption {
+  /** The value of the option */
+  value: string;
+  /** The display label of the option */
+  label?: string;
 }
 ```
 
