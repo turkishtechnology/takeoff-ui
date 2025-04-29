@@ -12,14 +12,14 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: process.env.APP_URL || 'https://kurumsaltest.thy.com',
+  url: 'https://takeoffui.thy.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: process.env.BASE_URL || '/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'thy', // Usually your GitHub org/user name.
+  organizationName: 'turkishtechnology', // Usually your GitHub org/user name.
   projectName: 'takeoff-ui', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -30,7 +30,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'tr'],
+    locales: ['en'],
   },
   plugins: [
     tailwindPlugin,
@@ -102,10 +102,10 @@ const config: Config = {
           label: 'Github',
           position: 'right',
         },
-        {
-          type: 'localeDropdown',
-          position: 'right',
-        },
+        // {
+        //   type: 'localeDropdown',
+        //   position: 'right',
+        // },
       ],
       hideOnScroll: true,
     },
