@@ -15,7 +15,14 @@ function clearString(value) {
     .replaceAll('\r', ' ');
 }
 
-function clearStringObject(value) {
+function clearStringObject(value, tag, propName) {
+  if (tag == 'tk-chart') {
+    if (value?.indexOf('ChartData') > -1) {
+      return 'ChartData';
+    } else if (propName == 'options') {
+      return 'ChartOptions';
+    }
+  }
   return value
     ?.replaceAll('|', ',')
     .replaceAll('\n', ' ')
@@ -78,11 +85,11 @@ ${docs} \n
         prop.name
       }" variant="primary" size="large" type="filledlight"/> | <code>${
         prop.type?.indexOf('{') > -1
-          ? '`' + clearStringObject(prop.type) + '`'
-          : clearStringObject(prop.type)
+          ? '`' + clearStringObject(prop.type, tag, prop.name) + '`'
+          : clearStringObject(prop.type, tag, prop.name)
       }</code> | ${
         prop.default?.indexOf('{') > -1
-          ? '`' + clearStringObject(prop.default) + '`' || 'null'
+          ? '`' + clearStringObject(prop.default, tag) + '`' || 'null'
           : clearStringObject(prop.default) || 'null'
       } | ${clearString(prop.docs)} |\n`;
     });

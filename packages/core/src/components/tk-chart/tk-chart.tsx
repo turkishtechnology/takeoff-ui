@@ -1,5 +1,5 @@
 import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
-import Chart, { ChartType, ChartOptions } from 'chart.js/auto';
+import Chart, { ChartType, ChartOptions, ChartData } from 'chart.js/auto';
 import { getDefaultOptionsForType } from './defaults';
 import { merge } from 'lodash';
 import classNames from 'classnames';
@@ -30,12 +30,12 @@ export class TkChart implements ComponentInterface {
   @Prop() type: ChartType = 'bar';
 
   /**
-   * The chart data
+   * Chart data prop is used to define chart data supported by the Chart.js library. With this prop, you can specify chart data described in the Chart.js documentation (https://www.chartjs.org/docs/latest/general/data-structures.html).
    */
-  @Prop() data: any;
+  @Prop() data: ChartData;
 
   /**
-   * Chart options
+   * Chart options prop is used to define chart options supported by the Chart.js library. With this prop, you can specify any chart options described in the Chart.js documentation (https://www.chartjs.org/docs/latest/general/options.html).
    */
   @Prop() options?: ChartOptions;
 
