@@ -3,14 +3,22 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const State = () => {
-  const reactCode = `<TkUpload disabled={true}></TkUpload>`;
+  const reactCode = `<TkUpload disabled={true}></TkUpload>
+<TkUpload invalid={true} error="This is an error message"></TkUpload>
+<TkUpload loading={true}></TkUpload>`;
 
-  const vueCode = `<TkUpload :disabled="true"></TkUpload>`;
+  const vueCode = `<TkUpload :disabled="true"></TkUpload>
+<TkUpload :invalid="true" error="This is an error message"></TkUpload>
+<TkUpload :loading="true"></TkUpload>`;
 
   const demo = (
     <div>
       <label>Disabled</label>
       <TkUpload disabled={true}></TkUpload>
+      <label>Invalid and Error</label>
+      <TkUpload invalid={true} error="This is an error message"></TkUpload>
+      <label>Loading</label>
+      <TkUpload loading={true}></TkUpload>
     </div>
   );
 
