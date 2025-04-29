@@ -8,6 +8,8 @@ import FooterCustomization from "./Examples/FooterCustomization";
 import AllowDisabledDates from "./Examples/AllowDisabledDates";
 import FirstDayOfWeek from "./Examples/FirstDayOfWeek";
 import DisabledWeekDays from "./Examples/DisabledWeekDays";
+import TimePicker from "./Examples/TimePicker";
+import TimeRange from "./Examples/TimeRange";
 
 import {TkAlert} from "@takeoff-ui/react"
 
@@ -74,3 +76,15 @@ Demonstrates how to customize the footer using the `footerType` and `footerVaria
 <TkAlert header="Note" variant="info" message="Clicking the 'Today' button selects the current date, updates the input field, and highlights today's date in the calendar view." filledlight />
 <br/>
 <FooterCustomization />
+
+## Time Picker Mode
+
+Demonstrates how to enable date & time selection using the `showTimePicker` property for single date.
+
+<TimePicker />
+
+## Date & Time Range Selection
+
+Illustrates how to use `mode="range"` together with `showTimePicker` to select a date range with time.
+
+<TimeRange />
