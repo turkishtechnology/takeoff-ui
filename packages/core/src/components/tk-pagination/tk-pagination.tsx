@@ -324,38 +324,47 @@ export class TkPagination implements ComponentInterface {
     return <ContentWrapperTag class={contentClasses}>{content}</ContentWrapperTag>;
   }
 
+  private renderSelect(): HTMLTkSelectElement {
+    return (
+      <tk-select
+        style={{ width: '75px' }}
+        value={this.rowsPerPage}
+        options={this.rowsPerPageOptions}
+        onTk-change={e => {
+          this.rowsPerPage = e.detail;
+        }}
+      ></tk-select>
+    );
+  }
+
+  private renderInput(totalPages: number): HTMLTkInputElement {
+    return (
+      <tk-input
+        style={{ width: '70px' }}
+        mode="text"
+        min={1}
+        max={totalPages}
+        value={this.inputValue}
+        icon="chevron_right"
+        iconPosition="right"
+        onTk-change={(event: CustomEvent) => {
+          this.handlePageInputChange(event.detail.toString());
+        }}
+        onTk-blur={() => this.validateAndUpdatePage()}
+      />
+    );
+  }
+
   render() {
     const totalPages = this.getTotalPages();
 
-    const tag = this.renderTag(totalPages);
-    const content = this.renderContent(totalPages);
-
     return (
       <div class="tk-pagination-container">
-        <div class="tk-pagination-start">{tag}</div>
-        {content}
+        <div class="tk-pagination-start">{this.renderTag(totalPages)}</div>
+        {this.renderContent(totalPages)}
         <div class="tk-pagination-end">
-          <tk-select
-            style={{ width: '75px' }}
-            value={this.rowsPerPage}
-            options={this.rowsPerPageOptions}
-            onTk-change={e => {
-              this.rowsPerPage = e.detail;
-            }}
-          ></tk-select>
-          <tk-input
-            style={{ width: '70px' }}
-            mode="text"
-            min={1}
-            max={totalPages}
-            value={this.inputValue}
-            icon="chevron_right"
-            iconPosition="right"
-            onTk-change={(event: CustomEvent) => {
-              this.handlePageInputChange(event.detail.toString());
-            }}
-            onTk-blur={() => this.validateAndUpdatePage()}
-          />
+          {this.renderSelect()}
+          {this.renderInput(totalPages)}
         </div>
       </div>
     );
