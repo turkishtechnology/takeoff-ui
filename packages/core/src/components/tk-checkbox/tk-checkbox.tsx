@@ -113,20 +113,26 @@ export class TkCheckbox implements ComponentInterface {
     }
   }
 
+  private renderInput(): HTMLInputElement {
+    return (
+      <input
+        id={this.uniqueId}
+        type="checkbox"
+        ref={el => (this.inputElement = el)}
+        checked={this.value}
+        indeterminate={this.indeterminate}
+        disabled={this.disabled}
+        onChange={this.handleChange.bind(this)}
+        name={this.name}
+      />
+    );
+  }
+
   render() {
     return (
       <div class={classNames('tk-checkbox-container', this.type)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         <label htmlFor={this.uniqueId} class={classNames({ 'width-description': this.description })}>
-          <input
-            id={this.uniqueId}
-            type="checkbox"
-            ref={el => (this.inputElement = el)}
-            checked={this.value}
-            indeterminate={this.indeterminate}
-            disabled={this.disabled}
-            onChange={this.handleChange.bind(this)}
-            name={this.name}
-          />
+          {this.renderInput()}
           <div class="mask">
             <i class="material-symbols-outlined">{this.indeterminate ? 'remove' : 'check'}</i>
           </div>
