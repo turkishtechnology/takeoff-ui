@@ -24,6 +24,7 @@ export class TkInput implements ComponentInterface {
   private tabindex?: string | number;
   private uniqueId = uuidv4();
   private cleaveInstance: Cleave;
+  private readOnly: boolean = false;
 
   @Element() el!: HTMLTkInputElement;
 
@@ -438,19 +439,57 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  render() {
-    let label: HTMLLabelElement;
-    let _icon: HTMLTkIconElement;
-    let passwordLeftIcon: HTMLTkIconElement;
-    let passwordRightIcon: HTMLTkIconElement;
-    let leftButton: HTMLTkButtonElement;
-    let rightButton: HTMLTkButtonElement;
-    let safetyStatus: HTMLElement;
-    let readOnly: boolean = false;
+  private renderInput(): HTMLInputElement {
+    return (
+      <input
+        id={this.uniqueId}
+        ref={el => (this.nativeInput = el)}
+        disabled={this.disabled}
+        autoComplete="off"
+        type={this.inputType}
+        name={this.name}
+        min={this.min}
+        max={this.max}
+        placeholder={this.placeholder || ''}
+        readOnly={this.readOnly}
+        tabindex={this.tabindex}
+        value={this.mode == 'chips' ? undefined : this.value}
+        onInput={this.handleInput}
+        onBlur={this.handleInputBlur}
+        onFocus={this.handleInputFocus}
+        onKeyDown={this.handleInputKeyDown}
+      />
+    );
+  }
 
-    const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
-    const prefixClass = classNames('tk-input-prefix-container', this.size);
+  private renderHint(): HTMLSpanElement {
+    let hint;
+    if (this.hint?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
 
+      hint = (
+        <span class="hint">
+          {hintIcon}
+          {this.hint}
+        </span>
+      );
+    }
+
+    if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
+      hint = (
+        <span class="hint">
+          {hintIcon}
+          {this.error}
+        </span>
+      );
+    }
+    return hint;
+  }
+
+  private renderLabel(): HTMLLabelElement {
+    let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
@@ -460,28 +499,12 @@ export class TkInput implements ComponentInterface {
         </label>
       );
     }
+    return label;
+  }
 
-    if (this.icon && !this.isCounter) {
-      _icon = <tk-icon {...getIconElementProps(this.icon)} />;
-    }
-
-    if (this.inputType == 'password') {
-      passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
-      passwordRightIcon = (
-        <tk-icon
-          {...getIconElementProps('visibility', {
-            class: 'clickable',
-            onMouseDown: this.handleMouseDown,
-            onMouseUp: this.handleMouseUp,
-          })}
-        />
-      );
-
-      if (this.showSafetyStatus) {
-        safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;
-      }
-    }
-
+  private renderAlignmentButtons() {
+    let leftButton: HTMLTkButtonElement;
+    let rightButton: HTMLTkButtonElement;
     if (this.isCounter) {
       leftButton = (
         <tk-icon
@@ -511,78 +534,73 @@ export class TkInput implements ComponentInterface {
         />
       );
     }
-    let hint: string;
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+    return { left: leftButton, right: rightButton };
+  }
 
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.hint}
-        </span>
+  private renderPasswordIcons() {
+    let passwordLeftIcon: HTMLTkIconElement;
+    let passwordRightIcon: HTMLTkIconElement;
+
+    if (this.inputType == 'password') {
+      passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
+      passwordRightIcon = (
+        <tk-icon
+          {...getIconElementProps('visibility', {
+            class: 'clickable',
+            onMouseDown: this.handleMouseDown,
+            onMouseUp: this.handleMouseUp,
+          })}
+        />
       );
     }
+    return { left: passwordLeftIcon, right: passwordRightIcon };
+  }
 
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+  render() {
+    let _icon: HTMLTkIconElement;
+    let safetyStatus: HTMLElement;
 
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.error}
-        </span>
-      );
+    if (this.showSafetyStatus) {
+      safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;
+    }
+
+    const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
+    const prefixClass = classNames('tk-input-prefix-container', this.size);
+
+    if (this.icon && !this.isCounter) {
+      _icon = <tk-icon {...getIconElementProps(this.icon)} />;
     }
 
     let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
 
     if (this.el.classList.contains('tk-select-input')) {
-      readOnly = !this.el.classList.contains('editable-select');
+      this.readOnly = !this.el.classList.contains('editable-select');
     } else {
-      readOnly = this.readonly;
+      this.readOnly = this.readonly;
     }
-
-    const chips = this.renderChips();
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
-        {label}
+        {this.renderLabel()}
         <label class="tk-input" htmlFor={this.uniqueId}>
-          {chips}
-          {!this.icon && this.iconPosition !== 'left' && passwordLeftIcon}
+          {this.renderChips()}
+          {!this.icon && this.iconPosition !== 'left' && this.renderPasswordIcons().left}
           {this.icon && this.iconPosition === 'left' && _icon}
-          {leftButton}
+          {this.renderAlignmentButtons().left}
           {this.pre && (
             <div class={prefixClass}>
               <span class="tk-input-prefix-text">{this.pre}</span>
               <span class="tk-input-divider"></span>
             </div>
           )}
-          <input
-            id={this.uniqueId}
-            ref={el => (this.nativeInput = el)}
-            disabled={this.disabled}
-            autoComplete="off"
-            type={this.inputType}
-            name={this.name}
-            min={this.min}
-            max={this.max}
-            placeholder={this.placeholder || ''}
-            readOnly={readOnly}
-            tabindex={this.tabindex}
-            value={this.mode == 'chips' ? undefined : this.value}
-            onInput={this.handleInput}
-            onBlur={this.handleInputBlur}
-            onFocus={this.handleInputFocus}
-            onKeyDown={this.handleInputKeyDown}
-          />
+          {this.renderInput()}
           {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)}></tk-button>}
           {this.icon && this.iconPosition === 'right' && _icon}
-          {!this.icon && this.iconPosition !== 'right' && passwordRightIcon}
-          {rightButton}
+          {!this.icon && this.iconPosition !== 'right' && this.renderPasswordIcons().right}
+          {this.renderAlignmentButtons().right}
         </label>
         {safetyStatus}
-        {hint}
+        {this.renderHint()}
       </div>
     );
   }
