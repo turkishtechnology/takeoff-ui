@@ -1,16 +1,21 @@
-name: 'Bug Report'
+---
+name: Bug Report
 description: Report a bug or unexpected behavior
-title: 'bug: '
-labels: ['bug']
+title: "bug: "
+labels:
+  - bug
 body:
   - type: markdown
     attributes:
-      value: |
-        ### Thanks for taking the time to create a bug report. Before opening a new issue, please search existing issues to avoid duplicates.
+      value: >
+        ### Thanks for taking the time to create a bug report. Before opening a
+        new issue, please search existing issues to avoid duplicates.
   - type: markdown
     attributes:
-      value: |
-        #### If you aren't sure this is a bug or not, please open a discussion instead:
+      value: >
+        #### If you aren't sure this is a bug or not, please open a discussion
+        instead:
+
         - [Discussions](https://github.com/turkishtechnology/takeoff-ui/discussionsl)
   - type: textarea
     id: bug-description
@@ -18,6 +23,17 @@ body:
       label: Describe the bug
       description: A brief description of what the bug is.
       placeholder: Bug description
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      description: A step-by-step description of how to reproduce the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. See error
     validations:
       required: true
   - type: dropdown
@@ -73,41 +89,32 @@ body:
       default: 0
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Version
-      description: 'Please specify the version you are having trouble with.'
-      placeholder: 'V1.0.0'
+      description: Please specify the version you are having trouble with.
+      placeholder: V1.0.0
     validations:
       required: true
   - type: textarea
     id: screenshot
     attributes:
       label: Screenshot
-      description: 'Please add a screenshot of the error or the situation you are dealing with.'
+      description: Please add a screenshot of the error or the situation you are
+        dealing with.
   - type: textarea
     id: logs
     attributes:
       label: Logs
-      description: 'Please include browser console or server logs of the bug.'
+      description: Please include browser console or server logs of the bug.
       render: bash
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: How to reproduce
-      description: A step-by-step description of how to reproduce the bug.
-      placeholder: |
-        1. Go to '...'
-        2. Click on '....'
-        3. See error
-    validations:
-      required: true
   - type: checkboxes
     id: terms
     attributes:
       label: Before submitting
-      description: By submitting this issue, you agree to follow our [Contributing Guidelines](https://github.com/turkishtechnology/takeoff-ui/blob/develop/CONTRIBUTING.md).
+      description: By submitting this issue, you agree to follow our [Contributing
+        Guidelines](https://github.com/turkishtechnology/takeoff-ui/blob/develop/CONTRIBUTING.md).
       options:
         - label: I've made research efforts and searched the documentation
           required: true
