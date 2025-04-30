@@ -34,11 +34,69 @@ const options = {
 };
 
 const Line = () => {
-  const reactCode = `
-    <TkChart type="line" data={data} />
+  const reactCode = `const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      data: [1, 10, 5, 2, 20, 32],
+      borderColor: '#3B82F6',
+      tension: 0.5,
+    },
+  ],
+};
+const options = {
+  scales: {
+    y: {
+      grid: {
+        display: false,
+        drawTicks: false,
+      },
+    },
+    x: {
+      border: {
+        display: false,
+      },
+      grid: {
+        display: false,
+        drawTicks: false,
+      },
+    },
+  },
+};
+<TkChart type="line" data={data} options={options} />
     `;
-  const vueCode = `
-    <TkChart type="line" :data="data" />
+  const vueCode = `const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      data: [1, 10, 5, 2, 20, 32],
+      borderColor: '#3B82F6',
+      tension: 0.5,
+    },
+  ],
+};
+const options = {
+  scales: {
+    y: {
+      grid: {
+        display: false,
+        drawTicks: false,
+      },
+    },
+    x: {
+      border: {
+        display: false,
+      },
+      grid: {
+        display: false,
+        drawTicks: false,
+      },
+    },
+  },
+};
+<TkChart type="line" :data.prop="data" :options.prop="options" />
     `;
   const demo = (
     <div>
