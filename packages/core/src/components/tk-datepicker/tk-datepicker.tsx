@@ -28,6 +28,7 @@ export class TkDatePicker {
   private debounceTimer: number;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
+  private dialogRef?: HTMLTkDialogElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
@@ -67,10 +68,8 @@ export class TkDatePicker {
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
-        this.bindWindowClickListener();
       } else {
         this.currentView = 'days';
-        this.unbindWindowClickListener();
       }
     }
   }
@@ -287,13 +286,19 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
+
+    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
+    this.dialogRef = this.el.closest('tk-dialog');
+    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
   }
 
   componentDidUpdate() {
     if (this.isOpen) {
-      this.cleanup = autoUpdate(this.inputRef, this.panelRef, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      if (this.inputRef && this.panelRef) {
+        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
+          animationFrame: true,
+        });
+      }
       this.bindWindowClickListener();
     } else {
       this.cleanup && this.cleanup();
@@ -515,13 +520,13 @@ export class TkDatePicker {
 
   private updatePosition() {
     if (this.inputRef && this.panelRef) {
-      computePosition(this.inputRef, this.panelRef, {
+      computePosition(this.inputRef?.querySelector('.tk-input'), this.panelRef, {
+        strategy: 'fixed',
         placement: 'bottom-start',
-        middleware: [offset(5), flip(), shift({ padding: 5 })],
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
         Object.assign(this.panelRef.style, {
           left: `${x}px`,
-
           top: `${y}px`,
         });
       });
@@ -1068,6 +1073,13 @@ export class TkDatePicker {
       }
     }
     this.processDateValue(initialValue, true);
+  }
+
+  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
+  private handleDialogScroll() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
   }
 
   private createDayCell(date: Date, isAdjacentMonth: boolean) {
