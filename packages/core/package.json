@@ -45,6 +45,7 @@
     "@stencil/vue-output-target": "0.8.9",
     "@stencil/react-output-target": "0.8.0",
     "@tiptap/core": "^2.11.0",
+    "@tiptap/extension-placeholder": "^2.11.9",
     "@tiptap/extension-font-family": "^2.1.12",
     "@tiptap/extension-image": "^2.11.0",
     "@tiptap/extension-link": "^2.11.0",
