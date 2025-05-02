@@ -201,28 +201,26 @@ export class TkCurrencyInput implements ComponentInterface {
     this.tkFocus.emit();
   };
 
-  render() {
-    const rootClasses = classNames('tk-currency-input-container', this.size, { focus: this.hasFocus });
+  private renderInput(): HTMLInputElement {
+    return (
+      <input
+        ref={el => (this.nativeInput = el)}
+        disabled={this.disabled}
+        autoComplete="off"
+        type="text"
+        name={this.name}
+        placeholder={this.placeholder || ''}
+        readOnly={this.readonly}
+        tabindex={this.tabindex}
+        value={this.formattedValue}
+        onInput={this.handleInput}
+        onBlur={this.handleBlur}
+        onFocus={this.handleFocus}
+      />
+    );
+  }
 
-    let hint: string;
-    if (this.hint?.length > 0) {
-      hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.error}
-        </span>
-      );
-    }
-
+  private renderRightField(): HTMLElement {
     let rightField;
     if (this.currencyOptions?.length > 0) {
       rightField = (
@@ -259,28 +257,42 @@ export class TkCurrencyInput implements ComponentInterface {
         </div>
       );
     }
+    return rightField;
+  }
+
+  private renderHint(): HTMLSpanElement {
+    let hint;
+    if (this.hint?.length > 0) {
+      hint = (
+        <span class="hint">
+          <i class="material-symbols-outlined">info</i>
+          {this.hint}
+        </span>
+      );
+    }
+
+    if (this.error?.length > 0) {
+      hint = (
+        <span class="hint">
+          <i class="material-symbols-outlined">info</i>
+          {this.error}
+        </span>
+      );
+    }
+    return hint;
+  }
+
+  render() {
+    const rootClasses = classNames('tk-currency-input-container', this.size, { focus: this.hasFocus });
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         <label class="label">{this.label}</label>
         <div class="tk-currency-input">
-          <input
-            ref={el => (this.nativeInput = el)}
-            disabled={this.disabled}
-            autoComplete="off"
-            type="text"
-            name={this.name}
-            placeholder={this.placeholder || ''}
-            readOnly={this.readonly}
-            tabindex={this.tabindex}
-            value={this.formattedValue}
-            onInput={this.handleInput}
-            onBlur={this.handleBlur}
-            onFocus={this.handleFocus}
-          />
-          {rightField}
+          {this.renderInput()}
+          {this.renderRightField()}
         </div>
-        {hint}
+        {this.renderHint()}
       </div>
     );
   }

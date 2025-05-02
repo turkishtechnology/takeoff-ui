@@ -410,14 +410,7 @@ export class TkEditor {
     );
   }
 
-  render() {
-    const contentStyle = this.contentStyle;
-    const labelElement = this.label && (
-      <label class="tk-editor-label">
-        {this.label}
-        {this.showAsterisk && <span class="tk-editor-label-asterisk">*</span>}
-      </label>
-    );
+  private renderHint(): HTMLDivElement {
     let hint: HTMLDivElement;
     if (this.hint?.length > 0) {
       hint = (
@@ -435,6 +428,18 @@ export class TkEditor {
         </div>
       );
     }
+    return hint;
+  }
+
+  render() {
+    const contentStyle = this.contentStyle;
+    const labelElement = this.label && (
+      <label class="tk-editor-label">
+        {this.label}
+        {this.showAsterisk && <span class="tk-editor-label-asterisk">*</span>}
+      </label>
+    );
+
     return (
       <div
         class={classNames('tk-editor-container', {
@@ -449,7 +454,7 @@ export class TkEditor {
           {this.renderToolbar()}
           <div class="tk-editor-content" ref={el => (this.editorRef = el)} data-placeholder={this.placeholder} style={contentStyle} />
         </div>
-        {hint}
+        {this.renderHint()}
       </div>
     );
   }

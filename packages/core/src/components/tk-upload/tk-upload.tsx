@@ -254,6 +254,68 @@ export class TkUpload implements ComponentInterface {
     );
   }
 
+  private renderDropzone(): HTMLDivElement {
+    return (
+      <div class={classNames('tk-upload-dropzone', this.type)}>
+        <div class="tk-upload-icon">
+          <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xlarge' }, undefined, 'span')} />
+        </div>
+        <div class="tk-upload-content">
+          <div class="tk-upload-text-holder">
+            <div class="tk-upload-title">{this.title}</div>
+            <div class="tk-upload-description">{this.description}</div>
+          </div>
+          <div class="tk-upload-input">
+            <tk-button label={this.chooseButtonLabel} variant="neutral" type="outlined" icon="folder" disabled={this.disabled} onTk-click={() => this.inputRef.click()}></tk-button>
+            {!this.autoUpload && (
+              <tk-button
+                label={this.uploadButtonLabel}
+                variant="neutral"
+                type="outlined"
+                icon="file_upload"
+                loading={this.loading}
+                disabled={!(this.value?.length > 0) || this.loading}
+                onTk-click={this.handleUploadButtonClick.bind(this)}
+              ></tk-button>
+            )}
+            <input
+              ref={el => (this.inputRef = el)}
+              type="file"
+              accept={this.accept}
+              multiple={this.multiple ? true : undefined}
+              onChange={e => this.handleInputChange(e)}
+              style={{ display: 'none' }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private renderFileholder(): HTMLDivElement {
+    return (
+      <div class="tk-upload-file-holder">
+        {this.value?.map((item, index) => (
+          <div class="tk-upload-file-item" key={index}>
+            <div class="tk-upload-file-preview">{this.renderFilePreview(item)}</div>
+            <div class="tk-upload-file-content">
+              <div>
+                <div class="tk-upload-file-name">{item.name}</div>
+                <div class="tk-upload-file-size-state">
+                  <span class="tk-upload-size">{filesize(item.size, { standard: 'jedec' })}</span>
+                  {this.renderState()}
+                </div>
+              </div>
+              <div class="tk-upload-file-delete">
+                <tk-button variant="neutral" type="outlined" icon="close" size="small" onTk-click={() => this.handleRemoveButtonClick(item)}></tk-button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   render() {
     let label: HTMLLabelElement;
     let hint: HTMLSpanElement;
@@ -291,66 +353,9 @@ export class TkUpload implements ComponentInterface {
     return (
       <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         {label}
-        <div class={classNames('tk-upload-dropzone', this.type)}>
-          <div class="tk-upload-icon">
-            <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xlarge' }, undefined, 'span')} />
-          </div>
-          <div class="tk-upload-content">
-            <div class="tk-upload-text-holder">
-              <div class="tk-upload-title">{this.title}</div>
-              <div class="tk-upload-description">{this.description}</div>
-            </div>
-            <div class="tk-upload-input">
-              <tk-button
-                label={this.chooseButtonLabel}
-                variant="neutral"
-                type="outlined"
-                icon="folder"
-                disabled={this.disabled}
-                onTk-click={() => this.inputRef.click()}
-              ></tk-button>
-              {!this.autoUpload && (
-                <tk-button
-                  label={this.uploadButtonLabel}
-                  variant="neutral"
-                  type="outlined"
-                  icon="file_upload"
-                  loading={this.loading}
-                  disabled={!(this.value?.length > 0) || this.loading}
-                  onTk-click={this.handleUploadButtonClick.bind(this)}
-                ></tk-button>
-              )}
-              <input
-                ref={el => (this.inputRef = el)}
-                type="file"
-                accept={this.accept}
-                multiple={this.multiple ? true : undefined}
-                onChange={e => this.handleInputChange(e)}
-                style={{ display: 'none' }}
-              />
-            </div>
-          </div>
-        </div>
+        {this.renderDropzone()}
         {hint}
-        <div class="tk-upload-file-holder">
-          {this.value?.map((item, index) => (
-            <div class="tk-upload-file-item" key={index}>
-              <div class="tk-upload-file-preview">{this.renderFilePreview(item)}</div>
-              <div class="tk-upload-file-content">
-                <div>
-                  <div class="tk-upload-file-name">{item.name}</div>
-                  <div class="tk-upload-file-size-state">
-                    <span class="tk-upload-size">{filesize(item.size, { standard: 'jedec' })}</span>
-                    {this.renderState()}
-                  </div>
-                </div>
-                <div class="tk-upload-file-delete">
-                  <tk-button variant="neutral" type="outlined" icon="close" size="small" onTk-click={() => this.handleRemoveButtonClick(item)}></tk-button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        {this.renderFileholder()}
       </div>
     );
   }

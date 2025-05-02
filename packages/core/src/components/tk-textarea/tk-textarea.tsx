@@ -175,10 +175,8 @@ export class TkTextarea implements ComponentInterface {
     this.tkFocus.emit();
   };
 
-  render() {
+  private renderLabel(): HTMLLabelElement {
     let label: HTMLLabelElement;
-
-    const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
@@ -189,8 +187,11 @@ export class TkTextarea implements ComponentInterface {
         </label>
       );
     }
+    return label;
+  }
 
-    let hint: string;
+  private renderHintError(): HTMLSpanElement {
+    let hint;
     if (this.hint?.length > 0) {
       hint = (
         <span class="hint">
@@ -208,6 +209,11 @@ export class TkTextarea implements ComponentInterface {
         </span>
       );
     }
+    return hint;
+  }
+
+  render() {
+    const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
     let counter: HTMLSpanElement;
     const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
@@ -221,7 +227,7 @@ export class TkTextarea implements ComponentInterface {
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
-        {label}
+        {this.renderLabel()}
         <label class="tk-textarea" htmlFor={this.uniqueId}>
           <textarea
             id={this.uniqueId}
@@ -242,7 +248,7 @@ export class TkTextarea implements ComponentInterface {
           </textarea>
           {counter}
         </label>
-        {hint}
+        {this.renderHintError()}
       </div>
     );
   }
