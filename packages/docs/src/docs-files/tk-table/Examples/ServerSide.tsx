@@ -3,7 +3,7 @@ import {
   TkTableCustomEvent,
   ITableRequest,
 } from '@takeoff-ui/core';
-import { TkTable } from '@takeoff-ui/react';
+import { TkButton, TkTable } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useEffect, useRef, useState } from 'react';
 import fetchFromServer from './server';
@@ -36,10 +36,10 @@ const Example = () => {
   const tableRef = useRef<HTMLTkTableElement>(null);
   const [data, setData] = useState();
   const [totalItem, setTotalItem] = useState();
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
 
   const handleRequest = async (e: TkTableCustomEvent<ITableRequest>) => {
-    console.log('handleRequest');
     setLoading(true);
     const result: any = await fetchFromServer(
       e.detail.currentPage,
@@ -49,8 +49,9 @@ const Example = () => {
       e.detail.sortOrder,
     );
 
-    setData(result?.data);
     setTotalItem(result?.totalItem);
+    setRowsPerPage(e.detail.rowsPerPage);
+    setData(result?.data);
     setLoading(false);
   };
 
@@ -59,16 +60,33 @@ const Example = () => {
   }, []);
 
   return (
-    <TkTable
-      ref={tableRef}
-      columns={column}
-      data={data}
-      paginationMethod="server"
-      rowsPerPage={5}
-      totalItems={totalItem}
-      loading={loading}
-      onTkRequest={handleRequest}
-    />
+    <>
+      <TkButton
+        icon="refresh"
+        variant="neutral"
+        type="text"
+        onTkClick={async () => {
+          setLoading(true);
+          const result: any = await fetchFromServer(1, 5, [], null, null);
+
+          setTotalItem(result?.totalItem);
+          setData(result?.data);
+          setLoading(false);
+
+          tableRef.current!.setCurrentPage(1);
+        }}
+      />
+      <TkTable
+        ref={tableRef}
+        columns={column}
+        data={data}
+        paginationMethod="server"
+        rowsPerPage={rowsPerPage}
+        totalItems={totalItem}
+        loading={loading}
+        onTkRequest={handleRequest}
+      />
+    </>
   );
 };
 
@@ -96,9 +114,13 @@ const ServerSide = () => {
     sortable: true,
   },
 ];
+
+const tableRef = useRef<HTMLTkTableElement>(null);
 const [data, setData] = useState();
 const [totalItem, setTotalItem] = useState();
+const [rowsPerPage, setRowsPerPage] = useState(5);
 const [loading, setLoading] = useState(false);
+
 const handleRequest = async (e: TkTableCustomEvent<ITableRequest>) => {
   setLoading(true);
   const result: any = await fetchFromServer(
@@ -108,25 +130,50 @@ const handleRequest = async (e: TkTableCustomEvent<ITableRequest>) => {
     e.detail.sortField,
     e.detail.sortOrder
   );
-  setData(result?.data);
+
   setTotalItem(result?.totalItem);
+  setRowsPerPage(e.detail.rowsPerPage);
+  setData(result?.data);
   setLoading(false);
 };
+
+useEffect(() => {
+  tableRef.current.serverRequest();
+}, []);
+
 return (
-  <TkTable
-    columns={column}
-    data={data}
-    paginationMethod="server"
-    rowsPerPage={5}
-    totalItems={totalItem}
-    loading={loading}
-    onTkRequest={handleRequest}
-  />
+  <>
+    <TkButton
+      icon="refresh"
+      variant="neutral"
+      type="text"
+      onTkClick={async () => {
+        setLoading(true);
+        const result: any = await fetchFromServer(1, 5, [], null, null);
+
+        setTotalItem(result?.totalItem);
+        setData(result?.data);
+        setLoading(false);
+
+        tableRef.current!.setCurrentPage(1);
+      }}
+    />
+    <TkTable
+      ref={tableRef}
+      columns={column}
+      data={data}
+      paginationMethod="server"
+      rowsPerPage={rowsPerPage}
+      totalItems={totalItem}
+      loading={loading}
+      onTkRequest={handleRequest}
+    />
+  </>
 );`;
 
   const vueCode = `<script setup>
-import { TkTable } from '@takeoff-ui/vue'
-import { ref } from 'vue';
+import { TkTable, TkButton } from '@takeoff-ui/vue'
+import { ref, onMounted } from 'vue';
 
 const column = [
   {
@@ -138,34 +185,28 @@ const column = [
     header: "Name",
     searchable: true,
     sortable: true,
-    sorter: (a, b) => (a.name > b.name ? 1 : -1),
-    filter: (value, row) =>
-      row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
   },
   {
     field: "category",
     header: "Category",
     searchable: true,
     sortable: true,
-    sorter: (a, b) => (a.category > b.category ? 1 : -1),
-    filter: (value, row) =>
-      row.category.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
   },
   {
     field: "quantity",
     header: "Quantity",
     sortable: true,
-    sorter: (a, b) =>
-      Number(a.quantity) > Number(b.quantity) ? 1 : -1,
   },
 ];
 
-const data = ref([])
-const totalItem = ref(0)
-const loading = ref(false)
+const tableRef = ref(null);
+const data = ref();
+const totalItem = ref();
+const rowsPerPage = ref(5);
+const loading = ref(false);
 
 const handleRequest = async (e) => {
-  loading.value = true
+  loading.value = true;
   const result = await fetchFromServer(
     e.detail.currentPage,
     e.detail.rowsPerPage,
@@ -173,18 +214,42 @@ const handleRequest = async (e) => {
     e.detail.sortField,
     e.detail.sortOrder
   );
-  data.value = result?.data
-  totalItem.value = result?.totalItem
-  loading.value = false
+  
+  totalItem.value = result?.totalItem;
+  rowsPerPage.value = e.detail.rowsPerPage;
+  data.value = result?.data;
+  loading.value = false;
+};
+
+onMounted(() => {
+  tableRef.value.serverRequest();
+});
+
+const refreshData = async () => {
+  loading.value = true;
+  const result = await fetchFromServer(1, 5, [], null, null);
+  
+  totalItem.value = result?.totalItem;
+  data.value = result?.data;
+  loading.value = false;
+  
+  tableRef.value.setCurrentPage(1);
 };
 </script>
 
 <template>
+  <TkButton
+    icon="refresh"
+    variant="neutral"
+    type="text"
+    @tkClick="refreshData"
+  />
   <TkTable 
+    ref="tableRef"
     :columns.prop="column" 
     :data.prop="data" 
     paginationMethod="server" 
-    :rowsPerPage="5" 
+    :rowsPerPage="rowsPerPage" 
     :totalItems="totalItem"
     :loading="loading" 
     @tkRequest="handleRequest" 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-29T14:45:00",
+  "timestamp": "2025-05-02T08:30:05",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -12411,6 +12411,40 @@
           "signature": "serverRequest() => Promise<void>",
           "parameters": [],
           "docs": "Allows tk-request event to be triggered manually",
+          "docsTags": []
+        },
+        {
+          "name": "setCurrentPage",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(page: number) => Promise<void>",
+            "parameters": [
+              {
+                "name": "page",
+                "type": "number",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "setCurrentPage(page: number) => Promise<void>",
+          "parameters": [
+            {
+              "name": "page",
+              "type": "number",
+              "docs": ""
+            }
+          ],
+          "docs": "",
           "docsTags": []
         }
       ],

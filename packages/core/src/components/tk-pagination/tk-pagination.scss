@@ -160,7 +160,7 @@ tk-pagination {
 
     .tk-pagination-page {
       &.tk-pagination-page-active {
-        border: var(--spacing-px, 1px) solid var(--states-info-light, #abc9fb);
+        border: var(--spacing-px, 1px) solid var(--states-info-sub-base);
         background: var(--background-lightest, #f9fafc);
       }
     }

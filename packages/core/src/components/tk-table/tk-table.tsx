@@ -381,6 +381,11 @@ export class TkTable implements ComponentInterface {
     };
   }
 
+  @Method()
+  async setCurrentPage(page: number) {
+    this.currentPage = page;
+  }
+
   private getNestedValue(obj, path) {
     return path.split('.').reduce((acc, key) => {
       return acc && acc[key] !== undefined ? acc[key] : undefined;
@@ -654,7 +659,6 @@ export class TkTable implements ComponentInterface {
       } else {
         this.handleInputFilterApply(field);
       }
-      console.log(this.filters);
       this.isFilterOpen = false;
     });
 
@@ -985,7 +989,6 @@ export class TkTable implements ComponentInterface {
     if (['client', 'server'].includes(this.paginationMethod))
       return (
         <tk-pagination
-          rounded={false}
           type={this.paginationType}
           totalItems={this.totalItems}
           rowsPerPage={this.rowsPerPage}
