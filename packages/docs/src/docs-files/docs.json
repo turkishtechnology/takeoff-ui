@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-02T08:30:05",
+  "timestamp": "2025-05-02T09:32:35",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -15093,7 +15093,7 @@
       "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
-      "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
+      "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  customRegex?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
       "docstring": "See cleave.js documentation https://nosir.github.io/cleave.js",
       "path": "src/components/tk-input/interfaces.ts"
     },

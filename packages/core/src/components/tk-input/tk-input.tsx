@@ -287,6 +287,12 @@ export class TkInput implements ComponentInterface {
 
       // masklı kullanımlar için value'yu formatlama yapılıyor.
       if (this.maskOptions && this.cleaveInstance) {
+        // If letterOnly option is enabled, filter out non-letters
+        if (this.maskOptions.letterOnly) {
+          _value = _value.replace(/[^a-zA-Z]/g, '');
+          input.value = _value;
+        }
+
         this.cleaveInstance?.setRawValue(_value);
         _value = this.cleaveInstance?.getFormattedValue();
       }

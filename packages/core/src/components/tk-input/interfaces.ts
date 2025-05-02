@@ -17,6 +17,7 @@ export interface IInputMaskOptions {
   delimiterLength?: number;
   delimiters?: any[];
   initValue?: string;
+  letterOnly?: boolean;
   lowerCase?: boolean;
   maxLength?: number;
   noImmediatePrefix?: boolean;

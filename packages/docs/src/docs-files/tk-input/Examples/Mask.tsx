@@ -43,10 +43,29 @@ const Mask = () => {
   }}
   value={value3}
   onTkChange={(e) => setValue3(e.detail)}
+/>
+
+<TkInput
+  label="Letter Only"
+  placeholder="xxxxxxxxxx"
+  maskOptions={{
+    blocks: [40],
+    letterOnly: true,
+  }}
+  value={value4}
+  onTkChange={(e) => {
+    setValue4(e.detail);
+  }}
 />`;
 
   const vueCode = `<script setup>
 import { TkInput } from '@takeoff-ui/vue';
+
+const value = ref();
+const value1 = ref();
+const value2 = ref();
+const value3 = ref();
+const value4 = ref();
 </script>
 
 <template>
@@ -88,6 +107,15 @@ import { TkInput } from '@takeoff-ui/vue';
       }"
       v-model="value3"
     />
+    <TkInput
+      label="Letter Only"
+      placeholder="xxxxxxxxxx"
+      :maskOptions.prop="{
+        blocks: [40],
+        letterOnly: true,
+      }"
+      v-model="value4"
+    />
   </div>
 </template>
 `;
@@ -96,7 +124,7 @@ import { TkInput } from '@takeoff-ui/vue';
   const [value1, setValue1] = useState();
   const [value2, setValue2] = useState();
   const [value3, setValue3] = useState();
-
+  const [value4, setValue4] = useState();
   const demo = (
     <div className="flex flex-col gap-2 w-[300px]">
       <TkInput
@@ -142,6 +170,19 @@ import { TkInput } from '@takeoff-ui/vue';
         }}
         value={value3}
         onTkChange={(e) => setValue3(e.detail)}
+      />
+
+      <TkInput
+        label="Letter Only"
+        placeholder="xxxxxxxxxx"
+        maskOptions={{
+          blocks: [40],
+          letterOnly: true,
+        }}
+        value={value4}
+        onTkChange={(e) => {
+          setValue4(e.detail);
+        }}
       />
     </div>
   );
