@@ -35,10 +35,6 @@ export class TkPagination implements ComponentInterface {
    * @defaultValue 10
    */
   @Prop({ mutable: true }) rowsPerPage: number = 10;
-  @Watch('rowsPerPage')
-  rowsPerPageChanged(newValue: number) {
-    this.tkRowsPerPageChange.emit(newValue);
-  }
 
   /**
    * Number of total items.
@@ -331,7 +327,10 @@ export class TkPagination implements ComponentInterface {
         value={this.rowsPerPage}
         options={this.rowsPerPageOptions}
         onTk-change={e => {
-          this.rowsPerPage = e.detail;
+          if (e.detail !== this.rowsPerPage) {
+                this.rowsPerPage = e.detail;
+                this.tkRowsPerPageChange.emit(e.detail);
+          }
         }}
       ></tk-select>
     );

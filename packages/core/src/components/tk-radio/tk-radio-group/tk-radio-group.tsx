@@ -31,7 +31,7 @@ export class TkRadioGroup implements ComponentInterface {
 
   @Watch('invalid')
   protected invalidChanged() {
-    if (this.slottedItems.length > 0) {
+    if (this.slottedItems?.length > 0) {
       this.slottedItems.forEach(item => {
         item.invalid = this.invalid;
       });
