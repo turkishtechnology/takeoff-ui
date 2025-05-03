@@ -253,9 +253,12 @@ export class TkTable implements ComponentInterface {
   @Method()
   async exportFile(options: ITableExportOptions) {
     let _data;
+    let _columns;
 
-    if (options.scope == 'all') {
-      _data = this.data;
+    if (options?.externalData?.length > 0) {
+      _data = options.externalData;
+    } else if (options.scope == 'all') {
+      _data = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
     } else if (options.scope == 'selected') {
       _data = this.selection;
     } else if (!options.scope || options.scope == 'current-page') {
@@ -280,11 +283,18 @@ export class TkTable implements ComponentInterface {
       const workbook = new ExcelJs.Workbook();
       const worksheet = workbook.addWorksheet('Sheet 1');
 
-      worksheet.columns = this.columns
+      if (options.columns && options.columns.length > 0) {
+        _columns = options.columns;
+      } else {
+        _columns = this.columns;
+      }
+
+      worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: 20 };
+          return { header: item.header, key: item.field, width: item.width || 20 };
         });
+
       worksheet.addRows(_data);
 
       const buffer = await workbook.xlsx.writeBuffer();
@@ -610,7 +620,7 @@ export class TkTable implements ComponentInterface {
 
       // Get current filter values for this field
       const currentFilter = this.filters.find(filter => filter.field === field);
-      const selectedValues = currentFilter?.values || [];
+      const selectedValues = (currentFilter?.value as string[]) || [];
 
       // Create checkboxes for each option
       column.filterOptions.forEach(option => {
@@ -631,7 +641,7 @@ export class TkTable implements ComponentInterface {
       const input: HTMLTkInputElement = document.createElement('tk-input');
       input.placeholder = 'Search';
       input.setFocus();
-      input.value = this.filters?.find(item => item.field == field)?.value;
+      input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
       this.elFilterPanelElement.appendChild(input);
     }
 
@@ -689,12 +699,12 @@ export class TkTable implements ComponentInterface {
 
     if (selectedValues.length > 0) {
       if (filterIndex > -1) {
-        this.filters[filterIndex].values = selectedValues;
+        this.filters[filterIndex].value = selectedValues;
         this.filters[filterIndex].type = 'checkbox';
       } else {
         this.filters.push({
           field: columnField,
-          values: selectedValues,
+          value: selectedValues,
           type: 'checkbox',
         } as ITableFilter);
       }

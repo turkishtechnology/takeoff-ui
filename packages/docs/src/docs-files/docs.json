@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-02T09:32:35",
+  "timestamp": "2025-05-02T20:25:28",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -15093,7 +15093,7 @@
       "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
-      "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  customRegex?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
+      "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
       "docstring": "See cleave.js documentation https://nosir.github.io/cleave.js",
       "path": "src/components/tk-input/interfaces.ts"
     },
@@ -15123,12 +15123,12 @@
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableExportOptions": {
-      "declaration": "export interface ITableExportOptions {\n  /** only works when type is `pdf`. Default value is `vertical` */\n  orientation?: 'horizontal' | 'vertical';\n  fileName?: string;\n  type?: 'csv' | 'pdf' | 'excel';\n  /** `all` working only client side pagination. Default value is `current-page` */\n  scope?: 'current-page' | 'selected' | 'all';\n  /** Ignore Columns Fields array */\n  ignoreColumnsFields?: string[];\n}",
+      "declaration": "export interface ITableExportOptions {\n  /** only works when type is `pdf`. Default value is `vertical` */\n  orientation?: 'horizontal' | 'vertical';\n  fileName?: string;\n  type?: 'csv' | 'pdf' | 'excel';\n  /** `all` working only client side pagination. Default value is `current-page` */\n  scope?: 'current-page' | 'selected' | 'all';\n  /** Ignore Columns Fields array for only excel export */\n  ignoreColumnsFields?: string[];\n  /** Columns for only excel export */\n  columns?: ITableExportExcelColumn[];\n  /** */\n  externalData?: any[];\n}",
       "docstring": "",
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableFilter": {
-      "declaration": "export interface ITableFilter {\n  /** The value of the filter */\n  value?: string;\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n  /** The values for checkbox filter */\n  values?: string[];\n}",
+      "declaration": "export interface ITableFilter {\n  /** The value of the filter - string for text filter, string array for checkbox filter */\n  value?: string | string[];\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n}",
       "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },
@@ -15149,6 +15149,11 @@
     },
     "src/components/tk-table/interfaces.ts::ICustomElement": {
       "declaration": "export interface ICustomElement {\n  ref: HTMLElement;\n  element: HTMLElement;\n}",
+      "docstring": "",
+      "path": "src/components/tk-table/interfaces.ts"
+    },
+    "src/components/tk-table/interfaces.ts::ITableExportExcelColumn": {
+      "declaration": "export interface ITableExportExcelColumn {\n  header: string;\n  field: string;\n  width: number;\n}",
       "docstring": "",
       "path": "src/components/tk-table/interfaces.ts"
     }

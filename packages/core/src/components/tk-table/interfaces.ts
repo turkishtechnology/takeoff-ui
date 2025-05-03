@@ -68,14 +68,12 @@ export interface ITableRequest {
 
 /** Represents a filter applied to a table */
 export interface ITableFilter {
-  /** The value of the filter */
-  value?: string;
+  /** The value of the filter - string for text filter, string array for checkbox filter */
+  value?: string | string[];
   /** The field to which the filter is applied */
   field: string;
   /** The type of the filter (text or checkbox) */
   type?: 'text' | 'checkbox';
-  /** The values for checkbox filter */
-  values?: string[];
 }
 
 /** It is the return type of the tkCellEdit event. */
@@ -98,15 +96,27 @@ export interface ICustomElement {
 export interface ITableExportOptions {
   /** only works when type is `pdf`. Default value is `vertical` */
   orientation?: 'horizontal' | 'vertical';
+  /** */
   fileName?: string;
+  /** */
   type?: 'csv' | 'pdf' | 'excel';
   /** `all` working only client side pagination. Default value is `current-page` */
   scope?: 'current-page' | 'selected' | 'all';
-  /** Ignore Columns Fields array */
+  /** Ignore Columns Fields array for only excel export */
   ignoreColumnsFields?: string[];
+  /** Columns for only excel export */
+  columns?: ITableExportExcelColumn[];
+  /** */
+  externalData?: any[];
 }
 
 export interface ITableRowCellStyleResponse {
   background?: string;
   color?: string;
+}
+
+export interface ITableExportExcelColumn {
+  header: string;
+  field: string;
+  width: number;
 }
