@@ -1,5 +1,6 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
+import Placeholder from '@tiptap/extension-placeholder';
 import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { DEFAULT_EXTENSIONS, DEFAULT_TOOLBAR_CONFIG } from './defaults';
@@ -32,6 +33,8 @@ export class TkEditor {
     textAlign?: 'left' | 'center' | 'right' | 'justify';
     link?: boolean;
   } = {};
+  @State() private isEmpty: boolean = false;
+  @State() private hasInitialized: boolean = false;
 
   /**
    * The value of the editor
@@ -186,7 +189,7 @@ export class TkEditor {
   }
 
   private get activeExtensions() {
-    return [...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
+    return [Placeholder.configure({ placeholder: this.placeholder || '' }), ...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
   }
 
   private command() {
@@ -200,11 +203,21 @@ export class TkEditor {
         extensions: this.activeExtensions,
         content: this.value,
         editable: !this.disabled && !this.readonly,
+        onCreate: ({ editor }) => {
+          this.isEmpty = editor.getText().length === 0;
+        },
         onUpdate: ({ editor }) => {
+          if (!this.hasInitialized) {
+            this.hasInitialized = true;
+            if (editor.getText().trim() === '') {
+              return;
+            }
+          }
           const html = editor.getHTML();
           this.value = html;
           this.tkChange.emit(html);
           this.updateSelectionState();
+          this.isEmpty = editor.getText().length === 0;
         },
         onFocus: () => {
           this.isFocused = true;
@@ -410,14 +423,7 @@ export class TkEditor {
     );
   }
 
-  render() {
-    const contentStyle = this.contentStyle;
-    const labelElement = this.label && (
-      <label class="tk-editor-label">
-        {this.label}
-        {this.showAsterisk && <span class="tk-editor-label-asterisk">*</span>}
-      </label>
-    );
+  private renderHint(): HTMLDivElement {
     let hint: HTMLDivElement;
     if (this.hint?.length > 0) {
       hint = (
@@ -435,6 +441,18 @@ export class TkEditor {
         </div>
       );
     }
+    return hint;
+  }
+
+  render() {
+    const contentStyle = this.contentStyle;
+    const labelElement = this.label && (
+      <label class="tk-editor-label">
+        {this.label}
+        {this.showAsterisk && <span class="tk-editor-label-asterisk">*</span>}
+      </label>
+    );
+
     return (
       <div
         class={classNames('tk-editor-container', {
@@ -447,9 +465,14 @@ export class TkEditor {
         {labelElement}
         <div class="tk-editor">
           {this.renderToolbar()}
-          <div class="tk-editor-content" ref={el => (this.editorRef = el)} data-placeholder={this.placeholder} style={contentStyle} />
+          <div
+            class={classNames('tk-editor-content', { 'tk-editor-placeholder-visible': this.isEmpty && !!this.placeholder })}
+            ref={el => (this.editorRef = el)}
+            data-placeholder={this.placeholder}
+            style={contentStyle}
+          />
         </div>
-        {hint}
+        {this.renderHint()}
       </div>
     );
   }

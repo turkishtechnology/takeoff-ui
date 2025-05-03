@@ -92,21 +92,7 @@ export class TkBadge implements ComponentInterface {
     return !isNaN(numericValue);
   }
 
-  render() {
-    const isCountOnly = this.isValidCount() && !this.label && !this.dot && !this.icon;
-    const rootClasses = classNames('tk-badge-container', {
-      'has-slot': this.hasSlot,
-    });
-    const badgeClasses = classNames('tk-badge', this.variant, this.size, this.type, {
-      'rounded': this.rounded,
-      'reverse': this.icon && this.iconPosition === 'right',
-      'icon-only': this.icon && !this.label && !this.dot,
-      'dot': this.dot,
-      'count': isCountOnly,
-    });
-
-    const icon = !this.dot && this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
-
+  private renderContent(): HTMLSpanElement {
     let content;
     if (!this.dot) {
       const contentConfig = {
@@ -123,13 +109,30 @@ export class TkBadge implements ComponentInterface {
       const { value = '', class: contentClass = '' } = contentConfig[type] || {};
       content = <span class={contentClass}>{value}</span>;
     }
+    return content;
+  }
+
+  render() {
+    const isCountOnly = this.isValidCount() && !this.label && !this.dot && !this.icon;
+    const rootClasses = classNames('tk-badge-container', {
+      'has-slot': this.hasSlot,
+    });
+    const badgeClasses = classNames('tk-badge', this.variant, this.size, this.type, {
+      'rounded': this.rounded,
+      'reverse': this.icon && this.iconPosition === 'right',
+      'icon-only': this.icon && !this.label && !this.dot,
+      'dot': this.dot,
+      'count': isCountOnly,
+    });
+
+    const icon = !this.dot && this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
 
     return (
       <div class={rootClasses}>
         <slot />
         <span class={badgeClasses}>
           {icon}
-          {content}
+          {this.renderContent()}
         </span>
       </div>
     );

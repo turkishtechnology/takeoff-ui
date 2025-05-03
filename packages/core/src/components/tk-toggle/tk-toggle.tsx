@@ -146,6 +146,27 @@ export class TkToggle implements ComponentInterface {
     }
   };
 
+  private renderInput(): HTMLInputElement {
+    return (
+      <input
+        id={this.inputId}
+        ref={input => (this.nativeInput = input)}
+        class="tk-toggle-input"
+        type="checkbox"
+        role="switch"
+        disabled={this.disabled}
+        checked={this.checked}
+        onChange={this.handleInputChange}
+        tabIndex={this.tabindex}
+        aria-checked={this.checked.toString()}
+        aria-disabled={this.disabled}
+        aria-invalid={this.invalid || undefined}
+        aria-label={this.name}
+        aria-labelledby={this.ariaLabelledby}
+      />
+    );
+  }
+
   render() {
     const rootClasses = classNames('tk-toggle', `tk-toggle-${this.size}`, `tk-toggle-${this.variant}`, {
       'tk-toggle-disabled': this.disabled,
@@ -156,22 +177,7 @@ export class TkToggle implements ComponentInterface {
       <div class={rootClasses}>
         <label htmlFor={this.inputId}>
           <div class="tk-toggle-input-container">
-            <input
-              id={this.inputId}
-              ref={input => (this.nativeInput = input)}
-              class="tk-toggle-input"
-              type="checkbox"
-              role="switch"
-              disabled={this.disabled}
-              checked={this.checked}
-              onChange={this.handleInputChange}
-              tabIndex={this.tabindex}
-              aria-checked={this.checked.toString()}
-              aria-disabled={this.disabled}
-              aria-invalid={this.invalid || undefined}
-              aria-label={this.name}
-              aria-labelledby={this.ariaLabelledby}
-            />
+            {this.renderInput()}
             <span class="tk-toggle-thumb">{this.showIcon && <span class="material-symbols-outlined tk-toggle-thumb-icon">{this.icon}</span>}</span>
           </div>
           {this.hasDefaultSlot ? <slot></slot> : this.label && <span class="tk-toggle-label">{this.label}</span>}
