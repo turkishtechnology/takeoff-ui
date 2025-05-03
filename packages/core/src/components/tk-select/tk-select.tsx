@@ -342,7 +342,7 @@ export class TkSelect implements ComponentInterface {
     this.selectedItem = this.getSelectedItem();
 
     if (!this.selectedItem && this.editable && this.allowCustomValue) {
-      this.inputRef.value = this.value;
+      this.inputRef.value = this.getOptionLabel(this.value);
     } else if (!this.selectedItem && !this.allowCustomValue) {
       this.inputRef.value = null;
     } else if (this.selectedItem) {
