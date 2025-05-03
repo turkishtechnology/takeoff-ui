@@ -78,7 +78,7 @@ export class TkChips implements ComponentInterface {
       removable: this.removable,
     });
 
-    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
+    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
 
     return (
       <div class={rootClasses}>

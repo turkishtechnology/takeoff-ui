@@ -426,6 +426,7 @@ export class TkInput implements ComponentInterface {
               type="outlined"
               key={index}
               autoSelfDestroy={false}
+              size="small"
             ></tk-chips>
           );
         } else {
@@ -438,6 +439,7 @@ export class TkInput implements ComponentInterface {
               type="outlined"
               key={index}
               autoSelfDestroy={false}
+              size="small"
             ></tk-chips>
           );
         }

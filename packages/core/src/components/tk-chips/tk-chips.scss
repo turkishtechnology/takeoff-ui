@@ -1,5 +1,5 @@
 :host {
-  display: inline-block;
+  display: inline-flex;
 }
 
 .tk-chips {
@@ -334,7 +334,7 @@
   }
 
   &.small {
-    padding: var(--chips-small-v-padding, 1px) var(--chips-small-h-padding, 4px);
+    padding: calc(var(--chips-small-v-padding, 1px) - 1px) var(--chips-small-h-padding, 4px);
     font-size: var(--desktop-body-xs-size, 12px);
     font-style: normal;
     font-weight: 400;
@@ -347,7 +347,7 @@
   }
 
   &.base {
-    padding: var(--chips-base-v-padding, 2px) var(--chips-base-h-padding, 6px);
+    padding: calc(var(--chips-base-v-padding - 1, 2px) - 1px) var(--chips-base-h-padding, 6px);
     font-size: var(--desktop-body-s-size, 14px);
     font-style: normal;
     font-weight: 400;
@@ -360,7 +360,7 @@
   }
 
   &.large {
-    padding: var(--chips-large-v-padding, 4px) var(--chips-large-h-padding, 8px);
+    padding: calc(var(--chips-large-v-padding, 4px) - 2px) var(--chips-large-h-padding, 8px);
     font-size: var(--desktop-body-s-size, 14px);
     font-style: normal;
     font-weight: 400;
