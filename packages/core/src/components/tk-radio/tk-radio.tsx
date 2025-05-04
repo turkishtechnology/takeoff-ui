@@ -112,7 +112,12 @@ export class TkRadio implements ComponentInterface {
   }
 
   private handleWindowClick(event: MouseEvent) {
-    const clickedElement = event.target as HTMLTkRadioElement;
+    let clickedElement = event.target as HTMLElement;
+
+    if (clickedElement.tagName !== 'TK-RADIO') {
+      clickedElement = clickedElement.closest('tk-radio') as HTMLTkRadioElement;
+    }
+
     if (
       clickedElement?.getAttribute('name')?.length > 0 &&
       clickedElement?.getAttribute('name') == this.name &&
