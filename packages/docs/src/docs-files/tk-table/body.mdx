@@ -39,7 +39,13 @@ This feature allows users to select rows in the table. The selected rows are vis
 
 ## Filter and Sorting
 
-Client side filter and sort.
+The table supports three types of filtering:
+
+- Text input filtering: Allows free text search in columns
+- Checkbox filtering: Enables selecting multiple values from predefined options
+- Radio filtering: Allows selecting a single value from predefined options
+
+The filtering type can be configured using the `filterType` property in column definition. For checkbox and radio filters, you need to provide `filterOptions` with value-label pairs.
 
 <TkAlert
   header="Information"

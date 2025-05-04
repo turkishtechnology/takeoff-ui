@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { basicData } from './data';
 
 const Example = () => {
-  const tableRef = useRef(null);
+  const tableRef = useRef<HTMLTkTableElement>(null);
 
   const column: ITableColumn[] = [
     {
@@ -46,10 +46,16 @@ const Example = () => {
 
   const handleClearFilters = () => {
     tableRef.current?.clearFilters();
+    // For server-side pagination, after clearing filters,
+    // serverRequest method is called to trigger tkRequest event
+    // tableRef.current?.serverRequest();
   };
 
   const handleClearSorting = () => {
     tableRef.current?.clearSorting();
+    // For server-side pagination, after clearing filters,
+    // serverRequest method is called to trigger tkRequest event
+    // tableRef.current?.serverRequest();
   };
 
   return (
@@ -103,10 +109,16 @@ const ClearFiltersAndSort = () => {
 
   const handleClearFilters = () => {
     tableRef.current?.clearFilters();
+    // For server-side pagination, after clearing filters,
+    // serverRequest method is called to trigger tkRequest event
+    // tableRef.current?.serverRequest();
   };
 
   const handleClearSorting = () => {
     tableRef.current?.clearSorting();
+    // For server-side pagination, after clearing filters,
+    // serverRequest method is called to trigger tkRequest event
+    // tableRef.current?.serverRequest();
   };
 
   return (
@@ -162,10 +174,16 @@ const column = [
 
 const handleClearFilters = () => {
   tableRef.value?.$el.clearFilters();
+  // For server-side pagination, after clearing filters,
+  // serverRequest method is called to trigger tkRequest event
+  // tableRef.value?.$el.serverRequest();
 };
 
 const handleClearSorting = () => {
   tableRef.value?.$el.clearSorting();
+  // For server-side pagination, after clearing filters,
+  // serverRequest method is called to trigger tkRequest event
+  // tableRef.value?.$el.serverRequest();
 };
 </script>
 

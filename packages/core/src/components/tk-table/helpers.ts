@@ -38,6 +38,11 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
         return (filter.value as string[]).includes(fieldValue);
       }
 
+      if (filter.type === 'radio' && filter.value) {
+        const fieldValue = row[filter.field]?.toString();
+        return fieldValue === filter.value;
+      }
+
       const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;

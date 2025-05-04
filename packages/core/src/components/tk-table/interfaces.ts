@@ -30,9 +30,9 @@ export interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
-  /** Defines the filter type for this column (text or checkbox) */
-  filterType?: 'text' | 'checkbox';
-  /** Defines options for checkbox filter type */
+  /** Defines the filter type for this column (text, checkbox or radio) */
+  filterType?: 'text' | 'checkbox' | 'radio';
+  /** Defines options for checkbox or radio filter type */
   filterOptions?: IFilterOption[];
 }
 
@@ -68,12 +68,12 @@ export interface ITableRequest {
 
 /** Represents a filter applied to a table */
 export interface ITableFilter {
-  /** The value of the filter - string for text filter, string array for checkbox filter */
+  /** The value of the filter - string for text/radio filter, string array for checkbox filter */
   value?: string | string[];
   /** The field to which the filter is applied */
   field: string;
-  /** The type of the filter (text or checkbox) */
-  type?: 'text' | 'checkbox';
+  /** The type of the filter (text, checkbox or radio) */
+  type?: 'text' | 'checkbox' | 'radio';
 }
 
 /** It is the return type of the tkCellEdit event. */

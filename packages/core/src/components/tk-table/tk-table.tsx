@@ -156,22 +156,23 @@ export class TkTable implements ComponentInterface {
   @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<any[] | any>;
 
   /**
-   *
+   * Emitted when a request needs to be made to the server.
    */
   @Event({ eventName: 'tk-request' }) tkRequest: EventEmitter<ITableRequest>;
 
   /**
-   *
+   * Emitted when the expanded rows change.
    */
   @Event({ eventName: 'tk-expanded-rows-change' }) tkExpandedRowsChange: EventEmitter<any[]>;
 
   /**
-   *
+   * Emitted when a cell is edited.
    */
   @Event({ eventName: 'tk-cell-edit' }) tkCellEdit: EventEmitter<ITableCellEdit>;
 
   /**
-   *
+   * Emitted when a row is clicked.
+   * @param row The row data that was clicked
    */
   @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
 
@@ -187,7 +188,9 @@ export class TkTable implements ComponentInterface {
         }
       });
 
-      if (!isInside) this.isFilterOpen = false;
+      if (!isInside) {
+        this.closeFilterPanel();
+      }
     }
   }
 
@@ -227,8 +230,7 @@ export class TkTable implements ComponentInterface {
         });
       }
     } else {
-      this.elFilterPanelElement?.remove();
-      this.cleanupFilterPanel && this.cleanupFilterPanel();
+      this.closeFilterPanel();
     }
   }
 
@@ -330,17 +332,9 @@ export class TkTable implements ComponentInterface {
       this.filters = [];
       this.currentPage = 1;
 
-      if (this.paginationMethod === 'client') {
+      if (this.paginationMethod !== 'server') {
         const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-        this.generateRenderData(tmpData, 1);
-      } else {
-        this.tkRequest.emit({
-          currentPage: this.currentPage,
-          rowsPerPage: this.rowsPerPage,
-          sortField: this.sortField,
-          sortOrder: this.sortOrder,
-          filters: this.filters,
-        } as ITableRequest);
+        this.generateRenderData(tmpData, 1, true);
       }
     }
   }
@@ -355,17 +349,9 @@ export class TkTable implements ComponentInterface {
       this.sortOrder = null;
       this.currentPage = 1;
 
-      if (this.paginationMethod === 'client') {
+      if (this.paginationMethod !== 'server') {
         const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-        this.generateRenderData(tmpData, 1);
-      } else {
-        this.tkRequest.emit({
-          currentPage: this.currentPage,
-          rowsPerPage: this.rowsPerPage,
-          sortField: this.sortField,
-          sortOrder: this.sortOrder,
-          filters: this.filters,
-        } as ITableRequest);
+        this.generateRenderData(tmpData, 1, true);
       }
     }
   }
@@ -453,12 +439,33 @@ export class TkTable implements ComponentInterface {
         placement: 'bottom',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        Object.assign(this.elFilterPanelElement.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
+        // Ensure the element still exists before updating its position
+        if (this.elFilterPanelElement) {
+          Object.assign(this.elFilterPanelElement.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+          });
+        }
       });
     }
+  }
+
+  // Add a new method to safely close the filter panel
+  private closeFilterPanel() {
+    // First cleanup the floating UI
+    if (this.cleanupFilterPanel) {
+      this.cleanupFilterPanel();
+      this.cleanupFilterPanel = null;
+    }
+
+    // Then remove the element from DOM
+    if (this.elFilterPanelElement) {
+      this.elFilterPanelElement.remove();
+      this.elFilterPanelElement = null;
+    }
+
+    // Finally update the state
+    this.isFilterOpen = false;
   }
 
   private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
@@ -491,6 +498,9 @@ export class TkTable implements ComponentInterface {
     } else {
       this.currentPage = 1;
     }
+
+    // Close the filter panel
+    this.closeFilterPanel();
   }
 
   private handleSearchCancelButtonClick(columnField) {
@@ -510,6 +520,9 @@ export class TkTable implements ComponentInterface {
         this.currentPage = 1;
       }
     }
+
+    // Close the filter panel
+    this.closeFilterPanel();
   }
 
   private handleInputBlur(row, index: number, colField: string, editableInputRef) {
@@ -603,7 +616,8 @@ export class TkTable implements ComponentInterface {
   }
 
   private createFilterPanel(refSearchIcon: HTMLElement, field: string) {
-    if (this.elFilterPanelElement) this.elFilterPanelElement?.remove();
+    // First close any existing filter panel
+    this.closeFilterPanel();
 
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
@@ -633,6 +647,40 @@ export class TkTable implements ComponentInterface {
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
+      });
+
+      this.elFilterPanelElement.appendChild(filterContainer);
+    }
+    // Check if the column has a filterType property and it's set to 'radio'
+    else if (column?.filterType === 'radio' && column.filterOptions?.length > 0) {
+      // Create radio filter
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-radio-container');
+
+      // Get current filter value for this field
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const selectedValue = currentFilter?.value as string;
+
+      // Create radio group name unique to this column
+      const radioGroupName = `radio-filter-${field}`;
+
+      // Create radio buttons for each option
+      column.filterOptions.forEach(option => {
+        const radioWrapper = document.createElement('div');
+        radioWrapper.classList.add('tk-table-filter-radio-item');
+
+        const radio = document.createElement('tk-radio');
+        radio.value = option.value;
+        radio.name = radioGroupName;
+        radio.label = option.label || option.value;
+
+        // Check if this option is currently selected
+        if (selectedValue === option.value) {
+          radio.checked = true;
+        }
+
+        radioWrapper.appendChild(radio);
+        filterContainer.appendChild(radioWrapper);
       });
 
       this.elFilterPanelElement.appendChild(filterContainer);
@@ -666,10 +714,12 @@ export class TkTable implements ComponentInterface {
     searchButton.addEventListener('tk-click', () => {
       if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
         this.handleCheckboxFilterApply(field);
+      } else if (this.columns.find(col => col.field === field)?.filterType === 'radio') {
+        this.handleRadioFilterApply(field);
       } else {
         this.handleInputFilterApply(field);
       }
-      this.isFilterOpen = false;
+      // We don't need to close the filter panel here anymore since it's closed in the apply methods
     });
 
     buttons.appendChild(cancelButton);
@@ -720,6 +770,51 @@ export class TkTable implements ComponentInterface {
     } else {
       this.currentPage = 1;
     }
+
+    // Close the filter panel
+    this.closeFilterPanel();
+  }
+
+  private handleRadioFilterApply(columnField: string) {
+    const radioButtons = Array.from(document.querySelectorAll(`body > .tk-table-filter-panel .tk-table-filter-radio-item tk-radio`));
+    const column = this.columns.find(col => col.field === columnField);
+
+    if (!column || !column.filterOptions || radioButtons.length === 0) return;
+
+    // Find selected radio button
+    const selectedRadio = radioButtons.find((radio: HTMLTkRadioElement) => radio.checked) as HTMLTkRadioElement;
+
+    // Update filter
+    const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
+
+    if (selectedRadio) {
+      const selectedValue = selectedRadio.value;
+
+      if (filterIndex > -1) {
+        this.filters[filterIndex].value = selectedValue;
+        this.filters[filterIndex].type = 'radio';
+      } else {
+        this.filters.push({
+          field: columnField,
+          value: selectedValue,
+          type: 'radio',
+        } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if no value selected
+      this.filters.splice(filterIndex, 1);
+    }
+
+    // Apply filter
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+
+    // Close the filter panel
+    this.closeFilterPanel();
   }
 
   private createHead() {

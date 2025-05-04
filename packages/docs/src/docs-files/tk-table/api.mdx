@@ -27,10 +27,10 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Description |
 | ---- | ----------- |
-| tk-cell-edit |  |
-| tk-expanded-rows-change |  |
-| tk-request |  |
-| tk-row-click |  |
+| tk-cell-edit | Emitted when a cell is edited. |
+| tk-expanded-rows-change | Emitted when the expanded rows change. |
+| tk-request | Emitted when a request needs to be made to the server. |
+| tk-row-click | Emitted when a row is clicked. |
 | tk-selection-change |  |
 
 ### Methods
@@ -85,9 +85,9 @@ interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
-  /** Defines the filter type for this column (text or checkbox) */
-  filterType?: 'text' | 'checkbox';
-  /** Defines options for checkbox filter type */
+  /** Defines the filter type for this column (text, checkbox or radio) */
+  filterType?: 'text' | 'checkbox' | 'radio';
+  /** Defines options for checkbox or radio filter type */
   filterOptions?: IFilterOption[];
 }
 ```
@@ -145,7 +145,9 @@ interface ITableCellEdit {
 interface ITableExportOptions {
   /** only works when type is `pdf`. Default value is `vertical` */
   orientation?: 'horizontal' | 'vertical';
+  /** */
   fileName?: string;
+  /** */
   type?: 'csv' | 'pdf' | 'excel';
   /** `all` working only client side pagination. Default value is `current-page` */
   scope?: 'current-page' | 'selected' | 'all';
@@ -162,12 +164,12 @@ Represents a filter applied to a table
 
 ```typescript
 interface ITableFilter {
-  /** The value of the filter - string for text filter, string array for checkbox filter */
+  /** The value of the filter - string for text/radio filter, string array for checkbox filter */
   value?: string | string[];
   /** The field to which the filter is applied */
   field: string;
-  /** The type of the filter (text or checkbox) */
-  type?: 'text' | 'checkbox';
+  /** The type of the filter (text, checkbox or radio) */
+  type?: 'text' | 'checkbox' | 'radio';
 }
 ```
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-02T20:25:28",
+  "timestamp": "2025-05-03T20:52:13",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -12242,11 +12242,6 @@
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
-              },
-              "ITableRequest": {
-                "location": "import",
-                "path": "./interfaces",
-                "id": "src/components/tk-table/interfaces.ts::ITableRequest"
               }
             },
             "return": "Promise<void>"
@@ -12269,11 +12264,6 @@
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
-              },
-              "ITableRequest": {
-                "location": "import",
-                "path": "./interfaces",
-                "id": "src/components/tk-table/interfaces.ts::ITableRequest"
               }
             },
             "return": "Promise<void>"
@@ -12466,7 +12456,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
+          "docs": "Emitted when a cell is edited.",
           "docsTags": []
         },
         {
@@ -12480,7 +12470,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
+          "docs": "Emitted when the expanded rows change.",
           "docsTags": []
         },
         {
@@ -12500,7 +12490,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
+          "docs": "Emitted when a request needs to be made to the server.",
           "docsTags": []
         },
         {
@@ -12514,8 +12504,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Emitted when a row is clicked.",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "row The row data that was clicked"
+            }
+          ]
         },
         {
           "event": "tk-selection-change",
@@ -12551,21 +12546,21 @@
       "dependents": [],
       "dependencies": [
         "tk-checkbox",
+        "tk-radio",
         "tk-input",
         "tk-button",
         "tk-icon",
         "tk-badge",
-        "tk-radio",
         "tk-pagination"
       ],
       "dependencyGraph": {
         "tk-table": [
           "tk-checkbox",
+          "tk-radio",
           "tk-input",
           "tk-button",
           "tk-icon",
           "tk-badge",
-          "tk-radio",
           "tk-pagination"
         ],
         "tk-input": [
@@ -15103,7 +15098,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text or checkbox) */\n  filterType?: 'text' | 'checkbox';\n  /** Defines options for checkbox filter type */\n  filterOptions?: IFilterOption[];\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },
@@ -15123,12 +15118,12 @@
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableExportOptions": {
-      "declaration": "export interface ITableExportOptions {\n  /** only works when type is `pdf`. Default value is `vertical` */\n  orientation?: 'horizontal' | 'vertical';\n  fileName?: string;\n  type?: 'csv' | 'pdf' | 'excel';\n  /** `all` working only client side pagination. Default value is `current-page` */\n  scope?: 'current-page' | 'selected' | 'all';\n  /** Ignore Columns Fields array for only excel export */\n  ignoreColumnsFields?: string[];\n  /** Columns for only excel export */\n  columns?: ITableExportExcelColumn[];\n  /** */\n  externalData?: any[];\n}",
+      "declaration": "export interface ITableExportOptions {\n  /** only works when type is `pdf`. Default value is `vertical` */\n  orientation?: 'horizontal' | 'vertical';\n  /** */\n  fileName?: string;\n  /** */\n  type?: 'csv' | 'pdf' | 'excel';\n  /** `all` working only client side pagination. Default value is `current-page` */\n  scope?: 'current-page' | 'selected' | 'all';\n  /** Ignore Columns Fields array for only excel export */\n  ignoreColumnsFields?: string[];\n  /** Columns for only excel export */\n  columns?: ITableExportExcelColumn[];\n  /** */\n  externalData?: any[];\n}",
       "docstring": "",
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableFilter": {
-      "declaration": "export interface ITableFilter {\n  /** The value of the filter - string for text filter, string array for checkbox filter */\n  value?: string | string[];\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text or checkbox) */\n  type?: 'text' | 'checkbox';\n}",
+      "declaration": "export interface ITableFilter {\n  /** The value of the filter - string for text/radio filter, string array for checkbox filter */\n  value?: string | string[];\n  /** The field to which the filter is applied */\n  field: string;\n  /** The type of the filter (text, checkbox or radio) */\n  type?: 'text' | 'checkbox' | 'radio';\n}",
       "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },
