@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, ComponentInterface, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Element, Prop, ComponentInterface, Watch, Event, EventEmitter, State } from '@stencil/core';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
 export interface IAccordionItemSelect {
@@ -21,6 +21,8 @@ export interface IAccordionItemSelect {
 export class TkAccordion implements ComponentInterface {
   @Element() el: HTMLTkAccordionElement;
 
+  @State() private internalActiveIndex: (string | number)[] = [];
+
   /**
    * Currently active panel indexes. Can be a single value or an array.
    * When allowMultiple is false, only the last value in the array will be used.
@@ -28,7 +30,11 @@ export class TkAccordion implements ComponentInterface {
   @Prop({ mutable: true }) activeIndex?: string | number | string[] | number[];
   @Watch('activeIndex')
   activeIndexChanged() {
-    this.updateItems();
+    const normalized = this.normalizeActiveIndex();
+    if (JSON.stringify(normalized) !== JSON.stringify(this.internalActiveIndex)) {
+      this.internalActiveIndex = normalized;
+      this.updateItems();
+    }
   }
 
   /**
@@ -73,34 +79,34 @@ export class TkAccordion implements ComponentInterface {
   @Event() tkAccordionItemSelected: EventEmitter<IAccordionItemSelect>;
 
   componentDidLoad() {
+    this.internalActiveIndex = this.normalizeActiveIndex();
     this.updateItems();
   }
 
-  private normalizeActiveIndex(): string | number | string[] | number[] {
+  private normalizeActiveIndex(): (string | number)[] {
     if (this.activeIndex === undefined || this.activeIndex === null) return [];
     if (Array.isArray(this.activeIndex)) {
       if (!this.allowMultiple) {
         const lastItem = this.activeIndex[this.activeIndex.length - 1];
-        return lastItem !== undefined ? ([lastItem] as string[] | number[]) : [];
+        return lastItem !== undefined ? [lastItem] : [];
       }
-      return this.activeIndex;
+      return this.activeIndex as (string | number)[];
     }
-    return [String(this.activeIndex)];
+    return [this.activeIndex as string | number];
   }
 
   private isIndexActive(index: string | number): boolean {
-    const activeIndexes = this.normalizeActiveIndex() as string[] | number[];
-    return activeIndexes.map(String).includes(String(index));
+    return this.internalActiveIndex.map(String).includes(String(index));
   }
 
   private toggleItem(index: string | number) {
     const isActive = this.isIndexActive(index);
     if (this.allowMultiple) {
-      const currentActive = this.normalizeActiveIndex() as string[] | number[];
+      const currentActive = [...this.internalActiveIndex];
       const newActive = isActive ? currentActive.filter(i => String(i) !== String(index)) : [...currentActive, index];
-      this.activeIndex = newActive as string[] | number[];
+      this.internalActiveIndex = newActive as (string | number)[];
     } else {
-      this.activeIndex = isActive ? undefined : index;
+      this.internalActiveIndex = isActive ? [] : [index];
     }
     this.tkAccordionItemSelected.emit({
       index,
