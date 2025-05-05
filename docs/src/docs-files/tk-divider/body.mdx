@@ -1,0 +1,31 @@
+import Default from "./Examples/Default";
+import Orientation from "./Examples/Orientation";
+import Content from "./Examples/Content";
+import CustomSpacing from "./Examples/CustomSpacing";
+import { TkAlert } from "@takeoff-ui/react"
+
+## Default
+
+The default usage of divider.
+
+<Default />
+
+## Content
+
+Customize the divider's content using the `default` slot to place any desired elements inside the `TkDivider`.
+
+<TkAlert header="Note" variant="warning" message="This feature works in conjunction with the `orientation` prop as `horizontal`." filledlight />
+<br/>
+<Content />
+
+## Orientation
+
+Provides both `horizontal` and `vertical` orientations via `orientation` property.
+
+<Orientation />
+
+## Custom Spacing
+
+Adjust the spacing around the divider using `mx` and `my` for both margins.
+
+<CustomSpacing />

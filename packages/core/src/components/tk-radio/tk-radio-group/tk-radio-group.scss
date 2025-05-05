@@ -1,0 +1,60 @@
+tk-radio-group {
+  display: block;
+}
+
+.tk-radio-group-container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: var(--size-sm);
+    font-weight: 400;
+    color: var(--text-darkest);
+    line-height: var(--desktop-body-s-line-height);
+    padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
+
+    .asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height);
+    }
+  }
+
+  .tk-radio-holder {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    &.spread {
+      width: 100%;
+
+      tk-radio {
+        flex: 1;
+      }
+    }
+
+    &.card {
+      tk-radio {
+        border-radius: var(--radius-m-base);
+        border: 1px solid var(--border-light);
+
+        &:hover {
+          background-color: var(--background-lightest);
+        }
+
+        .tk-radio-container label {
+          padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
+        }
+      }
+    }
+  }
+
+  &.vertical {
+    .tk-radio-holder {
+      flex-direction: column;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The disabled status. |
+| <TkBadge label="emptyMessage" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'Nooptionsavailable' | The message to display when there is no data available. |
+| <TkBadge label="groupNameKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'groupName' | The key to use for group names when options are grouped |
+| <TkBadge label="groupOptionsKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'options' | The key to use for grouped options array |
+| <TkBadge label="optionHtml" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null | Provides a function to customize the options. |
+| <TkBadge label="optionLabelKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'label' | The key to use for option labels |
+| <TkBadge label="optionValueKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'value' | The key to use for option values |
+| <TkBadge label="options" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | The list of options to be displayed in the select box. |
+| <TkBadge label="optionsAlign" variant="primary" size="large" type="filledlight"/> | <code>"center", "left", "right"</code> | 'left' | Indicates the alignment of options. |
+| <TkBadge label="position" variant="primary" size="large" type="filledlight"/> | <code>"bottom", "bottom-end", "bottom-start", "left", "left-end", "left-start", "right", "right-end", "right-start", "top", "top-end", "top-start"</code> | 'bottom' | Sets the position of the tooltip. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-item-click | Emitted when the value has changed. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| empty-data | Set how the dropdown will appear when there is no data |
+| trigger | The trigger slot defines the element that will trigger the dropdown |

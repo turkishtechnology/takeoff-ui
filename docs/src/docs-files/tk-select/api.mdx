@@ -1,0 +1,42 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="allowCustomValue" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables users to enter custom values that are not part of the predefined options. |
+| <TkBadge label="clearable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input can be cleared |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot interact with the input. |
+| <TkBadge label="dropdownWidthMode" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'match-parent' | Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'. |
+| <TkBadge label="editable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | This property determines whether the input field within the select box is editable. |
+| <TkBadge label="emptyMessage" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'Nooptionsavailable' | The message to display when there is no data available. |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
+| <TkBadge label="filter" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | this.defaultFilter | Function used to filter current options based on the input value. Comes with a default filter function, but can be overridden with a custom function. |
+| <TkBadge label="filterDebounceDelay" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | Sets the delay (in ms) before triggering the filter function. |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the label for the element. |
+| <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Represents whether the options are fethecd from service or not. If true renders spinner in options dropdown. |
+| <TkBadge label="multiple" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | If `true` the user can make multiple selections. |
+| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The name of the control, which is submitted with the form data. |
+| <TkBadge label="optionHtml" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null | Provides a function to customize the options. |
+| <TkBadge label="optionLabelKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'label' | The key to use for option labels |
+| <TkBadge label="optionValueKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The key to use for option values |
+| <TkBadge label="options" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | The list of options to be displayed in the select box. |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The value of the input. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-change | Emitted when the value has changed. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| empty-data | Set how the dropdown will appear when there is no data |

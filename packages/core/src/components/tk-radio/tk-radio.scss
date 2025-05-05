@@ -1,0 +1,121 @@
+tk-radio {
+  display: inline-block;
+}
+
+.tk-radio-container {
+  label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-s);
+    color: var(--text-darkest);
+    font-size: var(--size-sm);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    user-select: none;
+    &.right {
+      flex-direction: row-reverse;
+    }
+    &.width-description {
+      align-items: start;
+    }
+
+    input {
+      margin: 0;
+      appearance: none;
+      outline: none;
+      display: none;
+    }
+
+    .mask {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      background-color: var(--static-light);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-full);
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      padding: 2px;
+
+      div {
+        display: none;
+        width: 12px;
+        height: 12px;
+        color: var(--static-light);
+        border-radius: var(--radius-full);
+        background-color: var(--states-info-base);
+      }
+    }
+
+    .tk-radio-text-holder {
+      .tk-radio-description {
+        color: var(--text-base);
+        font-size: var(--size-xs);
+        font-weight: var(--weight-regular);
+      }
+    }
+  }
+
+  &:hover {
+    label {
+      .mask {
+        background-color: var(--background-lightest);
+      }
+    }
+  }
+
+  label input:focus-visible + .mask {
+    border-color: var(--states-info-base);
+    background-color: var(--static-light);
+  }
+
+  label input:checked + .mask {
+    border-color: var(--states-info-lightest);
+    background-color: var(--static-light);
+
+    div {
+      display: block;
+    }
+  }
+
+  label:hover input:checked + .mask {
+    border-color: var(--states-info-light);
+    background-color: var(--states-info-lightest);
+  }
+
+  &[aria-disabled],
+  &[disabled] {
+    label {
+      color: var(--text-sub-base);
+
+      input + .mask {
+        border: 2px solid var(--border-light);
+        background-color: var(--background-light);
+
+        div {
+          background-color: var(--background-sub-base);
+        }
+      }
+    }
+  }
+
+  &[aria-invalid] {
+    label {
+      .mask {
+        border: 2px solid var(--states-danger-base);
+        background: var(--static-light);
+      }
+
+      input:checked + .mask {
+        border-color: var(--states-danger-light);
+
+        div {
+          background-color: var(--states-danger-base);
+        }
+      }
+    }
+  }
+}

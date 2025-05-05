@@ -1,0 +1,45 @@
+.tk-toaster {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 360px;
+  z-index:1500;
+
+  &.top-right {
+    top: 20px;
+    right: 20px;
+    bottom: unset;
+    left: unset;
+  }
+
+  &.top-left {
+    top: 20px;
+    right: unset;
+    bottom: unset;
+    left: 20px;
+  }
+
+  &.bottom-right {
+    top: unset;
+    right: 20px;
+    bottom: 20px;
+    left: unset;
+  }
+
+  &.bottom-left {
+    top: unset;
+    right: unset;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .tk-toast {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .tk-toast.open {
+    opacity: 1;
+  }
+}

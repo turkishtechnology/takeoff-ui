@@ -1,0 +1,22 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="currentPage" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 1 | The current page of the pagination. |
+| <TkBadge label="mode" variant="primary" size="large" type="filledlight"/> | <code>"compact", "compact-expanded"</code> | null | The mode of the pagination |
+| <TkBadge label="rounded" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the pagination elements should have rounded corners |
+| <TkBadge label="rowsPerPage" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 10 | Number of items per page. |
+| <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/> | <code>number[]</code> | [5, 10, 20, 50] | Number of items per page options |
+| <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | Number of total items. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-next-page | Pagination next button click event |
+| tk-page-change | Pagination page change event |
+| tk-prev-page | Pagination prev button click event |
+| tk-rows-per-page-change | RowsPerPage change event |

@@ -1,0 +1,33 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="activeIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for active steps. |
+| <TkBadge label="complete" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates if the step has been completed. |
+| <TkBadge label="completeIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for completed steps. |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates if the step is disabled (cannot be selected or interacted with). |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates if the step has encountered an error. |
+| <TkBadge label="errorIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for error steps. |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The header text to be displayed for the step. |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Icon to be displayed for the step. Can be either a string (icon name) or an IIconOptions object. |
+| <TkBadge label="inactiveIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for inactive steps. |
+| <TkBadge label="index" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | The index of the step in the stepper. |
+| <TkBadge label="isActive" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates if the step is currently active. |
+| <TkBadge label="isClickable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Whether the step is clickable. |
+| <TkBadge label="labelPosition" variant="primary" size="large" type="filledlight"/> | <code>"flip", "non-flip"</code> | 'non-flip' | Controls the label position of the step. |
+| <TkBadge label="stepMode" variant="primary" size="large" type="filledlight"/> | <code>"basic", "number"</code> | 'basic' | Controls the step mode of the stepper component. |
+| <TkBadge label="subheader" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Optional subheader text to provide additional context for the step. |
+
+### Interfaces
+
+
+
+```typescript
+interface IStepClickDetail {
+  index: number;
+  status: 'completed' | 'active' | 'inactive' | 'error' | 'disabled';
+}
+```
+

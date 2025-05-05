@@ -1,0 +1,34 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot interact with the input. |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the label for the element. |
+| <TkBadge label="maxLength" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Limits the number of characters. |
+| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The name of the control, which is submitted with the form data. |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="rows" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 3 | Represents the rows value of the component |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>number, string</code> | '' | The value of the input. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-blur | Emitted when the input loses focus. |
+| tk-change | Emitted when the value has changed. |
+| tk-focus | Emitted when the input has focus. |
+| tk-input | Emitted when a keyboard input occurred. |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| setFocus | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |

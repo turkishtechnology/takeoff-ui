@@ -1,0 +1,25 @@
+.tk-chart-container {
+    position: relative;
+    box-sizing: border-box;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+    
+    // Style-based classes
+    &.tk-chart-bar {
+        background-color: transparent;
+        
+    }
+    
+    &.tk-chart-pie {
+        background-color: #F9FAFB;
+        border-radius: 8px;
+        padding: 16px;
+    }
+    
+ 
+}

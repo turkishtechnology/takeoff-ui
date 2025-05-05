@@ -1,0 +1,13 @@
+{
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "es6": true
+  },
+  "extends": ["plugin:@stencil-community/recommended"],
+  "rules": {
+    "react/jsx-no-bind": "off",
+    "@stencil-community/reserved-member-names": "off"
+  }
+}

@@ -1,0 +1,102 @@
+tk-select {
+  display: block;
+}
+
+.tk-select-container {
+  .tk-select-panel {
+    position: fixed;
+    max-height: 320px;
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    background: var(--static-light);
+    z-index: 99;
+    box-shadow: var(--effect-1-default-sm);
+
+    .dropdown-item-holder {
+      margin: 8px;
+
+      .dropdown-group-label {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--text-dark);
+        font-size: var(--desktop-body-xs-size);
+        padding: 0px 8px;
+
+        label {
+          white-space: nowrap;
+        }
+
+        .line {
+          width: 100%;
+          height: 1px;
+          background-color: var(--background-light);
+        }
+      }
+
+      .dropdown-item {
+        color: var(--text-darkest);
+        border-radius: 8px;
+        padding: var(--dropdown-items-basic-base-v-padding) var(--dropdown-items-basic-base-h-padding, 8px);
+
+        &.multiple {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        &:hover {
+          cursor: pointer;
+          background: var(--background-lightest);
+        }
+        &[data-active="true"] {
+          cursor: pointer;
+          background: var(--states-info-light);
+        }
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      background: var(--background-lightest);
+      opacity: 1;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 2px;
+      background: var(--background-lightest);
+      opacity: 1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background: var(--secondary-sub-base);
+      opacity: 1;
+    }
+  }
+
+  &.large {
+    .dropdown-item-holder {
+      .dropdown-item {
+        font-size: var(--desktop-body-m-base-size);
+      }
+    }
+  }
+
+  &.base {
+    .dropdown-item-holder {
+      .dropdown-item {
+        font-size: var(--desktop-body-s-size);
+      }
+    }
+  }
+
+  &.small {
+    .dropdown-item-holder {
+      .dropdown-item {
+        font-size: var(--desktop-body-xs-size);
+      }
+    }
+  }
+}

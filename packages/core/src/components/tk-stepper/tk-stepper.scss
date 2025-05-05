@@ -1,0 +1,263 @@
+:host {
+  display: block;
+}
+
+.tk-stepper {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Geologica';
+  text-align: initial;
+  list-style: none;
+  box-sizing: border-box;
+
+  &.tk-stepper-horizontal {
+    flex-direction: row;
+    overflow-x: auto;
+
+    .tk-step-item {
+      flex: 1;
+
+      &:last-child {
+        flex: none;
+      }
+
+      .tk-step {
+        .tk-step-sign {
+          margin-inline-start: 40px;
+          margin-inline-end: 8px;
+          vertical-align: top;
+        }
+
+        .tk-step-rail {
+          position: absolute;
+          top: calc(28px / 2);
+          font-size: 0px;
+          width: calc(100% - 48px);
+          padding: 0 24px;
+          inset-inline-start: 0;
+          margin-inline-start: calc(32px / 2 + 40px);
+
+          &::after {
+            content: '';
+            display: inline-block;
+            height: 2px;
+            width: 100%;
+            background-color: var(--border-light);
+            border-radius: var(--radius-full);
+          }
+        }
+
+        .tk-step-content {
+          display: flex;
+          width: calc((32px / 2 + 40px) * 2);
+          margin-top: var(--stepper-items-content-gap);
+          text-align: center;
+          flex-direction: column;
+          align-items: center;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  &.tk-stepper-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .tk-step-item {
+      display: block;
+      flex: 1 0 auto;
+      padding-inline-start: 0;
+      overflow: visible;
+
+      &:last-child {
+        flex: none;
+      }
+
+      .tk-step {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        .tk-step-sign {
+          float: left;
+          margin-inline-end: 8px;
+        }
+
+        .tk-step-rail {
+          position: absolute;
+          top: 0px;
+          font-size: 0px;
+          height: calc(100% - 48px);
+          padding: 40px 0;
+          width: 2px;
+          inset-inline-start: calc(30px / 2);
+
+          &::after {
+            content: '';
+            display: inline-block;
+            width: 2px;
+            height: 100%;
+            background-color: var(--border-light);
+            border-radius: var(--radius-full);
+          }
+        }
+
+        .tk-step-content {
+          display: block;
+          min-height: calc(32px * 2.5);
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  .tk-step-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    overflow: visible;
+
+    &:last-child {
+      .tk-step-rail {
+        display: none;
+      }
+    }
+
+    .tk-step-container {
+      outline: none;
+
+      .tk-step {
+        cursor: pointer;
+
+        .tk-step-sign {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 28px;
+          height: 28px;
+          border: 2px solid var(--border-light);
+          background-color: var(--static-white);
+          border-radius: var(--radius-full);
+          text-align: center;
+
+          .tk-step-icon,
+          .tk-step-number,
+          .tk-step-icon-error,
+          svg {
+            position: relative;
+            line-height: 1;
+            font-size: var(--size-xl);
+            width: 20px;
+            height: 20px;
+          }
+
+          .tk-step-icon-dot svg {
+            width: 12px;
+            height: 12px;
+          }
+
+          .tk-step-icon-complete svg {
+            width: 14px;
+            height: 12px;
+          }
+        }
+
+        .tk-step-rail::after {
+          transition: background-color .2s ease-in-out;
+        }
+
+        .tk-step-content {
+          .tk-step-header {
+            color: var(--text-dark);
+            font-family: var(--desktop-family-body);
+            font-size: var(--desktop-size-sm);
+            font-weight: var(--desktop-weight-medium);
+            line-height: var(--desktop-line-height-sm-normal);
+          }
+
+          .tk-step-subheader {
+            color: var(--text-base);
+            font-family: var(--desktop-family-body);
+            font-size: var(--desktop-size-xs, 12px);
+            font-weight: var(--desktop-weight-regular, 400);
+            line-height: var(--desktop-line-height-xs-normal, 1.5);
+          }
+        }
+
+        &.tk-step-disabled {
+          cursor: not-allowed;
+        }
+
+        &:not(.tk-step-disabled) {
+          &.tk-step-active {
+            .tk-step-sign {
+              border-color: var(--primary-base);
+              background-color: var(--primary-base);
+              color: var(--static-white);
+
+              .tk-step-icon,
+              svg {
+                color: var(--static-white);
+              }
+            }
+
+            .tk-step-header {
+              color: var(--text-darkest);
+            }
+          }
+
+          &.tk-step-inactive {
+            .tk-step-sign {
+              border-color: var(--border-light);
+              color: var(--border-light);
+
+              svg circle {
+                fill: var(--border-light);
+              }
+            }
+          }
+
+          &.tk-step-completed {
+            .tk-step-sign {
+              border-color: var(--primary-base);
+              color: var(--primary-base);
+
+              .tk-step-icon {
+                color: var(--primary-base);
+              }
+            }
+
+            .tk-step-rail::after {
+              background-color: var(--primary-base);
+            }
+          }
+
+          &.tk-step-error {
+            .tk-step-sign {
+              border-color: var(--states-danger-base);
+              color: var(--states-danger-base);
+              background: var(--states-danger-base);
+
+              .tk-step-icon {
+                color: var(--static-light);
+              }
+
+              svg path {
+                fill: var(--static-light);
+              }
+            }
+
+            .tk-step-content {
+              .tk-step-header {
+                color: var(--states-danger-base);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

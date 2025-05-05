@@ -1,0 +1,96 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="chipLabelKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'label' | The key to use for option labels |
+| <TkBadge label="clearable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input can be cleared |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | the user cannot interact with the input. |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon name to be displayed. |
+| <TkBadge label="iconPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code> | 'left' | Defines the position of the icon. |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the label for the input. |
+| <TkBadge label="maskOptions" variant="primary" size="large" type="filledlight"/> | <code>IInputMaskOptions</code> | null | The maskOptions prop is used to define masking configurations supported by the Cleave.js library. With this prop, you can specify any masking options described in the Cleave.js documentation (https://nosir.github.io/cleave.js/). For example, you can configure it for formatting dates, phone numbers, or credit card numbers as needed. |
+| <TkBadge label="max" variant="primary" size="large" type="filledlight"/> | <code>number, string</code> | null | Maximum value for number inputs |
+| <TkBadge label="min" variant="primary" size="large" type="filledlight"/> | <code>number, string</code> | null | Minimum value for number inputs |
+| <TkBadge label="mode" variant="primary" size="large" type="filledlight"/> | <code>"chips", "counter", "number", "password", "text"</code> | 'text' | input type |
+| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The name of the control, which is submitted with the form data. |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
+| <TkBadge label="pre" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the prefix of the input; |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="showSafetyStatus" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | if type = password safety status bar visible |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any[], number, string, string[]</code> | null | The value of the input. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-blur | Emitted when the input loses focus. |
+| tk-change | Emitted when the value has changed. |
+| tk-clear-click | Emitted when the clear button has click. |
+| tk-focus | Emitted when the input has focus. |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| setFocus | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |
+
+### Interfaces
+
+See cleave.js documentation https://nosir.github.io/cleave.js
+
+```typescript
+interface IInputMaskOptions {
+  backspace?: boolean;
+  blocks?: number[];
+  blocksLength?: number;
+  copyDelimiter?: boolean;
+  creditCard?: boolean;
+  creditCardStrictMode?: boolean;
+  creditCardType?: string;
+  date?: boolean;
+  dateFormatter?: any;
+  dateMax?: string;
+  dateMin?: string;
+  datePattern?: string[];
+  delimiter?: string;
+  delimiterLazyShow?: boolean;
+  delimiterLength?: number;
+  delimiters?: any[];
+  initValue?: string;
+  letterOnly?: boolean;
+  lowerCase?: boolean;
+  maxLength?: number;
+  noImmediatePrefix?: boolean;
+  numeral?: boolean;
+  numeralDecimalMark?: string;
+  numeralDecimalScale?: number;
+  numeralIntegerScale?: number;
+  numeralPositiveOnly?: boolean;
+  numeralThousandsGroupStyle?: string;
+  numericOnly?: boolean;
+  phone?: boolean;
+  phoneFormatter?: any;
+  phoneRegionCode?: string;
+  prefix?: string;
+  prefixLength?: number;
+  rawValueTrimPrefix?: boolean;
+  result?: string;
+  signBeforePrefix?: boolean;
+  stripLeadingZeroes?: boolean;
+  swapHiddenInput?: boolean;
+  tailPrefix?: boolean;
+  time?: boolean;
+  timeFormat?: string;
+  timeFormatter?: any;
+  timePattern?: string[];
+  uppercase?: boolean;
+}
+```
+
