@@ -34,6 +34,11 @@ export interface ITableColumn {
   filterType?: 'text' | 'checkbox' | 'radio';
   /** Defines options for checkbox or radio filter type */
   filterOptions?: IFilterOption[];
+  /** Defines the label of the buttons */
+  filterButton?: {
+    searchButton?: { label?: string };
+    cancelButton?: { label?: string };
+  };
 }
 
 /**
