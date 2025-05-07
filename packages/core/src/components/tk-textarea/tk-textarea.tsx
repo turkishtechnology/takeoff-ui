@@ -138,8 +138,7 @@ export class TkTextarea implements ComponentInterface {
   }
 
   formResetCallback() {
-    this.value = null;
-    this.nativeInput.value = null;
+    this.handleFormReset();
   }
 
   /**
@@ -156,6 +155,12 @@ export class TkTextarea implements ComponentInterface {
       this.charCount = this.value.toString().trim().length;
     }
   };
+
+  private handleFormReset() {
+    this.value = null;
+    this.nativeInput.value = null;
+    this.tkChange.emit(this.value);
+  }
 
   private handleInput = (ev: Event) => {
     const input = ev.target as HTMLTextAreaElement | null;

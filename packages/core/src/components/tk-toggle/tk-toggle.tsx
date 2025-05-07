@@ -124,9 +124,7 @@ export class TkToggle implements ComponentInterface {
   }
 
   formResetCallback() {
-    this.value = false;
-    this.checked = false;
-    this.invalid = false;
+    this.handleFormReset();
   }
 
   /**
@@ -135,6 +133,12 @@ export class TkToggle implements ComponentInterface {
   @Method()
   getInputElement(): Promise<HTMLInputElement> {
     return Promise.resolve(this.nativeInput);
+  }
+  private handleFormReset() {
+    this.value = false;
+    this.checked = false;
+    this.invalid = false;
+    this.tkChange.emit(this.value);
   }
 
   private handleInputChange = (event: Event) => {
