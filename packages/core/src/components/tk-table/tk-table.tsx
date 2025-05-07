@@ -348,6 +348,8 @@ export class TkTable implements ComponentInterface {
       this.sortField = null;
       this.sortOrder = null;
       this.currentPage = 1;
+      // tüm sort iconlar default duruma getirilir
+      this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
       if (this.paginationMethod !== 'server') {
         const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
