@@ -116,6 +116,11 @@ export class TkButton implements ComponentInterface {
       if (form) {
         form?.requestSubmit();
       }
+    } else if (this.mode == 'reset') {
+      const form = this.el.closest('form');
+      if (form) {
+        form?.reset();
+      }
     }
   }
 
