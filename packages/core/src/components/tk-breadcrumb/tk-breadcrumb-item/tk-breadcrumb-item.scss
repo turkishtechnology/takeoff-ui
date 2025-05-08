@@ -1,5 +1,7 @@
 .tk-breadcrumb-item {
+  position: relative;
   cursor: pointer;
+  z-index: 200;
 
   .tk-breadcrumb-link {
     display: flex;

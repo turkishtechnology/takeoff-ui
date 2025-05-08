@@ -4,6 +4,8 @@
 }
 
 .tk-toggle {
+  position: relative;
+  z-index: 200;
   label {
     display: flex;
     align-items: center;

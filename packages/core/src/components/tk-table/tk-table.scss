@@ -1,8 +1,10 @@
 .tk-table-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 1px;
+  z-index: 100;
 
   .tk-table-header {
     display: flex;

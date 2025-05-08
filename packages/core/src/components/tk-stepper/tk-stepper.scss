@@ -3,6 +3,7 @@
 }
 
 .tk-stepper {
+  position: relative;
   display: flex;
   width: 100%;
   margin: 0;
@@ -11,6 +12,7 @@
   text-align: initial;
   list-style: none;
   box-sizing: border-box;
+  z-index: 200;
 
   &.tk-stepper-horizontal {
     flex-direction: row;

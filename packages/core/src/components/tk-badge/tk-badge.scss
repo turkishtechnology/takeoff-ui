@@ -5,6 +5,7 @@
 .tk-badge-container.has-slot {
   display: inline-flex;
   position: relative;
+  z-index: 200;
 
   .tk-badge {
     position: absolute;

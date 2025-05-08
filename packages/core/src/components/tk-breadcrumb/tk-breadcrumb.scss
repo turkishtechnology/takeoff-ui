@@ -3,9 +3,11 @@
 }
 
 .tk-breadcrumb {
+  position: relative;
   display: flex;
   align-items: center;
   overflow-x: auto;
+  z-index: 200;
 
   &::-webkit-scrollbar {
     display: none;

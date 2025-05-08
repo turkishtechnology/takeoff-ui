@@ -3,8 +3,10 @@
 }
 
 .tk-rating-container {
+  position: relative;
   display: flex;
   align-items: center;
+  z-index: 200;
 }
 
 .tk-rating {

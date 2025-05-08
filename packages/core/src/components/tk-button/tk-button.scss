@@ -7,6 +7,8 @@
 
   .tk-button {
     width: 100%;
+    position: relative;
+    z-index: 200;
   }
 }
 
@@ -19,6 +21,7 @@
   align-items: center;
   justify-content: center;
   outline: none;
+  z-index: 200;
 
   &.primary {
     border: 0px;

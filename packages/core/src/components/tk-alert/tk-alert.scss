@@ -3,6 +3,7 @@
 }
 
 .tk-alert-container {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,6 +13,7 @@
   padding: var(--toast-base-v-padding) var(--toast-base-h-padding);
   border-width: 1px;
   border-style: solid;
+  z-index: 200;
 
   .tk-alert-content {
     display: flex;

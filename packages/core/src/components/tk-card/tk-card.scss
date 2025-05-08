@@ -3,11 +3,13 @@
 }
 
 .tk-card {
+  position: relative;
   display: flex;
   background: var(--static-light);
   border-radius: 16px;
   border: 1px solid var(--border-light);
   box-shadow: var(--effect-1-default-base);
+  z-index: 100;
 
   &.has-hover-shadow {
     &:hover {

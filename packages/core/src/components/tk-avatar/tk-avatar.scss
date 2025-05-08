@@ -4,6 +4,7 @@
 
 .tk-avatar-container {
   position: relative;
+  z-index: 200;
 }
 
 :has(.tk-avatar-badge) {

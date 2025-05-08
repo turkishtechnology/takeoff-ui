@@ -3,6 +3,8 @@ tk-dialog {
 
   &[visible],
   &[visible="true"] {
+  &[visible],
+  &[visible="true"] {
     display: block;
   }
 }
@@ -16,6 +18,7 @@ tk-dialog {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1500;
   z-index: 1500;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -208,6 +211,7 @@ tk-dialog {
     justify-content: flex-end;
     align-self: stretch;
 
+    ::slotted([slot="footer-actions"]) {
     ::slotted([slot="footer-actions"]) {
       display: flex;
       align-items: center;

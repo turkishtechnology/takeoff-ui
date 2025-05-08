@@ -3,6 +3,8 @@
 }
 
 .tk-divider {
+  position: relative;
+  z-index: 200;
   &.tk-divider-horizontal {
     margin: 16px 0;
     border-top: var(--spacing-px) solid var(--background-light);

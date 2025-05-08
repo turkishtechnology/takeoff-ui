@@ -3,10 +3,12 @@
 }
 
 .tk-editor-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--editor-gap);
   width: 100%;
+  z-index: 200;
 
   .tk-editor-label {
     color: var(--text-darkest);

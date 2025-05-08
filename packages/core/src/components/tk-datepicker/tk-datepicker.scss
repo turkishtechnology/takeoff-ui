@@ -17,6 +17,7 @@
   &:not(.tk-datepicker-panel-inline) {
     position: fixed;
     z-index: 800;
+    z-index: 800;
   }
 
   &.tk-datepicker-panel-inline {
@@ -193,6 +194,7 @@
   vertical-align: middle;
   padding-top: 2px;
   padding-bottom: 2px;
+  z-index: 100;
   z-index: 100;
   cursor: pointer;
 
@@ -457,6 +459,7 @@
   height: 40px;
   line-height: 40px;
   position: relative;
+  z-index: 100;
   z-index: 100;
 }
 
