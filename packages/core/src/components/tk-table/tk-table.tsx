@@ -348,7 +348,7 @@ export class TkTable implements ComponentInterface {
       this.sortField = null;
       this.sortOrder = null;
       this.currentPage = 1;
-      // tüm sort iconlar default duruma getirilir
+      // all sort icons are reset to their default state
       this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
       if (this.paginationMethod !== 'server') {
