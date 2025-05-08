@@ -210,7 +210,8 @@
         }
 
         &.loading-holder {
-          height: 200px;
+          min-height: 200px;
+          height: auto;
         }
       }
 
