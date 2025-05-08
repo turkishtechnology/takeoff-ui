@@ -4,6 +4,7 @@
 
 .tk-avatar-container {
   position: relative;
+  z-index: 200;
 }
 
 :has(.tk-avatar-badge) {
@@ -31,7 +32,7 @@
     /* 125% */
   }
 
-  >svg {
+  > svg {
     display: block;
     fill: currentColor;
     pointer-events: none;
@@ -65,7 +66,7 @@
       font-size: var(--desktop-title-h5-size, 24px);
     }
 
-    >svg {
+    > svg {
       transform: translateY(12px);
     }
   }
@@ -86,7 +87,7 @@
       font-size: var(--desktop-title-h6-size, 20px);
     }
 
-    >svg {
+    > svg {
       transform: translateY(10px);
     }
   }
@@ -106,7 +107,7 @@
       font-size: var(--desktop-body-m-base-size, 16px);
     }
 
-    >svg {
+    > svg {
       transform: translateY(8px);
     }
   }
@@ -126,7 +127,7 @@
       font-size: var(--desktop-body-xs-size, 12px);
     }
 
-    >svg {
+    > svg {
       transform: translateY(6px);
     }
   }
@@ -152,7 +153,7 @@
       /* 145.455% */
     }
 
-    >svg {
+    > svg {
       transform: translateY(4px);
     }
   }
@@ -233,27 +234,27 @@
   }
 }
 
-.tk-avatar-primary>svg {
+.tk-avatar-primary > svg {
   color: var(--primary-lightest);
 }
 
-.tk-avatar-light>svg {
+.tk-avatar-light > svg {
   color: var(--frames-lightest);
 }
 
-.tk-avatar-success>svg {
+.tk-avatar-success > svg {
   color: var(--states-success-light);
 }
 
-.tk-avatar-info>svg {
+.tk-avatar-info > svg {
   color: var(--states-info-light);
 }
 
-.tk-avatar-warning>svg {
+.tk-avatar-warning > svg {
   color: var(--states-warning-light);
 }
 
-.tk-avatar-danger>svg {
+.tk-avatar-danger > svg {
   color: var(--states-danger-light);
 }
 
@@ -267,19 +268,19 @@
   box-shadow: var(--effect-1-hover-sm);
 
   &.tk-avatar-badge-status-success {
-    background: var(--states-success-base, #22C55E);
+    background: var(--states-success-base, #22c55e);
   }
 
   &.tk-avatar-badge-status-info {
-    background: var(--states-info-base, #3B82F6);
+    background: var(--states-info-base, #3b82f6);
   }
 
   &.tk-avatar-badge-status-warning {
-    background: var(--states-warning-base, #EAB308);
+    background: var(--states-warning-base, #eab308);
   }
 
   &.tk-avatar-badge-status-danger {
-    background: var(--states-danger-base, #FF3D32);
+    background: var(--states-danger-base, #ff3d32);
   }
 }
 

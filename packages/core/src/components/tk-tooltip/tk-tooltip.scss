@@ -12,7 +12,7 @@
   pointer-events: none;
   width: max-content;
   max-width: 300px;
-  z-index: 1000;
+  z-index: 1300;
 
   &.tk-tooltip-dark {
     background: var(--background-darkest);
@@ -188,5 +188,5 @@
   width: 9px;
   height: 9px;
   transform: rotate(45deg);
-  z-index: 1000;
+  // z-index: 1350;
 }

@@ -3,14 +3,16 @@
 }
 
 .tk-stepper {
+  position: relative;
   display: flex;
   width: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Geologica';
+  font-family: "Geologica";
   text-align: initial;
   list-style: none;
   box-sizing: border-box;
+  z-index: 200;
 
   &.tk-stepper-horizontal {
     flex-direction: row;
@@ -40,7 +42,7 @@
           margin-inline-start: calc(32px / 2 + 40px);
 
           &::after {
-            content: '';
+            content: "";
             display: inline-block;
             height: 2px;
             width: 100%;
@@ -96,7 +98,7 @@
           inset-inline-start: calc(30px / 2);
 
           &::after {
-            content: '';
+            content: "";
             display: inline-block;
             width: 2px;
             height: 100%;
@@ -166,7 +168,7 @@
         }
 
         .tk-step-rail::after {
-          transition: background-color .2s ease-in-out;
+          transition: background-color 0.2s ease-in-out;
         }
 
         .tk-step-content {

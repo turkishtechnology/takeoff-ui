@@ -1,5 +1,7 @@
 tk-radio-group {
+  position: relative;
   display: block;
+  z-index: 200;
 }
 
 .tk-radio-group-container {

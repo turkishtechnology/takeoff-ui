@@ -3,11 +3,13 @@
 }
 
 .tk-currency-input-container {
+  position: relative;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  z-index: 200;
 
   .label {
     color: var(--text-darkest);
@@ -161,7 +163,6 @@
   }
 
   &[aria-disabled] {
-
     & .label,
     & .hint,
     .tk-currency-input input {
@@ -175,7 +176,6 @@
   }
 
   &[aria-readonly] {
-
     .label,
     .hint {
       color: var(--text-sub-base);

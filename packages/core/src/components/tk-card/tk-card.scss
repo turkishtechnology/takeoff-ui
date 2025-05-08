@@ -3,11 +3,13 @@
 }
 
 .tk-card {
+  position: relative;
   display: flex;
   background: var(--static-light);
   border-radius: 16px;
   border: 1px solid var(--border-light);
   box-shadow: var(--effect-1-default-base);
+  z-index: 100;
 
   &.has-hover-shadow {
     &:hover {
@@ -172,14 +174,13 @@
     justify-content: flex-end;
     align-self: stretch;
 
-    ::slotted([slot='footer-actions']) {
+    ::slotted([slot="footer-actions"]) {
       display: flex;
       align-items: center;
       gap: var(--dialog-footer-base-gap);
     }
 
     &:not(.tk-card-horizontal .tk-card-footer) {
-
       &.tk-card-footer-divided,
       &.tk-card-footer-light {
         border-top: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);

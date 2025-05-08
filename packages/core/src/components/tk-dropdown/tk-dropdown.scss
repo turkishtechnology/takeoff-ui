@@ -9,7 +9,6 @@ tk-dropdown {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1000;
     width: max-content;
     max-height: 300px;
     overflow-y: auto;
@@ -17,6 +16,7 @@ tk-dropdown {
     border: 1px solid var(--border-light);
     background: var(--static-light);
     box-shadow: var(--effect-1-default-sm);
+    z-index: 800;
 
     .tk-dropdown-item-holder {
       margin: 8px;
@@ -58,7 +58,7 @@ tk-dropdown {
         }
 
         &:hover,
-        &[data-active='true'] {
+        &[data-active="true"] {
           cursor: pointer;
           background: var(--background-lightest);
         }

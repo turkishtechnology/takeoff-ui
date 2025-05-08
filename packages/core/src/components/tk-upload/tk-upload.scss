@@ -1,7 +1,9 @@
 .tk-upload-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  z-index: 200;
 
   .label {
     font-size: var(--desktop-label-m-base-size);
@@ -55,7 +57,7 @@
     &.default {
       display: flex;
 
-      .tk-upload-icon .icon i{
+      .tk-upload-icon .icon i {
         font-size: 40px;
         color: var(--primary-base);
       }
@@ -117,7 +119,6 @@
             color: var(--primary-base);
             padding: 8px;
           }
-
         }
       }
 
@@ -243,7 +244,8 @@
         }
       }
 
-      .tk-upload-file-icon {}
+      .tk-upload-file-icon {
+      }
 
       .tk-upload-file-content {
         display: flex;
@@ -265,7 +267,8 @@
           font-weight: 300;
           margin-top: 6px;
 
-          .tk-upload-size {}
+          .tk-upload-size {
+          }
 
           .tk-upload-state {
             display: flex;

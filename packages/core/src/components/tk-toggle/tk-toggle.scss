@@ -4,6 +4,8 @@
 }
 
 .tk-toggle {
+  position: relative;
+  z-index: 200;
   label {
     display: flex;
     align-items: center;
@@ -26,7 +28,7 @@
         }
       }
 
-      .tk-toggle-input:checked+.tk-toggle-thumb {
+      .tk-toggle-input:checked + .tk-toggle-thumb {
         transform: translateX(28px);
       }
     }
@@ -48,7 +50,7 @@
         }
       }
 
-      .tk-toggle-input:checked+.tk-toggle-thumb {
+      .tk-toggle-input:checked + .tk-toggle-thumb {
         transform: translateX(24px);
       }
     }
@@ -70,7 +72,7 @@
         }
       }
 
-      .tk-toggle-input:checked+.tk-toggle-thumb {
+      .tk-toggle-input:checked + .tk-toggle-thumb {
         transform: translateX(20px);
       }
     }
@@ -92,7 +94,7 @@
         }
       }
 
-      .tk-toggle-input:checked+.tk-toggle-thumb {
+      .tk-toggle-input:checked + .tk-toggle-thumb {
         transform: translateX(16px);
       }
     }
@@ -114,7 +116,7 @@
         }
       }
 
-      .tk-toggle-input:checked+.tk-toggle-thumb {
+      .tk-toggle-input:checked + .tk-toggle-thumb {
         transform: translateX(12px);
       }
     }
@@ -153,9 +155,9 @@
     opacity: 0;
     cursor: pointer;
     margin: 0;
-    z-index: 2;
+    z-index: 100;
 
-    &:checked+.tk-toggle-thumb {
+    &:checked + .tk-toggle-thumb {
       transform: translateX(28px);
 
       .tk-toggle-thumb-icon {
@@ -163,7 +165,7 @@
       }
     }
 
-    &:disabled+.tk-toggle-thumb {
+    &:disabled + .tk-toggle-thumb {
       background-color: var(--background-light);
 
       .tk-toggle-thumb-icon {
@@ -201,7 +203,7 @@
         }
       }
 
-      .tk-toggle-input:hover:checked+.tk-toggle-thumb {
+      .tk-toggle-input:hover:checked + .tk-toggle-thumb {
         background-color: var(--states-info-lightest);
       }
     }
@@ -215,7 +217,7 @@
         }
       }
 
-      .tk-toggle-input:hover:checked+.tk-toggle-thumb {
+      .tk-toggle-input:hover:checked + .tk-toggle-thumb {
         background-color: var(--states-success-lightest);
       }
     }

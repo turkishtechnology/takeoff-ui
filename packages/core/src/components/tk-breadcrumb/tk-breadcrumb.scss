@@ -3,9 +3,11 @@
 }
 
 .tk-breadcrumb {
+  position: relative;
   display: flex;
   align-items: center;
   overflow-x: auto;
+  z-index: 200;
 
   &::-webkit-scrollbar {
     display: none;
@@ -30,19 +32,19 @@
 
       .tk-breadcrumb-dot-separator {
         &::before {
-          content: '•';
+          content: "•";
         }
       }
 
       .tk-breadcrumb-slash-separator {
         &::before {
-          content: '/';
+          content: "/";
         }
       }
 
       .tk-breadcrumb-vertical-separator {
         &::before {
-          content: '|';
+          content: "|";
         }
       }
 

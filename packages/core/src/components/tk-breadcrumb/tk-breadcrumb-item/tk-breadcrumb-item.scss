@@ -1,5 +1,7 @@
 .tk-breadcrumb-item {
+  position: relative;
   cursor: pointer;
+  z-index: 200;
 
   .tk-breadcrumb-link {
     display: flex;
@@ -56,7 +58,6 @@
 
 .tk-breadcrumb-basic {
   .tk-breadcrumb-item {
-
     &:hover,
     &:active {
       .tk-breadcrumb-item-icon {

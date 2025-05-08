@@ -1,5 +1,7 @@
 tk-pagination {
+  position: relative;
   display: block;
+  z-index: 200;
 }
 
 .tk-pagination-container {
@@ -82,7 +84,7 @@ tk-pagination {
 
       &:disabled {
         .tk-pagination-page-label,
-        .tk-pagination-cell-icon i{
+        .tk-pagination-cell-icon i {
           color: var(--text-sub-base, #99a0ae);
         }
       }
