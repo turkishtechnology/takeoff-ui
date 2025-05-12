@@ -13,6 +13,17 @@ type IReleaseItem = {
 
 export const releases: IReleaseItem[] = [
   {
+    title: 'Beta Release',
+    version: '0.0.2-beta.1',
+    date: '12.05.2025',
+    newFeatures: ['Add filter buttons label attributo to IColumn '],
+    bugFixes: [
+      'Fix sorting icon when clearSorting method is called',
+      'Fix loading icon location in table',
+      'Fix reset mode usage to button',
+    ],
+  },
+  {
     title: 'Patch Release',
     version: '0.0.1',
     date: '05.05.2025',
