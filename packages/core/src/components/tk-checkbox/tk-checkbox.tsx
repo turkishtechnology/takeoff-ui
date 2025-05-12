@@ -95,6 +95,10 @@ export class TkCheckbox implements ComponentInterface {
   }
 
   formResetCallback() {
+    this.handleFormReset();
+  }
+
+  private handleFormReset() {
     this.value = false;
     this.indeterminate = false;
     this.inputElement.checked = false;

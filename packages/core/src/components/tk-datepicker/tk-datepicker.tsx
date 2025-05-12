@@ -311,6 +311,10 @@ export class TkDatePicker {
     this.unbindWindowClickListener();
   }
 
+  formResetCallback() {
+    this.handleFormReset();
+  }
+
   /**
    * Sets the date to today
    */
@@ -1073,6 +1077,7 @@ export class TkDatePicker {
       }
     }
     this.processDateValue(initialValue, true);
+    this.tkChange.emit(this.value);
   }
 
   // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı

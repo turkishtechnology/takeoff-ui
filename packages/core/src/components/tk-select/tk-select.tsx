@@ -255,8 +255,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   formResetCallback() {
-    this.value = null;
-    this.tkChange.emit(null);
+    this.handleFormReset();
   }
 
   private async defaultFilter(text: string, options: any[]) {
@@ -431,7 +430,7 @@ export class TkSelect implements ComponentInterface {
       }
       this.tkChange.emit(this.value);
     } else {
-      this.isOpen = true;
+      // this.isOpen = true;
 
       if (this.editable && this.allowCustomValue) {
         this.value = value;
