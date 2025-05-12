@@ -1,8 +1,5 @@
 tk-dialog {
   display: none;
-
-  &[visible],
-  &[visible="true"] {
   &[visible],
   &[visible="true"] {
     display: block;
@@ -212,10 +209,11 @@ tk-dialog {
     align-self: stretch;
 
     ::slotted([slot="footer-actions"]) {
-    ::slotted([slot="footer-actions"]) {
-      display: flex;
-      align-items: center;
-      gap: var(--dialog-footer-base-gap);
+      ::slotted([slot="footer-actions"]) {
+        display: flex;
+        align-items: center;
+        gap: var(--dialog-footer-base-gap);
+      }
     }
   }
 }
