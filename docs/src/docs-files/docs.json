@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-05T09:17:40",
+  "timestamp": "2025-05-13T06:53:36",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -42,7 +42,7 @@
           "mutable": true,
           "attr": "active-index",
           "reflectToAttr": false,
-          "docs": "Currently active panel indexes. Can be a single value or an array.\nWhen allowMultiple is false, only the last value in the array will be used.",
+          "docs": "Currently active panel indexes. Can be a single value or an array.\r\nWhen allowMultiple is false, only the last value in the array will be used.",
           "docsTags": [],
           "values": [
             {
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "C:/SnapVolumesTemp/MountPoints/{fa6cc7e2-0000-0000-0000-100000000000}/{1b375f6f-ea6e-46f7-869f-ac591b8ba10e}/SVROOT/Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -2521,14 +2521,14 @@
           "mutable": false,
           "attr": "avatar-props",
           "reflectToAttr": false,
-          "docs": "TO DO State hata verdiği için buraya alındı, düzeltilecek\nTkAvatar component properties",
+          "docs": "TO DO State hata verdiği için buraya alındı, düzeltilecek\r\nTkAvatar component properties",
           "docsTags": [
             {
               "name": "defaultValue",
               "text": "{ severity: 'light', background: 'solid', rounded: true }"
             }
           ],
-          "default": "{\n    severity: 'light',\n    background: 'solid',\n    rounded: true,\n  }",
+          "default": "{\r\n    severity: 'light',\r\n    background: 'solid',\r\n    rounded: true,\r\n  }",
           "values": [
             {
               "type": "any"
@@ -2848,20 +2848,20 @@
           "name": "imageOptions",
           "type": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\" | \"right\"; windowed?: boolean; background?: boolean; backgroundUrl?: string; position?: \"top\" | \"left\" | \"right\" | \"background\"; }",
           "complexType": {
-            "original": "{\n    badge?: string;\n    badgeIcon?: string;\n    badgeIconPosition?: 'left' | 'right';\n    windowed?: boolean;\n    background?: boolean;\n    backgroundUrl?: string;\n    position?: 'top' | 'left' | 'right' | 'background';\n  }",
+            "original": "{\r\n    badge?: string;\r\n    badgeIcon?: string;\r\n    badgeIconPosition?: 'left' | 'right';\r\n    windowed?: boolean;\r\n    background?: boolean;\r\n    backgroundUrl?: string;\r\n    position?: 'top' | 'left' | 'right' | 'background';\r\n  }",
             "resolved": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\" | \"right\"; windowed?: boolean; background?: boolean; backgroundUrl?: string; position?: \"top\" | \"left\" | \"right\" | \"background\"; }",
             "references": {}
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "TO DO\nOptions for the image display",
+          "docs": "TO DO\r\nOptions for the image display",
           "docsTags": [
             {
               "name": "defaultValue",
               "text": "{ position: 'top', background: false, windowed: false }"
             }
           ],
-          "default": "{\n    position: 'top',\n    background: false,\n    windowed: true,\n  }",
+          "default": "{\r\n    position: 'top',\r\n    background: false,\r\n    windowed: true,\r\n  }",
           "values": [
             {
               "type": "{ badge?: string; badgeIcon?: string; badgeIconPosition?: \"left\""
@@ -3070,7 +3070,7 @@
               "ChartData": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData"
               }
             }
           },
@@ -3131,7 +3131,7 @@
               "ChartOptions": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
               }
             }
           },
@@ -3327,7 +3327,7 @@
               "ChartType": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType"
               }
             }
           },
@@ -4550,7 +4550,7 @@
           },
           "signature": "setFocus() => Promise<void>",
           "parameters": [],
-          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\n`input.focus()`.",
+          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\r\n`input.focus()`.",
           "docsTags": []
         }
       ],
@@ -4664,7 +4664,7 @@
           },
           "mutable": true,
           "reflectToAttr": false,
-          "docs": "Array of dates that are allowed to be selected. All other dates will be disabled.\n\nNote: Format should match dateFormat prop",
+          "docs": "Array of dates that are allowed to be selected. All other dates will be disabled.\r\n\r\nNote: Format should match dateFormat prop",
           "docsTags": [],
           "default": "[]",
           "values": [
@@ -4803,7 +4803,7 @@
           },
           "mutable": true,
           "reflectToAttr": false,
-          "docs": "Array of dates that are disabled for selection.\n\nFormat should match dateFormat prop",
+          "docs": "Array of dates that are disabled for selection.\r\n\r\nFormat should match dateFormat prop",
           "docsTags": [],
           "default": "[]",
           "values": [
@@ -4826,7 +4826,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "Disabled week days (0-6, where 0 is Sunday and 6 is Saturday)\nExample: [0,6] will disable Sunday and Saturday",
+          "docs": "Disabled week days (0-6, where 0 is Sunday and 6 is Saturday)\r\nExample: [0,6] will disable Sunday and Saturday",
           "docsTags": [],
           "default": "[]",
           "values": [
@@ -4873,7 +4873,7 @@
           "mutable": false,
           "attr": "first-day-of-week-index",
           "reflectToAttr": false,
-          "docs": "Defines the first day of the week. 0 for Monday, 1 for Tuesday, ..., 6 for Sunday.\nIf not provided, the first day of the week is determined by the `locale` prop.\nIf neither `firstDayOfWeekIndex` nor `locale` provide a value, defaults to Monday (0).\nProviding this prop overrides the locale setting for the start of the week.",
+          "docs": "Defines the first day of the week. 0 for Monday, 1 for Tuesday, ..., 6 for Sunday.\r\nIf not provided, the first day of the week is determined by the `locale` prop.\r\nIf neither `firstDayOfWeekIndex` nor `locale` provide a value, defaults to Monday (0).\r\nProviding this prop overrides the locale setting for the start of the week.",
           "docsTags": [],
           "values": [
             {
@@ -5425,7 +5425,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "C:/SnapVolumesTemp/MountPoints/{fa6cc7e2-0000-0000-0000-100000000000}/{1b375f6f-ea6e-46f7-869f-ac591b8ba10e}/SVROOT/Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5484,7 +5484,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "C:/SnapVolumesTemp/MountPoints/{fa6cc7e2-0000-0000-0000-100000000000}/{1b375f6f-ea6e-46f7-869f-ac591b8ba10e}/SVROOT/Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5960,7 +5960,7 @@
           },
           "signature": "close() => Promise<void>",
           "parameters": [],
-          "docs": "Requests to close the dialog by emitting a tk-close event.\nNote: This method only emits an event. The dialog will only close if the parent component\nlistens for this event and updates the 'visible' prop to false.",
+          "docs": "Requests to close the dialog by emitting a tk-close event.\r\nNote: This method only emits an event. The dialog will only close if the parent component\r\nlistens for this event and updates the 'visible' prop to false.",
           "docsTags": []
         },
         {
@@ -5982,7 +5982,7 @@
           },
           "signature": "open() => Promise<void>",
           "parameters": [],
-          "docs": "Requests to open the dialog by emitting a tk-open event.\nNote: This method only emits an event. The dialog will only open if the parent component\nlistens for this event and updates the 'visible' prop to true.",
+          "docs": "Requests to open the dialog by emitting a tk-open event.\r\nNote: This method only emits an event. The dialog will only open if the parent component\r\nlistens for this event and updates the 'visible' prop to true.",
           "docsTags": []
         }
       ],
@@ -6623,7 +6623,7 @@
           },
           "signature": "close() => Promise<void>",
           "parameters": [],
-          "docs": "Closes the drawer by emitting a tk-drawer-close event\nParent components should listen for this event and update the open prop",
+          "docs": "Closes the drawer by emitting a tk-drawer-close event\r\nParent components should listen for this event and update the open prop",
           "docsTags": []
         },
         {
@@ -6645,7 +6645,7 @@
           },
           "signature": "show() => Promise<void>",
           "parameters": [],
-          "docs": "Opens the drawer by emitting a tk-drawer-open event\nParent components should listen for this event and update the open prop",
+          "docs": "Opens the drawer by emitting a tk-drawer-open event\r\nParent components should listen for this event and update the open prop",
           "docsTags": []
         }
       ],
@@ -7277,7 +7277,7 @@
               "AnyExtension": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
               }
             }
           },
@@ -7561,7 +7561,7 @@
               "JSONContent": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
               }
             },
             "return": "Promise<string | JSONContent>"
@@ -7594,7 +7594,7 @@
               "Editor": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::Editor"
+                "id": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor"
               }
             },
             "return": "Promise<Editor>"
@@ -7701,7 +7701,7 @@
       "filePath": "src/components/tk-icon/tk-icon.tsx",
       "encapsulation": "none",
       "tag": "tk-icon",
-      "docs": "The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.\nThis component uses Google's Material Symbols icons. For a complete list of available icon names, please visit:\nhttps://fonts.google.com/icons?icon.set=Material+Symbols",
+      "docs": "The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.\r\nThis component uses Google's Material Symbols icons. For a complete list of available icon names, please visit:\r\nhttps://fonts.google.com/icons?icon.set=Material+Symbols",
       "docsTags": [
         {
           "name": "react",
@@ -8744,7 +8744,7 @@
           },
           "signature": "setFocus() => Promise<void>",
           "parameters": [],
-          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\n`input.focus()`.",
+          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\r\n`input.focus()`.",
           "docsTags": []
         }
       ],
@@ -10267,7 +10267,7 @@
           "mutable": false,
           "attr": "loading",
           "reflectToAttr": false,
-          "docs": "Represents whether the options are fethecd from service or not.\nIf true renders spinner in options dropdown.",
+          "docs": "Represents whether the options are fethecd from service or not.\r\nIf true renders spinner in options dropdown.",
           "docsTags": [],
           "default": "false",
           "values": [
@@ -11566,7 +11566,7 @@
           "mutable": false,
           "attr": "show-complete-state",
           "reflectToAttr": false,
-          "docs": "Whether to show completed steps with the complete state.\nIf false, completed steps will appear as just passed and not with complete styling.",
+          "docs": "Whether to show completed steps with the complete state.\r\nIf false, completed steps will appear as just passed and not with complete styling.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -11798,7 +11798,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "Provides a function to customize cell styles.\nThis function takes row and column information and returns a style for a specific cell.",
+          "docs": "Provides a function to customize cell styles.\r\nThis function takes row and column information and returns a style for a specific cell.",
           "docsTags": [],
           "values": [
             {
@@ -12041,7 +12041,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "Provides a function to customize row styles.\nThis function takes row information and returns a style for a specific row.",
+          "docs": "Provides a function to customize row styles.\r\nThis function takes row information and returns a style for a specific row.",
           "docsTags": [],
           "values": [
             {
@@ -12622,7 +12622,7 @@
           "mutable": true,
           "attr": "active-index",
           "reflectToAttr": true,
-          "docs": "Controls the currently active tab index.\nCan be controlled programmatically from outside.",
+          "docs": "Controls the currently active tab index.\r\nCan be controlled programmatically from outside.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -13609,7 +13609,7 @@
           },
           "signature": "setFocus() => Promise<void>",
           "parameters": [],
-          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\n`input.focus()`.",
+          "docs": "Sets focus on the specified `tk-input`. Use this method instead of the global\r\n`input.focus()`.",
           "docsTags": []
         }
       ],
@@ -13732,7 +13732,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "An array of objects representing the items to display on the timeline.\nEach object should have at least a `title`. `description` and `date` are optional.",
+          "docs": "An array of objects representing the items to display on the timeline.\r\nEach object should have at least a `title`. `description` and `date` are optional.",
           "docsTags": [],
           "default": "[]",
           "values": [
@@ -14508,7 +14508,7 @@
           "mutable": false,
           "attr": "auto-upload",
           "reflectToAttr": false,
-          "docs": "If `autoUpload` is set to `true`, the upload button will be hidden,\nand the `tkUpload` event will be automatically triggered for each newly added file.",
+          "docs": "If `autoUpload` is set to `true`, the upload button will be hidden,\r\nand the `tkUpload` event will be automatically triggered for each newly added file.",
           "docsTags": [],
           "default": "false",
           "values": [
@@ -15033,12 +15033,12 @@
       "path": "src/global/interfaces/IIconOptions.ts"
     },
     "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect": {
-      "declaration": "export interface IAccordionItemSelect {\n  index: string | number;\n  active: boolean;\n}",
+      "declaration": "export interface IAccordionItemSelect {\r\n  index: string | number;\r\n  active: boolean;\r\n}",
       "docstring": "",
       "path": "src/components/tk-accordion/tk-accordion.tsx"
     },
     "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection": {
-      "declaration": "export interface IDateSelection {\n  start: string;\n  end?: string;\n}",
+      "declaration": "export interface IDateSelection {\r\n  start: string;\r\n  end?: string;\r\n}",
       "docstring": "",
       "path": "src/components/tk-datepicker/tk-datepicker.tsx"
     },
@@ -15047,25 +15047,25 @@
       "docstring": "",
       "path": "src/components/tk-breadcrumb/interfaces.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-editor/interfaces.ts::TkEditorCustomButton": {
       "declaration": "export interface TkEditorCustomButton {\n  /**\n   * The action to perform when the button is clicked\n   */\n  action: string;\n  /**\n   * The icon to display in the toolbar button\n   */\n  icon: string;\n  /**\n   * The label to display in the toolbar button\n   */\n  label: string;\n  /**\n   * The behavior of the button\n   */\n  behavior: TkEditorToolbarButtonBehavior;\n  /**\n   * The level of the heading to apply when the button is clicked\n   */\n  level?: HeadingLevel;\n  /**\n   * The command to run when the button is clicked\n   */\n  command?: (editor: Editor) => boolean | void;\n}",
@@ -15077,15 +15077,15 @@
       "docstring": "",
       "path": "src/components/tk-editor/interfaces.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
+    "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../../../../../../../../../../../Users/P_YALCINDURAN/Documents/GitHub/takeoff-ui/node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
       "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
