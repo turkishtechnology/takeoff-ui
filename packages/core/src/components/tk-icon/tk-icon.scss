@@ -3,11 +3,9 @@ tk-icon {
 }
 
 .tk-icon {
-    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    z-index: 200;
 
     &.tk-icon-small {
         font-size: var(--size-sm);
