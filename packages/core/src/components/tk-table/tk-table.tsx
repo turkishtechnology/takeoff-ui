@@ -348,6 +348,8 @@ export class TkTable implements ComponentInterface {
       this.sortField = null;
       this.sortOrder = null;
       this.currentPage = 1;
+      // all sort icons are reset to their default state
+      this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
       if (this.paginationMethod !== 'server') {
         const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
@@ -699,7 +701,7 @@ export class TkTable implements ComponentInterface {
 
     // Create cancel button
     const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
-    cancelButton.label = 'Remove';
+    cancelButton.label = column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
     cancelButton.addEventListener('tk-click', () => {
@@ -709,7 +711,7 @@ export class TkTable implements ComponentInterface {
 
     // Create search/apply button
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
-    searchButton.label = 'Apply';
+    searchButton.label = column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
     searchButton.addEventListener('tk-click', () => {
       if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
@@ -1068,7 +1070,7 @@ export class TkTable implements ComponentInterface {
         <table>
           {this.createHead()}
           {this.loading ? (
-            <tbody>
+            <tbody class="loading-holder">
               <tr>
                 <td colSpan={this.columns.length + 1}>
                   <div class="loading">

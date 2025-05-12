@@ -53,7 +53,6 @@ export class TkRadioGroup implements ComponentInterface {
   @Watch('value')
   protected valueChanged() {
     this.updateTkRadio();
-    this.tkChange.emit(this.value);
   }
 
   /**
@@ -80,7 +79,7 @@ export class TkRadioGroup implements ComponentInterface {
     this.slottedItems = this.el.querySelectorAll('tk-radio');
     if (this.slottedItems.length > 0) {
       this.slottedItems.forEach(item => {
-        item.addEventListener('tk-change', this.onChangeHandle.bind(this));
+        item.addEventListener('tk-change', this.handleChange.bind(this));
         item.checked = this.value == item.value;
         item.invalid = this.invalid;
       });
@@ -88,8 +87,7 @@ export class TkRadioGroup implements ComponentInterface {
   }
 
   formResetCallback() {
-    this.value = null;
-    this.updateTkRadio();
+    this.handleFormReset();
   }
 
   private updateTkRadio() {
@@ -100,7 +98,13 @@ export class TkRadioGroup implements ComponentInterface {
     }
   }
 
-  private onChangeHandle(e) {
+  private handleFormReset() {
+    this.value = null;
+    this.tkChange.emit(this.value);
+    this.updateTkRadio();
+  }
+
+  private handleChange(e) {
     this.value = e.detail;
     this.updateTkRadio();
   }

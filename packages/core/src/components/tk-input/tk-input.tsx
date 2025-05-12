@@ -205,8 +205,7 @@ export class TkInput implements ComponentInterface {
   }
 
   formResetCallback() {
-    this.value = null;
-    this.tkChange.emit(null);
+    this.handleFormReset();
   }
 
   /**
@@ -315,6 +314,11 @@ export class TkInput implements ComponentInterface {
     this.tkBlur.emit();
   };
 
+  private handleFormReset() {
+    this.value = null;
+    this.tkChange.emit(null);
+  }
+
   // for add chip
   private handleInputKeyDown = (e: KeyboardEvent) => {
     if (
@@ -365,8 +369,7 @@ export class TkInput implements ComponentInterface {
 
   private handleClearButtonClick(e) {
     e.stopPropagation();
-    this.value = null;
-    this.tkChange.emit(null);
+    this.handleFormReset();
     this.tkClearClick.emit();
   }
 
