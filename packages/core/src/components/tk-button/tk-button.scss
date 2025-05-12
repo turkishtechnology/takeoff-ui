@@ -7,13 +7,10 @@
 
   .tk-button {
     width: 100%;
-    position: relative;
-    z-index: 200;
   }
 }
 
 .tk-button {
-  position: relative;
   font-family: "Geologica", sans-serif;
   font-weight: 400;
   line-height: var(--desktop-body-m-base-line-height);
@@ -22,7 +19,6 @@
   align-items: center;
   justify-content: center;
   outline: none;
-  z-index: 200;
 
   &.primary {
     border: 0px;
