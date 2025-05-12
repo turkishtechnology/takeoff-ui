@@ -1070,7 +1070,7 @@ export class TkTable implements ComponentInterface {
         <table>
           {this.createHead()}
           {this.loading ? (
-            <tbody>
+            <tbody class="loading-holder">
               <tr>
                 <td colSpan={this.columns.length + 1}>
                   <div class="loading">
