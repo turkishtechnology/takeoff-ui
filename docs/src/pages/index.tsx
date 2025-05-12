@@ -35,17 +35,7 @@ export default function Home() {
                   }}
                   className="flex-nowrap text-[32px]"
                 >
-                  <span>CPM </span>
-                  <span>RS13 </span>
-                  <span>CMS </span>
-                  <span>CR Platform </span>
-                  <span>Teknoloji Portal </span>
-                  <span>Cargo Web </span>
-                  <span>Kurye Portal </span>
-                  <span>Denied Boarding </span>
-                  <span>Kampanya Yönetim Sistemi </span>
-                  <span>TK Conventions </span>
-                  <span>OpsNow </span>
+                  <span>Integrated in 17+ Production Environments </span>
                 </div>
               </div>
             </div>

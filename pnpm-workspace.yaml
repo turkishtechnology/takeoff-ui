@@ -1,4 +1,5 @@
 packages:
+  - 'packages/angular'
   - 'packages/angular/projects/library'
   - 'packages/react'
   - 'packages/vue'
