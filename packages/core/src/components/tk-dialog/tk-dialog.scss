@@ -69,6 +69,7 @@ tk-dialog {
   border: 1px solid var(--border-lightest);
   background: var(--static-light);
   box-shadow: var(--effect-1-default-base);
+  z-index: 100;
 
   .tk-dialog-header {
     display: flex;
