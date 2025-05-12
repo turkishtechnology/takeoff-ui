@@ -3,13 +3,11 @@
 }
 
 .tk-textarea-container {
-  position: relative;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   gap: var(--input-external-label-large-container-gap);
   width: 100%;
-  z-index: 200;
 
   .label {
     color: var(--text-darkest);
