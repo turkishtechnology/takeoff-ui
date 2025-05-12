@@ -57,6 +57,7 @@
     "chart.js": "^4.4.9",
     "classnames": "^2.5.1",
     "cleave.js": "^1.6.0",
+    "d3-org-chart": "^3.1.1",
     "date-fns": "^3.6.0",
     "exceljs": "^4.4.0",
     "filesize": "^10.1.6",

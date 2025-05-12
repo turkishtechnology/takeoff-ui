@@ -19,7 +19,8 @@ import Tooltip from './components/Tooltip';
 import Alert from './components/Alert';
 import Accordion from './components/Accordion';
 import ZodValidation from './examples/ZodValidation';
-
+import Chart from './components/Chart';
+import OrgChart from './components/OrgChart';
 function App() {
   return (
     <Layout>
@@ -39,6 +40,8 @@ function App() {
         <Route path="components/tooltip" element={<Tooltip />} />
         <Route path="components/alert" element={<Alert />} />
         <Route path="components/accordion" element={<Accordion />} />
+        <Route path="components/chart" element={<Chart />} />
+        <Route path="components/orgchart" element={<OrgChart />} />
         <Route path="examples" element={<Examples />} />
         <Route path="examples/react-hook-form" element={<ReactHookForm />} />
         <Route path="examples/zod-validation" element={<ZodValidation />} />

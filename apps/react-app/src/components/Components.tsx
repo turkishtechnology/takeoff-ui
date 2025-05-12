@@ -94,6 +94,18 @@ function Components() {
         >
           Accordion
         </Link>
+        <Link
+          to="chart"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Chart
+        </Link>
+        <Link
+          to="orgchart"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          OrgChart
+        </Link>
       </div>
     </TkCard>
   );
