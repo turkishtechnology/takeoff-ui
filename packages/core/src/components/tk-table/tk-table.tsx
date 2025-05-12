@@ -699,7 +699,7 @@ export class TkTable implements ComponentInterface {
 
     // Create cancel button
     const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
-    cancelButton.label = 'Remove';
+    cancelButton.label = column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
     cancelButton.addEventListener('tk-click', () => {
@@ -709,7 +709,7 @@ export class TkTable implements ComponentInterface {
 
     // Create search/apply button
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
-    searchButton.label = 'Apply';
+    searchButton.label = column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
     searchButton.addEventListener('tk-click', () => {
       if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
