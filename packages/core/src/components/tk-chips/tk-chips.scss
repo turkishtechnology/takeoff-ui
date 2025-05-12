@@ -11,7 +11,6 @@
   border-radius: var(--chips-large-radius, 6px);
   border-width: 0px;
   background-color: var(--static-Light, #fff);
-  z-index: 200;
   &.removable {
     cursor: pointer;
   }
