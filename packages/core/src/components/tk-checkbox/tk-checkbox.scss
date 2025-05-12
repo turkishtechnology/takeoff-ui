@@ -3,8 +3,6 @@ tk-checkbox {
 }
 
 .tk-checkbox-container {
-  position: relative;
-  z-index: 200;
   &.card {
     border-radius: var(--radius-m-base);
     border: 1px solid var(--border-light);
