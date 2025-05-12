@@ -270,7 +270,7 @@ export class TkPagination implements ComponentInterface {
       content = (
         <Fragment>
           <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
-            <i class="material-symbols-outlined tk-pagination-cell-icon">chevron_left</i>
+            <tk-icon {...getIconElementProps('chevron_left', { class: 'tk-pagination-cell-icon', variant: null })} />
           </button>
           <tk-input
             mode="text"
@@ -282,7 +282,7 @@ export class TkPagination implements ComponentInterface {
           />
           <span class="tk-pagination-current-label">/ {totalPages} pages</span>
           <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
-            <tk-icon {...getIconElementProps('chevron-right', { class: 'tk-pagination-cell-icon', variant: null })} />
+            <tk-icon {...getIconElementProps('chevron_right', { class: 'tk-pagination-cell-icon', variant: null })} />
           </button>
         </Fragment>
       );
@@ -328,8 +328,8 @@ export class TkPagination implements ComponentInterface {
         options={this.rowsPerPageOptions}
         onTk-change={e => {
           if (e.detail !== this.rowsPerPage) {
-                this.rowsPerPage = e.detail;
-                this.tkRowsPerPageChange.emit(e.detail);
+            this.rowsPerPage = e.detail;
+            this.tkRowsPerPageChange.emit(e.detail);
           }
         }}
       ></tk-select>

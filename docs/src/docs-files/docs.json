@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-05T09:17:40",
+  "timestamp": "2025-05-12T04:55:29",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -7277,7 +7277,7 @@
               "AnyExtension": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
               }
             }
           },
@@ -7561,7 +7561,7 @@
               "JSONContent": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
               }
             },
             "return": "Promise<string | JSONContent>"
@@ -7594,7 +7594,7 @@
               "Editor": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::Editor"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor"
               }
             },
             "return": "Promise<Editor>"
@@ -9152,14 +9152,14 @@
         "tk-table"
       ],
       "dependencies": [
-        "tk-input",
         "tk-icon",
+        "tk-input",
         "tk-select"
       ],
       "dependencyGraph": {
         "tk-pagination": [
-          "tk-input",
           "tk-icon",
+          "tk-input",
           "tk-select"
         ],
         "tk-input": [
@@ -12264,6 +12264,10 @@
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
+              },
+              "HTMLTkIconElement": {
+                "location": "global",
+                "id": "global::HTMLTkIconElement"
               }
             },
             "return": "Promise<void>"
@@ -12579,8 +12583,8 @@
           "tk-icon"
         ],
         "tk-pagination": [
-          "tk-input",
           "tk-icon",
+          "tk-input",
           "tk-select"
         ],
         "tk-select": [
@@ -15062,10 +15066,10 @@
       "docstring": "",
       "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-editor/interfaces.ts::TkEditorCustomButton": {
       "declaration": "export interface TkEditorCustomButton {\n  /**\n   * The action to perform when the button is clicked\n   */\n  action: string;\n  /**\n   * The icon to display in the toolbar button\n   */\n  icon: string;\n  /**\n   * The label to display in the toolbar button\n   */\n  label: string;\n  /**\n   * The behavior of the button\n   */\n  behavior: TkEditorToolbarButtonBehavior;\n  /**\n   * The level of the heading to apply when the button is clicked\n   */\n  level?: HeadingLevel;\n  /**\n   * The command to run when the button is clicked\n   */\n  command?: (editor: Editor) => boolean | void;\n}",
@@ -15077,15 +15081,15 @@
       "docstring": "",
       "path": "src/components/tk-editor/interfaces.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.11.7_@tiptap+pm@2.11.7/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
       "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
@@ -15098,7 +15102,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },
