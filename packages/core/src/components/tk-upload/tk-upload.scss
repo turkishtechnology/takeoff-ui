@@ -67,25 +67,25 @@
 
         .tk-upload-text-holder {
           .tk-upload-title {
-            color: var(--text-darkest, #222530);
+            color: var(--text-darkest);
 
             /* Body/Small-14 */
             font-family: var(--desktop-body-s-font, Geologica);
-            font-size: var(--desktop-body-s-size, 14px);
+            font-size: var(--desktop-body-s-size);
             font-weight: 400;
-            line-height: var(--desktop-body-s-line-height, 20px);
+            line-height: var(--desktop-body-s-line-height);
             /* 142.857% */
           }
 
           .tk-upload-description {
-            color: var(--text-base, #717784);
+            color: var(--text-base);
 
             /* Body/X-Small-12 */
             font-family: var(--desktop-body-xs-font, Geologica);
-            font-size: var(--desktop-body-xs-size, 12px);
+            font-size: var(--desktop-body-xs-size);
             font-style: normal;
             font-weight: 300;
-            line-height: var(--desktop-body-xs-line-height, 18px);
+            line-height: var(--desktop-body-xs-line-height);
             /* 150% */
           }
         }
@@ -132,25 +132,25 @@
           gap: 8px;
 
           .tk-upload-title {
-            color: var(--text-darkest, #222530);
+            color: var(--text-darkest);
 
             /* Body/Small-14 */
             font-family: var(--desktop-body-s-font, Geologica);
-            font-size: var(--desktop-body-s-size, 14px);
+            font-size: var(--desktop-body-s-size);
             font-weight: 400;
-            line-height: var(--desktop-body-s-line-height, 20px);
+            line-height: var(--desktop-body-s-line-height);
             /* 142.857% */
           }
 
           .tk-upload-description {
-            color: var(--text-base, #717784);
+            color: var(--text-base);
 
             /* Body/X-Small-12 */
             font-family: var(--desktop-body-xs-font, Geologica);
-            font-size: var(--desktop-body-xs-size, 12px);
+            font-size: var(--desktop-body-xs-size);
             font-style: normal;
             font-weight: 300;
-            line-height: var(--desktop-body-xs-line-height, 18px);
+            line-height: var(--desktop-body-xs-line-height);
             /* 150% */
           }
         }
@@ -261,7 +261,7 @@
           display: flex;
           gap: 8px;
           color: var(--text-base);
-          font-size: var(--desktop-label-s-size, 12px);
+          font-size: var(--desktop-label-s-size);
           font-weight: 300;
           margin-top: 6px;
 
