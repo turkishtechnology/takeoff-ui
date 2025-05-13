@@ -215,12 +215,12 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: var(--settings-footer-gap, 8px);
+    gap: 8px;
   }
 
   &.tk-drawer-footer-divided,
   &.tk-drawer-footer-light {
-    border-top: var(--spacing-px, 1px) solid var(--border-light);
+    border-top: var(--spacing-px) solid var(--border-light);
   }
 
   &.tk-drawer-footer-light {
