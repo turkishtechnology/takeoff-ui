@@ -8,7 +8,7 @@
   position: absolute;
   color: var(--static-white);
   padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
-  border-radius: var(--tooltips-base-radius, 8px);
+  border-radius: var(--tooltips-base-radius);
   pointer-events: none;
   width: max-content;
   max-width: 300px;
