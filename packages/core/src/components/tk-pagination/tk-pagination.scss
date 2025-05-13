@@ -23,16 +23,16 @@ tk-pagination {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: var(--pagination-base-tag-gap, 0px);
+    gap: var(--pagination-base-tag-gap);
 
     .tk-pagination-tag-label {
-      color: var(--text-base, #717784);
+      color: var(--text-base);
       /* Body/X-Small-12 */
       font-family: var(--desktop-body-xs-font, Geologica);
-      font-size: var(--desktop-body-xs-size, 12px);
+      font-size: var(--desktop-body-xs-size);
       font-style: normal;
       font-weight: 400;
-      line-height: var(--desktop-body-xs-line-height, 18px);
+      line-height: var(--desktop-body-xs-line-height);
       /* 150% */
     }
   }
@@ -41,13 +41,13 @@ tk-pagination {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--pagination-base-gap, 6px);
+    gap: var(--pagination-base-gap);
 
     .tk-pagination-prev-actions,
     .tk-pagination-next-actions {
       display: flex;
       align-items: center;
-      gap: var(--pagination-base-arrow-gap, 4px);
+      gap: var(--pagination-base-arrow-gap);
     }
 
     .tk-pagination-cell {
@@ -73,17 +73,17 @@ tk-pagination {
       }
 
       &:hover:not(:disabled) {
-        background: var(--background-lightest, #f9fafc);
+        background: var(--background-lightest);
       }
 
       &:focus-visible {
-        border: var(--spacing-px, 1px) solid var(--states-info-base, #3b82f6);
+        border: var(--spacing-px) solid var(--states-info-base);
       }
 
       &:disabled {
         .tk-pagination-page-label,
         .tk-pagination-cell-icon i{
-          color: var(--text-sub-base, #99a0ae);
+          color: var(--text-sub-base);
         }
       }
     }
@@ -98,23 +98,23 @@ tk-pagination {
 
     &.tk-pagination-outlined {
       .tk-pagination-page {
-        border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+        border: var(--spacing-px) solid var(--border-light);
       }
     }
 
     &.tk-pagination-grouped {
       display: inline-flex;
       align-items: center;
-      padding: var(--pagination-base-container-v-padding, 2px) 0px;
+      padding: var(--pagination-base-container-v-padding) 0px;
       border-radius: 8px;
-      border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
-      background: var(--static-light, #fff);
+      border: var(--spacing-px) solid var(--border-light);
+      background: var(--static-light);
       overflow: hidden;
 
       .tk-pagination-divider {
         width: 1px;
         height: 16px;
-        background-color: var(--border-light, #e1e4ea);
+        background-color: var(--border-light);
       }
     }
 
@@ -125,14 +125,14 @@ tk-pagination {
       }
 
       .tk-pagination-current-label {
-        color: var(--text-base, #717784);
+        color: var(--text-base);
 
         /* Body/Small-14 */
         font-family: var(--desktop-body-s-font, Geologica);
-        font-size: var(--desktop-body-s-size, 14px);
+        font-size: var(--desktop-body-s-size);
         font-style: normal;
         font-weight: 400;
-        line-height: var(--desktop-body-s-line-height, 20px);
+        line-height: var(--desktop-body-s-line-height);
         /* 142.857% */
       }
 
@@ -140,7 +140,7 @@ tk-pagination {
       .tk-pagination-prev,
       .tk-pagination-next,
       .tk-pagination-last {
-        border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+        border: var(--spacing-px) solid var(--border-light);
       }
 
       &.tk-pagination-rounded {
@@ -160,8 +160,8 @@ tk-pagination {
 
     .tk-pagination-page {
       &.tk-pagination-page-active {
-        border: var(--spacing-px, 1px) solid var(--states-info-sub-base);
-        background: var(--background-lightest, #f9fafc);
+        border: var(--spacing-px) solid var(--states-info-sub-base);
+        background: var(--background-lightest);
       }
     }
 
@@ -171,7 +171,7 @@ tk-pagination {
     .tk-pagination-next,
     .tk-pagination-first {
       &:focus-visible {
-        border: var(--spacing-px, 1px) solid var(--states-info-base, #3b82f6);
+        border: var(--spacing-px) solid var(--states-info-base);
         outline: none;
       }
     }
