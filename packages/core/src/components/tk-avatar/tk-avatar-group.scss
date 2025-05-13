@@ -10,8 +10,8 @@
 
   &.tk-avatar-group-compact {
     border-radius: var(--radius-full);
-    border: 1px solid var(--border-light, #E1E4EA);
-    background: var(--static-light, #FFF);
+    border: 1px solid var(--border-light);
+    background: var(--static-light);
     padding: 4px;
 
     >tk-avatar:last-child .tk-avatar-container {
@@ -24,7 +24,7 @@
         user-select: none;
 
         .tk-avatar-label {
-          color: var(--text-darkest, #222530);
+          color: var(--text-darkest);
         }
       }
     }
@@ -42,7 +42,7 @@
     }
 
     >.tk-avatar-base {
-      margin-left: var(--neutral-darker-shadows-2xl-spread, -12px);
+      margin-left: -12px;
     }
 
     >.tk-avatar-small,
