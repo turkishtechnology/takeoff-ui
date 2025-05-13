@@ -309,7 +309,7 @@ importers:
   packages/core:
     dependencies:
       '@floating-ui/dom':
-        specifier: ^1.6.11
+        specifier: ^1.7.0
         version: 1.7.0
       '@stencil/angular-output-target':
         specifier: 0.10.1
