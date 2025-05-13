@@ -118,11 +118,11 @@ tk-dialog {
       color: var(--icon-sub-base);
       width: var(--dialog-header-base-close-icon-size);
       height: var(--dialog-header-base-close-icon-size);
-      padding: var(--sizes-small-full-padding, 6px);
+      padding: var(--sizes-small-full-padding);
       justify-content: center;
       align-items: center;
       gap: var(--dialog-header-small-gap);
-      border-radius: var(--sizes-small-radius, 8px);
+      border-radius: var(--sizes-small-radius);
 
       &:focus {
         box-shadow: var(--neutral-focus);
