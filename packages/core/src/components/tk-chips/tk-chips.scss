@@ -18,6 +18,7 @@
   &.disabled {
     color: var(--text-sub-base, #cacfd8) !important;
     background-color: var(--frames-light) !important;
+    pointer-events: none;
 
     &.avatar,
     &.outlined {
