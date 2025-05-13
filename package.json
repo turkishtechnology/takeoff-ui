@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app",
+    "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd docs && pnpm run generate-docs && pnpm run build",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",
     "dev:ng": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd packages/angular && pnpm run start",
