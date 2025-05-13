@@ -181,9 +181,9 @@
           .tk-step-subheader {
             color: var(--text-base);
             font-family: var(--desktop-family-body);
-            font-size: var(--desktop-size-xs, 12px);
-            font-weight: var(--desktop-weight-regular, 400);
-            line-height: var(--desktop-line-height-xs-normal, 1.5);
+            font-size: var(--desktop-size-xs);
+            font-weight: var(--weight-regular);
+            line-height: var(--line-height-xs-normal);
           }
         }
 
