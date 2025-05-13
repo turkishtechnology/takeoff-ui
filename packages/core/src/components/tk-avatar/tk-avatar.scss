@@ -27,7 +27,7 @@
     /* Title/H5-24 */
     font-style: normal;
     font-weight: 400;
-    line-height: var(--desktop-title-h5-line-height, 30px);
+    line-height: var(--desktop-title-h5-line-height);
     /* 125% */
   }
 
@@ -62,7 +62,7 @@
     border: 2px solid var(--static-light);
 
     .tk-avatar-label {
-      font-size: var(--desktop-title-h5-size, 24px);
+      font-size: var(--desktop-title-h5-size);
     }
 
     >svg {
@@ -83,7 +83,7 @@
     border: 2px solid var(--static-light);
 
     .tk-avatar-label {
-      font-size: var(--desktop-title-h6-size, 20px);
+      font-size: var(--desktop-title-h6-size);
     }
 
     >svg {
@@ -103,7 +103,7 @@
     height: 32px;
 
     .tk-avatar-label {
-      font-size: var(--desktop-body-m-base-size, 16px);
+      font-size: var(--desktop-body-m-base-size);
     }
 
     >svg {
@@ -123,7 +123,7 @@
     height: 24px;
 
     .tk-avatar-label {
-      font-size: var(--desktop-body-xs-size, 12px);
+      font-size: var(--desktop-body-xs-size);
     }
 
     >svg {
@@ -147,8 +147,8 @@
     }
 
     .tk-avatar-label {
-      font-size: var(--desktop-body-2xs-size, 11px);
-      line-height: var(--line-height-xxs-normal, 16px);
+      font-size: var(--desktop-body-2xs-size);
+      line-height: var(--line-height-xxs-normal);
       /* 145.455% */
     }
 
@@ -175,7 +175,7 @@
   background: var(--primary-base);
 
   .tk-avatar-label {
-    color: var(--text-lightest, #f9fafc);
+    color: var(--text-lightest);
   }
 
   &:has(.tk-avatar-image) {
@@ -267,19 +267,19 @@
   box-shadow: var(--effect-1-hover-sm);
 
   &.tk-avatar-badge-status-success {
-    background: var(--states-success-base, #22C55E);
+    background: var(--states-success-base);
   }
 
   &.tk-avatar-badge-status-info {
-    background: var(--states-info-base, #3B82F6);
+    background: var(--states-info-base);
   }
 
   &.tk-avatar-badge-status-warning {
-    background: var(--states-warning-base, #EAB308);
+    background: var(--states-warning-base);
   }
 
   &.tk-avatar-badge-status-danger {
-    background: var(--states-danger-base, #FF3D32);
+    background: var(--states-danger-base);
   }
 }
 
