@@ -225,12 +225,26 @@ export class TkTable implements ComponentInterface {
   componentDidUpdate() {
     if (this.isFilterOpen) {
       if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition(), {
-          animationFrame: true,
-        });
+        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition());
       }
     } else {
       this.closeFilterPanel();
+    }
+  }
+
+  disconnectedCallback(): void {
+    if (this.cleanupFilterPanel) {
+      this.cleanupFilterPanel();
+      this.cleanupFilterPanel = null;
+    }
+
+    this.elActiveSearchIcon = null;
+    this.elFilterPanelElement = null;
+    this.isFilterOpen = false;
+
+    const existingFilterPanel = document.querySelector('.tk-table-filter-panel');
+    if (existingFilterPanel) {
+      existingFilterPanel.remove();
     }
   }
 
