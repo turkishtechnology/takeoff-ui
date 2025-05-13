@@ -24,9 +24,9 @@
 
 .tk-badge-container {
   display: inline-flex;
-  
+
   .tk-badge {
-    font-family: 'Geologica', sans-serif;
+    font-family: "Geologica", sans-serif;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -303,7 +303,8 @@
       /* 145.455% */
       font-size: var(--desktop-body-2xs-size);
       border-radius: var(--badge-small-basic-radius);
-      padding: var(--badge-small-basic-v-padding) var(--badge-small-basic-right-padding) var(--badge-small-basic-v-padding) var(--badge-small-basic-left-padding);
+      padding: var(--badge-small-basic-v-padding) var(--badge-small-basic-right-padding)
+        var(--badge-small-basic-v-padding) var(--badge-small-basic-left-padding);
       gap: 2;
 
       i {
@@ -327,7 +328,8 @@
       /* 150% */
       font-size: var(--desktop-body-xs-size);
       border-radius: var(--badge-base-basic-radius);
-      padding: var(--badge-base-basic-v-padding) var(--badge-base-basic-right-padding) var(--badge-base-basic-v-padding) var(--badge-base-basic-left-padding);
+      padding: var(--badge-base-basic-v-padding) var(--badge-base-basic-right-padding) var(--badge-base-basic-v-padding)
+        var(--badge-base-basic-left-padding);
       gap: 4px;
 
       i {
@@ -351,7 +353,8 @@
       /* 150% */
       font-size: var(--desktop-body-xs-size);
       border-radius: var(--badge-large-basic-radius);
-      padding: var(--badge-large-basic-v-padding) var(--badge-large-basic-right-padding) var(--badge-large-basic-v-padding) var(--badge-large-basic-left-padding);
+      padding: var(--badge-large-basic-v-padding) var(--badge-large-basic-right-padding)
+        var(--badge-large-basic-v-padding) var(--badge-large-basic-left-padding);
       gap: 6px;
 
       i {
@@ -375,8 +378,8 @@
 
       &.small {
         gap: var(--badge-small-right-icon-gap);
-        padding: var(--badge-small-right-icon-v-padding) var(--badge-small-right-icon-right-padding) var(--badge-small-right-icon-v-padding)
-          var(--badge-small-right-icon-left-padding);
+        padding: var(--badge-small-right-icon-v-padding) var(--badge-small-right-icon-right-padding)
+          var(--badge-small-right-icon-v-padding) var(--badge-small-right-icon-left-padding);
 
         i {
           font-size: var(--badge-small-right-icon-icon-size);
@@ -387,7 +390,8 @@
 
       &.base {
         gap: var(--badge-base-right-icon-gap);
-        padding: var(--badge-base-right-icon-v-padding) var(--badge-base-right-icon-right-padding) var(--badge-base-right-icon-v-padding) var(--badge-base-right-icon-left-padding);
+        padding: var(--badge-base-right-icon-v-padding) var(--badge-base-right-icon-right-padding)
+          var(--badge-base-right-icon-v-padding) var(--badge-base-right-icon-left-padding);
 
         i {
           font-size: var(--badge-base-right-icon-icon-size);
@@ -398,8 +402,8 @@
 
       &.large {
         gap: var(--badge-large-right-icon-gap);
-        padding: var(--badge-large-right-icon-v-padding) var(--badge-large-right-icon-right-padding) var(--badge-large-right-icon-v-padding)
-          var(--badge-large-right-icon-left-padding);
+        padding: var(--badge-large-right-icon-v-padding) var(--badge-large-right-icon-right-padding)
+          var(--badge-large-right-icon-v-padding) var(--badge-large-right-icon-left-padding);
 
         i {
           font-size: var(--badge-large-right-icon-icon-size);

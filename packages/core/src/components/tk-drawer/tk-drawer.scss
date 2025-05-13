@@ -9,7 +9,7 @@
   left: 0;
   top: 0;
   display: flex;
-  z-index: 1101;
+  z-index: 1500;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 
@@ -19,7 +19,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
   }
 
   &.tk-drawer-visible {
@@ -63,7 +62,7 @@
   flex-direction: column;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  z-index: 1;
+  z-index: 100;
 
   &.tk-drawer-full-screen {
     width: 100vw !important;
@@ -211,7 +210,7 @@
   padding: var(--notification-footer-v-padding) var(--notification-footer-h-padding);
   box-shadow: var(--effect-2-default-base);
 
-  ::slotted([slot='footer']) {
+  ::slotted([slot="footer"]) {
     display: flex;
     justify-content: flex-end;
     align-items: center;

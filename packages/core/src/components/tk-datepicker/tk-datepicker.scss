@@ -16,7 +16,8 @@
 
   &:not(.tk-datepicker-panel-inline) {
     position: fixed;
-    z-index: 99;
+    z-index: 800;
+    z-index: 800;
   }
 
   &.tk-datepicker-panel-inline {
@@ -193,6 +194,8 @@
   vertical-align: middle;
   padding-top: 2px;
   padding-bottom: 2px;
+  z-index: 100;
+  z-index: 100;
   cursor: pointer;
 
   &::before {
@@ -202,7 +205,6 @@
     transform: translateY(-50%);
     background-color: transparent;
     height: 40px;
-    z-index: 0;
   }
 
   .tk-datepicker-day {
@@ -211,7 +213,7 @@
     min-width: var(--datepicker-items-base-size);
     height: var(--datepicker-items-base-size);
     line-height: var(--datepicker-items-base-size);
-    z-index: 1;
+    z-index: 100;
     text-align: center;
     color: var(--text-darkest);
     font-family: var(--desktop-body-s-font, Geologica);
@@ -457,7 +459,8 @@
   height: 40px;
   line-height: 40px;
   position: relative;
-  z-index: 1;
+  z-index: 100;
+  z-index: 100;
 }
 
 .tk-datepicker-timepicker-value-selected {

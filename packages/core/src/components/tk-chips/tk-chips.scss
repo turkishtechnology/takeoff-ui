@@ -3,14 +3,16 @@
 }
 
 .tk-chips {
-  font-family: 'Geologica', sans-serif;
+  position: relative;
+  font-family: "Geologica", sans-serif;
+  position: relative;
+  font-family: "Geologica", sans-serif;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--chips-large-radius, 6px);
   border-width: 0px;
   background-color: var(--static-Light, #fff);
-
   &.removable {
     cursor: pointer;
   }

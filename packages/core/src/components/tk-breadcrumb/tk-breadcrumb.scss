@@ -30,19 +30,19 @@
 
       .tk-breadcrumb-dot-separator {
         &::before {
-          content: '•';
+          content: "•";
         }
       }
 
       .tk-breadcrumb-slash-separator {
         &::before {
-          content: '/';
+          content: "/";
         }
       }
 
       .tk-breadcrumb-vertical-separator {
         &::before {
-          content: '|';
+          content: "|";
         }
       }
 

@@ -45,7 +45,6 @@
     }
 
     &.error {
-
       span,
       .tk-editor-supporting-text-icon {
         color: var(--states-danger-base);
@@ -61,7 +60,6 @@
 
   &.tk-editor-invalid {
     .tk-editor-supporting-text {
-
       span,
       .tk-editor-supporting-text-icon {
         color: var(--states-danger-base);
@@ -89,7 +87,6 @@
       }
 
       &.error {
-
         span,
         .tk-editor-supporting-text-icon {
           color: var(--states-danger-base);
@@ -133,7 +130,7 @@
       background: var(--background-lightest);
       position: sticky;
       top: 0;
-      z-index: 1;
+      z-index: 100;
 
       .tk-editor-controlsgroup-container {
         display: flex;
@@ -148,7 +145,6 @@
 
           /* Workaround for temp svg */
           :not(.tk-editor-button-heading):not(.tk-editor-button-undo):not(.tk-editor-button-redo) {
-
             &.tk-editor-button-readonly,
             &.tk-editor-button-disabled {
               svg {
@@ -162,7 +158,6 @@
           &[data-tk-editor-group="history"],
           &[data-tk-editor-group="alignment"] {
             .tk-editor-button {
-
               &:not(.tk-editor-button-readonly),
               &:not(.tk-editor-button-disabled) {
                 color: var(--text-sub-base);
@@ -245,7 +240,7 @@
 
                   &:focus {
                     position: relative;
-                    z-index: 1;
+                    z-index: 100;
                     outline: none;
                   }
 
@@ -444,12 +439,12 @@
     margin: 0;
   }
 
-  >* {
+  > * {
     margin: 0;
     padding: 0;
   }
 
-  >*+* {
+  > * + * {
     margin-top: var(--editor-body-gap);
   }
 
@@ -469,7 +464,7 @@
     li {
       margin: 2px 0;
 
-      >p {
+      > p {
         margin: 0;
       }
     }
@@ -536,6 +531,6 @@
     bottom: 0;
     pointer-events: none;
     position: absolute;
-    z-index: 2;
+    z-index: 200;
   }
 }
