@@ -38,7 +38,7 @@ tk-select {
       .dropdown-item {
         color: var(--text-darkest);
         border-radius: 8px;
-        padding: var(--dropdown-items-basic-base-v-padding) var(--dropdown-items-basic-base-h-padding, 8px);
+        padding: var(--dropdown-items-basic-base-v-padding) var(--dropdown-items-basic-base-h-padding);
 
         &.multiple {
           display: flex;
