@@ -119,6 +119,11 @@ export class TkUpload implements ComponentInterface {
   @Prop() type: 'default' | 'centered' = 'default';
 
   /**
+   * Indicates whether the files can be downloaded. When true, a download button will be displayed next to each file.
+   */
+  @Prop() downloadable: boolean = false;
+
+  /**
    * Emitted when one or more files pass validation.
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<File[]>;
@@ -137,6 +142,11 @@ export class TkUpload implements ComponentInterface {
    * Emitted when a file is removed from the accepted list.
    */
   @Event({ eventName: 'tk-removed-file' }) tkRemovedFile: EventEmitter<File>;
+
+  /**
+   * Emitted when a file is download button is clicked.
+   */
+  @Event({ eventName: 'tk-download-file' }) tkDownloadFile: EventEmitter<File>;
 
   private isImageFile(file: File): boolean {
     const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -193,6 +203,10 @@ export class TkUpload implements ComponentInterface {
         this.tkFilesRejected.emit(rejectedFiles);
       }
     }
+  }
+
+  private handleDownloadButtonClick(file: File) {
+    this.tkDownloadFile.emit(file);
   }
 
   private handleRemoveButtonClick(file: File) {
@@ -306,7 +320,10 @@ export class TkUpload implements ComponentInterface {
                   {this.renderState()}
                 </div>
               </div>
-              <div class="tk-upload-file-delete">
+              <div class="tk-upload-file-buttons">
+                {this.downloadable && (
+                  <tk-button variant="neutral" type="outlined" icon="file_download" size="small" onTk-click={() => this.handleDownloadButtonClick(item)}></tk-button>
+                )}
                 <tk-button variant="neutral" type="outlined" icon="close" size="small" onTk-click={() => this.handleRemoveButtonClick(item)}></tk-button>
               </div>
             </div>
