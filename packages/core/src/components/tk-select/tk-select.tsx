@@ -191,8 +191,22 @@ export class TkSelect implements ComponentInterface {
     if (_.isEqual(newValue, oldValue)) return;
 
     if (this.multiple) {
+      if (Array.isArray(newValue)) {
+        const validValues = newValue.filter(val => this.options.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+        if (!_.isEqual(validValues, newValue)) {
+          this.value = validValues;
+          return;
+        }
+      }
       this.inputRef.value = this.value;
     } else {
+      if (newValue !== null && !this.allowCustomValue) {
+        const exists = this.options.some(opt => _.isEqual(this.getOptionValue(opt), newValue));
+        if (!exists) {
+          this.value = null;
+          return;
+        }
+      }
       this.setValue();
     }
   }
