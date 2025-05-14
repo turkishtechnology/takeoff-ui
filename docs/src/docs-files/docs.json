@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-12T05:10:59",
+  "timestamp": "2025-05-14T08:34:42",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -14598,6 +14598,30 @@
           "setter": false
         },
         {
+          "name": "downloadable",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "downloadable",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the files can be downloaded. When true, a download button will be displayed next to each file.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "error",
           "type": "string",
           "complexType": {
@@ -14943,6 +14967,25 @@
           "cancelable": true,
           "composed": true,
           "docs": "Emitted when one or more files pass validation.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-download-file",
+          "detail": "File",
+          "bubbles": true,
+          "complexType": {
+            "original": "File",
+            "resolved": "File",
+            "references": {
+              "File": {
+                "location": "global",
+                "id": "global::File"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when a file is download button is clicked.",
           "docsTags": []
         },
         {
