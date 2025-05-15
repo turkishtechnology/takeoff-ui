@@ -298,13 +298,13 @@
     }
 
     &.small {
-      height: 16px;
-      line-height: var(--desktop-body-2xs-line-height);
+      height: var(--size-base);
+      line-height: var(--desktop-body-m-base-size);
       /* 145.455% */
       font-size: var(--desktop-body-2xs-size);
       border-radius: var(--badge-small-basic-radius);
       padding: var(--badge-small-basic-v-padding) var(--badge-small-basic-right-padding) var(--badge-small-basic-v-padding) var(--badge-small-basic-left-padding);
-      gap: 2;
+      gap: var(--badge-small-basic-gap);
 
       i {
         font-size: var(--badge-small-left-icon-icon-size);
@@ -314,21 +314,21 @@
 
       &.icon-only,
       &.count {
-        width: 16px;
-        height: 16px;
+        width: var(--size-base);
+        height: var(--size-base);
         padding: var(--spacing-none);
         gap: var(--badge-small-basic-gap);
       }
     }
 
     &.base {
-      height: 20px;
+      height: var(--size-lg);
       line-height: var(--desktop-body-xs-line-height);
       /* 150% */
       font-size: var(--desktop-body-xs-size);
       border-radius: var(--badge-base-basic-radius);
       padding: var(--badge-base-basic-v-padding) var(--badge-base-basic-right-padding) var(--badge-base-basic-v-padding) var(--badge-base-basic-left-padding);
-      gap: 4px;
+      gap: var(--spacing-xxs);
 
       i {
         font-size: var(--badge-base-left-icon-icon-size);
@@ -338,21 +338,21 @@
 
       &.icon-only,
       &.count {
-        width: 20px;
-        height: 20px;
+        width: var(--size-xl);
+        height: var(--size-xl);
         padding: var(--spacing-none);
         gap: var(--badge-base-basic-gap);
       }
     }
 
     &.large {
-      height: 24px;
-      line-height: var(--desktop-body-xs-line-height);
+      height: var(--size-xl);
+      line-height: var(--desktop-body-s-line-height);
       /* 150% */
-      font-size: var(--desktop-body-xs-size);
+      font-size: var( --desktop-body-s-size);
       border-radius: var(--badge-large-basic-radius);
       padding: var(--badge-large-basic-v-padding) var(--badge-large-basic-right-padding) var(--badge-large-basic-v-padding) var(--badge-large-basic-left-padding);
-      gap: 6px;
+      gap: var(--spacing-xs);
 
       i {
         font-size: var(--badge-large-left-icon-icon-size);
@@ -363,8 +363,8 @@
 
       &.icon-only,
       &.count {
-        width: 24px;
-        height: 24px;
+        width: var(--size-2xl);
+        height: var(--size-2xl);
         padding: var(--spacing-none);
         gap: var(--badge-large-basic-gap);
       }
@@ -414,14 +414,14 @@
     }
 
     &.icon-only {
-      gap: 0px;
+      gap: var(--badge-base-basic-gap);
       padding: var(--spacing-none);
     }
 
     &.dot {
-      width: 6px;
-      height: 6px;
-      gap: 0px;
+      width: var(--size-base);
+      height: var(--size-base);
+      gap: var(--badge-base-basic-gap);
       padding: var(--spacing-none);
       border: none !important;
 
