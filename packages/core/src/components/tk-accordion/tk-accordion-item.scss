@@ -1,5 +1,5 @@
 .tk-accordion-item {
-  margin: 10px auto;
+  margin: var(--spacing-l) auto;
 
   .header {
     display: flex;
@@ -23,11 +23,9 @@
   }
 
   &.grouped {
-    gap: 10px;
     border-radius: var(--accordion-base-radius);
     border: 1px solid var(--border-light);
     background: var(--static-light);
-
     .header {
       border-radius: var(--accordion-base-radius);
 
@@ -47,7 +45,7 @@
         max-height 0.2s ease-out,
         opacity 0.2s ease-out;
       opacity: 0;
-      padding-top: 5px;
+      padding-top: var(--spacing-s);
       display: none;
 
       &.open {
@@ -57,10 +55,10 @@
       }
     }
 
-    &.base {
+    &.base { 
       .header {
-        font-size: 14px;
-        font-weight: 400;
+        font-size: var(--desktop-body-s-size);
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-s-line-height);
         gap: var(--accordion-base-gap);
         padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
@@ -73,11 +71,11 @@
 
     &.large {
       .header {
-        font-size: 16px;
-        font-weight: 400;
+        font-size:  var(--desktop-body-m-size);;
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-m-base-line-height);
-        padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
         gap: var(--accordion-large-gap);
+        padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
       }
 
       .content {
@@ -88,7 +86,7 @@
 
   &.divided {
     .header {
-      gap: 10px;
+      gap: var(--spacing-l);
       border-radius: var(--accordion-base-radius);
       border: 1px solid var(--border-light);
       background: var(--static-light);
@@ -111,7 +109,7 @@
       display: none;
 
       &.open {
-        margin-top: 6px;
+        margin-top: var(--spacing-s);
         max-height: 100%;
         opacity: 1;
         display: block;
@@ -120,38 +118,35 @@
 
     &.base {
       .header {
-        padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
-        gap: var(--accordion-base-gap);
-        font-size: 14px;
-        font-weight: 400;
+        font-size: var(--desktop-body-s-size);
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-s-line-height);
+        padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
       }
 
       .content {
-        padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
         font-size: var(--desktop-body-xs-size);
         font-style: normal;
-        font-weight: 300;
+        font-weight: var(--weight-light);
         line-height: var(--desktop-body-xs-line-height);
+        padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
       }
     }
 
     &.large {
-      padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
-      gap: var(--accordion-large-gap);
-
       .header {
-        font-size: 16px;
-        font-weight: 400;
+        font-size: var(--desktop-body-m-size);
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-m-large-line-height);
+        padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
       }
 
       .content {
-        padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
         font-size: var(--desktop-body-s-size);
         font-style: normal;
-        font-weight: 300;
+        font-weight: var(--weight-light);
         line-height: var(--desktop-body-s-line-height);
+        padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
       }
     }
   }
