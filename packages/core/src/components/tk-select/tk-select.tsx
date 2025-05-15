@@ -189,12 +189,7 @@ export class TkSelect implements ComponentInterface {
   @Watch('value')
   protected valueChanged(newValue: any, oldValue: any) {
     if (_.isEqual(newValue, oldValue)) return;
-
-    if (this.multiple) {
-      this.inputRef.value = this.value;
-    } else {
-      this.setValue();
-    }
+    this.setValue();
   }
 
   /**
@@ -209,9 +204,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   componentDidLoad(): void {
-    if (this.multiple && this.value?.length > 0) {
-      this.inputRef.value = this.value;
-    } else if (this.value) {
+    if (this.value) {
       this.setValue();
     }
 
@@ -338,6 +331,23 @@ export class TkSelect implements ComponentInterface {
   }
 
   private setValue() {
+    if (this.multiple) {
+      if (!Array.isArray(this.value)) {
+        this.value = [];
+        this.inputRef.value = [];
+        return;
+      }
+
+      const validValues = this.value.filter(val => this.options?.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+      if (!_.isEqual(validValues, this.value)) {
+        this.value = [];
+        this.inputRef.value = [];
+        return;
+      }
+      this.inputRef.value = this.value;
+      return;
+    }
+
     this.selectedItem = this.getSelectedItem();
 
     if (!this.selectedItem && this.editable && this.allowCustomValue) {
@@ -393,10 +403,9 @@ export class TkSelect implements ComponentInterface {
   private async handleItemClick(item) {
     this.isItemClickFlag = true;
     if (this.multiple) {
-      let tmpValue = this.value;
-      if (!tmpValue) tmpValue = [];
-
+      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
       const tmpItem = this.getOptionValue(item);
+
       if (_.some(tmpValue, itemValue => _.isEqual(itemValue, this.getOptionValue(tmpItem)))) {
         // tıklanan item zaten seçili ise seçimi kaldırır
         _.remove(tmpValue, itemValue => _.isEqual(itemValue, tmpItem));
