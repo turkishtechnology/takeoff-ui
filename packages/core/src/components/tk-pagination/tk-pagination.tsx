@@ -56,7 +56,6 @@ export class TkPagination implements ComponentInterface {
 
   /**
    * The mode of the pagination
-   * @defaultValue 'outlined'
    */
   @Prop() mode: 'compact' | 'compact-expanded';
 
@@ -358,14 +357,16 @@ export class TkPagination implements ComponentInterface {
     const totalPages = this.getTotalPages();
 
     return (
-      <div class="tk-pagination-container">
-        <div class="tk-pagination-start">{this.renderTag(totalPages)}</div>
-        {this.renderContent(totalPages)}
-        <div class="tk-pagination-end">
-          {this.renderSelect()}
-          {this.renderInput(totalPages)}
+      totalPages > 0 && (
+        <div class="tk-pagination-container">
+          <div class="tk-pagination-start">{this.renderTag(totalPages)}</div>
+          {this.renderContent(totalPages)}
+          <div class="tk-pagination-end">
+            {this.renderSelect()}
+            {this.renderInput(totalPages)}
+          </div>
         </div>
-      </div>
+      )
     );
   }
 }
