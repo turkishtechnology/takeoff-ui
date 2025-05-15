@@ -28,14 +28,14 @@
   .tk-alert-content {
     .tk-alert-header {
       font-size: var(--desktop-body-s-size);
-      font-weight: 400;
-      line-height: 20px;
+      font-weight: var(--weight-regular);
+      line-height: var(--desktop-body-s-line-height);
     }
 
     .tk-alert-message {
       font-size: var(--desktop-body-xs-size);
-      font-weight: 300;
-      line-height: 18px;
+      font-weight: var(--weight-light);
+      line-height: var(--desktop-body-xs-line-height);
     }
   }
 
