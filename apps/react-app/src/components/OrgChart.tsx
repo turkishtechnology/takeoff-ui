@@ -1,11 +1,10 @@
 import { useRef, useState } from 'react';
 import { TkOrgChart } from '@takeoff-ui/react';
-import Layout from '../layout/Layout';
 
 function OrgChart() {
   const chartRef = useRef<any>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [zoomEnabled, setZoomEnabled] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [zoomEnabled, setZoomEnabled] = useState(false);
 
   const handleToggleZoom = () => {
     setZoomEnabled(!zoomEnabled);
@@ -27,27 +26,49 @@ function OrgChart() {
   //     { id: 7, parentId: 3, name: 'Emre Arslan', title: 'VP of Engineering' },
   // ]
   const data: any = {
-    name: 'Emre Arslan',
+    name: '1Emre Arslan',
     title: 'CEO',
     children: [
       {
-        name: 'Emre Arslan',
+        name: '2Emre Arslan',
         title: 'CTO',
         children: [
           {
-            name: 'Engineering manager',
+            name: '3Engineering manager',
             title: 'VP of Engineering',
           },
           {
-            name: 'Engineering manager',
+            name: '4Engineering manager',
             title: 'VP of Engineering',
           },
           {
-            name: 'Engineering manager',
+            name: '5Engineering manager',
             title: 'VP of Engineering',
           },
           {
-            name: 'Engineering manager',
+            name: '6Engineering manager',
+            title: 'VP of Engineering',
+          },
+        ],
+      },
+      {
+        name: '2Emre Arslan',
+        title: 'CTO',
+        children: [
+          {
+            name: '3Engineering manager',
+            title: 'VP of Engineering',
+          },
+          {
+            name: '4Engineering manager',
+            title: 'VP of Engineering',
+          },
+          {
+            name: '5Engineering manager',
+            title: 'VP of Engineering',
+          },
+          {
+            name: '6Engineering manager',
             title: 'VP of Engineering',
           },
         ],
@@ -72,7 +93,7 @@ function OrgChart() {
           {isCollapsed ? 'Disable Buttons' : 'Enable Buttons'}
         </button>
       </div>
-      <div style={{ height: '500px', width: '100%' }}>
+      <div style={{ height: '100%', width: '100%' }}>
         <TkOrgChart
           ref={chartRef}
           data={data}

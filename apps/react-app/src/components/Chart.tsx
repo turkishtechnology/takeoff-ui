@@ -1,13 +1,15 @@
 import { TkChart } from '@takeoff-ui/react';
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 
 function Chart() {
   // seçilmiş dataset index
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   // chart ref
   const chartRef = useRef<any>(null);
-  // pie data
-  const pieData = {
+  // loading state
+  const [isLoading, setIsLoading] = useState(false);
+  // chart data state
+  const [chartData, setChartData] = useState({
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
     datasets: [
       {
@@ -29,7 +31,67 @@ function Chart() {
         borderWidth: 1,
       },
     ],
-  };
+  });
+
+  // Fetch data from server function
+  const refreshChartData = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Mock data from server - in real app this would be a fetch call
+      const updatedData = {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+        datasets: [
+          {
+            data: [
+              Math.floor(Math.random() * 30),
+              Math.floor(Math.random() * 30),
+              Math.floor(Math.random() * 30),
+              Math.floor(Math.random() * 30),
+              Math.floor(Math.random() * 30),
+            ],
+            backgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#4BC0C0',
+              '#9966FF',
+            ],
+            hoverBackgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#4BC0C0',
+              '#9966FF',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      setChartData(updatedData);
+
+      // Update chart manually
+      const chartInstance = chartRef.current?.getChart();
+      if (chartInstance) {
+        chartInstance.refresh();
+      }
+
+      console.log('Chart data refreshed');
+    } catch (error) {
+      console.error('Error refreshing chart data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Initial data fetch on mount
+  useEffect(() => {
+    refreshChartData();
+  }, [refreshChartData]);
 
   // center text plugin
   const centerTextPlugin = {
@@ -84,8 +146,9 @@ function Chart() {
       setSelectedIndex(null);
       chartInstance.selectedIndex = null;
     }
-    chartInstance.update();
+    chartInstance.refresh();
   }, []);
+
   // pie chart options
   const pieOptions = useMemo(
     () => ({
@@ -97,18 +160,36 @@ function Chart() {
         centerText: { selectedIndex },
       },
     }),
-    [handleClick, pieData],
+    [handleClick, selectedIndex],
   );
 
   return (
     <div style={{ width: '50%' }}>
       <TkChart
         type="doughnut"
-        data={pieData}
-        options={pieOptions}
+        data={chartData}
+        options={pieOptions as any}
         plugins={[centerTextPlugin]}
         ref={chartRef}
       />
+      <div
+        style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+      >
+        <button
+          onClick={refreshChartData}
+          disabled={isLoading}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: isLoading ? '#cccccc' : '#36A2EB',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {isLoading ? 'Loading...' : 'Refresh Data'}
+        </button>
+      </div>
     </div>
   );
 }
