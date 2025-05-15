@@ -2,7 +2,7 @@
 
 Takeoff UI is a comprehensive design system providing framework-agnostic web components developed with [Stencil.js](https://stenciljs.com/). The project leverages Turborepo for quick builds, smooth workflows, and easy collaboration across packages.
 
-![Takeoff UI Hero](docs/hero-mock.png)
+![Takeoff UI Hero](docs/static/img/takeoff-og.jpg)
 
 ## Documentation
 
