@@ -834,7 +834,7 @@ export class TkTable implements ComponentInterface {
     if (this.selectionMode === 'checkbox') {
       selectionTh = (
         <th style={{ width: '20px', maxWidth: '20px' }} class="non-text">
-          <tk-checkbox ref={el => (this.refSelectAll = el)} onTk-change={e => this.handleSelectAll(e.detail)}></tk-checkbox>
+          <tk-checkbox disabled={!(this.renderData.length > 0)} ref={el => (this.refSelectAll = el)} onTk-change={e => this.handleSelectAll(e.detail)}></tk-checkbox>{' '}
         </th>
       );
     } else if (this.selectionMode === 'radio') {
@@ -864,7 +864,7 @@ export class TkTable implements ComponentInterface {
                   class: classNames('sort-icon'),
                   variant: null,
                   ref: (el: any) => (refSortIcon = el),
-                  onClick: () => this.handleSortIconClick(refSortIcon, col),
+                  onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
               />
             );
@@ -876,7 +876,7 @@ export class TkTable implements ComponentInterface {
                     class: classNames('filter-icon'),
                     variant: null,
                     ref: (el: any) => (refSearchIcon = el),
-                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
+                    onClick: () => this.renderData?.length > 0 && this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
                 />
               );
