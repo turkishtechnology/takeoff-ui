@@ -93,6 +93,12 @@ export class TkDatePicker {
   @Prop() label: string;
 
   /**
+   * Defines the size for the label
+   * @defaultValue base
+   */
+  @Prop() labelSize: 'large' | 'base' | 'small' = 'base';
+
+  /**
    * Whether the datepicker is disabled
    * @defaultValue false
    */
@@ -1415,6 +1421,7 @@ export class TkDatePicker {
         label={this.label}
         mode="text"
         icon="calendar_month"
+        size={this.labelSize}
         class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}
         name={this.name}
         hint={this.hint}
