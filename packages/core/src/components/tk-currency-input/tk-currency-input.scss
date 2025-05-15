@@ -11,7 +11,7 @@
 
   .label {
     color: var(--text-darkest);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
   }
 
   .tk-currency-input {
@@ -68,7 +68,7 @@
     color: var(--text-base);
     line-height: var(--desktop-body-m-base-line-height);
     font-size: var(--size-xs);
-    font-weight: 300;
+    font-weight: var(--weight-light);
     display: flex;
     align-items: center;
     gap: var(--spacing-m-base);

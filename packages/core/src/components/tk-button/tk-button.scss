@@ -12,7 +12,7 @@
 
 .tk-button {
   font-family: 'Geologica', sans-serif;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   line-height: var(--desktop-body-m-base-line-height);
   transition: all 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
   display: inline-flex;

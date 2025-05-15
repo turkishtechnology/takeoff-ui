@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2px;
+    gap: var(--backgrounded-item-gap);
     text-decoration: none;
 
     .tk-breadcrumb-item-label {
@@ -13,7 +13,7 @@
       font-family: var(--desktop-label-s-font);
       font-size: var(--desktop-label-m-base-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
       line-height: var(--desktop-label-m-base-line-height);
       /* 142.857% */
     }

@@ -105,7 +105,7 @@
         font-family: var(--desktop-body-s-font, Geologica);
         font-size: var(--desktop-body-s-size);
         font-style: normal;
-        font-weight: 400;
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-s-line-height);
         cursor: pointer;
       }
@@ -180,7 +180,7 @@
     font-family: var(--desktop-body-s-font, Geologica);
     font-size: var(--desktop-body-s-size);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     line-height: var(--desktop-body-s-line-height);
   }
 }
@@ -217,7 +217,7 @@
     font-family: var(--desktop-body-s-font, Geologica);
     font-size: var(--desktop-body-s-size);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--weight-regular);
   }
 
   &.disabled,
@@ -336,7 +336,7 @@
   font-family: var(--desktop-body-s-font, Geologica);
   font-size: var(--desktop-body-s-size);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   line-height: var(--desktop-body-s-line-height);
   cursor: pointer;
 
@@ -434,7 +434,7 @@
 .tk-datepicker-timepicker-label {
   font-family: var(--desktop-body-xs-font, Geologica);
   font-size: var(--desktop-body-xs-size);
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   color: var(--text-base);
 }
 

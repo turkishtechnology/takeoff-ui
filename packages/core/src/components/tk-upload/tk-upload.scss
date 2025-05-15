@@ -8,12 +8,12 @@
     line-height: var(--desktop-label-m-base-line-height);
     padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
     color: var(--text-darkest);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
 
     .asterisk {
       color: var(--states-danger-base);
       font-size: var(--desktop-label-s-size);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       line-height: var(--desktop-label-s-line-height);
     }
   }
@@ -22,7 +22,7 @@
     color: var(--text-base);
     line-height: var(--desktop-label-s-line-height);
     font-size: var(--desktop-label-s-size);
-    font-weight: 300;
+    font-weight: var(--weight-light);
     display: flex;
     align-items: center;
     gap: var(--spacing-m-base);
@@ -72,7 +72,7 @@
             /* Body/Small-14 */
             font-family: var(--desktop-body-s-font, Geologica);
             font-size: var(--desktop-body-s-size);
-            font-weight: 400;
+            font-weight: var(--weight-regular);
             line-height: var(--desktop-body-s-line-height);
             /* 142.857% */
           }
@@ -84,7 +84,7 @@
             font-family: var(--desktop-body-xs-font, Geologica);
             font-size: var(--desktop-body-xs-size);
             font-style: normal;
-            font-weight: 300;
+            font-weight: var(--weight-light);
             line-height: var(--desktop-body-xs-line-height);
             /* 150% */
           }
@@ -137,7 +137,7 @@
             /* Body/Small-14 */
             font-family: var(--desktop-body-s-font, Geologica);
             font-size: var(--desktop-body-s-size);
-            font-weight: 400;
+            font-weight: var(--weight-regular);
             line-height: var(--desktop-body-s-line-height);
             /* 142.857% */
           }
@@ -149,7 +149,7 @@
             font-family: var(--desktop-body-xs-font, Geologica);
             font-size: var(--desktop-body-xs-size);
             font-style: normal;
-            font-weight: 300;
+            font-weight: var(--weight-light);
             line-height: var(--desktop-body-xs-line-height);
             /* 150% */
           }
@@ -262,7 +262,7 @@
           gap: 8px;
           color: var(--text-base);
           font-size: var(--desktop-label-s-size);
-          font-weight: 300;
+          font-weight: var(--weight-light);
           margin-top: 6px;
 
           .tk-upload-size {}

@@ -10,7 +10,7 @@ tk-radio-group {
 
   label {
     font-size: var(--size-sm);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     color: var(--text-darkest);
     line-height: var(--desktop-body-s-line-height);
     padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
@@ -18,7 +18,7 @@ tk-radio-group {
     .asterisk {
       color: var(--states-danger-base);
       font-size: var(--desktop-label-s-size);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       line-height: var(--desktop-label-s-line-height);
     }
   }

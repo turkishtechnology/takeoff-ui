@@ -11,12 +11,12 @@
 
   .label {
     color: var(--text-darkest);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
 
     .asterisk {
       color: var(--states-danger-base);
       font-size: var(--desktop-label-s-size);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       line-height: var(--desktop-label-s-line-height);
     }
   }
@@ -58,7 +58,7 @@
       color: var(--text-base);
       line-height: var(--desktop-label-s-line-height);
       font-size: var(--desktop-label-s-size);
-      font-weight: 400;
+      font-weight: var(--weight-regular);
 
       &.maxed {
         color: var(--states-danger-base);
@@ -70,7 +70,7 @@
     color: var(--text-base);
     line-height: var(--desktop-label-s-line-height);
     font-size: var(--desktop-label-s-size);
-    font-weight: 300;
+    font-weight: var(--weight-light);
     display: flex;
     align-items: center;
     gap: var(--spacing-m-base);

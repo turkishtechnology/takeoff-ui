@@ -163,7 +163,7 @@
     font-family: var(--desktop-body-m-base-font, Geologica);
     font-size: var(--desktop-body-m-base-size);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     line-height: var(--desktop-body-m-base-line-height);
   }
 

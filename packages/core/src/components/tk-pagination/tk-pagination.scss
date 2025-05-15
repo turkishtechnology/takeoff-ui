@@ -31,7 +31,7 @@ tk-pagination {
       font-family: var(--desktop-body-xs-font, Geologica);
       font-size: var(--desktop-body-xs-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
       line-height: var(--desktop-body-xs-line-height);
       /* 150% */
     }
@@ -131,7 +131,7 @@ tk-pagination {
         font-family: var(--desktop-body-s-font, Geologica);
         font-size: var(--desktop-body-s-size);
         font-style: normal;
-        font-weight: 400;
+        font-weight: var(--weight-regular);
         line-height: var(--desktop-body-s-line-height);
         /* 142.857% */
       }

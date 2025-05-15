@@ -19,7 +19,7 @@
       font-family: var(--desktop-body-2xs-font, Geologica);
       font-size: var(--desktop-body-2xs-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
       line-height: var(--line-height-xxs-normal);
 
       &::before {

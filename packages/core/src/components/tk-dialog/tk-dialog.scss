@@ -96,7 +96,7 @@ tk-dialog {
           font-family: var(--desktop-title-h5-font);
           font-size: var(--desktop-title-h5-size);
           font-style: normal;
-          font-weight: 400;
+          font-weight: var(--weight-regular);
           line-height: var(--desktop-title-h5-line-height);
           /* 125% */
         }
@@ -106,7 +106,7 @@ tk-dialog {
           font-family: var(--desktop-subheading-xs-font);
           font-size: var(--desktop-subheading-xs-size);
           font-style: normal;
-          font-weight: 400;
+          font-weight: var(--weight-regular);
           line-height: var(--desktop-subheading-xs-line-height);
           /* 150% */
         }

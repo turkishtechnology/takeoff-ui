@@ -24,12 +24,12 @@
       color: var(--text-lightest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-sub-base);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -48,12 +48,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -72,12 +72,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -96,12 +96,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -120,12 +120,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -144,12 +144,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
@@ -168,12 +168,12 @@
       color: var(--text-darkest);
       font-size: var(--desktop-body-s-size);
       font-style: normal;
-      font-weight: 400;
+      font-weight: var(--weight-regular);
     }
 
     .tk-tooltip-description {
       color: var(--text-dark);
-      font-weight: 300;
+      font-weight: var(--weight-light);
       font-size: var(--desktop-body-xs-size);
     }
 
