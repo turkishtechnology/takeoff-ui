@@ -18,15 +18,15 @@
   align-items: center;
   overflow: hidden;
   border: 1px solid var(--static-light);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   flex-shrink: 0;
-  gap: 10px;
+  gap: var(--spacing-l);
 
   .tk-avatar-label {
     font-family: var(--desktop-title-h5-font, Geologica);
     /* Title/H5-24 */
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     line-height: var(--desktop-title-h5-line-height);
     /* 125% */
   }
@@ -71,15 +71,15 @@
   }
 
   .tk-avatar-badge {
-    width: 18px;
-    height: 18px;
+    width: var(--size-lg);
+    height: var(--size-lg);
   }
 }
 
 .tk-avatar-large {
   .tk-avatar {
-    width: 48px;
-    height: 48px;
+    width: var(--size-5xl);
+    height: var(--size-5xl);
     border: 2px solid var(--static-light);
 
     .tk-avatar-label {
@@ -92,15 +92,15 @@
   }
 
   .tk-avatar-badge {
-    width: 14px;
-    height: 14px;
+    width: var(--size-sm);
+    height: var(--size-sm);
   }
 }
 
 .tk-avatar-base {
   .tk-avatar {
-    width: 32px;
-    height: 32px;
+    width: var(--size-3xl);
+    height: var(--size-3xl);
 
     .tk-avatar-label {
       font-size: var(--desktop-body-m-base-size);
@@ -112,15 +112,15 @@
   }
 
   .tk-avatar-badge {
-    width: 10px;
-    height: 10px;
+    width: var(--size-xxs);
+    height: var(--size-xxs);
   }
 }
 
 .tk-avatar-small {
   .tk-avatar {
-    width: 24px;
-    height: 24px;
+    width: var(--size-2xl);
+    height: var(--size-2xl);
 
     .tk-avatar-label {
       font-size: var(--desktop-body-xs-size);
@@ -139,11 +139,11 @@
 
 .tk-avatar-xsmall {
   .tk-avatar {
-    width: 20px;
-    height: 20px;
+    width: var(--size-xl);
+    height: var(--size-xl);
 
     &:not(.tk-avatar-rounded) {
-      border-radius: 4px;
+      border-radius: var(--radius-xs);
     }
 
     .tk-avatar-label {
@@ -259,11 +259,10 @@
 
 .tk-avatar-badge {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: var(--spacing-none);
+  left: var(--spacing-none);
   border-radius: var(--radius-full);
   border: 2px solid var(--static-light);
-  border-width: 2px;
   box-shadow: var(--effect-1-hover-sm);
 
   &.tk-avatar-badge-status-success {

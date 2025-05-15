@@ -12,10 +12,10 @@
     border-radius: var(--radius-full);
     border: 1px solid var(--border-light);
     background: var(--static-light);
-    padding: 4px;
+    padding: var(--spacing-xs);
 
     >tk-avatar:last-child .tk-avatar-container {
-      margin-left: 0;
+      margin-left: var(--spacing-none);
 
       .tk-avatar {
         background: transparent;
