@@ -352,6 +352,16 @@ export class TkDatePicker {
     this.inputValue = this.formatInputValue();
   }
 
+  /**
+   * Closes the datepicker panel if it is open.
+   */
+  @Method()
+  async closePanel() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
+  }
+
   private getResolvedFirstDayIndex(): number {
     if (this.firstDayOfWeekIndex !== undefined && this.firstDayOfWeekIndex !== null) {
       if (this.firstDayOfWeekIndex >= 0 && this.firstDayOfWeekIndex <= 6) {
