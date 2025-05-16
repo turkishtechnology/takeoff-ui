@@ -241,7 +241,7 @@ export class TkPagination implements ComponentInterface {
           </span>
         );
       } else {
-        tagContent = (
+        tagContent = totalPages > 0 && (
           <Fragment>
             <span class="tk-pagination-tag-label">
               page: {this.internalCurrentPage} of {totalPages}
