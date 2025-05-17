@@ -34,12 +34,12 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
   sortAndFilterData = _data.filter(row =>
     filters.every(filter => {
       if (filter.type === 'checkbox' && Array.isArray(filter.value) && (filter.value as string[]).length > 0) {
-        const fieldValue = row[filter.field]?.toString();
+        const fieldValue = getNestedValue(row, filter.field).toString();
         return (filter.value as string[]).includes(fieldValue);
       }
 
       if (filter.type === 'radio' && filter.value) {
-        const fieldValue = row[filter.field]?.toString();
+        const fieldValue = getNestedValue(row, filter.field).toString();
         return fieldValue === filter.value;
       }
 
@@ -62,4 +62,10 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
   }
 
   return sortAndFilterData;
+};
+
+export const getNestedValue = (row, path) => {
+  return path.split('.').reduce((acc, key) => {
+    return acc && acc[key] !== undefined ? acc[key] : undefined;
+  }, row);
 };

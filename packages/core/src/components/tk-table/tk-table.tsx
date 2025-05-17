@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse } from './interfaces';
-import { filterAndSort, handleInputKeydown } from './helpers';
+import { filterAndSort, handleInputKeydown, getNestedValue } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -287,7 +287,7 @@ export class TkTable implements ComponentInterface {
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
         body: _data.map(
-          row => this.columns.map(col => this.getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
+          row => this.columns.map(col => getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
@@ -321,7 +321,7 @@ export class TkTable implements ComponentInterface {
       link.click();
     } else if (options.type == 'csv') {
       const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => this.getNestedValue(row, col.field) || '').join(',')).join('\n');
+      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) || '').join(',')).join('\n');
       const csvContent = headers + '\n' + rows;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -396,12 +396,6 @@ export class TkTable implements ComponentInterface {
   @Method()
   async setCurrentPage(page: number) {
     this.currentPage = page;
-  }
-
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
@@ -1022,7 +1016,7 @@ export class TkTable implements ComponentInterface {
                         >
                           <input
                             ref={el => (editableInputRef = el)}
-                            value={this.getNestedValue(row, col.field)}
+                            value={getNestedValue(row, col.field)}
                             type="text"
                             onKeyDown={e => handleInputKeydown(e, this.el)}
                             onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
@@ -1035,7 +1029,7 @@ export class TkTable implements ComponentInterface {
                           class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
                           style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
                         >
-                          {this.getNestedValue(row, col.field)}
+                          {getNestedValue(row, col.field)}
                         </td>
                       );
                     }
