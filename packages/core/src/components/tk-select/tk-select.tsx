@@ -471,17 +471,19 @@ export class TkSelect implements ComponentInterface {
 
     if (this.editable && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
+      const inputValue = this.inputRef.querySelector('input').value;
+
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
         !this.isItemClickFlag &&
         // seçili item yok ise ama inutda bir değer var ise
-        ((!selectedItem && this.inputRef.querySelector('input').value) ||
+        ((!selectedItem && inputValue) ||
           // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
-          (selectedItem && this.getOptionLabel(selectedItem) != this.inputRef.querySelector('input').value))
+          (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
       ) {
         this.value = null;
         this.tkChange.emit(null);
-        this.renderOptions = await this.filter(null, this.options);
+        this.renderOptions = [...this.options];
       } else {
         this.isItemClickFlag = false;
       }
