@@ -252,11 +252,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async defaultFilter(text: string, options: any[]) {
-    if (text) {
-      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text?.toLowerCase()) > -1);
-    } else {
+    if (!text) {
       return [...this.options];
     }
+    return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
   }
 
   private updatePosition() {
@@ -340,8 +339,8 @@ export class TkSelect implements ComponentInterface {
 
       const validValues = this.value.filter(val => this.options?.some(opt => _.isEqual(this.getOptionValue(opt), val)));
       if (!_.isEqual(validValues, this.value)) {
-        this.value = [];
-        this.inputRef.value = [];
+        this.value = [...validValues];
+        this.inputRef.value = [...validValues];
         return;
       }
       this.inputRef.value = this.value;
