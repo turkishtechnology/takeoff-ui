@@ -154,11 +154,8 @@ export class TkSelect implements ComponentInterface {
     if (_.isEqual(newValue, oldValue)) return;
 
     this.renderOptions = [...this.options];
-    if (this.multiple) {
-      this.inputRef.value = this.value;
-    } else {
-      this.setValue();
-    }
+
+    this.setValue();
   }
 
   /**
@@ -204,10 +201,6 @@ export class TkSelect implements ComponentInterface {
   }
 
   componentDidLoad(): void {
-    if (this.value) {
-      this.setValue();
-    }
-
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
@@ -224,6 +217,16 @@ export class TkSelect implements ComponentInterface {
     // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
     this.dialogRef = this.el.closest('tk-dialog');
     this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+
+    if (this.allowCustomValue) {
+      this.editable = true;
+    }
+
+    this.inputRef.querySelector('input').addEventListener('input', this.handleInputChange.bind(this));
+
+    if (this.value) {
+      this.setValue();
+    }
   }
 
   componentDidUpdate() {
@@ -330,31 +333,42 @@ export class TkSelect implements ComponentInterface {
   }
 
   private setValue() {
+    if (!this.inputRef) return;
+
+    // Handle multiple selection case
     if (this.multiple) {
-      if (!Array.isArray(this.value)) {
-        this.value = [];
-        this.inputRef.value = [];
-        return;
+      // Ensure value is always an array
+      const currentValue = Array.isArray(this.value) ? this.value : [];
+
+      // If custom values are not allowed, validate against available options
+      if (!this.allowCustomValue && this.options?.length > 0) {
+        const validValues = currentValue.filter(val => this.options.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+
+        // Update value if invalid options were filtered out
+        if (!_.isEqual(validValues, currentValue)) {
+          this.value = validValues;
+          this.inputRef.value = validValues;
+          return;
+        }
       }
 
-      const validValues = this.value.filter(val => this.options?.some(opt => _.isEqual(this.getOptionValue(opt), val)));
-      if (!_.isEqual(validValues, this.value)) {
-        this.value = validValues;
-        this.inputRef.value = validValues;
-        return;
-      }
-      this.inputRef.value = this.value;
+      this.inputRef.value = currentValue;
       return;
     }
 
+    // Handle single selection case
     this.selectedItem = this.getSelectedItem();
 
-    if (!this.selectedItem && this.editable && this.allowCustomValue) {
-      this.inputRef.value = this.getOptionLabel(this.value);
-    } else if (!this.selectedItem && !this.allowCustomValue) {
-      this.inputRef.value = null;
+    // Set input value based on selection state and custom value allowance
+    if (this.editable && this.allowCustomValue) {
+      // For editable with custom values, show the value directly
+      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
     } else if (this.selectedItem) {
+      // For selected items, show the label
       this.inputRef.value = this.getOptionLabel(this.selectedItem);
+    } else {
+      // For no selection, clear the input
+      this.inputRef.value = null;
     }
   }
 
@@ -473,6 +487,8 @@ export class TkSelect implements ComponentInterface {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.inputRef.querySelector('input').value;
 
+      if (!inputValue) return;
+
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
         !this.isItemClickFlag &&
@@ -483,7 +499,7 @@ export class TkSelect implements ComponentInterface {
       ) {
         this.value = null;
         this.tkChange.emit(null);
-        this.renderOptions = [...this.options];
+        this.renderOptions = await this.filter(null, this.options);
       } else {
         this.isItemClickFlag = false;
       }
