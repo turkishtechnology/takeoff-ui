@@ -41,6 +41,182 @@ const Tabs = () => {
           header: 'Settings Tab',
           description: 'Configure your settings',
           position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
+        }}
+      >
+        <div>Settings Content</div>
+      </TkTabsItem>
+      <TkTabsItem
+        label="Settings"
+        icon="settings"
+        tooltipOptions={{
+          header: 'Settings Tab',
+          description: 'Configure your settings',
+          position: 'bottom',
+          icon: {
+            name: 'settings',
+            color: 'black',
+            style: 'sharp',
+            fill: false,
+          },
         }}
       >
         <div>Settings Content</div>

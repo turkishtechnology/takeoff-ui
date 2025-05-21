@@ -1,5 +1,6 @@
 import { Element, Component, Prop, Host, h, ComponentInterface, Watch } from '@stencil/core';
-import { IIconOptions } from '../../components';
+import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { ITooltipOptions } from '../../global/interfaces/ITooltipOptions';
 
 @Component({
   tag: 'tk-tabs-item',
@@ -53,13 +54,7 @@ export class TkTabsItem implements ComponentInterface {
       }),
     );
   }
-  @Prop() tooltipOptions?: {
-    header?: string;
-    description?: string;
-    position?: 'top' | 'bottom' | 'left' | 'right';
-    variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral';
-    icon?: string | IIconOptions;
-  };
+  @Prop() tooltipOptions?: ITooltipOptions;
 
   render() {
     return (

@@ -218,7 +218,7 @@ export class TkTabs implements ComponentInterface {
 
   private renderTabTooltip(tab: HTMLTkTabsItemElement) {
     if (tab?.tooltipOptions) {
-      if (tab.tooltipOptions.icon && typeof tab.tooltipOptions.icon === 'string') {
+      if (tab.tooltipOptions.icon) {
         return (
           <tk-tooltip
             header={tab.tooltipOptions.header}
@@ -226,19 +226,11 @@ export class TkTabs implements ComponentInterface {
             position={tab.tooltipOptions.position || 'bottom'}
             variant={tab.tooltipOptions.variant || 'dark'}
           >
-            <tk-icon slot="trigger" icon={tab.tooltipOptions.icon || 'info'} size={this.size} />
-          </tk-tooltip>
-        );
-      } else if (tab.tooltipOptions.icon && typeof tab.tooltipOptions.icon === 'object') {
-        const icon: IIconOptions = tab.tooltipOptions.icon;
-        return (
-          <tk-tooltip
-            header={tab.tooltipOptions.header}
-            description={tab.tooltipOptions.description}
-            position={tab.tooltipOptions.position || 'bottom'}
-            variant={tab.tooltipOptions.variant || 'dark'}
-          >
-            <tk-icon slot="trigger" {...getIconElementProps(icon)} size={this.size} />
+            <tk-icon
+              slot="trigger"
+              {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
+              size={this.size}
+            />
           </tk-tooltip>
         );
       }

@@ -6,7 +6,7 @@
 .tk-tooltip-content {
   display: flex;
   gap: 8px;
-  position: absolute;
+  position: fixed;
   color: var(--static-white);
   padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
   border-radius: var(--tooltips-base-radius, 8px);
