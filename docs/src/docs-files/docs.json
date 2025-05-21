@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-19T08:03:54",
+  "timestamp": "2025-05-21T08:37:11",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -5383,6 +5383,44 @@
           "setter": false
         },
         {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Defines the size for the label",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "base"
+            }
+          ],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "timeFormat",
           "type": "\"12\" | \"24\"",
           "complexType": {
@@ -5450,6 +5488,28 @@
         }
       ],
       "methods": [
+        {
+          "name": "closePanel",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "closePanel() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the datepicker panel if it is open.",
+          "docsTags": []
+        },
         {
           "name": "setToday",
           "returns": {
