@@ -7,6 +7,8 @@ const Basic = () => {
 
   const vueCode = `<TkPagination totalItems="50" rowsPerPage="10" />`;
 
+  const angularCode = `<tk-pagination [totalItems]="50" [rowsPerPage]="10" />`;
+
   const demo = <TkPagination totalItems={50} rowsPerPage={10} />;
 
   return (
@@ -14,7 +16,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

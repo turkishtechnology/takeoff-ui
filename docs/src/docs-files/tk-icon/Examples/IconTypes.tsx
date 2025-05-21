@@ -11,6 +11,10 @@ const IconTypes = () => {
 <TkIcon icon="star" iconType="rounded" />
 <TkIcon icon="star" iconType="sharp" />`;
 
+  const angularCode = `<tk-icon icon="star" iconType="outlined" />
+<tk-icon icon="star" iconType="rounded" />
+<tk-icon icon="star" iconType="sharp" />`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-4">
       <div className="flex flex-col items-center">
@@ -33,7 +37,7 @@ const IconTypes = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

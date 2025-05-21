@@ -3,7 +3,7 @@ import React from 'react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Variants = () => {
-  const reactCode = `<TkAvatar variant="primary" label="PR" />
+  const reactCode = `<TkAvatar background="solid" variant="primary" label="PR" />
 <TkAvatar background="solid" variant="light" label="LT" />
 <TkAvatar background="solid" variant="success" label="SC" />
 <TkAvatar background="solid" variant="info" label="IN" />
@@ -16,6 +16,13 @@ const Variants = () => {
 <TkAvatar background="solid" variant="info" label="IN" />
 <TkAvatar background="solid" variant="warning" label="WN" />
 <TkAvatar background="solid" variant="danger" label="DG" />`;
+
+  const angularCode = `<tk-avatar background="solid" variant="primary" label="PR" />
+<tk-avatar background="solid" variant="light" label="LT" />
+<tk-avatar background="solid" variant="success" label="SC" />
+<tk-avatar background="solid" variant="info" label="IN" />
+<tk-avatar background="solid" variant="warning" label="WN" />
+<tk-avatar background="solid" variant="danger" label="DG" />`;
 
   const demo = (
     <div className="flex flex-col gap-2">
@@ -44,7 +51,7 @@ const Variants = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

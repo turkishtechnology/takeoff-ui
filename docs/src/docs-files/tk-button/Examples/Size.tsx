@@ -11,6 +11,10 @@ const Size = () => {
 <TkButton variant="primary" size="base" label="base button" />
 <TkButton variant="primary" size="large" label="large button" />`;
 
+  const angularCode = `<tk-button variant="primary" size="small" label="small button" />
+<tk-button variant="primary" size="base" label="base button" />
+<tk-button variant="primary" size="large" label="large button" />`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-2">
       <TkButton variant="primary" size="small" label="small button" />
@@ -24,7 +28,7 @@ const Size = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

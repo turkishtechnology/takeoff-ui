@@ -31,6 +31,20 @@ const Sizes = () => {
 <TkIcon icon="flight" sign size="xlarge" />
 <TkIcon icon="flight" sign size="xxlarge" />`;
 
+  const angularCode = `<!-- Standard Icons -->
+<tk-icon icon="flight" size="small" />
+<tk-icon icon="flight" size="base" />
+<tk-icon icon="flight" size="large" />
+<tk-icon icon="flight" size="xlarge" />
+<tk-icon icon="flight" size="xxlarge" />
+  
+<!-- Sign icons -->
+<tk-icon icon="flight" sign size="small" />
+<tk-icon icon="flight" sign size="base" />
+<tk-icon icon="flight" sign size="large" />
+<tk-icon icon="flight" sign size="xlarge" />
+<tk-icon icon="flight" sign size="xxlarge" />`;
+
   const demo = (
     <div className="flex flex-col gap-6">
       <div>
@@ -91,7 +105,7 @@ const Sizes = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

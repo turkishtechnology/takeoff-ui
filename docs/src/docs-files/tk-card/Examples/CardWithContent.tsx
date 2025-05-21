@@ -3,19 +3,26 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const CardWithContent = () => {
-  const reactCode = `<TkCard header="Lorem Ipsum Title">
+  const reactCode = `<TkCard header="Card Title">
   <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
       quas!
   </p>
 </TkCard>`;
 
-  const vueCode = `<TkCard header="Lorem Ipsum Title">
+  const vueCode = `<TkCard header="Card Title">
   <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
       quas!
   </p>
 </TkCard>`;
+
+  const angularCode = `<tk-card header="Card Title">
+  <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+      quas!
+  </p>
+</tk-card>`;
 
   const demo = (
     <div className="flex flex-col gap-2">
@@ -35,7 +42,7 @@ const CardWithContent = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

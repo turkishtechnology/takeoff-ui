@@ -13,6 +13,11 @@ const Type = () => {
 <TkBadge variant="primary" type="outlined" label="primary" />
 <TkBadge variant="primary" type="text" label="primary" />`;
 
+  const angularCode = `<tk-badge variant="primary" type="filled" label="primary" />
+<tk-badge variant="primary" type="filledlight" label="primary" />
+<tk-badge variant="primary" type="outlined" label="primary" />
+<tk-badge variant="primary" type="text" label="primary" />`;
+
   const demo = (
     <div className="flex justify-center flex-wrap gap-2">
       <TkBadge variant="primary" type="filled" label="primary" />
@@ -28,7 +33,7 @@ const Type = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

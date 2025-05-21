@@ -86,6 +86,37 @@ const options = {
 };
 <TkChart type="pie" :data.prop="data" :options.prop="options" />
     `;
+
+  const angularCode = `<tk-chart
+  type="pie"
+  [data]="{
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+      {
+        label: 'My First dataset',
+        data: [1, 10, 5, 2, 20, 32],
+        backgroundColor: [
+          '#F5F9FF',
+          '#D0E1FD',
+          '#ABC9FB',
+          '#3B82F6',
+          '#295BAC',
+          '#204887'
+        ]
+      }
+    ]
+  }"
+  [options]="{
+    plugins: {
+      legend: {
+        labels: {
+          usePointStyle: true
+        }
+      }
+    }
+  }"
+/>`;
+
   const demo = (
     <div>
       <TkChart width="450px" type="pie" data={data} options={options} />
@@ -96,7 +127,7 @@ const options = {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode=""
+      angularCode={angularCode}
     />
   );
 };
