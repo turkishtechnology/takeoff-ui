@@ -9,6 +9,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="chooseButtonLabel" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'ChooseFile' | Label text displayed inside the choose button. |
 | <TkBadge label="description" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'JPEG, PNG, PDFandMP4formats, upto50MB.' | Description displayed under the title. |
 | <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Disables the input, preventing user interaction. |
+| <TkBadge label="downloadable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the files can be downloaded. When true, a download button will be displayed next to each file. |
 | <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a error about the upload. |
 | <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
 | <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the upload is in an invalid state, uploads will fail eventually |
@@ -28,6 +29,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | Name | Description |
 | ---- | ----------- |
 | tk-change | Emitted when one or more files pass validation. |
+| tk-download-file | Emitted when a file is download button is clicked. |
 | tk-files-rejected | Emitted when one or more files fail validation, with reasons. |
 | tk-removed-file | Emitted when a file is removed from the accepted list. |
 | tk-upload | Emitted when the user initiates file upload. |
