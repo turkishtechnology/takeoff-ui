@@ -2,7 +2,7 @@ import { Component, ComponentInterface, h, Prop, State, Element, Watch } from '@
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
 
 /**
- * The TkPopover is used to display additional information when element is hovered over.
+ * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
  * @slot - Default slot for content without a specific name
  * @slot trigger - The trigger slot defines the element that will trigger the Popover
  * @slot content - Define custom HTML content for the Popover, which replaces the default header, description and icon elements
@@ -20,7 +20,6 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
-  private currentPosition: 'top' | 'bottom' | 'left' | 'right' = 'right';
 
   @Element() el: HTMLTkPopoverElement;
 
@@ -45,8 +44,7 @@ export class TkPopover implements ComponentInterface {
   @Prop() position?: 'top' | 'bottom' | 'left' | 'right' = 'right';
 
   @Watch('position')
-  positionChanged(newValue: string) {
-    this.currentPosition = newValue as 'top' | 'bottom' | 'left' | 'right';
+  positionChanged() {
     if (this.popoverElement) {
       this.updateArrowPosition();
     }
@@ -64,7 +62,6 @@ export class TkPopover implements ComponentInterface {
   @Prop() containerStyle?: any = null;
 
   componentWillLoad() {
-    this.currentPosition = this.position || 'right';
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
   }
 
@@ -135,7 +132,7 @@ export class TkPopover implements ComponentInterface {
   private updateArrowPosition() {
     const arrowElement = this.arrowElement;
 
-    switch (this.currentPosition) {
+    switch (this.position) {
       case 'top':
         arrowElement.style.bottom = '-5px';
         arrowElement.style.borderLeft = 'none';
@@ -160,11 +157,8 @@ export class TkPopover implements ComponentInterface {
   }
 
   private handleDocumentClick = (e: MouseEvent) => {
-    // If clicking inside the popover content, don't close
-    if (this.popoverElement?.contains(e.target as Node)) {
-      return;
-    }
-    // If clicking outside both popover and trigger, close
+    if (this.popoverElement?.contains(e.target as Node)) return;
+
     if (!this.el.contains(e.target as Node)) {
       this.isOpen = false;
     }
