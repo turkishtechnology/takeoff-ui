@@ -11,6 +11,10 @@ const Type = () => {
 <TkButton variant="primary" label="Primary" type="outlined" />
 <TkButton variant="primary" label="Primary" type="text" />`;
 
+  const angularCode = `<tk-button variant="primary" label="Primary" type="filled" />
+<tk-button variant="primary" label="Primary" type="outlined" />
+<tk-button variant="primary" label="Primary" type="text" />`;
+
   const demo = (
     <div className="flex justify-center flex-wrap gap-2">
       <TkButton variant="primary" label="Primary" type="filled" />
@@ -24,7 +28,7 @@ const Type = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

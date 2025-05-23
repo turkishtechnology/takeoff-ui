@@ -7,6 +7,8 @@ const Description = () => {
 
   const vueCode = `<TkCheckbox description="example description" />`;
 
+  const angularCode = `<tk-checkbox description="example description" />`;
+
   const demo = (
     <div className="flex gap-4 flex-wrap items-center">
       <TkCheckbox description="example description" />
@@ -18,7 +20,7 @@ const Description = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

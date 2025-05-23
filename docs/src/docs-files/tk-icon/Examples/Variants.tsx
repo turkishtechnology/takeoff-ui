@@ -21,6 +21,15 @@ const Variants = () => {
 <TkIcon icon="flight" variant="danger" />
 <TkIcon icon="flight" variant="white" />`;
 
+  const angularCode = `<tk-icon icon="flight" variant="primary" />
+<tk-icon icon="flight" variant="secondary" />
+<tk-icon icon="flight" variant="neutral" />
+<tk-icon icon="flight" variant="info" />
+<tk-icon icon="flight" variant="success" />
+<tk-icon icon="flight" variant="warning" />
+<tk-icon icon="flight" variant="danger" />
+<tk-icon icon="flight" variant="white" />`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-4">
       <TkIcon icon="flight" variant="primary" />
@@ -39,7 +48,7 @@ const Variants = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

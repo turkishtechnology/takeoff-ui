@@ -9,6 +9,9 @@ const State = () => {
   const vueCode = `<TkRating type="star" value="3.5" :showRatingValue.prop="true" disabled />
 <TkRating type="star" value="3.5" :showRatingValue.prop="true" readonly />`;
 
+  const angularCode = `<tk-rating type="star" [value]="3.5" showRatingValue disabled />
+  <tk-rating type="star" [value]="3.5" showRatingValue readonly />`;
+
   const demo = (
     <div
       style={{
@@ -32,7 +35,7 @@ const State = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

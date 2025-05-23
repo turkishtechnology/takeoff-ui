@@ -17,6 +17,13 @@ const ContentSlot = () => {
   </div>
 </TkCheckbox>`;
 
+  const angularCode = `<tk-checkbox type="card">
+  <div slot="content" class="flex items-center gap-2">
+    <div>Label</div>
+    <tk-badge icon="info" variant="info" label="İnformation" size="small" />
+  </div>
+</tk-checkbox>`;
+
   const demo = (
     <TkCheckbox type="card">
       <div slot="content" className="flex items-center gap-2">
@@ -31,7 +38,7 @@ const ContentSlot = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

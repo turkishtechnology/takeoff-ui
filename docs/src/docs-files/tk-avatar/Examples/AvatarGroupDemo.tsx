@@ -34,6 +34,21 @@ const AvatarGroupDemo = () => {
   <TkAvatar variant="light" background="solid" rounded label="+4" />
 </TkAvatarGroup>`;
 
+  const angularCode = `<tk-avatar-group>
+  <tk-avatar image="https://via.placeholder.com/40" variant="primary" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="light" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="success" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="info" background="solid" rounded label="TK" />
+  <tk-avatar variant="light" background="solid" rounded label="+4" />
+</tk-avatar-group>
+<tk-avatar-group compact>
+  <tk-avatar image="https://via.placeholder.com/40" variant="primary" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="light" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="success" background="solid" rounded />
+  <tk-avatar image="https://via.placeholder.com/40" variant="info" background="solid" rounded label="TK" />
+  <tk-avatar variant="light" background="solid" rounded label="+4" />
+</tk-avatar-group>`;
+
   const demo = (
     <div className="flex flex-col gap-4 overflow-auto">
       <TkAvatarGroup>
@@ -99,7 +114,7 @@ const AvatarGroupDemo = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

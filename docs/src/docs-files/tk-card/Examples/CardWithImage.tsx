@@ -13,6 +13,10 @@ const CardWithImage = () => {
     showMenuButton
 >
     <p>Card with top image in windowed mode.</p>
+    <div slot="footer-actions">
+          <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+          <TkButton label="Submit" variant="primary"></TkButton>
+    </div>
 </TkCard>`;
 
   const vueCode = `<TkCard 
@@ -26,20 +30,28 @@ const CardWithImage = () => {
     <p>Card with top image in windowed mode.</p>
 </TkCard>`;
 
+  const angularCode = `<tk-card
+  header="Top Image"
+  image="path/to/image.jpg"
+  [imageOptions]="{ position: 'top', windowed: true }"
+  [containerStyle]="{ width: '312px' }"
+  showAvatar
+  showMenuButton
+>
+  <p>Card with top image in windowed mode.</p>
+</tk-card>`;
+
   const demo = (
     <div style={{ overflow: 'overlay' }}>
       <TkCard
-        header="Card Title"
+        header="Top Image"
         image={useBaseUrl('img/docs/tk-card/vertical_card.png')}
         imageOptions={{ position: 'top', windowed: true }}
         containerStyle={{ width: '312px' }}
         showAvatar
         showMenuButton
       >
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        <p>Card with top image in windowed mode.</p>
         <div slot="footer-actions">
           <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
           <TkButton label="Submit" variant="primary"></TkButton>
@@ -53,7 +65,7 @@ const CardWithImage = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -9,6 +9,9 @@ const State = () => {
   const vueCode = `<TkCheckbox label="Invalid" :invalid="true" />
 <TkCheckbox label="Disabled" disabled />`;
 
+  const angularCode = `<tk-checkbox label="Invalid" [invalid]="true" />
+<tk-checkbox label="Disabled" disabled />`;
+
   const demo = (
     <div className="flex flex-col gap-4">
       <TkCheckbox label="Invalid" invalid={true} />
@@ -21,7 +24,7 @@ const State = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

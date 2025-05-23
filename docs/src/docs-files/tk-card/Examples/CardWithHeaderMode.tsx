@@ -10,6 +10,8 @@ const CardWithHeaderMode = () => {
   const [showMenuButton, setShowMenuButton] = useState(false);
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
+  const [codeSampleAngular, setCodeSampleAngular] = useState('');
+
   const headerTypes = [
     { label: 'Basic', value: 'basic' },
     { label: 'Divided', value: 'divided' },
@@ -37,10 +39,18 @@ const CardWithHeaderMode = () => {
     const newCodeSample = `<TkCard
  ${attributes}
 >
-    <p>This card demonstrates different header options.</p>
+    <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
 </TkCard>`;
+
+    const angularCodeSample = `<tk-card
+  ${attributes}
+>
+  <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
+</tk-card>`;
+
     setCodeSampleReact(newCodeSample);
     setCodeSampleVue(newCodeSample);
+    setCodeSampleAngular(angularCodeSample);
   }, [headerType, showAvatar, showMenuButton]);
 
   const demo = (
@@ -95,7 +105,7 @@ const CardWithHeaderMode = () => {
       demo={demo}
       reactCode={codeSampleReact}
       vueCode={codeSampleVue}
-      angularCode={''}
+      angularCode={codeSampleAngular}
     ></FeatureDemo>
   );
 };
