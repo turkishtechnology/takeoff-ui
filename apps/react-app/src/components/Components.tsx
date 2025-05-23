@@ -22,6 +22,112 @@ function Components() {
         >
           Input
         </Link>
+
+        <Link
+          to="stepper"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Stepper
+        </Link>
+
+        <Link
+          to="toggle"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Toggle
+        </Link>
+
+        <Link
+          to="divider"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Divider
+        </Link>
+
+        <Link
+          to="pagination"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Pagination
+        </Link>
+
+        <Link
+          to="editor"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Editor
+        </Link>
+
+        <Link
+          to="drawer"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Drawer
+        </Link>
+
+        <Link
+          to="timeline"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Timeline
+        </Link>
+
+        <Link
+          to="spinner"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Spinner
+        </Link>
+
+        <Link
+          to="icon"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Icon
+        </Link>
+
+        <Link
+          to="chips"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Chips
+        </Link>
+        <Link
+          to="textarea"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Textarea
+        </Link>
+        <Link
+          to="chart"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Chart
+        </Link>
+        <Link
+          to="card"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Card
+        </Link>
+        <Link
+          to="badge"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Badge
+        </Link>
+        <Link
+          to="breadcrumb"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Breadcrumb
+        </Link>
+        <Link
+          to="avatar"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Avatar
+        </Link>
         <Link
           to="select"
           className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"

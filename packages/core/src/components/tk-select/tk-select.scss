@@ -10,7 +10,7 @@ tk-select {
     border-radius: 16px;
     border: 1px solid var(--border-light);
     background: var(--static-light);
-    z-index: 99;
+    z-index: 800;
     box-shadow: var(--effect-1-default-sm);
 
     .dropdown-item-holder {
@@ -51,6 +51,10 @@ tk-select {
           background: var(--background-lightest);
         }
         &[data-active="true"] {
+          cursor: pointer;
+          background: var(--background-light);
+        }
+        &[data-selected="true"] {
           cursor: pointer;
           background: var(--states-info-light);
         }

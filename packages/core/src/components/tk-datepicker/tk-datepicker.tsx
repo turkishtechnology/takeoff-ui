@@ -91,6 +91,11 @@ export class TkDatePicker {
    * Defines the label for the input
    */
   @Prop() label: string;
+  /**
+   * Defines the size for the label
+   * @defaultValue base
+   */
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
    * Whether the datepicker is disabled
@@ -350,6 +355,16 @@ export class TkDatePicker {
       this.isOpen = false;
     }
     this.inputValue = this.formatInputValue();
+  }
+
+  /**
+   * Closes the datepicker panel if it is open.
+   */
+  @Method()
+  async closePanel() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
   }
 
   private getResolvedFirstDayIndex(): number {
@@ -1413,6 +1428,7 @@ export class TkDatePicker {
       <tk-input
         ref={el => (this.inputRef = el as HTMLTkInputElement)}
         label={this.label}
+        size={this.size}
         mode="text"
         icon="calendar_month"
         class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}

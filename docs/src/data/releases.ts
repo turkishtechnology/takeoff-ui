@@ -14,6 +14,31 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.3',
+    date: '21.05.2025',
+    newFeatures: [
+      'Label size prop added to datepicker component',
+      'Hide page and item numbers for empty data to pagination',
+      'Add closePanel method to datepicker component',
+      'Checkbox and icons are disabled when the data is empty to table',
+    ],
+    bugFixes: [
+      'Fix checkbox filter to nested field in table',
+      'Fix all z-index related issues',
+    ],
+  },
+  {
+    title: 'Beta Release',
+    version: '0.0.2-beta.2',
+    date: '14.05.2025',
+    newFeatures: [
+      'Add navigation mode style',
+      'Added downloadable prop to upload component',
+    ],
+    bugFixes: ['Fixed filter panel appearance when route of page'],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.1',
     date: '12.05.2025',
     newFeatures: ['Add filter buttons label attributo to IColumn '],

@@ -9,6 +9,8 @@ const Design = () => {
 
   const vueCode = `<TkPagination :totalItems="50" :rowsPerPage="10" type="${type}" />`;
 
+  const angularCode = `<tk-pagination [totalItems]="50" [rowsPerPage]="10" type="${type}" />`;
+
   const radioModels = [
     {
       label: 'Grouped',
@@ -44,7 +46,7 @@ const Design = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

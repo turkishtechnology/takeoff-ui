@@ -38,8 +38,13 @@ const separator = ref('${separator}');
 </script>
 <template>
   <TkBreadcrumb :model.prop="items" :separator="separator" />
-</template>
-`;
+</template>`;
+
+  const angularCode = `<tk-breadcrumb [model]="[  
+    { label: 'Home', href: '/', isExternal: true },
+    { label: 'Library', href: '/library', isExternal: true },
+    { label: 'Data' }
+  ]" separator="${separator}" />`;
 
   const demo = (
     <div style={{ overflow: 'overlay' }}>
@@ -64,7 +69,7 @@ const separator = ref('${separator}');
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

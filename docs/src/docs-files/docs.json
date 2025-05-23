@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-12T05:10:59",
+  "timestamp": "2025-05-23T10:15:44",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -5383,6 +5383,44 @@
           "setter": false
         },
         {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Defines the size for the label",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "base"
+            }
+          ],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "timeFormat",
           "type": "\"12\" | \"24\"",
           "complexType": {
@@ -5450,6 +5488,28 @@
         }
       ],
       "methods": [
+        {
+          "name": "closePanel",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "closePanel() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the datepicker panel if it is open.",
+          "docsTags": []
+        },
         {
           "name": "setToday",
           "returns": {
@@ -9183,6 +9243,201 @@
           "tk-pagination"
         ]
       }
+    },
+    {
+      "filePath": "src/components/tk-popover/tk-popover.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-popover",
+      "docs": "The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- Default slot for content without a specific name"
+        },
+        {
+          "name": "slot",
+          "text": "trigger - The trigger slot defines the element that will trigger the Popover"
+        },
+        {
+          "name": "slot",
+          "text": "content - Define custom HTML content for the Popover, which replaces the default header, description and icon elements"
+        },
+        {
+          "name": "react",
+          "text": "`import { TkPopover } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkPopover } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkPopover } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "containerStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "container-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of container element",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "position",
+          "type": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+          "complexType": {
+            "original": "'top' | 'bottom' | 'left' | 'right'",
+            "resolved": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "position",
+          "reflectToAttr": false,
+          "docs": "Sets the position of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'right'"
+            }
+          ],
+          "default": "'right'",
+          "values": [
+            {
+              "value": "bottom",
+              "type": "string"
+            },
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
+              "type": "string"
+            },
+            {
+              "value": "top",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "trigger",
+          "type": "\"click\" | \"hover\"",
+          "complexType": {
+            "original": "'click' | 'hover'",
+            "resolved": "\"click\" | \"hover\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "trigger",
+          "reflectToAttr": false,
+          "docs": "Sets the action of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'click'"
+            }
+          ],
+          "default": "'click'",
+          "values": [
+            {
+              "value": "click",
+              "type": "string"
+            },
+            {
+              "value": "hover",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"basic\" | \"dark\" | \"white\"",
+          "complexType": {
+            "original": "'white' | 'dark' | 'basic'",
+            "resolved": "\"basic\" | \"dark\" | \"white\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "Sets the type of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "\"white\""
+            }
+          ],
+          "default": "'basic'",
+          "values": [
+            {
+              "value": "basic",
+              "type": "string"
+            },
+            {
+              "value": "dark",
+              "type": "string"
+            },
+            {
+              "value": "white",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "Default slot for content without a specific name"
+        },
+        {
+          "name": "content",
+          "docs": "Define custom HTML content for the Popover, which replaces the default header, description and icon elements"
+        },
+        {
+          "name": "trigger",
+          "docs": "The trigger slot defines the element that will trigger the Popover"
+        }
+      ],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/tk-radio/tk-radio.tsx",
@@ -14598,6 +14853,30 @@
           "setter": false
         },
         {
+          "name": "downloadable",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "downloadable",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the files can be downloaded. When true, a download button will be displayed next to each file.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "error",
           "type": "string",
           "complexType": {
@@ -14943,6 +15222,25 @@
           "cancelable": true,
           "composed": true,
           "docs": "Emitted when one or more files pass validation.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-download-file",
+          "detail": "File",
+          "bubbles": true,
+          "complexType": {
+            "original": "File",
+            "resolved": "File",
+            "references": {
+              "File": {
+                "location": "global",
+                "id": "global::File"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when a file is download button is clicked.",
           "docsTags": []
         },
         {

@@ -4,7 +4,7 @@ import React from 'react';
 
 const Icons = () => {
   const reactCode = `<TkAccordion expand-icon="add" collapse-icon="remove">
-  <TkAccordionItem icon="flight">
+  <TkAccordionItem icon="flight"> 
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
@@ -24,6 +24,17 @@ const Icons = () => {
     <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
 </TkAccordion>`;
+
+  const angularCode = `<tk-accordion expand-icon="add" collapse-icon="remove">
+  <tk-accordion-item icon="flight">
+    <span slot="header">Panel 1 Title</span>
+    <div slot="content">Panel 1 Content</div>
+  </tk-accordion-item>
+  <tk-accordion-item icon="flight">
+    <span slot="header">Panel 2 Title</span>
+    <div slot="content">Panel 2 Content</div>
+  </tk-accordion-item>
+</tk-accordion>`;
 
   const demo = (
     <>
@@ -47,7 +58,7 @@ const Icons = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

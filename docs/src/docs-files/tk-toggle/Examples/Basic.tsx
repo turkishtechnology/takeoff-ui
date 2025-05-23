@@ -7,6 +7,8 @@ const Basic = () => {
 
   const vueCode = `<TkToggle />`;
 
+  const angularCode = `<tk-toggle />`;
+
   const demo = (
     <div className="flex justify-center">
       <TkToggle />
@@ -18,7 +20,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

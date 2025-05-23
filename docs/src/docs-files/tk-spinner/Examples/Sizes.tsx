@@ -13,6 +13,11 @@ const Sizes = () => {
 <TkSpinner size="base" type="rounded" label="M" />
 <TkSpinner size="small" type="rounded" label="S" />`;
 
+  const angularCode = `<tk-spinner size="xlarge" type="rounded" label="XL" />
+<tk-spinner size="large" type="rounded" label="L" />
+<tk-spinner size="base" type="rounded" label="M" />
+<tk-spinner size="small" type="rounded" label="S" />`;
+
   const demo = (
     <div className="flex items-end justify-center gap-4 flex-wrap">
       <TkSpinner size="xlarge" type="rounded" label="XL" />
@@ -28,7 +33,7 @@ const Sizes = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

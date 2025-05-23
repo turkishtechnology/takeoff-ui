@@ -40,6 +40,25 @@ const Messages = () => {
 />
 `;
 
+  const angularCode = `<tk-alert
+  variant="success"
+  type="outlined"
+  header="Success Filled Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+/>
+
+<tk-alert
+  variant="success"
+  type="outlined"
+  header="Success Filled Alert"
+  [message]="[
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+    'Dummy text of the printing and typesetting',
+    'Lorem Ipsum has been the industry\'s standard.'
+  ]"
+/>
+`;
+
   const demo = (
     <>
       <div className="mb-4 flex flex-col gap-2">
@@ -71,7 +90,7 @@ const Messages = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

@@ -50,7 +50,12 @@ const content = await editorRef.current?.getContent("${outputFormat}");
 console.log(content);
 };
 
-return <TkEditor ref={editorRef} value={content} />;
+return (
+    <>
+    <TkEditor ref={editorRef} value={content} />
+    <TkButton label="Get Content" onTkClick={() => getContent()} />
+    </>
+  );
 `;
     const newCodeSampleVue = `<script setup>
 import { ref } from 'vue';
