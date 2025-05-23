@@ -14,6 +14,16 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.4',
+    date: '23.05.2025',
+    newComponents: [
+      'Popover component has been developed',
+      'Organization chart component has been developed',
+    ],
+    newFeatures: ['Add tooltip to tabs header'],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.3',
     date: '21.05.2025',
     newFeatures: [

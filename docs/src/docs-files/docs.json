@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-21T14:58:40",
+  "timestamp": "2025-05-23T11:22:34",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -8907,6 +8907,246 @@
           "tk-input"
         ]
       }
+    },
+    {
+      "filePath": "src/components/tk-orgchart/tk-org-chart.tsx",
+      "encapsulation": "none",
+      "tag": "tk-org-chart",
+      "docs": "The TkOrgChart component allows users to visualize organizational data using d3-org-chart.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "accessibilityLabel",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "accessibility-label",
+          "reflectToAttr": false,
+          "docs": "Accessibility label for the chart",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "collapsible",
+          "reflectToAttr": false,
+          "docs": "Enable or disable expand/collapse buttons functionality\nWhen disabled, all nodes will be automatically expanded",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "data",
+          "type": "any[]",
+          "complexType": {
+            "original": "any[]",
+            "resolved": "any[]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any[]"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "options",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "options",
+          "reflectToAttr": false,
+          "docs": "Chart options for d3-org-chart customization",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addNode",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(node: any) => Promise<void>",
+            "parameters": [
+              {
+                "name": "node",
+                "type": "any",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addNode(node: any) => Promise<void>",
+          "parameters": [
+            {
+              "name": "node",
+              "type": "any",
+              "docs": ""
+            }
+          ],
+          "docs": "Add node to organizational chart",
+          "docsTags": []
+        },
+        {
+          "name": "fit",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "fit() => Promise<void>",
+          "parameters": [],
+          "docs": "Fit chart to screen",
+          "docsTags": []
+        },
+        {
+          "name": "getOrgChart",
+          "returns": {
+            "type": "Promise<any>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<any>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<any>"
+          },
+          "signature": "getOrgChart() => Promise<any>",
+          "parameters": [],
+          "docs": "Get the chart instance",
+          "docsTags": []
+        },
+        {
+          "name": "refresh",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "refresh() => Promise<void>",
+          "parameters": [],
+          "docs": "Refresh the chart",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "tk-node-click",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Node click event",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/tk-pagination/tk-pagination.tsx",
@@ -15468,7 +15708,7 @@
       "path": "src/components/tk-table/interfaces.ts"
     },
     "src/global/interfaces/ITooltipOptions.ts::ITooltipOptions": {
-      "declaration": "export interface ITooltipOptions {\n    /**\n     * Sets header text for the tooltip.\n     */\n    header?: string;\n    /**\n     * Sets description text for the tooltip.\n     */\n    description?: string;\n    /**\n     * Sets the position of the tooltip.\n     */\n    position?: 'top' | 'bottom' | 'left' | 'right';\n    /**\n     * Sets the variant of the tooltip.\n     */\n    variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral';\n    /**\n     * Sets the icon of the tooltip.\n     */\n    icon?: string | IIconOptions;\n  }",
+      "declaration": "export interface ITooltipOptions {\n  /**\n   * Sets header text for the tooltip.\n   */\n  header?: string;\n  /**\n   * Sets description text for the tooltip.\n   */\n  description?: string;\n  /**\n   * Sets the position of the tooltip.\n   */\n  position?: 'top' | 'bottom' | 'left' | 'right';\n  /**\n   * Sets the variant of the tooltip.\n   */\n  variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral';\n  /**\n   * Sets the icon of the tooltip.\n   */\n  icon: string | IIconOptions;\n}",
       "docstring": "",
       "path": "src/global/interfaces/ITooltipOptions.ts"
     },
