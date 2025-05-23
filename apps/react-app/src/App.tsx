@@ -35,7 +35,7 @@ import Editor from './components/Editor';
 import Pagination from './components/Pagination';
 import Stepper from './components/Stepper';
 import Toggle from './components/Toggle';
-
+import OrgChart from './components/OrgChart';
 function App() {
   return (
     <Layout>
@@ -71,6 +71,8 @@ function App() {
         <Route path="components/accordion" element={<Accordion />} />
         <Route path="components/drawer" element={<Drawer />} />
         <Route path="components/textarea" element={<Textarea />} />
+        <Route path="components/chart" element={<Chart />} />
+        <Route path="components/orgchart" element={<OrgChart />} />
         <Route path="examples" element={<Examples />} />
         <Route path="examples/react-hook-form" element={<ReactHookForm />} />
         <Route path="examples/zod-validation" element={<ZodValidation />} />
