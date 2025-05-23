@@ -77,6 +77,43 @@ const Position = () => {
   <TkButton slot="trigger" label="Hover Me!"></TkButton>
 </TkTooltip>`;
 
+  const angularCode = `<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="top"
+  icon="flight"
+  variant="dark"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="dark"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="left"
+  icon="flight"
+  variant="dark"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="bottom"
+  icon="flight"
+  variant="dark"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>`;
+
   const demo = (
     <div className="">
       <TkTooltip
@@ -126,7 +163,7 @@ const Position = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -11,6 +11,10 @@ const Type = () => {
 <TkRating type="heart" :value="2.5" />
 <TkRating type="dot" :value="4" />`;
 
+  const angularCode = `<tk-rating type="star" [value]="2" />
+<tk-rating type="heart" [value]="2.5" />
+<tk-rating type="dot" [value]="4" />`;
+
   const demo = (
     <div
       style={{
@@ -29,7 +33,7 @@ const Type = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

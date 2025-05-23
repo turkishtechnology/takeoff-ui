@@ -37,6 +37,23 @@ const State = () => {
   disabled
 />`;
 
+  const angularCode = `<tk-currency-input
+  label="Error"
+  placeholder="Error"
+  [invalid]="true"
+  error="Bu alan zorunludur"
+/>
+<tk-currency-input
+  label="Readonly"
+  placeholder="Readonly"
+  readonly
+/>
+<tk-currency-input
+  label="Disabled"
+  placeholder="Disabled"
+  disabled
+/>`;
+
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
       <TkCurrencyInput
@@ -55,7 +72,7 @@ const State = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -48,6 +48,14 @@ const options = [
 </template>
 `;
 
+  const angularCode = `<tk-dropdown [options]="[
+    { label: 'Enable Item', value: '1' },
+    { label: 'Disabled Item', value: '2', disabled: true },
+    { label: 'Enable Item', value: '3' }
+  ]">
+    <tk-button label="Disable Item Example" slot="trigger" />
+  </tk-dropdown>`;
+
   const demo = <Example />;
 
   return (
@@ -55,7 +63,7 @@ const options = [
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

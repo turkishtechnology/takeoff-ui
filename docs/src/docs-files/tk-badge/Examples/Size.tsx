@@ -13,6 +13,10 @@ const Size = () => {
 <TkBadge variant="primary" size="small" type="filledlight" label="primary" />
 `;
 
+  const angularCode = `<tk-badge variant="primary" size="large" type="filledlight" label="primary" />
+<tk-badge variant="primary" size="base" type="filledlight" label="primary" />
+<tk-badge variant="primary" size="small" type="filledlight" label="primary" />`;
+
   const demo = (
     <div className="flex items-end justify-center flex-wrap gap-2">
       <TkBadge
@@ -41,7 +45,7 @@ const Size = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

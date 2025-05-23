@@ -20,6 +20,14 @@ const Type = () => {
   <TkRadio label="label 1" value="1" />
   <TkRadio label="label 2" value="2" />
 </TkRadioGroup>`;
+  const angularCode = `<tk-radio-group label="Default Type">
+  <tk-radio label="label 1" value="1" />
+  <tk-radio label="label 2" value="2" />
+</tk-radio-group>
+<tk-radio-group label="Card Type" type="card">
+  <tk-radio label="label 1" value="1" />
+  <tk-radio label="label 2" value="2" />
+</tk-radio-group>`;
 
   const demo = (
     <div
@@ -44,7 +52,7 @@ const Type = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

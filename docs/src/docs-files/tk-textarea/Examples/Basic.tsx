@@ -15,6 +15,12 @@ const Basic = () => {
   placeholder="Placeholder text"
 />`;
 
+  const angularCode = `<tk-textarea
+  label="Textarea"
+  hint="Hint text"
+  placeholder="Placeholder text"
+/>`;
+
   const demo = (
     <TkTextarea
       label="Textarea"
@@ -28,7 +34,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

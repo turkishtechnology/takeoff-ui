@@ -12,6 +12,10 @@ const WithBadges = () => {
 <TkAvatar image="https://via.placeholder.com/40" badge badgeStatus="warning" rounded />
 <TkAvatar label="AD" badge badgeStatus="danger" rounded />`;
 
+  const angularCode = `<tk-avatar image="https://via.placeholder.com/40" background="solid" badge badgeStatus="success" rounded />
+<tk-avatar image="https://via.placeholder.com/40" badge badgeStatus="warning" rounded />
+<tk-avatar label="AD" badge badgeStatus="danger" rounded />`;
+
   const demo = (
     <div className="flex justify-center gap-2 flex-wrap">
       <TkAvatar
@@ -38,7 +42,7 @@ const WithBadges = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

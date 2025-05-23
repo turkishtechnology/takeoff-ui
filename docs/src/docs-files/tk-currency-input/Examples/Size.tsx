@@ -29,6 +29,19 @@ const Size = () => {
   size="large"
 />`;
 
+  const angularCode = `<tk-currency-input
+  label="Small Currency Input"
+  size="small"
+/>
+<tk-currency-input
+  label="Base Currency Input"
+  size="base"
+/>
+<tk-currency-input
+  label="Large Currency Input"
+  size="large"
+/>`;
+
   const demo = (
     <div className="flex items-end gap-2 flex-wrap justify-center">
       <TkCurrencyInput label="Small Currency Input" size="small" />
@@ -42,7 +55,7 @@ const Size = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

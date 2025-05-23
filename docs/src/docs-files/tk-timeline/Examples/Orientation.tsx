@@ -29,6 +29,9 @@ const Orientation = () => {
   const vueCode = `<TkTimeline :items.prop="items" />
 <TkTimeline :items.prop="items" orientation="vertical" />`;
 
+  const angularCode = `<tk-timeline [items]="items" />
+<tk-timeline [items]="items" orientation="vertical" />`;
+
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
@@ -52,7 +55,7 @@ const Orientation = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

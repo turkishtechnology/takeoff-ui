@@ -4,9 +4,11 @@ import React from 'react';
 
 const Orientation = () => {
   const reactCode = `<TkSpinner orientation="horizontal" label="Horizontal" />
-  <TkSpinner orientation="vertical" label="Vertical" />`;
+<TkSpinner orientation="vertical" label="Vertical" />`;
   const vueCode = `<TkSpinner orientation="horizontal" label="Horizontal" />
-  <TkSpinner orientation="vertical" label="Vertical" />`;
+<TkSpinner orientation="vertical" label="Vertical" />`;
+  const angularCode = `<tk-spinner orientation="horizontal" label="Horizontal" />
+<tk-spinner orientation="vertical" label="Vertical" />`;
 
   const demo = (
     <div className="flex justify-center items-start gap-4 flex-wrap">
@@ -19,7 +21,7 @@ const Orientation = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

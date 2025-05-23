@@ -7,6 +7,8 @@ const Default = () => {
 
   const vueCode = `<TkSpinner />`;
 
+  const angularCode = `<tk-spinner />`;
+
   const demo = (
     <div className="flex justify-center gap-2">
       <TkSpinner />
@@ -18,7 +20,7 @@ const Default = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

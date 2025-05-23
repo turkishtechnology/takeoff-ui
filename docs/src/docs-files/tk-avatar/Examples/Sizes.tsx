@@ -15,6 +15,12 @@ const Sizes = () => {
 <TkAvatar size="small" rounded label="S" />
 <TkAvatar size="xsmall" rounded label="XS" />`;
 
+  const angularCode = `<tk-avatar size="xlarge" rounded label="XL" />
+<tk-avatar size="large" rounded label="L" />
+<tk-avatar size="base" rounded label="M" />
+<tk-avatar size="small" rounded label="S" />
+<tk-avatar size="xsmall" rounded label="XS" />`;
+
   const demo = (
     <div className="flex justify-center items-end gap-2 flex-wrap">
       <TkAvatar size="xlarge" rounded label="XL" />
@@ -31,7 +37,7 @@ const Sizes = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

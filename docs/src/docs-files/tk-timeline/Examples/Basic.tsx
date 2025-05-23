@@ -16,6 +16,8 @@ const Basic = () => {
 
   const vueCode = `<TkTimeline :items.prop="items" />`;
 
+  const angularCode = `<tk-timeline [items]="items" />`;
+
   const demo = (
     <div className=" my-6">
       <TkTimeline items={items} />
@@ -27,7 +29,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };
