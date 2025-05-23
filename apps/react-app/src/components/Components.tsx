@@ -212,6 +212,12 @@ function Components() {
         >
           OrgChart
         </Link>
+        <Link
+          to="tabs"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Tabs
+        </Link>
       </div>
     </TkCard>
   );

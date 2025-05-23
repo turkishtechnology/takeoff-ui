@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-23T10:15:44",
+  "timestamp": "2025-05-21T14:58:40",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -13298,15 +13298,20 @@
       "dependencies": [
         "tk-tabs-item",
         "tk-icon",
-        "tk-badge"
+        "tk-badge",
+        "tk-tooltip"
       ],
       "dependencyGraph": {
         "tk-tabs": [
           "tk-tabs-item",
           "tk-icon",
-          "tk-badge"
+          "tk-badge",
+          "tk-tooltip"
         ],
         "tk-badge": [
+          "tk-icon"
+        ],
+        "tk-tooltip": [
           "tk-icon"
         ]
       }
@@ -13428,15 +13433,15 @@
         },
         {
           "name": "icon",
-          "type": "ITabsIconOptions | string",
+          "type": "IIconOptions | string",
           "complexType": {
-            "original": "string | ITabsIconOptions",
-            "resolved": "ITabsIconOptions | string",
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
             "references": {
-              "ITabsIconOptions": {
+              "IIconOptions": {
                 "location": "import",
-                "path": "./interfaces",
-                "id": "src/components/tk-tabs/interfaces.ts::ITabsIconOptions"
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
               }
             }
           },
@@ -13447,7 +13452,7 @@
           "docsTags": [],
           "values": [
             {
-              "type": "ITabsIconOptions"
+              "type": "IIconOptions"
             },
             {
               "type": "string"
@@ -13477,6 +13482,34 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tooltipOptions",
+          "type": "ITooltipOptions",
+          "complexType": {
+            "original": "ITooltipOptions",
+            "resolved": "ITooltipOptions",
+            "references": {
+              "ITooltipOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/ITooltipOptions",
+                "id": "src/global/interfaces/ITooltipOptions.ts::ITooltipOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "ITooltipOptions"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -14701,13 +14734,18 @@
         }
       ],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "tk-tabs"
+      ],
       "dependencies": [
         "tk-icon"
       ],
       "dependencyGraph": {
         "tk-tooltip": [
           "tk-icon"
+        ],
+        "tk-tabs": [
+          "tk-tooltip"
         ]
       }
     },
@@ -15429,10 +15467,10 @@
       "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },
-    "src/components/tk-tabs/interfaces.ts::ITabsIconOptions": {
-      "declaration": "export interface ITabsIconOptions {\n  /**\n   * Material symbols icon name\n   */\n  name: string;\n  /**\n   * The color of the icon\n   */\n  color?: string;\n  /**\n   * The style of the icon\n   */\n  style?: 'outlined' | 'rounded' | 'sharp';\n  /**\n   * Indicates whether the icon should be filled\n   */\n  fill?: boolean;\n}",
-      "docstring": "Defines the options for configuring icons in the Tabs Item component",
-      "path": "src/components/tk-tabs/interfaces.ts"
+    "src/global/interfaces/ITooltipOptions.ts::ITooltipOptions": {
+      "declaration": "export interface ITooltipOptions {\n    /**\n     * Sets header text for the tooltip.\n     */\n    header?: string;\n    /**\n     * Sets description text for the tooltip.\n     */\n    description?: string;\n    /**\n     * Sets the position of the tooltip.\n     */\n    position?: 'top' | 'bottom' | 'left' | 'right';\n    /**\n     * Sets the variant of the tooltip.\n     */\n    variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral';\n    /**\n     * Sets the icon of the tooltip.\n     */\n    icon?: string | IIconOptions;\n  }",
+      "docstring": "",
+      "path": "src/global/interfaces/ITooltipOptions.ts"
     },
     "src/components/tk-timeline/interfaces.ts::TimelineItem": {
       "declaration": "export interface TimelineItem {\n  title: string;\n  description?: string;\n  date?: string;\n}",

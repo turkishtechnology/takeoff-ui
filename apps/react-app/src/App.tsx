@@ -36,6 +36,8 @@ import Pagination from './components/Pagination';
 import Stepper from './components/Stepper';
 import Toggle from './components/Toggle';
 import OrgChart from './components/OrgChart';
+import Tabs from './components/Tabs';
+
 function App() {
   return (
     <Layout>
@@ -76,6 +78,7 @@ function App() {
         <Route path="examples" element={<Examples />} />
         <Route path="examples/react-hook-form" element={<ReactHookForm />} />
         <Route path="examples/zod-validation" element={<ZodValidation />} />
+        <Route path="components/tabs" element={<Tabs />} />
       </Routes>
     </Layout>
   );

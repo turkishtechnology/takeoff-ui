@@ -1,6 +1,6 @@
 import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { ITabsIconOptions } from './interfaces';
+import { IIconOptions } from '../../components';
 import { getIconElementProps } from '../../utils/icon-props';
 
 /**
@@ -123,6 +123,7 @@ export class TkTabs implements ComponentInterface {
         badged: tab.badged,
         badgeLabel: tab.badgeLabel,
         badgeCount: tab.badgeCount,
+        tooltipOptions: tab.tooltipOptions,
       };
     }) as HTMLTkTabsItemElement[];
 
@@ -197,7 +198,7 @@ export class TkTabs implements ComponentInterface {
     if (tab.icon && typeof tab.icon === 'string') {
       return <span class="material-symbols-outlined tk-tabs-item-icon">{tab.icon}</span>;
     } else if (tab.icon && typeof tab.icon === 'object') {
-      const icon: ITabsIconOptions = tab.icon;
+      const icon: IIconOptions = tab.icon;
       return <tk-icon {...getIconElementProps(icon, { class: classNames('tk-tabs-item-icon') })} />;
     }
   }
@@ -213,6 +214,28 @@ export class TkTabs implements ComponentInterface {
       );
     }
     return null;
+  }
+
+  private renderTabTooltip(tab: HTMLTkTabsItemElement) {
+    if (tab?.tooltipOptions) {
+      if (tab.tooltipOptions.icon) {
+        return (
+          <tk-tooltip
+            header={tab.tooltipOptions.header}
+            description={tab.tooltipOptions.description}
+            position={tab.tooltipOptions.position || 'bottom'}
+            variant={tab.tooltipOptions.variant || 'dark'}
+          >
+            <tk-icon
+              slot="trigger"
+              {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
+              size={this.size}
+            />
+          </tk-tooltip>
+        );
+      }
+      return null;
+    }
   }
 
   render() {
@@ -247,6 +270,7 @@ export class TkTabs implements ComponentInterface {
                 <div class="tk-tabs-item-label-container">
                   <span class="tk-tabs-item-label">{tab.label}</span>
                   {this.renderTabBadge(tab, index)}
+                  {this.renderTabTooltip(tab)}
                 </div>
                 {this.isClosable && (
                   <span

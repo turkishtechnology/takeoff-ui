@@ -96,6 +96,7 @@ export class TkTooltip implements ComponentInterface {
 
   private updatePosition() {
     computePosition(this.triggerElement, this.tooltipElement, {
+      strategy: 'fixed',
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData }) => {
