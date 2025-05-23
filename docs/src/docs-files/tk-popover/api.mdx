@@ -1,0 +1,18 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="position" variant="primary" size="large" type="filledlight"/> | <code>"bottom", "left", "right", "top"</code> | 'right' | Sets the position of the popover. |
+| <TkBadge label="trigger" variant="primary" size="large" type="filledlight"/> | <code>"click", "hover"</code> | 'click' | Sets the action of the popover. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "white"</code> | 'basic' | Sets the type of the popover. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+|  | Default slot for content without a specific name |
+| content | Define custom HTML content for the Popover, which replaces the default header, description and icon elements |
+| trigger | The trigger slot defines the element that will trigger the Popover |
