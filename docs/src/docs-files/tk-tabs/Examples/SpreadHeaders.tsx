@@ -21,7 +21,7 @@ const SpreadHeaders = () => {
     const attributesList = [`type="${type}"`].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCodeSample = `<TkTabs ${attributes} spreadHeaders>
+    const reactCode = `<TkTabs ${attributes} spreadHeaders>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -33,7 +33,7 @@ const SpreadHeaders = () => {
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCodeSample = `<TkTabs ${attributes} :spreadHeaders.prop="true">
+    const vueCode = `<TkTabs ${attributes} :spreadHeaders.prop="true">
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -44,8 +44,8 @@ const SpreadHeaders = () => {
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
 </TkTabs>`;
-    setCodeSampleReact(reactCodeSample);
-    setCodeSampleVue(vueCodeSample);
+    setCodeSampleReact(reactCode);
+    setCodeSampleVue(vueCode);
   }, [type]);
 
   const demo = (
