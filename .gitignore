@@ -12,3 +12,4 @@
 .turbo
 .docusaurus
 build
+/docs/static/llmstxt-files/

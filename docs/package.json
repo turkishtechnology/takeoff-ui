@@ -14,7 +14,8 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "generate-docs": "node ./src/docs-files/generate-mdx.js"
+    "generate-docs": "node ./src/docs-files/generate-mdx.js",
+    "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
