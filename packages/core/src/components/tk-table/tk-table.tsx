@@ -308,10 +308,22 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: item.width || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
         });
 
-      worksheet.addRows(_data);
+      worksheet.addRows(
+        _data?.map(item => {
+          const rowData = {};
+
+          _columns
+            .filter(col => !options.ignoreColumnsFields?.includes(col.field))
+            .forEach(col => {
+              rowData[col.field] = getNestedValue(item, col.field) || '';
+            });
+
+          return rowData;
+        }),
+      );
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
