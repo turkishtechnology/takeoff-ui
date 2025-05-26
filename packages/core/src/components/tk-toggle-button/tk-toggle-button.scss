@@ -1,0 +1,120 @@
+:host {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.tk-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 auto;
+  background-color: transparent;
+  color: #717784;
+  border-color: transparent;
+
+  height: 32px;
+  padding: 10px 12px;
+  gap: 6px;
+  border-radius: var(--radius-m-base, 8px);
+
+  &.small {
+    height: 24px;
+    border-radius: var(--button-sizes-small-radius);
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  &.base {
+    height: 32px;
+    border-radius: var(--button-sizes-base-radius);
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+
+  &.large {
+    height: 40px;
+    border-radius: var(--button-sizes-large-radius);
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  &.rounded {
+    border-radius: 999px;
+  }
+
+  .tk-toggle-button-icon path {
+    fill: #717784;
+  }
+
+
+  .tk-toggle-button-label {
+    color: var(--text-base, #717784);
+    font-family: var(--body-m-base-font, 'Geologica', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+
+    &.large {
+      line-height: var(--body-m-base-line-height, 24px);
+      font-size: var(--body-m-base-size, 16px);
+    }
+
+    &.base {
+      line-height: var(--body-m-base-line-height, 20px);
+      font-size: var(--body-m-base-size, 14px);
+    }
+
+    &.small {
+      line-height: var(--body-m-base-line-height, 28px);
+      font-size: var(--body-m-base-size, 12px);
+    }
+  }
+
+  .tk-toggle-button-icon {
+    display: inline-block;
+    flex-shrink: 0;
+
+    &.small {
+      width: 20px;
+      height: 20px;
+    }
+
+    &.base {
+      width: 24px;
+      height: 24px;
+    }
+
+    &.large {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &.primary {
+    color: var(--static-white);
+    background-color: var(--primary-base);
+
+    &.selected {
+      background-color: var(--primary-darkest);
+      border-color: var(--primary-darkest);
+    }
+  }
+
+
+  &.selected {
+    .tk-toggle-button-label {
+      color: var(--static-white);
+    }
+    background-color: var(--background-darkest, #222530);
+    color: var(--static-white);
+    box-shadow: 0px 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
+    0px 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
+    0px 8px 20px 0px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
+
+    .tk-toggle-button-icon path {
+      fill: var(--static-white);
+    }
+  }
+
+
+}

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-21T08:37:11",
+  "timestamp": "2025-05-26T14:52:31",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -8137,6 +8137,7 @@
         "tk-pagination",
         "tk-table",
         "tk-tabs",
+        "tk-toggle-button",
         "tk-tooltip",
         "tk-upload"
       ],
@@ -8179,6 +8180,9 @@
           "tk-icon"
         ],
         "tk-tabs": [
+          "tk-icon"
+        ],
+        "tk-toggle-button": [
           "tk-icon"
         ],
         "tk-tooltip": [
@@ -14253,6 +14257,457 @@
               "text": "onChange"
             }
           ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/tk-toggle-button/tk-toggle-button.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-toggle-button",
+      "docs": "TkToggleButton is a segmented/compact toggle button for use in a group.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkToggleButton } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkToggleButton } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkToggleButton } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": false,
+          "docs": "Disables the button, preventing user interaction.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "icon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon name to be displayed.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconPosition",
+          "type": "\"left\" | \"right\"",
+          "complexType": {
+            "original": "'left' | 'right'",
+            "resolved": "\"left\" | \"right\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-position",
+          "reflectToAttr": false,
+          "docs": "Defines the position of the icon.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'left'"
+            }
+          ],
+          "default": "'left'",
+          "values": [
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Label text displayed inside the button.",
+          "docsTags": [],
+          "default": "''",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "rounded",
+          "reflectToAttr": false,
+          "docs": "Makes the button round with an icon-only style.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "selected",
+          "reflectToAttr": true,
+          "docs": "Whether the button is selected (controlled by group or standalone).",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Sets size for the component.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'base'"
+            }
+          ],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "value",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "value",
+          "reflectToAttr": false,
+          "docs": "The value of the toggle button (for group usage).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"neutral\" | \"primary\"",
+          "complexType": {
+            "original": "'primary' | 'neutral'",
+            "resolved": "\"neutral\" | \"primary\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": false,
+          "docs": "Determines the button's variant for different styles.",
+          "docsTags": [],
+          "default": "'neutral'",
+          "values": [
+            {
+              "value": "neutral",
+              "type": "string"
+            },
+            {
+              "value": "primary",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "tk-toggle",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the toggle button is toggled.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "button",
+          "docs": ""
+        }
+      ],
+      "dependents": [],
+      "dependencies": [
+        "tk-icon"
+      ],
+      "dependencyGraph": {
+        "tk-toggle-button": [
+          "tk-icon"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/tk-toggle-button/tk-toggle-button-group.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-toggle-button-group",
+      "docs": "TkToggleButtonGroup is a segmented/compact toggle button group.\nAlways renders in compact/segmented mode.",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "complexType": {
+            "original": "'horizontal' | 'vertical'",
+            "resolved": "\"horizontal\" | \"vertical\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "direction",
+          "reflectToAttr": false,
+          "docs": "The direction of the toggle button group.",
+          "docsTags": [],
+          "default": "'horizontal'",
+          "values": [
+            {
+              "value": "horizontal",
+              "type": "string"
+            },
+            {
+              "value": "vertical",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "rounded",
+          "reflectToAttr": false,
+          "docs": "The value of the rounded toggle button group.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"basic\" | \"divided\" | \"light\"",
+          "complexType": {
+            "original": "'basic' | 'divided' | 'light'",
+            "resolved": "\"basic\" | \"divided\" | \"light\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "default": "'basic'",
+          "values": [
+            {
+              "value": "basic",
+              "type": "string"
+            },
+            {
+              "value": "divided",
+              "type": "string"
+            },
+            {
+              "value": "light",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "value",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "value",
+          "reflectToAttr": false,
+          "docs": "The value of the selected toggle button.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "tk-change",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the selected value changes.",
+          "docsTags": []
         }
       ],
       "listeners": [],
