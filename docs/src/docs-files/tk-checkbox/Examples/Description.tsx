@@ -11,7 +11,7 @@ const Description = () => {
 
   const demo = (
     <div className="flex gap-4 flex-wrap items-center">
-      <TkCheckbox description="example description" />
+      <TkCheckbox label="example label" description="example description" />
     </div>
   );
 
