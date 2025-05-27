@@ -72,7 +72,7 @@ export class TkPopover implements ComponentInterface {
       this.triggerElement?.addEventListener('mouseleave', () => (this.isOpen = false));
     } else {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
-      document.addEventListener('click', this.handleDocumentClick);
+      window.addEventListener('click', this.handleDocumentClick);
     }
   }
 
@@ -157,9 +157,8 @@ export class TkPopover implements ComponentInterface {
   }
 
   private handleDocumentClick = (e: MouseEvent) => {
-    if (this.popoverElement?.contains(e.target as Node)) return;
-
-    if (!this.el.contains(e.target as Node)) {
+    const isInnerClicked = e.composedPath().some(item => item == this.el);
+    if (!isInnerClicked) {
       this.isOpen = false;
     }
   };
