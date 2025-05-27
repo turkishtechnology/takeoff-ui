@@ -15,24 +15,31 @@ function ToggleButton() {
   return (
     <div>
       <TkToggleButtonGroup
+        rounded
+        direction="horizontal"
         type="light"
         value={groupValue}
         onTkChange={(e) => {
+          console.log('e', e);
           setGroupValue(e.detail);
-          console.log('groupValue', e.detail);
         }}
       >
         {options.map((opt) => (
           <TkToggleButton
-            rounded
-            size="base"
+            icon={{ name: 'bolt', fill: true }}
+            iconPosition="right"
+            variant="primary"
+            type="filled-light"
+            size="large"
             key={opt.value}
             value={opt.value}
             label={opt.label}
-            selected={groupValue === opt.value}
           />
         ))}
       </TkToggleButtonGroup>
+      <div style={{ marginTop: 16, fontWeight: 'bold' }}>
+        Selected value: {groupValue}
+      </div>
     </div>
   );
 }

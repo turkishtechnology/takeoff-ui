@@ -1,6 +1,6 @@
 :host {
   display: flex;
-  flex: 1 0 auto;
+  width: 100%;
 }
 
 .tk-toggle-button {
@@ -8,48 +8,135 @@
   align-items: center;
   justify-content: center;
   flex: 1 0 auto;
-  background-color: transparent;
-  color: #717784;
-  border-color: transparent;
 
+  border: 0px;
   height: 32px;
   padding: 10px 12px;
   gap: 6px;
+
   border-radius: var(--radius-m-base, 8px);
 
-  &.small {
-    height: 24px;
-    border-radius: var(--button-sizes-small-radius);
-    padding: 10px 12px;
-    gap: 6px;
+  &.neutral {
+    box-shadow: 0px 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 8px 20px 0px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
+
+    &.filled {
+      &.selected {
+        background-color: var(--neutral-800);
+      }
+    }
+
+    &.outlined {
+      &.selected {
+        background-color: var(--neutral-50);
+        border: 1px solid var(--neutral-300);
+
+      }
+    }
+
+    &.text {
+      &.selected {
+        background-color: var(--static-light);
+      }
+
+    }
+
+    &.raised {
+      &.selected {
+        background-color: var(--neutral-800);
+        border: 1px solid var(--static-black);
+        box-shadow: 0px -2px 2px 0px var(--alpha-base-black-64, rgba(0, 0, 0, 0.64)) inset, 0px 2px 2px 0px var(--background-dark, #525866) inset, 0px 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 8px 20px 0px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
+
+      }
+    }
+
+    &.filled-light {
+      &.selected {
+        background-color: var(--neutral-200);
+      }
+    }
+
+    &.filled.selected,
+    &.raised.selected {
+      .tk-toggle-button-label {
+        color: var(--neutral-50);
+      }
+      .tk-toggle-button-icon {
+        color: var(--neutral-50);
+      }
+    }
+
+    &.outlined.selected,
+    &.text.selected,
+    &.filled-light.selected {
+      .tk-toggle-button-label {
+        color: var(--neutral-800);
+      }
+      .tk-toggle-button-icon {
+        color: var(--neutral-800);
+      }
+    }
   }
 
-  &.base {
-    height: 32px;
-    border-radius: var(--button-sizes-base-radius);
-    padding: 10px 12px;
-    gap: 6px;
-  }
+  &.primary {
 
+    &.filled {
+      &.selected {
+        background-color: var(--primary-500);
+      }
+    }
 
-  &.large {
-    height: 40px;
-    border-radius: var(--button-sizes-large-radius);
-    padding: 12px 14px;
-    gap: 8px;
-  }
+    &.outlined {
+      &.selected {
+        background-color: var(--neutral-50);
+        border: 1px solid var(--primary-300);
+      }
+    }
 
-  &.rounded {
-    border-radius: 999px;
-  }
+    &.text {
+      &.selected {
+        background-color: var(--static-light);
+      }
+    }
 
-  .tk-toggle-button-icon path {
-    fill: #717784;
+    &.raised {
+      &.selected {
+        border: 1px solid var(--primary-sub-base);
+        box-shadow: 0px 2px 2px 0px var(--primary-300, #DB5465) inset, 0px -2px 2px 0px var(--primary-700, #8F0012) inset, 0px 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)), 0px 8px 20px 0px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
+
+      }
+    }
+
+    &.filled-light {
+      &.selected {
+        background-color: var(--primary-50);
+      }
+    }
+
+    &.filled.selected,
+    &.raised.selected {
+      .tk-toggle-button-label {
+        color: var(--static-white);
+      }
+      .tk-toggle-button-icon {
+        color: var(--static-white);
+      }
+    }
+
+    &.outlined.selected,
+    &.text.selected,
+    &.filled-light.selected {
+      .tk-toggle-button-label {
+        color: var(--primary-500);
+      }
+      .tk-toggle-button-icon {
+        color: var(--primary-500);
+      }
+    }
   }
 
 
   .tk-toggle-button-label {
-    color: var(--text-base, #717784);
+    color: var(--text-base);
     font-family: var(--body-m-base-font, 'Geologica', sans-serif);
     font-weight: 400;
     font-style: normal;
@@ -71,8 +158,10 @@
   }
 
   .tk-toggle-button-icon {
-    display: inline-block;
+    display: flex;
     flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
 
     &.small {
       width: 20px;
@@ -90,31 +179,40 @@
     }
   }
 
-  &.primary {
-    color: var(--static-white);
-    background-color: var(--primary-base);
 
-    &.selected {
-      background-color: var(--primary-darkest);
-      border-color: var(--primary-darkest);
-    }
+  &.small {
+    height: 24px;
+  }
+
+  &.base {
+    height: 32px;
+  }
+
+  &.large {
+    height: 40px;
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  &.rounded {
+    border-radius: 999px;
   }
 
 
-  &.selected {
+  &.disabled {
+    .tk-toggle-button-icon,
     .tk-toggle-button-label {
-      color: var(--static-white);
-    }
-    background-color: var(--background-darkest, #222530);
-    color: var(--static-white);
-    box-shadow: 0px 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
-    0px 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
-    0px 8px 20px 0px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
-
-    .tk-toggle-button-icon path {
-      fill: var(--static-white);
+      color: var(--text-sub-base);
     }
   }
+
+  &:hover {
+    .tk-toggle-button-icon,
+    .tk-toggle-button-label {
+      color: var(--text-darkest);
+    }
+  }
+
 
 
 }

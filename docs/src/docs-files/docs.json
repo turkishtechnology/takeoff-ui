@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-26T14:52:31",
+  "timestamp": "2025-05-27T20:41:50",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -14271,7 +14271,7 @@
       "filePath": "src/components/tk-toggle-button/tk-toggle-button.tsx",
       "encapsulation": "shadow",
       "tag": "tk-toggle-button",
-      "docs": "TkToggleButton is a segmented/compact toggle button for use in a group.",
+      "docs": "TkToggleButton is a toggle button for use in a group.",
       "docsTags": [
         {
           "name": "react",
@@ -14487,6 +14487,47 @@
           "setter": false
         },
         {
+          "name": "type",
+          "type": "\"filled\" | \"filled-light\" | \"outlined\" | \"raised\" | \"text\"",
+          "complexType": {
+            "original": "'filled' | 'outlined' | 'text' | 'raised' | 'filled-light'",
+            "resolved": "\"filled\" | \"filled-light\" | \"outlined\" | \"raised\" | \"text\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "The value of the type toggle button.",
+          "docsTags": [],
+          "default": "'filled'",
+          "values": [
+            {
+              "value": "filled",
+              "type": "string"
+            },
+            {
+              "value": "filled-light",
+              "type": "string"
+            },
+            {
+              "value": "outlined",
+              "type": "string"
+            },
+            {
+              "value": "raised",
+              "type": "string"
+            },
+            {
+              "value": "text",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "any",
           "complexType": {
@@ -14559,12 +14600,7 @@
       "listeners": [],
       "styles": [],
       "slots": [],
-      "parts": [
-        {
-          "name": "button",
-          "docs": ""
-        }
-      ],
+      "parts": [],
       "dependents": [],
       "dependencies": [
         "tk-icon"

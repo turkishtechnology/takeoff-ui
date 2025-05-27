@@ -3,7 +3,6 @@
   align-items: center;
   gap: 8px;
   width: 100%;
-  max-width: 632px;
   padding: 4px;
   align-self: stretch;
   background: var(--static-Light, #FFF);
@@ -13,19 +12,27 @@
     border: 1px solid var(--border-light, #E1E4EA);
     background: var(--background-lightest, #F9FAFC);
   }
-  
+
   &.divided {
     border: 1px solid var(--border-light, #E1E4EA);
 
   }
-  &.rounded{
-    border-radius: 999px;
-  }
+
   &.horizontal {
     flex-direction: row;
+
+    &.rounded {
+      border-radius: 999px;
+    }
+
   }
 
   &.vertical {
     flex-direction: column;
+
+    &.rounded {
+      border-radius: 24px;
+    }
   }
+
 }

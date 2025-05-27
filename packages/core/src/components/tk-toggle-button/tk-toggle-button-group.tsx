@@ -1,12 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
 import classNames from 'classnames';
 
-declare global {
-  interface HTMLTkToggleButtonElement extends HTMLElement {
-    position?: 'first' | 'middle' | 'last' | 'only';
-  }
-}
-
 /**
  * TkToggleButtonGroup is a segmented/compact toggle button group.
  * Always renders in compact/segmented mode.
@@ -31,6 +25,8 @@ export class TkToggleButtonGroup implements ComponentInterface {
   @Prop({ mutable: true }) value?: any;
   @Watch('value')
   valueChanged() {
+    console.debug('[tk-toggle-button-group] valueChanged:', { newValue: this.value });
+
     this.updateSelected();
     this.tkChange.emit(this.value);
   }
@@ -48,22 +44,14 @@ export class TkToggleButtonGroup implements ComponentInterface {
   componentWillLoad() {
     this.updateSlottedItems();
   }
-  // gerek olmayabilir!
+
   private updateSlottedItems() {
     this.slottedItems = this.el.querySelectorAll('tk-toggle-button');
     this.updateSelected();
 
-    // Only set position prop on children
-    this.slottedItems.forEach((item, idx, arr) => {
-      if (arr.length === 1) {
-        item.position = 'only';
-      } else if (idx === 0) {
-        item.position = 'first';
-      } else if (idx === arr.length - 1) {
-        item.position = 'last';
-      } else {
-        item.position = 'middle';
-      }
+    this.slottedItems.forEach(item => {
+      // Pass the rounded prop from the group to the button
+      item.rounded = this.rounded;
       item.addEventListener('tk-toggle', this.handleToggle.bind(this));
     });
   }
@@ -78,6 +66,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
 
   private handleToggle(e) {
     const { value } = e.detail;
+
     this.value = value;
     this.updateSelected();
   }
