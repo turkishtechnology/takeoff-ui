@@ -49,23 +49,9 @@ export class TkTooltip implements ComponentInterface {
    */
   @Prop() position?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' =
     'right';
-  currentPosition: string;
 
   @Watch('position')
   positionChanged(newValue: string) {
-    this.currentPosition = newValue as
-      | 'top'
-      | 'top-start'
-      | 'top-end'
-      | 'bottom'
-      | 'bottom-start'
-      | 'bottom-end'
-      | 'left'
-      | 'left-start'
-      | 'left-end'
-      | 'right'
-      | 'right-start'
-      | 'right-end';
     if (this.tooltipElement) {
       this.updateArrowPosition();
     }
@@ -87,7 +73,6 @@ export class TkTooltip implements ComponentInterface {
   @Prop() containerStyle?: any = null;
 
   componentWillLoad() {
-    this.currentPosition = this.position || 'right';
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
   }
 
