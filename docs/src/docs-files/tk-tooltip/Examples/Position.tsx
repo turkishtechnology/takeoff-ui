@@ -330,141 +330,125 @@ const Position = () => {
 </tk-tooltip>`;
 
   const demo = (
-    <div className="circle-layout">
-      <style>
-        {`
-          .circle-layout {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            margin: 50px auto;
-          }
-          .circle-layout > * {
-            position: absolute;
-            transform: translate(-50%, -50%);
-          }
-          .circle-layout > *:nth-child(2) { top: 10%; left: 20%; } /* top-start */
-          .circle-layout > *:nth-child(3) { top: 0%; left: 50%; } /* top*/
-          .circle-layout > *:nth-child(4) { top: 10%; left: 80%; } /* top-end */
-          .circle-layout > *:nth-child(5) { top: 30%; left: 90%; } /* right-start */
-          .circle-layout > *:nth-child(6) { top: 50%; left: 100%; } /* right */
-          .circle-layout > *:nth-child(7) { top: 70%; left: 90%; } /* right-end */
-          .circle-layout > *:nth-child(8) { top: 70%; left: 10%; } /* left-start */
-          .circle-layout > *:nth-child(9) { top: 50%; left: 10%; } /* left */
-          .circle-layout > *:nth-child(10) { top: 30%; left: 10%; } /* left-end */
-          .circle-layout > *:nth-child(11) { top: 90%; left: 20%; } /* bottom-start */
-          .circle-layout > *:nth-child(12) { top: 100%; left: 50%; } /* bottom */
-          .circle-layout > *:nth-child(13) { top: 90%; left: 80%; } /* bottom-end */
-        `}
-      </style>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="top-start"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Top Start" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="top"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Top" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="top-end"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Top End" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="right-start"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Right Start" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="right"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Right" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="right-end"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Right End" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="left-start"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Left Start" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="left"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Left" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="left-end"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Left End" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="bottom-start"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Bottom Start" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="bottom"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Bottom" />
-      </TkTooltip>
-      <TkTooltip
-        header="Tooltip Header"
-        description="Tooltip Explanation Here"
-        position="bottom-end"
-        icon="flight"
-        variant="dark"
-      >
-        <TkButton slot="trigger" label="Bottom End" />
-      </TkTooltip>
+    <div className="flex flex-col m-8">
+      <div className="flex justify-center gap-2">
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="top-start"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Top Start" />
+        </TkTooltip>
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="top"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Top" />
+        </TkTooltip>
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="top-end"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Top End" />
+        </TkTooltip>
+      </div>
+      <div className="flex space-between justify-between">
+        <div className="flex flex-col gap-2">
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="right-start"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Right Start" />
+          </TkTooltip>
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="right"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Right" />
+          </TkTooltip>
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="right-end"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Right End" />
+          </TkTooltip>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="left-start"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Left Start" />
+          </TkTooltip>
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="left"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Left" />
+          </TkTooltip>
+          <TkTooltip
+            header="Tooltip Header"
+            description="Tooltip Explanation Here"
+            position="left-end"
+            icon="flight"
+            variant="dark"
+          >
+            <TkButton slot="trigger" label="Left End" />
+          </TkTooltip>
+        </div>
+      </div>
+      <div className="flex justify-center gap-2">
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="bottom-start"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Bottom Start" />
+        </TkTooltip>
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="bottom"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Bottom" />
+        </TkTooltip>
+        <TkTooltip
+          header="Tooltip Header"
+          description="Tooltip Explanation Here"
+          position="bottom-end"
+          icon="flight"
+          variant="dark"
+        >
+          <TkButton slot="trigger" label="Bottom End" />
+        </TkTooltip>
+      </div>
     </div>
   );
 
