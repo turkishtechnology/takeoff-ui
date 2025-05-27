@@ -106,6 +106,7 @@ export class TkRadioGroup implements ComponentInterface {
 
   private handleChange(e) {
     this.value = e.detail;
+    this.tkChange.emit(this.value);
     this.updateTkRadio();
   }
 
