@@ -188,6 +188,9 @@
   position: absolute;
   width: 9px;
   height: 9px;
+  background: inherit;
+  border: 1px solid;
+  border-color: inherit;
   transform: rotate(45deg);
   z-index: 1300;
 }

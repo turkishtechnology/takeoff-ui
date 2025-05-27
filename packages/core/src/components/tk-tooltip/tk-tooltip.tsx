@@ -22,7 +22,6 @@ export class TkTooltip implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
-  private currentPosition: 'top' | 'bottom' | 'left' | 'right' = 'right';
 
   @Element() el: HTMLTkTooltipElement;
 
@@ -48,10 +47,25 @@ export class TkTooltip implements ComponentInterface {
    * Sets the position of the tooltip.
    * @defaultValue 'right'
    */
-  @Prop() position?: 'top' | 'bottom' | 'left' | 'right' = 'right';
+  @Prop() position?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' =
+    'right';
+  currentPosition: string;
+
   @Watch('position')
   positionChanged(newValue: string) {
-    this.currentPosition = newValue as 'top' | 'bottom' | 'left' | 'right';
+    this.currentPosition = newValue as
+      | 'top'
+      | 'top-start'
+      | 'top-end'
+      | 'bottom'
+      | 'bottom-start'
+      | 'bottom-end'
+      | 'left'
+      | 'left-start'
+      | 'left-end'
+      | 'right'
+      | 'right-start'
+      | 'right-end';
     if (this.tooltipElement) {
       this.updateArrowPosition();
     }
@@ -99,7 +113,7 @@ export class TkTooltip implements ComponentInterface {
       strategy: 'fixed',
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
-    }).then(({ x, y, middlewareData }) => {
+    }).then(({ x, y, middlewareData, placement }) => {
       Object.assign(this.tooltipElement.style, {
         left: `${x}px`,
         top: `${y}px`,
@@ -111,25 +125,34 @@ export class TkTooltip implements ComponentInterface {
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      this.updateArrowPosition();
+      const [side] = placement.split('-');
+      this.updateArrowPosition(side);
     });
   }
 
-  private updateArrowPosition() {
+  private updateArrowPosition(side?: string) {
     const arrowElement = this.arrowElement;
-
-    switch (this.currentPosition) {
+    switch (side) {
       case 'top':
-        arrowElement.style.bottom = '-3px';
+        arrowElement.style.bottom = '-5px';
+        arrowElement.style.borderTop = 'none';
+        arrowElement.style.borderLeft = 'none';
         break;
       case 'bottom':
-        arrowElement.style.top = '-3px';
+        arrowElement.style.top = '-5px';
+        arrowElement.style.borderBottom = 'none';
+        arrowElement.style.borderRight = 'none';
+
         break;
       case 'left':
-        arrowElement.style.right = '-3px';
+        arrowElement.style.right = '-5px';
+        arrowElement.style.borderBottom = 'none';
+        arrowElement.style.borderLeft = 'none';
         break;
       case 'right':
-        arrowElement.style.left = '-3px';
+        arrowElement.style.left = '-5px';
+        arrowElement.style.borderTop = 'none';
+        arrowElement.style.borderRight = 'none';
         break;
     }
   }

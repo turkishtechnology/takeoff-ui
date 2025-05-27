@@ -41,7 +41,7 @@ export class TkPopover implements ComponentInterface {
    * Sets the position of the popover.
    * @defaultValue 'right'
    */
-  @Prop() position?: 'top' | 'bottom' | 'left' | 'right' = 'right';
+  @Prop() position?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end';
 
   @Watch('position')
   positionChanged() {
@@ -113,7 +113,7 @@ export class TkPopover implements ComponentInterface {
     computePosition(this.triggerElement, this.popoverElement, {
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
-    }).then(({ x, y, middlewareData }) => {
+    }).then(({ x, y, middlewareData, placement }) => {
       Object.assign(this.popoverElement.style, {
         left: `${x}px`,
         top: `${y}px`,
@@ -125,23 +125,24 @@ export class TkPopover implements ComponentInterface {
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      this.updateArrowPosition();
+      const [side] = placement.split('-');
+      this.updateArrowPosition(side);
     });
   }
 
-  private updateArrowPosition() {
+  private updateArrowPosition(side?: string) {
     const arrowElement = this.arrowElement;
-
-    switch (this.position) {
+    switch (side) {
       case 'top':
         arrowElement.style.bottom = '-5px';
-        arrowElement.style.borderLeft = 'none';
         arrowElement.style.borderTop = 'none';
+        arrowElement.style.borderLeft = 'none';
         break;
       case 'bottom':
         arrowElement.style.top = '-5px';
-        arrowElement.style.borderRight = 'none';
         arrowElement.style.borderBottom = 'none';
+        arrowElement.style.borderRight = 'none';
+
         break;
       case 'left':
         arrowElement.style.right = '-5px';
