@@ -14,6 +14,13 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.6',
+    date: '27.05.2025',
+    newFeatures: ['Added Columns filter and sorting custumization to table'],
+    bugFixes: ['Fixed radio group tkChange and v-model sync issue'],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.5',
     date: '27.05.2025',
     newFeatures: [
