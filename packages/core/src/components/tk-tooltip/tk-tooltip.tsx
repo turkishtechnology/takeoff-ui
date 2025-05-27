@@ -51,7 +51,7 @@ export class TkTooltip implements ComponentInterface {
     'right';
 
   @Watch('position')
-  positionChanged(newValue: string) {
+  positionChanged() {
     if (this.tooltipElement) {
       this.updateArrowPosition();
     }
