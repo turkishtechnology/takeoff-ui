@@ -932,7 +932,7 @@ export class TkTable implements ComponentInterface {
                     class: classNames('filter-icon'),
                     variant: null,
                     ref: (el: any) => (refSearchIcon = el),
-                    onClick: () => this.renderData?.length > 0 && this.handleSearchIconClick(refSearchIcon, col.field),
+                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
                 />
               );
