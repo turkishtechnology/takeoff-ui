@@ -23,6 +23,16 @@ const Style = () => {
   <TkButton variant="warning" label="Warning" />
 </div>`;
 
+  const angularCode = `<div style="margin-bottom: 16px; display: flex; gap: 8px">
+  <tk-button variant="primary" label="Primary" />
+  <tk-button variant="secondary" label="Secondary" />
+  <tk-button variant="neutral" label="Neutral" />
+  <tk-button variant="info" label="Info" />
+  <tk-button variant="success" label="Success" />
+  <tk-button variant="danger" label="Danger" />
+  <tk-button variant="warning" label="Warning" />
+</div>`;
+
   const demo = (
     <div className="flex justify-center flex-wrap gap-2">
       <TkButton variant="primary" label="Primary" />
@@ -40,7 +50,7 @@ const Style = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

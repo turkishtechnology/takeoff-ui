@@ -21,6 +21,15 @@ const Variant = () => {
 <TkChips variant="danger" label="danger" removable/>
 <TkChips variant="verified" label="verified" removable/>`;
 
+  const angularCode = `<tk-chips variant="primary" label="primary" removable />
+<tk-chips variant="secondary" label="secondary" removable />
+<tk-chips variant="neutral" label="neutral" removable />
+<tk-chips variant="info" label="info" removable />
+<tk-chips variant="warning" label="warning" removable />
+<tk-chips variant="success" label="success" removable />
+<tk-chips variant="danger" label="danger" removable />
+<tk-chips variant="verified" label="verified" removable />`;
+
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
       <TkChips variant="primary" label="primary" removable />
@@ -39,7 +48,7 @@ const Variant = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

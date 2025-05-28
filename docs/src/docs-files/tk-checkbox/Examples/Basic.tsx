@@ -11,6 +11,10 @@ const Basic = () => {
 <TkCheckbox label="checked" :value="true" />
 <TkCheckbox label="indeterminate" :indeterminate="true" />`;
 
+  const angularCode = `<tk-checkbox label="unchecked" [value]="false" />
+<tk-checkbox label="checked" [value]="true" />
+<tk-checkbox label="indeterminate" [indeterminate]="true" />`;
+
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
       <TkCheckbox label="unchecked" value={false} />
@@ -24,7 +28,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

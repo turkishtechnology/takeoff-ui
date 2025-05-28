@@ -26,6 +26,17 @@ const Floating = () => {
   </div>
 </TkBadge>`;
 
+  const angularCode = `<tk-badge variant="danger" type="filled" dot>
+  <div
+    style="width: 24px; height: 24px; background: lightgrey"
+  ></div>
+</tk-badge>
+<tk-badge variant="secondary" size="small" type="filled" count="4" rounded>
+  <div
+    style="width: 24px; height: 24px; background: lightgrey"
+  ></div>
+</tk-badge>`;
+
   const demo = (
     <div className="flex items-end justify-center gap-2">
       <TkBadge variant="danger" type="filled" dot>
@@ -42,7 +53,7 @@ const Floating = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

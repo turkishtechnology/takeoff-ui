@@ -9,6 +9,8 @@ const Mode = () => {
 
   const vueCode = `<TkPagination :totalItems="50" :rowsPerPage="10" mode="${mode}" />`;
 
+  const angularCode = `<tk-pagination [totalItems]="50" [rowsPerPage]="10" mode="${mode}" />`;
+
   const radioModels = [
     {
       label: 'Compact',
@@ -40,7 +42,7 @@ const Mode = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

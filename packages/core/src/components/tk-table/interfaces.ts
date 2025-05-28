@@ -26,7 +26,9 @@ export interface ITableColumn {
   selectColumn?: boolean;
   /** Indicates if the column acts as an expander */
   expander?: boolean;
-  /** Custom rendering function for HTML content in the column */
+  /** Custom rendering function for HTML content in the column header */
+  headerHtml?: Function;
+  /** Custom rendering function for HTML content in the column cells */
   html?: Function;
   /** */
   fixed?: 'left' | 'right';

@@ -72,6 +72,40 @@ const Actions = () => {
 </TkAlert>
 `;
 
+  const angularCode = `<tk-alert
+  variant="info"
+  type="outlined"
+  header="Success Filled Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+>
+  <div slot="right-action" class="flex gap-3">
+    <tk-button label="Action1" variant="info" type="text"></tk-button>
+    <tk-button label="Action2" variant="info" type="text"></tk-button>
+  </div>
+</tk-alert>
+
+<tk-alert
+  variant="info"
+  type="outlined"
+  header="Success Filled Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+>
+  <div slot="footer-action" class="flex gap-3">
+    <tk-button
+      label="Action1"
+      variant="info"
+      type="outlined"
+      size="small"
+    ></tk-button>
+    <tk-button
+      label="Action2"
+      variant="info"
+      type="filled"
+      size="small"
+    ></tk-button>
+  </div>
+</tk-alert>`;
+
   const demo = (
     <>
       <div className="mb-4 flex flex-col gap-2">
@@ -119,7 +153,7 @@ const Actions = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

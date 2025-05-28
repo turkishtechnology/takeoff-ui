@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-27T20:41:50",
+  "timestamp": "2025-05-27T13:20:07",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -8913,6 +8913,246 @@
       }
     },
     {
+      "filePath": "src/components/tk-orgchart/tk-org-chart.tsx",
+      "encapsulation": "none",
+      "tag": "tk-org-chart",
+      "docs": "The TkOrgChart component allows users to visualize organizational data using d3-org-chart.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkOrgChart } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "accessibilityLabel",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "accessibility-label",
+          "reflectToAttr": false,
+          "docs": "Accessibility label for the chart",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "collapsible",
+          "reflectToAttr": false,
+          "docs": "Enable or disable expand/collapse buttons functionality\nWhen disabled, all nodes will be automatically expanded",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "data",
+          "type": "any[]",
+          "complexType": {
+            "original": "any[]",
+            "resolved": "any[]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any[]"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "options",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "options",
+          "reflectToAttr": false,
+          "docs": "Chart options for d3-org-chart customization",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addNode",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(node: any) => Promise<void>",
+            "parameters": [
+              {
+                "name": "node",
+                "type": "any",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addNode(node: any) => Promise<void>",
+          "parameters": [
+            {
+              "name": "node",
+              "type": "any",
+              "docs": ""
+            }
+          ],
+          "docs": "Add node to organizational chart",
+          "docsTags": []
+        },
+        {
+          "name": "fit",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "fit() => Promise<void>",
+          "parameters": [],
+          "docs": "Fit chart to screen",
+          "docsTags": []
+        },
+        {
+          "name": "getOrgChart",
+          "returns": {
+            "type": "Promise<any>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<any>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<any>"
+          },
+          "signature": "getOrgChart() => Promise<any>",
+          "parameters": [],
+          "docs": "Get the chart instance",
+          "docsTags": []
+        },
+        {
+          "name": "refresh",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "refresh() => Promise<void>",
+          "parameters": [],
+          "docs": "Refresh the chart",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "tk-node-click",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Node click event",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
       "filePath": "src/components/tk-pagination/tk-pagination.tsx",
       "encapsulation": "none",
       "tag": "tk-pagination",
@@ -9247,6 +9487,201 @@
           "tk-pagination"
         ]
       }
+    },
+    {
+      "filePath": "src/components/tk-popover/tk-popover.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-popover",
+      "docs": "The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- Default slot for content without a specific name"
+        },
+        {
+          "name": "slot",
+          "text": "trigger - The trigger slot defines the element that will trigger the Popover"
+        },
+        {
+          "name": "slot",
+          "text": "content - Define custom HTML content for the Popover, which replaces the default header, description and icon elements"
+        },
+        {
+          "name": "react",
+          "text": "`import { TkPopover } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkPopover } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkPopover } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "containerStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "container-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of container element",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "position",
+          "type": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+          "complexType": {
+            "original": "'top' | 'bottom' | 'left' | 'right'",
+            "resolved": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "position",
+          "reflectToAttr": false,
+          "docs": "Sets the position of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'right'"
+            }
+          ],
+          "default": "'right'",
+          "values": [
+            {
+              "value": "bottom",
+              "type": "string"
+            },
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
+              "type": "string"
+            },
+            {
+              "value": "top",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "trigger",
+          "type": "\"click\" | \"hover\"",
+          "complexType": {
+            "original": "'click' | 'hover'",
+            "resolved": "\"click\" | \"hover\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "trigger",
+          "reflectToAttr": false,
+          "docs": "Sets the action of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "'click'"
+            }
+          ],
+          "default": "'click'",
+          "values": [
+            {
+              "value": "click",
+              "type": "string"
+            },
+            {
+              "value": "hover",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"basic\" | \"dark\" | \"white\"",
+          "complexType": {
+            "original": "'white' | 'dark' | 'basic'",
+            "resolved": "\"basic\" | \"dark\" | \"white\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "Sets the type of the popover.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "\"white\""
+            }
+          ],
+          "default": "'basic'",
+          "values": [
+            {
+              "value": "basic",
+              "type": "string"
+            },
+            {
+              "value": "dark",
+              "type": "string"
+            },
+            {
+              "value": "white",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "Default slot for content without a specific name"
+        },
+        {
+          "name": "content",
+          "docs": "Define custom HTML content for the Popover, which replaces the default header, description and icon elements"
+        },
+        {
+          "name": "trigger",
+          "docs": "The trigger slot defines the element that will trigger the Popover"
+        }
+      ],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/tk-radio/tk-radio.tsx",
@@ -13107,15 +13542,20 @@
       "dependencies": [
         "tk-tabs-item",
         "tk-icon",
-        "tk-badge"
+        "tk-badge",
+        "tk-tooltip"
       ],
       "dependencyGraph": {
         "tk-tabs": [
           "tk-tabs-item",
           "tk-icon",
-          "tk-badge"
+          "tk-badge",
+          "tk-tooltip"
         ],
         "tk-badge": [
+          "tk-icon"
+        ],
+        "tk-tooltip": [
           "tk-icon"
         ]
       }
@@ -13237,15 +13677,15 @@
         },
         {
           "name": "icon",
-          "type": "ITabsIconOptions | string",
+          "type": "IIconOptions | string",
           "complexType": {
-            "original": "string | ITabsIconOptions",
-            "resolved": "ITabsIconOptions | string",
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
             "references": {
-              "ITabsIconOptions": {
+              "IIconOptions": {
                 "location": "import",
-                "path": "./interfaces",
-                "id": "src/components/tk-tabs/interfaces.ts::ITabsIconOptions"
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
               }
             }
           },
@@ -13256,7 +13696,7 @@
           "docsTags": [],
           "values": [
             {
-              "type": "ITabsIconOptions"
+              "type": "IIconOptions"
             },
             {
               "type": "string"
@@ -13286,6 +13726,34 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tooltipOptions",
+          "type": "ITooltipOptions",
+          "complexType": {
+            "original": "ITooltipOptions",
+            "resolved": "ITooltipOptions",
+            "references": {
+              "ITooltipOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/ITooltipOptions",
+                "id": "src/global/interfaces/ITooltipOptions.ts::ITooltipOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "ITooltipOptions"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -14997,13 +15465,18 @@
         }
       ],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "tk-tabs"
+      ],
       "dependencies": [
         "tk-icon"
       ],
       "dependencyGraph": {
         "tk-tooltip": [
           "tk-icon"
+        ],
+        "tk-tabs": [
+          "tk-tooltip"
         ]
       }
     },
@@ -15696,7 +16169,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n  };\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },
@@ -15725,10 +16198,10 @@
       "docstring": "Represents a filter applied to a table",
       "path": "src/components/tk-table/interfaces.ts"
     },
-    "src/components/tk-tabs/interfaces.ts::ITabsIconOptions": {
-      "declaration": "export interface ITabsIconOptions {\n  /**\n   * Material symbols icon name\n   */\n  name: string;\n  /**\n   * The color of the icon\n   */\n  color?: string;\n  /**\n   * The style of the icon\n   */\n  style?: 'outlined' | 'rounded' | 'sharp';\n  /**\n   * Indicates whether the icon should be filled\n   */\n  fill?: boolean;\n}",
-      "docstring": "Defines the options for configuring icons in the Tabs Item component",
-      "path": "src/components/tk-tabs/interfaces.ts"
+    "src/global/interfaces/ITooltipOptions.ts::ITooltipOptions": {
+      "declaration": "export interface ITooltipOptions {\n  /**\n   * Sets header text for the tooltip.\n   */\n  header?: string;\n  /**\n   * Sets description text for the tooltip.\n   */\n  description?: string;\n  /**\n   * Sets the position of the tooltip.\n   */\n  position?: 'top' | 'bottom' | 'left' | 'right';\n  /**\n   * Sets the variant of the tooltip.\n   */\n  variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral';\n  /**\n   * Sets the icon of the tooltip.\n   */\n  icon: string | IIconOptions;\n}",
+      "docstring": "",
+      "path": "src/global/interfaces/ITooltipOptions.ts"
     },
     "src/components/tk-timeline/interfaces.ts::TimelineItem": {
       "declaration": "export interface TimelineItem {\n  title: string;\n  description?: string;\n  date?: string;\n}",

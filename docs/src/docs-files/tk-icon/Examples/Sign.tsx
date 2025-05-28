@@ -21,6 +21,15 @@ const Sign = () => {
 <TkIcon icon="flight" sign variant="danger" />
 <TkIcon icon="flight" sign variant="white" />`;
 
+  const angularCode = `<tk-icon icon="flight" sign variant="primary" />
+<tk-icon icon="flight" sign variant="secondary" />
+<tk-icon icon="flight" sign variant="neutral" />
+<tk-icon icon="flight" sign variant="info" />
+<tk-icon icon="flight" sign variant="success" />
+<tk-icon icon="flight" sign variant="warning" />
+<tk-icon icon="flight" sign variant="danger" />
+<tk-icon icon="flight" sign variant="white" />`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-4">
       <TkIcon icon="flight" sign variant="primary" />
@@ -39,7 +48,7 @@ const Sign = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

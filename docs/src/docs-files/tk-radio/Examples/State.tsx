@@ -21,6 +21,15 @@ const State = () => {
   <TkRadio label="label 2" value="2" disabled />
 </TkRadioGroup>`;
 
+  const angularCode = `<tk-radio-group [invalid]="true" label="Error">
+  <tk-radio label="label 1" value="1" />
+  <tk-radio label="label 2" value="2" />
+</tk-radio-group>
+<tk-radio-group [invalid]="true" label="Disabled">
+  <tk-radio label="label 1" value="1" disabled />
+  <tk-radio label="label 2" value="2" disabled />
+</tk-radio-group>`;
+
   const demo = (
     <div
       style={{
@@ -44,7 +53,7 @@ const State = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

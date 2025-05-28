@@ -22,7 +22,8 @@ import { getIconElementProps } from '../../utils/icon-props';
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private elements: ICustomElement[] = [];
+  private customCellElements: ICustomElement[] = [];
+  private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
@@ -204,7 +205,11 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    this.elements?.forEach(element => {
+    this.customCellElements?.forEach(element => {
+      element?.ref?.replaceChildren(element.element);
+    });
+
+    this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
   }
@@ -308,10 +313,22 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: item.width || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
         });
 
-      worksheet.addRows(_data);
+      worksheet.addRows(
+        _data?.map(item => {
+          const rowData = {};
+
+          _columns
+            .filter(col => !options.ignoreColumnsFields?.includes(col.field))
+            .forEach(col => {
+              rowData[col.field] = getNestedValue(item, col.field) || '';
+            });
+
+          return rowData;
+        }),
+      );
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -828,6 +845,8 @@ export class TkTable implements ComponentInterface {
   }
 
   private createHead() {
+    this.customHeaderElements = [];
+
     const theadClasses = classNames(this.headerType);
     let selectionTh;
 
@@ -850,6 +869,8 @@ export class TkTable implements ComponentInterface {
             let refSearchIcon: HTMLTkIconElement;
             let _sortIcon;
             let _searchIcon;
+            let _customHeader;
+            let _customHeaderElements: ICustomElement;
 
             // generate expander th
             if (col.expander) {
@@ -886,6 +907,17 @@ export class TkTable implements ComponentInterface {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
               }
             }
+            if (typeof col?.headerHtml == 'function') {
+              _customHeader = col.headerHtml();
+
+              if (_customHeader instanceof HTMLElement) {
+                _customHeaderElements = {
+                  ref: null,
+                  element: _customHeader,
+                } as ICustomElement;
+                this.customHeaderElements.push(_customHeaderElements);
+              }
+            }
 
             return (
               <th
@@ -893,16 +925,24 @@ export class TkTable implements ComponentInterface {
                 style={{ width: col.width, minWidth: col.width, maxWidth: col.width }}
               >
                 <div class="tk-table-head-cell">
-                  <div class="header-container">
-                    <div class="header" title={col.header}>
-                      {col.header}
-                    </div>
-                    {col?.subHeader?.length > 0 && (
-                      <div class="sub-header" title={col.subHeader}>
-                        {col.subHeader}
+                  {_customHeader ? (
+                    !_customHeaderElements ? (
+                      <div class="header-container" innerHTML={_customHeader}></div>
+                    ) : (
+                      <div ref={el => (_customHeaderElements.ref = el as HTMLElement)} class="header-container"></div>
+                    )
+                  ) : (
+                    <div class="header-container">
+                      <div class="header" title={col.header}>
+                        {col.header}
                       </div>
-                    )}
-                  </div>
+                      {col?.subHeader?.length > 0 && (
+                        <div class="sub-header" title={col.subHeader}>
+                          {col.subHeader}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {(col.sortable || col.searchable) && (
                     <div class="icons">
                       {_sortIcon}
@@ -919,7 +959,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
-    this.elements = [];
+    this.customCellElements = [];
 
     if (this.renderData?.length > 0) {
       return (
@@ -998,7 +1038,7 @@ export class TkTable implements ComponentInterface {
                           element: cellElement,
                         };
 
-                        this.elements.push(customElements);
+                        this.customCellElements.push(customElements);
                         return (
                           <td
                             ref={el => (customElements.ref = el as HTMLElement)}

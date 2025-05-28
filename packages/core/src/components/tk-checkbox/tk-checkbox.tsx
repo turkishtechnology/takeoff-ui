@@ -135,7 +135,7 @@ export class TkCheckbox implements ComponentInterface {
   render() {
     return (
       <div class={classNames('tk-checkbox-container', this.type)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
-        <label htmlFor={this.uniqueId} class={classNames({ 'width-description': this.description })}>
+        <label htmlFor={this.uniqueId}>
           {this.renderInput()}
           <div class="mask">
             <i class="material-symbols-outlined">{this.indeterminate ? 'remove' : 'check'}</i>

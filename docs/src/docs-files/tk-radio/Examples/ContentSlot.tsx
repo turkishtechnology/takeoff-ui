@@ -33,6 +33,21 @@ const ContentSlot = () => {
   </TkRadio>
 </TkRadioGroup>`;
 
+  const angularCode = `<tk-radio-group type="card" value="0" spread>
+  <tk-radio value="0">
+    <div slot="content" class="flex items-center gap-2">
+      <div>Label</div>
+      <tk-badge icon="info" variant="info" label="İnformation" />
+    </div>
+  </tk-radio>
+  <tk-radio value="1">
+    <div slot="content" class="flex items-center gap-2">
+      <div>Label</div>
+      <tk-badge icon="info" variant="info" label="İnformation" />
+    </div>
+  </tk-radio>
+</tk-radio-group>`;
+
   const demo = (
     <TkRadioGroup type="card" value="0" spread>
       <TkRadio value="0">
@@ -55,7 +70,7 @@ const ContentSlot = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

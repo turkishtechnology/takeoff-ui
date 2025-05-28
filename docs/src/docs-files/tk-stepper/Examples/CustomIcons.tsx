@@ -25,16 +25,15 @@ const CustomIcons = () => {
 
   React.useEffect(() => {
     const newReactCodeSample = `<TkStepper completeIcon="${completeIcon}" active={1} onTkStepChange={handleStepChange}>
-    <TkStep header="Step 1" subheader="Step Description" complete={active > 0} />
-    <TkStep header="Step 2" subheader="Step Description" isActive={active === 1} complete={active > 1} />
-    <TkStep header="Step 3" subheader="Step Description" isActive={active === 2} complete={active > 2} />
-    <TkStep header="Step 4" subheader="Step Description" isActive={active === 3} activeIcon={{
+    <TkStep header="Step 1" subheader="Step Description" complete={activeStep > 0} />
+    <TkStep header="Step 2" subheader="Step Description" isActive={activeStep === 1} complete={activeStep > 1} />
+    <TkStep header="Step 3" subheader="Step Description" isActive={activeStep === 2} complete={activeStep > 2} />
+    <TkStep header="Step 4" subheader="Step Description" isActive={activeStep === 3} activeIcon={{
         name: "apps",
         style: "rounded",
         fill: true,
         color: "#FFFFFF"
     }} />
-  />
 </TkStepper>`;
 
     const newVueCodeSample = `<template>

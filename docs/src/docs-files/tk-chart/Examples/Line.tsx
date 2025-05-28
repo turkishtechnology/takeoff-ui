@@ -98,6 +98,41 @@ const options = {
 };
 <TkChart type="line" :data.prop="data" :options.prop="options" />
     `;
+
+  const angularCode = `<tk-chart
+  type="line"
+  [data]="{
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+      {
+        label: 'My First dataset',
+        data: [1, 10, 5, 2, 20, 32],
+        borderColor: '#3B82F6',
+        tension: 0.5
+      }
+    ]
+  }"
+  [options]="{
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false
+        }
+      },
+      x: {
+        border: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawTicks: false
+        }
+      }
+    }
+  }"
+/>`;
+
   const demo = (
     <div>
       <TkChart type="line" data={data} options={options} />
@@ -108,7 +143,7 @@ const options = {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode=""
+      angularCode={angularCode}
     />
   );
 };

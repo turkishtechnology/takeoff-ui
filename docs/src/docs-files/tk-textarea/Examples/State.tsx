@@ -37,6 +37,23 @@ const State = () => {
   disabled
 />`;
 
+  const angularCode = `<tk-textarea
+  label="Error"
+  placeholder="Error"
+  [invalid]="true"
+  error="Bu alan zorunludur"
+/>
+<tk-textarea
+  label="Readonly"
+  placeholder="Readonly"
+  [readonly]="true"
+/>
+<tk-textarea
+  label="Disabled"
+  placeholder="Disabled"
+  [disabled]="true"
+/>`;
+
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
       <TkTextarea
@@ -55,7 +72,7 @@ const State = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

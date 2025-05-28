@@ -5,6 +5,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 const CardWithFooter = () => {
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
+  const [codeSampleAngular, setCodeSampleAngular] = useState('');
 
   const [footerType, setFooterType] = useState<'basic' | 'divided' | 'light'>(
     'divided',
@@ -38,8 +39,8 @@ const CardWithFooter = () => {
         This card demonstrates the use of a footer with action buttons.
     </p>
     <div slot="footer-actions">
-        <TkButton variant="primary">Submit</TkButton>
-        <TkButton variant="secondary" type="text">Cancel</TkButton>
+        <TkButton label="Submit" variant="primary"/>
+        <TkButton label="Cancel" variant="secondary" type="text"/>
     </div>
 </TkCard>`;
 
@@ -55,8 +56,22 @@ const CardWithFooter = () => {
     </div>
 </TkCard>
 `;
+
+    const newCodeSampleAngular = `<tk-card
+  ${attributes}
+>
+  <p>
+      This card demonstrates the use of a footer with action buttons.
+  </p>
+  <div slot="footer-actions">
+    <tk-button label="Submit" variant="primary" />
+    <tk-button label="Cancel" variant="secondary" type="text" />
+  </div>
+</tk-card>`;
+
     setCodeSampleReact(newCodeSampleReact);
     setCodeSampleVue(newCodeSampleVue);
+    setCodeSampleAngular(newCodeSampleAngular);
   }, [footerType]);
 
   const demo = (
@@ -89,7 +104,7 @@ const CardWithFooter = () => {
       demo={demo}
       reactCode={codeSampleReact}
       vueCode={codeSampleVue}
-      angularCode={''}
+      angularCode={codeSampleAngular}
     ></FeatureDemo>
   );
 };
