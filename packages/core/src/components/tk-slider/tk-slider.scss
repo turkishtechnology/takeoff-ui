@@ -1,0 +1,124 @@
+.tk-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--slider-gap, 8px);
+
+  &-label {
+    display: flex;
+    padding: var(--external-label-large-label-v-padding, 0px) 8px;
+    align-items: center;
+    align-self: stretch;
+    font-family: var(--label-s-font, Geologica);
+    font-size: var(--label-m-base-size, 14px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--label-m-base-line-height, 20px);
+    color: var(--text-primary, #1E1E1E);
+
+    .tk-slider-disabled & {
+      color: var(--text-sub-base, #99A0AE);
+    }
+  }
+
+  &-track-wrapper {
+    position: relative;
+    height: 6px;
+    background: var(--background-light, #E1E4EA);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--slider-content-gap, 10px);
+    align-self: stretch;
+    padding: var(--slider-v-padding, 0px) var(--slider-h-padding, 0px);
+  }
+
+  &-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &-fill {
+    position: absolute;
+    height: 6px;
+    background: var(--primary-base, #C90019);
+    border-radius: 8px;
+    top: 0;
+
+    .tk-slider-disabled & {
+      background: var(--background-sub-base, #CACFD8);
+    }
+  }
+
+  &-thumb {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--static-Light, #FFF);
+  background: var(--primary-base, #C90019);
+  z-index: 2;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+
+  svg {
+    width: 10px;
+    height: 10px;
+    display: block;
+
+    circle {
+      fill: white;
+    }
+  }
+
+  &-active {
+    box-shadow: 0 0 0 2px var(--primary-base, #C90019);
+  }
+
+  &-disabled {
+    background: var(--background-sub-base, #CACFD8);
+    cursor: not-allowed;
+
+    svg circle {
+      fill: white;
+    }
+  
+    }
+
+    &-active {
+      box-shadow: 0 0 0 2px var(--primary-base, #C90019);
+    }
+
+    &-disabled {
+      background: var(--background-sub-base, #CACFD8);
+      cursor: not-allowed;
+
+      svg circle {
+        fill: white;
+      }
+    }
+  }
+
+  &-labels {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    font-size: 11px;
+    line-height: 16px;
+    color: #6b7280;
+    text-transform: uppercase;
+
+    .tk-slider-disabled & {
+      color: var(--text-light, #CACFD8);
+    }
+  }
+}

@@ -18,6 +18,7 @@ import Rating from './components/Rating';
 import Tooltip from './components/Tooltip';
 import Alert from './components/Alert';
 import Accordion from './components/Accordion';
+import Slider from './components/Slider';
 import ZodValidation from './examples/ZodValidation';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="components/table" element={<Table />} />
         <Route path="components/datepicker" element={<Datepicker />} />
         <Route path="components/radio" element={<Radio />} />
+        <Route path="components/slider" element={<Slider />} />
         <Route path="components/dialog" element={<Dialog />} />
         <Route path="components/dropdown" element={<Dropdown />} />
         <Route path="components/button" element={<Button />} />
