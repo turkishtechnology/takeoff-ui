@@ -11,7 +11,18 @@ export interface IToast {
   type: 'filled' | 'filledlight' | 'outlined' | 'gradient';
   removable?: boolean;
   timeout?: number;
+  persistentId?: string;
+  persistent?: boolean;
 }
+
+const persistentToasts: Map<
+  string,
+  {
+    element: HTMLTkAlertElement;
+    container: HTMLDivElement;
+    isRemoving: boolean;
+  }
+> = new Map();
 
 export const createToast = (options: IToast) => {
   if (!['top-right', 'bottom-right', 'bottom-left', 'top-left'].includes(options.position)) options.position = 'top-right';
@@ -65,11 +76,135 @@ export const createToast = (options: IToast) => {
     toast.classList.add('open');
   }, 1);
 
-  setTimeout(() => {
-    toast.classList.remove('open');
+  if (!options.persistent) {
     setTimeout(() => {
-      tkAlert.remove();
-      toast.remove();
+      toast.classList.remove('open');
+      setTimeout(() => {
+        tkAlert.remove();
+        toast.remove();
+      }, 300);
+    }, options.timeout);
+  }
+};
+
+export const showPersistentToast = (options: IToast & { persistentId: string }) => {
+  const { persistentId } = options;
+
+  const existingToast = persistentToasts.get(persistentId);
+  if (existingToast) {
+    if (existingToast.isRemoving) {
+      return false;
+    }
+
+    existingToast.isRemoving = true;
+
+    const { container } = existingToast;
+    container.classList.remove('open');
+
+    setTimeout(() => {
+      if (container.parentNode) {
+        container.remove();
+      }
+      persistentToasts.delete(persistentId);
     }, 300);
-  }, options.timeout);
+
+    return false;
+  }
+
+  const toastOptions = {
+    ...options,
+    persistent: true,
+    removable: true,
+  };
+
+  if (!['top-right', 'bottom-right', 'bottom-left', 'top-left'].includes(toastOptions.position)) {
+    toastOptions.position = 'top-right';
+  }
+
+  let toaster = document.querySelector(`.tk-toaster.${toastOptions.position}`);
+
+  if (!toaster) {
+    toaster = document.createElement('div');
+    toaster.classList.add('tk-toaster');
+    toaster.classList.add(toastOptions.position);
+    document.querySelector('body').append(toaster);
+  }
+
+  const tkAlert: HTMLTkAlertElement = document.createElement('tk-alert');
+  if (toastOptions.header?.length > 0) tkAlert.header = toastOptions.header;
+  if (toastOptions.message?.length > 0) tkAlert.message = toastOptions.message;
+  tkAlert.setAttribute('type', toastOptions.type);
+  tkAlert.setAttribute('variant', toastOptions.variant);
+  if (toastOptions.icon?.length > 0) tkAlert.icon = toastOptions.icon;
+  if (toastOptions.iconSize?.length > 0) tkAlert.iconSize = toastOptions.iconSize;
+  if (toastOptions.removable) tkAlert.removable = toastOptions.removable;
+
+  if (toastOptions.actions?.length > 0) {
+    const slotFooterAction = document.createElement('div');
+    slotFooterAction.setAttribute('slot', 'footer-action');
+    slotFooterAction.style.display = 'flex';
+    slotFooterAction.style.gap = '8px';
+
+    toastOptions.actions.forEach(item => {
+      const button = document.createElement('tk-button');
+      button.label = item.label;
+      button.icon = item.icon;
+      button.variant = item.variant || 'primary';
+      button.type = item.type || 'filled';
+      button.size = item.size || 'base';
+      if (typeof item.action == 'function') button.addEventListener('tk-click', () => item.action());
+
+      slotFooterAction.appendChild(button);
+    });
+
+    tkAlert.appendChild(slotFooterAction);
+  }
+
+  const toast = document.createElement('div');
+  toast.classList.add('tk-toast');
+  toaster.append(toast);
+  toast.append(tkAlert);
+
+  persistentToasts.set(persistentId, {
+    element: tkAlert,
+    container: toast,
+    isRemoving: false,
+  });
+
+  tkAlert.addEventListener('remove', () => {
+    const toastData = persistentToasts.get(persistentId);
+    if (toastData && !toastData.isRemoving) {
+      persistentToasts.delete(persistentId);
+    }
+  });
+
+  setTimeout(() => {
+    toast.classList.add('open');
+  }, 1);
+
+  return true;
+};
+
+export const isPersistentToastVisible = (persistentId: string): boolean => {
+  const toast = persistentToasts.get(persistentId);
+  return toast ? !toast.isRemoving : false;
+};
+
+export const dismissAllPersistentToasts = (): void => {
+  persistentToasts.forEach(({ container, isRemoving }, persistentId) => {
+    if (!isRemoving) {
+      const toastData = persistentToasts.get(persistentId);
+      if (toastData) {
+        toastData.isRemoving = true;
+      }
+
+      container.classList.remove('open');
+      setTimeout(() => {
+        if (container.parentNode) {
+          container.remove();
+        }
+        persistentToasts.delete(persistentId);
+      }, 300);
+    }
+  });
 };
