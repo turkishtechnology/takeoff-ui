@@ -130,45 +130,40 @@ export class TkRadio implements ComponentInterface {
 
   private handleInputChange() {
     if (!this.disabled) {
-      this.checked = !this.checked;
-
-      if (this.checked) {
-        this.tkChange.emit(this.value);
-      }
+      this.checked = true;
+      this.tkChange.emit(this.value);
+      this.el.dispatchEvent(
+        new CustomEvent('tk-checked', {
+          detail: this.uniqueId,
+          bubbles: true,
+          composed: true,
+        }),
+      );
     }
   }
 
   render() {
-    const rootClasses = classNames('tk-radio-container', {
-      disabled: this.disabled,
+    const labelClass = classNames('tk-radio-container', this.position, {
+      'disabled': this.disabled,
+      'width-description': !!this.description,
     });
 
     return (
       <Host data-tk-radio-id={this.uniqueId}>
-        <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
-          <label htmlFor={this.uniqueId} class={(classNames({ 'width-description': this.description }), this.position)}>
-            <input
-              id={this.uniqueId}
-              type="radio"
-              checked={this.checked}
-              value={this.value}
-              disabled={this.disabled}
-              onChange={this.handleInputChange.bind(this)}
-              name={this.name}
-            />
-            <div class="mask">
-              <div></div>
+        <label class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+          <input type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
+          <div class="mask">
+            <div></div>
+          </div>
+          {this.hasContentSlot ? (
+            <slot name="content" />
+          ) : (
+            <div class="tk-radio-text-holder">
+              <div class="tk-radio-label">{this.label}</div>
+              <div class="tk-radio-description">{this.description}</div>
             </div>
-            {this.hasContentSlot ? (
-              <slot name="content" />
-            ) : (
-              <div class="tk-radio-text-holder">
-                <div class="tk-radio-label">{this.label}</div>
-                <div class="tk-radio-description">{this.description}</div>
-              </div>
-            )}
-          </label>
-        </div>
+          )}
+        </label>
       </Host>
     );
   }
