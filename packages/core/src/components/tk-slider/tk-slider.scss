@@ -5,7 +5,7 @@
 
   &-label {
     display: flex;
-    padding: var(--external-label-large-label-v-padding, 0px) 8px;
+    padding: var(--external-label-large-label-v-padding, 0px) 4px;
     align-items: center;
     align-self: stretch;
     font-family: var(--label-s-font, Geologica);
@@ -17,6 +17,12 @@
 
     .tk-slider-disabled & {
       color: var(--text-sub-base, #99A0AE);
+    }
+
+    .asterisk {
+      color: var(--states-danger-base, #C90019);
+      margin-left: 4px;
+      font-size: 14px;
     }
   }
 
@@ -69,9 +75,11 @@
   transition: box-shadow 0.2s ease;
 
   svg {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     display: block;
+    transform: scale(1.2);
+    transform-origin: center;
 
     circle {
       fill: white;
@@ -79,7 +87,12 @@
   }
 
   &-active {
-    box-shadow: 0 0 0 2px var(--primary-base, #C90019);
+    background: white;
+    border: 1px solid var(--primary-base, #C90019);
+
+    svg circle {
+      fill: var(--primary-base, #C90019);
+    }
   }
 
   &-disabled {
@@ -108,17 +121,99 @@
 
   &-labels {
     display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: stretch;
+    justify-content: space-between; 
+    flex-direction: row;  
+    width: 100%;                  
     font-size: 11px;
     line-height: 16px;
-    color: #6b7280;
-    text-transform: uppercase;
+    color: var(--text-base, #6b7280); 
 
-    .tk-slider-disabled & {
-      color: var(--text-light, #CACFD8);
+    text-transform: uppercase;
+    font-family: var(--subheading-2xs-font, Geologica);
+    font-weight: 400;
+
+    &-disabled {
+     color: var(--text-light, #CACFD8);
     }
   }
+
+  .tk-slider-ticks {
+    display: flex;
+    padding: 4px var(--slider-h-padding, 8px);
+    flex-direction: column;
+    align-items: center;
+    align-self: stretch;
+    width: 100%;
+  
+    .tk-slider-tick-track {
+      display: flex;
+      height: 8px;
+      justify-content: space-between;
+      align-items: flex-end;
+      align-self: stretch;
+      width: 100%;
+    }
+  
+    .tk-slider-tick {
+      width: 2px;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--background-sub-base, #CACFD8);
+    }
+  }
+  
+  .tk-slider-tooltip {
+    position: absolute;
+    top: 160%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #191c22;
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: var(--subheading-xs-font, Geologica);
+    font-weight: 400;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+  
+    &-arrow {
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 4px solid #191c22;
+    }
+  }
+
+  .tk-slider-hint,
+.tk-slider-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--subheading-xs-font, Geologica);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin-top: 4px;
+}
+
+.tk-slider-hint {
+  color: var(--text-base, #6B7280);
+}
+
+.tk-slider-error {
+  color: var(--states-danger-base, #C90019);
+}
+.tk-slider-hint i,
+.tk-slider-error i {
+  font-size: 16px;
+  color: inherit;
+}
+  
 }

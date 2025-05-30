@@ -1,4 +1,5 @@
 import { Component, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
+import classNames from 'classnames';
 
 @Component({
   tag: 'tk-slider',
@@ -15,8 +16,12 @@ export class TkSlider {
   @Prop() disabled: boolean = false;
   @Prop() range: boolean = false;
   @Prop() value: number | [number, number] = 0;
-  @Prop() labelVisibility: boolean = true;
   @Prop() rangeVisibility: boolean = true;
+  @Prop() type: 'labels' | 'ticks' = 'labels';
+  @Prop() showAsterisk: boolean = false;
+  @Prop() invalid: boolean = false;
+  @Prop() error?: string;
+  @Prop() hint?: string;
 
   @State() private currentMin: number;
   @State() private currentMax: number;
@@ -101,8 +106,12 @@ export class TkSlider {
 
     return (
       <div class={`tk-slider ${this.disabled ? 'tk-slider-disabled' : ''}`}>
-        {this.labelVisibility && this.label && <label class="tk-slider-label">{this.label}</label>}
-
+        {this.label && (
+          <label class="tk-slider-label">
+            {this.label}
+            {this.showAsterisk ? <span class="asterisk">*</span> : null}
+          </label>
+        )}
         <div class="tk-slider-track-wrapper">
           <div class="tk-slider-track" ref={el => (this.trackRef = el)}>
             {this.range ? (
@@ -121,7 +130,16 @@ export class TkSlider {
               class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMinActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
               style={{ left: `${minPercent}%` }}
               onMouseDown={!this.disabled ? () => this.handleMouseDown('min') : undefined}
+              onMouseEnter={() => (this.draggingThumb = 'min')}
+              onMouseLeave={() => (this.draggingThumb = null)}
             >
+              {!this.disabled && (isMinActive || this.draggingThumb === 'min') && (
+                <div class="tk-slider-tooltip">
+                  {this.currentMin}
+                  <div class="tk-slider-tooltip-arrow"></div>
+                </div>
+              )}
+
               <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8">
                 <circle cx="4" cy="4" r="4" />
               </svg>
@@ -132,7 +150,16 @@ export class TkSlider {
                 class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMaxActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
                 style={{ left: `${maxPercent}%` }}
                 onMouseDown={!this.disabled ? () => this.handleMouseDown('max') : undefined}
+                onMouseEnter={() => (this.draggingThumb = 'max')}
+                onMouseLeave={() => (this.draggingThumb = null)}
               >
+                {!this.disabled && (isMaxActive || this.draggingThumb === 'max') && (
+                  <div class="tk-slider-tooltip">
+                    {this.currentMax}
+                    <div class="tk-slider-tooltip-arrow"></div>
+                  </div>
+                )}
+
                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8">
                   <circle cx="4" cy="4" r="4" />
                 </svg>
@@ -141,10 +168,27 @@ export class TkSlider {
           </div>
         </div>
 
-        {this.rangeVisibility && (
+        {this.type === 'labels' && this.rangeVisibility && (
           <div class="tk-slider-labels">
             <span>{this.min}</span>
             <span>{this.max}</span>
+          </div>
+        )}
+
+        {this.type === 'ticks' && (
+          <div class="tk-slider-ticks">
+            <div class="tk-slider-tick-track">
+              {Array.from({ length: Math.floor((this.max - this.min) / this.step) + 1 }).map((_, index) => (
+                <div key={index} class="tk-slider-tick"></div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(this.hint || (this.invalid && this.error)) && (
+          <div class={classNames('tk-slider-hint', { 'tk-slider-error': this.invalid })}>
+            <tk-icon icon="info" size="small" />
+            <span>{this.invalid ? this.error : this.hint}</span>
           </div>
         )}
       </div>
