@@ -7,20 +7,45 @@ import classNames from 'classnames';
   shadow: true,
 })
 export class TkSlider {
-  @Element() el: HTMLElement;
+  @Element() el: HTMLTkSliderElement;
 
+  // The label text displayed above the slider
   @Prop() label?: string;
+
+  // The minimum value the slider can take
   @Prop() min: number = 0;
+
+  // The maximum value the slider can take
   @Prop() max: number = 100;
+
+  // The increment step for the slider value (e.g., step = 5 → 0, 5, 10, ...)
   @Prop() step: number = 1;
+
+  // Whether the slider is disabled (non-interactive if true)
   @Prop() disabled: boolean = false;
+
+  // Whether the slider operates in range mode (true) or single value mode (false)
   @Prop() range: boolean = false;
+
+  // Current value of the slider. If `range` is true, it should be [min, max]
   @Prop() value: number | [number, number] = 0;
+
+  // Whether the bottom label/tick section should be visible
   @Prop() rangeVisibility: boolean = true;
+
+  // The type of visual indicator shown below the track: 'labels' (min/max) or 'ticks' (markers)
   @Prop() type: 'labels' | 'ticks' = 'labels';
+
+  // Whether to show a red asterisk next to the label (typically for required fields)
   @Prop() showAsterisk: boolean = false;
+
+  // Marks the slider as invalid; used to apply error styling
   @Prop() invalid: boolean = false;
+
+  // Error message to display when `invalid` is true
   @Prop() error?: string;
+
+  // Informational hint message (shown when no error is present)
   @Prop() hint?: string;
 
   @State() private currentMin: number;
@@ -45,14 +70,15 @@ export class TkSlider {
     return ((value - this.min) / (this.max - this.min)) * 100;
   }
 
-  private handleMouseDown(thumb: 'min' | 'max') {
+  private handlePointerDown(thumb: 'min' | 'max') {
     if (this.disabled) return;
     this.draggingThumb = thumb;
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
+
+    document.addEventListener('pointermove', this.handlePointerMove);
+    document.addEventListener('pointerup', this.handlePointerUp);
   }
 
-  private handleMouseMove = (e: MouseEvent) => {
+  private handlePointerMove = (e: PointerEvent) => {
     if (!this.draggingThumb || !this.trackRef) return;
     const rect = this.trackRef.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
@@ -77,22 +103,19 @@ export class TkSlider {
       }
     }
 
-    this.emitChange();
-  };
-
-  private handleMouseUp = () => {
-    this.draggingThumb = null;
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.handleMouseUp);
-  };
-
-  private emitChange() {
     if (this.range) {
       this.tkChange.emit([this.currentMin, this.currentMax]);
     } else {
       this.tkChange.emit(this.currentMin);
     }
-  }
+  };
+
+  private handlePointerUp = () => {
+    this.draggingThumb = null;
+
+    document.removeEventListener('pointermove', this.handlePointerMove);
+    document.removeEventListener('pointerup', this.handlePointerUp);
+  };
 
   private clamp(value: number): number {
     return Math.max(this.min, Math.min(this.max, value));
@@ -109,7 +132,7 @@ export class TkSlider {
         {this.label && (
           <label class="tk-slider-label">
             {this.label}
-            {this.showAsterisk ? <span class="asterisk">*</span> : null}
+            {this.showAsterisk && <span class="asterisk">*</span>}
           </label>
         )}
         <div class="tk-slider-track-wrapper">
@@ -129,7 +152,7 @@ export class TkSlider {
             <div
               class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMinActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
               style={{ left: `${minPercent}%` }}
-              onMouseDown={!this.disabled ? () => this.handleMouseDown('min') : undefined}
+              onPointerDown={!this.disabled ? () => this.handlePointerDown('min') : undefined}
               onMouseEnter={() => (this.draggingThumb = 'min')}
               onMouseLeave={() => (this.draggingThumb = null)}
             >
@@ -147,9 +170,12 @@ export class TkSlider {
 
             {this.range && (
               <div
-                class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMaxActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
+                class={classNames('tk-slider-thumb', {
+                  'tk-slider-thumb-disabled': this.disabled,
+                  'tk-slider-thumb-active': isMinActive,
+                })}
                 style={{ left: `${maxPercent}%` }}
-                onMouseDown={!this.disabled ? () => this.handleMouseDown('max') : undefined}
+                onPointerDown={!this.disabled ? () => this.handlePointerDown('max') : undefined}
                 onMouseEnter={() => (this.draggingThumb = 'max')}
                 onMouseLeave={() => (this.draggingThumb = null)}
               >
