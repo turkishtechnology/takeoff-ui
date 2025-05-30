@@ -17,7 +17,7 @@ function ToggleButton() {
       <TkToggleButtonGroup
         rounded
         direction="horizontal"
-        type="light"
+        type="basic"
         value={groupValue}
         onTkChange={(e) => {
           console.log('e', e);
@@ -28,8 +28,8 @@ function ToggleButton() {
           <TkToggleButton
             icon={{ name: 'bolt', fill: true }}
             iconPosition="right"
-            variant="primary"
-            type="filled-light"
+            variant="neutral"
+            type="outlined"
             size="large"
             key={opt.value}
             value={opt.value}

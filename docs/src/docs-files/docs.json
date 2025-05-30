@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-27T13:20:07",
+  "timestamp": "2025-05-30T07:16:47",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -9547,10 +9547,10 @@
         },
         {
           "name": "position",
-          "type": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+          "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
           "complexType": {
-            "original": "'top' | 'bottom' | 'left' | 'right'",
-            "resolved": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+            "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
+            "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "references": {}
           },
           "mutable": false,
@@ -9563,10 +9563,17 @@
               "text": "'right'"
             }
           ],
-          "default": "'right'",
           "values": [
             {
               "value": "bottom",
+              "type": "string"
+            },
+            {
+              "value": "bottom-end",
+              "type": "string"
+            },
+            {
+              "value": "bottom-start",
               "type": "string"
             },
             {
@@ -9574,11 +9581,35 @@
               "type": "string"
             },
             {
+              "value": "left-end",
+              "type": "string"
+            },
+            {
+              "value": "left-start",
+              "type": "string"
+            },
+            {
               "value": "right",
               "type": "string"
             },
             {
+              "value": "right-end",
+              "type": "string"
+            },
+            {
+              "value": "right-start",
+              "type": "string"
+            },
+            {
               "value": "top",
+              "type": "string"
+            },
+            {
+              "value": "top-end",
+              "type": "string"
+            },
+            {
+              "value": "top-start",
               "type": "string"
             }
           ],
@@ -15355,10 +15386,10 @@
         },
         {
           "name": "position",
-          "type": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+          "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
           "complexType": {
-            "original": "'top' | 'bottom' | 'left' | 'right'",
-            "resolved": "\"bottom\" | \"left\" | \"right\" | \"top\"",
+            "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
+            "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "references": {}
           },
           "mutable": false,
@@ -15378,7 +15409,23 @@
               "type": "string"
             },
             {
+              "value": "bottom-end",
+              "type": "string"
+            },
+            {
+              "value": "bottom-start",
+              "type": "string"
+            },
+            {
               "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "left-end",
+              "type": "string"
+            },
+            {
+              "value": "left-start",
               "type": "string"
             },
             {
@@ -15386,7 +15433,23 @@
               "type": "string"
             },
             {
+              "value": "right-end",
+              "type": "string"
+            },
+            {
+              "value": "right-start",
+              "type": "string"
+            },
+            {
               "value": "top",
+              "type": "string"
+            },
+            {
+              "value": "top-end",
+              "type": "string"
+            },
+            {
+              "value": "top-start",
               "type": "string"
             }
           ],

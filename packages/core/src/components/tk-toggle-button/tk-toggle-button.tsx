@@ -21,7 +21,6 @@ export class TkToggleButton implements ComponentInterface {
    * Disables the button, preventing user interaction.
    */
   @Prop() disabled: boolean;
-
   /**
    * Specifies a material icon name to be displayed.
    */
@@ -68,20 +67,19 @@ export class TkToggleButton implements ComponentInterface {
    * Whether the button is selected (controlled by group or standalone).
    */
   @Prop({ mutable: true, reflect: true }) selected: boolean = false;
-
   /**
    * Emitted when the toggle button is toggled.
    */
   @Event({ eventName: 'tk-toggle' }) tkToggle!: EventEmitter<any>;
 
-  private handleClick(e: MouseEvent) {
+  private handleClick = (e: MouseEvent) => {
     if (this.disabled) {
       e.preventDefault();
       e.stopPropagation();
       return;
     }
     this.tkToggle.emit({ value: this.value, selected: !this.selected });
-  }
+  };
 
   private renderIcon() {
     const iconClass = `tk-toggle-button-icon ${this.size}`;
@@ -102,12 +100,12 @@ export class TkToggleButton implements ComponentInterface {
   render() {
     const rootClasses = classNames('tk-toggle-button', this.variant, this.type, this.size, {
       rounded: this.rounded,
-      selected: this.selected,
+      selected: this.selected && !this.disabled,
       disabled: this.disabled,
     });
 
     return (
-      <button class={rootClasses} disabled={this.disabled} onClick={e => this.handleClick(e)}>
+      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick}>
         {this.iconPosition === 'left' && this.renderIcon()}
         {this.renderLabel()}
         {this.iconPosition === 'right' && this.renderIcon()}

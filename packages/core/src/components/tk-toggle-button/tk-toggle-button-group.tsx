@@ -19,14 +19,16 @@ export class TkToggleButtonGroup implements ComponentInterface {
    * The value of the rounded toggle button group.
    */
   @Prop() rounded: boolean = false;
+  @Watch('rounded')
+  roundedChanged() {
+    this.updateSlottedItems();
+  }
   /**
    * The value of the selected toggle button.
    */
   @Prop({ mutable: true }) value?: any;
   @Watch('value')
   valueChanged() {
-    console.debug('[tk-toggle-button-group] valueChanged:', { newValue: this.value });
-
     this.updateSelected();
     this.tkChange.emit(this.value);
   }
@@ -50,7 +52,6 @@ export class TkToggleButtonGroup implements ComponentInterface {
     this.updateSelected();
 
     this.slottedItems.forEach(item => {
-      // Pass the rounded prop from the group to the button
       item.rounded = this.rounded;
       item.addEventListener('tk-toggle', this.handleToggle.bind(this));
     });
@@ -59,6 +60,13 @@ export class TkToggleButtonGroup implements ComponentInterface {
   private updateSelected() {
     if (this.slottedItems?.length > 0) {
       this.slottedItems.forEach(item => {
+        if (item.disabled) {
+          if (item.selected) {
+            item.selected = false;
+            item.value = undefined;
+          }
+          return;
+        }
         item.selected = this.value == item.value;
       });
     }
@@ -66,7 +74,6 @@ export class TkToggleButtonGroup implements ComponentInterface {
 
   private handleToggle(e) {
     const { value } = e.detail;
-
     this.value = value;
     this.updateSelected();
   }
