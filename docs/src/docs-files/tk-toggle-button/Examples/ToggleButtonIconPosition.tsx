@@ -49,17 +49,17 @@ const ToggleButtonIconPosition = () => {
         <div className="w-full">
           <TkToggleButtonGroup
             value={value}
-            type={groupType}
-            direction={direction}
-            rounded={rounded}
+            type="basic"
+            direction="horizontal"
+            rounded
             onTkChange={(e) => setValue(e.detail)}
           >
             {options.map((opt) => (
               <TkToggleButton
                 key={opt.value}
                 value={opt.value}
-                type={buttonType}
-                variant={buttonVariant}
+                type="outlined"
+                variant="neutral"
                 icon={{ name: 'bolt', fill: true }}
                 iconPosition={iconPosition}
                 size="large"
