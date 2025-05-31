@@ -1,0 +1,38 @@
+.tk-toggle-button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px;
+  align-self: stretch;
+  background: var(--static-Light, #FFF);
+  border-radius: 12px;
+
+  &.light {
+    border: 1px solid var(--border-light, #E1E4EA);
+    background: var(--background-lightest, #F9FAFC);
+  }
+
+  &.divided {
+    border: 1px solid var(--border-light, #E1E4EA);
+
+  }
+
+  &.horizontal {
+    flex-direction: row;
+
+    &.rounded {
+      border-radius: 999px;
+    }
+
+  }
+
+  &.vertical {
+    flex-direction: column;
+
+    &.rounded {
+      border-radius: 24px;
+    }
+  }
+
+}

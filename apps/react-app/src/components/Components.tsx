@@ -218,6 +218,12 @@ function Components() {
         >
           Tabs
         </Link>
+        <Link
+          to="toggle-button"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Toggle Button
+        </Link>
       </div>
     </TkCard>
   );

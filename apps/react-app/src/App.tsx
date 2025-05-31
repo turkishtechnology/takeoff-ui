@@ -19,6 +19,8 @@ import Tooltip from './components/Tooltip';
 import Alert from './components/Alert';
 import Accordion from './components/Accordion';
 import ZodValidation from './examples/ZodValidation';
+
+import ToggleButton from './components/ToggleButton';
 import Avatar from './components/Avatar';
 import Breadcrumb from './components/Breadcrumb';
 import Badge from './components/Badge';
@@ -78,6 +80,7 @@ function App() {
         <Route path="examples" element={<Examples />} />
         <Route path="examples/react-hook-form" element={<ReactHookForm />} />
         <Route path="examples/zod-validation" element={<ZodValidation />} />
+        <Route path="components/toggle-button" element={<ToggleButton />} />
         <Route path="components/tabs" element={<Tabs />} />
       </Routes>
     </Layout>
