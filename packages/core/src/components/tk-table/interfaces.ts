@@ -40,9 +40,8 @@ export interface ITableColumn {
   filterButtons?: {
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
+    selectAllCheckbox?: { label?: string };
   };
-  /** Indicates if the column contains select all checkbox */
-  selectAll?: boolean;
 }
 
 /**
