@@ -594,8 +594,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
-    // seçili satırların stilinin kaldırılması
-    this.el.shadowRoot.querySelector('table tr.selected')?.classList.remove('selected');
+    this.el.shadowRoot.querySelectorAll('table tr.selected').forEach(tr => tr.classList.remove('selected'));
 
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
@@ -897,7 +896,7 @@ export class TkTable implements ComponentInterface {
                     class: classNames('filter-icon'),
                     variant: null,
                     ref: (el: any) => (refSearchIcon = el),
-                    onClick: () => this.renderData?.length > 0 && this.handleSearchIconClick(refSearchIcon, col.field),
+                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
                 />
               );
@@ -986,7 +985,7 @@ export class TkTable implements ComponentInterface {
             } else if (this.selectionMode === 'radio') {
               selectionTd = (
                 <td class="non-text">
-                  <tk-radio value={row} name="selection" onTk-change={e => this.handleRadioSelectChange(e.detail, trElRef)}></tk-radio>
+                  <tk-radio value={row} name="selection" checked={_.isEqual(this.selection, row)} onTk-change={() => this.handleRadioSelectChange(row, trElRef)}></tk-radio>
                 </td>
               );
             }
