@@ -132,13 +132,6 @@ export class TkRadio implements ComponentInterface {
     if (!this.disabled) {
       this.checked = true;
       this.tkChange.emit(this.value);
-      this.el.dispatchEvent(
-        new CustomEvent('tk-checked', {
-          detail: this.uniqueId,
-          bubbles: true,
-          composed: true,
-        }),
-      );
     }
   }
 
