@@ -662,6 +662,33 @@ export class TkTable implements ComponentInterface {
       const currentFilter = this.filters.find(filter => filter.field === field);
       const selectedValues = (currentFilter?.value as string[]) || [];
 
+      const checkboxWrapper = document.createElement('div');
+
+      checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+      const allCheckbox = document.createElement('tk-checkbox');
+      allCheckbox.classList.add('select-all');
+      allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
+      allCheckbox.value = selectedValues.length === column.filterOptions.length;
+
+      allCheckbox.addEventListener('tk-change', (e: any) => {
+        const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
+        allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
+          cb.value = e.detail;
+        });
+        if (e.detail) {
+          selectedValues.length = 0;
+          selectedValues.push(...column.filterOptions.map(option => option.value));
+        } else {
+          selectedValues.length = 0;
+        }
+      });
+
+      const divider = document.createElement('tk-divider');
+      divider.my = 1;
+
+      checkboxWrapper.appendChild(allCheckbox);
+      filterContainer.appendChild(checkboxWrapper);
+      filterContainer.appendChild(divider);
       // Create checkboxes for each option
       column.filterOptions.forEach(option => {
         const checkboxWrapper = document.createElement('div');
@@ -757,13 +784,14 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleCheckboxFilterApply(columnField: string) {
-    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox'));
+    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox:not(.select-all)'));
     const column = this.columns.find(col => col.field === columnField);
 
     if (!column || !column.filterOptions || checkboxes.length === 0) return;
 
     // Get selected values
     const selectedValues = [];
+
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
       if (checkbox.value && column.filterOptions[index]) {
         selectedValues.push(column.filterOptions[index].value);

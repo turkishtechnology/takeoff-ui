@@ -40,6 +40,7 @@ export interface ITableColumn {
   filterButtons?: {
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
+    selectAllCheckbox?: { label?: string };
   };
 }
 
