@@ -32,6 +32,8 @@ export interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
+  /** */
+  style?: any;
   /** Defines the filter type for this column (text, checkbox or radio) */
   filterType?: 'text' | 'checkbox' | 'radio';
   /** Defines options for checkbox or radio filter type */

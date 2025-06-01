@@ -949,7 +949,7 @@ export class TkTable implements ComponentInterface {
             return (
               <th
                 class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                style={{ width: col.width, minWidth: col.width, maxWidth: col.width }}
+                style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...col.style }}
               >
                 <div class="tk-table-head-cell">
                   {_customHeader ? (

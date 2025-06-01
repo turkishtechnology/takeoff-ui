@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-31T20:34:58",
+  "timestamp": "2025-06-01T16:29:30",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -9554,10 +9554,7 @@
         {
           "name": "position",
           "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
-          "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
           "complexType": {
-            "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
-            "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
             "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "references": {}
@@ -9586,23 +9583,7 @@
               "type": "string"
             },
             {
-              "value": "bottom-end",
-              "type": "string"
-            },
-            {
-              "value": "bottom-start",
-              "type": "string"
-            },
-            {
               "value": "left",
-              "type": "string"
-            },
-            {
-              "value": "left-end",
-              "type": "string"
-            },
-            {
-              "value": "left-start",
               "type": "string"
             },
             {
@@ -9626,23 +9607,7 @@
               "type": "string"
             },
             {
-              "value": "right-end",
-              "type": "string"
-            },
-            {
-              "value": "right-start",
-              "type": "string"
-            },
-            {
               "value": "top",
-              "type": "string"
-            },
-            {
-              "value": "top-end",
-              "type": "string"
-            },
-            {
-              "value": "top-start",
               "type": "string"
             },
             {
@@ -15430,10 +15395,7 @@
         {
           "name": "position",
           "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
-          "type": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
           "complexType": {
-            "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
-            "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "original": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
             "resolved": "\"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
             "references": {}
@@ -15463,23 +15425,7 @@
               "type": "string"
             },
             {
-              "value": "bottom-end",
-              "type": "string"
-            },
-            {
-              "value": "bottom-start",
-              "type": "string"
-            },
-            {
               "value": "left",
-              "type": "string"
-            },
-            {
-              "value": "left-end",
-              "type": "string"
-            },
-            {
-              "value": "left-start",
               "type": "string"
             },
             {
@@ -15503,23 +15449,7 @@
               "type": "string"
             },
             {
-              "value": "right-end",
-              "type": "string"
-            },
-            {
-              "value": "right-start",
-              "type": "string"
-            },
-            {
               "value": "top",
-              "type": "string"
-            },
-            {
-              "value": "top-end",
-              "type": "string"
-            },
-            {
-              "value": "top-start",
               "type": "string"
             },
             {
@@ -16310,7 +16240,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n  };\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** */\n  style?: any;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },
