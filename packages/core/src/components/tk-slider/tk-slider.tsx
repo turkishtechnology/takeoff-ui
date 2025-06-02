@@ -9,49 +9,55 @@ import classNames from 'classnames';
 export class TkSlider {
   @Element() el: HTMLTkSliderElement;
 
-  // The label text displayed above the slider
+  /** The label text displayed above the slider */
   @Prop() label?: string;
 
-  // The minimum value the slider can take
+  /** The minimum value the slider can take */
   @Prop() min: number = 0;
 
-  // The maximum value the slider can take
+  /** The maximum value the slider can take */
   @Prop() max: number = 100;
 
-  // The increment step for the slider value (e.g., step = 5 → 0, 5, 10, ...)
+  /** The increment step for the slider value (e.g., step = 5 → 0, 5, 10, ...) */
   @Prop() step: number = 1;
 
-  // Whether the slider is disabled (non-interactive if true)
+  /** Whether the slider is disabled (non-interactive if true) */
   @Prop() disabled: boolean = false;
 
-  // Whether the slider operates in range mode (true) or single value mode (false)
+  /** Whether the slider operates in range mode (true) or single value mode (false) */
   @Prop() range: boolean = false;
 
-  // Current value of the slider. If `range` is true, it should be [min, max]
+  /** Current value of the slider. If `range` is true, it should be [min, max] */
   @Prop() value: number | [number, number] = 0;
 
-  // Whether the bottom label/tick section should be visible
+  /** Whether the bottom label/tick section should be visible */
   @Prop() rangeVisibility: boolean = true;
 
-  // The type of visual indicator shown below the track: 'labels' (min/max) or 'ticks' (markers)
+  /**
+   * The type of visual indicator shown below the track.
+   * 'labels' shows min/max values, 'ticks' shows evenly spaced tick marks
+   */
   @Prop() type: 'labels' | 'ticks' = 'labels';
 
-  // Whether to show a red asterisk next to the label (typically for required fields)
+  /** Whether to show a red asterisk next to the label (typically for required fields) */
   @Prop() showAsterisk: boolean = false;
 
-  // Marks the slider as invalid; used to apply error styling
+  /** Marks the slider as invalid; used to apply error styling */
   @Prop() invalid: boolean = false;
 
-  // Error message to display when `invalid` is true
+  /** Error message to display when `invalid` is true */
   @Prop() error?: string;
 
-  // Informational hint message (shown when no error is present)
+  /** Informational hint message (shown when no error is present) */
   @Prop() hint?: string;
 
   @State() private currentMin: number;
   @State() private currentMax: number;
   @State() private draggingThumb: 'min' | 'max' | null = null;
-
+  /**
+   * Emitted when the slider value changes.
+   * Emits a number for single mode, or a [min, max] tuple for range mode.
+   */
   @Event() tkChange: EventEmitter<number | [number, number]>;
 
   private trackRef: HTMLDivElement;
@@ -153,8 +159,6 @@ export class TkSlider {
               class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMinActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
               style={{ left: `${minPercent}%` }}
               onPointerDown={!this.disabled ? () => this.handlePointerDown('min') : undefined}
-              onMouseEnter={() => (this.draggingThumb = 'min')}
-              onMouseLeave={() => (this.draggingThumb = null)}
             >
               {!this.disabled && (isMinActive || this.draggingThumb === 'min') && (
                 <div class="tk-slider-tooltip">
@@ -176,8 +180,6 @@ export class TkSlider {
                 })}
                 style={{ left: `${maxPercent}%` }}
                 onPointerDown={!this.disabled ? () => this.handlePointerDown('max') : undefined}
-                onMouseEnter={() => (this.draggingThumb = 'max')}
-                onMouseLeave={() => (this.draggingThumb = null)}
               >
                 {!this.disabled && (isMaxActive || this.draggingThumb === 'max') && (
                   <div class="tk-slider-tooltip">
