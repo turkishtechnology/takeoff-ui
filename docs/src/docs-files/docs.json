@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-02T03:40:46",
+  "timestamp": "2025-06-02T04:28:33",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -8020,10 +8020,10 @@
         },
         {
           "name": "size",
-          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xxlarge\"",
+          "type": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xsmall\" | \"xxlarge\"",
           "complexType": {
-            "original": "'xxlarge' | 'xlarge' | 'large' | 'base' | 'small'",
-            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xxlarge\"",
+            "original": "'xxlarge' | 'xlarge' | 'large' | 'base' | 'small' | 'xsmall'",
+            "resolved": "\"base\" | \"large\" | \"small\" | \"xlarge\" | \"xsmall\" | \"xxlarge\"",
             "references": {}
           },
           "mutable": false,
@@ -8052,6 +8052,10 @@
             },
             {
               "value": "xlarge",
+              "type": "string"
+            },
+            {
+              "value": "xsmall",
               "type": "string"
             },
             {
@@ -13434,10 +13438,10 @@
         },
         {
           "name": "size",
-          "type": "\"base\" | \"large\" | \"small\"",
+          "type": "\"base\" | \"large\" | \"small\" | \"xsmall\" | \"xxsmall\"",
           "complexType": {
-            "original": "'large' | 'base' | 'small'",
-            "resolved": "\"base\" | \"large\" | \"small\"",
+            "original": "'large' | 'base' | 'small' | 'xsmall' | 'xxsmall'",
+            "resolved": "\"base\" | \"large\" | \"small\" | \"xsmall\" | \"xxsmall\"",
             "references": {}
           },
           "mutable": false,
@@ -13462,6 +13466,14 @@
             },
             {
               "value": "small",
+              "type": "string"
+            },
+            {
+              "value": "xsmall",
+              "type": "string"
+            },
+            {
+              "value": "xxsmall",
               "type": "string"
             }
           ],

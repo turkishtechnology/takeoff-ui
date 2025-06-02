@@ -7,6 +7,10 @@ tk-icon {
     align-items: center;
     justify-content: center;
 
+    &.tk-icon-xsmall {
+        font-size: var(--size-xs);
+    }
+
     &.tk-icon-small {
         font-size: var(--size-sm);
     }
@@ -61,6 +65,12 @@ tk-icon {
 
     &.tk-icon-sign {
         background-color: var(--background-lightest);
+        &.tk-icon-xsmall {
+            border: 1px solid;
+            border-radius: var(--radius-xs);
+            padding: 1px;
+        }
+
         &.tk-icon-small {
             border: 1px solid;
             border-radius: var(--radius-s);

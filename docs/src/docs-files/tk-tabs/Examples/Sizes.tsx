@@ -3,10 +3,14 @@ import { TkTabs, TkTabsItem, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Type = () => {
-  const [size, setSize] = useState<'small' | 'base' | 'large'>('base');
+  const [size, setSize] = useState<
+    'xxsmall' | 'xsmall' | 'small' | 'base' | 'large'
+  >('base');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const sizes = [
+    { label: 'XX Small', value: 'xxsmall' },
+    { label: 'X Small', value: 'xsmall' },
     { label: 'Small', value: 'small' },
     { label: 'Base', value: 'base' },
     { label: 'Large', value: 'large' },

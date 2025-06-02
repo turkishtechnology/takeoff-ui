@@ -79,7 +79,7 @@ export class TkTabs implements ComponentInterface {
    * Controls the size of the tabs component.
    * @defaultValue 'base'
    */
-  @Prop() size: 'large' | 'base' | 'small' = 'base';
+  @Prop() size: 'large' | 'base' | 'small' | 'xsmall' | 'xxsmall' = 'base';
 
   /**
    * Controls the tab style of the tabs component.
@@ -229,7 +229,7 @@ export class TkTabs implements ComponentInterface {
             <tk-icon
               slot="trigger"
               {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
-              size={this.size}
+              size={this.size === 'xxsmall' ? 'xsmall' : this.size}
             />
           </tk-tooltip>
         );

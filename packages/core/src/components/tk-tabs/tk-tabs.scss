@@ -42,9 +42,68 @@
     }
   }
 
+  /* XX SMALL */
+  &.tk-tabs-xxsmall {
+    &.tk-tabs-basic,
+    &.tk-tabs-divided,
+    &.tk-tabs-compact,
+    &.tk-tabs-expanded {
+      .tab-header {
+        padding: var(--tabs-items-xxsmall-v-padding) var(--tabs-items-xxsmall-h-padding);
+        gap: var(--tabs-items-xxsmall-tab-content-gap);
+
+        .tk-tabs-item-icon {
+          font-size: var(--tabs-items-xxsmall-icon-size);
+          width: var(--tabs-items-xxsmall-icon-size);
+          height: var(--tabs-items-xxsmall-icon-size);
+        }
+
+        .tk-tabs-item-label-container {
+          gap: var(--tabs-items-xxsmall-tab-label-gap);
+          .tk-tabs-item-label {
+            font-size: var(--desktop-body-2xs-size);
+          }
+        }
+
+        .tk-tabs-item-badge-container {
+          line-height: var(--desktop-body-xs-line-height);
+        }
+      }
+    }
+  }
+
+  /* X SMALL */
+  &.tk-tabs-xsmall {
+    &.tk-tabs-basic,
+    &.tk-tabs-divided,
+    &.tk-tabs-compact,
+    &.tk-tabs-expanded {
+      .tab-header {
+        padding: var(--tabs-items-xsmall-v-padding) var(--tabs-items-xsmall-h-padding);
+        gap: var(--tabs-items-xsmall-tab-content-gap);
+
+        .tk-tabs-item-icon {
+          font-size: var(--tabs-items-xsmall-icon-size);
+          width: var(--tabs-items-xsmall-icon-size);
+          height: var(--tabs-items-xsmall-icon-size);
+        }
+
+        .tk-tabs-item-label-container {
+          gap: var(--tabs-items-xsmall-tab-label-gap);
+          .tk-tabs-item-label {
+            font-size: var(--desktop-body-xs-size);
+          }
+        }
+
+        .tk-tabs-item-badge-container {
+          line-height: var(--desktop-body-2xs-line-height);
+        }
+      }
+    }
+  }
+
   /* SMALL */
   &.tk-tabs-small {
-
     &.tk-tabs-basic,
     &.tk-tabs-divided,
     &.tk-tabs-compact,
@@ -72,7 +131,6 @@
 
   /* BASE */
   &.tk-tabs-base {
-
     &.tk-tabs-basic,
     &.tk-tabs-divided,
     &.tk-tabs-compact,
@@ -100,7 +158,6 @@
 
   /* LARGE */
   &.tk-tabs-large {
-
     &.tk-tabs-basic,
     &.tk-tabs-divided,
     &.tk-tabs-compact,
@@ -432,7 +489,6 @@
     &.tk-tabs-primary {
       .tab-header {
         &.active {
-
           &:after {
             background: var(--primary-base);
           }
@@ -452,7 +508,6 @@
   }
 
   &.tk-tabs-horizontal {
-
     &.tk-tabs-basic,
     &.tk-tabs-expanded {
       .tab-header {
@@ -470,8 +525,33 @@
       }
     }
 
-    &.tk-tabs-small {
+    &.tk-tabs-xxsmall {
+      &.tk-tabs-basic,
+      &.tk-tabs-expanded {
+        .tab-header {
+          &.active {
+            &:after {
+              width: calc(100% - 16px);
+            }
+          }
+        }
+      }
+    }
 
+    &.tk-tabs-xsmall {
+      &.tk-tabs-basic,
+      &.tk-tabs-expanded {
+        .tab-header {
+          &.active {
+            &:after {
+              width: calc(100% - 20px);
+            }
+          }
+        }
+      }
+    }
+
+    &.tk-tabs-small {
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
@@ -485,7 +565,6 @@
     }
 
     &.tk-tabs-base {
-
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
@@ -499,7 +578,6 @@
     }
 
     &.tk-tabs-large {
-
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
@@ -514,7 +592,6 @@
   }
 
   &.tk-tabs-vertical {
-
     &.tk-tabs-basic,
     &.tk-tabs-expanded {
       .tab-header {
@@ -532,8 +609,33 @@
       }
     }
 
-    &.tk-tabs-small {
+    &.tk-tabs-xxsmall {
+      &.tk-tabs-basic,
+      &.tk-tabs-expanded {
+        .tab-header {
+          &.active {
+            &:after {
+              height: calc(100% - 4px);
+            }
+          }
+        }
+      }
+    }
 
+    &.tk-tabs-xsmall {
+      &.tk-tabs-basic,
+      &.tk-tabs-expanded {
+        .tab-header {
+          &.active {
+            &:after {
+              height: calc(100% - 8px);
+            }
+          }
+        }
+      }
+    }
+
+    &.tk-tabs-small {
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
@@ -547,7 +649,6 @@
     }
 
     &.tk-tabs-base {
-
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
@@ -561,7 +662,6 @@
     }
 
     &.tk-tabs-large {
-
       &.tk-tabs-basic,
       &.tk-tabs-expanded {
         .tab-header {
