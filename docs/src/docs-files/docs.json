@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-02T04:28:33",
+  "timestamp": "2025-06-02T05:14:32",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -12708,6 +12708,33 @@
             {
               "value": "radio",
               "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "selectionRowDisabled",
+          "type": "Function",
+          "complexType": {
+            "original": "Function",
+            "resolved": "Function",
+            "references": {
+              "Function": {
+                "location": "global",
+                "id": "global::Function"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "Function"
             }
           ],
           "optional": false,

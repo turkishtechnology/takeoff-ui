@@ -220,7 +220,7 @@
             background-color: var(--states-info-light);
           }
 
-          &.disabled td {
+          &[aria-disabled] td {
             color: var(--text-sub-base);
             background-color: var(--background-lightest);
           }

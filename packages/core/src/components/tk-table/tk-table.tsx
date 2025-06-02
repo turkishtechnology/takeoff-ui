@@ -62,6 +62,11 @@ export class TkTable implements ComponentInterface {
   @Prop({ mutable: true }) selection: any[] | any = [];
 
   /**
+   * A function that returns true if the row should be disabled
+   */
+  @Prop() selectionRowDisabled: Function;
+
+  /**
    * Style to apply to header of table
    */
   @Prop() headerType: 'basic' | 'dark' | 'primary' = 'basic';
@@ -569,7 +574,7 @@ export class TkTable implements ComponentInterface {
 
   private handleSelectAll(value: boolean) {
     if (value) {
-      this.selection = [...this.renderData];
+      this.selection = [...this.renderData.filter(row => !this.selectionRowDisabled(row))];
       this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];
@@ -1005,12 +1010,18 @@ export class TkTable implements ComponentInterface {
               if (stylesRow !== undefined) styleRowObject = { backgroundColor: stylesRow.background, color: stylesRow.color };
             }
 
+            let isRowDisabled = false;
+            if (this.selectionRowDisabled) {
+              isRowDisabled = this.selectionRowDisabled(row);
+            }
+
             let selectionTd;
             if (this.selectionMode === 'checkbox') {
               selectionTd = (
                 <td class="non-text">
                   <tk-checkbox
                     value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
+                    disabled={isRowDisabled}
                     onTk-change={e => this.handleCheckboxSelectChange(e.detail, trElRef, row)}
                   ></tk-checkbox>
                 </td>
@@ -1018,14 +1029,20 @@ export class TkTable implements ComponentInterface {
             } else if (this.selectionMode === 'radio') {
               selectionTd = (
                 <td class="non-text">
-                  <tk-radio value={row} name="selection" checked={_.isEqual(this.selection, row)} onTk-change={() => this.handleRadioSelectChange(row, trElRef)}></tk-radio>
+                  <tk-radio
+                    value={row}
+                    name="selection"
+                    checked={_.isEqual(this.selection, row)}
+                    disabled={isRowDisabled}
+                    onTk-change={() => this.handleRadioSelectChange(row, trElRef)}
+                  ></tk-radio>
                 </td>
               );
             }
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)}>
+                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
