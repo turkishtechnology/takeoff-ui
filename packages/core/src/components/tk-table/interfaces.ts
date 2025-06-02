@@ -47,6 +47,8 @@ export interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
   };
+  /** Defines the filtering types for the column */
+  advancedFilters?: boolean;
 }
 
 /**

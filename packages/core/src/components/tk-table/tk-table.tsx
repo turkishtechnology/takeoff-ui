@@ -531,7 +531,7 @@ export class TkTable implements ComponentInterface {
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
       const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
-      this.generateRenderData(tmpData, 1);
+      this.generateRenderData(tmpData, 1, true);
     } else {
       this.currentPage = 1;
     }
@@ -748,6 +748,15 @@ export class TkTable implements ComponentInterface {
 
       this.elFilterPanelElement.appendChild(filterContainer);
     } else {
+      if (column.advancedFilters) {
+        const select: HTMLTkSelectElement = document.createElement('tk-select');
+        const filterOptions = ['startsWith', 'endsWith', 'contains', 'notContains'];
+        select.options = filterOptions.map(type => ({
+          label: type,
+          value: type,
+        }));
+        this.elFilterPanelElement.appendChild(select);
+      }
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
       input.placeholder = 'Search';
