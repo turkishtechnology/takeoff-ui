@@ -111,6 +111,18 @@
                   cursor: pointer;
                   flex-shrink: 0;
                 }
+
+                &.show-icon-on-hover {
+                  visibility: hidden;
+                  width: 0;
+                }
+              }
+            }
+
+            &:hover {
+              .icons.show-icon-on-hover {
+                visibility: visible;
+                width: min-content;
               }
             }
           }
@@ -151,8 +163,7 @@
             font-weight: 400;
             line-height: 20px;
             background-color: var(--static-light);
-            padding: var(--table-items-body-base-text-v-padding) 12px var(--table-items-body-base-text-v-padding)
-              var(--table-items-body-base-text-h-padding);
+            padding: var(--table-items-body-base-text-v-padding) 12px var(--table-items-body-base-text-v-padding) var(--table-items-body-base-text-h-padding);
             border: none;
             border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
@@ -168,7 +179,7 @@
                 background: var(--static-light);
                 outline: none;
                 font-size: 14px;
-                font-family: "Geologica", sans-serif;
+                font-family: 'Geologica', sans-serif;
                 width: 100%;
 
                 &:hover {
@@ -232,8 +243,7 @@
     }
 
     table tbody tr td {
-      padding: var(--table-items-body-small-text-v-padding) 12px var(--table-items-body-small-text-v-padding)
-        var(--table-items-body-small-text-h-padding);
+      padding: var(--table-items-body-small-text-v-padding) 12px var(--table-items-body-small-text-v-padding) var(--table-items-body-small-text-h-padding);
 
       &.non-text {
         padding: var(--table-items-body-small-nontext-v-padding) var(--table-items-body-small-nontext-h-padding);

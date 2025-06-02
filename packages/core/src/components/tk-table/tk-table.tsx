@@ -971,7 +971,7 @@ export class TkTable implements ComponentInterface {
                     </div>
                   )}
                   {(col.sortable || col.searchable) && (
-                    <div class="icons">
+                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement })}>
                       {_sortIcon}
                       {_searchIcon}
                     </div>
