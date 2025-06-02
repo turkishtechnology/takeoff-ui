@@ -14,6 +14,25 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.7',
+    date: '02.06.2025',
+    newComponents: ['Toggle Button component has been developed'],
+    newFeatures: [
+      'Added xxsmall and xsmall size to tabs',
+      'Added selectionRowDisabled prop to table',
+      'Added containerStyle prop for scrollable rows to table',
+      'Added showIconOnHover for filter icon to table',
+      'Added style for th style to ITableColumn of table',
+      'Added selectAll feature to checkbox filter of column',
+    ],
+    bugFixes: [
+      'Fixed click event to radio',
+      'Fixed the problem causing preventing search icon click when filtering doesnt match to table',
+      'Fixed value reset issue to table',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.6',
     date: '27.05.2025',
     newFeatures: ['Added Columns filter and sorting custumization to table'],
