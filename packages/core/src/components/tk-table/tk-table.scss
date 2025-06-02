@@ -13,10 +13,14 @@
   }
 
   .table-holder {
+    height: 100%;
     padding: 1px;
     overflow-x: auto;
+    overflow-y: auto;
+
 
     &::-webkit-scrollbar {
+      width: 8px;
       height: 8px;
       background: var(--background-lightest);
       opacity: 1;
@@ -56,6 +60,8 @@
           border: none;
 
           th {
+            position: sticky;
+            top: 0;
             font-size: var(--desktop-body-s-size);
             color: var(--text-darkest);
             text-align: left;

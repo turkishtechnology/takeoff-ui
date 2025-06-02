@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-01T17:47:56",
+  "timestamp": "2025-06-02T03:40:46",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -12376,6 +12376,30 @@
           "setter": false
         },
         {
+          "name": "containerStyle",
+          "type": "any",
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "container-style",
+          "reflectToAttr": false,
+          "docs": "The style attribute of container element",
+          "docsTags": [],
+          "default": "null",
+          "values": [
+            {
+              "type": "any"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "data",
           "type": "any[]",
           "complexType": {
@@ -16240,7 +16264,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  \n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n\n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },

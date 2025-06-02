@@ -47,6 +47,11 @@ export class TkTable implements ComponentInterface {
   @Prop() columns: ITableColumn[] = [];
 
   /**
+   * The style attribute of container element
+   */
+  @Prop() containerStyle: any = null;
+
+  /**
    * Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection).
    */
   @Prop() selectionMode: 'radio' | 'checkbox';
@@ -1194,7 +1199,7 @@ export class TkTable implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} style={this.containerStyle}>
         {this.renderHeader()}
         {this.renderTable()}
         {this.renderPagination()}

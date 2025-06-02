@@ -7,6 +7,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
 | <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize cell styles. This function takes row and column information and returns a style for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
@@ -87,7 +88,7 @@ interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
-  
+
   /** Allows styling to be applied to the th element of the column */
   style?: any;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
