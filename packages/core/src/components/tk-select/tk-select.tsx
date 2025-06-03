@@ -42,6 +42,18 @@ export class TkSelect implements ComponentInterface {
   @State() isOpen: boolean = false;
 
   /**
+   * The key to use for option group names.
+   * Required if grouped options are used.
+   */
+  @Prop() groupNameKey: string = 'label';
+
+  /**
+   * The key to use for accessing grouped options array.
+   * Required if grouped options are used.
+   */
+  @Prop() groupOptionsKey: string = 'options';
+
+  /**
    * Represents whether the options are fethecd from service or not.
    * If true renders spinner in options dropdown.
    */
@@ -248,6 +260,10 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private isGrouped(): boolean {
+    return this.options?.length > 0 && this.options[0]?.[this.groupOptionsKey];
+  }
+
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
@@ -338,7 +354,24 @@ export class TkSelect implements ComponentInterface {
   }
 
   private setValue() {
-    this.selectedItem = this.getSelectedItem();
+    let optionsToSearch: any[] = [];
+
+    if (this.isGrouped()) {
+      optionsToSearch = this.options.flatMap(group => group[this.groupOptionsKey]);
+    } else {
+      optionsToSearch = this.options;
+    }
+
+    if (typeof this.value !== 'object' && optionsToSearch.every(item => typeof item !== 'object')) {
+      this.inputRef.value = this.value;
+      return;
+    }
+
+    if (this.optionValueKey?.length > 0) {
+      this.selectedItem = optionsToSearch.find(item => this.getOptionValue(item) == this.value);
+    } else {
+      this.selectedItem = optionsToSearch.find(item => _.isEqual(item, this.value));
+    }
 
     if (!this.selectedItem && this.editable && this.allowCustomValue) {
       this.inputRef.value = this.getOptionLabel(this.value);
@@ -578,7 +611,19 @@ export class TkSelect implements ComponentInterface {
   }
 
   private createOptions() {
-    return this.createOptionItem(this.renderOptions);
+    if (this.isGrouped()) {
+      return this.options.map(group => (
+        <div class="dropdown-group">
+          <div class="dropdown-group-label">
+            <label>{group[this.groupNameKey]}</label>
+            <div class="line"></div>
+          </div>
+          {this.createOptionItem(group[this.groupOptionsKey])}
+        </div>
+      ));
+    } else {
+      return this.createOptionItem(this.renderOptions);
+    }
   }
 
   private renderInput() {
