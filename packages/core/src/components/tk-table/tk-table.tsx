@@ -1087,7 +1087,7 @@ export class TkTable implements ComponentInterface {
                           element: cellElement,
                         };
 
-                        this.customCellElements.push(customElements);
+                        this.renderData?.length > 0 && this.customCellElements.push(customElements);
                         return (
                           <td
                             ref={el => (customElements.ref = el as HTMLElement)}
