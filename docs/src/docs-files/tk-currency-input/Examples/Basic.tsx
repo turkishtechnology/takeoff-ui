@@ -15,6 +15,12 @@ const Basic = () => {
   placeholder="Placeholder text"
 />`;
 
+  const angularCode = `<tk-currency-input
+  label="Currency Input"
+  hint="Hint text"
+  placeholder="Placeholder text"
+/>`;
+
   const demo = (
     <div className="flex items-end gap-2">
       <TkCurrencyInput
@@ -30,7 +36,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

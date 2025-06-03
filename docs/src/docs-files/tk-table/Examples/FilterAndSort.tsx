@@ -26,6 +26,7 @@ const Example = () => {
       header: 'Checkbox Filter',
       searchable: true,
       filterType: 'checkbox',
+      selectAll: true,
       filterOptions: [
         { value: 'active', label: 'Active' },
         { value: 'inactive', label: 'Inactive' },

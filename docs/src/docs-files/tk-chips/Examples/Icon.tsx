@@ -19,6 +19,14 @@ const Icon = () => {
   removable
 />`;
 
+  const angularCode = `<tk-chips
+  variant="primary"
+  size="large"
+  icon="flight"
+  label="primary"
+  removable
+/>`;
+
   const demo = (
     <div>
       <TkChips
@@ -36,7 +44,7 @@ const Icon = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -3,10 +3,14 @@ import { TkTabs, TkTabsItem, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Type = () => {
-  const [size, setSize] = useState<'small' | 'base' | 'large'>('base');
+  const [size, setSize] = useState<
+    'xxsmall' | 'xsmall' | 'small' | 'base' | 'large'
+  >('base');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const sizes = [
+    { label: 'XX Small', value: 'xxsmall' },
+    { label: 'X Small', value: 'xsmall' },
     { label: 'Small', value: 'small' },
     { label: 'Base', value: 'base' },
     { label: 'Large', value: 'large' },
@@ -18,7 +22,7 @@ const Type = () => {
     const attributesList = [`size="${size}"`].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCodeSample = `<TkTabs ${attributes}>
+    const reactCode = `<TkTabs ${attributes}>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -30,7 +34,7 @@ const Type = () => {
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCodeSample = `<TkTabs ${attributes}>
+    const vueCode = `<TkTabs ${attributes}>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -41,8 +45,8 @@ const Type = () => {
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
 </TkTabs>`;
-    setCodeSampleReact(reactCodeSample);
-    setCodeSampleVue(vueCodeSample);
+    setCodeSampleReact(reactCode);
+    setCodeSampleVue(vueCode);
   }, [size]);
 
   const demo = (

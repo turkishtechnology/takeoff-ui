@@ -50,7 +50,8 @@ const Example = () => {
 
 const Customization = () => {
   const reactCode = `const [width, setWidth] = useState("400px");
-
+  
+<TkButton label="Open Drawer" onTkClick={() => setShowDrawer(true)} />
 <TkDrawer
   header="Custom Width Drawer"
   open={showDrawer}

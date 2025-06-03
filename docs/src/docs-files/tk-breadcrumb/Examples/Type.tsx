@@ -30,6 +30,12 @@ const items = [
 </template>
 `;
 
+  const angularCode = `<tk-breadcrumb [model]="[
+    { label: 'Home', href: '/', isExternal: true },
+    { label: 'Library', href: '/library', isExternal: true },
+    { label: 'Data' }
+  ]" type="outlined" />`;
+
   const demo = <TkBreadcrumb model={items} type="outlined" />;
 
   return (
@@ -38,7 +44,7 @@ const items = [
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

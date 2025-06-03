@@ -131,6 +131,70 @@ const Variants = () => {
   <TkButton slot="trigger" label="Hover Me!"></TkButton>
 </TkTooltip>`;
 
+  const angularCode = `<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="dark"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="white"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="info"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="success"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="danger"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="warning"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>
+<tk-tooltip
+  header="Tooltip Header"
+  description="Tooltip Explanation Here"
+  position="right"
+  icon="flight"
+  variant="neutral"
+>
+  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+</tk-tooltip>`;
+
   const demo = (
     <>
       <div>
@@ -252,7 +316,7 @@ const Variants = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -94,6 +94,68 @@ const options = [
 </template>
 `;
 
+  const angularCode = `<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="bottom"
+>
+  <tk-button label="Bottom" slot="trigger" />
+</tk-dropdown>
+<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="bottom-start"
+>
+  <tk-button label="Bottom Start" slot="trigger" />
+</tk-dropdown>
+<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="bottom-end"
+>
+  <tk-button label="Bottom End" slot="trigger" />
+</tk-dropdown>
+
+<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="right"
+>
+  <tk-button label="Right" slot="trigger" />
+</tk-dropdown>
+<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="right-start"
+>
+  <tk-button label="Right Start" slot="trigger" />
+</tk-dropdown>
+<tk-dropdown
+  [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]"
+  position="right-end"
+>
+  <tk-button label="Right End" slot="trigger" />
+</tk-dropdown>`;
+
   const demo = <Example />;
 
   return (
@@ -101,7 +163,7 @@ const options = [
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

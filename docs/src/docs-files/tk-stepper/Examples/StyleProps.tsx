@@ -49,7 +49,7 @@ const StyleProps = () => {
     },
   };
 
-  const reactCodeSample = `// Container Style Example
+  const reactCode = `// Container Style Example
 <TkStepper
   containerStyle={{
     backgroundColor: "var(--neutral-50)",
@@ -124,7 +124,7 @@ const StyleProps = () => {
   />
 </TkStepper>`;
 
-  const vueCodeSample = `<!-- Container Style Example -->
+  const vueCode = `<!-- Container Style Example -->
 <tk-stepper
   :containerStyle.prop="{
     backgroundColor: 'var(--neutral-50)',
@@ -263,8 +263,8 @@ const StyleProps = () => {
   return (
     <FeatureDemo
       demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
+      reactCode={reactCode}
+      vueCode={vueCode}
       angularCode={''}
     />
   );

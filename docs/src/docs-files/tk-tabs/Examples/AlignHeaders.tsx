@@ -20,7 +20,7 @@ const AlignHeaders = () => {
     const attributesList = [`alignHeaders="${alignment}"`].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCodeSample = `<TkTabs ${attributes}>
+    const reactCode = `<TkTabs ${attributes}>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -32,7 +32,7 @@ const AlignHeaders = () => {
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCodeSample = `<TkTabs ${attributes}>
+    const vueCode = `<TkTabs ${attributes}>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -43,8 +43,8 @@ const AlignHeaders = () => {
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
 </TkTabs>`;
-    setCodeSampleReact(reactCodeSample);
-    setCodeSampleVue(vueCodeSample);
+    setCodeSampleReact(reactCode);
+    setCodeSampleVue(vueCode);
   }, [alignment]);
 
   const demo = (

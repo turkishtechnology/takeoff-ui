@@ -11,6 +11,10 @@ const Size = () => {
 <TkChips variant="primary" size="base" label="primary" removable />
 <TkChips variant="primary" size="large" label="primary" removable />`;
 
+  const angularCode = `<tk-chips variant="primary" size="small" label="primary" removable />
+<tk-chips variant="primary" size="base" label="primary" removable />
+<tk-chips variant="primary" size="large" label="primary" removable />`;
+
   const demo = (
     <div className="flex items-end gap-2 flex-wrap justify-center">
       <TkChips
@@ -36,7 +40,7 @@ const Size = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

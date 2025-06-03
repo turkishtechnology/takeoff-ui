@@ -166,11 +166,8 @@ export class TkSelect implements ComponentInterface {
     if (_.isEqual(newValue, oldValue)) return;
 
     this.renderOptions = [...this.options];
-    if (this.multiple) {
-      this.inputRef.value = this.value;
-    } else {
-      this.setValue();
-    }
+
+    this.setValue();
   }
 
   /**
@@ -201,12 +198,7 @@ export class TkSelect implements ComponentInterface {
   @Watch('value')
   protected valueChanged(newValue: any, oldValue: any) {
     if (_.isEqual(newValue, oldValue)) return;
-
-    if (this.multiple) {
-      this.inputRef.value = this.value;
-    } else {
-      this.setValue();
-    }
+    this.setValue();
   }
 
   /**
@@ -221,12 +213,6 @@ export class TkSelect implements ComponentInterface {
   }
 
   componentDidLoad(): void {
-    if (this.multiple && this.value?.length > 0) {
-      this.inputRef.value = this.value;
-    } else if (this.value) {
-      this.setValue();
-    }
-
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
@@ -243,6 +229,16 @@ export class TkSelect implements ComponentInterface {
     // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
     this.dialogRef = this.el.closest('tk-dialog');
     this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+
+    if (this.allowCustomValue) {
+      this.editable = true;
+    }
+
+    this.inputRef.querySelector('input').addEventListener('input', this.handleInputChange.bind(this));
+
+    if (this.value) {
+      this.setValue();
+    }
   }
 
   componentDidUpdate() {
@@ -275,11 +271,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async defaultFilter(text: string, options: any[]) {
-    if (text) {
-      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text?.toLowerCase()) > -1);
-    } else {
+    if (!text) {
       return [...this.options];
     }
+    return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
   }
 
   private updatePosition() {
@@ -373,12 +368,16 @@ export class TkSelect implements ComponentInterface {
       this.selectedItem = optionsToSearch.find(item => _.isEqual(item, this.value));
     }
 
-    if (!this.selectedItem && this.editable && this.allowCustomValue) {
-      this.inputRef.value = this.getOptionLabel(this.value);
-    } else if (!this.selectedItem && !this.allowCustomValue) {
-      this.inputRef.value = null;
+    // Set input value based on selection state and custom value allowance
+    if (this.editable && this.allowCustomValue) {
+      // For editable with custom values, show the value directly
+      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
     } else if (this.selectedItem) {
+      // For selected items, show the label
       this.inputRef.value = this.getOptionLabel(this.selectedItem);
+    } else {
+      // For no selection, clear the input
+      this.inputRef.value = null;
     }
   }
 
@@ -426,10 +425,9 @@ export class TkSelect implements ComponentInterface {
   private async handleItemClick(item) {
     this.isItemClickFlag = true;
     if (this.multiple) {
-      let tmpValue = this.value;
-      if (!tmpValue) tmpValue = [];
-
+      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
       const tmpItem = this.getOptionValue(item);
+
       if (_.some(tmpValue, itemValue => _.isEqual(itemValue, this.getOptionValue(tmpItem)))) {
         // tıklanan item zaten seçili ise seçimi kaldırır
         _.remove(tmpValue, itemValue => _.isEqual(itemValue, tmpItem));
@@ -496,13 +494,17 @@ export class TkSelect implements ComponentInterface {
 
     if (this.editable && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
+      const inputValue = this.inputRef.querySelector('input').value;
+
+      if (!inputValue) return;
+
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
         !this.isItemClickFlag &&
         // seçili item yok ise ama inutda bir değer var ise
-        ((!selectedItem && this.inputRef.querySelector('input').value) ||
+        ((!selectedItem && inputValue) ||
           // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
-          (selectedItem && this.getOptionLabel(selectedItem) != this.inputRef.querySelector('input').value))
+          (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
       ) {
         this.value = null;
         this.tkChange.emit(null);

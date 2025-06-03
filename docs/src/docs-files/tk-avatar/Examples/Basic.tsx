@@ -11,6 +11,10 @@ const Basic = () => {
 <TkAvatar label="AD" rounded />
 <TkAvatar />`;
 
+  const angularCode = `<tk-avatar label="JS" />
+<tk-avatar label="AD" rounded />
+<tk-avatar />`;
+
   const demo = (
     <div className="flex justify-center gap-4 flex-wrap">
       <TkAvatar label="JS" />
@@ -25,7 +29,7 @@ const Basic = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

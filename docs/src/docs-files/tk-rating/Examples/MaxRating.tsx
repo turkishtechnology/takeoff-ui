@@ -26,6 +26,10 @@ const MaxRating = () => {
   :maxRating="10"
 />`;
 
+  const angularCode = `<tk-rating type="star" [value]="2.5" showRatingValue [maxRating]="3" />
+<tk-rating type="star" [value]="4" showRatingValue [maxRating]="6" />
+<tk-rating type="star" [value]="5.5" showRatingValue [maxRating]="10" />`;
+
   const demo = (
     <div
       style={{
@@ -44,7 +48,7 @@ const MaxRating = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };
