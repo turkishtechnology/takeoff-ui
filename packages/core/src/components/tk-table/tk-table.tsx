@@ -22,7 +22,8 @@ import { getIconElementProps } from '../../utils/icon-props';
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private elements: ICustomElement[] = [];
+  private customCellElements: ICustomElement[] = [];
+  private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
@@ -46,6 +47,11 @@ export class TkTable implements ComponentInterface {
   @Prop() columns: ITableColumn[] = [];
 
   /**
+   * The style attribute of container element
+   */
+  @Prop() containerStyle: any = null;
+
+  /**
    * Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection).
    */
   @Prop() selectionMode: 'radio' | 'checkbox';
@@ -54,6 +60,11 @@ export class TkTable implements ComponentInterface {
    * List of the selected
    */
   @Prop({ mutable: true }) selection: any[] | any = [];
+
+  /**
+   * A function that returns true if the row should be disabled
+   */
+  @Prop() selectionRowDisabled: Function;
 
   /**
    * Style to apply to header of table
@@ -204,7 +215,11 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    this.elements?.forEach(element => {
+    this.customCellElements?.forEach(element => {
+      element?.ref?.replaceChildren(element.element);
+    });
+
+    this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
   }
@@ -308,10 +323,22 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: item.width || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
         });
 
-      worksheet.addRows(_data);
+      worksheet.addRows(
+        _data?.map(item => {
+          const rowData = {};
+
+          _columns
+            .filter(col => !options.ignoreColumnsFields?.includes(col.field))
+            .forEach(col => {
+              rowData[col.field] = getNestedValue(item, col.field) || '';
+            });
+
+          return rowData;
+        }),
+      );
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -547,7 +574,7 @@ export class TkTable implements ComponentInterface {
 
   private handleSelectAll(value: boolean) {
     if (value) {
-      this.selection = [...this.renderData];
+      this.selection = [...this.renderData.filter(row => !this.selectionRowDisabled(row))];
       this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];
@@ -577,8 +604,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
-    // seçili satırların stilinin kaldırılması
-    this.el.shadowRoot.querySelector('table tr.selected')?.classList.remove('selected');
+    this.el.shadowRoot.querySelectorAll('table tr.selected').forEach(tr => tr.classList.remove('selected'));
 
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
@@ -646,6 +672,33 @@ export class TkTable implements ComponentInterface {
       const currentFilter = this.filters.find(filter => filter.field === field);
       const selectedValues = (currentFilter?.value as string[]) || [];
 
+      const checkboxWrapper = document.createElement('div');
+
+      checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+      const allCheckbox = document.createElement('tk-checkbox');
+      allCheckbox.classList.add('select-all');
+      allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
+      allCheckbox.value = selectedValues.length === column.filterOptions.length;
+
+      allCheckbox.addEventListener('tk-change', (e: any) => {
+        const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
+        allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
+          cb.value = e.detail;
+        });
+        if (e.detail) {
+          selectedValues.length = 0;
+          selectedValues.push(...column.filterOptions.map(option => option.value));
+        } else {
+          selectedValues.length = 0;
+        }
+      });
+
+      const divider = document.createElement('tk-divider');
+      divider.my = 1;
+
+      checkboxWrapper.appendChild(allCheckbox);
+      filterContainer.appendChild(checkboxWrapper);
+      filterContainer.appendChild(divider);
       // Create checkboxes for each option
       column.filterOptions.forEach(option => {
         const checkboxWrapper = document.createElement('div');
@@ -741,13 +794,14 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleCheckboxFilterApply(columnField: string) {
-    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox'));
+    const checkboxes = Array.from(document.querySelectorAll('body > .tk-table-filter-panel .tk-table-filter-checkbox-item tk-checkbox:not(.select-all)'));
     const column = this.columns.find(col => col.field === columnField);
 
     if (!column || !column.filterOptions || checkboxes.length === 0) return;
 
     // Get selected values
     const selectedValues = [];
+
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
       if (checkbox.value && column.filterOptions[index]) {
         selectedValues.push(column.filterOptions[index].value);
@@ -828,6 +882,8 @@ export class TkTable implements ComponentInterface {
   }
 
   private createHead() {
+    this.customHeaderElements = [];
+
     const theadClasses = classNames(this.headerType);
     let selectionTh;
 
@@ -850,6 +906,8 @@ export class TkTable implements ComponentInterface {
             let refSearchIcon: HTMLTkIconElement;
             let _sortIcon;
             let _searchIcon;
+            let _customHeader;
+            let _customHeaderElements: ICustomElement;
 
             // generate expander th
             if (col.expander) {
@@ -876,7 +934,7 @@ export class TkTable implements ComponentInterface {
                     class: classNames('filter-icon'),
                     variant: null,
                     ref: (el: any) => (refSearchIcon = el),
-                    onClick: () => this.renderData?.length > 0 && this.handleSearchIconClick(refSearchIcon, col.field),
+                    onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
                 />
               );
@@ -886,25 +944,44 @@ export class TkTable implements ComponentInterface {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
               }
             }
+            if (typeof col?.headerHtml == 'function') {
+              _customHeader = col.headerHtml();
+
+              if (_customHeader instanceof HTMLElement) {
+                _customHeaderElements = {
+                  ref: null,
+                  element: _customHeader,
+                } as ICustomElement;
+                this.customHeaderElements.push(_customHeaderElements);
+              }
+            }
 
             return (
               <th
                 class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                style={{ width: col.width, minWidth: col.width, maxWidth: col.width }}
+                style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...col.style }}
               >
                 <div class="tk-table-head-cell">
-                  <div class="header-container">
-                    <div class="header" title={col.header}>
-                      {col.header}
-                    </div>
-                    {col?.subHeader?.length > 0 && (
-                      <div class="sub-header" title={col.subHeader}>
-                        {col.subHeader}
+                  {_customHeader ? (
+                    !_customHeaderElements ? (
+                      <div class="header-container" innerHTML={_customHeader}></div>
+                    ) : (
+                      <div ref={el => (_customHeaderElements.ref = el as HTMLElement)} class="header-container"></div>
+                    )
+                  ) : (
+                    <div class="header-container">
+                      <div class="header" title={col.header}>
+                        {col.header}
                       </div>
-                    )}
-                  </div>
+                      {col?.subHeader?.length > 0 && (
+                        <div class="sub-header" title={col.subHeader}>
+                          {col.subHeader}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {(col.sortable || col.searchable) && (
-                    <div class="icons">
+                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement })}>
                       {_sortIcon}
                       {_searchIcon}
                     </div>
@@ -919,7 +996,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
-    this.elements = [];
+    this.customCellElements = [];
 
     if (this.renderData?.length > 0) {
       return (
@@ -933,12 +1010,18 @@ export class TkTable implements ComponentInterface {
               if (stylesRow !== undefined) styleRowObject = { backgroundColor: stylesRow.background, color: stylesRow.color };
             }
 
+            let isRowDisabled = false;
+            if (this.selectionRowDisabled) {
+              isRowDisabled = this.selectionRowDisabled(row);
+            }
+
             let selectionTd;
             if (this.selectionMode === 'checkbox') {
               selectionTd = (
                 <td class="non-text">
                   <tk-checkbox
                     value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
+                    disabled={isRowDisabled}
                     onTk-change={e => this.handleCheckboxSelectChange(e.detail, trElRef, row)}
                   ></tk-checkbox>
                 </td>
@@ -946,14 +1029,20 @@ export class TkTable implements ComponentInterface {
             } else if (this.selectionMode === 'radio') {
               selectionTd = (
                 <td class="non-text">
-                  <tk-radio value={row} name="selection" onTk-change={e => this.handleRadioSelectChange(e.detail, trElRef)}></tk-radio>
+                  <tk-radio
+                    value={row}
+                    name="selection"
+                    checked={_.isEqual(this.selection, row)}
+                    disabled={isRowDisabled}
+                    onTk-change={() => this.handleRadioSelectChange(row, trElRef)}
+                  ></tk-radio>
                 </td>
               );
             }
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)}>
+                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
@@ -998,7 +1087,7 @@ export class TkTable implements ComponentInterface {
                           element: cellElement,
                         };
 
-                        this.elements.push(customElements);
+                        this.customCellElements.push(customElements);
                         return (
                           <td
                             ref={el => (customElements.ref = el as HTMLElement)}
@@ -1127,7 +1216,7 @@ export class TkTable implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} style={this.containerStyle}>
         {this.renderHeader()}
         {this.renderTable()}
         {this.renderPagination()}

@@ -13,6 +13,11 @@ const Basic = () => {
 <TkIcon icon="directions_car" />
 <TkIcon icon="local_dining" />`;
 
+  const angularCode = `<tk-icon icon="flight" />
+<tk-icon icon="hotel" />
+<tk-icon icon="directions_car" />
+<tk-icon icon="local_dining" />`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-4">
       <TkIcon icon="flight" />
@@ -27,7 +32,7 @@ const Basic = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

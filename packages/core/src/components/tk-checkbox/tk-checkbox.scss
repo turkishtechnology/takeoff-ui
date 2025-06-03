@@ -28,10 +28,6 @@ tk-checkbox {
     cursor: pointer;
     user-select: none;
 
-    &.width-description {
-      align-items: start;
-    }
-
     input[type="checkbox"] {
       margin: 0;
       appearance: none;
@@ -40,6 +36,9 @@ tk-checkbox {
     }
 
     .mask {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 20px;
       height: 20px;
       background-color: var(--static-light);
@@ -51,7 +50,7 @@ tk-checkbox {
       padding: 2px;
 
       i {
-        display: none;
+        visibility: hidden;
         font-size: 12px;
         color: var(--static-light);
         border-radius: var(--radius-xs);
@@ -86,7 +85,7 @@ tk-checkbox {
     background-color: var(--static-light);
 
     i {
-      display: block;
+      visibility: visible;
     }
   }
 

@@ -1185,6 +1185,21 @@
   --tabs-items-small-tab-content-gap: var(--spacing-s);
   --tabs-items-small-tab-label-gap: var(--spacing-xs);
   --tabs-items-small-icon-size: var(--spacing-5xl);
+  --tabs-items-xsmall-h-padding: var(--spacing-l);
+  --tabs-items-xsmall-v-padding: var(--spacing-xs);
+  --tabs-items-xsmall-basic-active-gap: var(--spacing-xxs);
+  --tabs-items-xsmall-basic-vertical-active-gap: var(--spacing-m-base);
+  --tabs-items-xsmall-tab-content-gap: var(--spacing-xs);
+  --tabs-items-xsmall-tab-label-gap: var(--spacing-xxs);
+  --tabs-items-xsmall-icon-size: var(--spacing-4xl);
+  --tabs-items-xxsmall-h-padding: var(--spacing-m-base);
+  --tabs-items-xxsmall-v-padding: var(--spacing-xxs);
+  --tabs-items-xxsmall-basic-active-gap: var(--spacing-px);
+  --tabs-items-xxsmall-basic-vertical-active-gap: var(--spacing-s);
+  --tabs-items-xxsmall-tab-content-gap: var(--spacing-xxs);
+  --tabs-items-xxsmall-tab-label-gap: var(--spacing-px);
+  --tabs-items-xxsmall-icon-size: var(--spacing-3xl);
+
 
   // timeline variables
   --timeline-h-padding: var(--spacing-m-base);

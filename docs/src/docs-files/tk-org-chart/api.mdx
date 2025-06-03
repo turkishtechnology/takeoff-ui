@@ -1,0 +1,25 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="accessibilityLabel" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Accessibility label for the chart |
+| <TkBadge label="collapsible" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Enable or disable expand/collapse buttons functionality When disabled, all nodes will be automatically expanded |
+| <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties. |
+| <TkBadge label="options" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | Chart options for d3-org-chart customization |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-node-click | Node click event |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| addNode | Add node to organizational chart |
+| fit | Fit chart to screen |
+| getOrgChart | Get the chart instance |
+| refresh | Refresh the chart |

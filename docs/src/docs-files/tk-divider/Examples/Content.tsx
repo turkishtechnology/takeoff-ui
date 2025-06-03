@@ -13,6 +13,11 @@ const Content = () => {
     <TkButton type="outlined" variant="neutral" size="small" label="Button"></TkButton>
 </TkDivider>`;
 
+  const angularCode = `<tk-divider>Content</tk-divider>
+<tk-divider>
+    <tk-button type="outlined" variant="neutral" size="small" label="Button"></tk-button>
+</tk-divider>`;
+
   const demo = (
     <div className="flex flex-col">
       <TkDivider>Content</TkDivider>
@@ -33,7 +38,7 @@ const Content = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

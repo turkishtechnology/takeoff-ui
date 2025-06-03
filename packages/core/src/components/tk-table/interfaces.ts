@@ -26,10 +26,17 @@ export interface ITableColumn {
   selectColumn?: boolean;
   /** Indicates if the column acts as an expander */
   expander?: boolean;
-  /** Custom rendering function for HTML content in the column */
+  /** Custom rendering function for HTML content in the column header */
+  headerHtml?: Function;
+  /** Custom rendering function for HTML content in the column cells */
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
+
+  /** Allows styling to be applied to the th element of the column */
+  style?: any;
+  /** When true, search and sort icons will only be displayed when hovering over the th element */
+  showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
   filterType?: 'text' | 'checkbox' | 'radio';
   /** Defines options for checkbox or radio filter type */
@@ -38,6 +45,7 @@ export interface ITableColumn {
   filterButtons?: {
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
+    selectAllCheckbox?: { label?: string };
   };
 }
 

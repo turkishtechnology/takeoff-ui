@@ -71,6 +71,7 @@ const OptionValueKey = () => {
         setSelectValue(e.detail);
       }}
     />
+    p><b>Selected Key's value:</b> {selectValue}</p>
     <TkSelect
         editable
         label="Object Value Select"
@@ -79,6 +80,7 @@ const OptionValueKey = () => {
           setObjectSelectValue(e.detail);
         }}
     />
+    <p><b>Selected Key's value:</b> {JSON.stringify(selectObjectValue)}</p>
   );`;
 
   const vueCode = `<script setup>

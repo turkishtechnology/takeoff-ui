@@ -13,6 +13,11 @@ const Description = () => {
     <TkRadio label="label 2" value="2" description="Example description" />
 </TkRadioGroup>`;
 
+  const angularCode = `<tk-radio-group>
+  <tk-radio label="label 1" value="1" />
+  <tk-radio label="label 2" value="2" description="Example description" />
+</tk-radio-group>`;
+
   const demo = (
     <TkRadioGroup style={{ overflow: 'overlay' }}>
       <TkRadio label="label 1" value="1" />
@@ -25,7 +30,7 @@ const Description = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

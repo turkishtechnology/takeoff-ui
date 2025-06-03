@@ -7,6 +7,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
 | <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize cell styles. This function takes row and column information and returns a style for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
@@ -19,6 +20,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/> | <code>number[]</code> | null | Number of rows per page options |
 | <TkBadge label="selection" variant="primary" size="large" type="filledlight"/> | <code>any</code> | [] | List of the selected |
 | <TkBadge label="selectionMode" variant="primary" size="large" type="filledlight"/> | <code>"checkbox", "radio"</code> | null | Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection). |
+| <TkBadge label="selectionRowDisabled" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null |  |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "small"</code> | 'base' | Sets size for the component. |
 | <TkBadge label="striped" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables or disables alternating row background colors for easier readability. |
 | <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Number of total items. |
@@ -81,10 +83,17 @@ interface ITableColumn {
   selectColumn?: boolean;
   /** Indicates if the column acts as an expander */
   expander?: boolean;
-  /** Custom rendering function for HTML content in the column */
+  /** Custom rendering function for HTML content in the column header */
+  headerHtml?: Function;
+  /** Custom rendering function for HTML content in the column cells */
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
+
+  /** Allows styling to be applied to the th element of the column */
+  style?: any;
+  /** When true, search and sort icons will only be displayed when hovering over the th element */
+  showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
   filterType?: 'text' | 'checkbox' | 'radio';
   /** Defines options for checkbox or radio filter type */
@@ -93,6 +102,7 @@ interface ITableColumn {
   filterButtons?: {
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
+    selectAllCheckbox?: { label?: string };
   };
 }
 ```

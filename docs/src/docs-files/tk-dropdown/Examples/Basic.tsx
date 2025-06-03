@@ -63,6 +63,19 @@ const options = [
 </template>
 `;
 
+  const angularCode = `<tk-dropdown [options]="[
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' }
+  ]">
+    <tk-button
+      label="Select"
+      icon="keyboard_arrow_down"
+      iconPosition="right"
+      slot="trigger"
+    />
+  </tk-dropdown>`;
+
   const demo = <Example />;
 
   return (
@@ -70,7 +83,7 @@ const options = [
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

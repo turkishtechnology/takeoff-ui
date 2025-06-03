@@ -34,7 +34,7 @@ const Type = () => {
     ].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCodeSample = `<TkTabs
+    const reactCode = `<TkTabs
 ${attributes}
 >
   <TkTabsItem label="Tab label" icon="flight">
@@ -48,7 +48,7 @@ ${attributes}
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCodeSample = `<TkTabs 
+    const vueCode = `<TkTabs 
 ${attributes}
 >
   <TkTabsItem label="Tab label" icon="flight">
@@ -61,8 +61,8 @@ ${attributes}
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
 </TkTabs>`;
-    setCodeSampleReact(reactCodeSample);
-    setCodeSampleVue(vueCodeSample);
+    setCodeSampleReact(reactCode);
+    setCodeSampleVue(vueCode);
   }, [orientation, type]);
 
   const demo = (

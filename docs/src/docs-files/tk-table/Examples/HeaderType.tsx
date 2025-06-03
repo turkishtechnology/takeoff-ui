@@ -46,6 +46,21 @@ const HeaderType = () => {
 
   const vueCode = `<TkTable :columns.prop="column" :data.prop="headerTypeData" headerType="${type}" />`;
 
+  const angularCode = `<tk-table
+  [columns]="[
+    { field: 'id', header: 'Id' },
+    { field: 'name', header: 'Name' },
+    { field: 'category', header: 'Category' },
+    { field: 'quantity', header: 'Quantity' }
+  ]"
+  [data]="[
+    { id: 1, name: 'Product A', category: 'Electronics', quantity: 12 },
+    { id: 2, name: 'Product B', category: 'Books', quantity: 8 },
+    { id: 3, name: 'Product C', category: 'Groceries', quantity: 20 }
+  ]"
+  headerType="${type}"
+/>`;
+
   const demo = <Example type={type} setType={setType} />;
 
   return (
@@ -53,7 +68,7 @@ const HeaderType = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };
