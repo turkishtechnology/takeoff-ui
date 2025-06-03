@@ -10,8 +10,7 @@ import {
   TkTextarea,
   TkToggle,
 } from '@takeoff-ui/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 function ReactHookForm() {
   // React Hook Form
 
@@ -42,8 +41,9 @@ function ReactHookForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+
     reset,
+    control,
   } = useForm<IFormInput>({
     defaultValues: {
       gender: GenderEnum.male,
@@ -52,16 +52,14 @@ function ReactHookForm() {
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
   };
+  const handleReset = () => {
+    reset();
+  };
   // React Hook Form End
 
   return (
     <TkCard>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        onReset={() => {
-          console.log('resetlendi');
-        }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} onReset={handleReset}>
         <div
           style={{
             display: 'flex',
@@ -69,76 +67,119 @@ function ReactHookForm() {
             gap: '16px',
           }}
         >
-          <TkInput
-            mode="text"
-            label="Name"
-            {...register('name', { required: true })}
-            invalid={!!errors?.name}
-            error={errors?.name && 'Bu alan gerekli'}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => (
+              <TkInput
+                mode="text"
+                label="Name"
+                invalid={!!errors?.name}
+                error={errors?.name && 'Bu alan gerekli'}
+                value={field.value}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
 
-          <TkSelect
-            label="Gender"
-            options={selectOptions}
-            {...register('gender', { required: true })}
-            invalid={!!errors?.gender}
-            error={errors?.gender && 'Bu alan gerekli'}
-            onTkChange={(e) => {
-              console.log('select change', e.detail);
-              // setValue('gender', e.detail);
-            }}
+          <Controller
+            control={control}
+            name="gender"
+            render={({ field }) => (
+              <TkSelect
+                label="Gender"
+                options={selectOptions}
+                value={field.value}
+                invalid={!!errors?.gender}
+                error={errors?.gender && 'Bu alan gerekli'}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
-          <TkTextarea
-            label="Address"
-            {...register('address', { required: true })}
-            invalid={!!errors?.address}
-            error={errors?.address && 'Bu alan gerekli'}
+
+          <Controller
+            control={control}
+            name="address"
+            render={({ field }) => (
+              <TkTextarea
+                label="Address"
+                invalid={!!errors?.address}
+                error={errors?.address && 'Bu alan gerekli'}
+                value={field.value}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
-          <TkInput
-            mode="password"
-            showSafetyStatus={true}
-            label="Password"
-            {...register('password', { required: true })}
-            invalid={!!errors?.password}
-            error={errors?.password && 'Bu alan gerekli'}
+          <Controller
+            control={control}
+            name="password"
+            render={({ field }) => (
+              <TkInput
+                mode="password"
+                showSafetyStatus={true}
+                label="Password"
+                invalid={!!errors?.password}
+                error={errors?.password && 'Bu alan gerekli'}
+                value={field.value}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
-          <TkDatepicker
-            label="Date"
-            mode="single"
-            {...register('date', { required: true })}
-            invalid={!!errors?.date}
-            error={errors?.date && 'Bu alan gerekli'}
-            onTkChange={(e) => setValue('date', e.detail)}
+          <Controller
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <TkDatepicker
+                label="Date"
+                mode="single"
+                invalid={!!errors?.date}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
-          <TkToggle
-            {...register('toggle', { required: true })}
-            onTkChange={(e) => setValue('toggle', e.detail)}
+          <Controller
+            control={control}
+            name="toggle"
+            render={({ field }) => (
+              <TkToggle
+                {...register('toggle', { required: true })}
+                onTkChange={(e) => field.onChange(e.detail)}
+              />
+            )}
           />
-          <TkCheckbox
-            label="Okudum onayladım."
-            {...register('check', { required: true })}
-            invalid={!!errors?.check}
-            onTkChange={(e) => setValue('check', e.detail)}
+          <Controller
+            control={control}
+            name="check"
+            render={({ field }) => (
+              <TkCheckbox
+                label="Okudum onayladım."
+                invalid={!!errors?.check}
+                onTkChange={(e) => field.onChange(e.detail)}
+                value={field.value}
+              />
+            )}
           />
-          <TkRadioGroup
-            {...register('radio', { required: true })}
-            onTkChange={(e) => setValue('radio', e.detail)}
-            invalid={!!errors?.radio}
-          >
-            <TkRadio value="test-1" label="Test 1" />
-            <TkRadio value="test-2" label="Test 2" />
-          </TkRadioGroup>
+          <Controller
+            control={control}
+            name="radio"
+            render={({ field }) => (
+              <TkRadioGroup
+                {...register('radio', { required: true })}
+                onTkChange={(e) => field.onChange(e.detail)}
+                invalid={!!errors?.radio}
+              >
+                <TkRadio value="test-1" label="Test 1" />
+                <TkRadio value="test-2" label="Test 2" />
+              </TkRadioGroup>
+            )}
+          />
           <TkButton
-            mode="button"
-            onClick={() =>
-              reset({
-                gender: null,
-              })
-            }
+            onTkClick={() => handleReset()}
             label="reset"
             variant="primary"
             fullWidth={true}
             type="outlined"
+            mode="reset"
           />
           <TkButton
             mode="submit"
