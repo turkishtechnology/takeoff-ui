@@ -750,7 +750,7 @@ export class TkTable implements ComponentInterface {
     } else {
       if (column.advancedFilters) {
         const select: HTMLTkSelectElement = document.createElement('tk-select');
-        const filterOptions = ['startsWith', 'endsWith', 'contains', 'notContains'];
+        const filterOptions = ['startsWith', 'endsWith', 'contains', 'notContains', 'equals', 'notEquals'];
         select.options = filterOptions.map(type => ({
           label: type,
           value: type,

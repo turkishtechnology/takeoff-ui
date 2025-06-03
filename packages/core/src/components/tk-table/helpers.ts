@@ -57,6 +57,10 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
             return fieldValue.includes(filter.value);
           case 'notContains':
             return !fieldValue.includes(filter.value);
+          case 'equals':
+            return fieldValue === filter.value;
+          case 'notEquals':
+            return fieldValue !== filter.value;
           default:
             return true;
         }
