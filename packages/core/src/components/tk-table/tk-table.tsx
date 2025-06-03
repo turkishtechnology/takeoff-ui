@@ -1081,8 +1081,7 @@ export class TkTable implements ComponentInterface {
                             style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
                           ></td>
                         );
-                      }
-                      if (typeof cellElement == 'object') {
+                      } else if (typeof cellElement == 'object') {
                         return (
                           <td
                             ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
