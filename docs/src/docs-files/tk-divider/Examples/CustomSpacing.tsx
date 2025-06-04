@@ -5,9 +5,15 @@ const CustomSpacing = () => {
   const reactCode = `<TkDivider mx={32} />
 <TkDivider my={48}>Custom Vertical Spacing</TkDivider>
 <TkDivider mx={32} my={48}>Custom Both Spacing</TkDivider>`;
+
   const vueCode = `<TkDivider :mx="32" />
-    <TkDivider :my="48">Custom Vertical Spacing</TkDivider>
-    <TkDivider :mx="32" :my="48">Custom Both Spacing</TkDivider>`;
+<TkDivider :my="48">Custom Vertical Spacing</TkDivider>
+<TkDivider :mx="32" :my="48">Custom Both Spacing</TkDivider>`;
+
+  const angularCode = `<tk-divider [mx]="32" />
+<tk-divider [my]="48">Custom Vertical Spacing</tk-divider>
+<tk-divider [mx]="32" [my]="48">Custom Both Spacing</tk-divider>`;
+
   const demo = (
     <div className="flex flex-col gap-4">
       <div
@@ -38,7 +44,7 @@ const CustomSpacing = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

@@ -31,6 +31,20 @@ const Icon = () => {
   label="right icon"
 />`;
 
+  const angularCode = `<tk-button
+  variant="primary"
+  size="large"
+  icon="flight"
+  label="left icon"
+/>
+<tk-button
+  variant="primary"
+  size="large"
+  icon="flight"
+  iconPosition="right"
+  label="right icon"
+/>`;
+
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-2">
       <TkButton
@@ -54,7 +68,7 @@ const Icon = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

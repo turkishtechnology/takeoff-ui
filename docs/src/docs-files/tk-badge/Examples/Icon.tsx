@@ -35,22 +35,38 @@ const Icon = () => {
   label="primary"
 />`;
 
+  const angularCode = `<tk-badge
+  variant="primary"
+  size="large"
+  type="filled"
+  icon="flight"
+  label="primary"
+/>
+<tk-badge
+  variant="primary"
+  size="large"
+  type="filled"
+  icon="flight"
+  iconPosition="right"
+  label="primary"
+/>`;
+
   const demo = (
-    <div className="flex flex-col items-end justify-center gap-2">
+    <div className="flex flex-col items-center justify-center gap-2">
       <TkBadge
-        variant="verified"
+        variant="primary"
         size="large"
-        type="filledlight"
-        icon="new_releases"
-        label="verified"
+        type="filled"
+        icon="flight"
+        label="primary"
       />
       <TkBadge
-        variant="verified"
+        variant="primary"
         size="large"
-        type="filledlight"
-        icon="new_releases"
+        type="filled"
+        icon="flight"
         iconPosition="right"
-        label="verified"
+        label="primary"
       />
     </div>
   );
@@ -60,7 +76,7 @@ const Icon = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

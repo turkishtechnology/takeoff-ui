@@ -86,6 +86,22 @@ const column = [
   </div>
 </template>`;
 
+  const angularCode = `<div style="padding: 8px">
+  <tk-table
+    [columns]="[
+      { field: 'id', header: 'Id' },
+      { field: 'name', header: 'Name' },
+      { field: 'category', header: 'Category' },
+      { field: 'quantity', header: 'Quantity' }
+    ]"
+    [data]="[
+      { id: 1, name: 'Product A', category: 'Electronics', quantity: 12 },
+      { id: 2, name: 'Product B', category: 'Books', quantity: 8 },
+      { id: 3, name: 'Product C', category: 'Groceries', quantity: 20 }
+    ]"
+  />
+</div>`;
+
   const demo = <Example />;
 
   return (
@@ -93,7 +109,7 @@ const column = [
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

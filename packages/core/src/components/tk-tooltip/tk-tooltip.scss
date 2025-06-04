@@ -1,11 +1,12 @@
 .tk-tooltip {
   position: relative;
+  display: flex;
 }
 
 .tk-tooltip-content {
   display: flex;
   gap: 8px;
-  position: absolute;
+  position: fixed;
   color: var(--static-white);
   padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
   border-radius: var(--tooltips-base-radius, 8px);
@@ -187,6 +188,9 @@
   position: absolute;
   width: 9px;
   height: 9px;
+  background: inherit;
+  border: 1px solid;
+  border-color: inherit;
   transform: rotate(45deg);
   z-index: 1300;
 }

@@ -11,6 +11,10 @@ const Type = () => {
 <TkChips variant="primary" type="filledlight" label="primary" />
 <TkChips variant="primary" type="outlined" label="primary" />`;
 
+  const angularCode = `<tk-chips variant="primary" type="filled" label="primary" />
+<tk-chips variant="primary" type="filledlight" label="primary" />
+<tk-chips variant="primary" type="outlined" label="primary" />`;
+
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
       <TkChips variant="primary" type="filled" label="primary" />
@@ -24,7 +28,7 @@ const Type = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };

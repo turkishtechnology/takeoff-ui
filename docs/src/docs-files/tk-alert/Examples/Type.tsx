@@ -53,6 +53,32 @@ const Type = () => {
   type="outlined"
 />`;
 
+  const angularCode = `<tk-alert
+  variant="success"
+  header="Success Filled Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard."
+  type="filled"
+/>
+<tk-alert
+  variant="success"
+  header="Success FilledLight Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard."
+  type="filledlight"
+/>
+<tk-alert
+  variant="success"
+  header="Success Gradient Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard."
+  type="gradient"
+/>
+<tk-alert
+  variant="success"
+  header="Success Outlined Alert"
+  message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard."
+  type="outlined"
+/>
+`;
+
   const demo = (
     <>
       <div className="mb-4 flex flex-col gap-2">
@@ -89,7 +115,7 @@ const Type = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

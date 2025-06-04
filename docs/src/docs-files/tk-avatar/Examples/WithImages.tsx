@@ -27,6 +27,18 @@ const WithImages = () => {
 <TkAvatar image="https://via.placeholder.com/40" background="solid" variant="info" />
 <TkAvatar image="https://via.placeholder.com/40" background="solid" variant="danger" />`;
 
+  const angularCode = `<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="primary" rounded />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="light" rounded />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="success" rounded />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="info" rounded />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="danger" rounded />
+    
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="primary" />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="light" />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="success" />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="info" />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" variant="danger" />`;
+
   const demo = (
     <div className="flex flex-col gap-2">
       <div className="flex justify-center gap-2 flex-wrap">
@@ -97,7 +109,7 @@ const WithImages = () => {
         demo={demo}
         reactCode={reactCode}
         vueCode={vueCode}
-        angularCode={''}
+        angularCode={angularCode}
       ></FeatureDemo>
     </>
   );

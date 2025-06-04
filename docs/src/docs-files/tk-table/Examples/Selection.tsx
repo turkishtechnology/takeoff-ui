@@ -40,6 +40,7 @@ const Example = () => {
         data={basicData}
         dataKey="id"
         selectionMode={mode}
+        selectionRowDisabled={(row) => row.id === 'zz21cz3c1'}
         onTkSelectionChange={(e: CustomEvent) =>
           setSelectionList({ ...e.detail })
         }

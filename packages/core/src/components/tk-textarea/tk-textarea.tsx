@@ -248,9 +248,8 @@ export class TkTextarea implements ComponentInterface {
             onInput={this.handleInput}
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
-          >
-            {this.value}
-          </textarea>
+            value={this.value}
+          />
           {counter}
         </label>
         {this.renderHintError()}

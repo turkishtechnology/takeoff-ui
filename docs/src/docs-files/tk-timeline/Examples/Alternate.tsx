@@ -19,6 +19,9 @@ const Alternate = () => {
   const vueCode = `<TkTimeline items.prop="items" />
 <TkTimeline :items.prop="items" :alternate="false"/>`;
 
+  const angularCode = `<tk-timeline [items]="items" />
+<tk-timeline [items]="items" [alternate]="false" />`;
+
   const demo = (
     <>
       <div className="mb-4 flex gap-2 flex-wrap w-full">
@@ -40,7 +43,7 @@ const Alternate = () => {
       demo={demo}
       reactCode={reactCode}
       vueCode={vueCode}
-      angularCode={''}
+      angularCode={angularCode}
     ></FeatureDemo>
   );
 };
