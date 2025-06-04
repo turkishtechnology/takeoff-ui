@@ -27,6 +27,7 @@ export class TkSelect implements ComponentInterface {
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
   private isItemClickFlag = false;
+  private innerOptions = [];
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -165,8 +166,6 @@ export class TkSelect implements ComponentInterface {
   protected optionsChanged(newValue: any[], oldValue: any[]) {
     if (_.isEqual(newValue, oldValue)) return;
 
-    this.renderOptions = [...this.options];
-
     this.setValue();
   }
 
@@ -209,7 +208,7 @@ export class TkSelect implements ComponentInterface {
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
-    this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
+    this.renderOptions = this.isGrouped() ? this.options : this.options?.length > 0 ? [...this.options] : [];
   }
 
   componentDidLoad(): void {
@@ -328,6 +327,23 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private async setRenderOptions(value) {
+    if (this.isGrouped()) {
+      this.renderOptions = this.options
+        .map(group => ({
+          ...group,
+          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
+            this.getOptionLabel(option)
+              .toLowerCase()
+              .includes(value?.toLowerCase() || ''),
+          ),
+        }))
+        .filter(group => group[this.groupOptionsKey].length > 0);
+    } else {
+      this.renderOptions = await this.filter(value, this.options);
+    }
+  }
+
   private getSelectedItem() {
     if (this.renderOptions?.length > 0) {
       if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
@@ -349,34 +365,58 @@ export class TkSelect implements ComponentInterface {
   }
 
   private setValue() {
-    let optionsToSearch: any[] = [];
+    if (!this.inputRef) return;
 
     if (this.isGrouped()) {
-      optionsToSearch = this.options.flatMap(group => group[this.groupOptionsKey]);
+      this.innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
     } else {
-      optionsToSearch = this.options;
+      this.innerOptions = this.options;
     }
 
-    if (typeof this.value !== 'object' && optionsToSearch.every(item => typeof item !== 'object')) {
-      this.inputRef.value = this.value;
+    // Handle multiple selection case
+    if (this.multiple) {
+      // Ensure value is always an array
+      const currentValue = Array.isArray(this.value) ? this.value : [];
+
+      // If custom values are not allowed, validate against available options
+      if (!this.allowCustomValue && this.innerOptions?.length > 0) {
+        const validValues = currentValue.filter(val => this.innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+
+        // Update value if invalid options were filtered out
+        if (!_.isEqual(validValues, currentValue)) {
+          this.value = validValues;
+          this.inputRef.value = validValues;
+          return;
+        }
+      }
+
+      this.inputRef.value = currentValue;
       return;
     }
 
-    if (this.optionValueKey?.length > 0) {
-      this.selectedItem = optionsToSearch.find(item => this.getOptionValue(item) == this.value);
-    } else {
-      this.selectedItem = optionsToSearch.find(item => _.isEqual(item, this.value));
-    }
-
-    // Set input value based on selection state and custom value allowance
+    // Handle single selection case
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
       this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
-    } else if (this.selectedItem) {
-      // For selected items, show the label
+      return;
+    }
+
+    // Find the selected item based on value type
+    if (typeof this.value !== 'object' && this.innerOptions.every(item => typeof item !== 'object')) {
+      // Handle primitive values
+      this.selectedItem = this.innerOptions.find(item => item === this.value);
+    } else if (this.optionValueKey?.length > 0) {
+      // Handle object values with optionValueKey
+      this.selectedItem = this.innerOptions.find(item => this.getOptionValue(item) === this.value);
+    } else {
+      // Handle object values without optionValueKey
+      this.selectedItem = this.innerOptions.find(item => _.isEqual(item, this.value));
+    }
+
+    // Set input value based on selection state
+    if (this.selectedItem) {
       this.inputRef.value = this.getOptionLabel(this.selectedItem);
     } else {
-      // For no selection, clear the input
       this.inputRef.value = null;
     }
   }
@@ -446,8 +486,14 @@ export class TkSelect implements ComponentInterface {
       this.value = [...tmpValue];
       this.tkChange.emit([...tmpValue]);
     } else {
-      this.value = this.getOptionValue(item);
-      this.tkChange.emit(this.getOptionValue(item));
+      if (this.allowCustomValue) {
+        const customValue = this.getOptionLabel(item);
+        this.value = customValue;
+        this.tkChange.emit(customValue);
+      } else {
+        this.value = this.getOptionValue(item);
+        this.tkChange.emit(this.getOptionValue(item));
+      }
       this.isOpen = false;
     }
   }
@@ -473,10 +519,10 @@ export class TkSelect implements ComponentInterface {
       if (this.filterDebounceDelay > 0) {
         clearTimeout(this.filterDebounceTimeout);
         this.filterDebounceTimeout = setTimeout(async () => {
-          this.renderOptions = await this.filter(value, this.options);
+          await this.setRenderOptions(value);
         }, this.filterDebounceDelay);
       } else {
-        this.renderOptions = await this.filter(value, this.options);
+        await this.setRenderOptions(value);
       }
     }
   }
@@ -556,7 +602,9 @@ export class TkSelect implements ComponentInterface {
         const nativeInput = this.inputRef.querySelector('input');
         nativeInput.dispatchEvent(new InputEvent('input', { bubbles: true }));
       }
-
+      if (this.allowCustomValue) {
+        this.isOpen = false;
+      }
       activeItem?.click();
     } else if (e.key == 'Tab') {
       this.hasFocus = false;
@@ -614,7 +662,7 @@ export class TkSelect implements ComponentInterface {
 
   private createOptions() {
     if (this.isGrouped()) {
-      return this.options.map(group => (
+      return this.renderOptions.map(group => (
         <div class="dropdown-group">
           <div class="dropdown-group-label">
             <label>{group[this.groupNameKey]}</label>
@@ -677,6 +725,10 @@ export class TkSelect implements ComponentInterface {
             this.createOptions()
           ) : this.hasEmptyDataSlot ? (
             <slot name="empty-data"></slot>
+          ) : this.allowCustomValue ? (
+            <div class="dropdown-item">
+              <div class="dropdown-item-label">{this.inputRef?.querySelector('input')?.value || this.inputRef?.value}</div>
+            </div>
           ) : (
             this.emptyMessage
           )}
