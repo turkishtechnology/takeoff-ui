@@ -27,7 +27,6 @@ export class TkSelect implements ComponentInterface {
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
   private isItemClickFlag = false;
-  private innerOptions = [];
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -366,11 +365,12 @@ export class TkSelect implements ComponentInterface {
 
   private setValue() {
     if (!this.inputRef) return;
+    let innerOptions = [];
 
     if (this.isGrouped()) {
-      this.innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
+      innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
     } else {
-      this.innerOptions = this.options;
+      innerOptions = this.options;
     }
 
     // Handle multiple selection case
@@ -379,8 +379,8 @@ export class TkSelect implements ComponentInterface {
       const currentValue = Array.isArray(this.value) ? this.value : [];
 
       // If custom values are not allowed, validate against available options
-      if (!this.allowCustomValue && this.innerOptions?.length > 0) {
-        const validValues = currentValue.filter(val => this.innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+      if (!this.allowCustomValue && innerOptions?.length > 0) {
+        const validValues = currentValue.filter(val => innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
 
         // Update value if invalid options were filtered out
         if (!_.isEqual(validValues, currentValue)) {
@@ -402,15 +402,15 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Find the selected item based on value type
-    if (typeof this.value !== 'object' && this.innerOptions.every(item => typeof item !== 'object')) {
+    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
       // Handle primitive values
-      this.selectedItem = this.innerOptions.find(item => item === this.value);
+      this.selectedItem = innerOptions.find(item => item === this.value);
     } else if (this.optionValueKey?.length > 0) {
       // Handle object values with optionValueKey
-      this.selectedItem = this.innerOptions.find(item => this.getOptionValue(item) === this.value);
+      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = this.innerOptions.find(item => _.isEqual(item, this.value));
+      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
     }
 
     // Set input value based on selection state
