@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 
 @Component({
@@ -6,7 +6,7 @@ import classNames from 'classnames';
   styleUrl: 'tk-slider.scss',
   shadow: true,
 })
-export class TkSlider {
+export class TkSlider implements ComponentInterface {
   @Element() el: HTMLTkSliderElement;
 
   /** The label text displayed above the slider */
@@ -156,7 +156,10 @@ export class TkSlider {
             )}
 
             <div
-              class={['tk-slider-thumb', this.disabled && 'tk-slider-thumb-disabled', isMinActive && 'tk-slider-thumb-active'].filter(Boolean).join(' ')}
+              class={classNames('tk-slider-thumb', {
+                'tk-slider-thumb-disabled': this.disabled,
+                'tk-slider-thumb-active': isMinActive,
+              })}
               style={{ left: `${minPercent}%` }}
               onPointerDown={!this.disabled ? () => this.handlePointerDown('min') : undefined}
             >
@@ -176,7 +179,7 @@ export class TkSlider {
               <div
                 class={classNames('tk-slider-thumb', {
                   'tk-slider-thumb-disabled': this.disabled,
-                  'tk-slider-thumb-active': isMinActive,
+                  'tk-slider-thumb-active': isMaxActive,
                 })}
                 style={{ left: `${maxPercent}%` }}
                 onPointerDown={!this.disabled ? () => this.handlePointerDown('max') : undefined}
