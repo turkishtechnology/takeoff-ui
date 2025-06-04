@@ -134,6 +134,7 @@ function ReactHookForm() {
                 mode="single"
                 invalid={!!errors?.date}
                 onTkChange={(e) => field.onChange(e.detail)}
+                value={field.value}
               />
             )}
           />
@@ -141,10 +142,7 @@ function ReactHookForm() {
             control={control}
             name="toggle"
             render={({ field }) => (
-              <TkToggle
-                {...register('toggle', { required: true })}
-                onTkChange={(e) => field.onChange(e.detail)}
-              />
+              <TkToggle onTkChange={(e) => field.onChange(e.detail)} />
             )}
           />
           <Controller
@@ -164,7 +162,7 @@ function ReactHookForm() {
             name="radio"
             render={({ field }) => (
               <TkRadioGroup
-                {...register('radio', { required: true })}
+                value={field.value}
                 onTkChange={(e) => field.onChange(e.detail)}
                 invalid={!!errors?.radio}
               >
