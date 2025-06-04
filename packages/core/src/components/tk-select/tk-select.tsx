@@ -254,11 +254,15 @@ export class TkSelect implements ComponentInterface {
     this.handleFormReset();
   }
 
-  private async defaultFilter(text: string, options: any[]) {
-    if (!text) {
+  private async defaultFilter(text: any, options: any[]) {
+    if (typeof text !== 'string' || !text.trim()) {
       return [...this.options];
     }
-    return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+
+    return options.filter(item => {
+      const label = this.getOptionLabel(item);
+      return typeof label === 'string' && label.toLowerCase().includes(text.toLowerCase());
+    });
   }
 
   private updatePosition() {
@@ -637,6 +641,10 @@ export class TkSelect implements ComponentInterface {
         onTk-change={e => {
           e.stopPropagation();
           this.handleInputChange(e.detail);
+        }}
+        onInput={(e: InputEvent) => {
+          const inputValue = (e.target as HTMLInputElement)?.value ?? '';
+          this.handleInputChange(inputValue); // native input için doğru trigger burada
         }}
         onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
         onTk-clear-click={() => this.handleInputClearClick()}
