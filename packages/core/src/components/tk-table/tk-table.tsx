@@ -910,7 +910,7 @@ export class TkTable implements ComponentInterface {
             let _customHeaderElements: ICustomElement;
 
             // generate expander th
-            if (col.expander) {
+            if (!col.header && col.expander) {
               return <th></th>;
             }
 
