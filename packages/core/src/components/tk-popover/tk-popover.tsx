@@ -20,6 +20,7 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
+  private dialogRef?: HTMLTkDialogElement;
 
   @Element() el: HTMLTkPopoverElement;
 
@@ -74,6 +75,10 @@ export class TkPopover implements ComponentInterface {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
       document.addEventListener('click', this.handleDocumentClick);
     }
+
+    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
+    this.dialogRef = this.el.closest('tk-dialog');
+    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
   }
 
   disconnectedCallback() {
@@ -85,6 +90,8 @@ export class TkPopover implements ComponentInterface {
       document.removeEventListener('click', this.handleDocumentClick);
     }
     this.cleanup && this.cleanup();
+
+    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
   }
 
   componentDidUpdate() {
@@ -117,8 +124,16 @@ export class TkPopover implements ComponentInterface {
     this.isOpen = false;
   }
 
+  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
+  private handleDialogScroll() {
+    if (this.isOpen) {
+      this.isOpen = false;
+    }
+  }
+
   private updatePosition() {
     computePosition(this.triggerElement, this.popoverElement, {
+      strategy: 'fixed',
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
