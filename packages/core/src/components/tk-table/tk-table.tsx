@@ -574,7 +574,7 @@ export class TkTable implements ComponentInterface {
 
   private handleSelectAll(value: boolean) {
     if (value) {
-      this.selection = [...this.renderData.filter(row => !this.selectionRowDisabled(row))];
+      this.selection = [...this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true))];
       this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];

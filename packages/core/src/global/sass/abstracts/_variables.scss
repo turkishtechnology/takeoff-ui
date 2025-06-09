@@ -951,6 +951,14 @@
   --pagination-base-arrow-gap: var(--spacing-xs);
   --pagination-base-gap: var(--spacing-s);
 
+  /* ------ slider variables ------ */
+  --slider-h-padding: var(--spacing-none);
+  --slider-v-padding: var(--spacing-none);
+  --slider-gap: var(--spacing-xxs);
+  --slider-content-gap: var(--spacing-none);
+  --slider-slider-h-padding: var(--spacing-m-base);
+  --slider-slider-v-padding: var(--spacing-s);
+
   /* ------ badge variables ------ */
   --badge-small-basic-radius: var(--radius-xs);
   --badge-small-basic-gap: 0;
