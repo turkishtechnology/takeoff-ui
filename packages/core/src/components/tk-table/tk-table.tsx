@@ -1086,7 +1086,6 @@ export class TkTable implements ComponentInterface {
                           <td
                             ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
                             class={classNames('non-text', { 'tk-table-left-sticky': col.fixed === 'left', 'tk-table-right-sticky': col.fixed === 'right' })}
-                            innerHTML={(cellElement as HTMLElement).outerHTML}
                             style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
                           />
                         );
