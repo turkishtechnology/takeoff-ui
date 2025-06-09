@@ -911,7 +911,12 @@ export class TkTable implements ComponentInterface {
 
             // generate expander th
             if (col.expander) {
-              return <th></th>;
+              return (
+                <th
+                  class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                  style={{ width: col?.width, minWidth: col?.width, maxWidth: col?.width, ...col?.style }}
+                ></th>
+              );
             }
 
             // generate head sort and search icons
