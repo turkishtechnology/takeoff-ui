@@ -1082,18 +1082,12 @@ export class TkTable implements ComponentInterface {
                           ></td>
                         );
                       } else if (typeof cellElement == 'object') {
-                        const customElements: ICustomElement = {
-                          ref: null,
-                          element: cellElement,
-                        };
-
-                        this.customCellElements.push(customElements);
                         return (
                           <td
-                            ref={el => (customElements.ref = el as HTMLElement)}
-                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                            ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
+                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed === 'left', 'tk-table-right-sticky': col.fixed === 'right' })}
                             style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
-                          ></td>
+                          />
                         );
                       }
                     } else if (col.editable) {
