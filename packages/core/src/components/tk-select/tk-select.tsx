@@ -222,8 +222,6 @@ export class TkSelect implements ComponentInterface {
       this.editable = true;
     }
 
-    this.inputRef.querySelector('input').addEventListener('input', this.handleInputChange.bind(this));
-
     if (this.value) {
       this.setValue();
     }
