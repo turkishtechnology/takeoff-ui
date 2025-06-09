@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Element, Watch } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
 
 /**
@@ -107,6 +107,14 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.cleanup && this.cleanup();
     }
+  }
+
+  /**
+   * Closes the popover
+   */
+  @Method()
+  async close() {
+    this.isOpen = false;
   }
 
   private updatePosition() {
