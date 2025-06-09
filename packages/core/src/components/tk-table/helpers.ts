@@ -33,17 +33,30 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
 
   sortAndFilterData = _data.filter(row =>
     filters.every(filter => {
+      const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
+
       if (filter.type === 'checkbox' && Array.isArray(filter.value) && (filter.value as string[]).length > 0) {
-        const fieldValue = getNestedValue(row, filter.field).toString();
-        return (filter.value as string[]).includes(fieldValue);
+        // If the column has a custom filter function, use it
+        if (filterableColumn) {
+          return filterableColumn.filter(filter.value, row);
+        } else {
+          // If the column doesn't have a custom filter function, use the default filter
+          const fieldValue = getNestedValue(row, filter.field).toString();
+          return (filter.value as string[]).includes(fieldValue);
+        }
       }
 
       if (filter.type === 'radio' && filter.value) {
-        const fieldValue = getNestedValue(row, filter.field).toString();
-        return fieldValue === filter.value;
+        // If the column has a custom filter function, use it
+        if (filterableColumn) {
+          return filterableColumn.filter(filter.value, row);
+        } else {
+          // If the column doesn't have a custom filter function, use the default filter
+          const fieldValue = getNestedValue(row, filter.field).toString();
+          return fieldValue === filter.value;
+        }
       }
 
-      const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;
       else return result;
