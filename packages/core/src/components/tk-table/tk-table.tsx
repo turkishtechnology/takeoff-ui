@@ -675,6 +675,23 @@ export class TkTable implements ComponentInterface {
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+
+      const checkboxInput = document.createElement('tk-input');
+      checkboxInput.placeholder = 'Search';
+      checkboxInput.setFocus();
+
+      checkboxInput.addEventListener('tk-change', (e: any) => {
+        const searchText = e.detail.toLowerCase();
+        const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
+        checkboxWrappers.forEach((wrapper: HTMLElement) => {
+          const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
+          if (checkbox) {
+            const label = checkbox.label.toLowerCase();
+            wrapper.style.display = label.includes(searchText) ? '' : 'none';
+          }
+        });
+      });
+
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
@@ -697,6 +714,7 @@ export class TkTable implements ComponentInterface {
       divider.my = 1;
 
       checkboxWrapper.appendChild(allCheckbox);
+      filterContainer.appendChild(checkboxInput);
       filterContainer.appendChild(checkboxWrapper);
       filterContainer.appendChild(divider);
       // Create checkboxes for each option
@@ -880,6 +898,7 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
+
   private handleRowClick = (e: MouseEvent) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
@@ -890,6 +909,7 @@ export class TkTable implements ComponentInterface {
       this.tkRowClick.emit(e);
     }
   };
+
   private createHead() {
     this.customHeaderElements = [];
 
