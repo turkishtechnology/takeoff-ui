@@ -678,7 +678,7 @@ export class TkTable implements ComponentInterface {
 
       const checkboxInput = document.createElement('tk-input');
       checkboxInput.placeholder = 'Search';
-      checkboxInput.setFocus();
+      checkboxInput.setAttribute('aria-label', 'Search');
 
       checkboxInput.addEventListener('tk-change', (e: any) => {
         const searchText = e.detail.toLowerCase();
