@@ -165,6 +165,8 @@ export class TkSelect implements ComponentInterface {
   protected optionsChanged(newValue: any[], oldValue: any[]) {
     if (_.isEqual(newValue, oldValue)) return;
 
+    this.renderOptions = this.isGrouped() ? this.options : this.options?.length > 0 ? [...this.options] : [];
+
     this.setValue();
   }
 
