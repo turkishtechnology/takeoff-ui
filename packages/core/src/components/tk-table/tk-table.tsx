@@ -880,16 +880,18 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
-  private handleRowClick = (e: MouseEvent) => {
+
+  private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
 
     if (clickableElement) {
       e.stopPropagation();
     } else {
-      this.tkRowClick.emit(e);
+      this.tkRowClick.emit(row);
     }
   };
+
   private createHead() {
     this.customHeaderElements = [];
 
@@ -1060,7 +1062,7 @@ export class TkTable implements ComponentInterface {
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={this.handleRowClick} aria-disabled={isRowDisabled}>
+                <tr ref={el => (trElRef = el)} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
