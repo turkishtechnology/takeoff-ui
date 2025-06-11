@@ -1010,6 +1010,10 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
+    // clear custom cell elements
+    this.customCellElements?.forEach(element => {
+      element?.element?.remove();
+    });
     this.customCellElements = [];
 
     if (this.renderData?.length > 0) {
