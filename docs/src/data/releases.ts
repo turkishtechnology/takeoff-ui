@@ -14,6 +14,14 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.9',
+    date: '11.06.2025',
+    bugFixes: [
+      'Resolved empty data slot and custom cell element appearance on vue',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.8',
     date: '10.06.2025',
     newComponents: ['Slider component has been developed'],
