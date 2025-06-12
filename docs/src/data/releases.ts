@@ -14,6 +14,16 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.10',
+    date: '12.06.2025',
+    bugFixes: [
+      'Fixed filter functionality in select component when using multiple mode with editable option',
+      'Fixed row click return row data',
+      'Fixed hover state of toggle button',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.9',
     date: '11.06.2025',
     bugFixes: [
