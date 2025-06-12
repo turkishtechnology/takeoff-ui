@@ -602,9 +602,6 @@ export class TkSelect implements ComponentInterface {
         const nativeInput = this.inputRef.querySelector('input');
         nativeInput.dispatchEvent(new InputEvent('input', { bubbles: true }));
       }
-      if (this.allowCustomValue) {
-        this.isOpen = false;
-      }
       activeItem?.click();
     } else if (e.key == 'Tab') {
       this.hasFocus = false;
@@ -725,10 +722,6 @@ export class TkSelect implements ComponentInterface {
             this.createOptions()
           ) : this.hasEmptyDataSlot ? (
             <slot name="empty-data"></slot>
-          ) : this.allowCustomValue ? (
-            <div class="dropdown-item">
-              <div class="dropdown-item-label">{this.inputRef?.querySelector('input')?.value || this.inputRef?.value}</div>
-            </div>
           ) : (
             this.emptyMessage
           )}
