@@ -3,12 +3,6 @@ import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-props';
 
-/**
- * TkToggleButton is a toggle button for use in a group.
- * @react `import { TkToggleButton } from '@takeoff-ui/react'`
- * @vue `import { TkToggleButton } from '@takeoff-ui/vue'`
- * @angular `import { TkToggleButton } from '@takeoff-ui/angular'`
- */
 @Component({
   tag: 'tk-toggle-button',
   styleUrl: 'tk-toggle-button.scss',
@@ -59,12 +53,12 @@ export class TkToggleButton implements ComponentInterface {
   @Prop() type: 'filled' | 'outlined' | 'text' | 'raised' | 'filled-light' = 'filled';
 
   /**
-   * The value of the toggle button (for group usage).
+   * The value of the toggle button.
    */
   @Prop() value?: any;
 
   /**
-   * Whether the button is selected (controlled by group or standalone).
+   * Whether the button is selected.
    */
   @Prop({ mutable: true, reflect: true }) selected: boolean = false;
   /**

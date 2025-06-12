@@ -16,17 +16,27 @@ const ToggleButtonIconPosition = () => {
 
   const [rounded, setRounded] = useState(false);
   const [value, setValue] = useState('1');
-  const reactCode = `<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
-    <TkToggleButton type="outlined" variant="neutral" key="1" value="1" label="One"/>
-    <TkToggleButton type="outlined" variant="neutral" key="2" value="2" label="Two"/>
-    <TkToggleButton type="outlined" variant="neutral" key="3" value="3" label="Three"/>
-   </TkToggleButtonGroup >`;
-
+  const [vueCode, setVueCode] = useState('');
+  const [reactCode, setReactCode] = useState('');
   const options = [
     { label: 'One', value: '1' },
     { label: 'Two', value: '2' },
     { label: 'Three', value: '3' },
   ];
+
+  // Update Vue code when icon position changes
+  useEffect(() => {
+    setReactCode(`<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="1" value="1" icon="{ name: 'bolt', fill: true }"  size="large" label="One"/>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="2" value="2" icon="{ name: 'bolt', fill: true }"  size="large" label="Two"/>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="3" value="3" icon="{ name: 'bolt', fill: true }"  size="large" label="Three"/>
+   </TkToggleButtonGroup >`);
+    setVueCode(`<TkToggleButtonGroup value="1" type="basic" :rounded="true" @tk-change="(e) => value = e.detail">
+  <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="1" value="1" :icon="{ name: 'bolt', fill: true }"  size="large" label="One"/>
+  <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="2" value="2" :icon="{ name: 'bolt', fill: true }"  size="large" label="Two"/>
+  <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="3" value="3" :icon="{ name: 'bolt', fill: true }"  size="large" label="Three"/>
+</TkToggleButtonGroup>`);
+  }, [iconPosition]);
 
   const demo = (
     <div className="flex flex-col gap-8 items-start w-full">
@@ -72,7 +82,7 @@ const ToggleButtonIconPosition = () => {
     </div>
   );
 
-  return <FeatureDemo demo={demo} reactCode={reactCode} />;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} />;
 };
 
 export default ToggleButtonIconPosition;

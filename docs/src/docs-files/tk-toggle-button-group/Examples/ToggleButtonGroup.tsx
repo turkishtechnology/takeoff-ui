@@ -35,6 +35,7 @@ const ToggleButtonGroupVariants = () => {
   );
   const [rounded, setRounded] = useState(false);
   const [value, setValue] = useState('1');
+  const [disabled, setDisabled] = useState(false);
   const [singleButtonValue, setSingleButtonValue] = useState(false);
   const [reactCode, setReactCode] = useState('');
   const [vueCode, setVueCode] = useState('');
@@ -61,7 +62,16 @@ const ToggleButtonGroupVariants = () => {
     const buttonCode = options
       .map(
         (opt) =>
-          `  <TkToggleButton type="${buttonType}" variant="${buttonVariant}" value="${opt.value}">${opt.label}</TkToggleButton>`,
+          `  <TkToggleButton
+    value="${opt.value}"
+    ${disabled ? 'disabled' : ''}
+    type="${buttonType}"
+    variant="${buttonVariant}"
+    icon={{ name: 'bolt', fill: true }}
+    iconPosition="right"
+    size="large"
+    label="${opt.label}"
+  />`,
       )
       .join('\n');
 
@@ -71,16 +81,70 @@ const ToggleButtonGroupVariants = () => {
 ${buttonCode}
 </TkToggleButtonGroup>`;
 
+    // Enhanced Vue code with icon and more complete implementation
+    const vueAttrs = [
+      `:value="${value}"`,
+      `type="${groupType}"`,
+      `direction="${direction}"`,
+      rounded ? ':rounded="true"' : '',
+      `@tk-change="(e) => value = e.detail"`,
+    ]
+      .filter(Boolean)
+      .join('\n  ');
+
+    const vueButtonCode = options
+      .map(
+        (opt) =>
+          `  <TkToggleButton
+    :value="${opt.value}"
+    ${disabled ? ':disabled="true"' : ''}
+    type="${buttonType}"
+    variant="${buttonVariant}"
+    :icon="{ name: 'bolt', fill: true }"
+    icon-position="right"
+    size="large"
+    label="${opt.label}"
+  />`,
+      )
+      .join('\n');
+
     const vue = `<TkToggleButtonGroup
-  ${attrs.replace('onTkChange={(e) => setValue(e.detail)}', '@tk-change="onChange"')}
+  ${vueAttrs}
 >
-${buttonCode}
+${vueButtonCode}
 </TkToggleButtonGroup>`;
 
+    // Angular code with updated formatting and features
+    const angularAttrs = [
+      `[value]="'${value}'"`,
+      `type="${groupType}"`,
+      `direction="${direction}"`,
+      rounded ? '[rounded]="true"' : '',
+      `(tkChange)="onChange($event)"`,
+    ]
+      .filter(Boolean)
+      .join('\n  ');
+
+    const angularButtonCode = options
+      .map(
+        (opt) =>
+          `  <tk-toggle-button
+    [value]="'${opt.value}'"
+    ${disabled ? '[disabled]="true"' : ''}
+    type="${buttonType}"
+    variant="${buttonVariant}"
+    [icon]="{ name: 'bolt', fill: true }"
+    iconPosition="right"
+    size="large"
+    label="${opt.label}"
+  ></tk-toggle-button>`,
+      )
+      .join('\n');
+
     const angular = `<tk-toggle-button-group
-  ${attrs.replace('onTkChange={(e) => setValue(e.detail)}', '(tkChange)="onChange($event)"')}
+  ${angularAttrs}
 >
-${buttonCode.replace(/TkToggleButton/g, 'tk-toggle-button')}
+${angularButtonCode}
 </tk-toggle-button-group>`;
 
     setReactCode(react);
@@ -119,6 +183,7 @@ ${buttonCode.replace(/TkToggleButton/g, 'tk-toggle-button')}
     direction,
     rounded,
     value,
+    disabled,
     singleButtonValue,
   ]);
 
@@ -191,6 +256,12 @@ ${buttonCode.replace(/TkToggleButton/g, 'tk-toggle-button')}
             value={rounded}
             onTkChange={() => setRounded((prev) => !prev)}
           />
+
+          <TkCheckbox
+            label="Disabled"
+            value={disabled}
+            onTkChange={() => setDisabled((prev) => !prev)}
+          />
         </div>
 
         <div className="w-full">
@@ -203,6 +274,7 @@ ${buttonCode.replace(/TkToggleButton/g, 'tk-toggle-button')}
           >
             {options.map((opt) => (
               <TkToggleButton
+                disabled={disabled}
                 key={opt.value}
                 value={opt.value}
                 type={buttonType}

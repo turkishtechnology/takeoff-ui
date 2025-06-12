@@ -13,6 +13,7 @@ const ToggleButtonGroupType = () => {
   const [groupType, setGroupType] = useState('basic');
   const [value, setValue] = useState('1');
   const [reactCode, setReactCode] = useState('');
+  const [vueCode, setVueCode] = useState('');
 
   const options = [
     { label: 'One', value: '1' },
@@ -22,12 +23,20 @@ const ToggleButtonGroupType = () => {
 
   // Only update the code string when `groupType` changes
   useEffect(() => {
-    const code = `<TkToggleButtonGroup value="1" type="${groupType}" onTkChange={(e) => setValue(e.detail)}>
+    const reactCode = `<TkToggleButtonGroup value="1" type="${groupType}" onTkChange={(e) => setValue(e.detail)}>
   <TkToggleButton type="outlined" variant="neutral" key="1" value="1" label="One" />
   <TkToggleButton type="outlined" variant="neutral" key="2" value="2" label="Two" />
   <TkToggleButton type="outlined" variant="neutral" key="3" value="3" label="Three" />
 </TkToggleButtonGroup>`;
-    setReactCode(code);
+
+    const vueCode = `<TkToggleButtonGroup :value="1" type="${groupType}" @tk-change="(e) => value = e.detail">
+  <TkToggleButton type="outlined" variant="neutral" :key="1" :value="1" label="One" />
+  <TkToggleButton type="outlined" variant="neutral" :key="2" :value="2" label="Two" />
+  <TkToggleButton type="outlined" variant="neutral" :key="3" :value="3" label="Three" />
+</TkToggleButtonGroup>`;
+
+    setReactCode(reactCode);
+    setVueCode(vueCode);
   }, [groupType]);
 
   const demo = (
@@ -64,7 +73,7 @@ const ToggleButtonGroupType = () => {
     </div>
   );
 
-  return <FeatureDemo demo={demo} reactCode={reactCode} />;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} />;
 };
 
 export default ToggleButtonGroupType;
