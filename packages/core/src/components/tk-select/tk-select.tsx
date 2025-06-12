@@ -704,7 +704,7 @@ export class TkSelect implements ComponentInterface {
           e.stopPropagation();
           this.handleInputChange(e.detail);
         }}
-        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
+        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 150)}
         onTk-clear-click={() => this.handleInputClearClick()}
         onKeyDown={e => this.handleInputKeydown(e)}
       ></tk-input>
