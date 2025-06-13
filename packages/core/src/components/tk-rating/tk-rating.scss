@@ -52,3 +52,37 @@
     pointer-events: none;
   }
 }
+
+.tk-rating.number {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border-sub-base, #CACFD8);
+  border-radius: 8px;
+  width: 4px;
+  height: 16px;
+  padding: 8px 14px;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: Geologica;
+
+  &.disabled {
+    background-color: var(--background-disabled);
+    border-color: var(--border-disabled);
+  }
+}
+
+.tk-rating.number:hover {
+  background: var(--states-danger-lightest, #FFF5F5);
+}
+
+.tk-rating-number-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+}
