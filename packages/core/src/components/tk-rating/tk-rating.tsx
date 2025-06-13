@@ -46,7 +46,7 @@ export class TkRating implements ComponentInterface {
   @Prop() showRatingValue: boolean = false;
 
   /**
-   * the user cannot interact with the input.
+   * The user cannot interact with the input.
    * @defaultValue false
    */
   @Prop() disabled: boolean = false;
