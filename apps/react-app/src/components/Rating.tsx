@@ -6,10 +6,8 @@ function Rating() {
       <TkCard>
         <TkRating readonly={true} value={3} />
         <TkRating disabled={true} value={3} />
+        <TkRating value={2} type="number"></TkRating>
       </TkCard>
-      <div style={{ width: '500px' }}>
-        <TkRating type="number" maxRating={5}></TkRating>
-      </div>
     </>
   );
 }

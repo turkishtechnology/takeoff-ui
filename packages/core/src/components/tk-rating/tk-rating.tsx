@@ -159,12 +159,11 @@ export class TkRating implements ComponentInterface {
           ? [1, 2, 3, 4, 5].map(ratingValue => {
               let style = {};
               if (this.value && ratingValue === this.value) {
-                // Only the selected rating gets its color when not hovering
                 style = {
                   backgroundColor: this.getNumberRatingColor(ratingValue),
                   color: ratingValue === 1 || ratingValue === 5 ? '#F9FAFC' : '#222530',
                 };
-              } else if (this.value && this.hoverRating > 0) {
+              } else if (this.value && ratingValue && this.hoverRating > 0) {
                 style = {
                   backgroundColor: this.getNumberHoverColor(this.value, ratingValue),
                   color: this.value === 5 ? '#F9FAFC' : this.value < ratingValue ? '#99A0AE' : '#222530',
