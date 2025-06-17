@@ -48,9 +48,13 @@ export interface ITableColumn {
     selectAllCheckbox?: { label?: string };
   };
   /** Defines the filtering types for the column */
-  advancedFilters?: boolean;
+  advancedFilters?: IAdvanceFilter[];
 }
 
+export interface IAdvanceFilter {
+  label?: string;
+  filter: Function;
+}
 /**
  * Defines options for checkbox filter
  */

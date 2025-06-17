@@ -539,7 +539,28 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
+  private handleAdvancedFilters(columnField) {
+    const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input.advanced');
+    const select: HTMLTkSelectElement = document.querySelector('body > .tk-table-filter-panel > tk-select.advanced');
+    const column = this.columns.find(col => col.field === columnField);
+    const selectedFilter = column?.advancedFilters?.find(f => f.label.trim().toLowerCase() === select.value.value);
 
+    if (searchInput && selectedFilter) {
+      const filteredData = this.data.filter(row => {
+        const rowValue = getNestedValue(row, columnField);
+        return selectedFilter.filter(searchInput.value, rowValue);
+      });
+
+      if (this.currentPage === 1) {
+        this.generateRenderData(filteredData, 1, true);
+      } else {
+        this.currentPage = 1;
+        this.generateRenderData(filteredData, 1, true);
+      }
+    }
+
+    this.closeFilterPanel();
+  }
   private handleSearchCancelButtonClick(columnField) {
     const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (removeFilterIndex > -1) {
@@ -747,16 +768,21 @@ export class TkTable implements ComponentInterface {
       });
 
       this.elFilterPanelElement.appendChild(filterContainer);
+    } else if (column.advancedFilters) {
+      const select: HTMLTkSelectElement = document.createElement('tk-select');
+      select.classList.add('advanced');
+      select.options = column.advancedFilters.map(item => ({
+        label: item.label,
+        value: item.label.trim().toLowerCase(),
+      }));
+      this.elFilterPanelElement.appendChild(select);
+      const advancedInput: HTMLTkInputElement = document.createElement('tk-input');
+      advancedInput.classList.add('advanced');
+      advancedInput.placeholder = 'Search';
+      advancedInput.setFocus();
+      advancedInput.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
+      this.elFilterPanelElement.appendChild(advancedInput);
     } else {
-      if (column.advancedFilters) {
-        const select: HTMLTkSelectElement = document.createElement('tk-select');
-        const filterOptions = ['startsWith', 'endsWith', 'contains', 'notContains', 'equals', 'notEquals'];
-        select.options = filterOptions.map(type => ({
-          label: type,
-          value: type,
-        }));
-        this.elFilterPanelElement.appendChild(select);
-      }
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
       input.placeholder = 'Search';
@@ -788,6 +814,8 @@ export class TkTable implements ComponentInterface {
         this.handleCheckboxFilterApply(field);
       } else if (this.columns.find(col => col.field === field)?.filterType === 'radio') {
         this.handleRadioFilterApply(field);
+      } else if (this.columns.find(col => col.field === field)?.advancedFilters) {
+        this.handleAdvancedFilters(field);
       } else {
         this.handleInputFilterApply(field);
       }

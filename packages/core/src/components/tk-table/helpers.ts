@@ -42,29 +42,7 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
         const fieldValue = getNestedValue(row, filter.field).toString();
         return fieldValue === filter.value;
       }
-
-      const filterableColumn = columns.find(col => col.field == filter.field);
-      if (filterableColumn?.advancedFilters) {
-        const select: HTMLTkSelectElement = document.querySelector('body > .tk-table-filter-panel > tk-select');
-        const filterType = select.value.value;
-        const fieldValue = getNestedValue(row, filter.field)?.toString();
-        switch (filterType) {
-          case 'startsWith':
-            return fieldValue.startsWith(filter.value);
-          case 'endsWith':
-            return fieldValue.endsWith(filter.value);
-          case 'contains':
-            return fieldValue.includes(filter.value);
-          case 'notContains':
-            return !fieldValue.includes(filter.value);
-          case 'equals':
-            return fieldValue === filter.value;
-          case 'notEquals':
-            return fieldValue !== filter.value;
-          default:
-            return true;
-        }
-      }
+      const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;
       else return result;
