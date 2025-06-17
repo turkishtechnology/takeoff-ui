@@ -6,14 +6,11 @@ const Types = () => {
   const reactCode = `<TkPopover type="basic">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" className="flex flex-col gap-2 w-[300px]">
-    <div className="flex justify-between items-center">
-      <div className="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span className="text-lg font-bold text-neutral-900">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="neutral" />
+    <div className="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span className="text-lg font-bold text-neutral-900">
+        Popover Header
+      </span>
     </div>
     <div className="flex flex-col gap-2">
       <span>
@@ -27,14 +24,11 @@ const Types = () => {
 <TkPopover type="white">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" className="flex flex-col gap-2 w-[300px]">
-    <div className="flex justify-between items-center">
-      <div className="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span className="text-lg font-bold text-neutral-900">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="neutral" />
+    <div className="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span className="text-lg font-bold text-neutral-900">
+        Popover Header
+      </span>
     </div>
     <div className="flex flex-col gap-2">
       <span>
@@ -48,14 +42,11 @@ const Types = () => {
 <TkPopover type="dark">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" className="flex flex-col gap-2 w-[300px]">
-    <div className="flex justify-between items-center">
-      <div className="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span className="text-lg font-bold text-neutral-100">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="white" />
+    <div className="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span className="text-lg font-bold text-neutral-100">
+        Popover Header
+      </span>
     </div>
     <div className="flex flex-col gap-2 text-neutral-100">
       <span>
@@ -69,14 +60,11 @@ const Types = () => {
   const vueCode = `<TkPopover type="basic">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" class="flex flex-col gap-2 w-[300px]">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span class="text-lg font-bold text-neutral-900">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="neutral" />
+    <div class="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span class="text-lg font-bold text-neutral-900">
+        Popover Header
+      </span>
     </div>
     <div class="flex flex-col gap-2">
       <span>
@@ -90,14 +78,11 @@ const Types = () => {
 <TkPopover type="white">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" class="flex flex-col gap-2 w-[300px]">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span class="text-lg font-bold text-neutral-900">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="neutral" />
+    <div class="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span class="text-lg font-bold text-neutral-900">
+        Popover Header
+      </span>
     </div>
     <div class="flex flex-col gap-2">
       <span>
@@ -111,14 +96,11 @@ const Types = () => {
 <TkPopover type="dark">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
   <div slot="content" class="flex flex-col gap-2 w-[300px]">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-2">
-        <TkIcon icon="bolt" variant="neutral" sign />
-        <span class="text-lg font-bold text-neutral-100">
-          Popover Header
-        </span>
-      </div>
-      <TkButton icon="close" type="text" size="small" variant="white" />
+    <div class="flex gap-2">
+      <TkIcon icon="bolt" variant="neutral" sign />
+      <span class="text-lg font-bold text-neutral-100">
+        Popover Header
+      </span>
     </div>
     <div class="flex flex-col gap-2 text-neutral-100">
       <span>
@@ -134,14 +116,11 @@ const Types = () => {
       <TkPopover type="basic">
         <TkButton slot="trigger" label="Click Me!"></TkButton>
         <div slot="content" className="flex flex-col gap-2 w-[300px]">
-          <div className="flex justify-between items-center ">
-            <div className="flex gap-2">
-              <TkIcon icon="bolt" variant="neutral" sign />
-              <span className="text-lg font-bold text-neutral-900">
-                Popover Header
-              </span>
-            </div>
-            <TkButton icon="close" type="text" size="small" variant="neutral" />
+          <div className="flex gap-2">
+            <TkIcon icon="bolt" variant="neutral" sign />
+            <span className="text-lg font-bold text-neutral-900">
+              Popover Header
+            </span>
           </div>
           <div className="flex flex-col gap-2">
             <span>
@@ -155,14 +134,11 @@ const Types = () => {
       <TkPopover type="white">
         <TkButton slot="trigger" label="Click Me!"></TkButton>
         <div slot="content" className="flex flex-col gap-2 w-[300px]">
-          <div className="flex justify-between items-center ">
-            <div className="flex gap-2">
-              <TkIcon icon="bolt" variant="neutral" sign />
-              <span className="text-lg font-bold text-neutral-900">
-                Popover Header
-              </span>
-            </div>
-            <TkButton icon="close" type="text" size="small" variant="neutral" />
+          <div className="flex gap-2">
+            <TkIcon icon="bolt" variant="neutral" sign />
+            <span className="text-lg font-bold text-neutral-900">
+              Popover Header
+            </span>
           </div>
           <div className="flex flex-col gap-2">
             <span>
@@ -176,14 +152,11 @@ const Types = () => {
       <TkPopover type="dark">
         <TkButton slot="trigger" label="Click Me!"></TkButton>
         <div slot="content" className="flex flex-col gap-2 w-[300px]">
-          <div className="flex justify-between items-center ">
-            <div className="flex gap-2">
-              <TkIcon icon="bolt" variant="neutral" sign />
-              <span className="text-lg font-bold text-neutral-100">
-                Popover Header
-              </span>
-            </div>
-            <TkButton icon="close" type="text" size="small" variant="white" />
+          <div className="flex gap-2">
+            <TkIcon icon="bolt" variant="neutral" sign />
+            <span className="text-lg font-bold text-neutral-100">
+              Popover Header
+            </span>
           </div>
           <div className="flex flex-col gap-2 text-neutral-100">
             <span>

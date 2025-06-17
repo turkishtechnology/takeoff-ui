@@ -595,7 +595,7 @@ export class TkTable implements ComponentInterface {
 
   private handleSelectAll(value: boolean) {
     if (value) {
-      this.selection = [...this.renderData.filter(row => !this.selectionRowDisabled(row))];
+      this.selection = [...this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true))];
       this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];
@@ -918,6 +918,17 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
 
+  private handleRowClick = (e: MouseEvent, row: any) => {
+    const path = e.composedPath();
+    const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
+
+    if (clickableElement) {
+      e.stopPropagation();
+    } else {
+      this.tkRowClick.emit(row);
+    }
+  };
+
   private createHead() {
     this.customHeaderElements = [];
 
@@ -948,7 +959,12 @@ export class TkTable implements ComponentInterface {
 
             // generate expander th
             if (col.expander) {
-              return <th></th>;
+              return (
+                <th
+                  class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                  style={{ width: col?.width, minWidth: col?.width, maxWidth: col?.width, ...col?.style }}
+                ></th>
+              );
             }
 
             // generate head sort and search icons
@@ -1033,6 +1049,10 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
+    // clear custom cell elements
+    this.customCellElements?.forEach(element => {
+      element?.element?.remove();
+    });
     this.customCellElements = [];
 
     if (this.renderData?.length > 0) {
@@ -1079,7 +1099,7 @@ export class TkTable implements ComponentInterface {
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={() => this.tkRowClick.emit(row)} aria-disabled={isRowDisabled}>
+                <tr ref={el => (trElRef = el)} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
@@ -1119,18 +1139,12 @@ export class TkTable implements ComponentInterface {
                           ></td>
                         );
                       } else if (typeof cellElement == 'object') {
-                        const customElements: ICustomElement = {
-                          ref: null,
-                          element: cellElement,
-                        };
-
-                        this.customCellElements.push(customElements);
                         return (
                           <td
-                            ref={el => (customElements.ref = el as HTMLElement)}
-                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                            ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
+                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed === 'left', 'tk-table-right-sticky': col.fixed === 'right' })}
                             style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
-                          ></td>
+                          />
                         );
                       }
                     } else if (col.editable) {

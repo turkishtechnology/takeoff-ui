@@ -1,11 +1,9 @@
-.tk-popover {
-  position: relative;
-}
+
 
 .tk-popover-content {
   display: flex;
   gap: 8px;
-  position: absolute;
+  position: fixed;
   padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
   border-radius: var(--tooltips-base-radius, 8px);
   width: max-content;

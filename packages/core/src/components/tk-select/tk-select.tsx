@@ -20,11 +20,13 @@ export class TkSelect implements ComponentInterface {
   private hasEmptyDataSlot: boolean = false;
   private selectedItem: any;
   private inputRef?: HTMLTkInputElement;
+  private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
   private dialogRef?: HTMLTkDialogElement;
   private uniqueId: string;
   private filterDebounceTimeout;
   private windowClickHandler: (event: MouseEvent) => void;
+  private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
   private isItemClickFlag = false;
 
@@ -35,6 +37,7 @@ export class TkSelect implements ComponentInterface {
   constructor() {
     this.uniqueId = uuidv4();
     this.windowClickHandler = this.handleWindowClick.bind(this);
+    this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
   @State() hasFocus = false;
@@ -200,19 +203,21 @@ export class TkSelect implements ComponentInterface {
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
 
+  componentDidRender(): void {
+    // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
+    // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
+    if (this.multiple && this.editable) {
+      this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
+      this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
+    }
+  }
+
   componentDidLoad(): void {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
 
-    // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
-    // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
-    if (this.multiple && this.editable) {
-      const nativeInput = this.inputRef.querySelector('input');
-      nativeInput.addEventListener('input', async () => {
-        this.renderOptions = await this.filter(nativeInput.value, this.options);
-      });
-    }
+    this.nativeInputRef = this.inputRef.querySelector('input');
 
     // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
     this.dialogRef = this.el.closest('tk-dialog');
@@ -222,14 +227,14 @@ export class TkSelect implements ComponentInterface {
       this.editable = true;
     }
 
-    this.inputRef.querySelector('input').addEventListener('input', this.handleInputChange.bind(this));
-
     if (this.value) {
       this.setValue();
     }
   }
 
   componentDidUpdate() {
+    this.nativeInputRef = this.inputRef.querySelector('input');
+
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
@@ -252,6 +257,10 @@ export class TkSelect implements ComponentInterface {
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  private async runFilterForMultiple() {
+    this.renderOptions = await this.filter(this.nativeInputRef.value, this.options);
   }
 
   private async defaultFilter(text: string, options: any[]) {
@@ -429,7 +438,7 @@ export class TkSelect implements ComponentInterface {
 
       // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
       if (this.multiple && this.editable) {
-        this.inputRef.querySelector('input').value = null;
+        this.nativeInputRef.value = null;
         this.renderOptions = await this.filter(null, this.options);
       }
 
@@ -485,7 +494,7 @@ export class TkSelect implements ComponentInterface {
 
     if (this.editable && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
-      const inputValue = this.inputRef.querySelector('input').value;
+      const inputValue = this.nativeInputRef.value;
 
       if (!inputValue) return;
 
@@ -544,8 +553,7 @@ export class TkSelect implements ComponentInterface {
     } else if (e.key == 'Enter') {
       const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
       if (this.multiple && this.editable && this.allowCustomValue) {
-        const nativeInput = this.inputRef.querySelector('input');
-        nativeInput.dispatchEvent(new InputEvent('input', { bubbles: true }));
+        this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
       }
 
       activeItem?.click();
@@ -638,7 +646,7 @@ export class TkSelect implements ComponentInterface {
           e.stopPropagation();
           this.handleInputChange(e.detail);
         }}
-        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 100)}
+        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 150)}
         onTk-clear-click={() => this.handleInputClearClick()}
         onKeyDown={e => this.handleInputKeydown(e)}
       ></tk-input>

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-02T05:14:32",
+  "timestamp": "2025-06-16T10:14:44",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -8145,6 +8145,7 @@
         "tk-editor",
         "tk-input",
         "tk-pagination",
+        "tk-slider",
         "tk-table",
         "tk-tabs",
         "tk-toggle-button",
@@ -8184,6 +8185,9 @@
           "tk-icon"
         ],
         "tk-pagination": [
+          "tk-icon"
+        ],
+        "tk-slider": [
           "tk-icon"
         ],
         "tk-table": [
@@ -9701,7 +9705,30 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "close",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "close() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the popover",
+          "docsTags": []
+        }
+      ],
       "events": [],
       "listeners": [],
       "styles": [],
@@ -11164,6 +11191,363 @@
         ],
         "tk-pagination": [
           "tk-select"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/tk-slider/tk-slider.tsx",
+      "encapsulation": "shadow",
+      "tag": "tk-slider",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": false,
+          "docs": "Whether the slider is disabled (non-interactive if true)",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": false,
+          "docs": "Error message to display when `invalid` is true",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "hint",
+          "reflectToAttr": false,
+          "docs": "Informational hint message (shown when no error is present)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "invalid",
+          "reflectToAttr": false,
+          "docs": "Marks the slider as invalid; used to apply error styling",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "The label text displayed above the slider",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max",
+          "reflectToAttr": false,
+          "docs": "The maximum value the slider can take",
+          "docsTags": [],
+          "default": "100",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min",
+          "reflectToAttr": false,
+          "docs": "The minimum value the slider can take",
+          "docsTags": [],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "range",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "range",
+          "reflectToAttr": false,
+          "docs": "Whether the slider operates in range mode (true) or single value mode (false)",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "rangeVisibility",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "range-visibility",
+          "reflectToAttr": false,
+          "docs": "Whether the bottom label/tick section should be visible",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "showAsterisk",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "show-asterisk",
+          "reflectToAttr": false,
+          "docs": "Whether to show a red asterisk next to the label (typically for required fields)",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "step",
+          "reflectToAttr": false,
+          "docs": "The increment step for the slider value (e.g., step = 5 → 0, 5, 10, ...)",
+          "docsTags": [],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "type",
+          "type": "\"labels\" | \"ticks\"",
+          "complexType": {
+            "original": "'labels' | 'ticks'",
+            "resolved": "\"labels\" | \"ticks\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type",
+          "reflectToAttr": false,
+          "docs": "The type of visual indicator shown below the track.\n'labels' shows min/max values, 'ticks' shows evenly spaced tick marks",
+          "docsTags": [],
+          "default": "'labels'",
+          "values": [
+            {
+              "value": "labels",
+              "type": "string"
+            },
+            {
+              "value": "ticks",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "value",
+          "type": "[number, number] | number",
+          "complexType": {
+            "original": "number | [number, number]",
+            "resolved": "[number, number] | number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "value",
+          "reflectToAttr": false,
+          "docs": "Current value of the slider. If `range` is true, it should be [min, max]",
+          "docsTags": [],
+          "default": "0",
+          "values": [
+            {
+              "type": "[number, number]"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "tkChange",
+          "detail": "[number, number] | number",
+          "bubbles": true,
+          "complexType": {
+            "original": "number | [number, number]",
+            "resolved": "[number, number] | number",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the slider value changes.\nEmits a number for single mode, or a [min, max] tuple for range mode.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [
+        "tk-icon"
+      ],
+      "dependencyGraph": {
+        "tk-slider": [
+          "tk-icon"
         ]
       }
     },
@@ -12730,7 +13114,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "A function that returns true if the row should be disabled",
           "docsTags": [],
           "values": [
             {
@@ -13319,6 +13703,35 @@
           "setter": false
         },
         {
+          "name": "controlled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "controlled",
+          "reflectToAttr": false,
+          "docs": "Controls if the tabs component is controlled.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "defaultActiveIndex",
           "type": "number",
           "complexType": {
@@ -13633,6 +14046,20 @@
           "cancelable": true,
           "composed": true,
           "docs": "Triggered when the currently open tab changes. Returns the active index.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-tab-click",
+          "detail": "number",
+          "bubbles": true,
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Triggered when a tab is clicked. Returns the clicked tab index.",
           "docsTags": []
         }
       ],
