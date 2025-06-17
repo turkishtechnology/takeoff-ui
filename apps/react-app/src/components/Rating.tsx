@@ -4,9 +4,26 @@ function Rating() {
   return (
     <>
       <TkCard>
-        <TkRating readonly={true} value={3} />
-        <TkRating disabled={true} value={3} />
-        <TkRating value={2} type="number"></TkRating>
+        <TkRating
+          type="star"
+          value={3.5}
+          onTkItemClick={(e) => console.log(e.detail)}
+        />
+        <TkRating
+          type="heart"
+          value={3}
+          onTkItemClick={(e) => console.log(e.detail)}
+        />
+        <TkRating
+          type="dot"
+          value={3}
+          onTkItemClick={(e) => console.log(e.detail)}
+        />
+        <TkRating
+          type="number"
+          value={3}
+          onTkItemClick={(e) => console.log(e.detail)}
+        />
       </TkCard>
     </>
   );
