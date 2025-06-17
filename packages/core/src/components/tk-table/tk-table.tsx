@@ -898,14 +898,14 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
 
-  private handleRowClick = (e: MouseEvent) => {
+  private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
 
     if (clickableElement) {
       e.stopPropagation();
     } else {
-      this.tkRowClick.emit(e);
+      this.tkRowClick.emit(row);
     }
   };
 
@@ -1029,6 +1029,10 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
+    // clear custom cell elements
+    this.customCellElements?.forEach(element => {
+      element?.element?.remove();
+    });
     this.customCellElements = [];
 
     if (this.renderData?.length > 0) {
@@ -1075,7 +1079,7 @@ export class TkTable implements ComponentInterface {
 
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={this.handleRowClick} aria-disabled={isRowDisabled}>
+                <tr ref={el => (trElRef = el)} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;

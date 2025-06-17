@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-09T20:03:43",
+  "timestamp": "2025-06-16T10:14:44",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -13703,6 +13703,35 @@
           "setter": false
         },
         {
+          "name": "controlled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "controlled",
+          "reflectToAttr": false,
+          "docs": "Controls if the tabs component is controlled.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "defaultActiveIndex",
           "type": "number",
           "complexType": {
@@ -14017,6 +14046,20 @@
           "cancelable": true,
           "composed": true,
           "docs": "Triggered when the currently open tab changes. Returns the active index.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-tab-click",
+          "detail": "number",
+          "bubbles": true,
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Triggered when a tab is clicked. Returns the clicked tab index.",
           "docsTags": []
         }
       ],

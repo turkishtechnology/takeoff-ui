@@ -14,6 +14,41 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.10',
+    date: '12.06.2025',
+    bugFixes: [
+      'Fixed filter functionality in select component when using multiple mode with editable option',
+      'Fixed row click return row data',
+      'Fixed hover state of toggle button',
+    ],
+  },
+  {
+    title: 'Beta Release',
+    version: '0.0.2-beta.9',
+    date: '11.06.2025',
+    bugFixes: [
+      'Resolved empty data slot and custom cell element appearance on vue',
+    ],
+  },
+  {
+    title: 'Beta Release',
+    version: '0.0.2-beta.8',
+    date: '10.06.2025',
+    newComponents: ['Slider component has been developed'],
+    newFeatures: [
+      'Added close method to popover',
+      'Custom filter function enabled for checkbox and radio filter types to table',
+      'Row click event triggering has been prevented when using popover in table.',
+      'Added custom style to expander th element',
+    ],
+    bugFixes: [
+      'Changed compute position strategy for popover use inside table',
+      'Solve instancevalue issue to popover',
+      'Fixed row aelect all to table',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.7',
     date: '02.06.2025',
     newComponents: ['Toggle Button component has been developed'],
