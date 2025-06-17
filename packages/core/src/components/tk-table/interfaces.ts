@@ -47,6 +47,12 @@ export interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
   };
+  filterElements?: {
+    searchButton?: { label?: string };
+    cancelButton?: { label?: string };
+    selectAllCheckbox?: { label?: string };
+    checkboxInput?: { placeholder?: string };
+  };
 }
 
 /**

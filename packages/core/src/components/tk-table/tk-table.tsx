@@ -675,23 +675,23 @@ export class TkTable implements ComponentInterface {
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+      if (column?.filterElements?.checkboxInput) {
+        const checkboxInput = document.createElement('tk-input');
+        checkboxInput.placeholder = column.filterElements.checkboxInput.placeholder || 'Search';
 
-      const checkboxInput = document.createElement('tk-input');
-      checkboxInput.placeholder = 'Search';
-      checkboxInput.setAttribute('aria-label', 'Search');
-
-      checkboxInput.addEventListener('tk-change', (e: any) => {
-        const searchText = e.detail.toLowerCase();
-        const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
-        checkboxWrappers.forEach((wrapper: HTMLElement) => {
-          const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
-          if (checkbox) {
-            const label = checkbox.label.toLowerCase();
-            wrapper.style.display = label.includes(searchText) ? '' : 'none';
-          }
+        checkboxInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+          const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
+          checkboxWrappers.forEach((wrapper: HTMLElement) => {
+            const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
+            if (checkbox) {
+              const label = checkbox.label.toLowerCase();
+              wrapper.style.display = label.includes(searchText) ? '' : 'none';
+            }
+          });
         });
-      });
-
+        filterContainer.appendChild(checkboxInput);
+      }
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
@@ -714,7 +714,6 @@ export class TkTable implements ComponentInterface {
       divider.my = 1;
 
       checkboxWrapper.appendChild(allCheckbox);
-      filterContainer.appendChild(checkboxInput);
       filterContainer.appendChild(checkboxWrapper);
       filterContainer.appendChild(divider);
       // Create checkboxes for each option
