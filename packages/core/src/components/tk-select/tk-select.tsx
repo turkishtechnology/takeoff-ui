@@ -168,7 +168,7 @@ export class TkSelect implements ComponentInterface {
   protected optionsChanged(newValue: any[], oldValue: any[]) {
     if (_.isEqual(newValue, oldValue)) return;
 
-    this.renderOptions = this.isGrouped() ? this.options : this.options?.length > 0 ? [...this.options] : [];
+    this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
 
     this.setValue();
   }
@@ -212,7 +212,7 @@ export class TkSelect implements ComponentInterface {
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
-    this.renderOptions = this.isGrouped() ? this.options : this.options?.length > 0 ? [...this.options] : [];
+    this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
 
   componentDidRender(): void {
@@ -497,14 +497,8 @@ export class TkSelect implements ComponentInterface {
       this.value = [...tmpValue];
       this.tkChange.emit([...tmpValue]);
     } else {
-      if (this.allowCustomValue) {
-        const customValue = this.getOptionLabel(item);
-        this.value = customValue;
-        this.tkChange.emit(customValue);
-      } else {
-        this.value = this.getOptionValue(item);
-        this.tkChange.emit(this.getOptionValue(item));
-      }
+      this.value = this.getOptionValue(item);
+      this.tkChange.emit(this.getOptionValue(item));
       this.isOpen = false;
     }
   }
