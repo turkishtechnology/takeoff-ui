@@ -72,7 +72,7 @@ const SpreadHeaders = () => {
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
             sed consequuntur error repudiandae numquam deserunt quisquam
             repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas!
+            perferendis esse, cupiditate nequequas! 1
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
@@ -80,7 +80,7 @@ const SpreadHeaders = () => {
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
             sed consequuntur error repudiandae numquam deserunt quisquam
             repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas!
+            perferendis esse, cupiditate nequequas! 2
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
@@ -88,7 +88,7 @@ const SpreadHeaders = () => {
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
             sed consequuntur error repudiandae numquam deserunt quisquam
             repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas!
+            perferendis esse, cupiditate nequequas! 3
           </p>
         </TkTabsItem>
       </TkTabs>
