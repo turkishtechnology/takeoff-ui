@@ -543,20 +543,16 @@ export class TkTable implements ComponentInterface {
     const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input.advanced');
     const select: HTMLTkSelectElement = document.querySelector('body > .tk-table-filter-panel > tk-select.advanced');
     const column = this.columns.find(col => col.field === columnField);
-    const selectedFilter = column?.advancedFilters?.find(f => f.label.trim().toLowerCase() === select.value.value);
+    const selectedFilter = column?.advancedFilters?.find(f => f.name.trim().toLowerCase() === select.value.value);
 
     if (searchInput && selectedFilter) {
       const filteredData = this.data.filter(row => {
         const rowValue = getNestedValue(row, columnField);
-        return selectedFilter.filter(searchInput.value, rowValue);
+        return selectedFilter.filter(searchInput.value.toString().trim().toLowerCase(), rowValue);
       });
 
-      if (this.currentPage === 1) {
-        this.generateRenderData(filteredData, 1, true);
-      } else {
-        this.currentPage = 1;
-        this.generateRenderData(filteredData, 1, true);
-      }
+      this.currentPage = 1;
+      this.generateRenderData(filteredData, 1, true);
     }
 
     this.closeFilterPanel();
@@ -772,8 +768,8 @@ export class TkTable implements ComponentInterface {
       const select: HTMLTkSelectElement = document.createElement('tk-select');
       select.classList.add('advanced');
       select.options = column.advancedFilters.map(item => ({
-        label: item.label,
-        value: item.label.trim().toLowerCase(),
+        label: item.name,
+        value: item.name.trim().toLowerCase(),
       }));
       this.elFilterPanelElement.appendChild(select);
       const advancedInput: HTMLTkInputElement = document.createElement('tk-input');

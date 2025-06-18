@@ -52,7 +52,7 @@ export interface ITableColumn {
 }
 
 export interface IAdvanceFilter {
-  label?: string;
+  name: string;
   filter: Function;
 }
 /**
