@@ -31,6 +31,9 @@ const Example = () => {
         { value: 'inactive', label: 'Inactive' },
         { value: 'pending', label: 'Pending' },
       ],
+      filterElements: {
+        checkboxInput: { placeholder: 'Filter' },
+      },
     },
     {
       field: 'group',
