@@ -90,7 +90,7 @@ const column = [
 
 <template>
   <div :style="{ padding: '8px' }">
-    <TkTable :columns.prop="column" :data.prop="basicData" size"small" />
+    <TkTable :columns.prop="column" :data.prop="basicData" size="small" />
   </div>
 </template>`;
 
