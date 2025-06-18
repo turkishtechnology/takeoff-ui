@@ -53,7 +53,7 @@ export interface ITableColumn {
 
 export interface IAdvanceFilter {
   name: string;
-  filter: Function;
+  filter: (value: string, rowValue: any) => boolean;
 }
 /**
  * Defines options for checkbox filter
