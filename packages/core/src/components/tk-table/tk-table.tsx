@@ -675,22 +675,22 @@ export class TkTable implements ComponentInterface {
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
-      if (column?.filterElements?.checkboxInput) {
-        const checkboxInput = document.createElement('tk-input');
-        checkboxInput.placeholder = column.filterElements.checkboxInput.placeholder || 'Search';
+      if (column?.filterElements?.optionsSearchInput) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
-        checkboxInput.addEventListener('tk-change', (e: any) => {
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
           const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
           checkboxWrappers.forEach((wrapper: HTMLElement) => {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
-              wrapper.style.display = label.includes(searchText) ? '' : 'none';
+              wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
         });
-        filterContainer.appendChild(checkboxInput);
+        filterContainer.appendChild(optionsSearchInput);
       }
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
@@ -743,7 +743,22 @@ export class TkTable implements ComponentInterface {
 
       // Create radio group name unique to this column
       const radioGroupName = `radio-filter-${field}`;
+      if (column?.filterElements?.optionsSearchInput) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+          const radioWrappers = filterContainer.querySelectorAll('.tk-table-filter-radio-item');
+          radioWrappers.forEach((wrapper: HTMLElement) => {
+            const radio = wrapper.querySelector('tk-radio');
+            const label = radio.label.toLowerCase();
+            wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+          });
+        });
+        optionsSearchInput.style.marginBottom = '0.75rem';
+        filterContainer.appendChild(optionsSearchInput);
+      }
       // Create radio buttons for each option
       column.filterOptions.forEach(option => {
         const radioWrapper = document.createElement('div');

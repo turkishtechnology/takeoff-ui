@@ -51,7 +51,7 @@ export interface ITableColumn {
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
-    checkboxInput?: { placeholder?: string };
+    optionsSearchInput?: { placeholder?: string };
   };
 }
 

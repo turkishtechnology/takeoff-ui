@@ -32,7 +32,7 @@ const Example = () => {
         { value: 'pending', label: 'Pending' },
       ],
       filterElements: {
-        checkboxInput: { placeholder: 'Filter' },
+        optionsSearchInput: { placeholder: 'Filter' },
       },
     },
     {
@@ -45,6 +45,9 @@ const Example = () => {
         { value: 'group 2', label: 'Group 2' },
         { value: 'group 3', label: 'Group 3' },
       ],
+      filterElements: {
+        optionsSearchInput: { placeholder: 'Filter' },
+      },
     },
     {
       field: 'quantity',
