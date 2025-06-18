@@ -8,6 +8,20 @@ const Example = () => {
     {
       field: 'id',
       header: 'Id',
+      searchable: true,
+      advancedFilters: [
+        {
+          name: 'startsWith',
+          filter: (value: string, rowValue: any) =>
+            rowValue?.toString().toLowerCase().startsWith(value) || false,
+        },
+        {
+          name: 'include',
+          filter: (value: string, rowValue: any) =>
+            rowValue?.toString().toLowerCase().includes(value.toLowerCase()) ||
+            false,
+        },
+      ],
     },
     {
       field: 'name',
@@ -21,6 +35,7 @@ const Example = () => {
           .toLowerCase()
           .indexOf(value.toString().toLowerCase() as string) > -1,
     },
+
     {
       field: 'status',
       header: 'Checkbox Filter',
