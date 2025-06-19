@@ -32,7 +32,7 @@ const Example = () => {
         { value: 'pending', label: 'Pending' },
       ],
       filterElements: {
-        optionsSearchInput: { placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter' },
       },
     },
     {

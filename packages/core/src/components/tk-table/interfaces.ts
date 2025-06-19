@@ -48,10 +48,11 @@ export interface ITableColumn {
     selectAllCheckbox?: { label?: string };
   };
   filterElements?: {
+    searchInput?: { placeholder?: string };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
-    optionsSearchInput?: { placeholder?: string };
+    optionsSearchInput?: { show?: boolean; placeholder?: string };
   };
 }
 
