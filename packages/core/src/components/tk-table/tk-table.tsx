@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse } from './interfaces';
-import { filterAndSort, handleInputKeydown, getNestedValue } from './helpers';
+import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -27,6 +27,10 @@ export class TkTable implements ComponentInterface {
   private refSelectAll: HTMLTkCheckboxElement;
   private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
+  private isResizing: boolean = false;
+  private resizeColumnIndex: number = -1;
+  private startX: number = 0;
+  private startWidth: number = 0;
 
   @Element() el: HTMLTkTableElement;
 
@@ -40,6 +44,7 @@ export class TkTable implements ComponentInterface {
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
+  @State() columnWidths: { [key: string]: string } = {};
 
   /**
    * The column definitions (Array of Objects)
@@ -212,6 +217,17 @@ export class TkTable implements ComponentInterface {
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
     }
+
+    // Initialize column widths from column definitions
+    this.columns.forEach(col => {
+      if (col.width) {
+        this.columnWidths[col.field] = col.width;
+      }
+    });
+
+    // Add mouse event listeners for column resizing
+    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
   }
 
   componentDidRender(): void {
@@ -261,6 +277,10 @@ export class TkTable implements ComponentInterface {
     if (existingFilterPanel) {
       existingFilterPanel.remove();
     }
+
+    // Clean up resize event listeners
+    document.removeEventListener('mousemove', this.handleMouseMove.bind(this));
+    document.removeEventListener('mouseup', this.handleMouseUp.bind(this));
   }
 
   /**
@@ -924,6 +944,55 @@ export class TkTable implements ComponentInterface {
     }
   };
 
+  private handleMouseDown = (e: MouseEvent, columnIndex: number) => {
+    e.preventDefault();
+    this.isResizing = true;
+    this.resizeColumnIndex = columnIndex;
+    this.startX = e.clientX;
+
+    const th = (e.target as HTMLElement).closest('th') as HTMLTableCellElement;
+    if (!th) return;
+
+    const column = this.columns[columnIndex];
+    const currentStateWidth = this.columnWidths[column?.field];
+
+    // Use helper function to calculate starting width
+    this.startWidth = calculateColumnStartWidth(th, currentStateWidth);
+
+    this.el.style.cursor = 'col-resize';
+    this.el.style.userSelect = 'none';
+  };
+
+  private handleMouseMove = (e: MouseEvent) => {
+    if (!this.isResizing || this.resizeColumnIndex === -1) return;
+
+    e.preventDefault();
+
+    // Use helper function to calculate new width
+    const newWidth = calculateNewColumnWidth(this.startX, e.clientX, this.startWidth);
+
+    const column = this.columns[this.resizeColumnIndex];
+    if (column) {
+      this.columnWidths = {
+        ...this.columnWidths,
+        [column.field]: `${newWidth}px`,
+      };
+
+      // Force re-render
+      this.columnWidths = { ...this.columnWidths };
+    }
+  };
+
+  private handleMouseUp = () => {
+    if (this.isResizing) {
+      this.isResizing = false;
+      this.resizeColumnIndex = -1;
+      // Reset cursor styles on the table container
+      this.el.style.cursor = '';
+      this.el.style.userSelect = '';
+    }
+  };
+
   private createHead() {
     this.customHeaderElements = [];
 
@@ -1007,7 +1076,12 @@ export class TkTable implements ComponentInterface {
             return (
               <th
                 class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...col.style }}
+                style={{
+                  width: this.columnWidths[col.field] || col.width,
+                  minWidth: this.columnWidths[col.field] || col.width,
+                  maxWidth: this.columnWidths[col.field] || col.width,
+                  ...col.style,
+                }}
               >
                 <div class="tk-table-head-cell">
                   {_customHeader ? (
@@ -1034,6 +1108,8 @@ export class TkTable implements ComponentInterface {
                       {_searchIcon}
                     </div>
                   )}
+                  {/* Add resize handle */}
+                  <div class="tk-table-resize-handle" onMouseDown={e => this.handleMouseDown(e, this.columns.indexOf(col))}></div>
                 </div>
               </th>
             );
@@ -1130,7 +1206,13 @@ export class TkTable implements ComponentInterface {
                           <td
                             class={classNames('non-text', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
                             innerHTML={cellElement}
-                            style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
+                            style={{
+                              width: this.columnWidths[col.field] || col.width,
+                              minWidth: this.columnWidths[col.field] || col.width,
+                              maxWidth: this.columnWidths[col.field] || col.width,
+                              ...styleRowObject,
+                              ...styleCellObject,
+                            }}
                           ></td>
                         );
                       } else if (typeof cellElement == 'object') {
@@ -1138,7 +1220,13 @@ export class TkTable implements ComponentInterface {
                           <td
                             ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
                             class={classNames('non-text', { 'tk-table-left-sticky': col.fixed === 'left', 'tk-table-right-sticky': col.fixed === 'right' })}
-                            style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
+                            style={{
+                              width: this.columnWidths[col.field] || col.width,
+                              minWidth: this.columnWidths[col.field] || col.width,
+                              maxWidth: this.columnWidths[col.field] || col.width,
+                              ...styleRowObject,
+                              ...styleCellObject,
+                            }}
                           />
                         );
                       }
@@ -1147,7 +1235,13 @@ export class TkTable implements ComponentInterface {
                       return (
                         <td
                           class={classNames('non-text editable', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                          style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
+                          style={{
+                            width: this.columnWidths[col.field] || col.width,
+                            minWidth: this.columnWidths[col.field] || col.width,
+                            maxWidth: this.columnWidths[col.field] || col.width,
+                            ...styleRowObject,
+                            ...styleCellObject,
+                          }}
                         >
                           <input
                             ref={el => (editableInputRef = el)}
@@ -1162,7 +1256,13 @@ export class TkTable implements ComponentInterface {
                       return (
                         <td
                           class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                          style={{ width: col.width, minWidth: col.width, maxWidth: col.width, ...styleRowObject, ...styleCellObject }}
+                          style={{
+                            width: this.columnWidths[col.field] || col.width,
+                            minWidth: this.columnWidths[col.field] || col.width,
+                            maxWidth: this.columnWidths[col.field] || col.width,
+                            ...styleRowObject,
+                            ...styleCellObject,
+                          }}
                         >
                           {getNestedValue(row, col.field)}
                         </td>

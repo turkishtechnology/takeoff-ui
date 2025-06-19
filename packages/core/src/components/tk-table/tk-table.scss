@@ -18,7 +18,6 @@
     overflow-x: auto;
     overflow-y: auto;
 
-
     &::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -76,13 +75,35 @@
               padding: var(--table-items-head-base-nontext-v-padding) var(--table-items-head-base-nontext-h-padding);
             }
 
+            // Add resize handle styles
+            position: relative;
+
+            .tk-table-resize-handle {
+              position: absolute;
+              top: 25%;
+              right: 0;
+              width: 1px;
+              height: 50%;
+              cursor: col-resize;
+              background: transparent;
+              border-right: 1px solid var(--border-sub-base);
+              z-index: 1;
+
+              &:hover {
+                width: 3px;
+                border-right: 2px solidvar(--primary-base);
+              }
+            }
+
+            &:last-child .tk-table-resize-handle {
+              border-right-color: transparent;
+            }
+
             .tk-table-head-cell {
               display: flex;
               align-items: center;
               justify-content: space-between;
               gap: var(--table-items-head-base-text-gap);
-              padding-left: var(--table-items-head-base-text-content-h-padding);
-              border-left: var(--spacing-px) solid var(--border-sub-base);
               font-weight: 400;
 
               .header-container {
@@ -169,7 +190,7 @@
             font-weight: 400;
             line-height: 20px;
             background-color: var(--static-light);
-            padding: var(--table-items-body-base-text-v-padding) 12px var(--table-items-body-base-text-v-padding) var(--table-items-body-base-text-h-padding);
+            padding: var(--table-items-body-base-text-v-padding) 12px var(--table-items-body-base-text-v-padding) 16px;
             border: none;
             border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
