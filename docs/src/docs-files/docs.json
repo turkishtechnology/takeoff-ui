@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-18T11:08:09",
+  "timestamp": "2025-06-12T13:02:08",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -15272,21 +15272,8 @@
       "filePath": "src/components/tk-toggle-button/tk-toggle-button.tsx",
       "encapsulation": "shadow",
       "tag": "tk-toggle-button",
-      "docs": "TkToggleButton is a toggle button for use in a group.",
-      "docsTags": [
-        {
-          "name": "react",
-          "text": "`import { TkToggleButton } from '@takeoff-ui/react'`"
-        },
-        {
-          "name": "vue",
-          "text": "`import { TkToggleButton } from '@takeoff-ui/vue'`"
-        },
-        {
-          "name": "angular",
-          "text": "`import { TkToggleButton } from '@takeoff-ui/angular'`"
-        }
-      ],
+      "docs": "",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -15436,7 +15423,7 @@
           "mutable": true,
           "attr": "selected",
           "reflectToAttr": true,
-          "docs": "Whether the button is selected (controlled by group or standalone).",
+          "docs": "Whether the button is selected.",
           "docsTags": [],
           "default": "false",
           "values": [
@@ -15539,7 +15526,7 @@
           "mutable": false,
           "attr": "value",
           "reflectToAttr": false,
-          "docs": "The value of the toggle button (for group usage).",
+          "docs": "The value of the toggle button.",
           "docsTags": [],
           "values": [
             {
@@ -15616,8 +15603,21 @@
       "filePath": "src/components/tk-toggle-button/tk-toggle-button-group.tsx",
       "encapsulation": "shadow",
       "tag": "tk-toggle-button-group",
-      "docs": "TkToggleButtonGroup is a segmented/compact toggle button group.\nAlways renders in compact/segmented mode.",
-      "docsTags": [],
+      "docs": "TkToggleButtonGroup is a component that allows you to create a group of toggle buttons.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/angular'`"
+        }
+      ],
       "usage": {},
       "props": [
         {
@@ -15668,7 +15668,7 @@
               "type": "boolean"
             }
           ],
-          "optional": false,
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -15684,7 +15684,7 @@
           "mutable": false,
           "attr": "type",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "The value type of the toggle button group.",
           "docsTags": [],
           "default": "'basic'",
           "values": [

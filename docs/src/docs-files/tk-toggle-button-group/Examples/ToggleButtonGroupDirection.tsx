@@ -13,17 +13,32 @@ const ToggleButtonGroupDirection = () => {
   const groupDirectionOptions = ['horizontal', 'vertical'];
   const [groupDirection, setGroupDirection] = useState('horizontal');
   const [value, setValue] = useState('1');
-  const reactCode = `<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
- <TkToggleButton type="outlined" variant="neutral" key="1" value="1" label="One"/>
- <TkToggleButton type="outlined" variant="neutral" key="2" value="2" label="Two"/>
- <TkToggleButton type="outlined" variant="neutral" key="3" value="3" label="Three"/>
-</TkToggleButtonGroup >`;
+  const [reactCode, setReactCode] = useState('');
+  const [vueCode, setVueCode] = useState('');
 
   const options = [
     { label: 'One', value: '1' },
     { label: 'Two', value: '2' },
     { label: 'Three', value: '3' },
   ];
+
+  // Update the code strings when direction changes
+  useEffect(() => {
+    const reactCode = `<TkToggleButtonGroup value="1" type="basic" direction="${groupDirection}" onTkChange={(e) => setValue(e.detail)}>
+  <TkToggleButton type="outlined" variant="neutral" key="1" value="1" label="One"/>
+  <TkToggleButton type="outlined" variant="neutral" key="2" value="2" label="Two"/>
+  <TkToggleButton type="outlined" variant="neutral" key="3" value="3" label="Three"/>
+</TkToggleButtonGroup>`;
+
+    const vueCode = `<TkToggleButtonGroup value="1" type="basic" direction="${groupDirection}" @tk-change="(e) => value = e.detail">
+  <TkToggleButton type="outlined" variant="neutral" :key="1" :value="1" label="One"/>
+  <TkToggleButton type="outlined" variant="neutral" :key="2" :value="2" label="Two"/>
+  <TkToggleButton type="outlined" variant="neutral" :key="3" :value="3" label="Three"/>
+</TkToggleButtonGroup>`;
+
+    setReactCode(reactCode);
+    setVueCode(vueCode);
+  }, [groupDirection]);
 
   const demo = (
     <div className="flex flex-col gap-4 w-full">
@@ -60,7 +75,7 @@ const ToggleButtonGroupDirection = () => {
     </div>
   );
 
-  return <FeatureDemo demo={demo} reactCode={reactCode} />;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} />;
 };
 
 export default ToggleButtonGroupDirection;

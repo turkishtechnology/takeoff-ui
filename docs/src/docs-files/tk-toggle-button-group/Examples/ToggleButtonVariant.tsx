@@ -26,36 +26,49 @@ const ToggleButtonVariant = () => {
   );
   const [buttonType, setButtonType] = useState<
     'filled' | 'outlined' | 'text' | 'raised' | 'filled-light'
-  >('filled');
+  >('outlined');
   const [buttonVariant, setButtonVariant] = useState<'primary' | 'neutral'>(
-    'neutral',
+    'primary',
   );
   const [direction, setDirection] = useState<'horizontal' | 'vertical'>(
     'horizontal',
   );
   const [rounded, setRounded] = useState(false);
   const [value, setValue] = useState('1');
-
+  const [vueCode, setVueCode] = useState('');
+  const [reactCode, setReactCode] = useState('');
   const options = [
     { label: 'One', value: '1' },
     { label: 'Two', value: '2' },
     { label: 'Three', value: '3' },
   ];
-  const reactCode = `<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
-    <TkToggleButton type="outlined" variant="neutral" key="1" value="1" label="One"/>
-    <TkToggleButton type="outlined" variant="neutral" key="2" value="2" label="Two"/>
-    <TkToggleButton type="outlined" variant="neutral" key="3" value="3" label="Three"/>
-   </TkToggleButtonGroup >`;
+
+  // Update Vue code when button variant changes
+  useEffect(() => {
+    const vueCode = `<TkToggleButtonGroup value="1" type="basic" @tk-change="(e) => value = e.detail">
+  <TkToggleButton type="outlined" variant="${buttonVariant}" key="1" value="1" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="One"/>
+  <TkToggleButton type="outlined" variant="${buttonVariant}" key="2" value="2" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Two"/>
+  <TkToggleButton type="outlined" variant="${buttonVariant}" key="3" value="3" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Three"/>
+</TkToggleButtonGroup>`;
+    const reactCode = `<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
+ <TkToggleButton type="outlined" variant="${buttonVariant}" key="1" value="1" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="One"/>
+ <TkToggleButton type="outlined" variant="${buttonVariant}" key="2" value="2" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Two"/>
+ <TkToggleButton type="outlined" variant="${buttonVariant}" key="3" value="3" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Three"/>
+</TkToggleButtonGroup >`;
+    setVueCode(vueCode);
+    setReactCode(reactCode);
+  }, [buttonVariant]);
+
   const demo = (
     <div className="flex flex-col gap-8 items-start w-full">
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-wrap gap-4">
           <TkRadioGroup
-            label="Type"
-            value={buttonType}
-            onTkChange={(e) => setButtonType(e.detail)}
+            label="Variant"
+            value={buttonVariant}
+            onTkChange={(e) => setButtonVariant(e.detail)}
           >
-            {buttonTypeOptions.map((v) => (
+            {buttonVariantOptions.map((v) => (
               <TkRadio
                 key={v}
                 label={v.charAt(0).toUpperCase() + v.slice(1)}
@@ -90,7 +103,7 @@ const ToggleButtonVariant = () => {
     </div>
   );
 
-  return <FeatureDemo demo={demo} reactCode={reactCode} />;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} />;
 };
 
 export default ToggleButtonVariant;

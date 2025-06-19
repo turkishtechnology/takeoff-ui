@@ -2,8 +2,10 @@ import { Component, ComponentInterface, Element, Prop, State, Watch, Event, Even
 import classNames from 'classnames';
 
 /**
- * TkToggleButtonGroup is a segmented/compact toggle button group.
- * Always renders in compact/segmented mode.
+ * TkToggleButtonGroup is a component that allows you to create a group of toggle buttons.
+ * @react `import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/react'`
+ * @vue `import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/vue'`
+ * @angular `import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/angular'`
  */
 @Component({
   tag: 'tk-toggle-button-group',
@@ -14,11 +16,14 @@ export class TkToggleButtonGroup implements ComponentInterface {
   @Element() el: HTMLTkToggleButtonGroupElement;
   @State() slottedItems: NodeListOf<HTMLTkToggleButtonElement>;
 
+  /**
+   * The value type of the toggle button group.
+   */
   @Prop() type: 'basic' | 'divided' | 'light' = 'basic';
   /**
    * The value of the rounded toggle button group.
    */
-  @Prop() rounded: boolean = false;
+  @Prop() rounded?: boolean = false;
   @Watch('rounded')
   roundedChanged() {
     this.updateSlottedItems();
