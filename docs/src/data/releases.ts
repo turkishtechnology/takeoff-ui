@@ -14,6 +14,17 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.11',
+    date: '19.06.2025',
+    newFeatures: [
+      'Added controlled prop and tk-tabs-click event to tabs',
+      'Added group options view feature to select component',
+      'Added filter input for checkboxes and radio buttons to table',
+    ],
+    refactor: ['Add cursor pointer to timepicker cells'],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.10',
     date: '12.06.2025',
     bugFixes: [

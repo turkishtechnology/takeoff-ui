@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-12T13:02:08",
+  "timestamp": "2025-06-19T08:24:57",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -10745,6 +10745,54 @@
           "values": [
             {
               "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "groupNameKey",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "group-name-key",
+          "reflectToAttr": false,
+          "docs": "The key to use for option group names.\nRequired if grouped options are used.",
+          "docsTags": [],
+          "default": "'label'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "groupOptionsKey",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "group-options-key",
+          "reflectToAttr": false,
+          "docs": "The key to use for accessing grouped options array.\nRequired if grouped options are used.",
+          "docsTags": [],
+          "default": "'options'",
+          "values": [
+            {
+              "type": "string"
             }
           ],
           "optional": false,
