@@ -5,6 +5,10 @@
 .tk-rating-container {
   display: flex;
   align-items: center;
+
+  &.number {
+    gap: 4px;
+  }
 }
 
 .tk-rating {
@@ -50,5 +54,86 @@
   &.disabled {
     color: var(--text-sub-base) !important;
     pointer-events: none;
+  }
+
+  &.number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    outline: 1px solid var(--border-sub-base);
+    border-radius: 8px;
+    width: 27px;
+    height: 27px;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Geologica;
+
+    background-color: var(--static-light);
+    color: var(--text-darkest);
+
+    &.rating-number-1:not(.selected):hover {
+      background: var(--states-danger-lightest);
+      color: var(--text-sub-base);
+    }
+
+    &.rating-number-2:not(.selected):hover {
+      background: var(--states-danger-sub-base);
+      color: var(--text-darkest);
+    }
+
+    &.rating-number-3:not(.selected):hover {
+      background: var(--states-warning-sub-base);
+      color: var(--text-darkest);
+    }
+
+    &.rating-number-4:not(.selected):hover {
+      background: var(--states-success-base);
+      color: var(--text-darkest);
+    }
+
+    &.rating-number-5:not(.selected):hover {
+      background: var(--states-success-darkest);
+      color: var(--text-lightest);
+    }
+
+    &.selected {
+      &.rating-number-1 {
+        background: var(--states-danger-dark);
+        color: var(--text-lightest);
+        outline: unset;
+      }
+
+      &.rating-number-2 {
+        background: var(--states-danger-sub-base);
+        color: var(--text-darkest);
+        border: 0px;
+      }
+
+      &.rating-number-3 {
+        background: var(--states-warning-sub-base);
+        color: var(--text-darkest);
+        border: 0px;
+      }
+
+      &.rating-number-4 {
+        background: var(--states-success-base);
+        color: var(--text-darkest);
+        border: 0px;
+      }
+
+      &.rating-number-5 {
+        background: var(--states-success-darkest);
+        color: var(--text-lightest);
+        border: 0px;
+      }
+    }
+
+    &.disabled {
+      background-color: var(--background-disabled);
+      border-color: var(--border-disabled);
+    }
   }
 }

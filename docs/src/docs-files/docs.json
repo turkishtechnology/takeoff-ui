@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-16T10:14:44",
+  "timestamp": "2025-06-18T11:08:09",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -10296,7 +10296,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": false,
-          "docs": "the user cannot interact with the input.",
+          "docs": "The user cannot interact with the input.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -10398,16 +10398,16 @@
         },
         {
           "name": "type",
-          "type": "\"dot\" | \"heart\" | \"star\"",
+          "type": "\"dot\" | \"heart\" | \"number\" | \"star\"",
           "complexType": {
-            "original": "'star' | 'heart' | 'dot'",
-            "resolved": "\"dot\" | \"heart\" | \"star\"",
+            "original": "'star' | 'heart' | 'dot' | 'number'",
+            "resolved": "\"dot\" | \"heart\" | \"number\" | \"star\"",
             "references": {}
           },
           "mutable": false,
           "attr": "type",
           "reflectToAttr": false,
-          "docs": "The type of icon to display for each rating element. Options include 'star', 'heart', and 'dot'.",
+          "docs": "The type of icon to display for each rating element. Options include 'star', 'heart', 'dot' and 'number'.",
           "docsTags": [],
           "default": "'star'",
           "values": [
@@ -10417,6 +10417,10 @@
             },
             {
               "value": "heart",
+              "type": "string"
+            },
+            {
+              "value": "number",
               "type": "string"
             },
             {
@@ -10437,7 +10441,7 @@
             "resolved": "number",
             "references": {}
           },
-          "mutable": true,
+          "mutable": false,
           "attr": "value",
           "reflectToAttr": false,
           "docs": "The currently selected rating value.",
