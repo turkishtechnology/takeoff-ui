@@ -45,6 +45,18 @@ export class TkSelect implements ComponentInterface {
   @State() isOpen: boolean = false;
 
   /**
+   * The key to use for option group names.
+   * Required if grouped options are used.
+   */
+  @Prop() groupNameKey: string = 'label';
+
+  /**
+   * The key to use for accessing grouped options array.
+   * Required if grouped options are used.
+   */
+  @Prop() groupOptionsKey: string = 'options';
+
+  /**
    * Represents whether the options are fethecd from service or not.
    * If true renders spinner in options dropdown.
    */
@@ -156,7 +168,7 @@ export class TkSelect implements ComponentInterface {
   protected optionsChanged(newValue: any[], oldValue: any[]) {
     if (_.isEqual(newValue, oldValue)) return;
 
-    this.renderOptions = [...this.options];
+    this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
 
     this.setValue();
   }
@@ -249,6 +261,10 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private isGrouped(): boolean {
+    return this.options?.length > 0 && this.options[0]?.[this.groupOptionsKey];
+  }
+
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
@@ -321,6 +337,23 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private async setRenderOptions(value) {
+    if (this.isGrouped()) {
+      this.renderOptions = this.options
+        .map(group => ({
+          ...group,
+          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
+            this.getOptionLabel(option)
+              .toLowerCase()
+              .includes(value?.toLowerCase() || ''),
+          ),
+        }))
+        .filter(group => group[this.groupOptionsKey].length > 0);
+    } else {
+      this.renderOptions = await this.filter(value, this.options);
+    }
+  }
+
   private getSelectedItem() {
     if (this.renderOptions?.length > 0) {
       if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
@@ -343,6 +376,13 @@ export class TkSelect implements ComponentInterface {
 
   private setValue() {
     if (!this.inputRef) return;
+    let innerOptions = [];
+
+    if (this.isGrouped()) {
+      innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
+    } else {
+      innerOptions = this.options;
+    }
 
     // Handle multiple selection case
     if (this.multiple) {
@@ -350,8 +390,8 @@ export class TkSelect implements ComponentInterface {
       const currentValue = Array.isArray(this.value) ? this.value : [];
 
       // If custom values are not allowed, validate against available options
-      if (!this.allowCustomValue && this.options?.length > 0) {
-        const validValues = currentValue.filter(val => this.options.some(opt => _.isEqual(this.getOptionValue(opt), val)));
+      if (!this.allowCustomValue && innerOptions?.length > 0) {
+        const validValues = currentValue.filter(val => innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
 
         // Update value if invalid options were filtered out
         if (!_.isEqual(validValues, currentValue)) {
@@ -366,17 +406,28 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Handle single selection case
-    this.selectedItem = this.getSelectedItem();
-
-    // Set input value based on selection state and custom value allowance
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
       this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
-    } else if (this.selectedItem) {
-      // For selected items, show the label
+      return;
+    }
+
+    // Find the selected item based on value type
+    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
+      // Handle primitive values
+      this.selectedItem = innerOptions.find(item => item === this.value);
+    } else if (this.optionValueKey?.length > 0) {
+      // Handle object values with optionValueKey
+      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
+    } else {
+      // Handle object values without optionValueKey
+      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
+    }
+
+    // Set input value based on selection state
+    if (this.selectedItem) {
       this.inputRef.value = this.getOptionLabel(this.selectedItem);
     } else {
-      // For no selection, clear the input
       this.inputRef.value = null;
     }
   }
@@ -473,10 +524,10 @@ export class TkSelect implements ComponentInterface {
       if (this.filterDebounceDelay > 0) {
         clearTimeout(this.filterDebounceTimeout);
         this.filterDebounceTimeout = setTimeout(async () => {
-          this.renderOptions = await this.filter(value, this.options);
+          await this.setRenderOptions(value);
         }, this.filterDebounceDelay);
       } else {
-        this.renderOptions = await this.filter(value, this.options);
+        await this.setRenderOptions(value);
       }
     }
   }
@@ -555,7 +606,6 @@ export class TkSelect implements ComponentInterface {
       if (this.multiple && this.editable && this.allowCustomValue) {
         this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
       }
-
       activeItem?.click();
     } else if (e.key == 'Tab') {
       this.hasFocus = false;
@@ -612,7 +662,19 @@ export class TkSelect implements ComponentInterface {
   }
 
   private createOptions() {
-    return this.createOptionItem(this.renderOptions);
+    if (this.isGrouped()) {
+      return this.renderOptions.map(group => (
+        <div class="dropdown-group">
+          <div class="dropdown-group-label">
+            <label>{group[this.groupNameKey]}</label>
+            <div class="line"></div>
+          </div>
+          {this.createOptionItem(group[this.groupOptionsKey])}
+        </div>
+      ));
+    } else {
+      return this.createOptionItem(this.renderOptions);
+    }
   }
 
   private renderInput() {
