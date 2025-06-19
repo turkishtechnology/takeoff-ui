@@ -4,10 +4,11 @@ import CustomItem from "./Examples/CustomItem";
 import Multiple from "./Examples/Multiple";
 import Size from "./Examples/Size";
 import State from "./Examples/State";
-import OptionValueKey from "./Examples/OptionValueKey"
-import Clearable from "./Examples/Clearable"
-import Loading from "./Examples/Loading"
-import {TkAlert} from "@takeoff-ui/react"
+import OptionValueKey from "./Examples/OptionValueKey";
+import Clearable from "./Examples/Clearable";
+import Loading from "./Examples/Loading";
+import GroupedOptions from "./Examples/GroupedOptions";
+import {TkAlert} from "@takeoff-ui/react";
 
 ## Basic
 
@@ -64,5 +65,11 @@ This example clears the input of the select.
 <TkAlert header="Note" variant="warning" message="This feature works in conjunction with the `editable` prop set to `true`." filledlight />
 <br/>
 <Clearable />
+
+## Grouped Options
+
+Display options under section headers using `groupNameKey` and `groupOptionsKey`.
+
+<GroupedOptions />
 
 

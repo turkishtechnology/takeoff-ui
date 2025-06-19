@@ -10296,7 +10296,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": false,
-          "docs": "the user cannot interact with the input.",
+          "docs": "The user cannot interact with the input.",
           "docsTags": [
             {
               "name": "defaultValue",
@@ -10398,16 +10398,16 @@
         },
         {
           "name": "type",
-          "type": "\"dot\" | \"heart\" | \"star\"",
+          "type": "\"dot\" | \"heart\" | \"number\" | \"star\"",
           "complexType": {
-            "original": "'star' | 'heart' | 'dot'",
-            "resolved": "\"dot\" | \"heart\" | \"star\"",
+            "original": "'star' | 'heart' | 'dot' | 'number'",
+            "resolved": "\"dot\" | \"heart\" | \"number\" | \"star\"",
             "references": {}
           },
           "mutable": false,
           "attr": "type",
           "reflectToAttr": false,
-          "docs": "The type of icon to display for each rating element. Options include 'star', 'heart', and 'dot'.",
+          "docs": "The type of icon to display for each rating element. Options include 'star', 'heart', 'dot' and 'number'.",
           "docsTags": [],
           "default": "'star'",
           "values": [
@@ -10417,6 +10417,10 @@
             },
             {
               "value": "heart",
+              "type": "string"
+            },
+            {
+              "value": "number",
               "type": "string"
             },
             {
@@ -10437,7 +10441,7 @@
             "resolved": "number",
             "references": {}
           },
-          "mutable": true,
+          "mutable": false,
           "attr": "value",
           "reflectToAttr": false,
           "docs": "The currently selected rating value.",
@@ -13524,10 +13528,10 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
+        "tk-input",
         "tk-checkbox",
         "tk-divider",
         "tk-radio",
-        "tk-input",
         "tk-button",
         "tk-icon",
         "tk-badge",
@@ -13535,10 +13539,10 @@
       ],
       "dependencyGraph": {
         "tk-table": [
+          "tk-input",
           "tk-checkbox",
           "tk-divider",
           "tk-radio",
-          "tk-input",
           "tk-button",
           "tk-icon",
           "tk-badge",
@@ -13698,6 +13702,35 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "controlled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "controlled",
+          "reflectToAttr": false,
+          "docs": "Controls if the tabs component is controlled.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -14017,6 +14050,20 @@
           "cancelable": true,
           "composed": true,
           "docs": "Triggered when the currently open tab changes. Returns the active index.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-tab-click",
+          "detail": "number",
+          "bubbles": true,
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Triggered when a tab is clicked. Returns the clicked tab index.",
           "docsTags": []
         }
       ],
@@ -16687,7 +16734,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n\n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n\n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n  filterElements?: {\n    searchInput?: { placeholder?: string };\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n    optionsSearchInput?: { show?: boolean; placeholder?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },

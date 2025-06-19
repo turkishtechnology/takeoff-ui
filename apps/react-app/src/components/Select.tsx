@@ -2,6 +2,27 @@ import { TkCard, TkSelect } from '@takeoff-ui/react';
 import { useState } from 'react';
 
 function Select() {
+  const groupedOptions = [
+    {
+      label: 'Grup A',
+      options: [
+        { label: 'Alfa Travel Inc.', value: 'alpha1' },
+        { label: 'Alfas Center Inc.', value: 'alpha2' },
+      ],
+    },
+    {
+      label: 'Hac-Umre',
+      options: [
+        { label: 'Alfa Tourist International', value: 'umre1' },
+        { label: 'Alfainter Travel Inc.', value: 'umre2' },
+      ],
+    },
+    {
+      label: 'IATA',
+      options: [{ label: 'Alfainter Travel Inc.', value: 'iata1' }],
+    },
+  ];
+
   //#region text options
   // text base options
   const textBaseOptions = [
@@ -183,6 +204,20 @@ function Select() {
   return (
     <TkCard className="p-10">
       <TkSelect
+        label="Acente"
+        placeholder="Acente seçin"
+        options={groupedOptions}
+        groupNameKey="label"
+        groupOptionsKey="options"
+        optionLabelKey="label"
+        optionValueKey="value"
+        value={value}
+        onTkChange={(e) => setValue(e.detail)}
+        clearable
+      />
+      <p>Seçilen: {JSON.stringify(value)}</p>
+
+      {/*<TkSelect
         label="Custom Item"
         optionLabelKey="name"
         optionValueKey="code"
@@ -206,7 +241,7 @@ function Select() {
             </div>`;
         }}
         onTkChange={(e) => setHtmlValue(e.detail)}
-      />
+      />*/}
       {/* <TkSelect
         label="Multiple Select"
         value={[
@@ -221,7 +256,7 @@ function Select() {
         multiple
         hint="Hint text"
       /> */}
-      //#region text options
+      {/*//#region text options
       <h4>text options</h4>
       ----------------------
       <TkSelect
@@ -233,7 +268,7 @@ function Select() {
           console.log('text', 'tk-change', e.detail);
           setValueString(e.detail);
         }}
-      />
+      />*/}
       {/* <hr style={{ margin: '8px 0' }} />
       <TkSelect
         label="Text Editable"
@@ -274,7 +309,7 @@ function Select() {
           console.log('text allow custom value', 'tk-change', e.detail);
         }}
       /> */}
-      <hr style={{ margin: '8px 0' }} />
+      {/*<hr style={{ margin: '8px 0' }} />
       <TkSelect
         label="Text Multiple"
         value={value}
@@ -286,7 +321,7 @@ function Select() {
           console.log('text multiple', 'tk-change', e.detail);
           setValue(e.detail);
         }}
-      />
+      />*/}
       {/* <hr style={{ margin: '8px 0' }} />
       <TkSelect
         label="Text Group"
@@ -448,7 +483,7 @@ function Select() {
           );
         }}
       /> */}
-      //#endregion
+      {/*//#endregion
       <h4>object options</h4>
       ----------------------
       <TkSelect
@@ -466,7 +501,6 @@ function Select() {
           }
         }}
         options={objectOptions}
-        // optionValueKey="value"
         value={valueObject}
         onTkChange={(e: CustomEvent) => {
           console.log('object', 'tk-change', e.detail);
@@ -484,7 +518,7 @@ function Select() {
           console.log('object multiple', 'tk-change', e.detail);
           setValueObjectMultiple(e.detail);
         }}
-      />
+      />*/}
       {/* <TkSelect
         label="Object Editable"
         options={objectEditableOptions}

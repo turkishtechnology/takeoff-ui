@@ -675,6 +675,23 @@ export class TkTable implements ComponentInterface {
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+      if (column?.filterElements?.optionsSearchInput?.show) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
+
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+          const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
+          checkboxWrappers.forEach((wrapper: HTMLElement) => {
+            const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
+            if (checkbox) {
+              const label = checkbox.label.toLowerCase();
+              wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+            }
+          });
+        });
+        filterContainer.appendChild(optionsSearchInput);
+      }
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
@@ -726,7 +743,22 @@ export class TkTable implements ComponentInterface {
 
       // Create radio group name unique to this column
       const radioGroupName = `radio-filter-${field}`;
+      if (column?.filterElements?.optionsSearchInput) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+          const radioWrappers = filterContainer.querySelectorAll('.tk-table-filter-radio-item');
+          radioWrappers.forEach((wrapper: HTMLElement) => {
+            const radio = wrapper.querySelector('tk-radio');
+            const label = radio.label.toLowerCase();
+            wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+          });
+        });
+        optionsSearchInput.style.marginBottom = '0.75rem';
+        filterContainer.appendChild(optionsSearchInput);
+      }
       // Create radio buttons for each option
       column.filterOptions.forEach(option => {
         const radioWrapper = document.createElement('div');
@@ -750,7 +782,7 @@ export class TkTable implements ComponentInterface {
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
-      input.placeholder = 'Search';
+      input.placeholder = column?.filterElements?.searchInput?.placeholder || 'Search';
       input.setFocus();
       input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
       this.elFilterPanelElement.appendChild(input);
@@ -762,7 +794,7 @@ export class TkTable implements ComponentInterface {
 
     // Create cancel button
     const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
-    cancelButton.label = column?.filterButtons?.cancelButton?.label || 'Remove';
+    cancelButton.label = column?.filterElements?.cancelButton?.label || column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
     cancelButton.addEventListener('tk-click', () => {
@@ -772,7 +804,7 @@ export class TkTable implements ComponentInterface {
 
     // Create search/apply button
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
-    searchButton.label = column?.filterButtons?.searchButton?.label || 'Apply';
+    searchButton.label = column?.filterElements?.searchButton?.label || column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
     searchButton.addEventListener('tk-click', () => {
       if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {

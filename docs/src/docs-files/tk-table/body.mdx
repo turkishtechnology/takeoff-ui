@@ -15,6 +15,7 @@ import { TkAlert } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
 import DragAndDropSorting from './Examples/DragAndDropSorting';
 import HeaderStyle from './Examples/HeaderStyle';
+import Size from './Examples/Size';
 
 ## Basic
 
@@ -50,6 +51,13 @@ The table supports three types of filtering:
 
 The filtering type can be configured using the `filterType` property in column definition. For checkbox and radio filters, you need to provide `filterOptions` with value-label pairs.
 
+<TkAlert
+  header="Deprecation"
+  message="Future releases will not support filterButtons instead please use filterElements. For more information, see Column Interface."
+  variant="danger"
+  filledlight
+/>
+<br />
 <TkAlert
   header="Information"
   message='It does not work when paginationType = "server". In this case, filtering and sorting should be done by the backend. See serverSide'
@@ -114,3 +122,9 @@ This feature allows the selected columns stay in their position in case of havin
 This feature allows the user to drag and drop the columns to the desired position.
 
 <DragAndDropSorting />
+
+## Size
+
+This feature allows the user to use alternative sizes.
+
+<Size />

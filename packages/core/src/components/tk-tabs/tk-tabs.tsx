@@ -26,6 +26,12 @@ export class TkTabs implements ComponentInterface {
   @Prop() alignHeaders: 'start' | 'center' | 'end' = 'start';
 
   /**
+   * Controls if the tabs component is controlled.
+   * @defaultValue false
+   */
+  @Prop() controlled: boolean = false;
+
+  /**
    * Default Active Index for tabs component.
    * @defaultValue 0
    */
@@ -107,6 +113,11 @@ export class TkTabs implements ComponentInterface {
    * The style attribute of tabs item element
    */
   @Prop() contentStyle?: any = null;
+
+  /**
+   * Triggered when a tab is clicked. Returns the clicked tab index.
+   */
+  @Event({ eventName: 'tk-tab-click' }) tkTabClick: EventEmitter<number>;
 
   /**
    * Triggered when the currently open tab changes. Returns the active index.
@@ -191,7 +202,11 @@ export class TkTabs implements ComponentInterface {
   }
 
   private handleTabClick(index: number) {
-    this.selectTab(index);
+    if (!this.controlled) {
+      this.selectTab(index);
+    } else {
+      this.tkTabClick.emit(index);
+    }
   }
 
   private renderTabItemIcon(tab: HTMLTkTabsItemElement) {
