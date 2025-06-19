@@ -44,8 +44,7 @@
 .tk-datepicker-header {
   display: flex;
   width: 336px;
-  padding: var(--datepicker-header-base-top-padding) var(--datepicker-header-base-h-padding)
-    var(--datepicker-header-base-bottom-padding) var(--datepicker-header-base-h-padding);
+  padding: var(--datepicker-header-base-top-padding) var(--datepicker-header-base-h-padding) var(--datepicker-header-base-bottom-padding) var(--datepicker-header-base-h-padding);
   flex-direction: column;
   align-items: flex-start;
 
@@ -197,7 +196,7 @@
   cursor: pointer;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -408,7 +407,7 @@
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 16px;
@@ -458,6 +457,7 @@
   line-height: 40px;
   position: relative;
   z-index: 100;
+  cursor: pointer;
 }
 
 .tk-datepicker-timepicker-value-selected {
