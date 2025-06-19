@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, Event, EventEmitter, h } from '@stencil/core';
 import getIcon from './rating-icons';
 import classNames from 'classnames';
 
@@ -29,15 +29,7 @@ export class TkRating implements ComponentInterface {
   /**
    * The currently selected rating value.
    */
-  @Prop({ mutable: true }) value: number = 0;
-
-  /**
-   * Watches for changes to the `value` prop and emits an event when the value is updated.
-   */
-  @Watch('value')
-  protected valueChanged() {
-    this.tkChange.emit(this.value);
-  }
+  @Prop() value: number = 0;
 
   /**
    * Determines whether to show the numerical rating value under to the icon.
@@ -62,17 +54,11 @@ export class TkRating implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<number>;
 
-  /**
-   * Emitted when an item is clicked.
-   */
-  @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<number>;
-
   // Set the rating on click, with half steps
   private handleRatingClick(rating: number) {
     if (this.disabled || this.readonly) return;
 
-    this.value = rating;
-    this.tkItemClick.emit(rating);
+    this.tkChange.emit(rating);
   }
 
   // Set hover rating with half steps
@@ -121,28 +107,29 @@ export class TkRating implements ComponentInterface {
     );
   }
 
+  renderNumberRating() {
+    return [1, 2, 3, 4, 5].map(ratingValue => (
+      <div
+        class={classNames('tk-rating', 'number', `rating-number-${ratingValue}`, {
+          readonly: this.readonly,
+          disabled: this.disabled,
+          selected: ratingValue === this.value,
+        })}
+        onMouseMove={() => this.handleMouseMove(ratingValue)}
+        onMouseLeave={() => this.handleMouseLeave()}
+        onClick={() => this.handleRatingClick(ratingValue)}
+      >
+        {ratingValue.toString().padStart(2, '0')}
+      </div>
+    ));
+  }
+
   render() {
     const isNumberType = this.type === 'number';
-    const containerClass = isNumberType ? 'tk-rating-number-container' : 'tk-rating-container';
 
     return (
-      <div class={containerClass + (isNumberType && this.value ? ` selected-${this.value}` : '')}>
-        {isNumberType
-          ? [1, 2, 3, 4, 5].map(ratingValue => (
-              <div
-                class={classNames('tk-rating', 'number', `rating-number-${ratingValue}`, {
-                  readonly: this.readonly,
-                  disabled: this.disabled,
-                  selected: ratingValue === this.value,
-                })}
-                onMouseMove={() => this.handleMouseMove(ratingValue)}
-                onMouseLeave={() => this.handleMouseLeave()}
-                onClick={() => this.handleRatingClick(ratingValue)}
-              >
-                {ratingValue.toString().padStart(2, '0')}
-              </div>
-            ))
-          : Array.from({ length: this.maxRating }, (_, index) => this.renderIcon(index + 1))}
+      <div class={classNames('tk-rating-container', { number: isNumberType })}>
+        {isNumberType ? this.renderNumberRating() : Array.from({ length: this.maxRating }, (_, index) => this.renderIcon(index + 1))}
       </div>
     );
   }
