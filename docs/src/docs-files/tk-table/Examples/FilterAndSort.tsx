@@ -31,6 +31,9 @@ const Example = () => {
         { value: 'inactive', label: 'Inactive' },
         { value: 'pending', label: 'Pending' },
       ],
+      filterElements: {
+        optionsSearchInput: { show: true, placeholder: 'Filter' },
+      },
     },
     {
       field: 'group',
@@ -42,6 +45,9 @@ const Example = () => {
         { value: 'group 2', label: 'Group 2' },
         { value: 'group 3', label: 'Group 3' },
       ],
+      filterElements: {
+        optionsSearchInput: { placeholder: 'Filter' },
+      },
     },
     {
       field: 'quantity',

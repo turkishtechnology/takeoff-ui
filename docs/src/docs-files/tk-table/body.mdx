@@ -51,6 +51,13 @@ The table supports three types of filtering:
 The filtering type can be configured using the `filterType` property in column definition. For checkbox and radio filters, you need to provide `filterOptions` with value-label pairs.
 
 <TkAlert
+  header="Deprecation"
+  message="Future releases will not support filterButtons instead please use filterElements. For more information, see Column Interface."
+  variant="danger"
+  filledlight
+/>
+<br />
+<TkAlert
   header="Information"
   message='It does not work when paginationType = "server". In this case, filtering and sorting should be done by the backend. See serverSide'
   variant="info"
