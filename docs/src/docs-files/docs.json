@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-19T08:24:57",
+  "timestamp": "2025-06-19T11:38:23",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -14327,7 +14327,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Sets tooltip options for the tab item.",
           "docsTags": [],
           "values": [
             {
