@@ -32,6 +32,7 @@ const Example = () => {
         { value: 'pending', label: 'Pending' },
       ],
       filterElements: {
+        icon: 'filter_list',
         optionsSearchInput: { show: true, placeholder: 'Filter' },
       },
     },
@@ -123,6 +124,10 @@ const FilterAndSort = () => {
         { value: 'inactive', label: 'Inactive' },
         { value: 'pending', label: 'Pending' },
       ],
+      filterElements: {
+        icon: "filter_list",
+        optionsSearchInput: { show: true, placeholder: 'Filter' },
+      },
     },
     {
       field: "group",
@@ -211,6 +216,10 @@ const column = [
       { value: 'inactive', label: 'Inactive' },
       { value: 'pending', label: 'Pending' },
     ],
+    filterElements: {
+      icon: "filter_list",
+      optionsSearchInput: { show: true, placeholder: 'Filter' },
+    },
   },
   {
     field: "group",

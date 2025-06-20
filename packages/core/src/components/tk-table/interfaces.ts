@@ -32,7 +32,6 @@ export interface ITableColumn {
   html?: Function;
   /** */
   fixed?: 'left' | 'right';
-
   /** Allows styling to be applied to the th element of the column */
   style?: any;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
@@ -48,6 +47,7 @@ export interface ITableColumn {
     selectAllCheckbox?: { label?: string };
   };
   filterElements?: {
+    icon?: string;
     searchInput?: { placeholder?: string };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };

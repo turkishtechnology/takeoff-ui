@@ -1047,7 +1047,7 @@ export class TkTable implements ComponentInterface {
             if (col.searchable) {
               _searchIcon = (
                 <tk-icon
-                  {...getIconElementProps('search', {
+                  {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
                     variant: null,
                     ref: (el: any) => (refSearchIcon = el),
