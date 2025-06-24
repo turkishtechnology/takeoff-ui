@@ -14606,7 +14606,7 @@
           },
           "mutable": false,
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Sets tooltip options for the tab item.",
           "docsTags": [],
           "values": [
             {

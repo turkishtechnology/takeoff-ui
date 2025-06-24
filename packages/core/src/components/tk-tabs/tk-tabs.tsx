@@ -125,31 +125,20 @@ export class TkTabs implements ComponentInterface {
   @Event({ eventName: 'tk-tab-change' }) tkTabChange: EventEmitter<number>;
 
   componentWillLoad() {
-    const tabs: NodeListOf<HTMLTkTabsItemElement> = this.el.querySelectorAll(':scope > tk-tabs-item');
-    this.internalTabItems = Array.from(tabs).map(tab => {
-      return {
-        label: tab.label,
-        disabled: tab.disabled,
-        icon: tab.icon,
-        badged: tab.badged,
-        badgeLabel: tab.badgeLabel,
-        badgeCount: tab.badgeCount,
-        tooltipOptions: tab.tooltipOptions,
-      };
-    }) as HTMLTkTabsItemElement[];
+    this.internalTabItems = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')) as HTMLTkTabsItemElement[];
 
     // slot ismini kullanıcının vermesine gerek kalmadan içeride setlenmesi sağlandı
-    tabs.forEach((tab, index) => {
+    this.internalTabItems.forEach((tab, index) => {
       tab.setAttribute('slot', `tab-content-${index}`);
     });
 
     this.internalActiveIndex = this.activeIndex ?? this.defaultActiveIndex;
 
-    this.el.addEventListener('badgeUpdated', this.handleBadgeUpdate.bind(this));
+    this.el.addEventListener('tk-update', this.handleTabUpdate.bind(this));
   }
 
   disconnectedCallback() {
-    this.el.removeEventListener('badgeUpdated', this.handleBadgeUpdate.bind(this));
+    this.el.removeEventListener('tk-update', this.handleTabUpdate.bind(this));
   }
 
   private selectTab(index: number) {
@@ -191,12 +180,19 @@ export class TkTabs implements ComponentInterface {
   /**
    * Handles badge update events from tab items
    */
-  private handleBadgeUpdate(event: CustomEvent) {
+  private handleTabUpdate(event: CustomEvent) {
     const tab = event.composedPath().find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'tk-tabs-item') as HTMLTkTabsItemElement;
     if (tab) {
       const index = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')).indexOf(tab);
       if (index !== -1 && this.internalTabItems[index]) {
+        this.internalTabItems[index].label = event.detail.label;
+        this.internalTabItems[index].icon = event.detail.icon;
+        this.internalTabItems[index].disabled = event.detail.disabled;
+        this.internalTabItems[index].badged = event.detail.badged;
         this.internalTabItems[index].badgeCount = event.detail.badgeCount;
+        this.internalTabItems[index].badgeLabel = event.detail.badgeLabel;
+        this.internalTabItems[index].tooltipOptions = event.detail.tooltipOptions;
+        this.internalTabItems = [...this.internalTabItems];
       }
     }
   }

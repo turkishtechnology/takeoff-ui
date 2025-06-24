@@ -1,5 +1,43 @@
 import { ITableColumn, ITableFilter } from './interfaces';
 
+/**
+ * Calculates the optimal starting width for column resizing
+ * Handles the difference between CSS width, clientWidth, and offsetWidth
+ * @param th - The table header element
+ * @param currentStateWidth - Current width from component state
+ * @returns The calculated starting width in pixels
+ */
+export const calculateColumnStartWidth = (th: HTMLTableCellElement, currentStateWidth?: string): number => {
+  if (currentStateWidth) {
+    return parseFloat(currentStateWidth);
+  }
+
+  const computedStyle = window.getComputedStyle(th);
+  const cssWidthValue = parseFloat(computedStyle.width);
+  const clientWidthValue = th.clientWidth;
+
+  // If clientWidth is very different from cssWidth (more than 5px), use cssWidth
+  // This handles padding/border inconsistencies across different columns
+  if (Math.abs(clientWidthValue - cssWidthValue) > 5) {
+    return cssWidthValue;
+  }
+
+  return clientWidthValue;
+};
+
+/**
+ * Calculates the new column width during resize
+ * @param startX - Initial mouse X position
+ * @param currentX - Current mouse X position
+ * @param startWidth - Initial column width
+ * @param minWidth - Minimum allowed width (default: 50px)
+ * @returns The new calculated width in pixels
+ */
+export const calculateNewColumnWidth = (startX: number, currentX: number, startWidth: number, minWidth: number = 50): number => {
+  const diff = currentX - startX;
+  return Math.max(minWidth, startWidth + diff);
+};
+
 export const handleInputKeydown = (event: KeyboardEvent, el: HTMLTkTableElement) => {
   const activeElement = el.shadowRoot.activeElement.parentElement as HTMLElement;
 
