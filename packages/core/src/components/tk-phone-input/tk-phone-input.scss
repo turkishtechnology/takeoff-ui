@@ -1,0 +1,245 @@
+:host {
+  display: block;
+}
+
+.tk-phone-input {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &__label {
+    display: flex;
+    align-items: flex-start;
+
+    &-title {
+      color: var(--text-darkest, #222530);
+      font-family: var(--desktop-label-s-font, 'Georgia');
+      font-size: var(--desktop-label-l-size, 16px);
+      font-weight: 400;
+      line-height: var(--desktop-label-l-size, 24px);
+      margin-bottom: 8px;
+    }
+
+    &-red-dot {
+      color: var(--states-danger-base, #ff3d32);
+      font-size: var(--desktop-label-m-base-size, 12px);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height, 18px);
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    width: -webkit-fill-available;
+    color: var(--text-darkest, #222530);
+    font-family: var(--desktop-label-s-font, 'Georgia');
+    border-radius: var(----button-sizes-large-radius, 8px);
+    border: 1px solid var(--border-light, #e1e4ea);
+    background: var(--static-Light, #fff);
+    padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+
+    &:focus {
+      border: 1px solid var(--states-info-base, #3b82f6);
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      border: 1px solid var(--border-light, #e1e4ea);
+      background: var(--background-lightest, #f9fafc);
+
+      &.country-selector .dropdown-button,
+      &.phone-input,
+      .dial-code {
+        color: var(--text-sub-base, #99a0ae);
+      }
+
+      ::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        color: var(--text-sub-base, #99a0ae);
+      }
+      ::-moz-placeholder {
+        /* Firefox 19+ */
+        color: var(--text-sub-base, #99a0ae);
+      }
+      :-ms-input-placeholder {
+        /* IE 10+ */
+        color: var(--text-sub-base, #99a0ae);
+      }
+      :-moz-placeholder {
+        /* Firefox 18- */
+        color: var(--text-sub-base, #99a0ae);
+      }
+    }
+
+    &--readonly {
+      cursor: not-allowed;
+      pointer-events: none;
+      border: 1px solid var(--border-light, #e1e4ea);
+      background: var(--background-lightest, #f9fafc);
+
+      & .country-selector .dropdown-button,
+      & .phone-input,
+      .dial-code {
+        color: var(--text-darkest, #222530);
+      }
+
+      ::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        color: var(--text-darkest, #222530);
+      }
+      ::-moz-placeholder {
+        /* Firefox 19+ */
+        color: var(--text-darkest, #222530);
+      }
+      :-ms-input-placeholder {
+        /* IE 10+ */
+        color: var(--text-darkest, #222530);
+      }
+      :-moz-placeholder {
+        /* Firefox 18- */
+        color: var(--text-darkest, #222530);
+      }
+    }
+
+    &--error {
+      border-color: var(--states-danger-base, #ff3d32);
+    }
+
+    &:hover {
+      background-color: #f9fafc;
+    }
+  }
+
+  &__dropdown {
+    position: relative;
+
+    &-button {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border: none;
+      cursor: pointer;
+      font-family: var(--desktop-label-s-font, 'Georgia');
+      font-size: var(--desktop-label-l-size, 16px);
+      background-color: transparent;
+      padding-right: var(--input-external-label-large-label-h-padding);
+
+      &-selected {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-right: 1px solid var(--border-light, #E1E4EA);
+
+      }
+      &-dial-code {
+        padding-right: var(--input-external-label-large-label-h-padding);
+      }
+    }
+
+    &-menu {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      z-index: 10;
+      background: #fff;
+      border: 1px solid var(--states-info-base, #3b82f6);
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+
+      &-search-wrapper {
+        position: relative;
+        padding: 8px;
+
+        &-search {
+          width: 100%;
+          padding: 8px 12px;
+          border: 1px solid var(--states-info-base, #3b82f6);
+          border-radius: 6px;
+          font-size: var(--desktop-label-m-base-size, 14px);
+          box-sizing: border-box;
+          outline: none;
+
+          &:focus {
+            border-color: var(--states-info-base, #3b82f6);
+          }
+        }
+        &-icon {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--icon-base, #717784);
+          pointer-events: none;
+        }
+      }
+
+      &-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 220px;
+        overflow-y: auto;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 16px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          font-family: var(--desktop-label-s-font, 'Georgia');
+
+          &:hover {
+            background-color: #f0f2f5;
+          }
+
+          &-country-label {
+            flex-grow: 1;
+            white-space: nowrap;
+            color: var(--text-darkest, #222530);
+            font-size: 15px;
+          }
+
+          &-dial-id {
+            color: var(--text-darkest, #222530);
+            font-size: var(--desktop-label-m-base-size, 14px);
+          }
+        }
+      }
+    }
+  }
+
+  &__input {
+    flex-grow: 1;
+    border: none;
+    font-family: var(--desktop-label-s-font, 'Georgia');
+    font-size: var(--desktop-label-l-size, 16px);
+    outline: none;
+    letter-spacing: 1.5px;
+    background-color: transparent;
+  }
+
+  &__message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--desktop-label-s-font-size);
+    font-family: var(--desktop-label-s-font, 'Georgia');
+    font-weight: 300;
+    padding: 6px 4px;
+    min-height: 24px;
+
+    &--valid {
+      color: var(--states-success-base);
+    }
+
+    &--invalid {
+      color: var(--states-danger-base, #ff3d32);
+    }
+  }
+}
