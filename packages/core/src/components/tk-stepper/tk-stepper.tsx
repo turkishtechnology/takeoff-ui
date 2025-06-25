@@ -167,6 +167,7 @@ export class TkStepper implements ComponentInterface {
       error: step.error,
       isActive: index === this.internalActive,
       disabled: step.disabled || false,
+      isClickable: step.isClickable !== undefined ? step.isClickable : true,
     }));
   }
 
@@ -179,8 +180,11 @@ export class TkStepper implements ComponentInterface {
   }
 
   private canStepBeSelected(targetIndex: number): boolean {
-    if (!this.linear) return !this.steps[targetIndex]?.disabled;
-    if (targetIndex < this.internalActive) return !this.steps[targetIndex]?.disabled;
+    const targetStep = this.steps[targetIndex];
+    if (!targetStep || targetStep.disabled || !targetStep.isClickable) return false;
+
+    if (!this.linear) return true;
+    if (targetIndex < this.internalActive) return true;
     if (targetIndex === this.internalActive + 1) {
       const currentStep = this.steps[this.internalActive];
       return !currentStep?.error && !currentStep?.disabled;
