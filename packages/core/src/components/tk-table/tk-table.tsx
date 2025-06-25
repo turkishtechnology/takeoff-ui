@@ -347,7 +347,7 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) / 7 || 20 };
         });
 
       worksheet.addRows(
