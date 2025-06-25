@@ -711,6 +711,7 @@ export class TkTable implements ComponentInterface {
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
               wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
           const visibleCheckboxes = Array.from(checkboxWrappers).filter(wrapper => {
@@ -863,7 +864,7 @@ export class TkTable implements ComponentInterface {
     const selectedValues = [];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index]) {
+      if (checkbox.value && column.filterOptions[index] && checkbox.style.display != 'none') {
         selectedValues.push(column.filterOptions[index].value);
       }
     });
