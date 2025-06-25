@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T08:56:38",
+  "timestamp": "2025-06-25T15:16:27",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -3070,7 +3070,7 @@
               "ChartData": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartData"
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData"
               }
             }
           },
@@ -3131,7 +3131,7 @@
               "ChartOptions": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions"
               }
             }
           },
@@ -3327,7 +3327,7 @@
               "ChartType": {
                 "location": "import",
                 "path": "chart.js/auto",
-                "id": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartType"
+                "id": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType"
               }
             }
           },
@@ -5463,7 +5463,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5544,7 +5544,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/H_DEMIR3/Documents/GitHub/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -7343,7 +7343,7 @@
               "AnyExtension": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
               }
             }
           },
@@ -7627,7 +7627,7 @@
               "JSONContent": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
               }
             },
             "return": "Promise<string | JSONContent>"
@@ -7660,7 +7660,7 @@
               "Editor": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::Editor"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor"
               }
             },
             "return": "Promise<Editor>"
@@ -16731,25 +16731,25 @@
       "docstring": "",
       "path": "src/components/tk-breadcrumb/interfaces.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartType": {
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartType": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartData": {
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartData": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
+    "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts::ChartOptions": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/chart.js@4.5.0/node_modules/chart.js/auto/auto.d.ts"
+      "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-editor/interfaces.ts::TkEditorCustomButton": {
       "declaration": "export interface TkEditorCustomButton {\n  /**\n   * The action to perform when the button is clicked\n   */\n  action: string;\n  /**\n   * The icon to display in the toolbar button\n   */\n  icon: string;\n  /**\n   * The label to display in the toolbar button\n   */\n  label: string;\n  /**\n   * The behavior of the button\n   */\n  behavior: TkEditorToolbarButtonBehavior;\n  /**\n   * The level of the heading to apply when the button is clicked\n   */\n  level?: HeadingLevel;\n  /**\n   * The command to run when the button is clicked\n   */\n  command?: (editor: Editor) => boolean | void;\n}",
@@ -16761,15 +16761,15 @@
       "docstring": "",
       "path": "src/components/tk-editor/interfaces.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
+    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.22.3_@tiptap+pm@2.22.3/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
       "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
