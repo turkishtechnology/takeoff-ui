@@ -8,6 +8,8 @@ import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { getIconElementProps } from '../../utils/icon-props';
+import '../../global/sass/fonts/Geologica/Geologica-Regular';
+import '../../global/sass/fonts/Geologica/Geologica-Bold';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -326,7 +328,9 @@ export class TkTable implements ComponentInterface {
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
-        headStyles: { fillColor: [201, 0, 25] },
+        headStyles: { fillColor: [201, 0, 25], fontStyle: 'bold' },
+        bodyStyles: { fontStyle: 'normal' },
+        styles: { font: 'Geologica' },
       });
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
