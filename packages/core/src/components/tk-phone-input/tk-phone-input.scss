@@ -20,7 +20,7 @@
       margin-bottom: 8px;
     }
 
-    &-red-dot {
+    &-red-asterisk {
       color: var(--states-danger-base, #ff3d32);
       font-size: var(--desktop-label-m-base-size, 12px);
       font-weight: 300;
@@ -38,10 +38,6 @@
     border: 1px solid var(--border-light, #e1e4ea);
     background: var(--static-Light, #fff);
     padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
-
-    &:focus {
-      border: 1px solid var(--states-info-base, #3b82f6);
-    }
 
     &--disabled {
       cursor: not-allowed;
@@ -103,8 +99,8 @@
       }
     }
 
-    &--error {
-      border-color: var(--states-danger-base, #ff3d32);
+    &--focus {
+      border: 1px solid var(--states-info-base, #3b82f6);
     }
 
     &:hover {
@@ -130,8 +126,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        border-right: 1px solid var(--border-light, #E1E4EA);
-
+        border-right: 1px solid var(--border-light, #e1e4ea);
       }
       &-dial-code {
         padding-right: var(--input-external-label-large-label-h-padding);

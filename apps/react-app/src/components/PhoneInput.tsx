@@ -12,8 +12,9 @@ function PhoneInput() {
         <div key={index}>{item.label}</div>
       ))}
       <TkPhoneInput
-        placeholder="Enter phone number"
-        initialCountry="TR"
+        //label="Enter phone number"
+        //showAsterisk
+        defaultCountry="TR"
         onTkChange={(e) => {
           console.log('change', e);
           setValue(e.detail);

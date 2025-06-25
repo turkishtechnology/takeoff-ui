@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-24T05:38:51",
+  "timestamp": "2025-06-25T08:03:45",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -9510,13 +9510,8 @@
       "filePath": "src/components/tk-phone-input/tk-phone-input.tsx",
       "encapsulation": "none",
       "tag": "tk-phone-input",
-      "docs": "Phone input component with country selector and validation",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "- Default slot for custom content"
-        }
-      ],
+      "docs": "",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -9552,6 +9547,30 @@
           "setter": false
         },
         {
+          "name": "defaultCountry",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "default-country",
+          "reflectToAttr": false,
+          "docs": "The default country to select (ISO country code).",
+          "docsTags": [],
+          "default": "'TR'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "disabled",
           "type": "boolean",
           "complexType": {
@@ -9576,7 +9595,7 @@
           "setter": false
         },
         {
-          "name": "emptyMessage",
+          "name": "error",
           "type": "string",
           "complexType": {
             "original": "string",
@@ -9584,22 +9603,22 @@
             "references": {}
           },
           "mutable": false,
-          "attr": "empty-message",
+          "attr": "error",
           "reflectToAttr": false,
-          "docs": "Message to display when no countries are available.\nIf not provided, a default message will be shown.",
+          "docs": "This is the error message that will be displayed.",
           "docsTags": [],
           "values": [
             {
               "type": "string"
             }
           ],
-          "optional": true,
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
         },
         {
-          "name": "errorMessage",
+          "name": "hint",
           "type": "string",
           "complexType": {
             "original": "string",
@@ -9607,37 +9626,42 @@
             "references": {}
           },
           "mutable": false,
-          "attr": "error-message",
+          "attr": "hint",
           "reflectToAttr": false,
-          "docs": "Error message for incomplete phone numbers.",
+          "docs": "Provided a hint or additional information about the input.",
           "docsTags": [],
           "values": [
             {
               "type": "string"
             }
           ],
-          "optional": true,
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
         },
         {
-          "name": "initialCountry",
-          "type": "string",
+          "name": "invalid",
+          "type": "boolean",
           "complexType": {
-            "original": "string",
-            "resolved": "string",
+            "original": "boolean",
+            "resolved": "boolean",
             "references": {}
           },
           "mutable": false,
-          "attr": "initial-country",
+          "attr": "invalid",
           "reflectToAttr": false,
-          "docs": "The default country to select (ISO country code).",
-          "docsTags": [],
-          "default": "'US'",
+          "docs": "Indicates whether the input is in an invalid state",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
           "values": [
             {
-              "type": "string"
+              "type": "boolean"
             }
           ],
           "optional": false,
@@ -9658,7 +9682,6 @@
           "reflectToAttr": false,
           "docs": "The label for the phone input.\nDefaults to 'Phone Number'.",
           "docsTags": [],
-          "default": "'Phone Number'",
           "values": [
             {
               "type": "string"
@@ -9717,6 +9740,30 @@
           "setter": false
         },
         {
+          "name": "showAsterisk",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "show-asterisk",
+          "reflectToAttr": false,
+          "docs": "Displays a red asterisk (*) next to the label for visual emphasis.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "IPhoneInputData[]",
           "complexType": {
@@ -9732,7 +9779,7 @@
           },
           "mutable": true,
           "reflectToAttr": false,
-          "docs": "The unique identifier for the phone input.\nUsed for testing and accessibility.",
+          "docs": "The value of the phone input.\nThis is a list of phone input data objects.\nIt can be mutable to allow two-way binding.",
           "docsTags": [],
           "values": [
             {
@@ -9748,6 +9795,20 @@
       "methods": [],
       "events": [
         {
+          "event": "tk-blur",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the input loses focus.",
+          "docsTags": []
+        },
+        {
           "event": "tk-change",
           "detail": "any",
           "bubbles": true,
@@ -9760,16 +9821,25 @@
           "composed": false,
           "docs": "Emitted when the value has changed.",
           "docsTags": []
+        },
+        {
+          "event": "tk-focus",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the input has focus.",
+          "docsTags": []
         }
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "",
-          "docs": "Default slot for custom content"
-        }
-      ],
+      "slots": [],
       "parts": [],
       "dependents": [],
       "dependencies": [
@@ -17071,7 +17141,7 @@
       "path": "src/components/tk-stepper/interfaces.ts"
     },
     "src/components/tk-table/interfaces.ts::ITableColumn": {
-      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n\n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n  filterElements?: {\n    searchInput?: { placeholder?: string };\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n    optionsSearchInput?: { show?: boolean; placeholder?: string };\n  };\n}",
+      "declaration": "export interface ITableColumn {\n  /** Defines the field for the column */\n  field: string;\n  /** Defines heading for the column */\n  header: string;\n  /** Defines sub heading for the column */\n  subHeader?: string;\n  /** Defines width for the column */\n  width?: string;\n  /** Indicates if the column supports sorting */\n  sortable?: boolean;\n  /** Custom sort function for the column */\n  sorter?: Function;\n  /** Custom filter function for the column */\n  filter?: Function;\n  /** Indicates if the column is searchable */\n  searchable?: boolean;\n  /** Indicates if the column is editable */\n  editable?: boolean;\n  /** Specifies the input type for editable columns */\n  inputType?: string;\n  /** Indicates if the column contains selection checkboxes */\n  selectColumn?: boolean;\n  /** Indicates if the column acts as an expander */\n  expander?: boolean;\n  /** Custom rendering function for HTML content in the column header */\n  headerHtml?: Function;\n  /** Custom rendering function for HTML content in the column cells */\n  html?: Function;\n  /** */\n  fixed?: 'left' | 'right';\n  /** Allows styling to be applied to the th element of the column */\n  style?: any;\n  /** When true, search and sort icons will only be displayed when hovering over the th element */\n  showIconsOnHover?: boolean;\n  /** Defines the filter type for this column (text, checkbox or radio) */\n  filterType?: 'text' | 'checkbox' | 'radio';\n  /** Defines options for checkbox or radio filter type */\n  filterOptions?: IFilterOption[];\n  /** Defines the label of the buttons */\n  filterButtons?: {\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n  };\n  filterElements?: {\n    icon?: string;\n    searchInput?: { placeholder?: string };\n    searchButton?: { label?: string };\n    cancelButton?: { label?: string };\n    selectAllCheckbox?: { label?: string };\n    optionsSearchInput?: { show?: boolean; placeholder?: string };\n  };\n}",
       "docstring": "Defines the columns for the table",
       "path": "src/components/tk-table/interfaces.ts"
     },

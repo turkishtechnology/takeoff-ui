@@ -5,22 +5,24 @@ import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputData, IPhoneInputDataList, IPhoneInputProps } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-props';
 
+/**
+ * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
+ * @react `import { TkPhoneInput } from '@takeoff-ui/react'`
+ * @vue `import { TkPhoneInput } from '@takeoff-ui/vue'`
+ * @angular `import { TkPhoneInput } from '@takeoff-ui/angular'`
+ */
+
 // For backward compatibility
 export type Country = ICountry;
 export type PhoneInputData = IPhoneInputData;
 
-/**
- * Phone input component with country selector and validation
- *
- * @slot - Default slot for custom content
- */
 @Component({
   tag: 'tk-phone-input',
   styleUrls: ['tk-phone-input.scss', 'flag.scss'],
   formAssociated: true,
 })
 export class TkPhoneInput implements IPhoneInputProps {
-  @Element() private hostElement!: HTMLElement;
+  @Element() private el!: HTMLTkPhoneInputElement;
 
   /**
    * Reference to the phone number input element.
@@ -31,19 +33,49 @@ export class TkPhoneInput implements IPhoneInputProps {
    * Reference to the country search input element.
    */
   private searchInput!: HTMLInputElement;
-  /**
-   * The unique identifier for the phone input.
-   * Used for testing and accessibility.
-   */
 
+  /**
+   * The list of countries to display in the dropdown.
+   */
+  @State() private countries: ICountry[] = [];
+
+  /**
+   * The currently selected country.
+   */
+  @State() private selectedCountry!: ICountry;
+
+  /**
+   * The current input value with mask applied.
+   */
+  @State() private inputValue: string = '';
+
+  /**
+   * Whether the input has been touched.
+   */
+  @State() hasFocus = false;
+
+  /**
+   * Whether the country dropdown is open.
+   */
+  @State() private isDropdownOpen: boolean = false;
+
+  /**
+   * The current search term for filtering countries.
+   */
+  @State() private searchTerm: string = '';
+
+  /**
+   * The value of the phone input.
+   * This is a list of phone input data objects.
+   * It can be mutable to allow two-way binding.
+   */
   @Prop({ mutable: true }) value?: IPhoneInputDataList;
 
   /**
    * The label for the phone input.
    * Defaults to 'Phone Number'.
    */
-
-  @Prop() label: string = 'Phone Number';
+  @Prop() label: string;
 
   /**
    * The list of countries to display in the dropdown.
@@ -64,7 +96,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * The default country to select (ISO country code).
    */
-  @Prop() initialCountry: string = 'US';
+  @Prop() defaultCountry: string = 'TR';
 
   /**
    * Placeholder text for the phone input.
@@ -72,16 +104,25 @@ export class TkPhoneInput implements IPhoneInputProps {
   @Prop() placeholder?: string;
 
   /**
-   * Error message for incomplete phone numbers.
+   * Displays a red asterisk (*) next to the label for visual emphasis.
    */
-  @Prop() errorMessage?: string;
+  @Prop() showAsterisk: boolean = false;
 
   /**
-   * Message to display when no countries are available.
-   * If not provided, a default message will be shown.
+   * Provided a hint or additional information about the input.
    */
+  @Prop() hint: string;
 
-  @Prop() emptyMessage?: string;
+  /**
+   * Indicates whether the input is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
+
+  /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error: string;
 
   /**
    * Emitted when the value has changed.
@@ -89,54 +130,14 @@ export class TkPhoneInput implements IPhoneInputProps {
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
 
   /**
-   * The list of countries to display in the dropdown.
+   * Emitted when the input loses focus.
    */
-  @State() private countries: ICountry[] = [];
+  @Event({ eventName: 'tk-blur' }) tkBlur: EventEmitter<void>;
 
   /**
-   * The currently selected country.
+   * Emitted when the input has focus.
    */
-  @State() private selectedCountry!: ICountry;
-
-  /**
-   * The current input value with mask applied.
-   */
-  @State() private inputValue: string = '';
-
-  /**
-   * The validation message to display.
-   */
-  @State() private validationMessage: string = '';
-
-  /**
-   * Whether the input has been touched.
-   */
-  @State() private isFocused: boolean = true;
-
-  /**
-   * Whether the country dropdown is open.
-   */
-  @State() private isDropdownOpen: boolean = false;
-
-  /**
-   * Whether the input is empty.
-   * This is used to show a message when no countries are available.
-   */
-  @State() private isEmpty: boolean = false;
-
-  /**
-   * The current search term for filtering countries.
-   */
-  @State() private searchTerm: string = '';
-
-  /**
-   * Event handler for clicks outside the component to close dropdown.
-   */
-  private handleClickOutside = (event: MouseEvent): void => {
-    if (!this.hostElement.contains(event.target as Node)) {
-      this.isDropdownOpen = false;
-    }
-  };
+  @Event({ eventName: 'tk-focus' }) tkFocus: EventEmitter<void>;
 
   /**
    * Add event listeners when the component is connected to the DOM.
@@ -157,7 +158,7 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   componentWillLoad(): void {
     this.initializeCountries();
-    this.setSelectedCountry(this.initialCountry);
+    this.setSelectedCountry(this.defaultCountry);
   }
 
   /**
@@ -212,8 +213,6 @@ export class TkPhoneInput implements IPhoneInputProps {
   private handleCountrySelect = (country: ICountry): void => {
     this.setSelectedCountry(country.id);
     this.inputValue = '';
-    this.validationMessage = '';
-    this.isFocused = true;
     this.isDropdownOpen = false;
     this.searchTerm = '';
     this.textInput?.focus();
@@ -228,6 +227,25 @@ export class TkPhoneInput implements IPhoneInputProps {
       if (this.isDropdownOpen) {
         this.searchInput?.focus();
       }
+    }
+  };
+
+  /**
+   * Get the filtered list of countries based on the search term.
+   */
+  private getFilteredCountries(): ICountry[] {
+    const term = this.searchTerm.toLowerCase();
+    if (!term) return this.countries;
+
+    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country.dialCode.includes(term));
+  }
+
+  /**
+   * Event handler for clicks outside the component to close dropdown.
+   */
+  private handleClickOutside = (event: MouseEvent): void => {
+    if (!this.el.contains(event.target as Node)) {
+      this.isDropdownOpen = false;
     }
   };
 
@@ -252,10 +270,9 @@ export class TkPhoneInput implements IPhoneInputProps {
       return;
     }
 
-    this.isFocused = false;
+    this.hasFocus = false;
     this.inputValue = this.applyMask(rawValue, currentMask);
     this.textInput.value = this.inputValue;
-    this.validateInput();
 
     this.value = [
       {
@@ -268,66 +285,42 @@ export class TkPhoneInput implements IPhoneInputProps {
     this.tkChange.emit(this.value);
   };
 
-  /**
-   * Handle blur events on the phone number input.
-   */
-  private handleInputBlur = (): void => {
-    this.validateInput();
+  private handleInputBlur = () => {
+    this.hasFocus = false;
+    this.tkBlur.emit();
   };
 
-  /**
-   * Validate the current input and set the validation message.
-   */
-  private validateInput(): void {
-    if (this.isFocused || this.inputValue === '' || !this.selectedCountry) {
-      this.isEmpty = true;
-      this.validationMessage = this.emptyMessage || 'This field is required.';
-      return;
-    } else {
-      this.isEmpty = false;
-      this.validationMessage = '';
+  private handleInputFocus = () => {
+    this.hasFocus = true;
+    this.tkFocus.emit();
+  };
+
+  private renderLabel() {
+    let label;
+    if (this.label?.length > 0) {
+      const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
+      label = (
+        <label htmlFor="phone-input" class="tk-phone-input__label">
+          <span class="tk-phone-input__label-title">{this.label}</span>
+          {this.showAsterisk ? asterisk : ''}
+        </label>
+      );
     }
 
-    const currentMask = this.selectedCountry.mask;
-    const digitsInInput = this.inputValue.replace(/\D/g, '').length;
-    const digitsInMask = (currentMask.match(/9/g) || []).length;
-
-    if (digitsInInput < digitsInMask) {
-      this.validationMessage = this.errorMessage || 'Please complete your phone number.';
-      this.isEmpty = true;
-    }
-  }
-
-  /**
-   * Get the filtered list of countries based on the search term.
-   */
-  private getFilteredCountries(): ICountry[] {
-    const term = this.searchTerm.toLowerCase();
-    if (!term) return this.countries;
-
-    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country.dialCode.includes(term));
-  }
-
-  private createLabel() {
-    return (
-      <label htmlFor="phone-input" class="tk-phone-input__label">
-        <span class="tk-phone-input__label-title">{this.label}</span>
-        <span class="tk-phone-input__label-red-dot">*</span>
-      </label>
-    );
+    return label;
   }
 
   /**
    * Create the country selector dropdown.
    */
-  private createCountryOption() {
+  private renderCountrySelector() {
     return (
       <div class="tk-phone-input__dropdown">
-        {this.createDropdownButton()}
+        {this.renderDropdownButton()}
         {this.isDropdownOpen && (
           <div class="tk-phone-input__dropdown-menu" role="listbox">
-            {this.createDropdownSearch()}
-            {this.createDropdownList()}
+            {this.renderDropdownSearch()}
+            {this.renderDropdownList()}
           </div>
         )}
       </div>
@@ -337,7 +330,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Create the dropdown button for selecting a country.
    */
-  private createDropdownButton() {
+  private renderDropdownButton() {
     return (
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button" disabled={this.disabled}>
         <div class="tk-phone-input__dropdown-button-selected">
@@ -356,8 +349,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Create the search input for filtering countries in the dropdown.
    */
-
-  private createDropdownSearch() {
+  private renderDropdownSearch() {
     return (
       <div class="tk-phone-input__dropdown-menu-search-wrapper">
         <input
@@ -378,8 +370,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Create the dropdown list of countries.
    */
-
-  private createDropdownList() {
+  private renderDropdownList() {
     return (
       <ul class="tk-phone-input__dropdown-menu-list">
         {this.getFilteredCountries().map(country => (
@@ -396,8 +387,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Create the phone number input field.
    */
-
-  private createPhoneInput() {
+  private renderPhoneInput() {
     return (
       <input
         type="tel"
@@ -408,46 +398,61 @@ export class TkPhoneInput implements IPhoneInputProps {
         value={this.inputValue}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
+        onFocus={this.handleInputFocus}
         disabled={this.disabled}
         ref={el => (this.textInput = el as HTMLInputElement)}
       />
     );
   }
 
-  /**
-   * Create a loading indicator while the component is initializing.
-   */
-  private createLoading() {
-    return <div>Loading...</div>;
+  private renderHint(): HTMLSpanElement {
+    let hint;
+
+    if (this.hint?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
+      hint = (
+        <span class="tk-phone-input__hint">
+          {hintIcon}
+          <span class="tk-phone-input__hint-text">{this.hint}</span>
+        </span>
+      );
+    }
+
+    if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
+      hint = (
+        <span class="tk-phone-input__hint tk-phone-input__hint--error">
+          {hintIcon}
+          <span class="tk-phone-input__hint-text">{this.error}</span>
+        </span>
+      );
+    }
+
+    return hint;
   }
 
   /**
    * Render the component.
    */
-
   render() {
-    if (!this.selectedCountry) {
-      return this.createLoading();
-    }
-
     return (
       <div class={classNames('tk-phone-input')}>
-        {this.createLabel()}
+        {this.renderLabel()}
         <div
           class={classNames(
             'tk-phone-input__wrapper',
             this.disabled && 'tk-phone-input__wrapper--disabled',
-            this.isEmpty && 'tk-phone-input__wrapper--error',
+            this.hasFocus && 'tk-phone-input__wrapper--focus',
             this.readonly && 'tk-phone-input__wrapper--readonly',
           )}
         >
-          {this.createCountryOption()}
-          {this.createPhoneInput()}
+          {this.renderCountrySelector()}
+          {this.renderPhoneInput()}
         </div>
-        <div class={classNames('tk-phone-input__message tk-phone-input__message--invalid', this.isEmpty && 'tk-phone-input__message--invalid')}>
-          {this.validationMessage && <tk-icon {...getIconElementProps('info', { variant: null, iconType: 'sharp' }, undefined, 'span')} />}
-          {this.validationMessage}
-        </div>
+
+        {this.renderHint()}
       </div>
     );
   }
