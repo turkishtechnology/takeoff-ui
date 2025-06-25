@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T08:56:38",
+  "timestamp": "2025-06-25T13:44:35",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -5014,6 +5014,73 @@
           "values": [
             {
               "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "icon",
+          "type": "IIconOptions | string",
+          "complexType": {
+            "original": "string | IIconOptions",
+            "resolved": "IIconOptions | string",
+            "references": {
+              "IIconOptions": {
+                "location": "import",
+                "path": "../../global/interfaces/IIconOptions",
+                "id": "src/global/interfaces/IIconOptions.ts::IIconOptions"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "Specifies a material icon name to be displayed.",
+          "docsTags": [],
+          "default": "\"calendar_month\"",
+          "values": [
+            {
+              "type": "IIconOptions"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconPosition",
+          "type": "\"left\" | \"right\"",
+          "complexType": {
+            "original": "'left' | 'right'",
+            "resolved": "\"left\" | \"right\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-position",
+          "reflectToAttr": false,
+          "docs": "Defines the position of the icon.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "left"
+            }
+          ],
+          "default": "'left'",
+          "values": [
+            {
+              "value": "left",
+              "type": "string"
+            },
+            {
+              "value": "right",
+              "type": "string"
             }
           ],
           "optional": false,
