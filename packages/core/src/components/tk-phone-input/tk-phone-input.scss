@@ -139,9 +139,9 @@
       left: 0;
       z-index: 10;
       background: #fff;
-      border: 1px solid var(--states-info-base, #3b82f6);
+      border: 1px solid var(--border-light, #E1E4EA);
       border-radius: 8px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--effect-1-default-sm);
       min-width: 300px;
       display: flex;
       flex-direction: column;
@@ -153,7 +153,7 @@
         &-search {
           width: 100%;
           padding: 8px 12px;
-          border: 1px solid var(--states-info-base, #3b82f6);
+          border: 1px solid var(--border-light, #E1E4EA);
           border-radius: 6px;
           font-size: var(--desktop-label-m-base-size, 14px);
           box-sizing: border-box;
