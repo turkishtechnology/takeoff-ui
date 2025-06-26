@@ -864,7 +864,7 @@ export class TkTable implements ComponentInterface {
     const selectedValues = [];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index] && checkbox.style.display != 'none') {
+      if (checkbox.value && column.filterOptions[index] && checkbox.style.display !== 'none') {
         selectedValues.push(column.filterOptions[index].value);
       }
     });
