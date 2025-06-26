@@ -824,6 +824,23 @@ export class TkTable implements ComponentInterface {
             const label = radio.label.toLowerCase();
             wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
           });
+
+          const wrappers = Array.from(filterContainer.querySelectorAll('.tk-table-filter-radio-item'));
+          const allHidden = wrappers.length > 0 && wrappers.every(wrapper => (wrapper as HTMLElement).style.display === 'none');
+          const emptyDiv = filterContainer.querySelector('.tk-table-filter-empty-state');
+
+          if (allHidden) {
+            if (!emptyDiv) {
+              const emptyMessage = document.createElement('div');
+              emptyMessage.classList.add('tk-table-filter-empty-state');
+              emptyMessage.textContent = column?.filterElements?.emptyMessage || 'No matching result';
+              filterContainer.appendChild(emptyMessage);
+            }
+          } else {
+            if (emptyDiv) {
+              filterContainer.removeChild(emptyDiv);
+            }
+          }
         });
         optionsSearchInput.style.marginBottom = '0.75rem';
         filterContainer.appendChild(optionsSearchInput);

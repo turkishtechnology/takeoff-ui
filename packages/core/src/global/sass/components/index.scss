@@ -14,16 +14,18 @@
   padding: 8px;
   gap: 8px;
 
+  .tk-table-filter-empty-state {
+    color: var(--text-sub-base);
+    align-self: center;
+    justify-self: center;
+  }
   .tk-table-filter-checkbox-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
     max-height: 200px;
     overflow-y: auto;
-    .tk-table-filter-empty-state {
-      color: var(--text-sub-base);
-      align-self: center;
-    }
+
     .tk-table-filter-checkbox-item {
       display: flex;
       align-items: center;
