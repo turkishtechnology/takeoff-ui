@@ -26,7 +26,6 @@ tk-dialog {
     width: 100%;
     height: 100%;
     z-index: 0;
-    backdrop-filter: blur(2px);
   }
 
   &.tk-dialog-visible {
@@ -40,22 +39,37 @@ tk-dialog {
   &:not(.tk-dialog-mask-hidden) {
     &.tk-dialog-mask-lightest {
       background-color: var(--overlay-black-lightest);
+      &.tk-dialog-mask-blur {
+        backdrop-filter: blur(2px);
+      }
     }
 
     &.tk-dialog-mask-light {
       background-color: var(--overlay-black-light);
+      &.tk-dialog-mask-blur {
+        backdrop-filter: blur(2px);
+      }
     }
 
     &.tk-dialog-mask-base {
       background-color: var(--overlay-black-base);
+      &.tk-dialog-mask-blur {
+        backdrop-filter: blur(2px);
+      }
     }
 
     &.tk-dialog-mask-dark {
       background-color: var(--overlay-black-dark);
+      &.tk-dialog-mask-blur {
+        backdrop-filter: blur(2px);
+      }
     }
 
     &.tk-dialog-mask-darkest {
       background-color: var(--overlay-black-darkest);
+      &.tk-dialog-mask-blur {
+        backdrop-filter: blur(2px);
+      }
     }
   }
 }

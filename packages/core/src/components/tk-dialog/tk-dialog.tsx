@@ -98,6 +98,12 @@ export class TkDialog implements ComponentInterface {
   @Prop() maskVariant: 'lightest' | 'light' | 'base' | 'dark' | 'darkest' = 'base';
 
   /**
+   * Controls whether the dialog has a blur background
+   * @defaultValue false
+   */
+  @Prop() hasBlur: boolean = false;
+
+  /**
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
@@ -291,6 +297,7 @@ export class TkDialog implements ComponentInterface {
     const maskClasses = classNames('tk-dialog-mask', `tk-dialog-mask-${this.maskVariant}`, {
       'tk-dialog-visible': this.visible,
       'tk-dialog-mask-hidden': this.hideBackdrop,
+      'tk-dialog-mask-blur': this.hasBlur,
     });
     return (
       <div class={maskClasses}>
