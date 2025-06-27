@@ -43,17 +43,6 @@ tk-pagination {
     flex-wrap: wrap;
     gap: var(--pagination-base-gap, 6px);
 
-    .tk-pagination-ellipsis {
-      min-width: 32px;
-      height: 32px;
-      align-content: center;
-      text-align-last: center;
-      font-family: var(--desktop-body-s-font);
-      font-size: var(--desktop-body-s-size, 14px);
-      font-style: normal;
-      font-weight: 400;
-      line-height: var(--desktop-body-s-line-height, 20px); /* 142.857% */
-    }
     .tk-pagination-prev-actions,
     .tk-pagination-next-actions {
       display: flex;
@@ -65,7 +54,7 @@ tk-pagination {
       display: flex;
       min-width: 32px;
       height: 32px;
-      //tasarımdaki sayılar tam karşılamıyor 8px ve 12px aslında 6px ve 11pxe tekabul
+      // The numbers in the design do not match exactly; 8px and 12px actually correspond to 6px and 11px
       padding: 6px 11px;
       justify-content: center;
       align-items: center;
@@ -91,7 +80,7 @@ tk-pagination {
         color: var(--icon-base);
       }
 
-      &:hover:not(:disabled) {
+      &:hover:not(:disabled):not(.tk-pagination-ellipsis) {
         background: var(--background-lightest, #f9fafc);
       }
 
