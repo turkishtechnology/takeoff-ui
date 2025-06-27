@@ -32,7 +32,7 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Reference to the country search input element.
    */
-  private searchInput!: HTMLInputElement;
+  private searchInput!: HTMLTkInputElement;
 
   /**
    * The list of countries to display in the dropdown.
@@ -114,15 +114,14 @@ export class TkPhoneInput implements IPhoneInputProps {
   @Prop() hint: string;
 
   /**
-   * Indicates whether the input is in an invalid state
-   * @defaultValue false
-   */
-  @Prop() invalid: boolean = false;
-
-  /**
    * This is the error message that will be displayed.
    */
   @Prop() error: string;
+
+  /**
+   * Sets size for the component.
+   */
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
    * Emitted when the value has changed.
@@ -279,7 +278,6 @@ export class TkPhoneInput implements IPhoneInputProps {
         rawValue,
         maskedValue: this.inputValue,
         dialCode: this.selectedCountry.dialCode,
-        country: this.selectedCountry,
       },
     ] as IPhoneInputDataList;
     this.tkChange.emit(this.value);
@@ -334,7 +332,7 @@ export class TkPhoneInput implements IPhoneInputProps {
     return (
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button" disabled={this.disabled}>
         <div class="tk-phone-input__dropdown-button-selected">
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null }, undefined, 'span')} />
+          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
             alt={`${this.selectedCountry.label} flag`}
@@ -352,17 +350,16 @@ export class TkPhoneInput implements IPhoneInputProps {
   private renderDropdownSearch() {
     return (
       <div class="tk-phone-input__dropdown-menu-search-wrapper">
-        <input
-          id="country-search"
-          type="search"
-          class="tk-phone-input__dropdown-menu-search-wrapper-search"
+        <tk-input
+          size={this.size}
           placeholder="Search"
           value={this.searchTerm}
-          onInput={this.handleSearchChange}
+          onTk-change={this.handleSearchChange}
+          ref={el => (this.searchInput = el as HTMLTkInputElement)}
+          icon="search"
+          iconPosition="right"
           onClick={(e: MouseEvent) => e.stopPropagation()}
-          ref={el => (this.searchInput = el as HTMLInputElement)}
         />
-        <tk-icon {...getIconElementProps('search', { variant: null }, undefined, 'span')} class="tk-phone-input__dropdown-menu-search-wrapper-icon" />
       </div>
     );
   }
@@ -374,7 +371,13 @@ export class TkPhoneInput implements IPhoneInputProps {
     return (
       <ul class="tk-phone-input__dropdown-menu-list">
         {this.getFilteredCountries().map(country => (
-          <li onClick={() => this.handleCountrySelect(country)} key={country.id} role="option" aria-selected={country.id === this.selectedCountry.id}>
+          <li
+            class="tk-phone-input__dropdown-menu-list-item"
+            onClick={() => this.handleCountrySelect(country)}
+            key={country.id}
+            role="option"
+            aria-selected={country.id === this.selectedCountry.id}
+          >
             <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={`flag flag-${country.id.toLowerCase()}`} />
             <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
             <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>
@@ -438,15 +441,14 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   render() {
     return (
-      <div class={classNames('tk-phone-input')}>
+      <div class={classNames('tk-phone-input', `tk-phone-input--${this.size}`)}>
         {this.renderLabel()}
         <div
-          class={classNames(
-            'tk-phone-input__wrapper',
-            this.disabled && 'tk-phone-input__wrapper--disabled',
-            this.hasFocus && 'tk-phone-input__wrapper--focus',
-            this.readonly && 'tk-phone-input__wrapper--readonly',
-          )}
+          class={classNames('tk-phone-input__wrapper', {
+            'tk-phone-input__wrapper--disabled': this.disabled,
+            'tk-phone-input__wrapper--focus': this.hasFocus,
+            'tk-phone-input__wrapper--readonly': this.readonly,
+          })}
         >
           {this.renderCountrySelector()}
           {this.renderPhoneInput()}

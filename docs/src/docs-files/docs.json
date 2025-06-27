@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T08:03:45",
+  "timestamp": "2025-06-27T13:38:59",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -8895,6 +8895,7 @@
       "dependents": [
         "tk-datepicker",
         "tk-pagination",
+        "tk-phone-input",
         "tk-select",
         "tk-table"
       ],
@@ -8920,6 +8921,9 @@
           "tk-input"
         ],
         "tk-pagination": [
+          "tk-input"
+        ],
+        "tk-phone-input": [
           "tk-input"
         ],
         "tk-select": [
@@ -9641,35 +9645,6 @@
           "setter": false
         },
         {
-          "name": "invalid",
-          "type": "boolean",
-          "complexType": {
-            "original": "boolean",
-            "resolved": "boolean",
-            "references": {}
-          },
-          "mutable": false,
-          "attr": "invalid",
-          "reflectToAttr": false,
-          "docs": "Indicates whether the input is in an invalid state",
-          "docsTags": [
-            {
-              "name": "defaultValue",
-              "text": "false"
-            }
-          ],
-          "default": "false",
-          "values": [
-            {
-              "type": "boolean"
-            }
-          ],
-          "optional": false,
-          "required": false,
-          "getter": false,
-          "setter": false
-        },
-        {
           "name": "label",
           "type": "string",
           "complexType": {
@@ -9764,6 +9739,39 @@
           "setter": false
         },
         {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Sets size for the component.",
+          "docsTags": [],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "IPhoneInputData[]",
           "complexType": {
@@ -9843,10 +9851,24 @@
       "parts": [],
       "dependents": [],
       "dependencies": [
-        "tk-icon"
+        "tk-icon",
+        "tk-input"
       ],
       "dependencyGraph": {
         "tk-phone-input": [
+          "tk-icon",
+          "tk-input"
+        ],
+        "tk-input": [
+          "tk-chips",
+          "tk-icon",
+          "tk-button"
+        ],
+        "tk-chips": [
+          "tk-icon"
+        ],
+        "tk-button": [
+          "tk-spinner",
           "tk-icon"
         ]
       }
