@@ -1,5 +1,6 @@
 import { Component, h, State, Prop, Element, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
+import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputData, IPhoneInputDataList, IPhoneInputProps } from './interfaces';
@@ -27,12 +28,14 @@ export class TkPhoneInput implements IPhoneInputProps {
   /**
    * Reference to the phone number input element.
    */
-  private textInput!: HTMLInputElement;
+  private inputRef!: HTMLInputElement;
 
   /**
    * Reference to the country search input element.
    */
   private searchInput!: HTMLTkInputElement;
+  private cleanup;
+  private panelRef?: HTMLDivElement;
 
   /**
    * The list of countries to display in the dropdown.
@@ -161,6 +164,20 @@ export class TkPhoneInput implements IPhoneInputProps {
   }
 
   /**
+   * Update the component when properties change.
+   */
+  componentDidUpdate() {
+    if (this.isDropdownOpen) {
+      this.cleanup = autoUpdate(this.el.querySelector('.tk-phone-input__wrapper'), this.el, () => this.updatePosition(), {
+        animationFrame: true,
+      });
+    } else {
+      this.panelRef?.remove();
+      this.cleanup && this.cleanup();
+    }
+  }
+
+  /**
    * Initialize the list of countries from the provided prop or fallback to internal list.
    */
   private initializeCountries(): void {
@@ -206,16 +223,22 @@ export class TkPhoneInput implements IPhoneInputProps {
     return maskedValue;
   }
 
-  /**
-   * Handle country selection from the dropdown.
-   */
-  private handleCountrySelect = (country: ICountry): void => {
-    this.setSelectedCountry(country.id);
-    this.inputValue = '';
-    this.isDropdownOpen = false;
-    this.searchTerm = '';
-    this.textInput?.focus();
-  };
+  private updatePosition() {
+    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper');
+
+    if (tkInputRootEl && this.panelRef) {
+      computePosition(tkInputRootEl, this.panelRef, {
+        strategy: 'fixed',
+        placement: 'bottom-start',
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.panelRef.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
+    }
+  }
 
   /**
    * Toggle the country dropdown.
@@ -238,6 +261,17 @@ export class TkPhoneInput implements IPhoneInputProps {
 
     return this.countries.filter(country => country.label.toLowerCase().includes(term) || country.dialCode.includes(term));
   }
+
+  /**
+   * Handle country selection from the dropdown.
+   */
+  private handleCountrySelect = (country: ICountry): void => {
+    this.setSelectedCountry(country.id);
+    this.inputValue = '';
+    this.isDropdownOpen = false;
+    this.searchTerm = '';
+    this.inputRef?.focus();
+  };
 
   /**
    * Event handler for clicks outside the component to close dropdown.
@@ -265,13 +299,13 @@ export class TkPhoneInput implements IPhoneInputProps {
     const maxDigits = (currentMask.match(/9/g) || []).length;
 
     if (rawValue.length > maxDigits) {
-      this.textInput.value = this.inputValue;
+      this.inputRef.value = this.inputValue;
       return;
     }
 
     this.hasFocus = false;
     this.inputValue = this.applyMask(rawValue, currentMask);
-    this.textInput.value = this.inputValue;
+    this.inputRef.value = this.inputValue;
 
     this.value = [
       {
@@ -316,7 +350,7 @@ export class TkPhoneInput implements IPhoneInputProps {
       <div class="tk-phone-input__dropdown">
         {this.renderDropdownButton()}
         {this.isDropdownOpen && (
-          <div class="tk-phone-input__dropdown-menu" role="listbox">
+          <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
             {this.renderDropdownSearch()}
             {this.renderDropdownList()}
           </div>
@@ -349,18 +383,17 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   private renderDropdownSearch() {
     return (
-      <div class="tk-phone-input__dropdown-menu-search-wrapper">
-        <tk-input
-          size={this.size}
-          placeholder="Search"
-          value={this.searchTerm}
-          onTk-change={this.handleSearchChange}
-          ref={el => (this.searchInput = el as HTMLTkInputElement)}
-          icon="search"
-          iconPosition="right"
-          onClick={(e: MouseEvent) => e.stopPropagation()}
-        />
-      </div>
+      <tk-input
+        class="tk-phone-input__dropdown-menu-search"
+        size={this.size}
+        placeholder="Search"
+        value={this.searchTerm}
+        onTk-change={this.handleSearchChange}
+        ref={el => (this.searchInput = el as HTMLTkInputElement)}
+        icon="search"
+        iconPosition="right"
+        onClick={(e: MouseEvent) => e.stopPropagation()}
+      />
     );
   }
 
@@ -403,7 +436,7 @@ export class TkPhoneInput implements IPhoneInputProps {
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         disabled={this.disabled}
-        ref={el => (this.textInput = el as HTMLInputElement)}
+        ref={el => (this.inputRef = el as HTMLInputElement)}
       />
     );
   }
