@@ -1,7 +1,8 @@
 tk-dialog {
   display: none;
 
-  &[visible], &[visible="true"] {
+  &[visible],
+  &[visible="true"] {
     display: block;
   }
 }
@@ -19,6 +20,10 @@ tk-dialog {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 
+  &.tk-dialog-mask-blur {
+    backdrop-filter: blur(2px);
+  }
+
   .tk-dialog-overlay {
     position: absolute;
     top: 0;
@@ -26,6 +31,7 @@ tk-dialog {
     width: 100%;
     height: 100%;
     z-index: 0;
+
   }
 
   &.tk-dialog-visible {
