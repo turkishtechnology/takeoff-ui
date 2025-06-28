@@ -347,7 +347,7 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) / 7 || 20 };  //Add this 7 because of unit conversion (In excel inches are used and 7px is approximately 1inch)
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) / 7 || 20 }; //Add this 7 because of unit conversion (In excel inches are used and 7px is approximately 1inch)
         });
 
       worksheet.addRows(
@@ -849,7 +849,7 @@ export class TkTable implements ComponentInterface {
     buttons.appendChild(cancelButton);
     buttons.appendChild(searchButton);
     this.elFilterPanelElement.appendChild(buttons);
-
+    this.elFilterPanelElement.style.zIndex = '1700';
     document.body.appendChild(this.elFilterPanelElement);
     this.isFilterOpen = true;
   }
