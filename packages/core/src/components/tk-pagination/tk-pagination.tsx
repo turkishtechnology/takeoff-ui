@@ -213,7 +213,7 @@ export class TkPagination implements ComponentInterface {
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
-        return <span class="tk-pagination-ellipsis">...</span>;
+        return <span class="tk-pagination-ellipsis tk-pagination-cell">...</span>;
       }
 
       return (
