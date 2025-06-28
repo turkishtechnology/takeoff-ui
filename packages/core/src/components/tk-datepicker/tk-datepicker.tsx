@@ -4,6 +4,7 @@ import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
+import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
 export interface IDateSelection {
   start: string;
@@ -123,6 +124,17 @@ export class TkDatePicker {
    * Hint text to display
    */
   @Prop() hint: string;
+
+  /**
+   * Specifies a material icon name to be displayed.
+   */
+  @Prop() icon?: string | IIconOptions = 'calendar_month';
+
+  /**
+   * Defines the position of the icon.
+   * @defaultValue left
+   */
+  @Prop() iconPosition: 'left' | 'right' = 'left';
 
   /**
    * Minimum selectable date
@@ -1430,7 +1442,8 @@ export class TkDatePicker {
         label={this.label}
         size={this.size}
         mode="text"
-        icon="calendar_month"
+        icon={this.icon}
+        iconPosition={this.iconPosition}
         class={classNames('tk-datepicker-input', { 'tk-table-input': this.el.classList.contains('tk-table-datepicker') })}
         name={this.name}
         hint={this.hint}

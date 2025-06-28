@@ -178,9 +178,6 @@ const CustomContent = () => {
               <TkTabsItem label="Unreaded" badgeLabel="03" badged></TkTabsItem>
           </TkTabs>
       </div>
-      <div slot="footer">
-          <TkButton label="View All" variant="neutral" type="outlined"></TkButton>
-      </div>
   </TkDrawer>`;
 
   const vueCode = `<script setup>
@@ -270,9 +267,6 @@ const showDrawer = ref(false);
         <TkTabsItem label="Unreaded"></TkTabsItem>
       </TkTabs>
     </div>
-    <div slot="footer">
-      <TkButton label="View All" variant="neutral" type="outlined"></TkButton>
-    </div>
   </TkDrawer>
 </template>
 
@@ -361,13 +355,6 @@ ${demoStyles}
             <TkTabsItem label="New" badgeLabel="03" badged></TkTabsItem>
             <TkTabsItem label="Unreaded" badgeLabel="03" badged></TkTabsItem>
           </TkTabs>
-        </div>
-        <div slot="footer">
-          <TkButton
-            label="View All"
-            variant="neutral"
-            type="outlined"
-          ></TkButton>
         </div>
       </TkDrawer>
     </>

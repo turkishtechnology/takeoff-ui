@@ -347,7 +347,7 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) / 7 || 20 };  //Add this 7 because of unit conversion (In excel inches are used and 7px is approximately 1inch)
         });
 
       worksheet.addRows(
@@ -711,6 +711,7 @@ export class TkTable implements ComponentInterface {
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
               wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
           const visibleCheckboxes = Array.from(checkboxWrappers).filter(wrapper => {
@@ -863,7 +864,7 @@ export class TkTable implements ComponentInterface {
     const selectedValues = [];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index]) {
+      if (checkbox.value && column.filterOptions[index] && checkbox.style.display !== 'none') {
         selectedValues.push(column.filterOptions[index].value);
       }
     });
