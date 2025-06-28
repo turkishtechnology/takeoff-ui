@@ -84,7 +84,7 @@ export class TkPhoneInput implements IPhoneInputProps {
    * The list of countries to display in the dropdown.
    * Can be provided as an array of Country objects or as a JSON string.
    */
-  @Prop() countryList?: ICountry[] | string;
+  @Prop() countryList?: ICountry[];
 
   /**
    * Whether the input is disabled.
