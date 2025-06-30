@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-props';
@@ -16,6 +16,7 @@ import { getIconElementProps } from '../../utils/icon-props';
 })
 export class TkChips implements ComponentInterface {
   @Element() el: HTMLTkChipsElement;
+  @State() removed = false;
 
   /**
    * The disabled status.
@@ -64,13 +65,23 @@ export class TkChips implements ComponentInterface {
   @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' = 'primary';
 
   /**
+   * The value of the chips
+   * @defaultValue this.label
+   */
+  @Prop() value: any;
+
+  /**
    * When an element is deleted, it is triggered. It returns the label.
    */
-  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<string>;
+  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
+
+  componentWillLoad(): void {
+    if (!this.value) this.value = this.label;
+  }
 
   private handleClick() {
-    if (this.autoSelfDestroy) this.el.remove();
-    this.tkRemove.emit(this.label);
+    this.tkRemove.emit(this.value);
+    if (this.autoSelfDestroy) this.removed = true;
   }
 
   render() {
@@ -79,7 +90,7 @@ export class TkChips implements ComponentInterface {
     });
 
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
-
+    if (this.removed) return null;
     return (
       <div class={rootClasses}>
         {icon}
