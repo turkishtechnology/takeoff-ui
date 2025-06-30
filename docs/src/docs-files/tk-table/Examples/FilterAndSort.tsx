@@ -34,6 +34,7 @@ const Example = () => {
       filterElements: {
         icon: 'filter_list',
         optionsSearchInput: { show: true, placeholder: 'Filter' },
+        emptyMessage: 'We could not find what you were looking for.',
       },
     },
     {
