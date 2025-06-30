@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-28T15:11:45",
+  "timestamp": "2025-06-30T11:11:01",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -9514,16 +9514,29 @@
       "filePath": "src/components/tk-phone-input/tk-phone-input.tsx",
       "encapsulation": "none",
       "tag": "tk-phone-input",
-      "docs": "",
-      "docsTags": [],
+      "docs": "The TkPhoneInput component allows users to input phone numbers with country selection and validation.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/angular'`"
+        }
+      ],
       "usage": {},
       "props": [
         {
           "name": "countryList",
-          "type": "ICountry[] | string",
+          "type": "ICountry[]",
           "complexType": {
-            "original": "ICountry[] | string",
-            "resolved": "ICountry[] | string",
+            "original": "ICountry[]",
+            "resolved": "ICountry[]",
             "references": {
               "ICountry": {
                 "location": "import",
@@ -9533,16 +9546,12 @@
             }
           },
           "mutable": false,
-          "attr": "country-list",
           "reflectToAttr": false,
           "docs": "The list of countries to display in the dropdown.\nCan be provided as an array of Country objects or as a JSON string.",
           "docsTags": [],
           "values": [
             {
               "type": "ICountry[]"
-            },
-            {
-              "type": "string"
             }
           ],
           "optional": true,
@@ -9585,8 +9594,13 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": false,
-          "docs": "Whether the input is disabled.",
-          "docsTags": [],
+          "docs": "Whether the input is disabled.\n*",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
           "default": "false",
           "values": [
             {
@@ -9637,6 +9651,35 @@
           "values": [
             {
               "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "invalid",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the input is in an invalid state",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
             }
           ],
           "optional": false,
@@ -9702,7 +9745,12 @@
           "attr": "readonly",
           "reflectToAttr": false,
           "docs": "If `true`, the user cannot modify the value.",
-          "docsTags": [],
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
           "default": "false",
           "values": [
             {

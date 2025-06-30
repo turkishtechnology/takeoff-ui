@@ -7,6 +7,64 @@
   flex-direction: column;
   box-sizing: border-box;
 
+  &[aria-invalid] {
+    & .tk-phone-input__wrapper {
+      border-color: var(--states-danger-base);
+    }
+
+    & .tk-phone-input__hint-text {
+      color: var(--states-danger-base);
+    }
+    & .tk-phone-input__hint i {
+      color: var(--states-danger-base);
+    }
+  }
+
+  &[aria-disabled] {
+    & .tk-phone-input__wrapper {
+      background-color: var(--background-lightest);
+      border-color: var(--border-light);
+    }
+
+    & .tk-phone-input__label,
+    & .tk-phone-input__hint-text {
+      color: var(--text-sub-base);
+      pointer-events: none;
+    }
+
+    & .tk-phone-input__input,
+    & .tk-phone-input__dropdown-button {
+      color: var(--text-sub-base);
+      pointer-events: none;
+
+      &::placeholder {
+        color: var(--text-sub-base);
+      }
+    }
+  }
+
+  &[aria-readonly] {
+    & .tk-phone-input__wrapper {
+      background-color: var(--background-lightest);
+      border-color: var(--border-light);
+    }
+
+    & .tk-phone-input__label,
+    & .tk-phone-input__hint-text {
+      color: var(--text-sub-base);
+    }
+
+    & .tk-phone-input__input,
+    & .tk-phone-input__dropdown-button {
+      color: var(--text-darkest);
+      pointer-events: none;
+
+      &::placeholder {
+        color: var(--text-darkest);
+      }
+    }
+  }
+
   &--large {
     .tk-phone-input__wrapper {
       height: var(--spacing-12xl);
@@ -116,66 +174,6 @@
     background: var(--static-light);
     padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
 
-    &--disabled {
-      cursor: not-allowed;
-      pointer-events: none;
-      border: var(--spacing-px) solid var(--border-light);
-      background: var(--background-lightest);
-
-      &.country-selector .dropdown-button,
-      &.phone-input,
-      .dial-code {
-        color: var(--text-sub-base);
-      }
-
-      ::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-        color: var(--text-sub-base);
-      }
-      ::-moz-placeholder {
-        /* Firefox 19+ */
-        color: var(--text-sub-base);
-      }
-      :-ms-input-placeholder {
-        /* IE 10+ */
-        color: var(--text-sub-base);
-      }
-      :-moz-placeholder {
-        /* Firefox 18- */
-        color: var(--text-sub-base);
-      }
-    }
-
-    &--readonly {
-      cursor: not-allowed;
-      pointer-events: none;
-      border: var(--spacing-px) solid var(--border-light);
-      background: var(--background-lightest);
-
-      & .country-selector .dropdown-button,
-      & .phone-input,
-      .dial-code {
-        color: var(--text-darkest);
-      }
-
-      ::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-        color: var(--text-darkest);
-      }
-      ::-moz-placeholder {
-        /* Firefox 19+ */
-        color: var(--text-darkest);
-      }
-      :-ms-input-placeholder {
-        /* IE 10+ */
-        color: var(--text-darkest);
-      }
-      :-moz-placeholder {
-        /* Firefox 18- */
-        color: var(--text-darkest);
-      }
-    }
-
     &--focus {
       border: var(--spacing-px) solid var(--states-info-base);
     }
@@ -189,13 +187,15 @@
     box-sizing: border-box;
 
     &-button {
+      cursor: pointer;
       display: flex;
       align-items: center;
       height: 100%;
       border: none;
-      cursor: pointer;
       font-family: var(--desktop-label-s-font, 'Georgia');
       font-size: var(--desktop-label-l-size);
+      font-weight: var(--weight-medium);
+      color: var(--text-darkest);
       background-color: transparent;
       padding-right: var(--input-external-label-large-label-h-padding);
 
@@ -291,5 +291,27 @@
     font-weight: var(--weight-medium);
     background-color: transparent;
     outline: none;
+    color: var(--text-darkest);
+
+    &::placeholder {
+      color: var(--text-sub-base);
+    }
+  }
+
+  &__hint {
+    color: var(--text-base);
+    line-height: var(--desktop-label-s-line-height);
+    font-size: var(--desktop-label-s-size);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+
+    &-icon {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
   }
 }

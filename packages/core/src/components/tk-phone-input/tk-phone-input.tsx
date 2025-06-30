@@ -1,9 +1,9 @@
-import { Component, h, State, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { INTERNAL_COUNTRIES } from './constants';
-import { ICountry, IPhoneInputData, IPhoneInputDataList, IPhoneInputProps } from './interfaces';
+import { ICountry, IPhoneInputDataList } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-props';
 
 /**
@@ -12,17 +12,12 @@ import { getIconElementProps } from '../../utils/icon-props';
  * @vue `import { TkPhoneInput } from '@takeoff-ui/vue'`
  * @angular `import { TkPhoneInput } from '@takeoff-ui/angular'`
  */
-
-// For backward compatibility
-export type Country = ICountry;
-export type PhoneInputData = IPhoneInputData;
-
 @Component({
   tag: 'tk-phone-input',
   styleUrls: ['tk-phone-input.scss', 'flag.scss'],
   formAssociated: true,
 })
-export class TkPhoneInput implements IPhoneInputProps {
+export class TkPhoneInput implements ComponentInterface {
   @Element() private el!: HTMLTkPhoneInputElement;
 
   /**
@@ -88,13 +83,21 @@ export class TkPhoneInput implements IPhoneInputProps {
 
   /**
    * Whether the input is disabled.
+   * * @defaultValue false
    */
   @Prop() disabled: boolean = false;
 
   /**
    * If `true`, the user cannot modify the value.
+   * @defaultValue false
    */
   @Prop() readonly: boolean = false;
+
+  /**
+   * Indicates whether the input is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
 
   /**
    * The default country to select (ISO country code).
@@ -182,19 +185,10 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   private initializeCountries(): void {
     if (this.countryList) {
-      try {
-        const parsedList = typeof this.countryList === 'string' ? JSON.parse(this.countryList) : this.countryList;
-
-        if (Array.isArray(parsedList) && parsedList.length > 0) {
-          this.countries = parsedList;
-          return;
-        }
-      } catch (error) {
-        console.error('Failed to parse country-list prop.', error);
-      }
+      this.countries = this.countryList;
+    } else {
+      this.countries = INTERNAL_COUNTRIES as ICountry[];
     }
-
-    this.countries = INTERNAL_COUNTRIES as ICountry[];
   }
 
   /**
@@ -231,9 +225,8 @@ export class TkPhoneInput implements IPhoneInputProps {
         strategy: 'fixed',
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
+      }).then(({ y }) => {
         Object.assign(this.panelRef.style, {
-          left: `${x}px`,
           top: `${y}px`,
         });
       });
@@ -364,7 +357,7 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   private renderDropdownButton() {
     return (
-      <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button" disabled={this.disabled}>
+      <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class="tk-phone-input__dropdown-button-selected">
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           <img
@@ -445,7 +438,7 @@ export class TkPhoneInput implements IPhoneInputProps {
     let hint;
 
     if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
 
       hint = (
         <span class="tk-phone-input__hint">
@@ -456,10 +449,10 @@ export class TkPhoneInput implements IPhoneInputProps {
     }
 
     if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
 
       hint = (
-        <span class="tk-phone-input__hint tk-phone-input__hint--error">
+        <span class="tk-phone-input__hint">
           {hintIcon}
           <span class="tk-phone-input__hint-text">{this.error}</span>
         </span>
@@ -474,15 +467,9 @@ export class TkPhoneInput implements IPhoneInputProps {
    */
   render() {
     return (
-      <div class={classNames('tk-phone-input', `tk-phone-input--${this.size}`)}>
+      <div class={classNames('tk-phone-input', `tk-phone-input--${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
         {this.renderLabel()}
-        <div
-          class={classNames('tk-phone-input__wrapper', {
-            'tk-phone-input__wrapper--disabled': this.disabled,
-            'tk-phone-input__wrapper--focus': this.hasFocus,
-            'tk-phone-input__wrapper--readonly': this.readonly,
-          })}
-        >
+        <div class="tk-phone-input__wrapper">
           {this.renderCountrySelector()}
           {this.renderPhoneInput()}
         </div>

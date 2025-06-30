@@ -14,27 +14,6 @@ export interface ICountry {
 }
 
 /**
- * Interface for phone input component props
- * @public
- */
-export interface IPhoneInputProps {
-  /** The list of countries to display in the dropdown */
-  countryList?: ICountry[] | string;
-  /** Whether the input is disabled */
-  disabled?: boolean;
-  /** The default country to select */
-  initialCountry?: string;
-  /** Placeholder text for the phone input */
-  placeholder?: string;
-  /** Error message for incomplete phone numbers */
-  errorMessageIncomplete?: string;
-  /** Error message for too long phone numbers */
-  errorMessageTooLong?: string;
-  /** Success message for valid phone numbers */
-  successMessage?: string;
-}
-
-/**
  * Interface for phone input validation state
  * @internal
  */
