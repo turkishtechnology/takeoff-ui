@@ -76,7 +76,7 @@ export class TkChips implements ComponentInterface {
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
 
   componentWillLoad(): void {
-    if (!this.value) this.value = this.label;
+    if (this.value == null) this.value = this.label;
   }
 
   private handleClick() {
