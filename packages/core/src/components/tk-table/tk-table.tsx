@@ -710,20 +710,14 @@ export class TkTable implements ComponentInterface {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
-              wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
-              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
+              wrapper.style.display = label.includes(searchText) ? 'flex' : 'none';
+              checkbox.style.display = label.includes(searchText) ? 'inline-block' : 'none';
             }
           });
           const visibleCount = Array.from(checkboxWrappers).reduce((count, wrapper: HTMLDivElement) => {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)');
             return count + (checkbox && wrapper.style.display !== 'none' ? 1 : 0);
           }, 0);
-
-          const allCheckboxWrapper = filterContainer.querySelector('.tk-table-filter-checkbox-item .select-all')?.parentElement as HTMLDivElement;
-
-          if (allCheckboxWrapper) {
-            allCheckboxWrapper.style.display = visibleCount === 0 ? 'none' : 'block';
-          }
 
           let divider = filterContainer.querySelector('tk-divider');
           if (!divider) {
@@ -732,25 +726,24 @@ export class TkTable implements ComponentInterface {
             filterContainer.appendChild(divider);
           }
 
-          let emptyDiv: HTMLDivElement = filterContainer.querySelector('.tk-table-filter-empty-state');
+          let emptyDiv: HTMLDivElement = this.elFilterPanelElement.querySelector('.tk-table-filter-empty-state');
           if (!emptyDiv) {
             emptyDiv = document.createElement('div');
             emptyDiv.classList.add('tk-table-filter-empty-state');
             emptyDiv.textContent = column?.filterElements?.emptyMessage || 'No matching results';
-            filterContainer.appendChild(emptyDiv);
+
+            this.elFilterPanelElement.insertBefore(emptyDiv, this.elFilterPanelElement.lastChild);
           }
 
           if (visibleCount === 0) {
-            if (allCheckboxWrapper) allCheckboxWrapper.style.display = 'none';
-            divider.style.display = 'none';
-            emptyDiv.style.display = 'block';
+            filterContainer.style.display = 'none';
+            emptyDiv.style.display = 'flex';
           } else {
-            if (allCheckboxWrapper) allCheckboxWrapper.style.display = 'block';
-            divider.style.display = '';
+            filterContainer.style.display = 'flex';
             emptyDiv.style.display = 'none';
           }
         });
-        filterContainer.appendChild(optionsSearchInput);
+        this.elFilterPanelElement.appendChild(optionsSearchInput);
       }
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
@@ -802,7 +795,7 @@ export class TkTable implements ComponentInterface {
 
       // Create radio group name unique to this column
       const radioGroupName = `radio-filter-${field}`;
-      if (column?.filterElements?.optionsSearchInput) {
+      if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
@@ -818,21 +811,22 @@ export class TkTable implements ComponentInterface {
           const wrappers = Array.from(filterContainer.querySelectorAll('.tk-table-filter-radio-item'));
           const allHidden = wrappers.length > 0 && wrappers.every(wrapper => (wrapper as HTMLElement).style.display === 'none');
 
-          let emptyDiv: HTMLDivElement = filterContainer.querySelector('.tk-table-filter-empty-state');
+          let emptyDiv: HTMLDivElement = this.elFilterPanelElement.querySelector('.tk-table-filter-empty-state');
           if (!emptyDiv) {
             emptyDiv = document.createElement('div');
             emptyDiv.classList.add('tk-table-filter-empty-state');
             emptyDiv.textContent = column?.filterElements?.emptyMessage || 'No matching results';
-            filterContainer.appendChild(emptyDiv);
+            this.elFilterPanelElement.insertBefore(emptyDiv, this.elFilterPanelElement.lastChild);
           }
           if (allHidden) {
-            emptyDiv.style.display = 'block';
+            emptyDiv.style.display = 'flex';
+            filterContainer.style.display = 'none';
           } else {
+            filterContainer.style.display = 'block';
             emptyDiv.style.display = 'none';
           }
         });
-        optionsSearchInput.style.marginBottom = '0.75rem';
-        filterContainer.appendChild(optionsSearchInput);
+        this.elFilterPanelElement.appendChild(optionsSearchInput);
       }
       // Create radio buttons for each option
       column.filterOptions.forEach(option => {
