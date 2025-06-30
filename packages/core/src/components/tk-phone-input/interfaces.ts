@@ -14,19 +14,6 @@ export interface ICountry {
 }
 
 /**
- * Interface for phone input validation state
- * @internal
- */
-export interface IPhoneInputValidation {
-  /** Whether the input has been touched */
-  isPristine: boolean;
-  /** Validation message to display */
-  message: string;
-  /** Whether the phone number is valid */
-  isValid: boolean;
-}
-
-/**
  * Interface for the output data emitted by the phone input
  * @public
  */
