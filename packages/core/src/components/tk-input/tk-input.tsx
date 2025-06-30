@@ -274,6 +274,11 @@ export class TkInput implements ComponentInterface {
     if (/[^A-Za-z0-9]/.test(password)) strength++;
     return strength;
   }
+  private getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, obj);
+  }
 
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
@@ -422,7 +427,7 @@ export class TkInput implements ComponentInterface {
           // multiple abject array selection için geliştirildi
           return (
             <tk-chips
-              label={item[this.chipLabelKey]}
+              label={this.getNestedValue(item, this.chipLabelKey)}
               removable
               onTk-remove={() => this.handleChipsRemove(item)}
               variant="neutral"
