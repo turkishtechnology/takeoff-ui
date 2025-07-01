@@ -17,10 +17,10 @@
     align-items: center;
   }
   &.tk-alert-alignment-start {
-    align-items: self-start;
+    align-items: flex-start;
   }
   &.tk-alert-alignment-end {
-    align-items: self-end;
+    align-items: flex-end;
   }
 
   .tk-alert-content {
