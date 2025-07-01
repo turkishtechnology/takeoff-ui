@@ -17,7 +17,7 @@ export interface ICountry {
  * Interface for the output data emitted by the phone input
  * @public
  */
-export interface IPhoneInputData {
+export interface IPhoneInputValue {
   /** The raw phone number without formatting */
   rawValue: string;
   /** The formatted phone number with mask applied */
@@ -27,9 +27,3 @@ export interface IPhoneInputData {
   /** The selected country object */
   country: ICountry;
 }
-
-/**
- * Array of IPhoneInputData
- * @public
- */
-export type IPhoneInputDataList = IPhoneInputData[];

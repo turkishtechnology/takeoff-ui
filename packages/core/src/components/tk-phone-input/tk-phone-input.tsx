@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { INTERNAL_COUNTRIES } from './constants';
-import { ICountry, IPhoneInputDataList } from './interfaces';
+import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-props';
 
 /**
@@ -67,7 +67,7 @@ export class TkPhoneInput implements ComponentInterface {
    * This is a list of phone input data objects.
    * It can be mutable to allow two-way binding.
    */
-  @Prop({ mutable: true }) value?: IPhoneInputDataList;
+  @Prop({ mutable: true }) value?: IPhoneInputValue;
 
   /**
    * The label for the phone input.
@@ -300,13 +300,15 @@ export class TkPhoneInput implements ComponentInterface {
     this.inputValue = this.applyMask(rawValue, currentMask);
     this.inputRef.value = this.inputValue;
 
-    this.value = [
-      {
-        rawValue,
-        maskedValue: this.inputValue,
+    this.value = {
+      rawValue,
+      maskedValue: this.inputValue,
+      country: {
+        id: this.selectedCountry.id,
+        label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
       },
-    ] as IPhoneInputDataList;
+    } as IPhoneInputValue;
     this.tkChange.emit(this.value);
   };
 

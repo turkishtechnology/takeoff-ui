@@ -2,21 +2,23 @@ import { TkCard, TkPhoneInput } from '@takeoff-ui/react';
 import { useState } from 'react';
 
 function PhoneInput() {
-  const [value, setValue] = useState([
-    { label: '', id: '', dialCode: '', mask: '' },
-  ]);
+  const [value, setValue] = useState({
+    label: '',
+    id: '',
+    dialCode: '',
+    mask: '',
+  });
 
   return (
     <TkCard>
-      {value.map((item, index) => (
-        <div key={index}>{item.label}</div>
-      ))}
+      <div>{value.label}</div>
+
       <TkPhoneInput
         //label="Enter phone number"
         //showAsterisk
         defaultCountry="TR"
         onTkChange={(e) => {
-          console.log('change', e);
+          console.log('change', e.detail);
           setValue(e.detail);
         }}
       />
