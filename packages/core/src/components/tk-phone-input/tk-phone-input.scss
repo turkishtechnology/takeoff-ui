@@ -5,6 +5,7 @@
 .tk-phone-input {
   display: flex;
   flex-direction: column;
+  gap: var(--input-external-label-large-container-gap);
   box-sizing: border-box;
 
   &[aria-invalid] {
@@ -189,6 +190,7 @@
       cursor: pointer;
       display: flex;
       align-items: center;
+      width: max-content;
       height: 100%;
       border: none;
       font-family: var(--desktop-label-s-font, 'Georgia');
