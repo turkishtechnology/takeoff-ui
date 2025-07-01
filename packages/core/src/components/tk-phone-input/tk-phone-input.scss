@@ -172,7 +172,6 @@
     border-radius: var(--button-sizes-large-radius);
     border: var(--spacing-px) solid var(--border-light);
     background: var(--static-light);
-    padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
 
     &--focus {
       border: var(--spacing-px) solid var(--states-info-base);
@@ -292,6 +291,7 @@
     background-color: transparent;
     outline: none;
     color: var(--text-darkest);
+    width: inherit;
 
     &::placeholder {
       color: var(--text-sub-base);

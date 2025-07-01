@@ -260,6 +260,16 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private handleCountrySelect = (country: ICountry): void => {
     this.setSelectedCountry(country.id);
+    this.value = {
+      rawValue: '',
+      maskedValue: '',
+      country: {
+        id: this.selectedCountry.id,
+        label: this.selectedCountry.label,
+        dialCode: this.selectedCountry.dialCode,
+      },
+    } as IPhoneInputValue;
+    this.tkChange.emit(this.value);
     this.inputValue = '';
     this.isDropdownOpen = false;
     this.searchTerm = '';
@@ -290,8 +300,9 @@ export class TkPhoneInput implements ComponentInterface {
     const rawValue = inputElement.value.replace(/\D/g, '');
     const currentMask = this.selectedCountry.mask;
     const maxDigits = (currentMask.match(/9/g) || []).length;
+    const hasNoDigits = /[^\d() ]/.test(inputElement.value);
 
-    if (rawValue.length > maxDigits) {
+    if (rawValue.length > maxDigits || hasNoDigits) {
       this.inputRef.value = this.inputValue;
       return;
     }

@@ -3,15 +3,14 @@ import { useState } from 'react';
 
 function PhoneInput() {
   const [value, setValue] = useState({
-    label: '',
-    id: '',
-    dialCode: '',
-    mask: '',
+    rawValue: '',
+    maskedValue: '',
+    country: {},
   });
 
   return (
     <TkCard>
-      <div>{value.label}</div>
+      <div>{value.maskedValue}</div>
 
       <TkPhoneInput
         //label="Enter phone number"
