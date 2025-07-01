@@ -4,6 +4,7 @@ export interface IToast {
   position?: string;
   header?: string;
   message?: string;
+  alignItems: 'start' | 'center' | 'end';
   actions?: IAlertActionButton[];
   variant: 'success' | 'warning' | 'info' | 'danger' | 'neutral';
   icon?: string;
@@ -43,6 +44,7 @@ export const createToast = (options: IToast) => {
   if (options.message?.length > 0) tkAlert.message = options.message;
   tkAlert.setAttribute('type', options.type);
   tkAlert.setAttribute('variant', options.variant);
+  tkAlert.setAttribute('align-items', options.alignItems);
   if (options.icon?.length > 0) tkAlert.icon = options.icon;
   if (options.iconSize?.length > 0) tkAlert.iconSize = options.iconSize;
   if (options.removable) tkAlert.removable = options.removable;
@@ -135,6 +137,7 @@ export const showPersistentToast = (options: IToast & { persistentId: string }) 
   if (toastOptions.message?.length > 0) tkAlert.message = toastOptions.message;
   tkAlert.setAttribute('type', toastOptions.type);
   tkAlert.setAttribute('variant', toastOptions.variant);
+  tkAlert.setAttribute('align-items', toastOptions.alignItems);
   if (toastOptions.icon?.length > 0) tkAlert.icon = toastOptions.icon;
   if (toastOptions.iconSize?.length > 0) tkAlert.iconSize = toastOptions.iconSize;
   if (toastOptions.removable) tkAlert.removable = toastOptions.removable;
