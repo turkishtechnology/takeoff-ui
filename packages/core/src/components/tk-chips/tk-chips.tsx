@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State } from '@stencil/core';
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-props';
@@ -16,7 +16,6 @@ import { getIconElementProps } from '../../utils/icon-props';
 })
 export class TkChips implements ComponentInterface {
   @Element() el: HTMLTkChipsElement;
-  @State() removed = false;
 
   /**
    * The disabled status.
@@ -81,7 +80,7 @@ export class TkChips implements ComponentInterface {
 
   private handleClick() {
     this.tkRemove.emit(this.value);
-    if (this.autoSelfDestroy) this.removed = true;
+    if (this.autoSelfDestroy) this.el?.remove();
   }
 
   render() {
@@ -90,7 +89,6 @@ export class TkChips implements ComponentInterface {
     });
 
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
-    if (this.removed) return null;
     return (
       <div class={rootClasses}>
         {icon}
