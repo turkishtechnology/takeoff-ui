@@ -42,19 +42,16 @@ const Size = () => {
     label="Small Input"
     size="small"
     [(ngModel)]="value"
-    (tkChange)="setValue($event.detail)"
   />
   <tk-phone-input
     label="Base Input"
     size="base"
     [(ngModel)]="value1"
-    (tkChange)="setValue1($event.detail)"
   />
   <tk-phone-input
     label="Large Input"
     size="large"
     [(ngModel)]="value2"
-    (tkChange)="setValue2($event.detail)"
   />`;
 
   const [value, setValue] = useState();

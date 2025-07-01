@@ -7,7 +7,7 @@ const State = () => {
     label="Error"
     placeholder="Error"
     invalid={true}
-    error="Bu alan zorunludur"
+    error="This field is required"
   />
   <TkPhoneInput
     label="Readonly"
@@ -24,7 +24,7 @@ const State = () => {
     label="Error"
     placeholder="Error"
     :invalid="true"
-    error="Bu alan zorunludur"
+    error="This field is required"
   />
   <TkPhoneInput 
     label="Readonly" 
@@ -41,7 +41,7 @@ const State = () => {
     label="Error"
     placeholder="Error"
     [invalid]="true"
-    error="Bu alan zorunludur"
+    error="This field is required"
   />
   <tk-phone-input
     label="Readonly"
@@ -60,7 +60,7 @@ const State = () => {
         label="Error"
         placeholder="Error"
         invalid={true}
-        error="Bu alan zorunludur"
+        error="This field is required"
       />
       <TkPhoneInput label="Readonly" placeholder="Readonly" readonly />
       <TkPhoneInput label="Disabled" placeholder="Disabled" disabled />
