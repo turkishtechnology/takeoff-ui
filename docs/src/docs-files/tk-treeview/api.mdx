@@ -1,0 +1,27 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If true, disables all interaction with the tree view. |
+| <TkBadge label="items" variant="primary" size="large" type="filledlight"/> | <code>TreeItemData[]</code> | null | Flat list of tree items. If provided, the tree will render from this data. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If true, the tree view is read-only and cannot be changed by the user. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | Tree view type: 'basic', 'divided', or 'light'. |
+
+### Interfaces
+
+
+
+```typescript
+interface TreeItemData {
+  id: string | number;
+  label: string;
+  depth: number;
+  children?: Array<string | number>;
+  parentIndex?: string | number | null;
+  disabled?: boolean;
+  // Add other node-specific props as needed
+}
+```
+
