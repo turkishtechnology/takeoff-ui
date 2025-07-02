@@ -50,6 +50,12 @@ export class TkAlert implements ComponentInterface {
   @Prop() iconSize: 'small' | 'base' | 'large' | 'xlarge' = 'large';
 
   /**
+   * Alignment of the alert content ('start', 'center', or 'end').
+   * @defaultValue 'center'
+   */
+  @Prop() alignItems: 'start' | 'center' | 'end' = 'center';
+
+  /**
    * This field specifies the design type of the component.
    * @defaultValue filled
    */
@@ -86,7 +92,13 @@ export class TkAlert implements ComponentInterface {
     if (typeof this.message == 'string') {
       message = <div class="tk-alert-message">{this.message}</div>;
     } else if (this.message?.every(item => typeof item === 'string')) {
-      message = <div class="tk-alert-message-holder">{this.message?.map(m => <div class="tk-alert-message">{m}</div>)}</div>;
+      message = (
+        <div class="tk-alert-message-holder">
+          {this.message?.map(m => (
+            <div class="tk-alert-message">{m}</div>
+          ))}
+        </div>
+      );
     }
 
     return (
@@ -112,7 +124,7 @@ export class TkAlert implements ComponentInterface {
     this.hasRightActionSlot = !!this.el.querySelector('[slot="right-action"]');
     this.hasFooterActionSlot = !!this.el.querySelector('[slot="footer-action"]');
 
-    const rootClasses = classNames('tk-alert-container', this.variant, this.type);
+    const rootClasses = classNames('tk-alert-container', this.variant, this.type, `tk-alert-alignment-${this.alignItems}`);
     const icon = this.renderIcon();
     const content = this.renderContent();
     const closeButton = this.renderCloseButton();
