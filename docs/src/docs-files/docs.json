@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T15:16:27",
+  "timestamp": "2025-07-01T14:32:00",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -278,7 +278,7 @@
             "references": {
               "IAccordionItemSelect": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
+                "path": "/Users/OTBHTURKMENOGLU/Desktop/takeoff-ui/packages/core/src/components/tk-accordion/tk-accordion.tsx",
                 "id": "src/components/tk-accordion/tk-accordion.tsx::IAccordionItemSelect"
               }
             }
@@ -5530,7 +5530,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/OTBHTURKMENOGLU/Desktop/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -5611,7 +5611,7 @@
             "references": {
               "IDateSelection": {
                 "location": "local",
-                "path": "/Users/atakanbayil/Desktop/THY/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
+                "path": "/Users/OTBHTURKMENOGLU/Desktop/takeoff-ui/packages/core/src/components/tk-datepicker/tk-datepicker.tsx",
                 "id": "src/components/tk-datepicker/tk-datepicker.tsx::IDateSelection"
               }
             }
@@ -7410,7 +7410,7 @@
               "AnyExtension": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension"
               }
             }
           },
@@ -7694,7 +7694,7 @@
               "JSONContent": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent"
               }
             },
             "return": "Promise<string | JSONContent>"
@@ -7727,7 +7727,7 @@
               "Editor": {
                 "location": "import",
                 "path": "@tiptap/core",
-                "id": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor"
+                "id": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::Editor"
               }
             },
             "return": "Promise<Editor>"
@@ -8212,6 +8212,7 @@
         "tk-editor",
         "tk-input",
         "tk-pagination",
+        "tk-phone-input",
         "tk-slider",
         "tk-table",
         "tk-tabs",
@@ -8252,6 +8253,9 @@
           "tk-icon"
         ],
         "tk-pagination": [
+          "tk-icon"
+        ],
+        "tk-phone-input": [
           "tk-icon"
         ],
         "tk-slider": [
@@ -8958,6 +8962,7 @@
       "dependents": [
         "tk-datepicker",
         "tk-pagination",
+        "tk-phone-input",
         "tk-select",
         "tk-table"
       ],
@@ -8983,6 +8988,9 @@
           "tk-input"
         ],
         "tk-pagination": [
+          "tk-input"
+        ],
+        "tk-phone-input": [
           "tk-input"
         ],
         "tk-select": [
@@ -9566,6 +9574,417 @@
         ],
         "tk-table": [
           "tk-pagination"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/tk-phone-input/tk-phone-input.tsx",
+      "encapsulation": "none",
+      "tag": "tk-phone-input",
+      "docs": "The TkPhoneInput component allows users to input phone numbers with country selection and validation.",
+      "docsTags": [
+        {
+          "name": "react",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/react'`"
+        },
+        {
+          "name": "vue",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/vue'`"
+        },
+        {
+          "name": "angular",
+          "text": "`import { TkPhoneInput } from '@takeoff-ui/angular'`"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "countryList",
+          "type": "ICountry[]",
+          "complexType": {
+            "original": "ICountry[]",
+            "resolved": "ICountry[]",
+            "references": {
+              "ICountry": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-phone-input/interfaces.ts::ICountry"
+              }
+            }
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "The list of countries to display in the dropdown.\nCan be provided as an array of Country objects or as a JSON string.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "ICountry[]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "defaultCountry",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "default-country",
+          "reflectToAttr": false,
+          "docs": "The default country to select (ISO country code).",
+          "docsTags": [],
+          "default": "'TR'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": false,
+          "docs": "Whether the input is disabled.\n*",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": false,
+          "docs": "This is the error message that will be displayed.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "hint",
+          "reflectToAttr": false,
+          "docs": "Provided a hint or additional information about the input.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "invalid",
+          "reflectToAttr": false,
+          "docs": "Indicates whether the input is in an invalid state",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "The label for the phone input.\nDefaults to 'Phone Number'.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "placeholder",
+          "reflectToAttr": false,
+          "docs": "Placeholder text for the phone input.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "readonly",
+          "reflectToAttr": false,
+          "docs": "If `true`, the user cannot modify the value.",
+          "docsTags": [
+            {
+              "name": "defaultValue",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "showAsterisk",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "show-asterisk",
+          "reflectToAttr": false,
+          "docs": "Displays a red asterisk (*) next to the label for visual emphasis.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"base\" | \"large\" | \"small\"",
+          "complexType": {
+            "original": "'large' | 'base' | 'small'",
+            "resolved": "\"base\" | \"large\" | \"small\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": false,
+          "docs": "Sets size for the component.",
+          "docsTags": [],
+          "default": "'base'",
+          "values": [
+            {
+              "value": "base",
+              "type": "string"
+            },
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "value",
+          "type": "IPhoneInputValue",
+          "complexType": {
+            "original": "IPhoneInputValue",
+            "resolved": "IPhoneInputValue",
+            "references": {
+              "IPhoneInputValue": {
+                "location": "import",
+                "path": "./interfaces",
+                "id": "src/components/tk-phone-input/interfaces.ts::IPhoneInputValue"
+              }
+            }
+          },
+          "mutable": true,
+          "reflectToAttr": false,
+          "docs": "The value of the phone input.\nThis is a list of phone input data objects.\nIt can be mutable to allow two-way binding.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "IPhoneInputValue"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "tk-blur",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the input loses focus.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-change",
+          "detail": "any",
+          "bubbles": true,
+          "complexType": {
+            "original": "any",
+            "resolved": "any",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": false,
+          "docs": "Emitted when the value has changed.",
+          "docsTags": []
+        },
+        {
+          "event": "tk-focus",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Emitted when the input has focus.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [
+        "tk-icon",
+        "tk-input"
+      ],
+      "dependencyGraph": {
+        "tk-phone-input": [
+          "tk-icon",
+          "tk-input"
+        ],
+        "tk-input": [
+          "tk-chips",
+          "tk-icon",
+          "tk-button"
+        ],
+        "tk-chips": [
+          "tk-icon"
+        ],
+        "tk-button": [
+          "tk-spinner",
+          "tk-icon"
         ]
       }
     },
@@ -16813,10 +17232,10 @@
       "docstring": "",
       "path": "../../node_modules/.pnpm/chart.js@4.4.9/node_modules/chart.js/auto/auto.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
+    "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::AnyExtension": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-editor/interfaces.ts::TkEditorCustomButton": {
       "declaration": "export interface TkEditorCustomButton {\n  /**\n   * The action to perform when the button is clicked\n   */\n  action: string;\n  /**\n   * The icon to display in the toolbar button\n   */\n  icon: string;\n  /**\n   * The label to display in the toolbar button\n   */\n  label: string;\n  /**\n   * The behavior of the button\n   */\n  behavior: TkEditorToolbarButtonBehavior;\n  /**\n   * The level of the heading to apply when the button is clicked\n   */\n  level?: HeadingLevel;\n  /**\n   * The command to run when the button is clicked\n   */\n  command?: (editor: Editor) => boolean | void;\n}",
@@ -16828,20 +17247,30 @@
       "docstring": "",
       "path": "src/components/tk-editor/interfaces.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
+    "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::JSONContent": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
-    "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
+    "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts::Editor": {
       "declaration": "any",
       "docstring": "",
-      "path": "../../node_modules/.pnpm/@tiptap+core@2.12.0_@tiptap+pm@2.12.0/node_modules/@tiptap/core/dist/index.d.ts"
+      "path": "../../node_modules/.pnpm/@tiptap+core@2.14.0_@tiptap+pm@2.14.0/node_modules/@tiptap/core/dist/index.d.ts"
     },
     "src/components/tk-input/interfaces.ts::IInputMaskOptions": {
       "declaration": "export interface IInputMaskOptions {\n  backspace?: boolean;\n  blocks?: number[];\n  blocksLength?: number;\n  copyDelimiter?: boolean;\n  creditCard?: boolean;\n  creditCardStrictMode?: boolean;\n  creditCardType?: string;\n  date?: boolean;\n  dateFormatter?: any;\n  dateMax?: string;\n  dateMin?: string;\n  datePattern?: string[];\n  delimiter?: string;\n  delimiterLazyShow?: boolean;\n  delimiterLength?: number;\n  delimiters?: any[];\n  initValue?: string;\n  letterOnly?: boolean;\n  lowerCase?: boolean;\n  maxLength?: number;\n  noImmediatePrefix?: boolean;\n  numeral?: boolean;\n  numeralDecimalMark?: string;\n  numeralDecimalScale?: number;\n  numeralIntegerScale?: number;\n  numeralPositiveOnly?: boolean;\n  numeralThousandsGroupStyle?: string;\n  numericOnly?: boolean;\n  phone?: boolean;\n  phoneFormatter?: any;\n  phoneRegionCode?: string;\n  prefix?: string;\n  prefixLength?: number;\n  rawValueTrimPrefix?: boolean;\n  result?: string;\n  signBeforePrefix?: boolean;\n  stripLeadingZeroes?: boolean;\n  swapHiddenInput?: boolean;\n  tailPrefix?: boolean;\n  time?: boolean;\n  timeFormat?: string;\n  timeFormatter?: any;\n  timePattern?: string[];\n  uppercase?: boolean;\n}",
       "docstring": "See cleave.js documentation https://nosir.github.io/cleave.js",
       "path": "src/components/tk-input/interfaces.ts"
+    },
+    "src/components/tk-phone-input/interfaces.ts::IPhoneInputValue": {
+      "declaration": "export interface IPhoneInputValue {\n  /** The raw phone number without formatting */\n  rawValue: string;\n  /** The formatted phone number with mask applied */\n  maskedValue: string;\n  /** The international dialing code */\n  dialCode: string;\n  /** The selected country object */\n  country: ICountry;\n}",
+      "docstring": "Interface for the output data emitted by the phone input",
+      "path": "src/components/tk-phone-input/interfaces.ts"
+    },
+    "src/components/tk-phone-input/interfaces.ts::ICountry": {
+      "declaration": "export interface ICountry {\n  /** The display name of the country */\n  label: string;\n  /** The ISO country code */\n  id: string;\n  /** The international dialing code with + prefix */\n  dialCode: string;\n  /** The phone number mask pattern where 9 represents a digit */\n  mask: string;\n}",
+      "docstring": "Interface representing a country for phone number input",
+      "path": "src/components/tk-phone-input/interfaces.ts"
     },
     "src/components/tk-stepper/interfaces.ts::IStepClickDetail": {
       "declaration": "export interface IStepClickDetail {\n  index: number;\n  status: 'completed' | 'active' | 'inactive' | 'error' | 'disabled';\n}",

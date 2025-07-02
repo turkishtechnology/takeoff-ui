@@ -1,0 +1,38 @@
+import Basic from './Examples/Basic';
+import CustomCountryList from './Examples/CustomCountryList';
+import Size from './Examples/Size';
+import State from './Examples/State';
+
+## Basic
+
+A simple TkPhoneInput display.
+
+<Basic />
+
+## Custom Country List
+
+You can provide a custom list of countries to the phone input. This allows you to control which countries are available for selection in the dropdown.
+
+```tsx
+  countryList=[
+    { label: 'Azerbaijan', id: 'AZ', dialCode: '+994', mask: '99 999 99 99' },
+    { label: 'Bolivia', id: 'BO', dialCode: '+591', mask: '99999999' },
+    { label: 'Brazil', id: 'BR', dialCode: '+55', mask: '(99) 99999-9999' },
+    { label: 'Japan', id: 'JP', dialCode: '+81', mask: '99-9999-9999' },
+    { label: 'Portugal', id: 'PT', dialCode: '+351', mask: '999 999 999' },
+    { label: 'Turkey', id: 'TR', dialCode: '+90', mask: '(999) 999 9999' }
+  ]
+```
+
+<CustomCountryList />
+
+
+## Size
+The "size" prop can be used with one of the sizes "small", "base", and "large". The default value is "base".
+
+<Size />
+
+## State
+This example illustrates the disabled, readonly, and invalid states of the phone input field. Each state demonstrates how the input behaves and visually changes in different interaction scenarios.
+
+<State />
