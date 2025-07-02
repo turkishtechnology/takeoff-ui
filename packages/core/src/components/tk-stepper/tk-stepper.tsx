@@ -50,18 +50,9 @@ export class TkStepper implements ComponentInterface {
   @Prop() active: number = 0;
   @Watch('active')
   activeChanged(newValue: number) {
-    if (this.steps.length > 0) {
-      const targetStep = this.steps[newValue];
-      if (targetStep && !targetStep.disabled) {
-        this.internalActive = newValue;
-        this.updateStepsState(newValue);
-      } else {
-        setTimeout(() => {
-          this.el.setAttribute('active', this.internalActive.toString());
-        }, 0);
-      }
-    } else {
+    if (newValue !== this.internalActive) {
       this.internalActive = newValue;
+      this.tkStepChange.emit(newValue);
     }
   }
 
@@ -114,12 +105,12 @@ export class TkStepper implements ComponentInterface {
   /**
    * Emitted when the active step changes.
    */
-  @Event() tkStepChange: EventEmitter<number>;
+  @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
 
   /**
    * Emitted when a step is clicked.
    */
-  @Event() tkStepClick: EventEmitter<IStepClickDetail>;
+  @Event({ eventName: 'tk-step-click' }) tkStepClick: EventEmitter<IStepClickDetail>;
 
   componentWillLoad() {
     this.internalActive = this.active;
@@ -140,7 +131,7 @@ export class TkStepper implements ComponentInterface {
    */
   @Method()
   async setActive(index: number) {
-    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index)) {
+    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.internalActive) {
       this.internalActive = index;
       this.tkStepChange.emit(index);
     }
@@ -167,6 +158,7 @@ export class TkStepper implements ComponentInterface {
       error: step.error,
       isActive: index === this.internalActive,
       disabled: step.disabled || false,
+      isClickable: step.isClickable !== undefined ? step.isClickable : true,
     }));
   }
 
@@ -179,8 +171,11 @@ export class TkStepper implements ComponentInterface {
   }
 
   private canStepBeSelected(targetIndex: number): boolean {
-    if (!this.linear) return !this.steps[targetIndex]?.disabled;
-    if (targetIndex < this.internalActive) return !this.steps[targetIndex]?.disabled;
+    const targetStep = this.steps[targetIndex];
+    if (!targetStep || targetStep.disabled || !targetStep.isClickable) return false;
+
+    if (!this.linear) return true;
+    if (targetIndex < this.internalActive) return true;
     if (targetIndex === this.internalActive + 1) {
       const currentStep = this.steps[this.internalActive];
       return !currentStep?.error && !currentStep?.disabled;

@@ -47,7 +47,7 @@ const Example = () => {
         { value: 'group 3', label: 'Group 3' },
       ],
       filterElements: {
-        optionsSearchInput: { placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter' },
       },
     },
     {
@@ -102,21 +102,24 @@ const Example = () => {
 const FilterAndSort = () => {
   const reactCode = `const column: ITableColumn[] = [
     {
-      field: "id",
-      header: "Id",
+      field: 'id',
+      header: 'Id',
     },
     {
-      field: "name",
-      header: "Input Filter",
+      field: 'name',
+      header: 'Input Filter',
       searchable: true,
       sortable: true,
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
       filter: (value: string, row: any) =>
-        row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase() as string) > -1,
+        row.name
+          .toString()
+          .toLowerCase()
+          .indexOf(value.toString().toLowerCase() as string) > -1,
     },
     {
-      field: "status",
-      header: "Checkbox Filter",
+      field: 'status',
+      header: 'Checkbox Filter',
       searchable: true,
       filterType: 'checkbox',
       filterOptions: [
@@ -125,13 +128,13 @@ const FilterAndSort = () => {
         { value: 'pending', label: 'Pending' },
       ],
       filterElements: {
-        icon: "filter_list",
+        icon: 'filter_list',
         optionsSearchInput: { show: true, placeholder: 'Filter' },
       },
     },
     {
-      field: "group",
-      header: "Radio Filter",
+      field: 'group',
+      header: 'Radio Filter',
       searchable: true,
       filterType: 'radio',
       filterOptions: [
@@ -139,17 +142,21 @@ const FilterAndSort = () => {
         { value: 'group 2', label: 'Group 2' },
         { value: 'group 3', label: 'Group 3' },
       ],
+      filterElements: {
+        optionsSearchInput: { show: true, placeholder: 'Filter' },
+      },
     },
     {
-      field: "quantity",
-      header: "Quantity",
+      field: 'quantity',
+      header: 'Quantity',
       sortable: true,
       sorter: (a: any, b: any) =>
         Number(a.quantity) > Number(b.quantity) ? 1 : -1,
     },
   ];
 
-  const data = [
+
+   const data = [
     {
       id: 'f230fh0g3',
       name: 'Bamboo Watch',
@@ -190,25 +197,28 @@ const FilterAndSort = () => {
   return <TkTable columns={column} data={data} />;`;
 
   const vueCode = `<script setup>
-import { TkTable } from '@takeoff-ui/vue'
+import { TkTable } from '@takeoff-ui/vue';
 
 const column = [
   {
-    field: "id",
-    header: "Id",
+    field: 'id',
+    header: 'Id',
   },
   {
-    field: "name",
-    header: "Input Filter",
+    field: 'name',
+    header: 'Input Filter',
     searchable: true,
     sortable: true,
     sorter: (a, b) => (a.name > b.name ? 1 : -1),
     filter: (value, row) =>
-      row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
+      row.name
+        .toString()
+        .toLowerCase()
+        .indexOf(value.toString().toLowerCase()) > -1,
   },
   {
-    field: "status",
-    header: "Checkbox Filter",
+    field: 'status',
+    header: 'Checkbox Filter',
     searchable: true,
     filterType: 'checkbox',
     filterOptions: [
@@ -217,13 +227,13 @@ const column = [
       { value: 'pending', label: 'Pending' },
     ],
     filterElements: {
-      icon: "filter_list",
+      icon: 'filter_list',
       optionsSearchInput: { show: true, placeholder: 'Filter' },
     },
   },
   {
-    field: "group",
-    header: "Radio Filter",
+    field: 'group',
+    header: 'Radio Filter',
     searchable: true,
     filterType: 'radio',
     filterOptions: [
@@ -231,16 +241,17 @@ const column = [
       { value: 'group 2', label: 'Group 2' },
       { value: 'group 3', label: 'Group 3' },
     ],
+    filterElements: {
+      optionsSearchInput: { show: true, placeholder: 'Filter' },
+    },
   },
   {
-    field: "quantity",
-    header: "Quantity",
+    field: 'quantity',
+    header: 'Quantity',
     sortable: true,
-    sorter: (a, b) =>
-      Number(a.quantity) > Number(b.quantity) ? 1 : -1,
+    sorter: (a, b) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
   },
 ];
-
 const data = [
   {
     id: 'f230fh0g3',

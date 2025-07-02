@@ -13,6 +13,16 @@
   border-width: 1px;
   border-style: solid;
 
+  &.tk-alert-alignment-center {
+    align-items: center;
+  }
+  &.tk-alert-alignment-start {
+    align-items: flex-start;
+  }
+  &.tk-alert-alignment-end {
+    align-items: flex-end;
+  }
+
   .tk-alert-content {
     display: flex;
     justify-content: flex-start;

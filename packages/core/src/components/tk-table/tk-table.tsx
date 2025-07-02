@@ -8,6 +8,8 @@ import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { getIconElementProps } from '../../utils/icon-props';
+import '../../global/sass/fonts/Geologica/Geologica-Regular';
+import '../../global/sass/fonts/Geologica/Geologica-Bold';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -326,7 +328,9 @@ export class TkTable implements ComponentInterface {
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
-        headStyles: { fillColor: [201, 0, 25] },
+        headStyles: { fillColor: [201, 0, 25], fontStyle: 'bold' },
+        bodyStyles: { fontStyle: 'normal' },
+        styles: { font: 'Geologica' },
       });
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
@@ -343,7 +347,7 @@ export class TkTable implements ComponentInterface {
       worksheet.columns = _columns
         .filter(item => !options.ignoreColumnsFields?.includes(item.field))
         .map(item => {
-          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) || 20 };
+          return { header: item.header, key: item.field, width: Number(item.width?.toString().replace('px', '')) / 7 || 20 }; //Add this 7 because of unit conversion (In excel inches are used and 7px is approximately 1inch)
         });
 
       worksheet.addRows(
@@ -707,16 +711,22 @@ export class TkTable implements ComponentInterface {
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
               wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
+              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
+          const visibleCheckboxes = Array.from(checkboxWrappers).filter(wrapper => {
+            const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)');
+            return checkbox && (wrapper as HTMLElement).style.display !== 'none';
+          });
+          allCheckbox.style.display = visibleCheckboxes.length === 0 ? 'none' : '';
         });
         filterContainer.appendChild(optionsSearchInput);
       }
       const allCheckbox = document.createElement('tk-checkbox');
       allCheckbox.classList.add('select-all');
-      allCheckbox.label = column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
+      allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
       allCheckbox.value = selectedValues.length === column.filterOptions.length;
-
+      checkboxWrapper.appendChild(allCheckbox);
       allCheckbox.addEventListener('tk-change', (e: any) => {
         const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
         allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
@@ -733,7 +743,6 @@ export class TkTable implements ComponentInterface {
       const divider = document.createElement('tk-divider');
       divider.my = 1;
 
-      checkboxWrapper.appendChild(allCheckbox);
       filterContainer.appendChild(checkboxWrapper);
       filterContainer.appendChild(divider);
       // Create checkboxes for each option
@@ -840,7 +849,7 @@ export class TkTable implements ComponentInterface {
     buttons.appendChild(cancelButton);
     buttons.appendChild(searchButton);
     this.elFilterPanelElement.appendChild(buttons);
-
+    this.elFilterPanelElement.style.zIndex = '1700';
     document.body.appendChild(this.elFilterPanelElement);
     this.isFilterOpen = true;
   }
@@ -855,7 +864,7 @@ export class TkTable implements ComponentInterface {
     const selectedValues = [];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index]) {
+      if (checkbox.value && column.filterOptions[index] && checkbox.style.display !== 'none') {
         selectedValues.push(column.filterOptions[index].value);
       }
     });

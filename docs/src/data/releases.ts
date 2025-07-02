@@ -14,6 +14,21 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.12',
+    date: '25.06.2025',
+    newFeatures: [
+      'Added filter icon change feature to table',
+      'Added dynamic resize column feature to table',
+    ],
+    bugFixes: [
+      'Fix turkish char problem to pdf export',
+      'Add selectall visibility check based on table checkbox filter input',
+      "Fixed render when update tab item's label and other prop",
+      'Implement isClickable prop to prevent step selection to stepper',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.11',
     date: '19.06.2025',
     newFeatures: [
