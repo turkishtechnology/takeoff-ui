@@ -20,6 +20,11 @@ const vueComponentModels: ComponentModelConfig[] = [
     event: 'tk-drawer-change',
     targetAttr: 'open',
   },
+  {
+    elements: ['tk-stepper'],
+    event: 'tk-step-change',
+    targetAttr: 'active',
+  },
 ];
 
 const angularValueAccessorBindings: ValueAccessorConfig[] = [
