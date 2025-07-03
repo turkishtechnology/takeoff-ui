@@ -141,6 +141,11 @@ export class TkInput implements ComponentInterface {
   @Prop() mode: 'text' | 'password' | 'counter' | 'number' | 'chips' = 'text';
 
   /**
+   * Sets step for decimal value with mode number
+   */
+  @Prop() step: string;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -466,6 +471,7 @@ export class TkInput implements ComponentInterface {
         name={this.name}
         min={this.min}
         max={this.max}
+        step={this.step}
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}

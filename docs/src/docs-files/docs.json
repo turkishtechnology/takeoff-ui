@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-02T13:53:19",
+  "timestamp": "2025-07-03T09:11:03",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.26.0",
@@ -8899,6 +8899,29 @@
             },
             {
               "value": "small",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "step",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "step",
+          "reflectToAttr": false,
+          "docs": "Sets step for decimal value with mode number",
+          "docsTags": [],
+          "values": [
+            {
               "type": "string"
             }
           ],
