@@ -133,4 +133,16 @@
         padding-left: 10px;
         gap: 2px;
     }
+    &.badge {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--background-light, #E1E4EA);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-darkest, #222530);
+    }
 }
