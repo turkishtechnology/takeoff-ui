@@ -3,7 +3,7 @@ import { Component, ComponentInterface, Prop, h, Host, Element } from '@stencil/
 @Component({
   tag: 'tk-tree-item',
   styleUrl: 'tk-tree-item.scss',
-  shadow: true,
+  shadow: false,
 })
 export class TkTreeItem implements ComponentInterface {
   @Element() el: HTMLTkTreeItemElement;

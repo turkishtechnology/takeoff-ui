@@ -4,6 +4,19 @@
     align-items: flex-start;
     background: transparent;
 
+    &.stepper {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: var(--tree-gap, 12px);
+
+        &.column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--tree-gap, 2px);
+        }
+    }
+
     &.divided {
         padding: var(--tree-v-padding, 8px) var(--tree-h-padding, 10px);
         border-radius: 8px;
@@ -34,9 +47,11 @@
             font-weight: 500;
             gap: var(--tree-gap, 4px);
         }
+
         &.directory {
             font-weight: 500;
         }
+
         &.file {
             font-weight: 400;
         }
@@ -51,17 +66,17 @@
         user-select: none;
         border-radius: 4px;
 
-        &.base{
+        &.base {
             gap: var(--items-tree-base-gap, 8px);
             padding: var(--items-tree-base-v-padding, 6px) var(--items-tree-base-h-padding, 8px);
         }
 
-        &.small{
+        &.small {
             gap: var(--items-tree-small-gap, 4px);
             padding: var(--items-tree-small-v-padding, 4px) var(--items-tree-small-h-padding, 6px);
         }
 
-        &.large{
+        &.large {
             gap: var(--items-tree-large-gap, 10px);
             padding: var(--items-tree-large-v-padding, 10px) var(--items-tree-large-h-padding, 12px);
         }
@@ -69,6 +84,7 @@
         &.selected {
             background: var(--primary-lightest, #FAE6E8);
             color: var(--text-darkest, #222530);
+
             .tk-tree-view.directory-icon,
             .tk-tree-view.folder-icon,
             .tk-tree-view.file-icon {
@@ -79,6 +95,7 @@
         &.disabled {
             color: var(--text-sub-base, #99A0AE);
             cursor: not-allowed;
+
             .tk-tree-view.directory-icon,
             .tk-tree-view.folder-icon,
             .tk-tree-view.file-icon {
@@ -86,13 +103,14 @@
             }
         }
 
-        &:hover {
+        &:not(.disabled, .selected):hover {
             color: var(--text-darkest, #222530);
             background: var(--background-lightest, #F9FAFC);
+
             .tk-tree-view.directory-icon,
             .tk-tree-view.folder-icon,
             .tk-tree-view.file-icon {
-                color: var(--primary-main, #222530);
+                color: var(--icon-darkest, #222530);
             }
         }
     }
@@ -100,27 +118,32 @@
     &.directory-icon,
     &.folder-icon,
     &.file-icon {
+
         &.base,
         &.large {
             font-size: 20px;
         }
+
         &.small {
             font-size: 16px;
-        } 
+        }
     }
 
     &.text {
         font-family: var(--body-s-font, Geologica);
         font-style: normal;
         font-weight: 400;
+
         &.base {
             font-size: var(--body-s-size, 14px);
             line-height: var(--body-s-line-height, 20px);
         }
+
         &.small {
             font-size: var(--body-2xs-size, 11px);
             line-height: var(--line-height-xxs-normal, 16px);
         }
+
         &.large {
             font-size: var(--body-m-base-size, 16px);
             line-height: var(--body-m-base-line-height, 24px);
@@ -133,6 +156,7 @@
         padding-left: 10px;
         gap: 2px;
     }
+
     &.badge {
         display: flex;
         width: 20px;
