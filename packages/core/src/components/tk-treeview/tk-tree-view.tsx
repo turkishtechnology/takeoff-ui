@@ -14,12 +14,13 @@ import classNames from 'classnames';
   shadow: false,
 })
 export class TkTreeView implements ComponentInterface {
+  private observer: MutationObserver;
+
   @Element() el: HTMLElement;
 
   @State() expandedIds: Set<string | number> = new Set();
   @State() selectedId: string | number = null;
   @State() treeData: any[] = [];
-  private observer: MutationObserver;
 
   /**
    * Tree view type: 'basic', 'divided', or 'light'.
@@ -134,6 +135,10 @@ export class TkTreeView implements ComponentInterface {
     this.tkItemClick.emit(itemId);
   };
 
+  /**
+   * Belirli bir node'a (itemId) kökten başlayarak giden yolu (itemId dizisi olarak) bulur.
+   * Örneğin: [rootId, childId, targetId]
+   */
   private findPathToNode(nodes, targetId, path = []): any[] {
     for (const node of nodes) {
       if (node.itemId === targetId) {
@@ -147,6 +152,10 @@ export class TkTreeView implements ComponentInterface {
     return [];
   }
 
+  /**
+   * Verilen node'un tüm alt (descendant) itemId'lerini (çocuklar, torunlar, vs.) döndürür.
+   * Sadece kendi çocuklarını değil, tüm alt ağacını toplar.
+   */
   private collectDescendantIds(node) {
     let ids = [];
     if (node.children && node.children.length > 0) {
@@ -158,6 +167,10 @@ export class TkTreeView implements ComponentInterface {
     return ids;
   }
 
+  /**
+   * treeData içinde verilen itemId'ye sahip node'u bulur ve döndürür.
+   * Eğer bulunamazsa null döner.
+   */
   private findNodeById(nodes, targetId) {
     for (const node of nodes) {
       if (node.itemId === targetId) return node;
@@ -178,6 +191,15 @@ export class TkTreeView implements ComponentInterface {
     }
     return columns;
   }
+
+  private handleNodeClick = (node, isDirectory, isDisabled) => {
+    if (isDisabled) return;
+    if (isDirectory) {
+      this.handleToggleUnified(node.itemId);
+    } else {
+      this.handleSelect(node.itemId);
+    }
+  };
 
   private renderNode = (node, depth = 0) => {
     const isDirectory = node.children && node.children.length > 0;
@@ -204,14 +226,7 @@ export class TkTreeView implements ComponentInterface {
             },
             this.size,
           )}
-          onClick={() => {
-            if (isDisabled) return;
-            if (isDirectory) {
-              this.handleToggleUnified(node.itemId);
-            } else {
-              this.handleSelect(node.itemId);
-            }
-          }}
+          onClick={() => this.handleNodeClick(node, isDirectory, isDisabled)}
         >
           {isDirectory
             ? [
