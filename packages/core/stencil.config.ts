@@ -93,10 +93,7 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      copy: [
-        { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
-        { src: 'docs', dest: 'docs' },
-      ],
+      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
     },
     {
       type: 'dist-custom-elements',
