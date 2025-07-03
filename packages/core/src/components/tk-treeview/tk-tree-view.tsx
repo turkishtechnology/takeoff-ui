@@ -3,7 +3,6 @@ import classNames from 'classnames';
 
 /**
  * The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
- * Supports both flat list data (via `items` prop) and declarative children (via slots).
  * @react `import { TkTreeView, TkTreeItem } from '@takeoff-ui/react'`
  * @vue `import { TkTreeView, TkTreeItem } from '@takeoff-ui/vue'`
  * @angular `import { TkTreeView, TkTreeItem } from '@takeoff-ui/angular'`
@@ -23,6 +22,11 @@ export class TkTreeView implements ComponentInterface {
   @State() treeData: any[] = [];
 
   /**
+   * Tree view mode: 'basic' or 'stepper'.
+   */
+  @Prop() mode: 'basic' | 'stepper' = 'basic';
+
+  /**
    * Tree view type: 'basic', 'divided', or 'light'.
    */
   @Prop() type: 'basic' | 'divided' | 'light' = 'basic';
@@ -36,11 +40,6 @@ export class TkTreeView implements ComponentInterface {
    * If true, disables all interaction with the tree view.
    */
   @Prop() disabled: boolean = false;
-
-  /**
-   * If true, the tree view is set as stepper mode.
-   */
-  @Prop() mode: 'basic' | 'stepper' = 'basic';
 
   /**
    * Show/hide the directory arrow icon.
@@ -62,6 +61,9 @@ export class TkTreeView implements ComponentInterface {
    */
   @Prop() showBadge: boolean = true;
 
+  /**
+   * Event emitted when a tree item is clicked.
+   */
   @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<string | number>;
 
   componentWillLoad() {
@@ -193,7 +195,7 @@ export class TkTreeView implements ComponentInterface {
   }
 
   private handleNodeClick = (node, isDirectory, isDisabled) => {
-    if (isDisabled) return;
+    if (this.disabled || isDisabled) return;
     if (isDirectory) {
       this.handleToggleUnified(node.itemId);
     } else {
@@ -205,7 +207,7 @@ export class TkTreeView implements ComponentInterface {
     const isDirectory = node.children && node.children.length > 0;
     const isExpanded = this.expandedIds.has(node.itemId);
     const isSelected = this.expandedIds.has(node.itemId) || this.selectedId === node.itemId;
-    const isDisabled = node.disabled;
+    const isDisabled = this.disabled || node.disabled;
     const nodeClass = classNames('tk-tree-view', 'node', {
       directory: isDirectory,
       file: !isDirectory,

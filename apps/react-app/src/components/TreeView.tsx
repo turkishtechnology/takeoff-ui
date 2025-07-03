@@ -88,7 +88,7 @@ function TreeView() {
       <button onClick={handleAddItems} style={{ marginBottom: 16 }}>
         Add New Items
       </button>
-      <TkTreeView mode="basic" type="light" size="base">
+      <TkTreeView mode="basic" type="light" size="base" disabled={true}>
         {renderTreeItems(items)}
       </TkTreeView>
     </>
