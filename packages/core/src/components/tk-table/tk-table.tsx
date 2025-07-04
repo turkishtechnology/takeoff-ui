@@ -1206,7 +1206,6 @@ export class TkTable implements ComponentInterface {
       width: this.columnWidths[col.field] || col.width,
       minWidth: this.columnWidths[col.field] || col.width,
       maxWidth: this.columnWidths[col.field] || col.width,
-      ...col.style,
     };
 
     if (col.fixed === 'left' && this.stickyOffsets.left[col.field] !== undefined) {
@@ -1270,7 +1269,15 @@ export class TkTable implements ComponentInterface {
               const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
               const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
 
-              return <th class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))} style={this.getStickyColumnStyle(col)}></th>;
+              return (
+                <th
+                  class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                  style={{
+                    ...this.getStickyColumnStyle(col),
+                    ...col?.style,
+                  }}
+                ></th>
+              );
             }
 
             // generate head sort and search icons
@@ -1321,7 +1328,13 @@ export class TkTable implements ComponentInterface {
             const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
 
             return (
-              <th class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))} style={this.getStickyColumnStyle(col)}>
+              <th
+                class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                style={{
+                  ...this.getStickyColumnStyle(col),
+                  ...col?.style,
+                }}
+              >
                 <div class="tk-table-head-cell">
                   {_customHeader ? (
                     !_customHeaderElements ? (
