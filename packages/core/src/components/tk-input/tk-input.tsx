@@ -141,6 +141,11 @@ export class TkInput implements ComponentInterface {
   @Prop() mode: 'text' | 'password' | 'counter' | 'number' | 'chips' = 'text';
 
   /**
+   * Sets step for decimal value with mode number
+   */
+  @Prop() step: string;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -273,6 +278,11 @@ export class TkInput implements ComponentInterface {
     if (/[0-9]/.test(password)) strength++;
     if (/[^A-Za-z0-9]/.test(password)) strength++;
     return strength;
+  }
+  private getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, obj);
   }
 
   private handleInput = (ev: Event) => {
@@ -422,7 +432,7 @@ export class TkInput implements ComponentInterface {
           // multiple abject array selection için geliştirildi
           return (
             <tk-chips
-              label={item[this.chipLabelKey]}
+              label={this.getNestedValue(item, this.chipLabelKey)}
               removable
               onTk-remove={() => this.handleChipsRemove(item)}
               variant="neutral"
@@ -461,6 +471,7 @@ export class TkInput implements ComponentInterface {
         name={this.name}
         min={this.min}
         max={this.max}
+        step={this.step}
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}

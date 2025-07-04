@@ -8,6 +8,7 @@ const Example = () => {
     createToast({
       position: position,
       header: 'Deneme Başlık',
+      alignItems: 'start',
       message: 'Bu bir deneme mesajıdır. Dikkate almayınız.',
       variant: variant,
       type: 'outlined',
@@ -72,6 +73,7 @@ const handleCreateToast = (position: string, variant: 'success' | 'warning' | 'i
     createToast({
       position: position,
       header: "Deneme Başlık",
+      alignItems: 'start',
       message: "Bu bir deneme mesajıdır. Dikkate almayınız.",
       variant: variant,
       type: "filled",
@@ -135,6 +137,7 @@ const handleCreateToast = (position, variant) => {
   createToast({
     position: position,
     header: "Deneme Başlık",
+    alignItems: 'start',
     message: "Bu bir deneme mesajıdır. Dikkate almayınız.",
     variant: variant,
     type: "filled",
@@ -210,6 +213,7 @@ import { createToast } from '@takeoff-ui/core';
       createToast({
         position,
         header: 'Deneme Başlık',
+        alignItems: 'start',
         message: 'Bu bir deneme mesajıdır. Dikkate almayınız.',
         variant: variant,
         type: 'filled',

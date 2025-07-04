@@ -14,6 +14,21 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.13',
+    date: '02.07.2025',
+    newComponents: ['Phone input has been developed'],
+    newFeatures: [
+      'Added alignItems prop to alert',
+      'Added blur effect to mask to dialog',
+      'Added icon, and iconPosition prop to datepicker',
+    ],
+    bugFixes: [
+      'Fixed vemit step change event to stepper',
+      'Fixed columns width for export excel files to table',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.12',
     date: '25.06.2025',
     newFeatures: [

@@ -13,3 +13,5 @@
 .docusaurus
 build
 /docs/static/llmstxt-files/
+docs.json
+docs.d.ts

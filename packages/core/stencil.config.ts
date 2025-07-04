@@ -6,7 +6,20 @@ import { sass } from '@stencil/sass';
 
 const vueComponentModels: ComponentModelConfig[] = [
   {
-    elements: ['tk-input', 'tk-textarea', 'tk-checkbox', 'tk-toggle', 'tk-radio-group', 'tk-radio', 'tk-select', 'tk-datepicker', 'tk-rating', 'tk-editor', 'tk-upload'],
+    elements: [
+      'tk-input',
+      'tk-phone-input',
+      'tk-textarea',
+      'tk-checkbox',
+      'tk-toggle',
+      'tk-radio-group',
+      'tk-radio',
+      'tk-select',
+      'tk-datepicker',
+      'tk-rating',
+      'tk-editor',
+      'tk-upload',
+    ],
     event: 'tk-change',
     targetAttr: 'value',
   },
@@ -20,11 +33,16 @@ const vueComponentModels: ComponentModelConfig[] = [
     event: 'tk-drawer-change',
     targetAttr: 'open',
   },
+  {
+    elements: ['tk-stepper'],
+    event: 'tk-step-change',
+    targetAttr: 'active',
+  },
 ];
 
 const angularValueAccessorBindings: ValueAccessorConfig[] = [
   {
-    elementSelectors: ['tk-input', 'tk-select', 'tk-datepicker', 'tk-rating'],
+    elementSelectors: ['tk-input', 'tk-phone-input', 'tk-select', 'tk-datepicker', 'tk-rating'],
     event: 'tk-change',
     targetAttr: 'value',
     type: 'text',
@@ -75,10 +93,7 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      copy: [
-        { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
-        { src: 'docs', dest: 'docs' },
-      ],
+      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
     },
     {
       type: 'dist-custom-elements',
