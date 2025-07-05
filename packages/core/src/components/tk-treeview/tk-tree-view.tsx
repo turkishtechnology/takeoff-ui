@@ -14,6 +14,7 @@ import classNames from 'classnames';
 })
 export class TkTreeView implements ComponentInterface {
   private observer: MutationObserver;
+  private treeMap: Map<string, any> = new Map();
 
   @Element() el: HTMLElement;
 
@@ -81,25 +82,75 @@ export class TkTreeView implements ComponentInterface {
     if (this.observer) this.observer.disconnect();
   }
 
-  extractTreeData(elements: Element[]): any[] {
-    return elements
+  /**
+   * Girdi stringinden deterministik bir hash değeri üretir.
+   * Ağacın parent, index ve label bilgilerine göre stabil ve benzersiz ID'ler oluşturmak için kullanılır.
+   * Aynı node yapısı her zaman aynı ID'yi üretir; bu, React uyumluluğu ve state'in korunması için kritiktir.
+   */
+  private hashString(str: string): string {
+    let hash = 0,
+      i,
+      chr;
+    for (i = 0; i < str.length; i++) {
+      chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0;
+    }
+    return Math.abs(hash).toString(36);
+  }
+
+  /**
+   * Returns the full path from root to this node as a string, using labels.
+   * This helps ensure itemId uniqueness even for nodes with the same label, parent, or index.
+   */
+  private getNodePath(label: string, parent: any): string {
+    let path = [];
+    let current = parent;
+    while (current) {
+      path.unshift(current.label);
+      current = current.parent;
+    }
+    path.push(label);
+    return path.join('/');
+  }
+
+  extractTreeData(elements: Element[], parent: any = null): any[] {
+    const nodes = Array.from(elements)
       .filter(el => el.tagName.toLowerCase() === 'tk-tree-item')
-      .map(el => {
-        const itemId = (el as any).itemId || el.getAttribute('item-id');
-        const label = (el as any).label || el.getAttribute('label');
-        const disabled = (el as any).disabled || el.getAttribute('disabled') !== null;
-        const children = this.extractTreeData(Array.from(el.children));
-        return { itemId, label, disabled, children };
+      .map((el, idx) => {
+        let itemId = (el as any).itemId || el.getAttribute('item-id');
+        const label = (el as any).label || el.getAttribute('label') || '';
+        const childrenEls = Array.from(el.children);
+        if (!itemId) {
+          // Use label, parentId, index, and full path for deterministic uniqueness
+          const parentId = parent?.itemId || 'root';
+          const path = this.getNodePath(label, parent);
+          const hash = this.hashString(`${label}|${parentId}|${idx}|${path}`);
+          itemId = `auto-id-${hash}`;
+        }
+        itemId = String(itemId);
+        const node: any = {
+          itemId,
+          label,
+          parent,
+          children: [],
+        };
+        node.children = this.extractTreeData(childrenEls, node);
+        node.hasChildren = node.children.length > 0;
+        this.treeMap.set(itemId, node);
+        return node;
       });
+    console.log('treeMap:', Array.from(this.treeMap.entries()));
+    return nodes;
   }
 
   private handleToggleUnified = id => {
     const expandedIds = new Set(this.expandedIds);
-    const clickedNode = this.findNodeById(this.treeData, id);
+    const clickedNode = this.findNodeById(id);
     const descendants = clickedNode ? this.collectDescendantIds(clickedNode) : [];
 
     if (this.mode === 'stepper') {
-      const path = this.findPathToNode(this.treeData, id);
+      const path = this.findPathToNode(id);
       const isExpanded = expandedIds.has(id);
 
       if (isExpanded) {
@@ -138,62 +189,66 @@ export class TkTreeView implements ComponentInterface {
   };
 
   /**
-   * Belirli bir node'a (itemId) kökten başlayarak giden yolu (itemId dizisi olarak) bulur.
-   * Örneğin: [rootId, childId, targetId]
+   * O(1) lookup for a node by itemId using treeMap.
    */
-  private findPathToNode(nodes, targetId, path = []): any[] {
-    for (const node of nodes) {
-      if (node.itemId === targetId) {
-        return [...path, node.itemId];
-      }
-      if (node.children && node.children.length > 0) {
-        const result = this.findPathToNode(node.children, targetId, [...path, node.itemId]);
-        if (result.length) return result;
-      }
-    }
-    return [];
+  private findNodeById(itemId: string | number) {
+    return this.treeMap.get(String(itemId));
   }
 
   /**
-   * Verilen node'un tüm alt (descendant) itemId'lerini (çocuklar, torunlar, vs.) döndürür.
-   * Sadece kendi çocuklarını değil, tüm alt ağacını toplar.
+   * Collect all descendant itemIds of a node using a stack (non-recursive).
    */
-  private collectDescendantIds(node) {
-    let ids = [];
-    if (node.children && node.children.length > 0) {
-      for (const child of node.children) {
-        ids.push(child.itemId);
-        ids = ids.concat(this.collectDescendantIds(child));
+  private collectDescendantIds(node: any): (string | number)[] {
+    const ids: (string | number)[] = [];
+    const stack = [...(node.children || [])];
+    while (stack.length) {
+      const current = stack.pop();
+      ids.push(current.itemId);
+      if (current.children && current.children.length > 0) {
+        stack.push(...current.children);
       }
     }
     return ids;
   }
 
   /**
-   * treeData içinde verilen itemId'ye sahip node'u bulur ve döndürür.
-   * Eğer bulunamazsa null döner.
+   * Find the path from root to a node by walking up parent references.
+   * Returns an array of itemIds from root to the node.
    */
-  private findNodeById(nodes, targetId) {
-    for (const node of nodes) {
-      if (node.itemId === targetId) return node;
-      if (node.children) {
-        const found = this.findNodeById(node.children, targetId);
-        if (found) return found;
-      }
+  private findPathToNode(itemId: string | number): (string | number)[] {
+    const path: (string | number)[] = [];
+    let node = this.treeMap.get(String(itemId));
+    while (node) {
+      path.unshift(node.itemId);
+      node = node.parent;
     }
-    return null;
+    return path;
   }
 
-  private getStepperColumns(nodes, columns = [], depth = 0) {
-    if (!nodes || !nodes.length) return columns;
-    columns[depth] = nodes;
-    const expandedNode = nodes.find(node => this.expandedIds.has(node.itemId));
-    if (expandedNode && expandedNode.children && expandedNode.children.length > 0) {
-      this.getStepperColumns(expandedNode.children, columns, depth + 1);
+  /**
+   * Stepper modunda, her seviyedeki (kolon) node'ları bulup bir dizi olarak döner.
+   * Her kolon, o seviyedeki node'ları içerir. Sadece genişletilmiş (expanded) node'ların çocukları bir sonraki kolonda gösterilir.
+   * Bu, stepper tarzı gezinme için gereklidir.
+   */
+  private getStepperColumns(): any[][] {
+    const columns: any[][] = [];
+    let currentLevel = this.treeData;
+    while (currentLevel && currentLevel.length > 0) {
+      columns.push(currentLevel);
+      const expandedNode = currentLevel.find(node => this.expandedIds.has(node.itemId));
+      if (expandedNode && expandedNode.children && expandedNode.children.length > 0) {
+        currentLevel = expandedNode.children;
+      } else {
+        break;
+      }
     }
     return columns;
   }
 
+  /**
+   * Bir node'a tıklandığında çalışır. Eğer node bir dizin (klasör) ise açma/kapama işlemini tetikler,
+   * değilse (dosya ise) seçili hale getirir. Eğer tree veya node disable ise hiçbir işlem yapmaz.
+   */
   private handleNodeClick = (node, isDirectory, isDisabled) => {
     if (this.disabled || isDisabled) return;
     if (isDirectory) {
@@ -204,7 +259,7 @@ export class TkTreeView implements ComponentInterface {
   };
 
   private renderNode = (node, depth = 0) => {
-    const isDirectory = node.children && node.children.length > 0;
+    const isDirectory = node.hasChildren;
     const isExpanded = this.expandedIds.has(node.itemId);
     const isSelected = this.expandedIds.has(node.itemId) || this.selectedId === node.itemId;
     const isDisabled = this.disabled || node.disabled;
@@ -228,7 +283,9 @@ export class TkTreeView implements ComponentInterface {
             },
             this.size,
           )}
-          onClick={() => this.handleNodeClick(node, isDirectory, isDisabled)}
+          onClick={() => {
+            this.handleNodeClick(node, isDirectory, isDisabled);
+          }}
         >
           {isDirectory
             ? [
@@ -251,7 +308,7 @@ export class TkTreeView implements ComponentInterface {
   render() {
     if (!this.treeData.length) return null;
     if (this.mode === 'stepper') {
-      const columns = this.getStepperColumns(this.treeData);
+      const columns = this.getStepperColumns();
       return (
         <div class={classNames('tk-tree-view', 'stepper')}>
           {columns.map((nodes, idx) => (
