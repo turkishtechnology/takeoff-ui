@@ -47,6 +47,7 @@ export class TkTable implements ComponentInterface {
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
   @State() columnWidths: { [key: string]: string } = {};
+  @State() stickyOffsets: { left: { [key: string]: number }; right: { [key: string]: number } } = { left: {}, right: {} };
 
   /**
    * The column definitions (Array of Objects)
@@ -232,6 +233,14 @@ export class TkTable implements ComponentInterface {
     document.addEventListener('mouseup', this.handleMouseUp.bind(this));
   }
 
+  componentDidLoad() {
+    const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
+    if (stickyColumns.length > 0) {
+      this.updateStickyOffsets();
+      this.setupScrollListener();
+    }
+  }
+
   componentDidRender(): void {
     this.customCellElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
@@ -283,6 +292,12 @@ export class TkTable implements ComponentInterface {
     // Clean up resize event listeners
     document.removeEventListener('mousemove', this.handleMouseMove.bind(this));
     document.removeEventListener('mouseup', this.handleMouseUp.bind(this));
+
+    // Clean up scroll event listener
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder');
+    if (tableHolder) {
+      tableHolder.removeEventListener('scroll', this.handleScroll.bind(this));
+    }
   }
 
   /**
@@ -992,6 +1007,115 @@ export class TkTable implements ComponentInterface {
     }
   };
 
+  private updateStickyOffsets() {
+    const leftColumns = this.columns.filter(col => col.fixed === 'left');
+    const rightColumns = this.columns.filter(col => col.fixed === 'right');
+
+    // Reset offsets
+    this.stickyOffsets = { left: {}, right: {} };
+
+    let measuredWidths: { [key: string]: number } = {};
+    let shouldUseMeasuredWidths = false;
+
+    // Try to measure from DOM if available
+    const tableElement = this.el.shadowRoot?.querySelector('table');
+    if (tableElement) {
+      const headerRow = tableElement.querySelector('thead tr');
+      if (headerRow) {
+        const thElements = Array.from(headerRow.querySelectorAll('th'));
+
+        // Measure actual widths from DOM
+        thElements.forEach((th, index) => {
+          const actualWidth = Math.round(th.getBoundingClientRect().width);
+
+          if (index === 0 && this.selectionMode) {
+            // Selection column
+            measuredWidths['selection'] = actualWidth;
+          } else {
+            // Data column
+            const dataColumnIndex = this.selectionMode ? index - 1 : index;
+            if (dataColumnIndex >= 0 && dataColumnIndex < this.columns.length) {
+              const column = this.columns[dataColumnIndex];
+              if (column) {
+                measuredWidths[column.field] = actualWidth;
+              }
+            }
+          }
+        });
+
+        shouldUseMeasuredWidths = true;
+      }
+    }
+
+    // Calculate left sticky offsets (cumulative from left)
+    let leftOffset = 0;
+
+    // Add selection column width if it exists
+    if (this.selectionMode) {
+      if (shouldUseMeasuredWidths && measuredWidths['selection']) {
+        // Use measured width if available
+        leftOffset += measuredWidths['selection'];
+      } else {
+        // Fallback to estimated width
+        leftOffset += 52;
+      }
+    }
+
+    leftColumns.forEach(col => {
+      this.stickyOffsets.left[col.field] = leftOffset;
+
+      let numericWidth = 120;
+
+      if (shouldUseMeasuredWidths && measuredWidths[col.field]) {
+        // Use measured width (priority)
+        numericWidth = measuredWidths[col.field];
+      } else {
+        // Use state or column definition width
+        const width = this.columnWidths[col.field] || col.width;
+        if (width) {
+          if (typeof width === 'string') {
+            numericWidth = parseInt(width.replace(/px|%|em|rem/, '')) || 120;
+          } else if (typeof width === 'number') {
+            numericWidth = width;
+          }
+        }
+      }
+
+      leftOffset += numericWidth;
+    });
+
+    // Calculate right sticky offsets (cumulative from right)
+    let rightOffset = 0;
+    // Process right columns in reverse order (rightmost first)
+    [...rightColumns].reverse().forEach(col => {
+      this.stickyOffsets.right[col.field] = rightOffset;
+
+      let numericWidth = 120;
+
+      if (shouldUseMeasuredWidths && measuredWidths[col.field]) {
+        // Use measured width (priority)
+        numericWidth = measuredWidths[col.field];
+      } else {
+        // Use state or column definition width
+        const width = this.columnWidths[col.field] || col.width;
+        if (width) {
+          if (typeof width === 'string') {
+            numericWidth = parseInt(width.replace(/px|%|em|rem/, '')) || 120;
+          } else if (typeof width === 'number') {
+            numericWidth = width;
+          }
+        }
+      }
+
+      rightOffset += numericWidth;
+    });
+
+    // Force re-render if using measured widths
+    if (shouldUseMeasuredWidths) {
+      this.columnWidths = { ...this.columnWidths };
+    }
+  }
+
   private handleMouseUp = () => {
     if (this.isResizing) {
       this.isResizing = false;
@@ -999,8 +1123,116 @@ export class TkTable implements ComponentInterface {
       // Reset cursor styles on the table container
       this.el.style.cursor = '';
       this.el.style.userSelect = '';
+      this.updateStickyOffsets();
     }
   };
+
+  private setupScrollListener() {
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder');
+    if (tableHolder) {
+      tableHolder.addEventListener('scroll', this.handleScroll.bind(this));
+    }
+  }
+
+  private handleScroll = (e: Event) => {
+    const target = e.target as HTMLElement;
+    const scrollLeft = target.scrollLeft;
+    const scrollWidth = target.scrollWidth;
+    const clientWidth = target.clientWidth;
+    const maxScrollLeft = scrollWidth - clientWidth;
+
+    // Update shadow visibility based on scroll position
+    const leftStickyElements = this.el.shadowRoot?.querySelectorAll('.tk-table-sticky-shadow-right');
+    const rightStickyElements = this.el.shadowRoot?.querySelectorAll('.tk-table-sticky-shadow-left');
+
+    // Show/hide left sticky shadow
+    if (leftStickyElements) {
+      leftStickyElements.forEach((el: HTMLElement) => {
+        if (scrollLeft > 0) {
+          el.style.setProperty('--shadow-opacity', '1');
+        } else {
+          el.style.setProperty('--shadow-opacity', '0');
+        }
+      });
+    }
+
+    // Show/hide right sticky shadow
+    if (rightStickyElements) {
+      rightStickyElements.forEach((el: HTMLElement) => {
+        if (scrollLeft < maxScrollLeft) {
+          el.style.setProperty('--shadow-opacity', '1');
+        } else {
+          el.style.setProperty('--shadow-opacity', '0');
+        }
+      });
+    }
+  };
+
+  private getStickyColumnClasses(col: ITableColumn, isFirst: boolean = false, isLast: boolean = false) {
+    const classes = [];
+
+    if (col.fixed === 'left') {
+      classes.push('tk-table-left-sticky');
+      if (isFirst) classes.push('tk-table-sticky-first');
+
+      // En sağdaki left sticky kolonda shadow göster
+      const leftColumns = this.columns.filter(c => c.fixed === 'left');
+      const isLastLeft = leftColumns[leftColumns.length - 1]?.field === col.field;
+      if (isLastLeft) classes.push('tk-table-sticky-shadow-right');
+    } else if (col.fixed === 'right') {
+      classes.push('tk-table-right-sticky');
+      if (isLast) classes.push('tk-table-sticky-last');
+
+      // En soldaki right sticky kolonda shadow göster (en büyük offset'li)
+      const rightColumns = this.columns.filter(c => c.fixed === 'right');
+      if (rightColumns.length > 0) {
+        // Right kolonlarda en soldaki = en büyük offset'e sahip olan
+        const leftmostRightCol = rightColumns.reduce((leftmost, current) => {
+          const currentOffset = this.stickyOffsets.right?.[current.field] || 0;
+          const leftmostOffset = this.stickyOffsets.right?.[leftmost.field] || 0;
+          return currentOffset > leftmostOffset ? current : leftmost;
+        }, rightColumns[0]);
+
+        const isLeftmostRight = leftmostRightCol?.field === col.field;
+        if (isLeftmostRight) classes.push('tk-table-sticky-shadow-left');
+      }
+    }
+
+    return classes.join(' ');
+  }
+
+  private getStickyColumnStyle(col: ITableColumn) {
+    const style: any = {
+      width: this.columnWidths[col.field] || col.width,
+      minWidth: this.columnWidths[col.field] || col.width,
+      maxWidth: this.columnWidths[col.field] || col.width,
+    };
+
+    if (col.fixed === 'left' && this.stickyOffsets.left[col.field] !== undefined) {
+      const leftColumns = this.columns.filter(c => c.fixed === 'left');
+      const columnIndex = leftColumns.findIndex(c => c.field === col.field);
+
+      style['--tk-table-sticky-left-offset'] = `${this.stickyOffsets.left[col.field]}px`;
+      style['left'] = `${this.stickyOffsets.left[col.field]}px`;
+      // En soldaki kolon en yüksek z-index'e sahip olmalı (en üstte durmalı)
+      style['zIndex'] = 30 - columnIndex; // Left sticky: 30, 29, 28... (soldan sağa azalıyor)
+    } else if (col.fixed === 'right' && this.stickyOffsets.right[col.field] !== undefined) {
+      style['--tk-table-sticky-right-offset'] = `${this.stickyOffsets.right[col.field]}px`;
+      style['right'] = `${this.stickyOffsets.right[col.field]}px`;
+
+      // Right sticky z-index mantığı: En sağdaki (offset=0) en yüksek z-index
+      const rightOffset = this.stickyOffsets.right[col.field];
+
+      // Right kolonlar için z-index: offset'e göre hesaplıyoruz
+      // offset=0 (en sağdaki) -> z-index=30
+      // offset arttıkça z-index azalır
+      const offsetLevel = Math.floor(rightOffset / 50); // Her 50px'te bir level
+      const zIndex = 30 - offsetLevel;
+      style['zIndex'] = Math.max(zIndex, 20); // Minimum z-index 20
+    }
+
+    return style;
+  }
 
   private createHead() {
     this.customHeaderElements = [];
@@ -1064,10 +1296,18 @@ export class TkTable implements ComponentInterface {
 
             // generate expander th
             if (col.expander) {
+              const leftColumns = this.columns.filter(c => c.fixed === 'left');
+              const rightColumns = this.columns.filter(c => c.fixed === 'right');
+              const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
+              const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
+
               return (
                 <th
-                  class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                  style={{ width: col?.width, minWidth: col?.width, maxWidth: col?.width, ...col?.style }}
+                  class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                  style={{
+                    ...this.getStickyColumnStyle(col),
+                    ...col?.style,
+                  }}
                 ></th>
               );
             }
@@ -1106,14 +1346,17 @@ export class TkTable implements ComponentInterface {
               }
             }
 
+            const leftColumns = this.columns.filter(c => c.fixed === 'left');
+            const rightColumns = this.columns.filter(c => c.fixed === 'right');
+            const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
+            const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
+
             return (
               <th
-                class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                 style={{
-                  width: this.columnWidths[col.field] || col.width,
-                  minWidth: this.columnWidths[col.field] || col.width,
-                  maxWidth: this.columnWidths[col.field] || col.width,
-                  ...col.style,
+                  ...this.getStickyColumnStyle(col),
+                  ...col?.style,
                 }}
               >
                 <div class="tk-table-head-cell">
@@ -1192,6 +1435,11 @@ export class TkTable implements ComponentInterface {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
                     let styleCellObject;
 
+                    const leftColumns = this.columns.filter(c => c.fixed === 'left');
+                    const rightColumns = this.columns.filter(c => c.fixed === 'right');
+                    const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
+                    const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
+
                     if (typeof this.cellStyle == 'function') {
                       const stylesCell = this.cellStyle(row, col);
                       if (stylesCell !== undefined) styleCellObject = { backgroundColor: stylesCell.background, color: stylesCell.color };
@@ -1200,8 +1448,8 @@ export class TkTable implements ComponentInterface {
                     if (col.expander) {
                       return (
                         <td
-                          class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
-                          style={{ ...styleRowObject, ...styleCellObject }}
+                          class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                          style={{ ...this.getStickyColumnStyle(col), ...styleRowObject, ...styleCellObject }}
                         >
                           <tk-button
                             ref={el => (tdExpanderButtonRef = el)}
@@ -1220,12 +1468,10 @@ export class TkTable implements ComponentInterface {
                       if (typeof cellElement == 'string') {
                         return (
                           <td
-                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                            class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                             innerHTML={cellElement}
                             style={{
-                              width: this.columnWidths[col.field] || col.width,
-                              minWidth: this.columnWidths[col.field] || col.width,
-                              maxWidth: this.columnWidths[col.field] || col.width,
+                              ...this.getStickyColumnStyle(col),
                               ...styleRowObject,
                               ...styleCellObject,
                             }}
@@ -1235,11 +1481,9 @@ export class TkTable implements ComponentInterface {
                         return (
                           <td
                             ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
-                            class={classNames('non-text', { 'tk-table-left-sticky': col.fixed === 'left', 'tk-table-right-sticky': col.fixed === 'right' })}
+                            class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                             style={{
-                              width: this.columnWidths[col.field] || col.width,
-                              minWidth: this.columnWidths[col.field] || col.width,
-                              maxWidth: this.columnWidths[col.field] || col.width,
+                              ...this.getStickyColumnStyle(col),
                               ...styleRowObject,
                               ...styleCellObject,
                             }}
@@ -1250,11 +1494,9 @@ export class TkTable implements ComponentInterface {
                       let editableInputRef: HTMLInputElement;
                       return (
                         <td
-                          class={classNames('non-text editable', { 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                          class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                           style={{
-                            width: this.columnWidths[col.field] || col.width,
-                            minWidth: this.columnWidths[col.field] || col.width,
-                            maxWidth: this.columnWidths[col.field] || col.width,
+                            ...this.getStickyColumnStyle(col),
                             ...styleRowObject,
                             ...styleCellObject,
                           }}
@@ -1271,11 +1513,9 @@ export class TkTable implements ComponentInterface {
                     } else {
                       return (
                         <td
-                          class={classNames({ 'tk-table-left-sticky': col.fixed == 'left', 'tk-table-right-sticky': col.fixed == 'right' })}
+                          class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                           style={{
-                            width: this.columnWidths[col.field] || col.width,
-                            minWidth: this.columnWidths[col.field] || col.width,
-                            maxWidth: this.columnWidths[col.field] || col.width,
+                            ...this.getStickyColumnStyle(col),
                             ...styleRowObject,
                             ...styleCellObject,
                           }}
