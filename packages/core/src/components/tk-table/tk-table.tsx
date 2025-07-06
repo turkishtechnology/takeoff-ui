@@ -1027,8 +1027,40 @@ export class TkTable implements ComponentInterface {
             let refSearchIcon: HTMLTkIconElement;
             let _sortIcon;
             let _searchIcon;
+            let _headerStructure;
             let _customHeader;
             let _customHeaderElements: ICustomElement;
+
+            if (typeof col?.headerHtml == 'function') {
+              _customHeader = col.headerHtml();
+
+              if (_customHeader instanceof HTMLElement) {
+                _customHeaderElements = {
+                  ref: null,
+                  element: _customHeader,
+                } as ICustomElement;
+                this.customHeaderElements.push(_customHeaderElements);
+              }
+            }
+
+            if (_customHeader && !_customHeaderElements) {
+              _headerStructure = <div class="header-container" innerHTML={_customHeader}></div>;
+            } else if (_customHeader && _customHeaderElements) {
+              _headerStructure = <div ref={el => (_customHeaderElements.ref = el as HTMLElement)} class="header-container"></div>;
+            } else {
+              _headerStructure = (
+                <div class="header-container">
+                  <div class="header" title={col.header}>
+                    {col.header}
+                  </div>
+                  {col?.subHeader?.length > 0 && (
+                    <div class="sub-header" title={col.subHeader}>
+                      {col.subHeader}
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
             // generate expander th
             if (col.expander) {
@@ -1068,17 +1100,9 @@ export class TkTable implements ComponentInterface {
               // filtrelenmiş ise badge ile göster
               if (this.filters.findIndex(item => item.field == col.field) > -1) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
-              }
-            }
-            if (typeof col?.headerHtml == 'function') {
-              _customHeader = col.headerHtml();
-
-              if (_customHeader instanceof HTMLElement) {
-                _customHeaderElements = {
-                  ref: null,
-                  element: _customHeader,
-                } as ICustomElement;
-                this.customHeaderElements.push(_customHeaderElements);
+                if (col.showIconsOnHover) {
+                  _headerStructure = <tk-badge dot>{_headerStructure}</tk-badge>;
+                }
               }
             }
 
@@ -1093,24 +1117,7 @@ export class TkTable implements ComponentInterface {
                 }}
               >
                 <div class="tk-table-head-cell">
-                  {_customHeader ? (
-                    !_customHeaderElements ? (
-                      <div class="header-container" innerHTML={_customHeader}></div>
-                    ) : (
-                      <div ref={el => (_customHeaderElements.ref = el as HTMLElement)} class="header-container"></div>
-                    )
-                  ) : (
-                    <div class="header-container">
-                      <div class="header" title={col.header}>
-                        {col.header}
-                      </div>
-                      {col?.subHeader?.length > 0 && (
-                        <div class="sub-header" title={col.subHeader}>
-                          {col.subHeader}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement })}>
                       {_sortIcon}
