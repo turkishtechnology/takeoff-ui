@@ -121,8 +121,9 @@ export class TkTreeView implements ComponentInterface {
         let itemId = (el as any).itemId || el.getAttribute('item-id');
         const label = (el as any).label || el.getAttribute('label') || '';
         const childrenEls = Array.from(el.children);
+        const disabled = (el as any).disabled || el.getAttribute('disabled') !== null;
         if (!itemId) {
-          // Use label, parentId, index, and full path for deterministic uniqueness
+          // label, parentId, index, and full path for deterministic uniqueness
           const parentId = parent?.itemId || 'root';
           const path = this.getNodePath(label, parent);
           const hash = this.hashString(`${label}|${parentId}|${idx}|${path}`);
@@ -134,13 +135,13 @@ export class TkTreeView implements ComponentInterface {
           label,
           parent,
           children: [],
+          disabled,
         };
         node.children = this.extractTreeData(childrenEls, node);
         node.hasChildren = node.children.length > 0;
         this.treeMap.set(itemId, node);
         return node;
       });
-    console.log('treeMap:', Array.from(this.treeMap.entries()));
     return nodes;
   }
 
