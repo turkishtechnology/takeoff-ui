@@ -1,62 +1,76 @@
 import { useState, useEffect } from 'react';
-import { TkTreeView, TkTreeItem, TkCheckbox } from '@takeoff-ui/react';
+import {
+  TkTreeView,
+  TkTreeItem,
+  TkRadioGroup,
+  TkRadio,
+} from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const TreeViewDisabled = () => {
-  const [disabled, setDisabled] = useState(false);
+  const [disabledMode, setDisabledMode] = useState('null'); // 'none', 'tree', 'item'
   const [reactCode, setReactCode] = useState('');
   const [vueCode, setVueCode] = useState('');
 
   useEffect(() => {
+    let reactTreeViewDisabled = disabledMode === 'tree' ? ' disabled' : '';
+    let reactTreeItemDisabled = disabledMode === 'item' ? ' disabled' : '';
+    let vueTreeViewDisabled = disabledMode === 'tree' ? ' disabled' : '';
+    let vueTreeItemDisabled = disabledMode === 'item' ? ' disabled' : '';
+
     setReactCode(`
-<TkTreeView mode="basic" type="light" size="base" disabled={${disabled}}>
+<TkTreeView mode="basic" type="light" size="base" ${reactTreeViewDisabled}>
   <TkTreeItem itemId="1" label="Root Directory">
-    <TkTreeItem itemId="1.2" label="Second Directory">
-      <TkTreeItem itemId="1.3" label="Third Directory">
-        <TkTreeItem itemId="1.4" label="Fourth Directory" />
-      </TkTreeItem>
+    <TkTreeItem itemId="1.2" label="Second Directory" ${reactTreeItemDisabled}>
+      <TkTreeItem itemId="1.3" label="Third Directory" />
     </TkTreeItem>
+    <TkTreeItem itemId="2" label="Another Child" />
   </TkTreeItem>
 </TkTreeView>
 `);
     setVueCode(`
-<TkTreeView mode="basic" type="light" size="base" disabled="${disabled}">
+<TkTreeView mode="basic" type="light" size="base" ${vueTreeViewDisabled}>
   <TkTreeItem item-id="1" label="Root Directory">
-    <TkTreeItem item-id="1.2" label="Second Directory">
-      <TkTreeItem item-id="1.3" label="Third Directory">
-        <TkTreeItem item-id="1.4" label="Fourth Directory" />
-      </TkTreeItem>
+    <TkTreeItem item-id="1.2" label="Second Directory" ${vueTreeItemDisabled}>
+      <TkTreeItem item-id="1.3" label="Third Directory" />
     </TkTreeItem>
+    <TkTreeItem item-id="2" label="Another Child" />
   </TkTreeItem>
 </TkTreeView>
 `);
-  }, [disabled]);
+  }, [disabledMode]);
 
   const demo = (
     <div className="flex flex-col gap-8 items-start w-full">
       <div className="flex flex-col gap-4 w-full">
-        <div className="flex flex-wrap gap-4">
-          <TkCheckbox
-            label="Disabled"
-            value={disabled}
-            onTkChange={(e) => setDisabled(e.detail)}
-          />
+        <div className="flex flex-wrap gap-4 items-center">
+          <label htmlFor="disabled-mode-radio">Disable:</label>
+          <TkRadioGroup
+            id="disabled-mode-radio"
+            value={disabledMode}
+            onTkChange={(e) => setDisabledMode(e.detail)}
+            direction="horizontal"
+          >
+            <TkRadio value="tree">TkTreeView</TkRadio>
+            <TkRadio value="item">TkTreeItem</TkRadio>
+          </TkRadioGroup>
         </div>
         <div className="flex flex-row gap-4 w-full">
-          <TkTreeView mode="basic" type="light" size="base" disabled={disabled}>
-            <TkTreeItem itemId="1" label="Root1 Directory">
-              <TkTreeItem itemId="1.2" label="Second Directory"></TkTreeItem>
-            </TkTreeItem>
-          </TkTreeView>
-        </div>
-        <div className="flex flex-row gap-4 w-full">
-          <TkTreeView mode="basic" type="light" size="base">
-            <TkTreeItem itemId="1" label="Root2 Directory">
+          <TkTreeView
+            mode="basic"
+            type="light"
+            size="base"
+            disabled={disabledMode === 'tree'}
+          >
+            <TkTreeItem itemId="1" label="Root Directory">
               <TkTreeItem
                 itemId="1.2"
                 label="Second Directory"
-                disabled={disabled}
-              ></TkTreeItem>
+                disabled={disabledMode === 'item'}
+              >
+                <TkTreeItem itemId="1.3" label="Third Directory" />
+              </TkTreeItem>
+              <TkTreeItem itemId="2" label="Another Child" />
             </TkTreeItem>
           </TkTreeView>
         </div>

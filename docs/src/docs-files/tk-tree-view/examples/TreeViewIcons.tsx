@@ -25,7 +25,7 @@ const TreeViewIcons = () => {
 </TkTreeView>
 `);
     setVueCode(`
-<TkTreeView mode="basic" type="light" size="base" show-expand-icon="${showExpandIcon}" show-folder-icon="${showFolderIcon}" show-file-icon="${showFileIcon}" show-badge="${showBadge}">
+<TkTreeView mode="basic" type="light" size="base" :showExpandIcon.prop="${showExpandIcon}" :showFolderIcon.prop="${showFolderIcon}" :showFileIcon.prop="${showFileIcon}" :showBadge.prop="${showBadge}">
   <TkTreeItem item-id="1" label="Root Directory">
     <TkTreeItem item-id="1.2" label="Second Directory">
       <TkTreeItem item-id="1.3" label="Third Directory">

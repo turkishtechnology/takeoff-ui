@@ -9,11 +9,6 @@ function TreeViewDynamic() {
       label: 'Parent Directory',
       children: [{ itemId: '2', label: 'Child File 1' }],
     },
-    {
-      itemId: '3',
-      label: 'Parent Directory 2',
-      children: [{ itemId: '4', label: 'Child File 2' }],
-    },
   ]);
   const [reactCode, setReactCode] = useState('');
   const [vueCode, setVueCode] = useState('');
@@ -23,14 +18,14 @@ function TreeViewDynamic() {
     setItems((prev) => [
       ...prev,
       {
-        itemId: '5',
+        itemId: '3',
         label: 'Parent Directory (Added)',
         children: [
-          { itemId: '6', label: 'Child File 1 (Added)' },
+          { itemId: '4', label: 'Child File 1 (Added)' },
           {
-            itemId: '7',
+            itemId: '5',
             label: 'Child Directory 2',
-            children: [{ itemId: '8', label: 'Child File 2 (Added)' }],
+            children: [{ itemId: '6', label: 'Child File 2 (Added)' }],
           },
         ],
       },
@@ -48,14 +43,104 @@ function TreeViewDynamic() {
 
   useEffect(() => {
     setReactCode(`
-<TkTreeView mode="basic" type="light" size="base">   
-  ${renderTreeItems(items)}
-</TkTreeView>
+const [items, setItems] = useState([
+    {
+      itemId: '1',
+      label: 'Parent Directory',
+      children: [{ itemId: '2', label: 'Child File 1' }],
+    }
+]);
+
+const handleAddItems = () => {
+  setItems((prev) => [
+    ...prev,
+    {
+      itemId: '3',
+      label: 'Parent Directory (added)',
+      children: [
+        { itemId: '4', label: 'Child File 1' },
+        {
+          itemId: '5',
+          label: 'Child Directory',
+          children: [{ itemId: '6', label: 'Child Directory2' }],
+        },
+      ],
+    },
+  ]);
+};
+
+const renderTreeItems = (nodes: any[]) =>
+  nodes.map((node) => (
+    <TkTreeItem key={node.itemId} itemId={node.itemId} label={node.label}>
+      {node.children && node.children.length > 0
+        ? renderTreeItems(node.children)
+        : null}
+    </TkTreeItem>
+  ));
+  return (
+  <>
+    <TkButton label="Add New Items" onTkClick={handleAddItems} />
+    <TkTreeView mode="stepper" type="light" size="base" onTkItemClick={(e) => console.log('clicked', e.detail)}>
+      {renderTreeItems(items)}
+    </TkTreeView>
+  </>
 `);
     setVueCode(`
-<TkTreeView mode="basic" type="light" size="base">
-  ${renderTreeItems(items)}
-</TkTreeView>
+<script setup>
+import { ref, defineComponent, h } from 'vue';
+import { TkTreeView, TkTreeItem } from '@takeoff-ui/vue';
+
+const items = ref([
+  {
+    itemId: '1',
+    label: 'Parent Directory',
+    children: [{ itemId: '2', label: 'Child File 1' }],
+  }
+]);
+
+const TreeNode = defineComponent({
+  name: 'TreeNode',
+  props: { node: { type: Object, required: true } },
+  setup(props) {
+    return () =>
+      h(
+        TkTreeItem,
+        { 'item-id': props.node.itemId, label: props.node.label },
+        props.node.children && props.node.children.length
+          ? {
+              default: () =>
+                props.node.children.map(child =>
+                  h(TreeNode, { node: child, key: child.itemId })
+                )
+            }
+          : undefined
+      );
+  }
+});
+
+function handleAddItems() {
+  items.value.push({
+    itemId: String(Date.now()),
+    label: 'Parent Directory (Added)',
+    children: [
+      { itemId: String(Date.now() + 1), label: 'Child File 1 (Added)' },
+      {
+        itemId: String(Date.now() + 2),
+        label: 'Child Directory 2',
+        children: [
+          { itemId: String(Date.now() + 3), label: 'Child File 2 (Added)' }
+        ]
+      }
+    ]
+  });
+}
+</script>
+<template>
+  <TkButton label="Add New Items" @tkClick="handleAddItems" />
+  <TkTreeView mode="basic" type="light" size="base">
+    <TreeNode v-for="item in items" :key="item.itemId" :node="item" />
+  </TkTreeView>
+</template>
 `);
   }, [items]);
 
