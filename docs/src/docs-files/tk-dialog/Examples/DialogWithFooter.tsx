@@ -78,12 +78,15 @@ const setShowDialog = (value) => {
 </script>
 
 <template>
-  <div style="margin-bottom: 16px; display: flex; gap: 8px">
+  <>
     <TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
     <TkDialog
       header="Dialog with Footer"
       subheader="This dialog uses the footer-actions slot"
-      v-model="showDialog"
+      :visible.prop="showDialog"
+      @tk-visible-change="(e) => {
+        showDialog = e.detail;
+      }"
       :containerStyle="{ width: '450px' }"
     >
       <p>
@@ -102,7 +105,7 @@ const setShowDialog = (value) => {
         <TkButton label="Save" variant="primary" @tkClick="saveAction" />
       </div>
     </TkDialog>
-  </div>
+  </>
 </template>
 
 `;

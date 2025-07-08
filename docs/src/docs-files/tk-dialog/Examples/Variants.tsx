@@ -29,19 +29,33 @@ const Variants = () => {
     </p>
 </TkDialog>`;
 
-  const vueCode = `<TkButton label="Open Dialog" @tkClick="showDialog = true" />
-<TkDialog
-   header="Dialog Variants"
-   subheader="This is a ${variant} dialog"
-   v-model="showDialog"
-   variant="${variant}"
-   :containerStyle="{ width: '450px' }"
->
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+  const vueCode = `<script setup>
+import { TkDialog, TkButton } from '@takeoff-ui/vue';
+import { ref } from 'vue';
+
+const showDialog = ref(false);
+const setShowDialog = (value) => {
+  showDialog.value = true;
+};
+</script>
+
+<template>
+  <>
+    <TkButton label="Open Dialog" @tkClick="showDialog = true" />
+    <TkDialog header="Dialog Variants" subheader="This is a info dialog" :visible.prop="showDialog" variant="success"
+      @tk-visible-change="(e) => {
+        showDialog = e.detail;
+      }"
+      :containerStyle="{ width: '450px' }">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam
+        deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
+        neque
         quas!
-    </p>
-</TkDialog>`;
+      </p>
+    </TkDialog>
+  </>
+</template>`;
 
   const demo = (
     <>
