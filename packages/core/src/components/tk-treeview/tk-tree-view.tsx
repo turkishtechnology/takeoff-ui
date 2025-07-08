@@ -43,9 +43,14 @@ export class TkTreeView implements ComponentInterface {
   @Prop() disabled: boolean = false;
 
   /**
-   * Show/hide the directory arrow icon.
+   * Show/hide the left arrow icon.
    */
-  @Prop() showExpandIcon: boolean = true;
+  @Prop() showLeftIcon: boolean = true;
+
+  /**
+   * Show/hide the right arrow icon.
+   */
+  @Prop() showRightIcon: boolean = true;
 
   /**
    * Show/hide the folder icon for directories.
@@ -61,6 +66,16 @@ export class TkTreeView implements ComponentInterface {
    * Show/hide the badge for children count on directories.
    */
   @Prop() showBadge: boolean = true;
+
+  /**
+   * Show/hide the pointer icon for selected items.
+   */
+  @Prop() showPointer: boolean = true;
+
+  /**
+   * Choose the expand icon position.
+   */
+  @Prop() expandIcon: 'left' | 'right' = 'left';
 
   /**
    * Event emitted when a tree item is clicked.
@@ -274,6 +289,7 @@ export class TkTreeView implements ComponentInterface {
 
     return (
       <div class={nodeClass}>
+        {this.showPointer && (isExpanded || isSelected) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
         <span
           class={classNames(
             'tk-tree-view',
@@ -290,14 +306,21 @@ export class TkTreeView implements ComponentInterface {
         >
           {isDirectory
             ? [
-                this.showExpandIcon && this.mode === 'basic' && (
-                  <span class={classNames('tk-tree-view', 'directory-icon', 'material-symbols-outlined', this.size)}>{isExpanded ? 'arrow_drop_down' : 'arrow_right'}</span>
+                this.showLeftIcon && this.mode === 'basic' && (
+                  <span class={classNames('tk-tree-view', 'directory-icon', 'material-symbols-outlined', this.size)}>
+                    {this.expandIcon == 'left' && (isExpanded ? 'arrow_drop_down' : 'arrow_right')}
+                  </span>
                 ),
                 this.showFolderIcon && <span class={classNames('tk-tree-view', 'folder-icon', 'material-symbols-outlined', this.size)}>folder</span>,
               ]
             : this.showFileIcon && <span class={classNames('tk-tree-view', 'file-icon', 'material-symbols-outlined', this.size)}>insert_drive_file</span>}
           <span class={classNames('tk-tree-view', 'text', this.size)}>{node.label}</span>
-          {isDirectory && this.showBadge && <span class={classNames('tk-tree-view', 'badge')}>{node.children?.length ?? 0}</span>}
+          {isDirectory && this.showBadge && <span class={classNames('tk-tree-view', 'badge', this.size)}>{node.children?.length ?? 0}</span>}
+          {this.showRightIcon && isDirectory && node.children && node.children.length > 0 && (
+            <span class={classNames('tk-tree-view', 'right-icon', 'material-symbols-outlined')}>
+              {this.expandIcon == 'right' && (isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right')}
+            </span>
+          )}
         </span>
         {this.mode == 'basic' && isDirectory && isExpanded && node.children && node.children.length > 0 && (
           <div class={classNames('tk-tree-view', 'children')}>{node.children.map(child => this.renderNode(child, depth + 1))}</div>

@@ -42,6 +42,7 @@
         align-items: flex-start;
         border-radius: 4px;
         flex-direction: column;
+        position: relative;
 
         &.expanded {
             font-weight: 500;
@@ -55,6 +56,29 @@
         &.file {
             font-weight: 400;
         }
+
+        .tk-tree-view.pointer {
+            background: var(--primary-main, #C90019);
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+
+            &.base {
+                height: 32px;
+            }
+
+            &.small {
+                height: 24px;
+            }
+
+            &.large {
+                height: 44px;
+            }
+        }
+
     }
 
     &.label {
@@ -84,12 +108,14 @@
         &.selected {
             background: var(--primary-lightest, #FAE6E8);
             color: var(--text-darkest, #222530);
-
+            margin-left: 10px;
             .tk-tree-view.directory-icon,
             .tk-tree-view.folder-icon,
-            .tk-tree-view.file-icon {
+            .tk-tree-view.file-icon,
+            .tk-tree-view.right-icon {
                 color: var(--primary-main, #C90019);
             }
+
         }
 
         &.disabled {
@@ -117,7 +143,8 @@
 
     &.directory-icon,
     &.folder-icon,
-    &.file-icon {
+    &.file-icon,
+    &.right-icon {
 
         &.base,
         &.large {
@@ -159,14 +186,32 @@
 
     &.badge {
         display: flex;
-        width: 20px;
-        height: 20px;
         justify-content: center;
         align-items: center;
         border-radius: 999px;
         background: var(--background-light, #E1E4EA);
-        font-size: 14px;
-        font-weight: 500;
+        font-weight: 400;
         color: var(--text-darkest, #222530);
+
+        &.base {
+            width: 20px;
+            height: 20px;
+            font-size: var(--body-s-size, 12px);
+            line-height: var(--body-s-line-height, 16px);
+        }
+
+        &.small {
+            width: 16px;
+            height: 16px;
+            font-size: var(--body-2xs-size, 8px);
+            line-height: var(--line-height-xxs-normal, 12px);
+        }
+
+        &.large {
+            width: 24px;
+            height: 24px;
+            font-size: var(--body-m-base-size, 16px);
+            line-height: var(--body-m-base-line-height, 20px);
+        }
     }
 }
