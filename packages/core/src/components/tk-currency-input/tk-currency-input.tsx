@@ -466,13 +466,13 @@ export class TkCurrencyInput implements ComponentInterface {
     return (
       <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.disabled}>
         <div class="tk-currency-input__dropdown-button-selected">
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
-            alt={`${this.selectedCurrency.code} flag`}
+            alt={`${this.selectedCurrency.name} flag`}
             class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`}
           />
-          <span class="tk-currency-input__dropdown-button-dial-code">{this.selectedCurrency?.code}</span>
+          <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
+          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
         </div>
       </button>
     );
