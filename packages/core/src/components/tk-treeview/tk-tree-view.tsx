@@ -18,8 +18,8 @@ export class TkTreeView implements ComponentInterface {
 
   @Element() el: HTMLElement;
 
-  @State() expandedIds: Set<string | number> = new Set();
-  @State() selectedId: string | number = null;
+  @State() expandedIds: Set<string> = new Set();
+  @State() selectedId: string | null = null;
   @State() treeData: any[] = [];
 
   /**
@@ -80,15 +80,15 @@ export class TkTreeView implements ComponentInterface {
   /**
    * Event emitted when a tree item is clicked.
    */
-  @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<string | number>;
+  @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<string>;
 
   componentWillLoad() {
-    this.treeData = this.extractTreeData(Array.from(this.el.children));
+    this.treeData = this.extractTreeData(Array.from(this.el.children), null, [0]);
   }
 
   componentDidLoad() {
     this.observer = new MutationObserver(() => {
-      this.treeData = this.extractTreeData(Array.from(this.el.children));
+      this.treeData = this.extractTreeData(Array.from(this.el.children), null, [0]);
     });
     this.observer.observe(this.el, { childList: true, subtree: true });
   }
@@ -97,39 +97,7 @@ export class TkTreeView implements ComponentInterface {
     if (this.observer) this.observer.disconnect();
   }
 
-  /**
-   * Girdi stringinden deterministik bir hash değeri üretir.
-   * Ağacın parent, index ve label bilgilerine göre stabil ve benzersiz ID'ler oluşturmak için kullanılır.
-   * Aynı node yapısı her zaman aynı ID'yi üretir; bu, React uyumluluğu ve state'in korunması için kritiktir.
-   */
-  private hashString(str: string): string {
-    let hash = 0,
-      i,
-      chr;
-    for (i = 0; i < str.length; i++) {
-      chr = str.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0;
-    }
-    return Math.abs(hash).toString(36);
-  }
-
-  /**
-   * Returns the full path from root to this node as a string, using labels.
-   * This helps ensure itemId uniqueness even for nodes with the same label, parent, or index.
-   */
-  private getNodePath(label: string, parent: any): string {
-    let path = [];
-    let current = parent;
-    while (current) {
-      path.unshift(current.label);
-      current = current.parent;
-    }
-    path.push(label);
-    return path.join('/');
-  }
-
-  extractTreeData(elements: Element[], parent: any = null): any[] {
+  extractTreeData(elements: Element[], parent: any = null, path: number[] = [0]): any[] {
     const nodes = Array.from(elements)
       .filter(el => el.tagName.toLowerCase() === 'tk-tree-item')
       .map((el, idx) => {
@@ -137,13 +105,13 @@ export class TkTreeView implements ComponentInterface {
         const label = (el as any).label || el.getAttribute('label') || '';
         const childrenEls = Array.from(el.children);
         const disabled = (el as any).disabled || el.getAttribute('disabled') !== null;
+
         if (!itemId) {
-          // label, parentId, index, and full path for deterministic uniqueness
-          const parentId = parent?.itemId || 'root';
-          const path = this.getNodePath(label, parent);
-          const hash = this.hashString(`${label}|${parentId}|${idx}|${path}`);
-          itemId = `auto-id-${hash}`;
+          // Generate hierarchical itemId based on position: 0, 0-0, 0-1, 0-0-0, etc.
+          const currentPath = [...path, idx];
+          itemId = currentPath.join('-');
         }
+
         itemId = String(itemId);
         const node: any = {
           itemId,
@@ -152,7 +120,9 @@ export class TkTreeView implements ComponentInterface {
           children: [],
           disabled,
         };
-        node.children = this.extractTreeData(childrenEls, node);
+
+        const currentPath = [...path, idx];
+        node.children = this.extractTreeData(childrenEls, node, currentPath);
         node.hasChildren = node.children.length > 0;
         this.treeMap.set(itemId, node);
         return node;
@@ -207,15 +177,15 @@ export class TkTreeView implements ComponentInterface {
   /**
    * O(1) lookup for a node by itemId using treeMap.
    */
-  private findNodeById(itemId: string | number) {
-    return this.treeMap.get(String(itemId));
+  private findNodeById(itemId: string) {
+    return this.treeMap.get(itemId);
   }
 
   /**
    * Collect all descendant itemIds of a node using a stack (non-recursive).
    */
-  private collectDescendantIds(node: any): (string | number)[] {
-    const ids: (string | number)[] = [];
+  private collectDescendantIds(node: any): string[] {
+    const ids: string[] = [];
     const stack = [...(node.children || [])];
     while (stack.length) {
       const current = stack.pop();
@@ -231,9 +201,9 @@ export class TkTreeView implements ComponentInterface {
    * Find the path from root to a node by walking up parent references.
    * Returns an array of itemIds from root to the node.
    */
-  private findPathToNode(itemId: string | number): (string | number)[] {
-    const path: (string | number)[] = [];
-    let node = this.treeMap.get(String(itemId));
+  private findPathToNode(itemId: string): string[] {
+    const path: string[] = [];
+    let node = this.treeMap.get(itemId);
     while (node) {
       path.unshift(node.itemId);
       node = node.parent;
