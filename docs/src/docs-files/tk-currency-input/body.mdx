@@ -1,12 +1,48 @@
-import Basic from "./Examples/Basic";
-import Size from "./Examples/Size";
-import State from "./Examples/State";
+import Basic from './Examples/Basic';
+import CustomCurrencyList from './Examples/CustomCurrencyList';
+import Size from './Examples/Size';
+import State from './Examples/State';
 
 ## Basic
 
-A simple TkCurrencyInput display. 
+A simple TkCurrencyInput display.
 
 <Basic />
+
+## Custom Currency List
+
+You can provide a custom list of currencies to the currency input. This allows you to control which currencies are available for selection in the dropdown.
+
+```tsx
+const currencyList = [
+  {
+    code: 'GBP',
+    id: 'GB',
+    symbol: '£',
+    name: 'British Pound',
+    decimalSeparator: '.',
+    thousandsSeparator: ',',
+  },
+  {
+    code: 'TRY',
+    id: 'TR',
+    symbol: '₺',
+    name: 'Turkish Lira',
+    decimalSeparator: ',',
+    thousandsSeparator: '.',
+  },
+  {
+    code: 'JPY',
+    id: 'JP',
+    symbol: '¥',
+    name: 'Japanese Yen',
+    decimalSeparator: '.',
+    thousandsSeparator: ',',
+  },
+];
+```
+
+<CustomCurrencyList />
 
 ## Size
 

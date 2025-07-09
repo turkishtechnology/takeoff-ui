@@ -43,7 +43,7 @@ const Size = () => {
 />`;
 
   const demo = (
-    <div className="flex items-end gap-2 flex-wrap justify-center">
+    <div className="flex flex-col flex-wrap items-start gap-3">
       <TkCurrencyInput label="Small Currency Input" size="small" />
       <TkCurrencyInput label="Base Currency Input" size="base" />
       <TkCurrencyInput label="Large Currency Input" size="large" />
