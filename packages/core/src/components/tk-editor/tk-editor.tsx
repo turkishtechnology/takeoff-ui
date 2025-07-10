@@ -1,9 +1,14 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
 import Placeholder from '@tiptap/extension-placeholder';
+import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
 import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
-import { DEFAULT_EXTENSIONS, DEFAULT_TOOLBAR_CONFIG } from './defaults';
+import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-props';
 
@@ -188,8 +193,49 @@ export class TkEditor {
     return this.editor;
   }
 
-  private get activeExtensions() {
-    return [Placeholder.configure({ placeholder: this.placeholder || '' }), ...DEFAULT_EXTENSIONS, ...(this.extensions || [])];
+  private get activeExtensions(): AnyExtension[] {
+    const userExtensions = this.extensions || [];
+    const userExtensionNames = new Set(userExtensions.map(ext => ext.name));
+
+    const starterKitExclusions = STARTER_KIT_EXTENSION_NAMES.filter(name => userExtensionNames.has(name)).reduce((acc, name) => ({ ...acc, [name]: false }), {});
+
+    const defaultExtensions: AnyExtension[] = [Placeholder.configure({ placeholder: this.placeholder || '' }), StarterKit.configure(starterKitExclusions)];
+
+    if (!userExtensionNames.has('underline')) {
+      defaultExtensions.push(Underline.configure({}));
+    }
+
+    if (!userExtensionNames.has('textAlign')) {
+      defaultExtensions.push(
+        TextAlign.configure({
+          types: ['heading', 'paragraph'],
+          alignments: ['left', 'center', 'right', 'justify'],
+        }),
+      );
+    }
+
+    if (!userExtensionNames.has('link')) {
+      defaultExtensions.push(
+        Link.configure({
+          openOnClick: true,
+          HTMLAttributes: {
+            class: 'tk-editor-link',
+          },
+        }),
+      );
+    }
+
+    if (!userExtensionNames.has('image')) {
+      defaultExtensions.push(
+        Image.configure({
+          HTMLAttributes: {
+            class: 'tk-editor-image',
+          },
+        }),
+      );
+    }
+
+    return [...defaultExtensions, ...userExtensions];
   }
 
   private command() {
