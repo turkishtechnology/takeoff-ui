@@ -1,5 +1,7 @@
 import Basic from './Examples/Basic';
 import CustomCurrencyList from './Examples/CustomCurrencyList';
+import AllowNegativeValue from './Examples/AllowNegativeValue';
+import CustomSeparators from './Examples/CustomSeparators';
 import Size from './Examples/Size';
 import State from './Examples/State';
 
@@ -43,6 +45,18 @@ const currencyList = [
 ```
 
 <CustomCurrencyList />
+
+## Custom Separators
+
+The "decimalSeparator" and "thousandsSeparator" props allow you to customize the formatting of the currency input. You can set these props to your desired characters for decimal and thousands separation.
+
+<CustomSeparators />
+
+## Allow Negative Value
+
+The "allowNegative" prop allows the input to accept negative values. When set to true, users can enter negative amounts.
+
+<AllowNegativeValue />
 
 ## Size
 

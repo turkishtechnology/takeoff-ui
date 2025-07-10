@@ -4,8 +4,9 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| <TkBadge label="currencies" variant="primary" size="large" type="filledlight"/> | <code>ICurrency[]</code> | null | List of available currencies. If not provided, it defaults to the internal currency list. |
-| <TkBadge label="currencyList" variant="primary" size="large" type="filledlight"/> | <code>ICurrency[]</code> | null |  |
+| <TkBadge label="allowNegative" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Allows negative values to be entered if set to true. |
+| <TkBadge label="currencyList" variant="primary" size="large" type="filledlight"/> | <code>ICurrency[]</code> | null | List of available currencies. If not provided, it defaults to the internal currency list. |
+| <TkBadge label="decimalSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Custom decimal separator to use for formatting. If provided, this will override the currency's default decimal separator. Example: "." for USD style, "," for EUR style |
 | <TkBadge label="defaultCurrency" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'TRY' | The default currency to use when the component is initialized. Default is 'TRY'. |
 | <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Disables the input field if set to true. |
 | <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
@@ -19,6 +20,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
 | <TkBadge label="step" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0.01 | The step value for the input, used for numeric inputs. Default is 0.01, which is suitable for currency inputs. |
+| <TkBadge label="thousandsSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Custom thousands separator to use for formatting. If provided, this will override the currency's default thousands separator. Example: "," for USD style, "." for EUR style, " " for some European styles |
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | The value of the input. |
 
 ### Events

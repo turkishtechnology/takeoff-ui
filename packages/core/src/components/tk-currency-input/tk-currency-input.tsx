@@ -68,8 +68,8 @@ export class TkCurrencyInput implements ComponentInterface {
    * List of available currencies.
    * If not provided, it defaults to the internal currency list.
    */
-  @Prop() currencies?: ICurrency[];
   @Prop() currencyList?: ICurrency[];
+
   /**
    * Placeholder text for the input field.
    */
@@ -110,10 +110,32 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   @Prop() defaultCurrency: string = 'TRY';
 
+  /**
+   * Allows negative values to be entered if set to true.
+   */
+  @Prop() allowNegative: boolean = false;
+
+  /**
+   * Custom decimal separator to use for formatting.
+   * If provided, this will override the currency's default decimal separator.
+   * Example: "." for USD style, "," for EUR style
+   */
+  @Prop() decimalSeparator?: string;
+
+  /**
+   * Custom thousands separator to use for formatting.
+   * If provided, this will override the currency's default thousands separator.
+   * Example: "," for USD style, "." for EUR style, " " for some European styles
+   */
+  @Prop() thousandsSeparator?: string;
+
   @Watch('defaultCurrency')
   defaultCurrencyChanged() {
-    if (this.currencies[this.defaultCurrency]) {
-      this.selectedCurrency = this.currencies[this.defaultCurrency];
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === this.defaultCurrency.toUpperCase());
+
+    if (currency) {
+      this.selectedCurrency = currency;
       this.updateDisplayValue();
 
       if (this.inputElement) {
@@ -129,6 +151,7 @@ export class TkCurrencyInput implements ComponentInterface {
       this.tkChange.emit(eventData);
     }
   }
+
   /**
    * The label for the input field.
    * If provided, it will be displayed above the input.
@@ -166,7 +189,6 @@ export class TkCurrencyInput implements ComponentInterface {
    * Initialize the component before it is rendered.
    */
   componentWillLoad() {
-    this.initializeCurrencies();
     this.setSelectedCurrency(this.defaultCurrency);
   }
 
@@ -192,17 +214,17 @@ export class TkCurrencyInput implements ComponentInterface {
     document.removeEventListener('click', this.closeDropdown);
   }
 
-  private initializeCurrencies() {
-    if (this.currencyList) {
-      this.currencies = this.currencyList;
-    } else {
-      this.currencies = INTERNAL_CURRENCY_LIST;
-    }
+  /**
+   * Get the currencies list - either from prop or use internal default
+   */
+  private getCurrencies(): ICurrency[] {
+    return this.currencyList || INTERNAL_CURRENCY_LIST;
   }
 
   private setSelectedCurrency(currencyCode: string) {
-    const currency = this.currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
-    this.selectedCurrency = currency || this.currencies[0];
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
+    this.selectedCurrency = currency || currencies[0];
     this.currentNumericValue = this.value || 0;
     this.updateDisplayValue();
   }
@@ -233,13 +255,32 @@ export class TkCurrencyInput implements ComponentInterface {
     this.displayValue = formattedValue;
   }
 
+  /**
+   * Get the decimal separator to use - custom prop takes priority over currency default
+   */
+  private getDecimalSeparator(): string {
+    return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
+  }
+
+  /**
+   * Get the thousands separator to use - custom prop takes priority over currency default
+   */
+  private getThousandsSeparator(): string {
+    return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
+  }
+
   private formatCurrency(amount: number): string {
     if (isNaN(amount)) return '';
 
-    const { decimalSeparator, thousandsSeparator } = this.selectedCurrency;
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    const isNegative = amount < 0;
+    const absoluteAmount = Math.abs(amount);
 
     // Format the number with the specified precision
-    const fixedAmount = Number(amount).toFixed(this.precision);
+    const fixedAmount = Number(absoluteAmount).toFixed(this.precision);
     const [integerPart, decimalPart] = fixedAmount.split('.');
 
     // Add thousands separators
@@ -251,22 +292,36 @@ export class TkCurrencyInput implements ComponentInterface {
       result += decimalSeparator + decimalPart;
     }
 
+    // Add negative sign if needed and allowed
+    if (isNegative && this.allowNegative) {
+      result = '-' + result;
+    }
+
     return result;
   }
 
   private parseFormattedValue(formattedValue: string): number {
     if (!formattedValue) return 0;
 
-    const { decimalSeparator, thousandsSeparator } = this.selectedCurrency;
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    const isNegative = formattedValue.startsWith('-') && this.allowNegative;
+
+    // Remove negative sign temporarily for processing
+    let cleanValue = formattedValue.replace('-', '');
 
     // Remove thousands separators and replace decimal separator with dot
-    let cleanValue = formattedValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '').replace(decimalSeparator, '.');
+    cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '').replace(decimalSeparator, '.');
 
-    // Remove non-numeric characters except decimal point and minus sign
-    cleanValue = cleanValue.replace(/[^0-9.-]/g, '');
+    // Remove non-numeric characters except decimal point
+    cleanValue = cleanValue.replace(/[^0-9.]/g, '');
 
     const numericValue = parseFloat(cleanValue);
-    return isNaN(numericValue) ? 0 : numericValue;
+    const result = isNaN(numericValue) ? 0 : numericValue;
+
+    return isNegative ? -result : result;
   }
 
   private closeDropdown = (event: Event) => {
@@ -298,7 +353,8 @@ export class TkCurrencyInput implements ComponentInterface {
   };
 
   private calculateNewCursorPosition(oldValue: string, newValue: string, oldCursorPosition: number, removedCharsBeforeCursor: number): number {
-    const { thousandsSeparator } = this.selectedCurrency;
+    // Use custom thousands separator if provided, otherwise fall back to currency default
+    const thousandsSeparator = this.getThousandsSeparator();
 
     let adjustedPosition = oldCursorPosition - removedCharsBeforeCursor;
 
@@ -321,7 +377,7 @@ export class TkCurrencyInput implements ComponentInterface {
         if (digitCount >= targetDigitPosition) {
           return i + 1;
         }
-      } else if (newValue[i] === this.selectedCurrency.decimalSeparator) {
+      } else if (newValue[i] === this.getDecimalSeparator()) {
         if (digitCount >= targetDigitPosition) {
           return i + 1;
         }
@@ -336,14 +392,31 @@ export class TkCurrencyInput implements ComponentInterface {
     const inputValue = target.value;
     const cursorPosition = target.selectionStart;
 
-    const allowedChars = new RegExp(`[0-9\\${this.selectedCurrency.decimalSeparator}\\${this.selectedCurrency.thousandsSeparator}]`);
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    // Allow negative sign if allowNegative is true
+    const negativePattern = this.allowNegative ? '\\-' : '';
+    const allowedChars = new RegExp(`[0-9\\${decimalSeparator}\\${thousandsSeparator}${negativePattern}]`);
 
     let filteredValue = '';
     let removedCharsBeforeCursor = 0;
+    let hasNegativeSign = false;
 
     for (let i = 0; i < inputValue.length; i++) {
       const char = inputValue[i];
-      if (allowedChars.test(char)) {
+
+      // Handle negative sign - only allow it at the beginning
+      if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
+        filteredValue += char;
+        hasNegativeSign = true;
+      } else if (char === '-' && this.allowNegative && hasNegativeSign) {
+        // Remove duplicate negative signs
+        if (i < cursorPosition) {
+          removedCharsBeforeCursor++;
+        }
+      } else if (allowedChars.test(char) && char !== '-') {
         filteredValue += char;
       } else if (i < cursorPosition) {
         removedCharsBeforeCursor++;
@@ -395,7 +468,9 @@ export class TkCurrencyInput implements ComponentInterface {
     event.stopPropagation();
     event.preventDefault();
 
-    const currency = this.currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
+
     if (currency) {
       this.selectedCurrency = currency;
 
@@ -415,6 +490,14 @@ export class TkCurrencyInput implements ComponentInterface {
       this.tkChange.emit(eventData);
     }
   };
+
+  private handlePropsDecimalAndThousandsSeparator() {
+    if (this.decimalSeparator && this.thousandsSeparator) {
+      return false; // If both separators are provided, we assume custom formatting is required
+    } else {
+      return true;
+    }
+  }
 
   private renderLabel() {
     if (this.label) {
@@ -479,9 +562,11 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   private renderCurrencyList() {
+    const currencies = this.getCurrencies();
+
     return (
       <ul class="tk-currency-input__dropdown-menu-list">
-        {this.currencies.map(currency => (
+        {currencies.map(currency => (
           <li
             class="tk-currency-input__dropdown-menu-list-item"
             key={currency.code}
@@ -532,7 +617,7 @@ export class TkCurrencyInput implements ComponentInterface {
         {this.renderLabel()}
         <div class="tk-currency-input__wrapper">
           {this.renderCurrencyInput()}
-          {this.renderCurrencySelector()}
+          {this.handlePropsDecimalAndThousandsSeparator() && this.renderCurrencySelector()}
         </div>
         {this.renderHint()}
       </div>
