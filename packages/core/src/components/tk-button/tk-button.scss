@@ -665,6 +665,9 @@
       height: var(--button-sizes-small-icon-size);
       line-height: unset;
     }
+    &.icon-only {
+      padding: var(--sizes-small-full-padding, 6px);
+    }
   }
 
   &.base {
@@ -686,6 +689,9 @@
       height: var(--button-sizes-base-icon-size);
       line-height: unset;
     }
+    &.icon-only {
+      padding: var(--sizes-base-full-padding, 8px);
+    }
   }
 
   &.large {
@@ -706,6 +712,9 @@
       width: var(--button-sizes-large-icon-size);
       height: var(--button-sizes-large-icon-size);
       line-height: unset;
+    }
+    &.icon-only {
+      padding: var(--sizes-large-full-padding, 12px);
     }
   }
 
