@@ -19,7 +19,7 @@ import { INTERNAL_CURRENCY_LIST } from './constants';
   formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
-  @Element() private el!: HTMLTkPhoneInputElement;
+  @Element() private el!: HTMLTkCurrencyInputElement;
 
   /**
    * Reference to the currency input element.
