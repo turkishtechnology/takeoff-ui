@@ -131,10 +131,10 @@ export class TkButton implements ComponentInterface {
       {
         'loading': this.loading && !this.disabled,
         'reverse': this.icon && this.iconPosition == 'right',
-        'rounded': this.rounded && this.icon && this.label == '',
+        'rounded': this.rounded && this.icon && (this.label == '' || this.label == null || this.label.length <= 0),
         'link': this.mode == 'link',
         'underline': this.underline,
-        'icon-only': this.label == '' && this.icon,
+        'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon,
       },
       [this.variant],
       [this.size],
