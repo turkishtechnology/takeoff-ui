@@ -331,6 +331,51 @@ export class TkInput implements ComponentInterface {
 
   // for add chip
   private handleInputKeyDown = (e: KeyboardEvent) => {
+    // --- Cleave.js maske ayırıcı karakterlerinin silinmesi için genel çözüm ---
+    if (this.maskOptions && this.cleaveInstance && this.mode == 'text' && (e.key === 'Backspace' || e.key === 'Delete')) {
+      const input = this.nativeInput;
+      const value = input.value;
+      const selectionStart = input.selectionStart;
+      const selectionEnd = input.selectionEnd;
+
+      // Sadece imleç varsa (seçili alan yoksa) işle
+      if (selectionStart === selectionEnd) {
+        let charToCheck, posToRemove;
+        if (e.key === 'Backspace' && selectionStart > 0) {
+          charToCheck = value[selectionStart - 1];
+          posToRemove = selectionStart - 1;
+        } else if (e.key === 'Delete' && selectionStart < value.length) {
+          charToCheck = value[selectionStart];
+          posToRemove = selectionStart;
+        }
+
+        // Eğer karakter bir ayırıcı ise (rakam/harf değilse)
+        if (charToCheck && /[^a-zA-Z0-9]/.test(charToCheck)) {
+          e.preventDefault();
+          // Ayırıcıyı ve öncesindeki (Backspace) veya sonrasındaki (Delete) karakteri sil
+          let newValue;
+          let newCaretPos;
+          if (e.key === 'Backspace') {
+            // Ayırıcının öncesindeki karakteri sil
+            newValue = value.slice(0, posToRemove - 1) + value.slice(posToRemove);
+            newCaretPos = posToRemove - 1;
+          } else {
+            // Ayırıcının sonrasındaki karakteri sil
+            newValue = value.slice(0, posToRemove) + value.slice(posToRemove + 1);
+            newCaretPos = posToRemove;
+          }
+          this.cleaveInstance.setRawValue(newValue);
+          this.value = this.cleaveInstance.getFormattedValue();
+          this.tkChange.emit(this.value);
+
+          // DOM güncellendikten sonra imleç pozisyonunu ayarla
+          setTimeout(() => {
+            input.setSelectionRange(newCaretPos, newCaretPos);
+          }, 0);
+          return; // Daha fazla işlem yapma
+        }
+      }
+    }
     if (
       e.key == 'Enter' &&
       this.nativeInput.value.trim() &&
