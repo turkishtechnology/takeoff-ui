@@ -48,6 +48,12 @@ export class TkUpload implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Displays the uploaded files.
+   * @defaultValue true
+   */
+  @Prop() showFiles: boolean = true;
+
+  /**
    * Label text displayed inside the choose button.
    */
   @Prop() chooseButtonLabel: string = 'Choose File';
@@ -372,7 +378,7 @@ export class TkUpload implements ComponentInterface {
         {label}
         {this.renderDropzone()}
         {hint}
-        {this.renderFileholder()}
+        {this.showFiles && this.renderFileholder()}
       </div>
     );
   }
