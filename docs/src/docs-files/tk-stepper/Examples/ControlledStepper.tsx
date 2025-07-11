@@ -55,6 +55,7 @@ const handleInputChange = (name, event) => {
 <TkStepper
     active={activeStep}
     onTkStepChange={handleStepChange}
+    controlled={true}
 >
     <TkStep
         header="Personal Info"
@@ -173,6 +174,7 @@ const handleInputChange = (name, event) => {
   <tk-stepper
     :active="activeStep"
     @tk-step-change="handleStepChange"
+    controlled="true"
   >
     <tk-step
       header="Personal Info"
@@ -417,7 +419,11 @@ const submitForm = () => {
         state.
       </p>
 
-      <TkStepper active={activeStep} onTkStepChange={handleStepChange}>
+      <TkStepper
+        active={activeStep}
+        onTkStepChange={handleStepChange}
+        controlled={true}
+      >
         <TkStep
           header="Personal Info"
           subheader="Name and contact details"

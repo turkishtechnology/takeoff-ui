@@ -103,6 +103,12 @@ export class TkStepper implements ComponentInterface {
   @Prop() signStyle?: any = null;
 
   /**
+   * If true, the stepper is controlled by the parent component via the 'active' prop and 'tk-step-change' event. If false, the stepper manages its own active state internally.
+   * @defaultValue false
+   */
+  @Prop() controlled?: boolean = false;
+
+  /**
    * Emitted when the active step changes.
    */
   @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
@@ -132,11 +138,12 @@ export class TkStepper implements ComponentInterface {
   @Method()
   async setActive(index: number) {
     if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.internalActive) {
-      this.internalActive = index;
       this.tkStepChange.emit(index);
+      if (!this.controlled) {
+        this.internalActive = index;
+      }
     }
   }
-
   private setupMutationObserver() {
     this.mutationObserver = new MutationObserver(() => {
       this.initializeSteps();
