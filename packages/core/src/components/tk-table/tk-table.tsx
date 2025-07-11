@@ -242,9 +242,13 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    this.customCellElements?.forEach(element => {
-      element?.ref?.replaceChildren(element.element);
-    });
+    if (!this.loading) {
+      this.customCellElements?.forEach(element => {
+        element?.ref?.replaceChildren(element.element);
+      });
+    } else {
+      this.clearCustomElements();
+    }
 
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
@@ -252,7 +256,7 @@ export class TkTable implements ComponentInterface {
   }
 
   componentWillUpdate(): Promise<void> | void {
-    // ampty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+    // empty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
 
     if (slotEmptyData) {
@@ -506,6 +510,13 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = newExpandedRows;
 
     this.tkExpandedRowsChange.emit(this.expandedRows);
+  }
+
+  private clearCustomElements() {
+    this.customCellElements?.forEach(element => {
+      element?.element?.remove();
+    });
+    this.customCellElements = [];
   }
 
   private updatePosition() {
@@ -1379,11 +1390,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
-    // clear custom cell elements
-    this.customCellElements?.forEach(element => {
-      element?.element?.remove();
-    });
-    this.customCellElements = [];
+    this.clearCustomElements();
 
     if (this.renderData?.length > 0) {
       return (
