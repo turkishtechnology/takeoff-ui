@@ -633,33 +633,28 @@ export class TkTable implements ComponentInterface {
     this.tkSelectionChange.emit(this.selection);
   }
 
-  private handleCheckboxSelectChange(isSelect: boolean, trElRef: HTMLTableRowElement, row) {
-    let tmpSelection = this.selection;
+  private handleCheckboxSelectChange(isSelect: boolean, row) {
+    let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
     const hasSelect = _.includes(tmpSelection, row);
-    if (!tmpSelection) tmpSelection = [];
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
       _.pull(tmpSelection, row);
-      trElRef.classList.remove('selected');
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
     } else if (isSelect == true && !hasSelect) {
       // seçili değilse ve eklenmek isteniyor ise
       tmpSelection.push(row);
-      trElRef.classList.add('selected');
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
     }
   }
 
-  private handleRadioSelectChange(row: any, trElRef: HTMLTableRowElement) {
+  private handleRadioSelectChange(row: any) {
     this.el.shadowRoot.querySelectorAll('table tr.selected').forEach(tr => tr.classList.remove('selected'));
 
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
-
-    trElRef.classList.add('selected');
   }
 
   private handlePageChange(e) {
@@ -1254,7 +1249,12 @@ export class TkTable implements ComponentInterface {
     if (this.selectionMode === 'checkbox') {
       selectionTh = (
         <th style={{ width: '20px', maxWidth: '20px' }} class="non-text">
-          <tk-checkbox disabled={!(this.renderData.length > 0)} ref={el => (this.refSelectAll = el)} onTk-change={e => this.handleSelectAll(e.detail)}></tk-checkbox>{' '}
+          <tk-checkbox
+            value={Array.isArray(this.selection) && this.selection.length === this.renderData.length && this.renderData.length > 0}
+            disabled={!(this.renderData.length > 0)}
+            ref={el => (this.refSelectAll = el)}
+            onTk-change={e => this.handleSelectAll(e.detail)}
+          ></tk-checkbox>
         </th>
       );
     } else if (this.selectionMode === 'radio') {
@@ -1396,7 +1396,6 @@ export class TkTable implements ComponentInterface {
       return (
         <tbody>
           {this.renderData?.map((row, index) => {
-            let trElRef!: HTMLTableRowElement;
             let styleRowObject;
 
             if (typeof this.rowStyle == 'function') {
@@ -1416,7 +1415,7 @@ export class TkTable implements ComponentInterface {
                   <tk-checkbox
                     value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
                     disabled={isRowDisabled}
-                    onTk-change={e => this.handleCheckboxSelectChange(e.detail, trElRef, row)}
+                    onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
                   ></tk-checkbox>
                 </td>
               );
@@ -1428,15 +1427,22 @@ export class TkTable implements ComponentInterface {
                     name="selection"
                     checked={_.isEqual(this.selection, row)}
                     disabled={isRowDisabled}
-                    onTk-change={() => this.handleRadioSelectChange(row, trElRef)}
+                    onTk-change={() => this.handleRadioSelectChange(row)}
                   ></tk-radio>
                 </td>
               );
             }
 
+            const isSelected =
+              this.selectionMode === 'checkbox'
+                ? _.some(this.selection, itemValue => _.isEqual(itemValue, row))
+                : this.selectionMode === 'radio'
+                  ? _.isEqual(this.selection, row)
+                  : false;
+
             return (
               <Fragment>
-                <tr ref={el => (trElRef = el)} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
+                <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
                   {selectionTd}
                   {this.columns.map(col => {
                     let tdExpanderButtonRef!: HTMLTkButtonElement;
