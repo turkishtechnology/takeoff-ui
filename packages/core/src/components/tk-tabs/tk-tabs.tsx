@@ -26,12 +26,6 @@ export class TkTabs implements ComponentInterface {
   @Prop() alignHeaders: 'start' | 'center' | 'end' = 'start';
 
   /**
-   * Controls if the tabs component is controlled.
-   * @defaultValue false
-   */
-  @Prop() controlled: boolean = false;
-
-  /**
    * Default Active Index for tabs component.
    * @defaultValue 0
    */
@@ -198,11 +192,7 @@ export class TkTabs implements ComponentInterface {
   }
 
   private handleTabClick(index: number) {
-    if (!this.controlled) {
-      this.selectTab(index);
-    } else {
-      this.tkTabClick.emit(index);
-    }
+    if (index >= 0 && index < this.internalTabItems.length && !this.internalTabItems[index].disabled) this.tkTabClick.emit(index);
   }
 
   private renderTabItemIcon(tab: HTMLTkTabsItemElement) {
