@@ -21,10 +21,7 @@ export class TkStepper implements ComponentInterface {
 
   @State() private steps: IStep[] = [];
   @State() private internalActive: number = 0;
-  @Watch('internalActive')
-  internalActiveChanged(newValue: number) {
-    this.updateStepsState(newValue);
-  }
+
   /**
    * Controls the orientation of the stepper component.
    * @defaultValue 'horizontal'
@@ -53,6 +50,7 @@ export class TkStepper implements ComponentInterface {
     if (newValue !== this.internalActive) {
       this.internalActive = newValue;
       this.tkStepChange.emit(newValue);
+      this.updateStepsState(this.internalActive);
     }
   }
 
@@ -103,12 +101,6 @@ export class TkStepper implements ComponentInterface {
   @Prop() signStyle?: any = null;
 
   /**
-   * If true, the stepper is controlled by the parent component via the 'active' prop and 'tk-step-change' event. If false, the stepper manages its own active state internally.
-   * @defaultValue false
-   */
-  @Prop() controlled?: boolean = false;
-
-  /**
    * Emitted when the active step changes.
    */
   @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
@@ -139,9 +131,7 @@ export class TkStepper implements ComponentInterface {
   async setActive(index: number) {
     if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.internalActive) {
       this.tkStepChange.emit(index);
-      if (!this.controlled) {
-        this.internalActive = index;
-      }
+      this.internalActive = index;
     }
   }
   private setupMutationObserver() {
@@ -214,9 +204,8 @@ export class TkStepper implements ComponentInterface {
     const step = this.steps[index];
     const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
     this.tkStepClick.emit({ index, status });
-
-    if (this.canStepBeSelected(index)) {
-      this.setActive(index);
+    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.internalActive) {
+      this.tkStepChange.emit(index);
     }
   };
 
