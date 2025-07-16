@@ -7,6 +7,7 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
 import { getIconElementProps } from '../../utils/icon-props';
+import { IChips } from '../tk-chips/interfaces';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -135,6 +136,12 @@ export class TkInput implements ComponentInterface {
    */
   @Prop() chipLabelKey: string = 'label';
 
+  /**
+   * Sets default options for all chips rendered in chips mode.
+   * You can use this to control chip appearance, icon, style, and behavior for all chips.
+   * To set per-chip options, use a lookup table or add a 'chipOptions' property to each value object.
+   */
+  @Prop() chipOptions: IChips;
   /**
    * input type
    */
@@ -471,36 +478,20 @@ export class TkInput implements ComponentInterface {
   private renderChips() {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
-        if (typeof item === 'object') {
-          // eğer item object ise label chips'in label'ına objenin labelı konmalı
-          // ayrıca chips silinme durumunda remove handler'ına object tümüyle gönderilmeli
-          // multiple abject array selection için geliştirildi
-          return (
-            <tk-chips
-              label={this.getNestedValue(item, this.chipLabelKey)}
-              removable
-              onTk-remove={() => this.handleChipsRemove(item)}
-              variant="neutral"
-              type="outlined"
-              key={index}
-              autoSelfDestroy={false}
-              size="small"
-            ></tk-chips>
-          );
-        } else {
-          return (
-            <tk-chips
-              label={item}
-              removable
-              onTk-remove={(e: CustomEvent) => this.handleChipsRemove(e.detail)}
-              variant="neutral"
-              type="outlined"
-              key={index}
-              autoSelfDestroy={false}
-              size="small"
-            ></tk-chips>
-          );
-        }
+        const itemChipOptions = typeof item === 'object' && item.chipOptions ? item.chipOptions : this.chipOptions || {};
+        const baseProps = {
+          ...itemChipOptions,
+          removable: true,
+          key: index,
+          autoSelfDestroy: false,
+          value: item,
+          variant: (itemChipOptions.variant ?? 'neutral') as 'neutral',
+          type: (itemChipOptions.type ?? 'outlined') as 'outlined',
+          size: (itemChipOptions.size ?? 'small') as 'small',
+        };
+        const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
+
+        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(item)} {...baseProps}></tk-chips>;
       });
     }
   }

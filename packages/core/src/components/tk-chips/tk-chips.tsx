@@ -63,27 +63,36 @@ export class TkChips implements ComponentInterface {
    */
   @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' = 'primary';
 
+  /** Custom style for chip container. */
+  @Prop() chipStyle?: any;
+
+  /** Custom style for label. */
+  @Prop() labelStyle?: any;
+
+  /** The value to emit on remove (object or string). */
+  @Prop() value?: any;
+
   /**
    * When an element is deleted, it is triggered. It returns the label.
    */
-  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<string>;
+  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
 
   private handleClick() {
     if (this.autoSelfDestroy) this.el.remove();
-    this.tkRemove.emit(this.label);
+    this.tkRemove.emit(this.value !== undefined ? this.value : this.label);
   }
 
   render() {
     const rootClasses = classNames('tk-chips', this.variant, this.size, this.disabled && 'disabled', this.type, {
       removable: this.removable,
+      disabled: this.disabled,
     });
-
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
 
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} style={this.chipStyle}>
         {icon}
-        {this.label}
+        <span style={this.labelStyle}>{this.label}</span>
         {this.removable && (
           <i onClick={() => this.handleClick()} class="material-symbols-outlined">
             close

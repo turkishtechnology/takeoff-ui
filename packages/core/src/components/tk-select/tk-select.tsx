@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
+import { IChips } from '../tk-chips/interfaces';
 
 /**
  * TkSelect component description.
@@ -160,6 +161,12 @@ export class TkSelect implements ComponentInterface {
    */
   @Prop() showAsterisk: boolean = false;
 
+  /**
+   * Sets default options for all chips rendered in multiple selection mode.
+   * You can use this to control chip appearance, icon, style, and behavior for all selected values.
+   * To set per-option chip options, add a 'chipOptions' property to each option object.
+   */
+  @Prop() chipOptions: IChips;
   /**
    * The list of options to be displayed in the select box.
    */
@@ -701,6 +708,7 @@ export class TkSelect implements ComponentInterface {
         readonly={this.readonly}
         disabled={this.disabled}
         clearable={this.clearable}
+        chipOptions={this.chipOptions}
         aria-describedby="dropdown"
         aria-expanded={!!this.isOpen}
         onClick={() => this.handleInputClick()}
