@@ -625,17 +625,15 @@ export class TkTable implements ComponentInterface {
   private handleSelectAll(value: boolean) {
     if (value) {
       this.selection = [...this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true))];
-      this.el.shadowRoot.querySelectorAll('tr').forEach(item => item.classList.add('selected'));
     } else {
       this.selection = [];
-      this.el.shadowRoot.querySelectorAll('tr.selected').forEach(item => item.classList.remove('selected'));
     }
     this.tkSelectionChange.emit(this.selection);
   }
 
   private handleCheckboxSelectChange(isSelect: boolean, row) {
     let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
-    const hasSelect = _.includes(tmpSelection, row);
+    const hasSelect = _.some(tmpSelection, item => _.isEqual(item, row));
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
