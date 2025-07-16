@@ -6,6 +6,11 @@ const Orientation = () => {
   const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>(
     'vertical',
   );
+  const [activeStep, setActiveStep] = useState<number>(0);
+
+  const handleStepChange = (event) => {
+    setActiveStep(event.detail);
+  };
   const orientations = [
     { label: 'Vertical', value: 'vertical' },
     { label: 'Horizontal', value: 'horizontal' },
@@ -18,7 +23,13 @@ const Orientation = () => {
   };
 
   React.useEffect(() => {
-    const newReactCodeSample = `<TkStepper orientation="${orientation}">
+    const newReactCodeSample = `const [activeStep, setActiveStep] = useState<number>(0);
+  const handleStepChange = (event) => {
+    setActiveStep(event.detail);
+  };
+  
+<TkStepper orientation="${orientation}"active={activeStep}
+  onTkStepChange={handleStepChange}>
   <TkStep header="General Information" subheader="Basic campaign details" complete />
   <TkStep header="Category Details" subheader="Campaign categorization" complete />
   <TkStep header="Communication" subheader="Communication strategies" isActive />
@@ -26,7 +37,8 @@ const Orientation = () => {
 </TkStepper>`;
 
     const newVueCodeSample = `<template>
-  <tk-stepper orientation="${orientation}">
+  <tk-stepper orientation="${orientation}" :active="activeStep"
+    @tk-step-change="handleStepChange">
     <tk-step header="General Information" subheader="Basic campaign details" complete />
     <tk-step header="Category Details" subheader="Campaign categorization" complete />
     <tk-step header="Communication" subheader="Communication strategies" :is-active="true" />
@@ -38,7 +50,11 @@ const Orientation = () => {
 import { ref } from 'vue';
 
 const orientation = ref('${orientation}');
+const activeStep = ref(0);
 
+const handleStepChange = (event) => {
+  activeStep.value = event.detail;
+};
 const handleOrientationChange = (event) => {
   orientation.value = event.detail;
 };
@@ -60,7 +76,11 @@ const handleOrientationChange = (event) => {
         </TkRadioGroup>
       </div>
 
-      <TkStepper orientation={orientation}>
+      <TkStepper
+        active={activeStep}
+        onTkStepChange={handleStepChange}
+        orientation={orientation}
+      >
         <TkStep
           header="General Information"
           subheader="Basic campaign details"

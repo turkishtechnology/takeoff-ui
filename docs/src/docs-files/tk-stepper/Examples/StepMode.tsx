@@ -6,13 +6,23 @@ const StepMode = () => {
   const [stepMode, setStepMode] = useState<'basic' | 'number'>('basic');
   const [reactCodeSample, setReactCodeSample] = useState('');
   const [vueCodeSample, setVueCodeSample] = useState('');
+  const [activeStep, setActiveStep] = useState<number>(0);
 
+  const handleStepChange = (event) => {
+    setActiveStep(event.detail);
+  };
   const handleStepModeChange = (event) => {
     setStepMode(event.detail);
   };
 
   React.useEffect(() => {
-    const newReactCodeSample = `<TkStepper stepMode="${stepMode}">
+    const newReactCodeSample = `const [activeStep, setActiveStep] = useState<number>(0);
+  const handleStepChange = (event) => {
+    setActiveStep(event.detail);
+  };
+  
+<TkStepper stepMode="${stepMode}" active={activeStep}
+  onTkStepChange={handleStepChange}>
   <TkStep header="General Information" subheader="Basic campaign details" complete />
   <TkStep header="Category Details" subheader="Campaign categorization" complete />
   <TkStep header="Communication" subheader="Communication strategies" isActive />
@@ -20,7 +30,8 @@ const StepMode = () => {
 </TkStepper>`;
 
     const newVueCodeSample = `<template>
-  <tk-stepper step-mode="${stepMode}">
+  <tk-stepper step-mode="${stepMode}"  :active="activeStep"
+    @tk-step-change="handleStepChange">
     <tk-step header="General Information" subheader="Basic campaign details" complete />
     <tk-step header="Category Details" subheader="Campaign categorization" complete />
     <tk-step header="Communication" subheader="Communication strategies" :is-active="true" />
@@ -32,7 +43,11 @@ const StepMode = () => {
 import { ref } from 'vue';
 
 const stepMode = ref('${stepMode}');
+const activeStep = ref(0);
 
+const handleStepChange = (event) => {
+  activeStep.value = event.detail;
+};
 const handleStepModeChange = (event) => {
   stepMode.value = event.detail;
 };
@@ -54,7 +69,11 @@ const handleStepModeChange = (event) => {
         <TkRadio label="Number" value="number" />
       </TkRadioGroup>
 
-      <TkStepper stepMode={stepMode}>
+      <TkStepper
+        stepMode={stepMode}
+        active={activeStep}
+        onTkStepChange={handleStepChange}
+      >
         <TkStep
           header="General Information"
           subheader="Basic campaign details"
