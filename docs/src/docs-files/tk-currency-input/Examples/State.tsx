@@ -55,7 +55,7 @@ const State = () => {
 />`;
 
   const demo = (
-    <div className="flex gap-2 flex-wrap justify-center">
+    <div className="flex flex-col flex-wrap items-start gap-3">
       <TkCurrencyInput
         label="Error"
         placeholder="Error"
