@@ -9,6 +9,8 @@ const Type = () => {
   const [type, setType] = useState<
     'basic' | 'divided' | 'compact' | 'expanded'
   >('basic');
+  const [activeTab, setActiveTab] = useState<number>(0);
+
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const orientations = [
@@ -34,8 +36,11 @@ const Type = () => {
     ].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCode = `<TkTabs
+    const reactCode = `const [activeTab, setActiveTab] = useState(0);
+<TkTabs
 ${attributes}
+ activeIndex={activeTab}
+  onTkTabClick={(e) => setActiveTab(e.detail)}
 >
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
@@ -48,8 +53,11 @@ ${attributes}
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCode = `<TkTabs 
-${attributes}
+    const vueCode = `const activeTab = ref(0);
+
+<TkTabs 
+${attributes} activeIndex={activeTab}
+  onTkTabClick={(e) => activeTab = e.detail}
 >
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
@@ -88,6 +96,8 @@ ${attributes}
         </TkRadioGroup>
       </div>
       <TkTabs
+        activeIndex={activeTab}
+        onTkTabClick={(e) => setActiveTab(e.detail)}
         orientation={orientation}
         type={type}
         contentStyle={{

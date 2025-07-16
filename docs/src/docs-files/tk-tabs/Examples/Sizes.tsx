@@ -15,6 +15,11 @@ const Type = () => {
     { label: 'Base', value: 'base' },
     { label: 'Large', value: 'large' },
   ];
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  const handleTabChange = (event) => {
+    setActiveTab(event.detail);
+  };
   const handleHeaderTypeChange = (event) => {
     setSize(event.detail);
   };
@@ -22,7 +27,12 @@ const Type = () => {
     const attributesList = [`size="${size}"`].filter(Boolean);
     const attributes = attributesList.join('\n  ');
 
-    const reactCode = `<TkTabs ${attributes}>
+    const reactCode = `const [activeTab, setActiveTab] = useState<number>(0);
+const handleTabChange = (event) => {
+    setActiveTab(event.detail);
+  };
+<TkTabs ${attributes} activeIndex={activeTab}
+  onTkTabClick={handleTabChange}>
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>
@@ -34,17 +44,29 @@ const Type = () => {
   </TkTabsItem>
 </TkTabs>`;
 
-    const vueCode = `<TkTabs ${attributes}>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-</TkTabs>`;
+    const vueCode = `<template>
+  <TkTabs ${attributes}:active-index="activeTab"
+    @tk-tab-click="handleTabChange">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
+    </TkTabsItem>
+  </TkTabs>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+
+const activeTab = ref(0);
+const handleTabChange = (event) => {
+  activeTab.value = event.detail;
+};
+</script>`;
     setCodeSampleReact(reactCode);
     setCodeSampleVue(vueCode);
   }, [size]);
@@ -61,6 +83,8 @@ const Type = () => {
         </TkRadioGroup>
       </div>
       <TkTabs
+        activeIndex={activeTab}
+        onTkTabClick={handleTabChange}
         size={size}
         contentStyle={{
           color: 'var(--text-dark)',
