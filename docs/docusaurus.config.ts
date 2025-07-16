@@ -94,7 +94,7 @@ const config: Config = {
         // { to: "/blog", label: "Blog", position: "left" },
         {
           to: '/release-notes',
-          label: 'v0.0.2-beta.13',
+          label: 'v0.0.2-beta.14',
           position: 'right',
         },
         {

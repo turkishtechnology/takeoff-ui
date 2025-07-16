@@ -14,6 +14,29 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.14',
+    date: '16.07.2025',
+    newComponents: [
+      'TimelineItem component has been developed for item customization',
+    ],
+    newFeatures: [
+      'Add showFiles prop to control file display to upload',
+      'Added filter badge view for header with showIconsOnHover to table',
+      'Added step prop for decimal to input',
+    ],
+    refactor: [
+      'Currency input has been refactored',
+      'Update active extensions logic to editor',
+    ],
+    bugFixes: [
+      'Fixed loading when there is custom cell to table',
+      'Delete mask input delimeter',
+      'Add max-width to toaster',
+      'Enhance sticky column functionality with shadows and offsets',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.13',
     date: '02.07.2025',
     newComponents: ['Phone input has been developed'],
