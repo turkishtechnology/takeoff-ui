@@ -45,7 +45,7 @@ const handleTabChange = (event) => {
 </TkTabs>`;
 
     const vueCode = `<template>
-  <TkTabs ${attributes}:active-index="activeTab"
+  <TkTabs ${attributes} :active-index="activeTab"
     @tk-tab-click="handleTabChange">
     <TkTabsItem label="Tab label" icon="flight">
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
