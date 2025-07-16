@@ -649,8 +649,6 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleRadioSelectChange(row: any) {
-    this.el.shadowRoot.querySelectorAll('table tr.selected').forEach(tr => tr.classList.remove('selected'));
-
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
   }
