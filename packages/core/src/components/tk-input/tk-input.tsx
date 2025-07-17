@@ -476,15 +476,16 @@ export class TkInput implements ComponentInterface {
   private renderChips() {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
+        const itemChipOptions = this.chipOptions || {};
         const baseProps = {
-          ...this.chipOptions,
+          ...itemChipOptions,
           removable: true,
           key: index,
           autoSelfDestroy: false,
           value: item,
-          variant: (this.chipOptions.variant ?? 'neutral') as 'neutral',
-          type: (this.chipOptions.type ?? 'outlined') as 'outlined',
-          size: (this.chipOptions.size ?? 'small') as 'small',
+          variant: (itemChipOptions.variant ?? 'neutral') as IChips['variant'],
+          type: (itemChipOptions.type ?? 'outlined') as IChips['type'],
+          size: (itemChipOptions.size ?? 'small') as IChips['size'],
         };
         const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
 
