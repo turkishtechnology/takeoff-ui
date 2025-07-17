@@ -137,9 +137,7 @@ export class TkInput implements ComponentInterface {
   @Prop() chipLabelKey: string = 'label';
 
   /**
-   * Sets default options for all chips rendered in chips mode.
-   * You can use this to control chip appearance, icon, style, and behavior for all chips.
-   * To set per-chip options, use a lookup table or add a 'chipOptions' property to each value object.
+   * Sets options for all chips rendered in chips mode.
    */
   @Prop() chipOptions: IChips;
   /**
@@ -478,16 +476,15 @@ export class TkInput implements ComponentInterface {
   private renderChips() {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
-        const itemChipOptions = typeof item === 'object' && item.chipOptions ? item.chipOptions : this.chipOptions || {};
         const baseProps = {
-          ...itemChipOptions,
+          ...this.chipOptions,
           removable: true,
           key: index,
           autoSelfDestroy: false,
           value: item,
-          variant: (itemChipOptions.variant ?? 'neutral') as 'neutral',
-          type: (itemChipOptions.type ?? 'outlined') as 'outlined',
-          size: (itemChipOptions.size ?? 'small') as 'small',
+          variant: (this.chipOptions.variant ?? 'neutral') as 'neutral',
+          type: (this.chipOptions.type ?? 'outlined') as 'outlined',
+          size: (this.chipOptions.size ?? 'small') as 'small',
         };
         const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
 

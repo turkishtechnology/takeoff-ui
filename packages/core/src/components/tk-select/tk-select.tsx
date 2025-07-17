@@ -162,9 +162,7 @@ export class TkSelect implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
-   * Sets default options for all chips rendered in multiple selection mode.
-   * You can use this to control chip appearance, icon, style, and behavior for all selected values.
-   * To set per-option chip options, add a 'chipOptions' property to each option object.
+   * Sets options for all chips rendered in multiple selection mode.
    */
   @Prop() chipOptions: IChips;
   /**
