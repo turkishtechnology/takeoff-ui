@@ -244,6 +244,7 @@
           &[aria-disabled] td {
             color: var(--text-sub-base);
             background-color: var(--background-lightest);
+            pointer-events: none;
           }
         }
 
