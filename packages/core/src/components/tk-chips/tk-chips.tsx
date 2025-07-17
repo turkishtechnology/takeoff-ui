@@ -69,17 +69,24 @@ export class TkChips implements ComponentInterface {
   /** Custom style for label. */
   @Prop() labelStyle?: any;
 
-  /** The value to emit on remove (object or string). */
-  @Prop() value?: any;
+  /**
+   * The value of the chips
+   * @defaultValue this.label
+   */
+  @Prop() value: any;
 
   /**
    * When an element is deleted, it is triggered. It returns the label.
    */
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
 
+  componentWillLoad(): void {
+    if (this.value == null) this.value = this.label;
+  }
+
   private handleClick() {
-    if (this.autoSelfDestroy) this.el.remove();
-    this.tkRemove.emit(this.value !== undefined ? this.value : this.label);
+    this.tkRemove.emit(this.value);
+    if (this.autoSelfDestroy) this.el?.remove();
   }
 
   render() {
@@ -88,7 +95,6 @@ export class TkChips implements ComponentInterface {
       disabled: this.disabled,
     });
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
-
     return (
       <div class={rootClasses} style={this.chipStyle}>
         {icon}
