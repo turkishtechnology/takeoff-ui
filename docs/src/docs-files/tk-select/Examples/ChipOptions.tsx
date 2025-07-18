@@ -14,8 +14,11 @@ const ChipOptions = () => {
       type: 'outlined',
       size: 'large',
       variant: 'success',
-      chipStyle: { color: 'purple' },
-      labelStyle: { letterSpacing: '2px', fontStyle: 'italic' },
+      chipStyle: {
+        color: 'purple',
+        letterSpacing: '2px',
+        fontStyle: 'italic',
+      },
     }}
 />`;
 
@@ -29,8 +32,11 @@ const ChipOptions = () => {
       type: 'outlined',
       size: 'large',
       variant: 'success',
-      chipStyle: { color: 'purple' },
-      labelStyle: { letterSpacing: '2px', fontStyle: 'italic' },
+      chipStyle: {
+        color: 'purple',
+        letterSpacing: '2px',
+        fontStyle: 'italic',
+      },
     }"
 />`;
 
@@ -49,8 +55,11 @@ const ChipOptions = () => {
           type: 'outlined',
           size: 'large',
           variant: 'success',
-          chipStyle: { color: 'purple' },
-          labelStyle: { letterSpacing: '2px', fontStyle: 'italic' },
+          chipStyle: {
+            color: 'purple',
+            letterSpacing: '2px',
+            fontStyle: 'italic',
+          },
         }}
       />
     </div>

@@ -7,5 +7,4 @@ export interface IChips {
   size?: 'large' | 'base' | 'small';
   variant?: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified';
   chipStyle?: any;
-  labelStyle?: any;
 }

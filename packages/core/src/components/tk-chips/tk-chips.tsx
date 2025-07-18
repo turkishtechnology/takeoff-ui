@@ -66,9 +66,6 @@ export class TkChips implements ComponentInterface {
   /** Custom style for chip container. */
   @Prop() chipStyle?: any;
 
-  /** Custom style for label. */
-  @Prop() labelStyle?: any;
-
   /**
    * The value of the chips
    * @defaultValue this.label
@@ -98,7 +95,7 @@ export class TkChips implements ComponentInterface {
     return (
       <div class={rootClasses} style={this.chipStyle}>
         {icon}
-        <span style={this.labelStyle}>{this.label}</span>
+        {this.label}
         {this.removable && (
           <i onClick={() => this.handleClick()} class="material-symbols-outlined">
             close
