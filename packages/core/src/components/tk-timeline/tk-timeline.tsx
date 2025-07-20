@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Fragment } from '@stencil/core';
+import { Component, h, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { TimelineItem } from './interfaces';
@@ -18,6 +18,10 @@ import { TimelineItem } from './interfaces';
 export class TkTimeline implements ComponentInterface {
   @Element() el: HTMLTkTimelineElement;
 
+  private mutationObserver: MutationObserver;
+
+  @State() slottedItemsCount: number = 0;
+
   /**
    * An array of objects representing the items to display on the timeline.
    * Each object should have at least a `title`. `description` and `date` are optional.
@@ -33,6 +37,37 @@ export class TkTimeline implements ComponentInterface {
    * Whether to alternate the position of timeline items relative to the line.
    */
   @Prop() alternate: boolean = true;
+
+  connectedCallback() {
+    // MutationObserver ile DOM değişikliklerini izle
+    if (typeof window !== 'undefined') {
+      this.mutationObserver = new MutationObserver(() => {
+        this.updateSlottedItemsCount();
+      });
+
+      this.mutationObserver.observe(this.el, {
+        childList: true,
+        subtree: true,
+      });
+    }
+  }
+
+  componentDidLoad() {
+    this.updateSlottedItemsCount();
+  }
+
+  disconnectedCallback() {
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
+  }
+
+  private updateSlottedItemsCount() {
+    const newCount = this.el.querySelectorAll('tk-timeline-item').length;
+    if (newCount !== this.slottedItemsCount) {
+      this.slottedItemsCount = newCount;
+    }
+  }
 
   private determineContentPlacement(index: number): 'start' | 'end' {
     if (!this.alternate) {
@@ -106,13 +141,9 @@ export class TkTimeline implements ComponentInterface {
     });
   }
 
-  private hasSlottedContent(): boolean {
-    return this.el.querySelectorAll('tk-timeline-item').length > 0;
-  }
-
   render() {
     const hostClasses = classNames('tk-timeline', `tk-timeline-${this.orientation}`);
-    const hasSlottedItems = this.hasSlottedContent();
+    const hasSlottedItems = this.slottedItemsCount > 0;
 
     return (
       <div class={hostClasses}>
