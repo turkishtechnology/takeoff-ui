@@ -1,35 +1,26 @@
-import { AnyExtension } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
-import TextAlign from '@tiptap/extension-text-align';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
 import { TkEditorToolbarConfig } from './interfaces';
-/**
- * Default Tiptap extensions with their configurations
- */
-export const DEFAULT_EXTENSIONS: AnyExtension[] = [
-  StarterKit.configure({}),
-  Underline.configure({}),
-  TextAlign.configure({
-    types: ['heading', 'paragraph'],
-    alignments: ['left', 'center', 'right', 'justify'],
-  }),
-  Link.configure({
-    openOnClick: true,
-    HTMLAttributes: {
-      class: 'tk-editor-link',
-    },
-  }),
-  Image.configure({
-    HTMLAttributes: {
-      class: 'tk-editor-image',
-    },
-  }),
-];
-/**
- * Default toolbar configuration with all available buttons
- */
+
+export const STARTER_KIT_EXTENSION_NAMES = [
+  'blockquote',
+  'bold',
+  'bulletList',
+  'code',
+  'codeBlock',
+  'document',
+  'dropcursor',
+  'gapcursor',
+  'hardBreak',
+  'heading',
+  'history',
+  'horizontalRule',
+  'italic',
+  'listItem',
+  'orderedList',
+  'paragraph',
+  'strike',
+  'text',
+] as const;
+
 export const DEFAULT_TOOLBAR_CONFIG: TkEditorToolbarConfig = [
   // Heading buttons
   ['h1', 'h2', 'h3', 'h4'],

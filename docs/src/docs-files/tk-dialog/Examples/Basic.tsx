@@ -63,18 +63,21 @@ import { ref } from 'vue';
 
 const showDialog = ref(false);
 const handleClick = () => {
-  showDialog.value = !showDialog.value;
+  showDialog.value = true;
 };
 </script>
 
 <template>
-  <div style="margin-bottom: 16px; display: flex; gap: 8px">
+  <>
     <TkButton label="Open Dialog" @tk-click="handleClick" />
     <TkDialog
       header="Welcome"
       subheader="Basic Dialog Example"
-      v-model="showDialog"
-      :containerStyle="{ width: '450px' }"
+      :visible.prop="showDialog"
+      @tk-visible-change="(e) => {
+        showDialog = e.detail;
+      }"
+      containerStyle="{ width: '450px' }"
     >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
@@ -83,7 +86,7 @@ const handleClick = () => {
         cupiditate neque quas!
       </p>
     </TkDialog>
-  </div>
+  </>
 </template>
 `;
 

@@ -233,6 +233,12 @@ function Components() {
           Toggle Button
         </Link>
         <Link
+          to="phone-input"
+          className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
+        >
+          Phone Input
+        </Link>
+        <Link
           to="tree-view"
           className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100"
         >

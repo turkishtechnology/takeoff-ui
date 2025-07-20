@@ -8,6 +8,8 @@ import Table from './components/Table';
 import ReactHookForm from './examples/ReactHookForm';
 import Home from './pages/Home';
 import Input from './components/Input';
+import PhoneInput from './components/PhoneInput';
+import CurrencyInput from './components/CurrencyInput';
 import Datepicker from './components/Datepicker';
 import Radio from './components/Radio';
 import Dialog from './components/Dialog';
@@ -84,6 +86,8 @@ function App() {
         <Route path="examples/zod-validation" element={<ZodValidation />} />
         <Route path="components/toggle-button" element={<ToggleButton />} />
         <Route path="components/tabs" element={<Tabs />} />
+        <Route path="components/phone-input" element={<PhoneInput />} />
+        <Route path="components/currency-input" element={<CurrencyInput />} />
         <Route path="components/tree-view" element={<TreeView />} />
       </Routes>
     </Layout>

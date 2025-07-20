@@ -1,53 +1,171 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
+import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
+
+import { getIconElementProps } from '../../utils/icon-props';
+import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
+import { INTERNAL_CURRENCY_LIST } from './constants';
 
 /**
- * TkCurrencyInput component description.
+ * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
  * @react `import { TkCurrencyInput } from '@takeoff-ui/react'`
  * @vue `import { TkCurrencyInput } from '@takeoff-ui/vue'`
  * @angular `import { TkCurrencyInput } from '@takeoff-ui/angular'`
  */
 @Component({
   tag: 'tk-currency-input',
-  styleUrl: 'tk-currency-input.scss',
-  shadow: true,
+  styleUrls: ['tk-currency-input.scss', 'flag.scss'],
+  formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
-  private nativeInput?: HTMLInputElement;
-  private inputId = `tk-input-${inputIds++}`;
-  private tabindex?: string | number;
-
-  @Element() el!: HTMLTkCurrencyInputElement;
-
-  @State() formattedValue: string = '';
-  @State() hasFocus = false;
+  @Element() private el!: HTMLTkCurrencyInputElement;
 
   /**
-   * Specifies the currency to be displayed.
-   * @defaultValue 'TL'
+   * Reference to the currency input element.
    */
-  @Prop() currency: string = 'TL';
-
+  private inputElement?: HTMLInputElement;
   /**
-   * Defines the available currency options for the user to select from.
+   * Reference to the dropdown element.
    */
-  @Prop() currencyOptions: any[];
+  private dropdownEl?: HTMLElement;
+  private cleanup;
+  private uniqueId = uuidv4();
 
   /**
-   * Sets the character used to separate the decimal part.
+   * The currently selected currency object.
+   * This is initialized based on the defaultCurrency prop and can be changed by the user.
    */
-  @Prop() decimalSeparator: string = ',';
-
+  @State() selectedCurrency: ICurrency;
   /**
-   * If `true`, the user cannot interact with the input.
+   * The value displayed in the input field, formatted as a currency string.
+   * This is updated based on the current numeric value and selected currency.
    */
-  @Prop() disabled = false;
+  @State() displayValue: string = '';
+  /**
+   * Indicates whether the dropdown for currency selection is open.
+   */
+  @State() isDropdownOpen: boolean = false;
+  /**
+   * Current numeric value of the input, used for calculations and formatting.
+   * This is updated based on user input and can be used in form submissions.
+   */
+  @State() currentNumericValue: number = 0;
 
   /**
-   * Indicates whether the input is in an invalid state.
-   * @defaultValue false
+   * The value of the input.
+   */
+  @Prop() value: number = 0;
+  @Watch('value')
+  valueChanged() {
+    if (this.value !== this.currentNumericValue) {
+      this.currentNumericValue = this.value || 0;
+      this.updateDisplayValue();
+    }
+  }
+
+  /**
+   * List of available currencies.
+   * If not provided, it defaults to the internal currency list.
+   */
+  @Prop() currencyList?: ICurrency[];
+
+  /**
+   * Placeholder text for the input field.
+   */
+  @Prop() placeholder?: string;
+  /**
+   * Disables the input field if set to true.
+   */
+  @Prop() disabled: boolean = false;
+  /**
+   * Marks the input field as invalid if set to true.
    */
   @Prop() invalid: boolean = false;
+  /**
+   * Makes the input field read-only if set to true.
+   */
+  @Prop() readonly: boolean = false;
+  /**
+   * Sets size for the component.
+   */
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
+  /**
+   * Displays a red asterisk (*) next to the label for visual emphasis.
+   */
+  @Prop() showAsterisk: boolean = false;
+  /**
+   * The step value for the input, used for numeric inputs.
+   * Default is 0.01, which is suitable for currency inputs.
+   */
+  @Prop() step: number = 0.01;
+  /**
+   * The number of decimal places to display in the formatted currency value.
+   * Default is 2, which is common for most currencies.
+   */
+  @Prop() precision: number = 2;
+  /**
+   * The default currency to use when the component is initialized.
+   * Default is 'TRY'.
+   */
+  @Prop() defaultCurrency: string = 'TRY';
+
+  /**
+   * Allows negative values to be entered if set to true.
+   */
+  @Prop() allowNegative: boolean = false;
+
+  /**
+   * Custom decimal separator to use for formatting.
+   * If provided, this will override the currency's default decimal separator.
+   * Example: "." for USD style, "," for EUR style
+   */
+  @Prop() decimalSeparator?: string;
+
+  /**
+   * Custom thousands separator to use for formatting.
+   * If provided, this will override the currency's default thousands separator.
+   * Example: "," for USD style, "." for EUR style, " " for some European styles
+   */
+  @Prop() thousandsSeparator?: string;
+
+  @Watch('defaultCurrency')
+  defaultCurrencyChanged() {
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === this.defaultCurrency.toUpperCase());
+
+    if (currency) {
+      this.selectedCurrency = currency;
+      this.updateDisplayValue();
+
+      if (this.inputElement) {
+        this.inputElement.value = this.displayValue;
+      }
+
+      const eventData = {
+        value: this.currentNumericValue,
+        currency: this.selectedCurrency,
+        formattedValue: this.displayValue,
+      } as CurrencyInputChangeEvent;
+
+      this.tkChange.emit(eventData);
+    }
+  }
+
+  /**
+   * The label for the input field.
+   * If provided, it will be displayed above the input.
+   */
+  @Prop() label: string;
+  /**
+   * The name attribute for the input element.
+   * Useful for form submissions.
+   */
+  @Prop() name: string;
+  /**
+   * Provided a hint or additional information about the input.
+   */
+  @Prop() hint: string;
 
   /**
    * This is the error message that will be displayed.
@@ -55,247 +173,454 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() error: string;
 
   /**
-   * Provided a hint or additional information about the input.
+   * Emitted when the value has changed.
    */
-  @Prop() hint: string;
-
-  /**
-   * Specifies a material icon name to be displayed.
-   */
-  @Prop() icon: string | undefined;
-
-  /**
-   * Defines the label for the input.
-   */
-  @Prop() label: string;
-
-  /**
-   * The name of the control, which is submitted with the form data.
-   */
-  @Prop() name: string = this.inputId;
-
-  /**
-   * Placeholder text displayed when the input is empty.
-   */
-  @Prop() placeholder?: string | null;
-
-  /**
-   * Determines the number of decimal places to display, like 2 decimal places for cents.
-   * @defaultValue 2
-   */
-  @Prop() precision: number = 2;
-
-  /**
-   * If `true`, the user cannot modify the value.
-   */
-  @Prop() readonly: boolean = false;
-
-  /**
-   * Sets size for the component.
-   */
-  @Prop() size: 'large' | 'base' | 'small' = 'base';
-
-  /**
-   * Specifies the character used to separate thousands in large numbers.
-   */
-  @Prop() thousandsSeparator: string = '.';
-
-  /**
-   * The value of the input.
-   */
-  @Prop({ mutable: true }) value?: number | null = 0;
-
-  /**
-   * Update the native input element when the value changes
-   */
-  @Watch('value')
-  protected valueChanged() {
-    this.tkChange.emit(this.value);
-  }
-
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
   /**
    * Emitted when the input loses focus.
    */
-  @Event({ eventName: 'tk-blur' }) tkBlur!: EventEmitter<void>;
-
-  /**
-   * Emitted when the value has changed.
-   */
-  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<string | number | undefined | null>;
-
+  @Event() tkBlur: EventEmitter<void>;
   /**
    * Emitted when the input has focus.
    */
-  @Event({ eventName: 'tk-focus' }) tkFocus!: EventEmitter<void>;
+  @Event() tkFocus: EventEmitter<void>;
 
   /**
-   * Emitted when a keyboard input occurred.
+   * Initialize the component before it is rendered.
    */
-  @Event({ eventName: 'tk-input' }) tkInput!: EventEmitter<KeyboardEvent>;
-
   componentWillLoad() {
-    // If the tk-input has a tabindex attribute we get the value
-    // and pass it down to the native input, then remove it from the
-    // tk-input to avoid causing tabbing twice on the same element
-    if (this.el.hasAttribute('tabindex')) {
-      const tabindex = this.el.getAttribute('tabindex');
-      this.tabindex = tabindex !== null ? tabindex : undefined;
-      this.el.removeAttribute('tabindex');
-    }
-  }
-
-  componentDidLoad(): void {
-    this.nativeInput = this.el.shadowRoot.querySelector('input');
+    this.setSelectedCurrency(this.defaultCurrency);
   }
 
   /**
-   * Sets focus on the specified `tk-input`. Use this method instead of the global
-   * `input.focus()`.
+   * Update the component when properties change.
    */
-  @Method()
-  async setFocus() {
-    this.nativeInput?.focus();
-  }
-
-  private formatCurrency(value) {
-    const allowedChar = value.replace(/[^0-9.,]/g, '');
-    value = this.formattedValue = allowedChar;
-
-    const parts = this.formattedValue.replaceAll(this.thousandsSeparator, '').split(this.decimalSeparator);
-    const arr = parts[0].split('');
-    const formatted = arr.flatMap((item, index) => {
-      if (arr.length > 3 && arr.length != index + 1 && arr.length % 3 == (index + 1) % 3) {
-        return [item, this.thousandsSeparator];
-      } else {
-        return [item];
-      }
-    });
-    if (parts.length > 1) {
-      this.formattedValue = formatted.join('') + this.decimalSeparator + parts[1];
-      this.value = parseFloat(this.formattedValue.replaceAll(this.thousandsSeparator, '').replace(this.decimalSeparator, '.')) || 0;
+  componentDidUpdate() {
+    if (this.isDropdownOpen) {
+      this.cleanup = autoUpdate(this.el.querySelector('.tk-currency-input__wrapper'), this.el, () => this.updatePosition(), {
+        animationFrame: true,
+      });
     } else {
-      this.formattedValue = formatted.join('');
-      this.value = parseFloat(this.formattedValue.replaceAll(this.thousandsSeparator, '')) || 0;
+      this.dropdownEl?.remove();
+      this.cleanup && this.cleanup();
     }
   }
 
-  private handleInput = (ev: Event) => {
-    const input = ev.target as HTMLInputElement | null;
-    if (input?.value) {
-      this.formatCurrency(input.value);
+  connectedCallback() {
+    document.addEventListener('click', this.closeDropdown);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('click', this.closeDropdown);
+  }
+
+  /**
+   * Get the currencies list - either from prop or use internal default
+   */
+  private getCurrencies(): ICurrency[] {
+    return this.currencyList || INTERNAL_CURRENCY_LIST;
+  }
+
+  private setSelectedCurrency(currencyCode: string) {
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
+    this.selectedCurrency = currency || currencies[0];
+    this.currentNumericValue = this.value || 0;
+    this.updateDisplayValue();
+  }
+
+  private updatePosition() {
+    const tkCurrenInputRootEl = this.el.querySelector('.tk-currency-input__wrapper');
+
+    if (tkCurrenInputRootEl && this.dropdownEl) {
+      computePosition(tkCurrenInputRootEl, this.dropdownEl, {
+        strategy: 'fixed',
+        placement: 'bottom-start',
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
+      }).then(({ y }) => {
+        Object.assign(this.dropdownEl.style, {
+          top: `${y}px`,
+        });
+      });
     }
-    this.tkInput.emit(ev as KeyboardEvent);
+  }
+
+  private updateDisplayValue() {
+    if (this.currentNumericValue === null || this.currentNumericValue === undefined || isNaN(this.currentNumericValue)) {
+      this.displayValue = '';
+      return;
+    }
+
+    const formattedValue = this.formatCurrency(this.currentNumericValue);
+    this.displayValue = formattedValue;
+  }
+
+  /**
+   * Get the decimal separator to use - custom prop takes priority over currency default
+   */
+  private getDecimalSeparator(): string {
+    return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
+  }
+
+  /**
+   * Get the thousands separator to use - custom prop takes priority over currency default
+   */
+  private getThousandsSeparator(): string {
+    return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
+  }
+
+  private formatCurrency(amount: number): string {
+    if (isNaN(amount)) return '';
+
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    const isNegative = amount < 0;
+    const absoluteAmount = Math.abs(amount);
+
+    // Format the number with the specified precision
+    const fixedAmount = Number(absoluteAmount).toFixed(this.precision);
+    const [integerPart, decimalPart] = fixedAmount.split('.');
+
+    // Add thousands separators
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
+
+    // Combine with decimal part if precision > 0
+    let result = formattedInteger;
+    if (this.precision > 0 && decimalPart) {
+      result += decimalSeparator + decimalPart;
+    }
+
+    // Add negative sign if needed and allowed
+    if (isNegative && this.allowNegative) {
+      result = '-' + result;
+    }
+
+    return result;
+  }
+
+  private parseFormattedValue(formattedValue: string): number {
+    if (!formattedValue) return 0;
+
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    const isNegative = formattedValue.startsWith('-') && this.allowNegative;
+
+    // Remove negative sign temporarily for processing
+    let cleanValue = formattedValue.replace('-', '');
+
+    // Remove thousands separators and replace decimal separator with dot
+    cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '').replace(decimalSeparator, '.');
+
+    // Remove non-numeric characters except decimal point
+    cleanValue = cleanValue.replace(/[^0-9.]/g, '');
+
+    const numericValue = parseFloat(cleanValue);
+    const result = isNaN(numericValue) ? 0 : numericValue;
+
+    return isNegative ? -result : result;
+  }
+
+  private closeDropdown = (event: Event) => {
+    if (!this.isDropdownOpen) {
+      return;
+    }
+
+    const target = event.target as Node;
+
+    if (this.dropdownEl && this.dropdownEl.contains(target)) {
+      return;
+    }
+
+    const hostElement = this.inputElement?.closest('tk-currency-input');
+    if (hostElement && hostElement.contains(target)) {
+      return;
+    }
+
+    this.isDropdownOpen = false;
+  };
+
+  private toggleDropdown = (event: Event) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (!this.disabled && !this.readonly) {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    }
+  };
+
+  private calculateNewCursorPosition(oldValue: string, newValue: string, oldCursorPosition: number, removedCharsBeforeCursor: number): number {
+    // Use custom thousands separator if provided, otherwise fall back to currency default
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    let adjustedPosition = oldCursorPosition - removedCharsBeforeCursor;
+
+    let oldSeparatorsBeforeCursor = 0;
+    for (let i = 0; i < Math.min(adjustedPosition, oldValue.length); i++) {
+      if (oldValue[i] === thousandsSeparator) {
+        oldSeparatorsBeforeCursor++;
+      }
+    }
+
+    let newSeparatorsBeforeCursor = 0;
+    let digitCount = 0;
+    let targetDigitPosition = adjustedPosition - oldSeparatorsBeforeCursor;
+
+    for (let i = 0; i < newValue.length; i++) {
+      if (newValue[i] === thousandsSeparator) {
+        newSeparatorsBeforeCursor++;
+      } else if (newValue[i] >= '0' && newValue[i] <= '9') {
+        digitCount++;
+        if (digitCount >= targetDigitPosition) {
+          return i + 1;
+        }
+      } else if (newValue[i] === this.getDecimalSeparator()) {
+        if (digitCount >= targetDigitPosition) {
+          return i + 1;
+        }
+      }
+    }
+
+    return Math.min(adjustedPosition + (newSeparatorsBeforeCursor - oldSeparatorsBeforeCursor), newValue.length);
+  }
+
+  private handleInput = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const inputValue = target.value;
+    const cursorPosition = target.selectionStart;
+
+    // Use custom separators if provided, otherwise fall back to currency defaults
+    const decimalSeparator = this.getDecimalSeparator();
+    const thousandsSeparator = this.getThousandsSeparator();
+
+    // Allow negative sign if allowNegative is true
+    const negativePattern = this.allowNegative ? '\\-' : '';
+    const allowedChars = new RegExp(`[0-9\\${decimalSeparator}\\${thousandsSeparator}${negativePattern}]`);
+
+    let filteredValue = '';
+    let removedCharsBeforeCursor = 0;
+    let hasNegativeSign = false;
+
+    for (let i = 0; i < inputValue.length; i++) {
+      const char = inputValue[i];
+
+      // Handle negative sign - only allow it at the beginning
+      if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
+        filteredValue += char;
+        hasNegativeSign = true;
+      } else if (char === '-' && this.allowNegative && hasNegativeSign) {
+        // Remove duplicate negative signs
+        if (i < cursorPosition) {
+          removedCharsBeforeCursor++;
+        }
+      } else if (allowedChars.test(char) && char !== '-') {
+        filteredValue += char;
+      } else if (i < cursorPosition) {
+        removedCharsBeforeCursor++;
+      }
+    }
+
+    const numericValue = this.parseFormattedValue(filteredValue);
+
+    this.currentNumericValue = numericValue;
+
+    const formattedValue = this.formatCurrency(numericValue);
+
+    this.displayValue = formattedValue;
+
+    target.value = formattedValue;
+
+    const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition, removedCharsBeforeCursor);
+
+    requestAnimationFrame(() => {
+      target.setSelectionRange(newCursorPosition, newCursorPosition);
+    });
+
+    const eventData = {
+      value: numericValue,
+      currency: this.selectedCurrency,
+      formattedValue: formattedValue,
+    } as CurrencyInputChangeEvent;
+
+    this.tkChange.emit(eventData);
+  };
+
+  private handleFocus = () => {
+    this.tkFocus.emit();
   };
 
   private handleBlur = () => {
-    this.hasFocus = false;
+    const target = this.inputElement;
+    const numericValue = this.parseFormattedValue(target.value);
+    this.currentNumericValue = numericValue;
 
-    this.formatCurrency(this.value.toFixed(this.precision).replace('.', this.decimalSeparator));
+    const formattedValue = this.formatCurrency(numericValue);
+    target.value = formattedValue;
+    this.displayValue = formattedValue;
 
     this.tkBlur.emit();
   };
 
-  private handleFocus = () => {
-    this.hasFocus = true;
+  private handleSelectCurrency = (currencyCode: string, event: Event) => {
+    event.stopPropagation();
+    event.preventDefault();
 
-    this.tkFocus.emit();
+    const currencies = this.getCurrencies();
+    const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
+
+    if (currency) {
+      this.selectedCurrency = currency;
+
+      this.updateDisplayValue();
+      this.isDropdownOpen = false;
+
+      if (this.inputElement) {
+        this.inputElement.value = this.displayValue;
+      }
+
+      const eventData = {
+        value: this.currentNumericValue,
+        currency: this.selectedCurrency,
+        formattedValue: this.displayValue,
+      } as CurrencyInputChangeEvent;
+
+      this.tkChange.emit(eventData);
+    }
   };
 
-  private renderInput(): HTMLInputElement {
+  private handlePropsDecimalAndThousandsSeparator() {
+    if (this.decimalSeparator && this.thousandsSeparator) {
+      return false; // If both separators are provided, we assume custom formatting is required
+    } else {
+      return true;
+    }
+  }
+
+  private renderLabel() {
+    if (this.label) {
+      return (
+        <label class="tk-currency-input__label" htmlFor={this.uniqueId}>
+          <span class="tk-currency-input__label-title">{this.label}</span>
+          {this.showAsterisk && <span class="tk-currency-input__label-red-asterisk">*</span>}
+        </label>
+      );
+    }
+    return null;
+  }
+
+  private renderCurrencyInput() {
     return (
       <input
-        ref={el => (this.nativeInput = el)}
-        disabled={this.disabled}
-        autoComplete="off"
+        id={this.uniqueId}
+        ref={el => (this.inputElement = el)}
         type="text"
+        class="tk-currency-input__input"
+        autoComplete="off"
+        value={this.displayValue}
+        placeholder={this.placeholder}
+        disabled={this.disabled}
+        readonly={this.readonly}
         name={this.name}
-        placeholder={this.placeholder || ''}
-        readOnly={this.readonly}
-        tabindex={this.tabindex}
-        value={this.formattedValue}
         onInput={this.handleInput}
-        onBlur={this.handleBlur}
         onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
       />
     );
   }
 
-  private renderRightField(): HTMLElement {
-    let rightField;
-    if (this.currencyOptions?.length > 0) {
-      rightField = (
-        // TODO: dropdown yapılınca burasıda dinamik hale getirilecek
-        <div class="options">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="flag">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H24V24H0V0Z" fill="#E30A17" />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M16.3501 12.3752C16.3501 15.6846 13.6173 18.3705 10.2516 18.3705C6.88601 18.3705 4.1532 15.6846 4.1532 12.3705C4.1532 9.05644 6.88132 6.37988 10.2469 6.37988C13.6126 6.37988 16.3548 9.06113 16.3548 12.3752H16.3501Z"
-              fill="white"
-            />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M16.6551 12.3754C16.6551 15.0238 14.4707 17.1707 11.7754 17.1707C9.08008 17.1707 6.90039 15.0238 6.90039 12.3754C6.90039 9.72695 9.08008 7.58008 11.7754 7.58008C14.4707 7.58008 16.6504 9.72695 16.6504 12.3754H16.6551Z"
-              fill="#E30A17"
-            />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M17.5359 9.57227L17.489 11.7895L15.4171 12.352L17.4562 13.0785L17.4093 15.1082L18.7359 13.5238L20.7468 14.2176L19.5843 12.516L20.9999 10.8238L18.8249 11.4238L17.5359 9.57227Z"
-              fill="white"
-            />
-          </svg>
-          <div class="current-currency">{this.currency}</div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M15.875 8.99953L11.995 12.8795L8.11501 8.99953C7.72501 8.60953 7.09501 8.60953 6.70501 8.99953C6.31501 9.38953 6.31501 10.0195 6.70501 10.4095L11.295 14.9995C11.685 15.3895 12.315 15.3895 12.705 14.9995L17.295 10.4095C17.685 10.0195 17.685 9.38953 17.295 8.99953C16.905 8.61953 16.265 8.60953 15.875 8.99953Z"
-              fill="#222530"
-            />
-          </svg>
+  private renderCurrencySelector() {
+    return (
+      <div class="tk-currency-input__dropdown">
+        {this.renderDropdownButton()}
+
+        {this.isDropdownOpen && (
+          <div class="tk-currency-input__dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
+            {this.renderCurrencyList()}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  private renderDropdownButton() {
+    return (
+      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.disabled}>
+        <div class="tk-currency-input__dropdown-button-selected">
+          <img
+            src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
+            alt={`${this.selectedCurrency.name} flag`}
+            class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`}
+          />
+          <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
+          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
         </div>
-      );
-    }
-    return rightField;
+      </button>
+    );
+  }
+
+  private renderCurrencyList() {
+    const currencies = this.getCurrencies();
+
+    return (
+      <ul class="tk-currency-input__dropdown-menu-list">
+        {currencies.map(currency => (
+          <li
+            class="tk-currency-input__dropdown-menu-list-item"
+            key={currency.code}
+            role="option"
+            onClick={event => this.handleSelectCurrency(currency.code, event)}
+            aria-selected={this.selectedCurrency.code === currency.code}
+          >
+            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${currency.code} flag`} class={`flag flag-${currency.id.toLowerCase()}`} />
+            <span class="tk-currency-input__dropdown-menu-list-country-label">{currency.symbol}</span>
+            <span class="tk-currency-input__dropdown-menu-list-dial-id">{currency.name}</span>
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   private renderHint(): HTMLSpanElement {
     let hint;
+
     if (this.hint?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
+
       hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.hint}
+        <span class="tk-currency-input__hint">
+          {hintIcon}
+          <span class="tk-currency-input__hint-text">{this.hint}</span>
         </span>
       );
     }
 
     if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
+
       hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.error}
+        <span class="tk-currency-input__hint">
+          {hintIcon}
+          <span class="tk-currency-input__hint-text">{this.error}</span>
         </span>
       );
     }
+
     return hint;
   }
 
   render() {
-    const rootClasses = classNames('tk-currency-input-container', this.size, { focus: this.hasFocus });
-
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
-        <label class="label">{this.label}</label>
-        <div class="tk-currency-input">
-          {this.renderInput()}
-          {this.renderRightField()}
+      <div class={classNames('tk-currency-input', `tk-currency-input--${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+        {this.renderLabel()}
+        <div class="tk-currency-input__wrapper">
+          {this.renderCurrencyInput()}
+          {this.handlePropsDecimalAndThousandsSeparator() && this.renderCurrencySelector()}
         </div>
         {this.renderHint()}
       </div>
     );
   }
 }
-
-let inputIds = 0;

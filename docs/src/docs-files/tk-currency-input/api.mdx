@@ -4,34 +4,45 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| <TkBadge label="currency" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'TL' | Specifies the currency to be displayed. |
-| <TkBadge label="currencyOptions" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | Defines the available currency options for the user to select from. |
-| <TkBadge label="decimalSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | ', ' | Sets the character used to separate the decimal part. |
-| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot interact with the input. |
+| <TkBadge label="allowNegative" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Allows negative values to be entered if set to true. |
+| <TkBadge label="currencyList" variant="primary" size="large" type="filledlight"/> | <code>ICurrency[]</code> | null | List of available currencies. If not provided, it defaults to the internal currency list. |
+| <TkBadge label="decimalSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Custom decimal separator to use for formatting. If provided, this will override the currency's default decimal separator. Example: "." for USD style, "," for EUR style |
+| <TkBadge label="defaultCurrency" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'TRY' | The default currency to use when the component is initialized. Default is 'TRY'. |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Disables the input field if set to true. |
 | <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
 | <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
-| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Specifies a material icon name to be displayed. |
-| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state. |
-| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the label for the input. |
-| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | this.inputId | The name of the control, which is submitted with the form data. |
-| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
-| <TkBadge label="precision" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 2 | Determines the number of decimal places to display, like 2 decimal places for cents. |
-| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Marks the input field as invalid if set to true. |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label for the input field. If provided, it will be displayed above the input. |
+| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The name attribute for the input element. Useful for form submissions. |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text for the input field. |
+| <TkBadge label="precision" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 2 | The number of decimal places to display in the formatted currency value. Default is 2, which is common for most currencies. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Makes the input field read-only if set to true. |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
-| <TkBadge label="thousandsSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '.' | Specifies the character used to separate thousands in large numbers. |
+| <TkBadge label="step" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0.01 | The step value for the input, used for numeric inputs. Default is 0.01, which is suitable for currency inputs. |
+| <TkBadge label="thousandsSeparator" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Custom thousands separator to use for formatting. If provided, this will override the currency's default thousands separator. Example: "," for USD style, "." for EUR style, " " for some European styles |
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | The value of the input. |
 
 ### Events
 
 | Name | Description |
 | ---- | ----------- |
-| tk-blur | Emitted when the input loses focus. |
 | tk-change | Emitted when the value has changed. |
-| tk-focus | Emitted when the input has focus. |
-| tk-input | Emitted when a keyboard input occurred. |
+| tkBlur | Emitted when the input loses focus. |
+| tkFocus | Emitted when the input has focus. |
 
-### Methods
+### Interfaces
 
-| Name | Description |
-| ---- | ----------- |
-| setFocus | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |
+Interfaces for the tk-currency-input component.
+
+```typescript
+interface ICurrency {
+  id: string;
+  code: string;
+  symbol: string;
+  name: string;
+  decimalSeparator: string;
+  thousandsSeparator: string;
+}
+```
+

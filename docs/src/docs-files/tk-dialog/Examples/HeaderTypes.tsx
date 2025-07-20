@@ -35,19 +35,20 @@ import { TkDialog, TkButton } from '@takeoff-ui/vue';
 import { ref } from 'vue';
 
 const showDialog = ref(false);
+const headerType = ref('${headerType}');
 const setShowDialog = (value) => {
   showDialog.value = value;
 };
 </script>
 
 <template>
-  <div style="margin-bottom: 16px; display: flex; gap: 8px">
+  <>
     <TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
     <TkDialog
       header="Header Types"
       subheader="This dialog uses the ${headerType} header type"
       v-model="showDialog"
-      headerType="${headerType}"
+      :headerType.prop="headerType"
       :containerStyle="{ width: '450px' }"
     >
       <p>
@@ -57,7 +58,7 @@ const setShowDialog = (value) => {
         cupiditate neque quas!
       </p>
     </TkDialog>
-  </div>
+  </>
 </template>
 `;
 

@@ -166,14 +166,14 @@
         &.dark {
           tr th {
             color: var(--text-lightest);
-            background: var(--background-darkest);
+            background-color: var(--background-darkest);
           }
         }
 
         &.primary {
           tr th {
             color: var(--text-lightest);
-            background: var(--primary-base);
+            background-color: var(--primary-base);
           }
         }
       }
@@ -244,6 +244,7 @@
           &[aria-disabled] td {
             color: var(--text-sub-base);
             background-color: var(--background-lightest);
+            pointer-events: none;
           }
         }
 
@@ -254,12 +255,46 @@
 
       .tk-table-left-sticky {
         position: sticky;
-        left: 0;
       }
 
       .tk-table-right-sticky {
         position: sticky;
-        right: 0;
+      }
+
+      .tk-table-sticky-shadow-right {
+        --shadow-opacity: 0;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: -10px;
+          bottom: 0;
+          width: 10px;
+          background: linear-gradient(to right, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
+          pointer-events: none;
+          opacity: var(--shadow-opacity, 0);
+          transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 1;
+        }
+      }
+
+      .tk-table-sticky-shadow-left {
+        --shadow-opacity: 0;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -10px;
+          bottom: 0;
+          width: 10px;
+          background: linear-gradient(to left, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
+          pointer-events: none;
+          opacity: var(--shadow-opacity, 0);
+          transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 1;
+        }
       }
     }
   }
@@ -302,7 +337,6 @@
     display: flex;
     justify-content: center;
     position: absolute;
-    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
