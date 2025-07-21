@@ -14,6 +14,17 @@ type IReleaseItem = {
 export const releases: IReleaseItem[] = [
   {
     title: 'Beta Release',
+    version: '0.0.2-beta.15',
+    date: '21.07.2025',
+    newComponents: ['TreeView component has been developed'],
+    bugFixes: [
+      'Fixed dynamic timeline-item render',
+      'Fixed selection assign class handling to table',
+      'Add value prop to handle number to select',
+    ],
+  },
+  {
+    title: 'Beta Release',
     version: '0.0.2-beta.14',
     date: '16.07.2025',
     newComponents: [
