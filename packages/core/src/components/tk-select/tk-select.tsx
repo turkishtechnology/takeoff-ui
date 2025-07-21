@@ -362,7 +362,6 @@ export class TkSelect implements ComponentInterface {
 
     if (this.multiple) {
       const currentValue = Array.isArray(this.value) ? this.value : [];
-      // selectedItem: options'ta olan objeler + (allowCustomValue varsa) custom value'lar
       this.selectedItem = currentValue
         .map(val => {
           let found;
@@ -376,10 +375,6 @@ export class TkSelect implements ComponentInterface {
           return null;
         })
         .filter(Boolean);
-
-      // inputRef.value: label veya custom string
-      this.inputRef.value = this.selectedItem.map(item => (typeof item === 'object' ? this.getOptionLabel(item) : item));
-      return;
     } else {
       // Tekil seçim
       if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
@@ -398,11 +393,11 @@ export class TkSelect implements ComponentInterface {
           this.selectedItem = this.value;
         }
       }
-      if (this.selectedItem) {
-        this.inputRef.value = typeof this.selectedItem === 'object' ? this.getOptionLabel(this.selectedItem) : this.selectedItem;
-      } else {
-        this.inputRef.value = null;
-      }
+    }
+    if (this.selectedItem) {
+      this.inputRef.value = this.selectedItem;
+    } else {
+      this.inputRef.value = null;
     }
   }
 
@@ -482,11 +477,7 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        if (this.allowCustomValue) {
-          const prevValue = Array.isArray(this.value) ? this.value : [];
-          const added = value[value.length - 1];
-          this.value = [...prevValue, added];
-        }
+        this.value[value.value];
       }
       this.tkChange.emit(this.value);
     } else {

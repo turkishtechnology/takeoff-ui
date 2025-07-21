@@ -491,7 +491,7 @@ export class TkInput implements ComponentInterface {
         } else {
           return (
             <tk-chips
-              label={item}
+              label={this.getNestedValue(item, this.chipLabelKey) || item}
               removable
               onTk-remove={(e: CustomEvent) => this.handleChipsRemove(e.detail)}
               variant="neutral"
