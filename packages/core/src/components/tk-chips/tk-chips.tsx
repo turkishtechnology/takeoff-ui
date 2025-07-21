@@ -63,9 +63,6 @@ export class TkChips implements ComponentInterface {
    */
   @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' = 'primary';
 
-  /** Custom style for chip container. */
-  @Prop() chipStyle?: any;
-
   /**
    * The value of the chips
    * @defaultValue this.label
@@ -93,7 +90,7 @@ export class TkChips implements ComponentInterface {
     });
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
     return (
-      <div class={rootClasses} style={this.chipStyle}>
+      <div class={rootClasses}>
         {icon}
         {this.label}
         {this.removable && (

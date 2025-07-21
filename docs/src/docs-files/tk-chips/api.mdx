@@ -5,7 +5,6 @@ import { TkBadge } from "@takeoff-ui/react";
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | <TkBadge label="autoSelfDestroy" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Determines whether the chip automatically removes itself when the close button is clicked. |
-| <TkBadge label="chipStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | Custom style for chip container. |
 | <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The disabled status. |
 | <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon name to be displayed. |
 | <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label to display inside the chip. |
@@ -26,13 +25,12 @@ import { TkBadge } from "@takeoff-ui/react";
 
 
 ```typescript
-interface IChips {
+interface IChipsOptions {
   label?: string;
   icon?: string | IIconOptions;
   type?: 'filled' | 'filledlight' | 'outlined' | 'avatar';
   size?: 'large' | 'base' | 'small';
   variant?: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified';
-  chipStyle?: any;
 }
 ```
 
