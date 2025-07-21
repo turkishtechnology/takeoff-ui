@@ -201,6 +201,7 @@ export class TkSelect implements ComponentInterface {
   @Watch('value')
   protected valueChanged(newValue: any, oldValue: any) {
     if (_.isEqual(newValue, oldValue)) return;
+
     this.setValue();
   }
 
@@ -354,28 +355,9 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private getSelectedItem() {
-    if (this.renderOptions?.length > 0) {
-      if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
-        // value ve her bir option object değilse. Yani bu primitive tiplerle çalışan bir selectbox ise
-
-        return this.renderOptions.find(item => item == this.value);
-      } else if (this.renderOptions?.every(item => typeof item === 'object')) {
-        if (this.optionValueKey?.length > 0) {
-          return this.renderOptions.find(item => this.getOptionValue(item) == this.value);
-        } else {
-          return this.renderOptions.find(item => _.isEqual(item, this.value));
-        }
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
   private setValue() {
     if (!this.inputRef) return;
+
     let innerOptions = this.isGrouped() ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
 
     if (this.multiple) {
@@ -536,7 +518,6 @@ export class TkSelect implements ComponentInterface {
     if (this.multiple) return;
 
     if (this.editable && !this.allowCustomValue) {
-      const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
 
       if (!inputValue) return;
@@ -545,9 +526,9 @@ export class TkSelect implements ComponentInterface {
       if (
         !this.isItemClickFlag &&
         // seçili item yok ise ama inutda bir değer var ise
-        ((!selectedItem && inputValue) ||
+        ((!this.selectedItem && inputValue) ||
           // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
-          (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
+          (this.selectedItem && this.getOptionLabel(this.selectedItem) != inputValue))
       ) {
         this.value = null;
         this.tkChange.emit(null);
@@ -614,7 +595,7 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      let checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      let checking = _.some(this.selectedItem, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
