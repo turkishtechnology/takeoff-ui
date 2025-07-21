@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
-import { IChipsOptions } from '../tk-chips/interfaces';
+import { IChipOptions } from '../tk-chips/interfaces';
 
 /**
  * TkSelect component description.
@@ -164,7 +164,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Sets options for all chips rendered in multiple selection mode.
    */
-  @Prop() chipOptions: IChipsOptions;
+  @Prop() chipOptions: IChipOptions;
   /**
    * The list of options to be displayed in the select box.
    */

@@ -1,6 +1,6 @@
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
-export interface IChipsOptions {
+export interface IChipOptions {
   label?: string;
   icon?: string | IIconOptions;
   type?: 'filled' | 'filledlight' | 'outlined' | 'avatar';

@@ -7,7 +7,7 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
 import { getIconElementProps } from '../../utils/icon-props';
-import { IChipsOptions } from '../tk-chips/interfaces';
+import { IChipOptions } from '../tk-chips/interfaces';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -139,7 +139,7 @@ export class TkInput implements ComponentInterface {
   /**
    * Sets options for all chips rendered in chips mode.
    */
-  @Prop() chipOptions: IChipsOptions;
+  @Prop() chipOptions: IChipOptions;
   /**
    * input type
    */
@@ -483,9 +483,9 @@ export class TkInput implements ComponentInterface {
           key: index,
           autoSelfDestroy: false,
           value: item,
-          variant: (itemChipOptions.variant ?? 'neutral') as IChipsOptions['variant'],
-          type: (itemChipOptions.type ?? 'outlined') as IChipsOptions['type'],
-          size: (itemChipOptions.size ?? 'small') as IChipsOptions['size'],
+          variant: (itemChipOptions.variant ?? 'neutral') as IChipOptions['variant'],
+          type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
+          size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
         };
         const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
 
