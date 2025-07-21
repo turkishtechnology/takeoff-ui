@@ -384,27 +384,28 @@ export class TkSelect implements ComponentInterface {
       innerOptions = this.options;
     }
 
-    // Handle multiple selection case
     if (this.multiple) {
-      // Ensure value is always an array
       const currentValue = Array.isArray(this.value) ? this.value : [];
+      let validOptions = [];
 
-      // If custom values are not allowed, validate against available options
-      if (!this.allowCustomValue && innerOptions?.length > 0) {
-        const validValues = currentValue.filter(val => innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
-
-        // Update value if invalid options were filtered out
-        if (!_.isEqual(validValues, currentValue)) {
-          this.value = validValues;
-          this.inputRef.value = validValues;
-          return;
+      for (const val of currentValue) {
+        let found;
+        if (this.optionValueKey) {
+          found = innerOptions.find(opt => this.getOptionValue(opt) === val);
+        } else {
+          found = innerOptions.find(opt => _.isEqual(opt, val));
+        }
+        if (found) {
+          validOptions.push(found);
+        } else if (this.allowCustomValue) {
+          validOptions.push(val);
         }
       }
 
-      this.inputRef.value = currentValue;
+      this.selectedItem = validOptions;
+      this.inputRef.value = [...validOptions.map(opt => this.getOptionLabel(opt))];
       return;
     }
-
     // Handle single selection case
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
