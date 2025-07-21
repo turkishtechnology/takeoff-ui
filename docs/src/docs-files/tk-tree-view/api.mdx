@@ -1,0 +1,25 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="badgeOptions" variant="primary" size="large" type="filledlight"/> | <code>IBadgeOptions</code> | null | Badge customization options for children count display. |
+| <TkBadge label="branchIcon" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' | Icon for branch items (items with children). When empty, no icon is shown. |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If true, disables all interaction with the tree view. |
+| <TkBadge label="items" variant="primary" size="large" type="filledlight"/> | <code>ITreeItem[]</code> | [] | Array of tree items data. This is the primary way to provide data to the tree view. |
+| <TkBadge label="leafIcon" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' | Icon for leaf items (items without children). When empty, no icon is shown. |
+| <TkBadge label="mode" variant="primary" size="large" type="filledlight"/> | <code>"basic", "stepper"</code> | 'basic' | Tree view mode: 'basic' or 'stepper'. |
+| <TkBadge label="selectable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If true, enables checkbox selection for tree items. |
+| <TkBadge label="showBadge" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Show/hide the badge for children count on directories. |
+| <TkBadge label="showPointer" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Show/hide the pointer icon for selected items. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Tree view size: 'large', 'base' or 'small'. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | Tree view type: 'basic', 'divided', or 'light'. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>string[]</code> | null | The value of the selected tree item. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-change | Event emitted when the selected value changes. |
+| tk-item-click | Event emitted when a tree item is clicked. |
