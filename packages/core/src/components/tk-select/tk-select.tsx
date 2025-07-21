@@ -376,60 +376,51 @@ export class TkSelect implements ComponentInterface {
 
   private setValue() {
     if (!this.inputRef) return;
-    let innerOptions = [];
-
-    if (this.isGrouped()) {
-      innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
-    } else {
-      innerOptions = this.options;
-    }
+    let innerOptions = this.isGrouped() ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
 
     if (this.multiple) {
       const currentValue = Array.isArray(this.value) ? this.value : [];
-      let validOptions = [];
+      // selectedItem: options'ta olan objeler + (allowCustomValue varsa) custom value'lar
+      this.selectedItem = currentValue
+        .map(val => {
+          let found;
+          if (this.optionValueKey) {
+            found = innerOptions.find(opt => this.getOptionValue(opt) === val);
+          } else {
+            found = innerOptions.find(opt => _.isEqual(opt, val));
+          }
+          if (found) return found;
+          if (this.allowCustomValue) return val;
+          return null;
+        })
+        .filter(Boolean);
 
-      for (const val of currentValue) {
-        let found;
-        if (this.optionValueKey) {
-          found = innerOptions.find(opt => this.getOptionValue(opt) === val);
-        } else {
-          found = innerOptions.find(opt => _.isEqual(opt, val));
+      // inputRef.value: label veya custom string
+      this.inputRef.value = this.selectedItem.map(item => (typeof item === 'object' ? this.getOptionLabel(item) : item));
+      return;
+    } else {
+      // Tekil seçim
+      if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
+        this.selectedItem = innerOptions.find(item => item === this.value);
+        if (!this.selectedItem && this.allowCustomValue) {
+          this.selectedItem = this.value;
         }
-        if (found) {
-          validOptions.push(found);
-        } else if (this.allowCustomValue) {
-          validOptions.push(val);
+      } else if (this.optionValueKey?.length > 0) {
+        this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
+        if (!this.selectedItem && this.allowCustomValue) {
+          this.selectedItem = this.value;
+        }
+      } else {
+        this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
+        if (!this.selectedItem && this.allowCustomValue) {
+          this.selectedItem = this.value;
         }
       }
-
-      this.selectedItem = validOptions;
-      this.inputRef.value = [...validOptions.map(opt => this.getOptionLabel(opt))];
-      return;
-    }
-    // Handle single selection case
-    if (this.editable && this.allowCustomValue) {
-      // For editable with custom values, show the value directly
-      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
-      return;
-    }
-
-    // Find the selected item based on value type
-    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
-      // Handle primitive values
-      this.selectedItem = innerOptions.find(item => item === this.value);
-    } else if (this.optionValueKey?.length > 0) {
-      // Handle object values with optionValueKey
-      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
-    } else {
-      // Handle object values without optionValueKey
-      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
-    }
-
-    // Set input value based on selection state
-    if (this.selectedItem) {
-      this.inputRef.value = this.getOptionLabel(this.selectedItem);
-    } else {
-      this.inputRef.value = null;
+      if (this.selectedItem) {
+        this.inputRef.value = typeof this.selectedItem === 'object' ? this.getOptionLabel(this.selectedItem) : this.selectedItem;
+      } else {
+        this.inputRef.value = null;
+      }
     }
   }
 
