@@ -482,7 +482,11 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        this.value = [...value];
+        if (this.allowCustomValue) {
+          const prevValue = Array.isArray(this.value) ? this.value : [];
+          const added = value[value.length - 1];
+          this.value = [...prevValue, added];
+        }
       }
       this.tkChange.emit(this.value);
     } else {
@@ -595,7 +599,7 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      let checking = _.some(this.selectedItem, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      let checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
