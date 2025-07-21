@@ -1,11 +1,14 @@
 import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
+import { ITreeItem } from './interfaces';
+import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 /**
  * The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
- * @react `import { TkTreeView, TkTreeItem } from '@takeoff-ui/react'`
- * @vue `import { TkTreeView, TkTreeItem } from '@takeoff-ui/vue'`
- * @angular `import { TkTreeView, TkTreeItem } from '@takeoff-ui/angular'`
+ * Uses array-based data structure for better performance and easier data management.
+ * @react `import { TkTreeView } from '@takeoff-ui/react'`
+ * @vue `import { TkTreeView } from '@takeoff-ui/vue'`
+ * @angular `import { TkTreeView } from '@takeoff-ui/angular'`
  */
 @Component({
   tag: 'tk-tree-view',
@@ -13,14 +16,15 @@ import classNames from 'classnames';
   shadow: false,
 })
 export class TkTreeView implements ComponentInterface {
-  private observer: MutationObserver;
-  private treeMap: Map<string, any> = new Map();
-
   @Element() el: HTMLElement;
 
-  @State() expandedIds: Set<string> = new Set();
-  @State() selectedId: string | null = null;
-  @State() treeData: any[] = [];
+  @State() expandedPaths: Set<string> = new Set();
+  @State() selectedPath: string | null = null;
+
+  /**
+   * Array of tree items data. This is the primary way to provide data to the tree view.
+   */
+  @Prop() items: ITreeItem[] = [];
 
   /**
    * Tree view mode: 'basic' or 'stepper'.
@@ -33,9 +37,9 @@ export class TkTreeView implements ComponentInterface {
   @Prop() type: 'basic' | 'divided' | 'light' = 'basic';
 
   /**
-   * Tree view size: 'base', 'small', or 'large'.
+   * Tree view size: 'large', 'base' or 'small'.
    */
-  @Prop() size: 'base' | 'small' | 'large' = 'base';
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
    * If true, disables all interaction with the tree view.
@@ -43,24 +47,14 @@ export class TkTreeView implements ComponentInterface {
   @Prop() disabled: boolean = false;
 
   /**
-   * Show/hide the left arrow icon.
+   * Icon for branch items (items with children). When empty, no icon is shown.
    */
-  @Prop() showLeftIcon: boolean = true;
+  @Prop() branchIcon: string = '';
 
   /**
-   * Show/hide the right arrow icon.
+   * Icon for leaf items (items without children). When empty, no icon is shown.
    */
-  @Prop() showRightIcon: boolean = true;
-
-  /**
-   * Show/hide the folder icon for directories.
-   */
-  @Prop() showFolderIcon: boolean = true;
-
-  /**
-   * Show/hide the file icon for files.
-   */
-  @Prop() showFileIcon: boolean = true;
+  @Prop() leafIcon: string = '';
 
   /**
    * Show/hide the badge for children count on directories.
@@ -68,187 +62,131 @@ export class TkTreeView implements ComponentInterface {
   @Prop() showBadge: boolean = true;
 
   /**
+   * Badge customization options for children count display.
+   */
+  @Prop() badgeOptions?: IBadgeOptions;
+
+  /**
    * Show/hide the pointer icon for selected items.
    */
   @Prop() showPointer: boolean = true;
 
   /**
-   * Choose the expand icon position.
-   */
-  @Prop() expandIcon: 'left' | 'right' = 'left';
-
-  /**
    * Event emitted when a tree item is clicked.
    */
-  @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<string>;
+  @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<ITreeItem>;
 
-  componentWillLoad() {
-    this.treeData = this.extractTreeData(Array.from(this.el.children), null, [0]);
-  }
+  /**
+   * Collect all descendant paths recursively
+   */
+  private collectDescendantPaths(pathStr: string, item: ITreeItem): string[] {
+    const paths: string[] = [];
 
-  componentDidLoad() {
-    this.observer = new MutationObserver(() => {
-      this.treeData = this.extractTreeData(Array.from(this.el.children), null, [0]);
-    });
-    this.observer.observe(this.el, { childList: true, subtree: true });
-  }
-
-  disconnectedCallback() {
-    if (this.observer) this.observer.disconnect();
-  }
-
-  extractTreeData(elements: Element[], parent: any = null, path: number[] = [0]): any[] {
-    const nodes = Array.from(elements)
-      .filter(el => el.tagName.toLowerCase() === 'tk-tree-item')
-      .map((el, idx) => {
-        let itemId = (el as any).itemId || el.getAttribute('item-id');
-        const label = (el as any).label || el.getAttribute('label') || '';
-        const childrenEls = Array.from(el.children);
-        const disabled = (el as any).disabled || el.getAttribute('disabled') !== null;
-
-        if (!itemId) {
-          // Generate hierarchical itemId based on position: 0, 0-0, 0-1, 0-0-0, etc.
-          const currentPath = [...path, idx];
-          itemId = currentPath.join('-');
-        }
-
-        itemId = String(itemId);
-        const node: any = {
-          itemId,
-          label,
-          parent,
-          children: [],
-          disabled,
-        };
-
-        const currentPath = [...path, idx];
-        node.children = this.extractTreeData(childrenEls, node, currentPath);
-        node.hasChildren = node.children.length > 0;
-        this.treeMap.set(itemId, node);
-        return node;
+    if (item.children && item.children.length > 0) {
+      item.children.forEach((child, index) => {
+        const childPath = `${pathStr}-${index}`;
+        paths.push(childPath);
+        paths.push(...this.collectDescendantPaths(childPath, child));
       });
-    return nodes;
-  }
-
-  private handleToggleUnified = id => {
-    const expandedIds = new Set(this.expandedIds);
-    const clickedNode = this.findNodeById(id);
-    const descendants = clickedNode ? this.collectDescendantIds(clickedNode) : [];
-
-    if (this.mode === 'stepper') {
-      const path = this.findPathToNode(id);
-      const isExpanded = expandedIds.has(id);
-
-      if (isExpanded) {
-        // Stepper: Sadece kendini ve altlarını kapat
-        expandedIds.delete(id);
-        descendants.forEach(descId => expandedIds.delete(descId));
-        if (id === this.selectedId || descendants.includes(this.selectedId)) {
-          this.selectedId = null;
-        }
-      } else {
-        // Stepper: Sadece path'i aç
-        this.expandedIds = new Set(path);
-        this.handleSelect(id);
-        return;
-      }
-    } else {
-      if (expandedIds.has(id)) {
-        // Normal: Kendini ve altlarını kapat
-        expandedIds.delete(id);
-        descendants.forEach(descId => expandedIds.delete(descId));
-        if (this.selectedId === id || descendants.includes(this.selectedId)) {
-          this.selectedId = null;
-        }
-      } else {
-        // Normal: Sadece kendini aç
-        expandedIds.add(id);
-        this.handleSelect(id);
-      }
     }
-    this.expandedIds = expandedIds;
-  };
 
-  private handleSelect = itemId => {
-    this.selectedId = itemId;
-    this.tkItemClick.emit(itemId);
-  };
-
-  /**
-   * O(1) lookup for a node by itemId using treeMap.
-   */
-  private findNodeById(itemId: string) {
-    return this.treeMap.get(itemId);
+    return paths;
   }
 
   /**
-   * Collect all descendant itemIds of a node using a stack (non-recursive).
+   * Get stepper columns for stepper mode display.
    */
-  private collectDescendantIds(node: any): string[] {
-    const ids: string[] = [];
-    const stack = [...(node.children || [])];
-    while (stack.length) {
-      const current = stack.pop();
-      ids.push(current.itemId);
-      if (current.children && current.children.length > 0) {
-        stack.push(...current.children);
-      }
-    }
-    return ids;
-  }
+  private getStepperColumns(): { items: ITreeItem[]; basePath: string }[] {
+    const columns: { items: ITreeItem[]; basePath: string }[] = [];
+    let currentLevel = this.items;
+    let currentBasePath = '';
 
-  /**
-   * Find the path from root to a node by walking up parent references.
-   * Returns an array of itemIds from root to the node.
-   */
-  private findPathToNode(itemId: string): string[] {
-    const path: string[] = [];
-    let node = this.treeMap.get(itemId);
-    while (node) {
-      path.unshift(node.itemId);
-      node = node.parent;
-    }
-    return path;
-  }
-
-  /**
-   * Stepper modunda, her seviyedeki (kolon) node'ları bulup bir dizi olarak döner.
-   * Her kolon, o seviyedeki node'ları içerir. Sadece genişletilmiş (expanded) node'ların çocukları bir sonraki kolonda gösterilir.
-   * Bu, stepper tarzı gezinme için gereklidir.
-   */
-  private getStepperColumns(): any[][] {
-    const columns: any[][] = [];
-    let currentLevel = this.treeData;
     while (currentLevel && currentLevel.length > 0) {
-      columns.push(currentLevel);
-      const expandedNode = currentLevel.find(node => this.expandedIds.has(node.itemId));
-      if (expandedNode && expandedNode.children && expandedNode.children.length > 0) {
-        currentLevel = expandedNode.children;
+      columns.push({ items: currentLevel, basePath: currentBasePath });
+
+      const expandedItem = currentLevel.find((_, index) => {
+        const itemPath = currentBasePath ? `${currentBasePath}-${index}` : `${index}`;
+        return this.expandedPaths.has(itemPath);
+      });
+
+      if (expandedItem && expandedItem.children && expandedItem.children.length > 0) {
+        const expandedIndex = currentLevel.indexOf(expandedItem);
+        currentBasePath = currentBasePath ? `${currentBasePath}-${expandedIndex}` : `${expandedIndex}`;
+        currentLevel = expandedItem.children;
       } else {
         break;
       }
     }
+
     return columns;
   }
 
-  /**
-   * Bir node'a tıklandığında çalışır. Eğer node bir dizin (klasör) ise açma/kapama işlemini tetikler,
-   * değilse (dosya ise) seçili hale getirir. Eğer tree veya node disable ise hiçbir işlem yapmaz.
-   */
-  private handleNodeClick = (node, isDirectory, isDisabled) => {
-    if (this.disabled || isDisabled) return;
-    if (isDirectory) {
-      this.handleToggleUnified(node.itemId);
+  private handleToggleUnified = (pathStr: string, item: ITreeItem) => {
+    const descendants = this.collectDescendantPaths(pathStr, item);
+
+    if (this.mode === 'stepper') {
+      // Generate ancestor paths inline: "0-1-2" -> ["0", "0-1", "0-1-2"]
+      const pathParts = pathStr.split('-');
+      const ancestors: string[] = [];
+      for (let i = 1; i <= pathParts.length; i++) {
+        ancestors.push(pathParts.slice(0, i).join('-'));
+      }
+
+      const isExpanded = this.expandedPaths.has(pathStr);
+
+      if (isExpanded) {
+        // Stepper: Close self and descendants
+        this.expandedPaths.delete(pathStr);
+        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
+          this.selectedPath = null;
+        }
+      } else {
+        // Stepper: Open path to this item
+        this.expandedPaths = new Set(ancestors);
+        this.handleSelect(pathStr, item);
+        return;
+      }
     } else {
-      this.handleSelect(node.itemId);
+      if (this.expandedPaths.has(pathStr)) {
+        // Basic: Close self and descendants
+        this.expandedPaths.delete(pathStr);
+        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
+          this.selectedPath = null;
+        }
+      } else {
+        // Basic: Open only self
+        this.expandedPaths.add(pathStr);
+        this.handleSelect(pathStr, item);
+      }
     }
   };
 
-  private renderNode = (node, depth = 0) => {
-    const isDirectory = node.hasChildren;
-    const isExpanded = this.expandedIds.has(node.itemId);
-    const isSelected = this.expandedIds.has(node.itemId) || this.selectedId === node.itemId;
-    const isDisabled = this.disabled || node.disabled;
+  private handleSelect = (pathStr: string, item: ITreeItem) => {
+    this.selectedPath = pathStr;
+    this.tkItemClick.emit(item);
+  };
+
+  /**
+   * Handle item click events.
+   */
+  private handleItemClick = (pathStr: string, item: ITreeItem, isDirectory: boolean, isDisabled: boolean) => {
+    if (this.disabled || isDisabled) return;
+    if (isDirectory) {
+      this.handleToggleUnified(pathStr, item);
+    } else {
+      this.handleSelect(pathStr, item);
+    }
+  };
+
+  private renderItem = (item: ITreeItem, basePath: string = '', index: number, depth: number = 0) => {
+    const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
+    const isDirectory = !!(item.children && item.children.length > 0);
+    const isExpanded = this.expandedPaths.has(pathStr);
+    const isSelected = this.selectedPath === pathStr;
+    const isDisabled = this.disabled || item.disabled;
+
     const nodeClass = classNames('tk-tree-view', 'node', {
       directory: isDirectory,
       file: !isDirectory,
@@ -271,43 +209,48 @@ export class TkTreeView implements ComponentInterface {
             this.size,
           )}
           onClick={() => {
-            this.handleNodeClick(node, isDirectory, isDisabled);
+            this.handleItemClick(pathStr, item, isDirectory, isDisabled);
           }}
         >
           {isDirectory
             ? [
-                this.showLeftIcon && this.mode === 'basic' && (
-                  <span class={classNames('tk-tree-view', 'directory-icon', 'material-symbols-outlined', this.size)}>
-                    {this.expandIcon == 'left' && (isExpanded ? 'arrow_drop_down' : 'arrow_right')}
-                  </span>
-                ),
-                this.showFolderIcon && <span class={classNames('tk-tree-view', 'folder-icon', 'material-symbols-outlined', this.size)}>folder</span>,
+                this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />,
+                this.branchIcon && <tk-icon icon={this.branchIcon} size={this.size} />,
               ]
-            : this.showFileIcon && <span class={classNames('tk-tree-view', 'file-icon', 'material-symbols-outlined', this.size)}>insert_drive_file</span>}
-          <span class={classNames('tk-tree-view', 'text', this.size)}>{node.label}</span>
-          {isDirectory && this.showBadge && <span class={classNames('tk-tree-view', 'badge', this.size)}>{node.children?.length ?? 0}</span>}
-          {this.showRightIcon && isDirectory && node.children && node.children.length > 0 && (
-            <span class={classNames('tk-tree-view', 'right-icon', 'material-symbols-outlined')}>
-              {this.expandIcon == 'right' && (isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right')}
-            </span>
+            : this.leafIcon && <tk-icon icon={this.leafIcon} size={this.size} />}
+          <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
+          {isDirectory && this.showBadge && (
+            <tk-badge
+              count={item.children?.length ?? 0}
+              size={this.size}
+              type={this.badgeOptions?.type ?? 'filledlight'}
+              variant={this.badgeOptions?.variant ?? 'neutral'}
+              rounded={this.badgeOptions?.rounded ?? true}
+              icon={this.badgeOptions?.icon}
+              iconPosition={this.badgeOptions?.iconPosition}
+            />
+          )}
+          {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
+            <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} size={this.size} />
           )}
         </span>
-        {this.mode == 'basic' && isDirectory && isExpanded && node.children && node.children.length > 0 && (
-          <div class={classNames('tk-tree-view', 'children')}>{node.children.map(child => this.renderNode(child, depth + 1))}</div>
+        {this.mode === 'basic' && isDirectory && isExpanded && item.children && item.children.length > 0 && (
+          <div class={classNames('tk-tree-view', 'children')}>{item.children.map((child, childIndex) => this.renderItem(child, pathStr, childIndex, depth + 1))}</div>
         )}
       </div>
     );
   };
 
   render() {
-    if (!this.treeData.length) return null;
+    if (!this.items || !this.items.length) return null;
+
     if (this.mode === 'stepper') {
       const columns = this.getStepperColumns();
       return (
         <div class={classNames('tk-tree-view', 'stepper')}>
-          {columns.map((nodes, idx) => (
+          {columns.map((column, idx) => (
             <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx}>
-              {nodes.map(node => this.renderNode(node))}
+              {column.items.map((item, itemIndex) => this.renderItem(item, column.basePath, itemIndex))}
             </div>
           ))}
         </div>
@@ -316,7 +259,7 @@ export class TkTreeView implements ComponentInterface {
       const rootClasses = classNames('tk-tree-view', this.type, { disabled: this.disabled });
       return (
         <div class={rootClasses}>
-          <div class={classNames('tk-tree-view', 'content')}>{this.treeData.map(node => this.renderNode(node))}</div>
+          <div class={classNames('tk-tree-view', 'content')}>{this.items.map((item, index) => this.renderItem(item, '', index))}</div>
         </div>
       );
     }
