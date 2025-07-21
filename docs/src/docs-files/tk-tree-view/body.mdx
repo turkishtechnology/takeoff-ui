@@ -1,42 +1,28 @@
-import TreeViewMode from './examples/TreeViewMode';
-import TreeViewType from './examples/TreeViewType';
-import TreeViewSize from './examples/TreeViewSize';
-import TreeViewIcons from './examples/TreeViewIcons';
-import TreeViewDisabled from './examples/TreeViewDisabled';
-import TreeViewDynamic from './examples/TreeViewDynamic';
+import Basic from './examples/Basic';
+import Stepper from './examples/Stepper';
+import Type from './examples/Type';
+import Size from './examples/Size';
 
-## Mode
+## Basic
 
-The `mode` prop controls the display mode of the tree view. It can be set to `basic` or `stepper`.
+The basic mode displays tree items in a traditional hierarchical structure with expandable/collapsible nodes.
 
-<TreeViewMode />
+<Basic />
+
+## Stepper Mode
+
+The stepper mode displays tree items in a step-by-step column layout, ideal for navigation and drill-down interfaces.
+
+<Stepper />
 
 ## Type
 
 The `type` prop controls the style type of the tree view. It can be set to `basic`, `divided`, or `light`.
 
-<TreeViewType />
+<Type />
 
 ## Size
 
 The `size` prop controls the size of the tree view. It can be set to `base`, `small`, or `large`.
 
-<TreeViewSize />
-
-## Icons
-
-The `showExpandIcon`, `showFolderIcon`, `showFileIcon`, and `showBadge` props control the visibility of the expand icon, folder icon, file icon, and badge.
-
-<TreeViewIcons />
-
-## Disabled
-
-The `disabled` prop controls the disabled state of the tree view.
-
-<TreeViewDisabled />
-
-## Dynamic Items
-
-You can add new items to the tree view.
-
-<TreeViewDynamic />
+<Size />

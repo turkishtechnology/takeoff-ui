@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { TkTreeView, TkTreeItem } from '@takeoff-ui/react';
+import React, { useState } from 'react';
+import { TkTreeView } from '@takeoff-ui/react';
 
 function TreeView() {
   const [items, setItems] = useState([
@@ -74,23 +74,22 @@ function TreeView() {
     ]);
   };
 
-  const renderTreeItems = (nodes: any[]) =>
-    nodes.map((node) => (
-      <TkTreeItem key={node.itemId} itemId={node.itemId} label={node.label}>
-        {node.children && node.children.length > 0
-          ? renderTreeItems(node.children)
-          : null}
-      </TkTreeItem>
-    ));
+  const handleItemClick = (event: CustomEvent) => {
+    console.log('Tree item clicked:', event.detail);
+  };
 
   return (
     <>
       <button onClick={handleAddItems} style={{ marginBottom: 16 }}>
         Add New Items
       </button>
-      <TkTreeView mode="basic" type="light" size="base" disabled={true}>
-        {renderTreeItems(items)}
-      </TkTreeView>
+      <TkTreeView
+        mode="basic"
+        type="light"
+        size="base"
+        items={items}
+        onTkItemClick={handleItemClick}
+      />
     </>
   );
 }
