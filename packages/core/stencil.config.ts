@@ -19,6 +19,7 @@ const vueComponentModels: ComponentModelConfig[] = [
       'tk-rating',
       'tk-editor',
       'tk-upload',
+      'tk-tree-view',
     ],
     event: 'tk-change',
     targetAttr: 'value',

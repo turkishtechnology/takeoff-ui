@@ -67,6 +67,16 @@ export class TkTreeView implements ComponentInterface {
   @Prop() badgeOptions?: IBadgeOptions;
 
   /**
+   * The value of the selected tree item.
+   */
+  @Prop() value?: string[];
+
+  /**
+   * If true, enables checkbox selection for tree items.
+   */
+  @Prop() selectable: boolean = false;
+
+  /**
    * Show/hide the pointer icon for selected items.
    */
   @Prop() showPointer: boolean = true;
@@ -75,6 +85,11 @@ export class TkTreeView implements ComponentInterface {
    * Event emitted when a tree item is clicked.
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<ITreeItem>;
+
+  /**
+   * Event emitted when the selected value changes.
+   */
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
   /**
    * Collect all descendant paths recursively
@@ -169,6 +184,59 @@ export class TkTreeView implements ComponentInterface {
   };
 
   /**
+   * Get all child keys recursively
+   */
+  private getAllChildKeys = (item: ITreeItem): string[] => {
+    const keys: string[] = [];
+    if (item.children && item.children.length > 0) {
+      item.children.forEach(child => {
+        keys.push(child.key);
+        keys.push(...this.getAllChildKeys(child));
+      });
+    }
+    return keys;
+  };
+
+  /**
+   * Handle checkbox change events.
+   */
+  private handleCheckboxChange = (checked: boolean, item: ITreeItem) => {
+    const childKeys = this.getAllChildKeys(item);
+
+    if (checked) {
+      // Add current item and all children
+      this.value = [...(this.value || []), item.key, ...childKeys];
+    } else {
+      // Remove current item and all children
+      this.value = this.value?.filter(key => key !== item.key && !childKeys.includes(key));
+    }
+    this.tkChange.emit(this.value);
+  };
+
+  /**
+   * Check if all child nodes are selected and return checkbox state
+   */
+  private getCheckboxState = (item: ITreeItem): { checked: boolean; indeterminate: boolean } => {
+    const isDirectlySelected = this.value?.includes(item.key) || false;
+
+    if (!item.children || item.children.length === 0) {
+      return { checked: isDirectlySelected, indeterminate: false };
+    }
+
+    const childStates = item.children.map(child => this.getCheckboxState(child));
+    const checkedChildren = childStates.filter(state => state.checked || state.indeterminate);
+    const allChecked = childStates.every(state => state.checked);
+
+    if (allChecked && checkedChildren.length === item.children.length) {
+      return { checked: true, indeterminate: false };
+    } else if (checkedChildren.length > 0) {
+      return { checked: false, indeterminate: true };
+    } else {
+      return { checked: isDirectlySelected, indeterminate: false };
+    }
+  };
+
+  /**
    * Handle item click events.
    */
   private handleItemClick = (pathStr: string, item: ITreeItem, isDirectory: boolean, isDisabled: boolean) => {
@@ -212,12 +280,20 @@ export class TkTreeView implements ComponentInterface {
             this.handleItemClick(pathStr, item, isDirectory, isDisabled);
           }}
         >
-          {isDirectory
-            ? [
-                this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />,
-                this.branchIcon && <tk-icon icon={this.branchIcon} size={this.size} />,
-              ]
-            : this.leafIcon && <tk-icon icon={this.leafIcon} size={this.size} />}
+          {isDirectory && this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />}
+          {this.selectable && (
+            <tk-checkbox
+              value={this.getCheckboxState(item).checked}
+              indeterminate={this.getCheckboxState(item).indeterminate}
+              disabled={isDisabled}
+              onTk-change={e => {
+                e.stopPropagation();
+                this.handleCheckboxChange(e.detail, item);
+              }}
+            />
+          )}
+          {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
+          {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
           <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
           {isDirectory && this.showBadge && (
             <tk-badge
