@@ -509,7 +509,7 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}
-        value={this.mode == 'chips' ? undefined : this.value}
+        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? this.getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
