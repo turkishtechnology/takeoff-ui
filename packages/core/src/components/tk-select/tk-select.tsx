@@ -402,11 +402,11 @@ export class TkSelect implements ComponentInterface {
           } else {
             found = innerOptions.find(opt => _.isEqual(opt, val));
           }
-          if (found) return found;
+          if (found !== undefined) return found;
           if (this.allowCustomValue) return val;
           return null;
         })
-        .filter(Boolean);
+        .filter(val => val !== null && val !== undefined);
       this.inputRef.value = this.selectedItem;
       return;
     }
