@@ -487,7 +487,8 @@ export class TkInput implements ComponentInterface {
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
         };
-        const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) || JSON.stringify(item) : item;
+                                       
+        const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : item;
 
         return <tk-chips {...baseProps} label={label} onTk-remove={() => this.handleChipsRemove(item)}></tk-chips>;
       });

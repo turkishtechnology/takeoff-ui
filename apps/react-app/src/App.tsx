@@ -22,7 +22,6 @@ import Alert from './components/Alert';
 import Accordion from './components/Accordion';
 import Slider from './components/Slider';
 import ZodValidation from './examples/ZodValidation';
-
 import ToggleButton from './components/ToggleButton';
 import Avatar from './components/Avatar';
 import Breadcrumb from './components/Breadcrumb';
@@ -42,6 +41,7 @@ import Stepper from './components/Stepper';
 import Toggle from './components/Toggle';
 import OrgChart from './components/OrgChart';
 import Tabs from './components/Tabs';
+import TreeView from './components/TreeView';
 
 function App() {
   return (
@@ -88,6 +88,7 @@ function App() {
         <Route path="components/tabs" element={<Tabs />} />
         <Route path="components/phone-input" element={<PhoneInput />} />
         <Route path="components/currency-input" element={<CurrencyInput />} />
+        <Route path="components/tree-view" element={<TreeView />} />
       </Routes>
     </Layout>
   );
