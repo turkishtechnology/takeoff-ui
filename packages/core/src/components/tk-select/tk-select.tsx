@@ -363,7 +363,7 @@ export class TkSelect implements ComponentInterface {
   private setValue() {
     if (!this.inputRef) return;
 
-    let innerOptions = this.isGrouped() ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
+    let innerOptions = this.isGrouped() ? this.renderOptions.flatMap(group => group[this.groupOptionsKey]) : this.renderOptions;
 
     if (this.multiple) {
       const currentValue = Array.isArray(this.value) ? this.value : [];
