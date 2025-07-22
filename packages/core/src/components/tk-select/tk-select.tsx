@@ -381,13 +381,7 @@ export class TkSelect implements ComponentInterface {
         })
         .filter(Boolean);
     } else {
-      // Tekil seçim
-      if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
-        this.selectedItem = innerOptions.find(item => item === this.value);
-        if (!this.selectedItem && this.allowCustomValue) {
-          this.selectedItem = this.value;
-        }
-      } else if (this.optionValueKey?.length > 0) {
+      if (this.optionValueKey?.length > 0) {
         this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
         if (!this.selectedItem && this.allowCustomValue) {
           this.selectedItem = this.value;
