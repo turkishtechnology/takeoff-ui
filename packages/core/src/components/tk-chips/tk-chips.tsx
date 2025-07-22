@@ -84,10 +84,10 @@ export class TkChips implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-chips', this.variant, this.size, this.disabled && 'disabled', this.type, {
+    const rootClasses = classNames('tk-chips', this.variant, this.size, this.type, {
       removable: this.removable,
+      disabled: this.disabled,
     });
-
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
     return (
       <div class={rootClasses}>
