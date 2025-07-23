@@ -76,6 +76,12 @@ export class TkPhoneInput implements ComponentInterface {
     if (!newValue.rawValue && !newValue.maskedValue) {
       this.inputValue = '';
     }
+    if (newValue) {
+      if (newValue?.country?.id) {
+        this.setSelectedCountry(newValue?.country?.id);
+      }
+      this.inputValue = this.applyMask(newValue.rawValue, this.selectedCountry.mask);
+    }
   }
 
   /**
@@ -171,7 +177,14 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentWillLoad(): void {
     this.initializeCountries();
-    this.setSelectedCountry(this.defaultCountry);
+    if (Object.keys(this.value)?.length) {
+      if (this.value?.country?.id) {
+        this.setSelectedCountry(this.value.country.id);
+      }
+      this.inputValue = this.applyMask(this?.value?.rawValue, this?.selectedCountry.mask);
+    } else {
+      this.setSelectedCountry(this.defaultCountry);
+    }
   }
 
   /**
