@@ -1,4 +1,4 @@
-import { Component, Prop, h, ComponentInterface, Element } from '@stencil/core';
+import { Component, Prop, h, ComponentInterface, Element, State } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-props';
@@ -21,6 +21,12 @@ export class TkAlert implements ComponentInterface {
   private hasFooterActionSlot: boolean = false;
 
   @Element() el: HTMLTkAlertElement;
+
+  /**
+   * Controls if radio has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
 
   /**
    * Defines the visual variant of the alert.
@@ -66,6 +72,10 @@ export class TkAlert implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() removable: boolean = false;
+
+  componentWillLoad(): void {
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
+  }
 
   private handleCloseButtonClick() {
     this.el.remove();
@@ -131,10 +141,16 @@ export class TkAlert implements ComponentInterface {
 
     return (
       <div class={rootClasses}>
-        {icon}
-        {content}
-        {this.hasRightActionSlot && <slot name="right-action"></slot>}
-        {closeButton}
+        {this.hasContentSlot ? (
+          <slot name="content" />
+        ) : (
+          <div>
+            {icon}
+            {content}
+            {this.hasRightActionSlot && <slot name="right-action"></slot>}
+            {closeButton}
+          </div>
+        )}
       </div>
     );
   }
