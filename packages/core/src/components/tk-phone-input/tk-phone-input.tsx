@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
@@ -67,11 +67,19 @@ export class TkPhoneInput implements ComponentInterface {
    * This is a list of phone input data objects.
    * It can be mutable to allow two-way binding.
    */
-  @Prop({ mutable: true }) value?: IPhoneInputValue;
+  @Prop({ mutable: true }) value?: IPhoneInputValue | any;
+  @Watch('value')
+  protected valueChanged(newValue): void {
+    if (!newValue || (typeof newValue === 'object' && Object.keys(newValue).length === 0)) {
+      this.handleFormReset();
+    }
+    if (!newValue.rawValue && !newValue.maskedValue) {
+      this.inputValue = '';
+    }
+  }
 
   /**
    * The label for the phone input.
-   * Defaults to 'Phone Number'.
    */
   @Prop() label: string;
 
@@ -180,6 +188,10 @@ export class TkPhoneInput implements ComponentInterface {
     }
   }
 
+  formResetCallback() {
+    this.handleFormReset();
+  }
+
   /**
    * Initialize the list of countries from the provided prop or fallback to internal list.
    */
@@ -267,6 +279,7 @@ export class TkPhoneInput implements ComponentInterface {
         id: this.selectedCountry.id,
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
+        mask: this.selectedCountry.mask,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -318,6 +331,7 @@ export class TkPhoneInput implements ComponentInterface {
         id: this.selectedCountry.id,
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
+        mask: currentMask,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -331,6 +345,25 @@ export class TkPhoneInput implements ComponentInterface {
   private handleInputFocus = () => {
     this.hasFocus = true;
     this.tkFocus.emit();
+  };
+
+  private handleFormReset = () => {
+    this.value = {
+      rawValue: '',
+      maskedValue: '',
+      country: {
+        id: this.selectedCountry.id,
+        label: this.selectedCountry.label,
+        dialCode: this.selectedCountry.dialCode,
+        mask: this.selectedCountry.mask,
+      },
+    } as IPhoneInputValue;
+    this.tkChange.emit(this.value);
+    this.isDropdownOpen = false;
+    this.inputValue = '';
+    this.inputRef.value = '';
+    this.searchTerm = '';
+    this.inputRef?.focus();
   };
 
   private renderLabel() {
