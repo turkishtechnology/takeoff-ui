@@ -147,10 +147,10 @@ export class TkAlert implements ComponentInterface {
           <div>
             {icon}
             {content}
-            {this.hasRightActionSlot && <slot name="right-action"></slot>}
-            {closeButton}
           </div>
         )}
+        {this.hasRightActionSlot && <slot name="right-action"></slot>}
+        {closeButton}
       </div>
     );
   }
