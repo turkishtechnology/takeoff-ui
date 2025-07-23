@@ -7,21 +7,21 @@ const Content = () => {
   variant="warning"
   type="outlined"
 >
-  <div slot=content>...</div>
+  <div slot="content">...</div>
 </tkAlert>`;
 
   const vueCode = `<TkAlert
   variant="warning"
   type="outlined"
 >
-  <div slot=content>...</div>
+  <div slot="content">...</div>
 </tkAlert>`;
 
   const angularCode = `<tk-alert
   variant="warning"
   type="outlined"
 >
-  <div slot=content>...</div>
+  <div slot="content">...</div>
 </tk-alert>
 `;
 
