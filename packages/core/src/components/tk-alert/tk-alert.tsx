@@ -23,7 +23,7 @@ export class TkAlert implements ComponentInterface {
   @Element() el: HTMLTkAlertElement;
 
   /**
-   * Controls if radio has custom content.
+   * Controls if alert has custom content.
    * @defaultValue false
    */
   @State() hasContentSlot: boolean = false;
