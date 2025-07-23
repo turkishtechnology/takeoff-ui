@@ -394,19 +394,20 @@ export class TkSelect implements ComponentInterface {
       // Ensure value is always an array
       const currentValue = Array.isArray(this.value) ? this.value : [];
 
-      // If custom values are not allowed, validate against available options
-      if (!this.allowCustomValue && innerOptions?.length > 0) {
-        const validValues = currentValue.filter(val => innerOptions.some(opt => _.isEqual(this.getOptionValue(opt), val)));
-
-        // Update value if invalid options were filtered out
-        if (!_.isEqual(validValues, currentValue)) {
-          this.value = validValues;
-          this.inputRef.value = validValues;
-          return;
-        }
-      }
-
-      this.inputRef.value = currentValue;
+      this.selectedItem = currentValue
+        .map(val => {
+          let found;
+          if (this.optionValueKey) {
+            found = innerOptions.find(opt => this.getOptionValue(opt) === val);
+          } else {
+            found = innerOptions.find(opt => _.isEqual(opt, val));
+          }
+          if (found !== undefined) return found;
+          if (this.allowCustomValue) return val;
+          return null;
+        })
+        .filter(val => val !== null && val !== undefined);
+      this.inputRef.value = this.selectedItem;
       return;
     }
 
@@ -431,7 +432,7 @@ export class TkSelect implements ComponentInterface {
 
     // Set input value based on selection state
     if (this.selectedItem) {
-      this.inputRef.value = this.getOptionLabel(this.selectedItem);
+      this.inputRef.value = this.selectedItem;
     } else {
       this.inputRef.value = null;
     }
@@ -513,7 +514,13 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        this.value = [...value];
+        const resolvedValues = (Array.isArray(value) ? value : [value]).map(val => {
+          if (typeof val === 'object' && val !== null && this.optionValueKey) {
+            return this.getOptionValue(val);
+          }
+          return val;
+        });
+        this.value = resolvedValues;
       }
       this.tkChange.emit(this.value);
     } else {
