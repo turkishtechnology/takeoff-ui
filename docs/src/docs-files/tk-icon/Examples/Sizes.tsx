@@ -6,6 +6,7 @@ const Sizes = () => {
   const reactCode = `// Standard Icons
 <TkIcon icon="flight" size="small" />
 <TkIcon icon="flight" size="base" />
+<TkIcon icon="flight" size="medium" />
 <TkIcon icon="flight" size="large" />
 <TkIcon icon="flight" size="xlarge" />
 <TkIcon icon="flight" size="xxlarge" />
@@ -13,6 +14,7 @@ const Sizes = () => {
 // Sign icons
 <TkIcon icon="flight" sign size="small" />
 <TkIcon icon="flight" sign size="base" />
+<TkIcon icon="flight" sign size="medium" />
 <TkIcon icon="flight" sign size="large" />
 <TkIcon icon="flight" sign size="xlarge" />
 <TkIcon icon="flight" sign size="xxlarge" />`;
@@ -20,12 +22,14 @@ const Sizes = () => {
   const vueCode = `// Standard Icons
 <TkIcon icon="flight" size="small" />
 <TkIcon icon="flight" size="base" />
+<TkIcon icon="flight" size="medium" />
 <TkIcon icon="flight" size="large" />
 <TkIcon icon="flight" size="xlarge" />
 <TkIcon icon="flight" size="xxlarge" />
 
 // Sign icons
 <TkIcon icon="flight" sign size="small" />
+<TkIcon icon="flight" sign size="base" />
 <TkIcon icon="flight" sign size="base" />
 <TkIcon icon="flight" sign size="large" />
 <TkIcon icon="flight" sign size="xlarge" />
@@ -34,6 +38,7 @@ const Sizes = () => {
   const angularCode = `<!-- Standard Icons -->
 <tk-icon icon="flight" size="small" />
 <tk-icon icon="flight" size="base" />
+<tk-icon icon="flight" size="medium" />
 <tk-icon icon="flight" size="large" />
 <tk-icon icon="flight" size="xlarge" />
 <tk-icon icon="flight" size="xxlarge" />
@@ -41,6 +46,7 @@ const Sizes = () => {
 <!-- Sign icons -->
 <tk-icon icon="flight" sign size="small" />
 <tk-icon icon="flight" sign size="base" />
+<tk-icon icon="flight" sign size="medium" />
 <tk-icon icon="flight" sign size="large" />
 <tk-icon icon="flight" sign size="xlarge" />
 <tk-icon icon="flight" sign size="xxlarge" />`;
@@ -57,6 +63,10 @@ const Sizes = () => {
           <div className="flex flex-col items-center">
             <TkIcon icon="flight" size="base" />
             <span className="text-xs mt-2">base</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <TkIcon icon="flight" size="medium" />
+            <span className="text-xs mt-2">medium</span>
           </div>
           <div className="flex flex-col items-center">
             <TkIcon icon="flight" size="large" />
@@ -82,6 +92,10 @@ const Sizes = () => {
           <div className="flex flex-col items-center">
             <TkIcon icon="flight" sign size="base" />
             <span className="text-xs mt-2">base</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <TkIcon icon="flight" sign size="medium" />
+            <span className="text-xs mt-2">medium</span>
           </div>
           <div className="flex flex-col items-center">
             <TkIcon icon="flight" sign size="large" />
