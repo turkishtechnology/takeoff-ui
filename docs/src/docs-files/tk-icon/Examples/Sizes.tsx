@@ -30,7 +30,7 @@ const Sizes = () => {
 // Sign icons
 <TkIcon icon="flight" sign size="small" />
 <TkIcon icon="flight" sign size="base" />
-<TkIcon icon="flight" sign size="base" />
+<TkIcon icon="flight" sign size="medium" />
 <TkIcon icon="flight" sign size="large" />
 <TkIcon icon="flight" sign size="xlarge" />
 <TkIcon icon="flight" sign size="xxlarge" />`;
