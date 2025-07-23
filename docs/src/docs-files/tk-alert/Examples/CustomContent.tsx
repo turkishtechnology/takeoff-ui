@@ -8,14 +8,14 @@ const Content = () => {
   type="outlined"
 >
   <div slot="content">...</div>
-</tkAlert>`;
+</TkAlert>`;
 
   const vueCode = `<TkAlert
   variant="warning"
   type="outlined"
 >
   <div slot="content">...</div>
-</tkAlert>`;
+</TkAlert>`;
 
   const angularCode = `<tk-alert
   variant="warning"
