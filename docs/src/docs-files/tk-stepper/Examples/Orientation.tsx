@@ -3,9 +3,7 @@ import { TkStepper, TkStep, TkRadio, TkRadioGroup } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Orientation = () => {
-  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>(
-    'vertical',
-  );
+  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('vertical');
   const orientations = [
     { label: 'Vertical', value: 'vertical' },
     { label: 'Horizontal', value: 'horizontal' },
@@ -13,7 +11,7 @@ const Orientation = () => {
   const [reactCodeSample, setReactCodeSample] = useState('');
   const [vueCodeSample, setVueCodeSample] = useState('');
 
-  const handleOrientationChange = (event) => {
+  const handleOrientationChange = event => {
     setOrientation(event.detail);
   };
 
@@ -53,42 +51,21 @@ const handleOrientationChange = (event) => {
       <div style={{ overflow: 'overlay' }} className="mb-4">
         <TkRadioGroup value={orientation} onTkChange={handleOrientationChange}>
           {orientations.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
 
       <TkStepper orientation={orientation}>
-        <TkStep
-          header="General Information"
-          subheader="Basic campaign details"
-          complete
-        />
-        <TkStep
-          header="Category Details"
-          subheader="Campaign categorization"
-          complete
-        />
-        <TkStep
-          header="Communication"
-          subheader="Communication strategies"
-          isActive
-        />
+        <TkStep header="General Information" subheader="Basic campaign details" complete />
+        <TkStep header="Category Details" subheader="Campaign categorization" complete />
+        <TkStep header="Communication" subheader="Communication strategies" isActive />
         <TkStep header="Summary" subheader="Campaign overview" />
       </TkStepper>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCodeSample} vueCode={vueCodeSample} angularCode={''} />;
 };
 
 export default Orientation;

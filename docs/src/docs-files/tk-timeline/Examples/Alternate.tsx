@@ -25,12 +25,7 @@ const Alternate = () => {
   const demo = (
     <>
       <div className="mb-4 flex gap-2 flex-wrap w-full">
-        <TkCheckbox
-          name="alternate"
-          value={alternate}
-          onTkChange={() => setAlternate((prevState) => !prevState)}
-          label="Alternate"
-        />
+        <TkCheckbox name="alternate" value={alternate} onTkChange={() => setAlternate(prevState => !prevState)} label="Alternate" />
       </div>
       <div className="pb-6">
         <TkTimeline items={items} alternate={alternate} />
@@ -38,14 +33,7 @@ const Alternate = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Alternate;

@@ -3,9 +3,7 @@ import { TkBreadcrumb, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Separator = () => {
-  const [separator, setSeparator] = React.useState<
-    'icon' | 'dot' | 'slash' | 'vertical'
-  >('icon');
+  const [separator, setSeparator] = React.useState<'icon' | 'dot' | 'slash' | 'vertical'>('icon');
   const items = [
     { label: 'Home', href: '/', isExternal: true },
     { label: 'Library', href: '/library', isExternal: true },
@@ -48,14 +46,9 @@ const separator = ref('${separator}');
 
   const demo = (
     <div style={{ overflow: 'overlay' }}>
-      <TkRadioGroup
-        value={separator}
-        onTkChange={(e) => setSeparator(e.detail)}
-      >
+      <TkRadioGroup value={separator} onTkChange={e => setSeparator(e.detail)}>
         {separatorOptions.map((radio, index) => {
-          return (
-            <TkRadio label={radio.label} key={index} value={radio.value} />
-          );
+          return <TkRadio label={radio.label} key={index} value={radio.value} />;
         })}
       </TkRadioGroup>
       <br />
@@ -65,12 +58,7 @@ const separator = ref('${separator}');
 
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

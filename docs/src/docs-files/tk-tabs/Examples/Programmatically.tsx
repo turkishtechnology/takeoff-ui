@@ -46,7 +46,7 @@ const Programmatically = () => {
       </div>
       <TkTabs
         activeIndex={activeTabIndex}
-        onTkTabChange={(e) => setActiveTabIndex(e.detail)}
+        onTkTabChange={e => setActiveTabIndex(e.detail)}
         contentStyle={{
           color: 'var(--text-dark)',
           fontSize: 'var(--desktop-body-s-size)',
@@ -54,40 +54,27 @@ const Programmatically = () => {
       >
         <TkTabsItem label="First Tab" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 1
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 1
           </p>
         </TkTabsItem>
         <TkTabsItem label="Second Tab" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 2
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 2
           </p>
         </TkTabsItem>
         <TkTabsItem label="Third Tab" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 3
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 3
           </p>
         </TkTabsItem>
       </TkTabs>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''} />;
 };
 
 export default Programmatically;

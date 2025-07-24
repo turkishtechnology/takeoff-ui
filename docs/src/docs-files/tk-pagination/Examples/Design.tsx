@@ -28,11 +28,9 @@ const Design = () => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }}>
-        <TkRadioGroup value={type} onTkChange={(e) => setType(e.detail)}>
+        <TkRadioGroup value={type} onTkChange={e => setType(e.detail)}>
           {radioModels.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -41,14 +39,7 @@ const Design = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Design;

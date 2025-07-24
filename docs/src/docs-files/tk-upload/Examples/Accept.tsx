@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Example = () => {
-  const handleFilesAccepted = (e) => {
+  const handleFilesAccepted = e => {
     createToast({
       header: 'Dosya eklendi',
       message: `${e.detail.length} dosya eklendi`,
@@ -15,10 +15,8 @@ const Example = () => {
     });
   };
 
-  const handleFilesRejected = (e) => {
-    let errorMessage = e.detail
-      ?.map((item) => item.reason + ' ' + item.file.name)
-      .join('\n');
+  const handleFilesRejected = e => {
+    let errorMessage = e.detail?.map(item => item.reason + ' ' + item.file.name).join('\n');
 
     createToast({
       header: `${e.detail.length} dosya eklenemedi!`,
@@ -32,12 +30,7 @@ const Example = () => {
 
   return (
     <>
-      <TkUpload
-        accept="image/png"
-        multiple
-        onTkChange={handleFilesAccepted}
-        onTkFilesRejected={handleFilesRejected}
-      ></TkUpload>
+      <TkUpload accept="image/png" multiple onTkChange={handleFilesAccepted} onTkFilesRejected={handleFilesRejected}></TkUpload>
     </>
   );
 };
@@ -114,14 +107,7 @@ const handleFilesRejected = (e) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Accept;

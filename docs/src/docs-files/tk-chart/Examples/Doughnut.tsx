@@ -8,14 +8,7 @@ const data = {
     {
       label: 'My First dataset',
       data: [1, 10, 5, 2, 20, 32],
-      backgroundColor: [
-        '#F5F9FF',
-        '#D0E1FD',
-        '#ABC9FB',
-        '#3B82F6',
-        '#295BAC',
-        '#204887',
-      ],
+      backgroundColor: ['#F5F9FF', '#D0E1FD', '#ABC9FB', '#3B82F6', '#295BAC', '#204887'],
     },
   ],
 };
@@ -121,14 +114,7 @@ const options = {
       <TkChart width="450px" type="doughnut" data={data} options={options} />
     </div>
   );
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Doughnut;

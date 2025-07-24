@@ -30,7 +30,7 @@ const Example = () => {
   return (
     <div className="p-2">
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup value={mode} onTkChange={(e) => setMode(e.detail)}>
+        <TkRadioGroup value={mode} onTkChange={e => setMode(e.detail)}>
           <TkRadio label="Checkbox" value="checkbox" />
           <TkRadio label="Radio" value="radio" />
         </TkRadioGroup>
@@ -40,10 +40,8 @@ const Example = () => {
         data={basicData}
         dataKey="id"
         selectionMode={mode}
-        selectionRowDisabled={(row) => row.id === 'zz21cz3c1'}
-        onTkSelectionChange={(e: CustomEvent) =>
-          setSelectionList({ ...e.detail })
-        }
+        selectionRowDisabled={row => row.id === 'zz21cz3c1'}
+        onTkSelectionChange={(e: CustomEvent) => setSelectionList({ ...e.detail })}
       />
       <p>{JSON.stringify(selectionList)}</p>
     </div>
@@ -124,14 +122,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default HeadStyle;

@@ -60,13 +60,9 @@ const Customization = () => {
           <div className="custom-content">
             <h3>Custom Title</h3>
             <div className="flex gap-2 items-center">
-              <img
-                src="https://flagpedia.net/data/flags/h24/tr.webp"
-                alt="Custom image"
-              />
+              <img src="https://flagpedia.net/data/flags/h24/tr.webp" alt="Custom image" />
               <span>
-                Custom description with <strong>HTML</strong> and{' '}
-                <strong>Image</strong>.
+                Custom description with <strong>HTML</strong> and <strong>Image</strong>.
               </span>
             </div>
           </div>
@@ -106,14 +102,7 @@ const Customization = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Customization;

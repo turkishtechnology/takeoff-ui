@@ -39,29 +39,13 @@ const Example = () => {
 
   return (
     <>
-      <TkButton
-        icon="north_west"
-        variant="success"
-        onTkClick={() => handleCreateToast('top-left', 'success')}
-      />
+      <TkButton icon="north_west" variant="success" onTkClick={() => handleCreateToast('top-left', 'success')} />
       &nbsp;
-      <TkButton
-        icon="north_east"
-        variant="info"
-        onTkClick={() => handleCreateToast('top-right', 'info')}
-      />
+      <TkButton icon="north_east" variant="info" onTkClick={() => handleCreateToast('top-right', 'info')} />
       &nbsp;
-      <TkButton
-        icon="south_west"
-        variant="warning"
-        onTkClick={() => handleCreateToast('bottom-left', 'warning')}
-      />
+      <TkButton icon="south_west" variant="warning" onTkClick={() => handleCreateToast('bottom-left', 'warning')} />
       &nbsp;
-      <TkButton
-        icon="south_east"
-        variant="danger"
-        onTkClick={() => handleCreateToast('bottom-right', 'danger')}
-      />
+      <TkButton icon="south_east" variant="danger" onTkClick={() => handleCreateToast('bottom-right', 'danger')} />
     </>
   );
 };
@@ -245,14 +229,7 @@ import { createToast } from '@takeoff-ui/core';
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Toaster;

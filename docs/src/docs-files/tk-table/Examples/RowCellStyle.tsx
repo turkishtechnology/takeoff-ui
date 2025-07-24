@@ -34,7 +34,7 @@ const Example = () => {
             return { background: 'var(--primary-base)', color: 'white' };
           }
         }}
-        rowStyle={(row) => {
+        rowStyle={row => {
           if (row.quantity > 30) {
             return {
               background: 'var(--states-success-sub-base)',
@@ -168,14 +168,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default RowCellStyle;

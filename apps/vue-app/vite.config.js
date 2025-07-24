@@ -10,7 +10,7 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // treat all tags with a dash as custom elements
-          isCustomElement: (tag) => tag.includes('tk-'),
+          isCustomElement: tag => tag.includes('tk-'),
         },
       },
     }),

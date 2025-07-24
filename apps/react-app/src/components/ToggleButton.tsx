@@ -19,12 +19,12 @@ function ToggleButton() {
         direction="horizontal"
         type="basic"
         value={groupValue}
-        onTkChange={(e) => {
+        onTkChange={e => {
           console.log('e', e);
           setGroupValue(e.detail);
         }}
       >
-        {options.map((opt) => (
+        {options.map(opt => (
           <TkToggleButton
             icon={{ name: 'bolt', fill: true }}
             iconPosition="right"
@@ -37,9 +37,7 @@ function ToggleButton() {
           />
         ))}
       </TkToggleButtonGroup>
-      <div style={{ marginTop: 16, fontWeight: 'bold' }}>
-        Selected value: {groupValue}
-      </div>
+      <div style={{ marginTop: 16, fontWeight: 'bold' }}>Selected value: {groupValue}</div>
     </div>
   );
 }

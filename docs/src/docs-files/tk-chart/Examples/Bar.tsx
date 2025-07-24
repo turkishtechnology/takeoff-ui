@@ -145,14 +145,7 @@ const options = {
       <TkChart type="bar" data={data} options={options} />
     </div>
   );
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Bar;

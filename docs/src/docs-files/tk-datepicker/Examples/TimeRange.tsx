@@ -8,7 +8,7 @@ const TimeRange = () => {
     end: '2024-02-10 17:30',
   });
 
-  const handleDateChange = (event) => {
+  const handleDateChange = event => {
     setDateTimeRange(event.detail);
   };
 
@@ -54,14 +54,7 @@ const TimeRange = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''} />;
 };
 
 export default TimeRange;

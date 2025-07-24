@@ -11,7 +11,7 @@ const Basic = () => {
       max={100}
       label="Basic Slider"
       value={value}
-      onTkChange={(e) => {
+      onTkChange={e => {
         if (typeof e.detail === 'number') {
           setValue(e.detail);
         }
@@ -40,14 +40,7 @@ const Basic = () => {
   [value]="30">
 </tk-slider>`;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Basic;

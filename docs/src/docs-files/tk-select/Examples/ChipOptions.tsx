@@ -39,7 +39,7 @@ const ChipOptions = () => {
         options={['Apple', 'Banana', 'Cherry']}
         multiple
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
         chipOptions={{
           icon: 'star',
           type: 'outlined',
@@ -50,14 +50,7 @@ const ChipOptions = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default ChipOptions;

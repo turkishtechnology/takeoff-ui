@@ -3,9 +3,7 @@ import { TkCard, TkCheckbox, TkRadio, TkRadioGroup } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const CardWithHeaderMode = () => {
-  const [headerType, setHeaderType] = useState<
-    'basic' | 'divided' | 'light' | 'dark' | 'primary'
-  >('basic');
+  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
   const [showAvatar, setShowAvatar] = useState(false);
   const [showMenuButton, setShowMenuButton] = useState(false);
   const [codeSampleReact, setCodeSampleReact] = useState('');
@@ -20,15 +18,13 @@ const CardWithHeaderMode = () => {
     { label: 'Primary', value: 'primary' },
   ];
 
-  const handleHeaderTypeChange = (event) => {
+  const handleHeaderTypeChange = event => {
     setHeaderType(event.detail);
   };
 
   useEffect(() => {
     const attributesList = [
-      `header="${
-        headerType.charAt(0).toUpperCase() + headerType.slice(1)
-      } Header"`,
+      `header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"`,
       `subheader="Interactive Example"`,
       `headerType="${headerType}"`,
       showAvatar ? 'showAvatar' : '',
@@ -56,57 +52,28 @@ const CardWithHeaderMode = () => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup
-          label="Options"
-          value={headerType}
-          onTkChange={handleHeaderTypeChange}
-        >
+        <TkRadioGroup label="Options" value={headerType} onTkChange={handleHeaderTypeChange}>
           {headerTypes.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
       <div className="mb-4 flex gap-2 flex-wrap w-full">
-        <TkCheckbox
-          name="showAvatar"
-          value={showAvatar}
-          onTkChange={() => setShowAvatar((prevState) => !prevState)}
-          label="Avatar"
-        />
-        <TkCheckbox
-          name="showMenuButton"
-          value={showMenuButton}
-          onTkChange={() => setShowMenuButton((prevState) => !prevState)}
-          label="Menu Button"
-        />
+        <TkCheckbox name="showAvatar" value={showAvatar} onTkChange={() => setShowAvatar(prevState => !prevState)} label="Avatar" />
+        <TkCheckbox name="showMenuButton" value={showMenuButton} onTkChange={() => setShowMenuButton(prevState => !prevState)} label="Menu Button" />
       </div>
       <TkCard
-        header={`${
-          headerType.charAt(0).toUpperCase() + headerType.slice(1)
-        } Header`}
+        header={`${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header`}
         subheader="Interactive Example"
         headerType={headerType as any}
         showAvatar={showAvatar}
         showMenuButton={showMenuButton}
       >
-        <p>
-          This card demonstrates different header options. Use the controls
-          above to change the header type and toggle avatar and menu button
-          visibility.
-        </p>
+        <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
       </TkCard>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={codeSampleAngular}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={codeSampleAngular}></FeatureDemo>;
 };
 export default CardWithHeaderMode;

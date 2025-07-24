@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Example = () => {
-  const handleFilesAccepted = (e) => {
+  const handleFilesAccepted = e => {
     createToast({
       header: 'Dosya eklendi',
       message: `${e.detail.length} dosya eklendi`,
@@ -15,7 +15,7 @@ const Example = () => {
     });
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = e => {
     console.log(e.detail);
     createToast({
       header: 'Dosya yüklendi',
@@ -27,12 +27,7 @@ const Example = () => {
     });
   };
 
-  return (
-    <TkUpload
-      onTkChange={handleFilesAccepted}
-      onTkUpload={handleUpload}
-    ></TkUpload>
-  );
+  return <TkUpload onTkChange={handleFilesAccepted} onTkUpload={handleUpload}></TkUpload>;
 };
 const Basic = () => {
   const reactCode = `const handleFilesAccepted = (e) => {
@@ -105,14 +100,7 @@ const handleFilesRejected = (e) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

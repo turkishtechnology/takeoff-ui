@@ -67,7 +67,7 @@ const CustomItem = () => {
           { code: 'ESB', name: 'Esenboğa Havalimanı', country: 'Ankara' },
           { code: 'AYT', name: 'Antalya Havalimanı', country: 'Antalya' },
         ]}
-        optionHtml={(item) => {
+        optionHtml={item => {
           return `<div style="display: flex; flex-direction: column;">
                       <div style="displaY: flex;justify-content: space-between;">
                           <div style="font-weight: bold;">${item.name}</div>
@@ -77,19 +77,12 @@ const CustomItem = () => {
                   </div>`;
         }}
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
       />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default CustomItem;

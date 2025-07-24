@@ -6,11 +6,11 @@ const DisabledWeekDays = () => {
   const [selectedDate1, setSelectedDate1] = useState('');
   const [selectedDate2, setSelectedDate2] = useState('');
 
-  const handleDateChange1 = (event) => {
+  const handleDateChange1 = event => {
     setSelectedDate1(event.detail);
   };
 
-  const handleDateChange2 = (event) => {
+  const handleDateChange2 = event => {
     setSelectedDate2(event.detail);
   };
 
@@ -93,14 +93,7 @@ const weekdays = [1, 2, 3, 4, 5]; // 1 is Monday, 5 is Friday
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default DisabledWeekDays;

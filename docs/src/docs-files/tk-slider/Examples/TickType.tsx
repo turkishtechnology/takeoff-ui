@@ -37,7 +37,7 @@ const TickType = () => {
 
   const demo = (
     <>
-      <TkRadioGroup value={type} onTkChange={(e) => setType(e.detail)}>
+      <TkRadioGroup value={type} onTkChange={e => setType(e.detail)}>
         {typeOptions.map((opt, i) => (
           <TkRadio key={i} label={opt.label} value={opt.value} />
         ))}
@@ -50,7 +50,7 @@ const TickType = () => {
         label="Slider"
         type={type}
         value={value}
-        onTkChange={(e) => {
+        onTkChange={e => {
           if (typeof e.detail === 'number') {
             setValue(e.detail);
           }
@@ -59,14 +59,7 @@ const TickType = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default TickType;

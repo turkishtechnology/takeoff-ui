@@ -15,35 +15,16 @@ const Example = () => {
   return (
     <>
       <div className="flex gap-2 flex-wrap justify-center">
-        <TkButton
-          icon="keyboard_arrow_down"
-          onTkClick={() => handleClick('top')}
-        />
-        <TkButton
-          icon="keyboard_arrow_left"
-          onTkClick={() => handleClick('right')}
-        />
-        <TkButton
-          icon="keyboard_arrow_up"
-          onTkClick={() => handleClick('bottom')}
-        />
-        <TkButton
-          icon="keyboard_arrow_right"
-          onTkClick={() => handleClick('left')}
-        />
+        <TkButton icon="keyboard_arrow_down" onTkClick={() => handleClick('top')} />
+        <TkButton icon="keyboard_arrow_left" onTkClick={() => handleClick('right')} />
+        <TkButton icon="keyboard_arrow_up" onTkClick={() => handleClick('bottom')} />
+        <TkButton icon="keyboard_arrow_right" onTkClick={() => handleClick('left')} />
       </div>
-      <TkDrawer
-        header="Header Text"
-        open={showDrawer}
-        position={position}
-        onTkDrawerClose={() => setShowDrawer(false)}
-      >
+      <TkDrawer header="Header Text" open={showDrawer} position={position} onTkDrawerClose={() => setShowDrawer(false)}>
         <div slot="content">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate neque quas!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
           </p>
         </div>
       </TkDrawer>
@@ -111,14 +92,7 @@ const handleClick = (positionValue) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Position;

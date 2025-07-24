@@ -27,11 +27,7 @@ const Example = () => {
   return (
     <div className="p-2">
       <div className="flex items-center">
-        <TkCheckbox
-          onTkChange={() => setStripe(!striped)}
-          label="striped"
-          value={striped}
-        />
+        <TkCheckbox onTkChange={() => setStripe(!striped)} label="striped" value={striped} />
       </div>
       <TkTable columns={column} data={basicData} striped={striped} />
     </div>
@@ -60,14 +56,7 @@ const Striped = () => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Striped;

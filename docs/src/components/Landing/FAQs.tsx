@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  TkTabs,
-  TkTabsItem,
-  TkAccordion,
-  TkAccordionItem,
-} from '@takeoff-ui/react';
+import { TkTabs, TkTabsItem, TkAccordion, TkAccordionItem } from '@takeoff-ui/react';
 
 export default function Contributors() {
   return (
@@ -12,10 +7,8 @@ export default function Contributors() {
       <div className="container">
         <h1>FAQs</h1>
         <p style={{ color: 'var(--text-base)' }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
-          similique laborum sint quibusdam, quisquam aperiam ducimus dolore
-          doloribus, tempora ullam minus odit officia error voluptatibus
-          eveniet, necessitatibus numquam. Itaque, natus.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos similique laborum sint quibusdam, quisquam aperiam ducimus dolore doloribus, tempora ullam minus odit
+          officia error voluptatibus eveniet, necessitatibus numquam. Itaque, natus.
         </p>
         <TkTabs type="compact" size="large" spreadHeaders>
           <TkTabsItem label="installation" icon="download">

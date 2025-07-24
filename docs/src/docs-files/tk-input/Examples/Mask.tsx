@@ -136,7 +136,7 @@ const value4 = ref();
           datePattern: ['d', 'm', 'Y'],
         }}
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
       />
 
       <TkInput
@@ -147,7 +147,7 @@ const value4 = ref();
           datePattern: ['m', 'y'],
         }}
         value={value1}
-        onTkChange={(e) => setValue1(e.detail)}
+        onTkChange={e => setValue1(e.detail)}
       />
 
       <TkInput
@@ -158,7 +158,7 @@ const value4 = ref();
           timePattern: ['h', 'm'],
         }}
         value={value2}
-        onTkChange={(e) => setValue2(e.detail)}
+        onTkChange={e => setValue2(e.detail)}
       />
 
       <TkInput
@@ -169,7 +169,7 @@ const value4 = ref();
           numericOnly: true,
         }}
         value={value3}
-        onTkChange={(e) => setValue3(e.detail)}
+        onTkChange={e => setValue3(e.detail)}
       />
 
       <TkInput
@@ -180,21 +180,14 @@ const value4 = ref();
           letterOnly: true,
         }}
         value={value4}
-        onTkChange={(e) => {
+        onTkChange={e => {
           setValue4(e.detail);
         }}
       />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Mask;

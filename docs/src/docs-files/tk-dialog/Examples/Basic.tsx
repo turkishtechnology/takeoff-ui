@@ -12,18 +12,10 @@ const Example = () => {
   return (
     <>
       <TkButton label="Open Dialog" onTkClick={handleClick} />
-      <TkDialog
-        header="Welcome"
-        subheader="Basic Dialog Example"
-        visible={showDialog}
-        onTkVisibleChange={(e) => setShowDialog(e.detail)}
-        containerStyle={{ width: '450px' }}
-      >
+      <TkDialog header="Welcome" subheader="Basic Dialog Example" visible={showDialog} onTkVisibleChange={e => setShowDialog(e.detail)} containerStyle={{ width: '450px' }}>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+          nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
         </p>
       </TkDialog>
     </>
@@ -92,14 +84,7 @@ const handleClick = () => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

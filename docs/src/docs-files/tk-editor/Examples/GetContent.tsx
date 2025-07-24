@@ -5,9 +5,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 const GetContent = () => {
   const editorRef = useRef<HTMLTkEditorElement>(null);
   const [outputContent, setOutputContent] = useState('');
-  const [outputFormat, setOutputFormat] = useState<'html' | 'text' | 'json'>(
-    'html',
-  );
+  const [outputFormat, setOutputFormat] = useState<'html' | 'text' | 'json'>('html');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
 
@@ -25,7 +23,7 @@ const GetContent = () => {
     { label: 'JSON', value: 'json' },
   ];
 
-  const handleFormatChange = (event) => {
+  const handleFormatChange = event => {
     setOutputFormat(event.detail);
     setOutputContent('');
   };
@@ -33,11 +31,7 @@ const GetContent = () => {
   const handleGetContent = async () => {
     if (editorRef.current) {
       const content = await editorRef.current.getContent(outputFormat);
-      setOutputContent(
-        typeof content === 'string'
-          ? content
-          : JSON.stringify(content, null, 2),
-      );
+      setOutputContent(typeof content === 'string' ? content : JSON.stringify(content, null, 2));
     }
   };
 
@@ -80,40 +74,23 @@ console.log(content);
     <div className="flex flex-col gap-4">
       <TkEditor ref={editorRef} value={initialContent} />
       <div className="flex flex-col gap-4">
-        <TkRadioGroup
-          label="Output Format"
-          value={outputFormat}
-          onTkChange={handleFormatChange}
-        >
+        <TkRadioGroup label="Output Format" value={outputFormat} onTkChange={handleFormatChange}>
           {formatTypes.map((format, index) => (
             <TkRadio key={index} label={format.label} value={format.value} />
           ))}
         </TkRadioGroup>
-        <TkButton
-          label="Get Content"
-          variant="primary"
-          onTkClick={handleGetContent}
-        />
+        <TkButton label="Get Content" variant="primary" onTkClick={handleGetContent} />
       </div>
       {outputContent && (
         <div className="mt-4">
           <div className="font-medium mb-2">Output ({outputFormat}):</div>
-          <pre className="bg-gray-100 p-4 rounded overflow-auto max-h-[300px]">
-            {outputContent}
-          </pre>
+          <pre className="bg-gray-100 p-4 rounded overflow-auto max-h-[300px]">{outputContent}</pre>
         </div>
       )}
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''} />;
 };
 
 export default GetContent;

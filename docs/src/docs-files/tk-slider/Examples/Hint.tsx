@@ -24,7 +24,7 @@ const Hint = () => {
       label="Slider with Hint"
       hint="This is a hint"
       value={value}
-      onTkChange={(e) => {
+      onTkChange={e => {
         if (typeof e.detail === 'number') {
           setValue(e.detail);
         }
@@ -32,14 +32,7 @@ const Hint = () => {
     />
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Hint;

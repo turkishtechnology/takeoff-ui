@@ -57,7 +57,7 @@ function TreeView() {
   // Function to append new items
   const handleAddItems = () => {
     console.log('Adding new items');
-    setItems((prev) => [
+    setItems(prev => [
       ...prev,
       {
         itemId: '20',
@@ -83,13 +83,7 @@ function TreeView() {
       <button onClick={handleAddItems} style={{ marginBottom: 16 }}>
         Add New Items
       </button>
-      <TkTreeView
-        mode="basic"
-        type="light"
-        size="base"
-        items={items}
-        onTkItemClick={handleItemClick}
-      />
+      <TkTreeView mode="basic" type="light" size="base" items={items} onTkItemClick={handleItemClick} />
     </>
   );
 }

@@ -44,35 +44,13 @@ const Size = () => {
 
   const demo = (
     <div className="flex justify-center flex-wrap items-end gap-2">
-      <TkInput
-        label="Small Input"
-        size="small"
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-      />
-      <TkInput
-        label="Base Input"
-        size="base"
-        value={value1}
-        onTkChange={(e) => setValue1(e.detail)}
-      />
-      <TkInput
-        label="Large Input"
-        size="large"
-        value={value2}
-        onTkChange={(e) => setValue2(e.detail)}
-      />
+      <TkInput label="Small Input" size="small" value={value} onTkChange={e => setValue(e.detail)} />
+      <TkInput label="Base Input" size="base" value={value1} onTkChange={e => setValue1(e.detail)} />
+      <TkInput label="Large Input" size="large" value={value2} onTkChange={e => setValue2(e.detail)} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Size;

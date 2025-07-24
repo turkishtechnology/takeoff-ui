@@ -3,13 +3,7 @@ import { TkChips } from '@takeoff-ui/react';
 function Chips() {
   return (
     <div>
-      <TkChips
-        variant="primary"
-        size="large"
-        icon="flight"
-        label="primary"
-        removable
-      />
+      <TkChips variant="primary" size="large" icon="flight" label="primary" removable />
     </div>
   );
 }

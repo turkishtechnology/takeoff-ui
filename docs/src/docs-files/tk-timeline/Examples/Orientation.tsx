@@ -3,15 +3,13 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useState } from 'react';
 
 const Orientation = () => {
-  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>(
-    'vertical',
-  );
+  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('vertical');
   const orientations = [
     { label: 'Vertical', value: 'vertical' },
     { label: 'Horizontal', value: 'horizontal' },
   ];
 
-  const handleOrientationChange = (event) => {
+  const handleOrientationChange = event => {
     setOrientation(event.detail);
   };
   const items = [
@@ -37,9 +35,7 @@ const Orientation = () => {
       <div style={{ overflow: 'overlay' }} className="mb-4">
         <TkRadioGroup value={orientation} onTkChange={handleOrientationChange}>
           {orientations.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -50,14 +46,7 @@ const Orientation = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Orientation;

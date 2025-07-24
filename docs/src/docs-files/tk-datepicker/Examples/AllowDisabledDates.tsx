@@ -9,11 +9,9 @@ const AllowDisabledDates = () => {
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
-    return [
-      new Date(currentYear, currentMonth, 10),
-      new Date(currentYear, currentMonth, 15),
-      new Date(currentYear, currentMonth, 20),
-    ].map((date) => date.toLocaleDateString('en-GB'));
+    return [new Date(currentYear, currentMonth, 10), new Date(currentYear, currentMonth, 15), new Date(currentYear, currentMonth, 20)].map(date =>
+      date.toLocaleDateString('en-GB'),
+    );
   };
   const dates = getCurrentMonthDates();
   const reactCode = `const [selectedDate1, setSelectedDate1] = useState("");
@@ -58,7 +56,7 @@ const selectedDate2 = ref("");
         dateFormat="dd/MM/yyyy"
         allowedDates={dates}
         value={selectedDate1}
-        onTkChange={(event) => setSelectedDate1(event.detail as string)}
+        onTkChange={event => setSelectedDate1(event.detail as string)}
       />
       <TkDatepicker
         label="Specific dates are disabled"
@@ -66,17 +64,10 @@ const selectedDate2 = ref("");
         dateFormat="dd/MM/yyyy"
         disabledDates={dates}
         value={selectedDate2}
-        onTkChange={(event) => setSelectedDate2(event.detail as string)}
+        onTkChange={event => setSelectedDate2(event.detail as string)}
       />
     </div>
   );
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default AllowDisabledDates;

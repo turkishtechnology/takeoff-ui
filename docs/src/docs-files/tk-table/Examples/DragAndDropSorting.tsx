@@ -1,11 +1,5 @@
 import { ITableColumn } from '@takeoff-ui/core';
-import {
-  TkButton,
-  TkCheckbox,
-  TkIcon,
-  TkPopover,
-  TkTable,
-} from '@takeoff-ui/react';
+import { TkButton, TkCheckbox, TkIcon, TkPopover, TkTable } from '@takeoff-ui/react';
 import { useState } from 'react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
@@ -33,9 +27,7 @@ const Example = () => {
     },
   ]);
 
-  const [selectedColumns, setSelectedColumns] = useState<ITableColumn[]>(
-    columns.filter((item) => ['id', 'name'].includes(item.field)),
-  );
+  const [selectedColumns, setSelectedColumns] = useState<ITableColumn[]>(columns.filter(item => ['id', 'name'].includes(item.field)));
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     const parentElement = e.currentTarget.closest('div');
@@ -64,47 +56,25 @@ const Example = () => {
     const [movedItem] = newColumns.splice(sourceIndex, 1);
     newColumns.splice(targetIndex, 0, movedItem);
     setColumns(newColumns);
-    setSelectedColumns(
-      newColumns.filter((item) =>
-        selectedColumns
-          .map((selectedCol) => selectedCol.field)
-          .includes(item.field),
-      ),
-    );
+    setSelectedColumns(newColumns.filter(item => selectedColumns.map(selectedCol => selectedCol.field).includes(item.field)));
   };
 
   return (
     <div className="flex flex-col gap-2">
       <TkPopover className="flex justify-end" position="bottom" trigger="click">
-        <TkButton
-          variant="neutral"
-          type="outlined"
-          slot="trigger"
-          label="Arrange Columns"
-        />
+        <TkButton variant="neutral" type="outlined" slot="trigger" label="Arrange Columns" />
         <div slot="content" className="p-2">
           <div className="flex flex-col gap-2">
             {columns.map((col, index) => (
-              <div
-                key={col.field}
-                className="flex justify-between gap-2 py-2 px-3 hover:bg-gray-100 transition-colors"
-              >
+              <div key={col.field} className="flex justify-between gap-2 py-2 px-3 hover:bg-gray-100 transition-colors">
                 <TkCheckbox
                   label={col.header}
-                  value={
-                    selectedColumns.findIndex(
-                      (item) => item.field == col.field,
-                    ) > -1
-                  }
-                  onTkChange={(e) => {
+                  value={selectedColumns.findIndex(item => item.field == col.field) > -1}
+                  onTkChange={e => {
                     if (e.detail) {
                       setSelectedColumns([...selectedColumns, col]);
                     } else {
-                      setSelectedColumns(
-                        selectedColumns.filter(
-                          (item) => item.field != col.field,
-                        ),
-                      );
+                      setSelectedColumns(selectedColumns.filter(item => item.field != col.field));
                     }
                   }}
                 />
@@ -112,10 +82,10 @@ const Example = () => {
                   icon="drag_indicator"
                   variant="neutral"
                   draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragStart={e => handleDragStart(e, index)}
                   onDragOver={handleDragOver}
                   onDragEnd={handleDragEnd}
-                  onDrop={(e) => handleDrop(e, index)}
+                  onDrop={e => handleDrop(e, index)}
                   style={{ cursor: 'move' }}
                 />
               </div>
@@ -365,13 +335,6 @@ const handleCheckboxChange = (e: any, col: ITableColumn) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 export default dragAndDropSorting;

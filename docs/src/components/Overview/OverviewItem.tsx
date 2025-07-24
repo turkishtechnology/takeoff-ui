@@ -15,22 +15,13 @@ const OverviewItem = ({ title, href, Svg, SvgDark, isNew }) => {
           className="flex justify-between"
         >
           <h3 className="mb-0 font-semibold">{title}</h3>
-          <TkButton
-            variant="neutral"
-            icon="arrow_outward"
-            size="small"
-            type="text"
-          />
+          <TkButton variant="neutral" icon="arrow_outward" size="small" type="text" />
         </div>
 
         <div className="relative">
           {isNew ? (
             <TkBadge label="new" variant="cyan">
-              {colorMode === 'dark' ? (
-                <img src={SvgDark} className="w-full" role="img" />
-              ) : (
-                <img src={Svg} />
-              )}
+              {colorMode === 'dark' ? <img src={SvgDark} className="w-full" role="img" /> : <img src={Svg} />}
             </TkBadge>
           ) : colorMode === 'dark' ? (
             <img src={SvgDark} className="w-full" role="img" />

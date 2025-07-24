@@ -1,12 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
-import {
-  TkToggleButtonGroup,
-  TkToggleButton,
-  TkRadioGroup,
-  TkRadio,
-  TkCheckbox,
-} from '@takeoff-ui/react';
+import { TkToggleButtonGroup, TkToggleButton, TkRadioGroup, TkRadio, TkCheckbox } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const ToggleButtonIconPosition = () => {
@@ -42,29 +36,15 @@ const ToggleButtonIconPosition = () => {
     <div className="flex flex-col gap-8 items-start w-full">
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-wrap gap-4">
-          <TkRadioGroup
-            label="Position"
-            value={iconPosition}
-            onTkChange={(e) => setIconPosition(e.detail)}
-          >
-            {iconPositionOptions.map((v) => (
-              <TkRadio
-                key={v}
-                label={v.charAt(0).toUpperCase() + v.slice(1)}
-                value={v}
-              />
+          <TkRadioGroup label="Position" value={iconPosition} onTkChange={e => setIconPosition(e.detail)}>
+            {iconPositionOptions.map(v => (
+              <TkRadio key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} value={v} />
             ))}
           </TkRadioGroup>
         </div>
         <div className="w-full">
-          <TkToggleButtonGroup
-            value={value}
-            type="basic"
-            direction="horizontal"
-            rounded
-            onTkChange={(e) => setValue(e.detail)}
-          >
-            {options.map((opt) => (
+          <TkToggleButtonGroup value={value} type="basic" direction="horizontal" rounded onTkChange={e => setValue(e.detail)}>
+            {options.map(opt => (
               <TkToggleButton
                 key={opt.value}
                 value={opt.value}

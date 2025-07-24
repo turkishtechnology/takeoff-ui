@@ -39,19 +39,12 @@ const Basic = () => {
         hint="Hint text"
         placeholder="Placeholder text"
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
       />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

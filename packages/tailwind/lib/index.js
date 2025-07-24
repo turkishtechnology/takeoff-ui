@@ -1,7 +1,7 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = plugin(
-  (api) => {
+  api => {
     require('./components/typography')(api);
   },
   {

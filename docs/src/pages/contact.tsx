@@ -12,10 +12,7 @@ export default function Contact() {
         <div className="container">
           <Gif />
           <h1>Contact Us</h1>
-          <p className="description">
-            TakeOff simplifies the process of building web applications. It
-            provides comprehensive and flexible design system and UI library.
-          </p>
+          <p className="description">TakeOff simplifies the process of building web applications. It provides comprehensive and flexible design system and UI library.</p>
         </div>
       </header>
 
@@ -34,8 +31,7 @@ export default function Contact() {
                 </a>
               </p>
               <p>
-                Or email us at{' '}
-                <a href="mailto:takeoffui@thy.com">takeoffui@thy.com</a>
+                Or email us at <a href="mailto:takeoffui@thy.com">takeoffui@thy.com</a>
               </p>
             </div>
             <div>
@@ -45,27 +41,19 @@ export default function Contact() {
                   <strong>Payment and Loyalty Solutions Directorate</strong>
                 </li>
                 <li>
-                  <strong>Emel Fırtına:</strong> Project Manager —
-                  <a href="mailto:efirtina@thy.com"> efirtina@thy.com</a>
+                  <strong>Emel Fırtına:</strong> Project Manager —<a href="mailto:efirtina@thy.com"> efirtina@thy.com</a>
                 </li>
                 <li>
-                  <strong>Emre Arslan:</strong> Designer —
-                  <a href="mailto:earslan1@thy.com"> earslan1@thy.com</a>
+                  <strong>Emre Arslan:</strong> Designer —<a href="mailto:earslan1@thy.com"> earslan1@thy.com</a>
                 </li>
                 <li>
-                  <strong>Harun Demir:</strong> Frontend Developer —
-                  <a href="mailto:harundemir@thy.com"> harundemir@thy.com</a>
+                  <strong>Harun Demir:</strong> Frontend Developer —<a href="mailto:harundemir@thy.com"> harundemir@thy.com</a>
                 </li>
                 <li>
-                  <strong>Ulaş Turan:</strong> Frontend Developer —
-                  <a href="mailto:kgbuturan@thy.com"> kgbuturan@thy.com</a>
+                  <strong>Ulaş Turan:</strong> Frontend Developer —<a href="mailto:kgbuturan@thy.com"> kgbuturan@thy.com</a>
                 </li>
                 <li>
-                  <strong>Pınar Yalçınduran:</strong> Frontend Developer —
-                  <a href="mailto:pyalcinduran@thy.com">
-                    {' '}
-                    pyalcinduran@thy.com
-                  </a>
+                  <strong>Pınar Yalçınduran:</strong> Frontend Developer —<a href="mailto:pyalcinduran@thy.com"> pyalcinduran@thy.com</a>
                 </li>
               </ul>
             </div>

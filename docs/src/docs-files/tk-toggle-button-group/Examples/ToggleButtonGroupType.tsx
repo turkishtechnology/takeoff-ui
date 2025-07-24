@@ -1,11 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
-import {
-  TkToggleButtonGroup,
-  TkToggleButton,
-  TkRadioGroup,
-  TkRadio,
-} from '@takeoff-ui/react';
+import { TkToggleButtonGroup, TkToggleButton, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const ToggleButtonGroupType = () => {
@@ -41,33 +36,15 @@ const ToggleButtonGroupType = () => {
 
   const demo = (
     <div className="flex flex-col gap-4 w-full">
-      <TkRadioGroup
-        label="Group Type"
-        value={groupType}
-        onTkChange={(e) => setGroupType(e.detail)}
-      >
-        {groupTypeOptions.map((t) => (
-          <TkRadio
-            key={t}
-            label={t.charAt(0).toUpperCase() + t.slice(1)}
-            value={t}
-          />
+      <TkRadioGroup label="Group Type" value={groupType} onTkChange={e => setGroupType(e.detail)}>
+        {groupTypeOptions.map(t => (
+          <TkRadio key={t} label={t.charAt(0).toUpperCase() + t.slice(1)} value={t} />
         ))}
       </TkRadioGroup>
 
-      <TkToggleButtonGroup
-        value={value}
-        type={groupType}
-        onTkChange={(e) => setValue(e.detail)}
-      >
-        {options.map((opt) => (
-          <TkToggleButton
-            key={opt.value}
-            value={opt.value}
-            type="outlined"
-            variant="neutral"
-            label={opt.label}
-          />
+      <TkToggleButtonGroup value={value} type={groupType} onTkChange={e => setValue(e.detail)}>
+        {options.map(opt => (
+          <TkToggleButton key={opt.value} value={opt.value} type="outlined" variant="neutral" label={opt.label} />
         ))}
       </TkToggleButtonGroup>
     </div>

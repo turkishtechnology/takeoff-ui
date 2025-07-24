@@ -4,9 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const Variants = () => {
   const [showDialog, setShowDialog] = useState(false);
-  const [variant, setVariant] = useState<
-    'info' | 'success' | 'warning' | 'danger'
-  >('info');
+  const [variant, setVariant] = useState<'info' | 'success' | 'warning' | 'danger'>('info');
   const variantOptions = [
     { label: 'Success', value: 'success' },
     { label: 'Info', value: 'info' },
@@ -60,11 +58,9 @@ const setShowDialog = (value) => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup value={variant} onTkChange={(e) => setVariant(e.detail)}>
+        <TkRadioGroup value={variant} onTkChange={e => setVariant(e.detail)}>
           {variantOptions.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -73,28 +69,19 @@ const setShowDialog = (value) => {
         header="Dialog Variants"
         subheader={`This is a ${variant} dialog`}
         visible={showDialog}
-        onTkVisibleChange={(e) => setShowDialog(e.detail)}
+        onTkVisibleChange={e => setShowDialog(e.detail)}
         variant={variant}
         containerStyle={{ width: '450px' }}
       >
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+          nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
         </p>
       </TkDialog>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Variants;

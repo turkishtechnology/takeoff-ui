@@ -80,12 +80,7 @@ const Messages = () => {
           message="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
           alignItems="start"
         />
-        <TkAlert
-          variant="success"
-          type="outlined"
-          header="Success Filled Alert"
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        />
+        <TkAlert variant="success" type="outlined" header="Success Filled Alert" message="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
         <TkAlert
           variant="success"
           type="outlined"
@@ -98,12 +93,7 @@ const Messages = () => {
   );
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

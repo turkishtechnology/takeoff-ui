@@ -16,11 +16,7 @@ const Example = () => {
   return (
     <>
       <div className="flex flex-col gap-4 mb-4">
-        <TkRadioGroup
-          label="Drawer Width"
-          value={width}
-          onTkChange={(e) => setWidth(e.detail)}
-        >
+        <TkRadioGroup label="Drawer Width" value={width} onTkChange={e => setWidth(e.detail)}>
           {widthOptions.map((option, index) => (
             <TkRadio key={index} label={option.label} value={option.value} />
           ))}
@@ -29,18 +25,11 @@ const Example = () => {
         <TkButton label="Open Drawer" onTkClick={() => setShowDrawer(true)} />
       </div>
 
-      <TkDrawer
-        header="Custom Width Drawer"
-        open={showDrawer}
-        onTkDrawerClose={() => setShowDrawer(false)}
-        containerStyle={{ width }}
-      >
+      <TkDrawer header="Custom Width Drawer" open={showDrawer} onTkDrawerClose={() => setShowDrawer(false)} containerStyle={{ width }}>
         <div slot="content">
           <p className="mt-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate neque quas!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
           </p>
         </div>
       </TkDrawer>
@@ -95,14 +84,7 @@ const width = ref('400px');
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''} />;
 };
 
 export default Customization;

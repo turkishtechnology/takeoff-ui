@@ -82,15 +82,10 @@ const Trigger = () => {
         <div slot="content" className="flex flex-col gap-2 w-[300px]">
           <div className="flex gap-2">
             <TkIcon icon="bolt" variant="neutral" sign />
-            <span className="text-lg font-bold text-neutral-900">
-              Popover Header
-            </span>
+            <span className="text-lg font-bold text-neutral-900">Popover Header</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              quos.
-            </span>
+            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</span>
           </div>
         </div>
       </TkPopover>
@@ -100,29 +95,17 @@ const Trigger = () => {
         <div slot="content" className="flex flex-col gap-2 w-[300px]">
           <div className="flex gap-2">
             <TkIcon icon="bolt" variant="neutral" sign />
-            <span className="text-lg font-bold text-neutral-900">
-              Popover Header
-            </span>
+            <span className="text-lg font-bold text-neutral-900">Popover Header</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              quos.
-            </span>
+            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</span>
           </div>
         </div>
       </TkPopover>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Trigger;

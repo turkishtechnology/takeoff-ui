@@ -52,19 +52,12 @@ const selectValue = ref([{ value: 'female', label: 'Female' }]);
         multiple
         hint="Hint text"
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
       />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

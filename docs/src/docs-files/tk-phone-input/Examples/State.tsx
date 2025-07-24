@@ -56,25 +56,13 @@ const State = () => {
 
   const demo = (
     <div className="flex flex-col flex-wrap items-start gap-3">
-      <TkPhoneInput
-        label="Error"
-        placeholder="Error"
-        invalid={true}
-        error="This field is required"
-      />
+      <TkPhoneInput label="Error" placeholder="Error" invalid={true} error="This field is required" />
       <TkPhoneInput label="Readonly" placeholder="Readonly" readonly />
       <TkPhoneInput label="Disabled" placeholder="Disabled" disabled />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default State;

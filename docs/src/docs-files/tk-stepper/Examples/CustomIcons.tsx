@@ -15,11 +15,11 @@ const CustomIcons = () => {
     { label: 'Star', value: 'star' },
   ];
 
-  const handleCompleteIconChange = (event) => {
+  const handleCompleteIconChange = event => {
     setCompleteIcon(event.detail);
   };
 
-  const handleStepChange = (event) => {
+  const handleStepChange = event => {
     setActive(event.detail);
   };
 
@@ -78,52 +78,22 @@ const handleStepChange = (event) => {
 
   const demo = (
     <div className="space-y-6">
-      <TkRadioGroup
-        label="Complete Icon"
-        value={completeIcon}
-        onTkChange={handleCompleteIconChange}
-      >
+      <TkRadioGroup label="Complete Icon" value={completeIcon} onTkChange={handleCompleteIconChange}>
         {completeIcons.map((icon, index) => (
           <TkRadio key={index} label={icon.label} value={icon.value} />
         ))}
       </TkRadioGroup>
 
-      <TkStepper
-        active={active}
-        onTkStepChange={handleStepChange}
-        completeIcon={completeIcon}
-      >
-        <TkStep
-          header="Step 1"
-          subheader="Step Description"
-          complete={active > 0}
-        />
-        <TkStep
-          header="Step 2"
-          subheader="Step Description"
-          isActive={active === 1}
-          complete={active > 1}
-        />
-        <TkStep
-          header="Step 3"
-          subheader="Step Description"
-          isActive={active === 2}
-          complete={active > 2}
-        />
-        <TkStep
-          header="Step 4"
-          subheader="Step Description"
-          activeIcon={customActiveIconConfig}
-          isActive={active === 3}
-        />
+      <TkStepper active={active} onTkStepChange={handleStepChange} completeIcon={completeIcon}>
+        <TkStep header="Step 1" subheader="Step Description" complete={active > 0} />
+        <TkStep header="Step 2" subheader="Step Description" isActive={active === 1} complete={active > 1} />
+        <TkStep header="Step 3" subheader="Step Description" isActive={active === 2} complete={active > 2} />
+        <TkStep header="Step 4" subheader="Step Description" activeIcon={customActiveIconConfig} isActive={active === 3} />
       </TkStepper>
 
       <div className="bg-gray-100 p-4 rounded mt-4">
         <h3 className="text-lg font-medium mb-2">Icon Configuration</h3>
-        <p className="text-sm">
-          The stepper component accepts both simple string icons and complex
-          icon configuration objects. For advanced customization, you can use:
-        </p>
+        <p className="text-sm">The stepper component accepts both simple string icons and complex icon configuration objects. For advanced customization, you can use:</p>
         <pre className="bg-gray-800 text-white p-3 rounded mt-2 text-sm overflow-auto">
           {`icon={{
   name: "apps",
@@ -136,14 +106,7 @@ const handleStepChange = (event) => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCodeSample} vueCode={vueCodeSample} angularCode={''} />;
 };
 
 export default CustomIcons;

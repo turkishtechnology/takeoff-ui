@@ -1,8 +1,4 @@
-import {
-  ITableColumn,
-  TkTableCustomEvent,
-  ITableRequest,
-} from '@takeoff-ui/core';
+import { ITableColumn, TkTableCustomEvent, ITableRequest } from '@takeoff-ui/core';
 import { TkTable } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,7 +15,7 @@ const Example = () => {
       header: 'Name',
       searchable: true,
       sortable: true,
-      html: (row) => {
+      html: row => {
         const tkInput: HTMLTkInputElement = document.createElement('tk-input');
         tkInput.classList.add('tk-table-input');
         tkInput.value = row.name;
@@ -35,7 +31,7 @@ const Example = () => {
       header: 'Category',
       searchable: true,
       sortable: true,
-      html: (row) => {
+      html: row => {
         return `<tk-badge label="${row.category}" ></tk-badge>`;
       },
     },
@@ -47,9 +43,8 @@ const Example = () => {
     {
       field: '-',
       header: 'Actions',
-      html: (row) => {
-        const tkButton: HTMLTkButtonElement =
-          document.createElement('tk-button');
+      html: row => {
+        const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
         tkButton.label = 'Detail';
         tkButton.type = 'text';
         tkButton.variant = 'info';
@@ -68,13 +63,7 @@ const Example = () => {
 
   const handleRequest = async (e: TkTableCustomEvent<ITableRequest>) => {
     setLoading(true);
-    const result: any = await fetchFromServer(
-      e.detail.currentPage,
-      e.detail.rowsPerPage,
-      e.detail.filters,
-      e.detail.sortField,
-      e.detail.sortOrder,
-    );
+    const result: any = await fetchFromServer(e.detail.currentPage, e.detail.rowsPerPage, e.detail.filters, e.detail.sortField, e.detail.sortOrder);
 
     setData(result?.data);
     setTotalItem(result?.totalItem);
@@ -85,18 +74,7 @@ const Example = () => {
     tableRef.current.serverRequest();
   }, []);
 
-  return (
-    <TkTable
-      ref={tableRef}
-      columns={column}
-      data={data}
-      paginationMethod="server"
-      rowsPerPage={5}
-      totalItems={totalItem}
-      loading={loading}
-      onTkRequest={handleRequest}
-    />
-  );
+  return <TkTable ref={tableRef} columns={column} data={data} paginationMethod="server" rowsPerPage={5} totalItems={totalItem} loading={loading} onTkRequest={handleRequest} />;
 };
 
 const CustomCell = () => {
@@ -244,14 +222,7 @@ const handleRequest = async (e) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default CustomCell;

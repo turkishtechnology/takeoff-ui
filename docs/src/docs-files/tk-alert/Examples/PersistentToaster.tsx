@@ -1,9 +1,4 @@
-import {
-  showPersistentToast,
-  isPersistentToastVisible,
-  dismissAllPersistentToasts,
-  IToast,
-} from '@takeoff-ui/core';
+import { showPersistentToast, isPersistentToastVisible, dismissAllPersistentToasts, IToast } from '@takeoff-ui/core';
 import { TkButton } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
@@ -14,8 +9,7 @@ const Example = () => {
       persistentId: 'my-persistent-toast',
       position: 'top-right',
       header: 'Persistent Toast',
-      message:
-        'This toast can be toggled. Click the same button again to close it.',
+      message: 'This toast can be toggled. Click the same button again to close it.',
       variant: 'info',
       type: 'outlined',
       removable: true,
@@ -44,11 +38,7 @@ const Example = () => {
     dismissAllPersistentToasts();
   };
 
-  const handleMultiplePersistent = (
-    position: string,
-    variant: string,
-    id: string,
-  ) => {
+  const handleMultiplePersistent = (position: string, variant: string, id: string) => {
     showPersistentToast({
       persistentId: id,
       position: position,
@@ -63,70 +53,17 @@ const Example = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <TkButton
-          label="Show/Hide Toast"
-          icon="visibility"
-          variant="info"
-          onTkClick={handlePersistentToast}
-        />
-        <TkButton
-          label="Check Status"
-          icon="help"
-          variant="neutral"
-          type="outlined"
-          onTkClick={handleCheckStatus}
-        />
-        <TkButton
-          label="Dismiss All"
-          icon="close"
-          variant="danger"
-          type="text"
-          onTkClick={handleDismissAll}
-        />
+        <TkButton label="Show/Hide Toast" icon="visibility" variant="info" onTkClick={handlePersistentToast} />
+        <TkButton label="Check Status" icon="help" variant="neutral" type="outlined" onTkClick={handleCheckStatus} />
+        <TkButton label="Dismiss All" icon="close" variant="danger" type="text" onTkClick={handleDismissAll} />
       </div>
 
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <span style={{ marginRight: '8px' }}>Multiple Persistent:</span>
-        <TkButton
-          icon="north_west"
-          variant="success"
-          onTkClick={() =>
-            handleMultiplePersistent(
-              'top-left',
-              'success',
-              'persistent-success',
-            )
-          }
-        />
-        <TkButton
-          icon="north_east"
-          variant="info"
-          onTkClick={() =>
-            handleMultiplePersistent('top-right', 'info', 'persistent-info')
-          }
-        />
-        <TkButton
-          icon="south_west"
-          variant="warning"
-          onTkClick={() =>
-            handleMultiplePersistent(
-              'bottom-left',
-              'warning',
-              'persistent-warning',
-            )
-          }
-        />
-        <TkButton
-          icon="south_east"
-          variant="danger"
-          onTkClick={() =>
-            handleMultiplePersistent(
-              'bottom-right',
-              'danger',
-              'persistent-danger',
-            )
-          }
-        />
+        <TkButton icon="north_west" variant="success" onTkClick={() => handleMultiplePersistent('top-left', 'success', 'persistent-success')} />
+        <TkButton icon="north_east" variant="info" onTkClick={() => handleMultiplePersistent('top-right', 'info', 'persistent-info')} />
+        <TkButton icon="south_west" variant="warning" onTkClick={() => handleMultiplePersistent('bottom-left', 'warning', 'persistent-warning')} />
+        <TkButton icon="south_east" variant="danger" onTkClick={() => handleMultiplePersistent('bottom-right', 'danger', 'persistent-danger')} />
       </div>
     </div>
   );
@@ -326,14 +263,7 @@ import { showPersistentToast, isPersistentToastVisible, dismissAllPersistentToas
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default PersistentToaster;

@@ -196,25 +196,11 @@ const treeData = [
 
   const demo = (
     <div className="w-full">
-      <TkTreeView
-        mode="stepper"
-        type="divided"
-        size="base"
-        items={sampleData}
-        branchIcon="category"
-        leafIcon="label"
-      />
+      <TkTreeView mode="stepper" type="divided" size="base" items={sampleData} branchIcon="category" leafIcon="label" />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode=""
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
 export default TreeViewStepper;

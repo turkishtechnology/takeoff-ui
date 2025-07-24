@@ -29,7 +29,7 @@ const Example = () => {
   return (
     <div className="p-2">
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup value={size} onTkChange={(e) => setSize(e.detail)}>
+        <TkRadioGroup value={size} onTkChange={e => setSize(e.detail)}>
           <TkRadio label="Small" value="small" />
           <TkRadio label="Base" value="base" />
         </TkRadioGroup>
@@ -113,14 +113,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Size;

@@ -117,23 +117,11 @@ const Basic = () => {
             />`;
   const demo = (
     <div>
-      <TkOrgChart
-        data={data}
-        options={options}
-        collapsible={true}
-        onTkNodeClick={handleNodeClick}
-      />
+      <TkOrgChart data={data} options={options} collapsible={true} onTkNodeClick={handleNodeClick} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode=""
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
 export default Basic;

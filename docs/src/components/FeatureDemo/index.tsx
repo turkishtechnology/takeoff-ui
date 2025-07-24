@@ -4,14 +4,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 
-const FeatureDemo = ({
-  demo,
-  reactCode,
-  vueCode,
-  angularCode,
-  cssCode = '',
-  dataExample = null,
-}) => {
+const FeatureDemo = ({ demo, reactCode, vueCode, angularCode, cssCode = '', dataExample = null }) => {
   return (
     <>
       <div
@@ -54,9 +47,7 @@ const FeatureDemo = ({
               {dataExample && (
                 <TabItem value="data" label="Data">
                   <CodeBlock className="m-0" language="json" showLineNumbers>
-                    {typeof dataExample === 'string'
-                      ? dataExample
-                      : JSON.stringify(dataExample, null, 2)}
+                    {typeof dataExample === 'string' ? dataExample : JSON.stringify(dataExample, null, 2)}
                   </CodeBlock>
                 </TabItem>
               )}

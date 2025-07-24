@@ -16,15 +16,13 @@ const Blur = () => {
         header="Welcome"
         subheader="Basic Dialog Example"
         visible={showDialog}
-        onTkVisibleChange={(e) => setShowDialog(e.detail)}
+        onTkVisibleChange={e => setShowDialog(e.detail)}
         containerStyle={{ width: '450px' }}
         isMaskBlur={true}
       >
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+          nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
         </p>
       </TkDialog>
     </>
@@ -92,14 +90,7 @@ const handleClick = () => {
 
   const demo = <Blur />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default MaskBlur;

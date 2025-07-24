@@ -12,22 +12,15 @@ const Example = () => {
         header="Dialog with Footer"
         subheader="This dialog uses the footer-actions slot"
         visible={showDialog}
-        onTkVisibleChange={(e) => setShowDialog(e.detail)}
+        onTkVisibleChange={e => setShowDialog(e.detail)}
         containerStyle={{ width: '450px' }}
       >
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+          nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
         </p>
         <div slot="footer-actions">
-          <TkButton
-            label="Cancel"
-            variant="neutral"
-            onTkClick={() => setShowDialog(false)}
-            type="text"
-          />
+          <TkButton label="Cancel" variant="neutral" onTkClick={() => setShowDialog(false)} type="text" />
           <TkButton label="Save" variant="primary" />
         </div>
       </TkDialog>
@@ -112,13 +105,6 @@ const setShowDialog = (value) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default DialogWithFooter;

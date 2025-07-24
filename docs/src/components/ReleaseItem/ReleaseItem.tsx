@@ -11,14 +11,7 @@ export default function ReleaseItem({ data }): JSX.Element {
     return (
       <>
         {tags.map((item, index) => {
-          return (
-            <TkBadge
-              label={item}
-              variant="info"
-              type="outlined"
-              key={'tag-' + index}
-            />
-          );
+          return <TkBadge label={item} variant="info" type="outlined" key={'tag-' + index} />;
         })}
       </>
     );

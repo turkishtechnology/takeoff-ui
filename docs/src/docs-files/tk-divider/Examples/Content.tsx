@@ -22,24 +22,14 @@ const Content = () => {
     <div className="flex flex-col">
       <TkDivider>Content</TkDivider>
       <TkDivider>
-        <TkButton
-          type="outlined"
-          variant="neutral"
-          size="small"
-          label="Button"
-        ></TkButton>
+        <TkButton type="outlined" variant="neutral" size="small" label="Button"></TkButton>
       </TkDivider>
     </div>
   );
 
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

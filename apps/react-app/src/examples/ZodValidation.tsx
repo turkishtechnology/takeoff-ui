@@ -1,12 +1,4 @@
-import {
-  TkCard,
-  TkButton,
-  TkCheckbox,
-  TkInput,
-  TkSelect,
-  TkTextarea,
-  TkDatepicker,
-} from '@takeoff-ui/react';
+import { TkCard, TkButton, TkCheckbox, TkInput, TkSelect, TkTextarea, TkDatepicker } from '@takeoff-ui/react';
 import { FormEvent, useState } from 'react';
 import { z } from 'zod';
 
@@ -54,7 +46,7 @@ function ZodValidation() {
         .string()
         .date()
         .refine(
-          (val) => {
+          val => {
             const date: Date = new Date(val);
             const beginningDate = new Date('01-01-1920');
             const endingDate = new Date('01-01-2010');
@@ -65,9 +57,7 @@ function ZodValidation() {
           },
           { message: 'Geçerli bir tarih giriniz' },
         ),
-      check: z
-        .boolean()
-        .refine((val) => val == true, { message: 'Bu alan zorunludur' }),
+      check: z.boolean().refine(val => val == true, { message: 'Bu alan zorunludur' }),
     })
     // password ve confirm password alanları birbirine eşitmi diye kontrolü için dinamik validasyon örneği
     .superRefine((data, ctx) => {
@@ -82,7 +72,7 @@ function ZodValidation() {
 
   const handleInputChange = (event: CustomEvent) => {
     const { name } = event.target as HTMLTkInputElement | HTMLTkSelectElement;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: event.detail,
     }));
@@ -95,13 +85,10 @@ function ZodValidation() {
 
     if (!validationResult.success) {
       // error mesajlarını işleme
-      const errorMessages = validationResult.error.errors.reduce(
-        (acc: any, error: any) => {
-          acc[error.path[0]] = error.message;
-          return acc;
-        },
-        {},
-      );
+      const errorMessages = validationResult.error.errors.reduce((acc: any, error: any) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
 
       setErrors(errorMessages);
     } else {
@@ -133,24 +120,8 @@ function ZodValidation() {
             gap: '16px',
           }}
         >
-          <TkInput
-            name="name"
-            mode="text"
-            label="Name"
-            value={formData.name}
-            onTkChange={handleInputChange}
-            invalid={!!errors.name}
-            error={errors.name}
-          />
-          <TkInput
-            name="email"
-            mode="text"
-            label="Email"
-            value={formData.email}
-            onTkChange={handleInputChange}
-            invalid={!!errors.email}
-            error={errors.email}
-          />
+          <TkInput name="name" mode="text" label="Name" value={formData.name} onTkChange={handleInputChange} invalid={!!errors.name} error={errors.name} />
+          <TkInput name="email" mode="text" label="Email" value={formData.email} onTkChange={handleInputChange} invalid={!!errors.email} error={errors.email} />
           <TkSelect
             name="country"
             label="Country"
@@ -161,14 +132,7 @@ function ZodValidation() {
             invalid={!!errors.country}
             error={errors.country}
           />
-          <TkTextarea
-            name="address"
-            label="Address"
-            value={formData.address}
-            onTkChange={handleInputChange}
-            invalid={!!errors.address}
-            error={errors.address}
-          />
+          <TkTextarea name="address" label="Address" value={formData.address} onTkChange={handleInputChange} invalid={!!errors.address} error={errors.address} />
           <TkInput
             name="password"
             mode="password"
@@ -193,25 +157,12 @@ function ZodValidation() {
             label={'forms.dob'}
             placeholder={'forms.dob-format'}
             dateFormat="yyyy-MM-dd"
-            onTkChange={(e) =>
-              setFormData({ ...formData, dob: e.detail as string })
-            }
+            onTkChange={e => setFormData({ ...formData, dob: e.detail as string })}
             invalid={!!errors.dob}
             error={errors.dob}
           />
-          <TkCheckbox
-            name="check"
-            value={formData.check}
-            onTkChange={handleInputChange}
-            label="Okudum onayladım"
-            invalid={!!errors.check}
-          />
-          <TkButton
-            mode="submit"
-            onClick={submit}
-            label="Validate"
-            variant="primary"
-          />
+          <TkCheckbox name="check" value={formData.check} onTkChange={handleInputChange} label="Okudum onayladım" invalid={!!errors.check} />
+          <TkButton mode="submit" onClick={submit} label="Validate" variant="primary" />
         </div>
       </form>
     </TkCard>

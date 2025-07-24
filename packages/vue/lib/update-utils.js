@@ -9,12 +9,9 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     return;
   }
 
-  const newContent = data.replace(
-    'modelPropValue = (e?.target as any)[modelProp];',
-    'modelPropValue = e.detail;',
-  );
+  const newContent = data.replace('modelPropValue = (e?.target as any)[modelProp];', 'modelPropValue = e.detail;');
 
-  fs.writeFile(filePath, newContent, 'utf8', (err) => {
+  fs.writeFile(filePath, newContent, 'utf8', err => {
     if (err) {
       console.error('Utils dosyası güncellenirken hata oluştu:', err);
       return;

@@ -3,9 +3,7 @@ import { TkTabs, TkTabsItem, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const AlignHeaders = () => {
-  const [alignment, setAlignment] = useState<'start' | 'center' | 'end'>(
-    'start',
-  );
+  const [alignment, setAlignment] = useState<'start' | 'center' | 'end'>('start');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const alignments = [
@@ -13,7 +11,7 @@ const AlignHeaders = () => {
     { label: 'Center', value: 'center' },
     { label: 'End', value: 'end' },
   ];
-  const handleHeaderAlignmentChange = (event) => {
+  const handleHeaderAlignmentChange = event => {
     setAlignment(event.detail);
   };
   useEffect(() => {
@@ -50,14 +48,9 @@ const AlignHeaders = () => {
   const demo = (
     <>
       <div className="overflow-auto mb-4">
-        <TkRadioGroup
-          value={alignment}
-          onTkChange={handleHeaderAlignmentChange}
-        >
+        <TkRadioGroup value={alignment} onTkChange={handleHeaderAlignmentChange}>
           {alignments.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -70,39 +63,26 @@ const AlignHeaders = () => {
       >
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 1
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 1
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 2
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 2
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 3
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 3
           </p>
         </TkTabsItem>
       </TkTabs>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
 };
 export default AlignHeaders;

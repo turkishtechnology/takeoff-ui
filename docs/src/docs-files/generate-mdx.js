@@ -9,10 +9,7 @@ const data = JSON.parse(fs.readFileSync(docsJson, 'utf8'));
 const typeLibraryAllKeys = Object.keys(data.typeLibrary);
 
 function clearString(value) {
-  return value
-    ?.replaceAll('|', ',')
-    .replaceAll('\n', ' ')
-    .replaceAll('\r', ' ');
+  return value?.replaceAll('|', ',').replaceAll('\n', ' ').replaceAll('\r', ' ');
 }
 
 function clearStringObject(value, tag, propName) {
@@ -39,11 +36,9 @@ function generateMdx(component) {
   const { tag, docs, docsTags, props, events, methods, slots } = component;
 
   // Start MDX head content
-  const reactImportCode = docsTags.find((item) => item.name == 'react')?.text;
-  const vueImportCode = docsTags.find((item) => item.name == 'vue')?.text;
-  const angularImportCode = docsTags.find(
-    (item) => item.name == 'angular',
-  )?.text;
+  const reactImportCode = docsTags.find(item => item.name == 'react')?.text;
+  const vueImportCode = docsTags.find(item => item.name == 'vue')?.text;
+  const angularImportCode = docsTags.find(item => item.name == 'angular')?.text;
 
   let headContent = `import Tabs from "@theme/Tabs";
 import CodeBlock from '@theme/CodeBlock'
@@ -80,17 +75,11 @@ ${docs} \n
   if (props && props.length) {
     apiContent += `### Props\n\n`;
     apiContent += `| Name | Type | Default | Description |\n| ---- | ---- | ------- | ----------- |\n`;
-    props.forEach((prop) => {
-      apiContent += `| <TkBadge label="${
-        prop.name
-      }" variant="primary" size="large" type="filledlight"/> | <code>${
-        prop.type?.indexOf('{') > -1
-          ? '`' + clearStringObject(prop.type, tag, prop.name) + '`'
-          : clearStringObject(prop.type, tag, prop.name)
+    props.forEach(prop => {
+      apiContent += `| <TkBadge label="${prop.name}" variant="primary" size="large" type="filledlight"/> | <code>${
+        prop.type?.indexOf('{') > -1 ? '`' + clearStringObject(prop.type, tag, prop.name) + '`' : clearStringObject(prop.type, tag, prop.name)
       }</code> | ${
-        prop.default?.indexOf('{') > -1
-          ? '`' + clearStringObject(prop.default, tag) + '`' || 'null'
-          : clearStringObject(prop.default) || 'null'
+        prop.default?.indexOf('{') > -1 ? '`' + clearStringObject(prop.default, tag) + '`' || 'null' : clearStringObject(prop.default) || 'null'
       } | ${clearString(prop.docs)} |\n`;
     });
   }
@@ -99,7 +88,7 @@ ${docs} \n
   if (events && events.length) {
     apiContent += `\n### Events\n\n`;
     apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
-    events.forEach((event) => {
+    events.forEach(event => {
       apiContent += `| ${event.event} | ${clearString(event.docs)} |\n`;
     });
   }
@@ -108,7 +97,7 @@ ${docs} \n
   if (methods && methods.length) {
     apiContent += `\n### Methods\n\n`;
     apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
-    methods.forEach((method) => {
+    methods.forEach(method => {
       apiContent += `| ${method.name} | ${clearString(method.docs)} |\n`;
     });
   }
@@ -117,18 +106,18 @@ ${docs} \n
   if (slots && slots.length) {
     apiContent += `\n### Slots\n\n`;
     apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
-    slots.forEach((slot) => {
+    slots.forEach(slot => {
       apiContent += `| ${slot.name} | ${clearString(slot.docs)} |\n`;
     });
   }
 
   // Add İnterfaces
-  const arrKeys = typeLibraryAllKeys.filter((key) => key.includes(tag));
+  const arrKeys = typeLibraryAllKeys.filter(key => key.includes(tag));
   if (arrKeys.length > 0) {
     apiContent += `\n### Interfaces\n\n`;
   }
 
-  arrKeys.forEach((key) => {
+  arrKeys.forEach(key => {
     apiContent += data.typeLibrary[key].docstring + '\n\n';
     apiContent += `\`\`\`typescript
 ${data.typeLibrary[key].declaration?.replace('export ', '')}
@@ -138,18 +127,12 @@ ${data.typeLibrary[key].declaration?.replace('export ', '')}
   return { head: headContent, api: apiContent };
 }
 
-data.components.forEach((component) => {
+data.components.forEach(component => {
   const content = generateMdx(component);
   // fs.mkdirSync("./src/docs-files/" + component.tag);
   try {
-    fs.writeFileSync(
-      './src/docs-files/' + component.tag + '/head.mdx',
-      content.head,
-    );
-    fs.writeFileSync(
-      './src/docs-files/' + component.tag + '/api.mdx',
-      content.api,
-    );
+    fs.writeFileSync('./src/docs-files/' + component.tag + '/head.mdx', content.head);
+    fs.writeFileSync('./src/docs-files/' + component.tag + '/api.mdx', content.api);
   } catch (error) {
     console.log(error);
   }

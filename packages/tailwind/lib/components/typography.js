@@ -1,11 +1,11 @@
 module.exports = function ({ addComponents }) {
   addComponents({
     '.title-display-lg': {
-      fontFamily: 'var(--mobile-title-display1-font)',
-      fontSize: 'var(--mobile-title-display1-size)',
-      fontWeight: 'var(--mobile-title-display1-line-weight)',
-      lineHeight: 'var(--mobile-title-display1-line-height)',
-      letterSpacing: '-4.8px',
+      'fontFamily': 'var(--mobile-title-display1-font)',
+      'fontSize': 'var(--mobile-title-display1-size)',
+      'fontWeight': 'var(--mobile-title-display1-line-weight)',
+      'lineHeight': 'var(--mobile-title-display1-line-height)',
+      'letterSpacing': '-4.8px',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-display1-font)',
         fontSize: 'var(--tablet-title-display1-size)',
@@ -20,11 +20,11 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-display-md': {
-      fontFamily: 'var(--mobile-title-display2-font)',
-      fontSize: 'var(--mobile-title-display2-size)',
-      fontWeight: 'var(--mobile-title-display2-line-weight)',
-      lineHeight: 'var(--mobile-title-display2-line-height)',
-      letterSpacing: '-4.8px',
+      'fontFamily': 'var(--mobile-title-display2-font)',
+      'fontSize': 'var(--mobile-title-display2-size)',
+      'fontWeight': 'var(--mobile-title-display2-line-weight)',
+      'lineHeight': 'var(--mobile-title-display2-line-height)',
+      'letterSpacing': '-4.8px',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-display2-font)',
         fontSize: 'var(--tablet-title-display2-size)',
@@ -39,10 +39,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h1': {
-      fontFamily: 'var(--mobile-title-h1-font)',
-      fontSize: 'var(--mobile-title-h1-size)',
-      fontWeight: 'var(--mobile-title-h1-line-weight)',
-      lineHeight: 'var(--mobile-title-h1-line-height)',
+      'fontFamily': 'var(--mobile-title-h1-font)',
+      'fontSize': 'var(--mobile-title-h1-size)',
+      'fontWeight': 'var(--mobile-title-h1-line-weight)',
+      'lineHeight': 'var(--mobile-title-h1-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h1-font)',
         fontSize: 'var(--tablet-title-h1-size)',
@@ -57,10 +57,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h2': {
-      fontFamily: 'var(--mobile-title-h2-font)',
-      fontSize: 'var(--mobile-title-h2-size)',
-      fontWeight: 'var(--mobile-title-h2-line-weight)',
-      lineHeight: 'var(--mobile-title-h2-line-height)',
+      'fontFamily': 'var(--mobile-title-h2-font)',
+      'fontSize': 'var(--mobile-title-h2-size)',
+      'fontWeight': 'var(--mobile-title-h2-line-weight)',
+      'lineHeight': 'var(--mobile-title-h2-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h2-font)',
         fontSize: 'var(--tablet-title-h2-size)',
@@ -75,10 +75,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h3': {
-      fontFamily: 'var(--mobile-title-h3-font)',
-      fontSize: 'var(--mobile-title-h3-size)',
-      fontWeight: 'var(--mobile-title-h3-line-weight)',
-      lineHeight: 'var(--mobile-title-h3-line-height)',
+      'fontFamily': 'var(--mobile-title-h3-font)',
+      'fontSize': 'var(--mobile-title-h3-size)',
+      'fontWeight': 'var(--mobile-title-h3-line-weight)',
+      'lineHeight': 'var(--mobile-title-h3-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h3-font)',
         fontSize: 'var(--tablet-title-h3-size)',
@@ -93,10 +93,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h4': {
-      fontFamily: 'var(--mobile-title-h4-font)',
-      fontSize: 'var(--mobile-title-h4-size)',
-      fontWeight: 'var(--mobile-title-h4-line-weight)',
-      lineHeight: 'var(--mobile-title-h4-line-height)',
+      'fontFamily': 'var(--mobile-title-h4-font)',
+      'fontSize': 'var(--mobile-title-h4-size)',
+      'fontWeight': 'var(--mobile-title-h4-line-weight)',
+      'lineHeight': 'var(--mobile-title-h4-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h4-font)',
         fontSize: 'var(--tablet-title-h4-size)',
@@ -111,10 +111,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h5': {
-      fontFamily: 'var(--mobile-title-h5-font)',
-      fontSize: 'var(--mobile-title-h5-size)',
-      fontWeight: 'var(--mobile-title-h5-line-weight)',
-      lineHeight: 'var(--mobile-title-h5-line-height)',
+      'fontFamily': 'var(--mobile-title-h5-font)',
+      'fontSize': 'var(--mobile-title-h5-size)',
+      'fontWeight': 'var(--mobile-title-h5-line-weight)',
+      'lineHeight': 'var(--mobile-title-h5-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h5-font)',
         fontSize: 'var(--tablet-title-h5-size)',
@@ -129,10 +129,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.title-h6': {
-      fontFamily: 'var(--mobile-title-h6-font)',
-      fontSize: 'var(--mobile-title-h6-size)',
-      fontWeight: 'var(--mobile-title-h6-line-weight)',
-      lineHeight: 'var(--mobile-title-h6-line-height)',
+      'fontFamily': 'var(--mobile-title-h6-font)',
+      'fontSize': 'var(--mobile-title-h6-size)',
+      'fontWeight': 'var(--mobile-title-h6-line-weight)',
+      'lineHeight': 'var(--mobile-title-h6-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-title-h6-font)',
         fontSize: 'var(--tablet-title-h6-size)',
@@ -147,10 +147,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-2xl': {
-      fontFamily: 'var(--mobile-body-2xl-font)',
-      fontSize: 'var(--mobile-body-2xl-size)',
-      fontWeight: 'var(--mobile-body-2xl-line-weight)',
-      lineHeight: 'var(--mobile-body-2xl-line-height)',
+      'fontFamily': 'var(--mobile-body-2xl-font)',
+      'fontSize': 'var(--mobile-body-2xl-size)',
+      'fontWeight': 'var(--mobile-body-2xl-line-weight)',
+      'lineHeight': 'var(--mobile-body-2xl-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-2xl-font)',
         fontSize: 'var(--tablet-body-2xl-size)',
@@ -165,10 +165,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-xl': {
-      fontFamily: 'var(--mobile-body-xl-font)',
-      fontSize: 'var(--mobile-body-xl-size)',
-      fontWeight: 'var(--mobile-body-xl-line-weight)',
-      lineHeight: 'var(--mobile-body-xl-line-height)',
+      'fontFamily': 'var(--mobile-body-xl-font)',
+      'fontSize': 'var(--mobile-body-xl-size)',
+      'fontWeight': 'var(--mobile-body-xl-line-weight)',
+      'lineHeight': 'var(--mobile-body-xl-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-xl-font)',
         fontSize: 'var(--tablet-body-xl-size)',
@@ -183,10 +183,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-lg': {
-      fontFamily: 'var(--mobile-body-l-font)',
-      fontSize: 'var(--mobile-body-l-size)',
-      fontWeight: 'var(--mobile-body-l-line-weight)',
-      lineHeight: 'var(--mobile-body-l-line-height)',
+      'fontFamily': 'var(--mobile-body-l-font)',
+      'fontSize': 'var(--mobile-body-l-size)',
+      'fontWeight': 'var(--mobile-body-l-line-weight)',
+      'lineHeight': 'var(--mobile-body-l-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-l-font)',
         fontSize: 'var(--tablet-body-l-size)',
@@ -201,10 +201,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-base': {
-      fontFamily: 'var(--mobile-body-m-base-font)',
-      fontSize: 'var(--mobile-body-m-base-size)',
-      fontWeight: 'var(--mobile-body-m-base-line-weight)',
-      lineHeight: 'var(--mobile-body-m-base-line-height)',
+      'fontFamily': 'var(--mobile-body-m-base-font)',
+      'fontSize': 'var(--mobile-body-m-base-size)',
+      'fontWeight': 'var(--mobile-body-m-base-line-weight)',
+      'lineHeight': 'var(--mobile-body-m-base-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-m-base-font)',
         fontSize: 'var(--tablet-body-m-base-size)',
@@ -219,10 +219,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-sm': {
-      fontFamily: 'var(--mobile-body-s-font)',
-      fontSize: 'var(--mobile-body-s-size)',
-      fontWeight: 'var(--mobile-body-s-line-weight)',
-      lineHeight: 'var(--mobile-body-s-line-height)',
+      'fontFamily': 'var(--mobile-body-s-font)',
+      'fontSize': 'var(--mobile-body-s-size)',
+      'fontWeight': 'var(--mobile-body-s-line-weight)',
+      'lineHeight': 'var(--mobile-body-s-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-s-font)',
         fontSize: 'var(--tablet-body-s-size)',
@@ -237,10 +237,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-xs': {
-      fontFamily: 'var(--mobile-body-xs-font)',
-      fontSize: 'var(--mobile-body-xs-size)',
-      fontWeight: 'var(--mobile-body-xs-line-weight)',
-      lineHeight: 'var(--mobile-body-xs-line-height)',
+      'fontFamily': 'var(--mobile-body-xs-font)',
+      'fontSize': 'var(--mobile-body-xs-size)',
+      'fontWeight': 'var(--mobile-body-xs-line-weight)',
+      'lineHeight': 'var(--mobile-body-xs-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-xs-font)',
         fontSize: 'var(--tablet-body-xs-size)',
@@ -255,10 +255,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.body-2xs': {
-      fontFamily: 'var(--mobile-body-2xs-font)',
-      fontSize: 'var(--mobile-body-2xs-size)',
-      fontWeight: 'var(--mobile-body-2xs-line-weight)',
-      lineHeight: 'var(--mobile-body-2xs-line-height)',
+      'fontFamily': 'var(--mobile-body-2xs-font)',
+      'fontSize': 'var(--mobile-body-2xs-size)',
+      'fontWeight': 'var(--mobile-body-2xs-line-weight)',
+      'lineHeight': 'var(--mobile-body-2xs-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-body-2xs-font)',
         fontSize: 'var(--tablet-body-2xs-size)',
@@ -273,10 +273,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.subheading-base': {
-      fontFamily: 'var(--mobile-subheading-m-base-font)',
-      fontSize: 'var(--mobile-subheading-m-base-size)',
-      fontWeight: 'var(--mobile-subheading-m-base-line-weight)',
-      lineHeight: 'var(--mobile-subheading-m-base-line-height)',
+      'fontFamily': 'var(--mobile-subheading-m-base-font)',
+      'fontSize': 'var(--mobile-subheading-m-base-size)',
+      'fontWeight': 'var(--mobile-subheading-m-base-line-weight)',
+      'lineHeight': 'var(--mobile-subheading-m-base-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-subheading-m-base-font)',
         fontSize: 'var(--tablet-subheading-m-base-size)',
@@ -291,10 +291,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.subheading-sm': {
-      fontFamily: 'var(--mobile-subheading-s-font)',
-      fontSize: 'var(--mobile-subheading-s-size)',
-      fontWeight: 'var(--mobile-subheading-s-line-weight)',
-      lineHeight: 'var(--mobile-subheading-s-line-height)',
+      'fontFamily': 'var(--mobile-subheading-s-font)',
+      'fontSize': 'var(--mobile-subheading-s-size)',
+      'fontWeight': 'var(--mobile-subheading-s-line-weight)',
+      'lineHeight': 'var(--mobile-subheading-s-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-subheading-s-font)',
         fontSize: 'var(--tablet-subheading-s-size)',
@@ -309,10 +309,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.subheading-xs': {
-      fontFamily: 'var(--mobile-subheading-xs-font)',
-      fontSize: 'var(--mobile-subheading-xs-size)',
-      fontWeight: 'var(--mobile-subheading-xs-line-weight)',
-      lineHeight: 'var(--mobile-subheading-xs-line-height)',
+      'fontFamily': 'var(--mobile-subheading-xs-font)',
+      'fontSize': 'var(--mobile-subheading-xs-size)',
+      'fontWeight': 'var(--mobile-subheading-xs-line-weight)',
+      'lineHeight': 'var(--mobile-subheading-xs-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-subheading-xs-font)',
         fontSize: 'var(--tablet-subheading-xs-size)',
@@ -327,10 +327,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.subheading-2xs': {
-      fontFamily: 'var(--mobile-subheading-2xs-font)',
-      fontSize: 'var(--mobile-subheading-2xs-size)',
-      fontWeight: 'var(--mobile-subheading-2xs-line-weight)',
-      lineHeight: 'var(--mobile-subheading-2xs-line-height)',
+      'fontFamily': 'var(--mobile-subheading-2xs-font)',
+      'fontSize': 'var(--mobile-subheading-2xs-size)',
+      'fontWeight': 'var(--mobile-subheading-2xs-line-weight)',
+      'lineHeight': 'var(--mobile-subheading-2xs-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-subheading-2xs-font)',
         fontSize: 'var(--tablet-subheading-2xs-size)',
@@ -345,10 +345,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-lg': {
-      fontFamily: 'var(--mobile-label-l-font)',
-      fontSize: 'var(--mobile-label-l-size)',
-      fontWeight: 'var(--mobile-label-l-line-weight)',
-      lineHeight: 'var(--mobile-label-l-line-height)',
+      'fontFamily': 'var(--mobile-label-l-font)',
+      'fontSize': 'var(--mobile-label-l-size)',
+      'fontWeight': 'var(--mobile-label-l-line-weight)',
+      'lineHeight': 'var(--mobile-label-l-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-l-font)',
         fontSize: 'var(--tablet-label-l-size)',
@@ -363,10 +363,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-base': {
-      fontFamily: 'var(--mobile-label-m-base-font)',
-      fontSize: 'var(--mobile-label-m-base-size)',
-      fontWeight: 'var(--mobile-label-m-base-line-weight)',
-      lineHeight: 'var(--mobile-label-m-base-line-height)',
+      'fontFamily': 'var(--mobile-label-m-base-font)',
+      'fontSize': 'var(--mobile-label-m-base-size)',
+      'fontWeight': 'var(--mobile-label-m-base-line-weight)',
+      'lineHeight': 'var(--mobile-label-m-base-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-m-base-font)',
         fontSize: 'var(--tablet-label-m-base-size)',
@@ -381,10 +381,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-sm': {
-      fontFamily: 'var(--mobile-label-s-font)',
-      fontSize: 'var(--mobile-label-s-size)',
-      fontWeight: 'var(--mobile-label-s-line-weight)',
-      lineHeight: 'var(--mobile-label-s-line-height)',
+      'fontFamily': 'var(--mobile-label-s-font)',
+      'fontSize': 'var(--mobile-label-s-size)',
+      'fontWeight': 'var(--mobile-label-s-line-weight)',
+      'lineHeight': 'var(--mobile-label-s-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-s-font)',
         fontSize: 'var(--tablet-label-s-size)',
@@ -399,10 +399,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-underline-sm': {
-      fontFamily: 'var(--mobile-label-underline-s-font)',
-      fontSize: 'var(--mobile-label-underline-s-size)',
-      fontWeight: 'var(--mobile-label-underline-s-line-weight)',
-      lineHeight: 'var(--mobile-label-underline-s-line-height)',
+      'fontFamily': 'var(--mobile-label-underline-s-font)',
+      'fontSize': 'var(--mobile-label-underline-s-size)',
+      'fontWeight': 'var(--mobile-label-underline-s-line-weight)',
+      'lineHeight': 'var(--mobile-label-underline-s-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-underline-s-font)',
         fontSize: 'var(--tablet-label-underline-s-size)',
@@ -417,10 +417,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-underline-base': {
-      fontFamily: 'var(--mobile-label-underline-m-base-font)',
-      fontSize: 'var(--mobile-label-underline-m-base-size)',
-      fontWeight: 'var(--mobile-label-underline-m-base-line-weight)',
-      lineHeight: 'var(--mobile-label-underline-m-base-line-height)',
+      'fontFamily': 'var(--mobile-label-underline-m-base-font)',
+      'fontSize': 'var(--mobile-label-underline-m-base-size)',
+      'fontWeight': 'var(--mobile-label-underline-m-base-line-weight)',
+      'lineHeight': 'var(--mobile-label-underline-m-base-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-underline-m-base-font)',
         fontSize: 'var(--tablet-label-underline-m-base-size)',
@@ -435,10 +435,10 @@ module.exports = function ({ addComponents }) {
       },
     },
     '.label-underline-lg': {
-      fontFamily: 'var(--mobile-label-underline-l-font)',
-      fontSize: 'var(--mobile-label-underline-l-size)',
-      fontWeight: 'var(--mobile-label-underline-l-line-weight)',
-      lineHeight: 'var(--mobile-label-underline-l-line-height)',
+      'fontFamily': 'var(--mobile-label-underline-l-font)',
+      'fontSize': 'var(--mobile-label-underline-l-size)',
+      'fontWeight': 'var(--mobile-label-underline-l-line-weight)',
+      'lineHeight': 'var(--mobile-label-underline-l-line-height)',
       '@media (min-width: 905px)': {
         fontFamily: 'var(--tablet-label-underline-l-font)',
         fontSize: 'var(--tablet-label-underline-l-size)',

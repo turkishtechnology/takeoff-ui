@@ -4,9 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const HeaderTypes = () => {
   const [showDialog, setShowDialog] = useState(false);
-  const [headerType, setHeaderType] = useState<
-    'basic' | 'divided' | 'light' | 'dark' | 'primary'
-  >('basic');
+  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
   const headerTypeOptions = [
     { label: 'Basic', value: 'basic' },
     { label: 'Divided', value: 'divided' },
@@ -65,14 +63,9 @@ const setShowDialog = (value) => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup
-          value={headerType}
-          onTkChange={(e) => setHeaderType(e.detail)}
-        >
+        <TkRadioGroup value={headerType} onTkChange={e => setHeaderType(e.detail)}>
           {headerTypeOptions.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -81,26 +74,16 @@ const setShowDialog = (value) => {
         header="Header Types"
         subheader={`This dialog uses the ${headerType} header type`}
         visible={showDialog}
-        onTkVisibleChange={(e) => setShowDialog(e.detail)}
+        onTkVisibleChange={e => setShowDialog(e.detail)}
         headerType={headerType}
         containerStyle={{ width: '450px' }}
       >
-        <p>
-          This example demonstrates the different header types available for the
-          TkDialog component.
-        </p>
+        <p>This example demonstrates the different header types available for the TkDialog component.</p>
       </TkDialog>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default HeaderTypes;

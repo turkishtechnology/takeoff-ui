@@ -9,7 +9,7 @@ const MediaAndUrl = () => {
     { label: 'URL Link', value: 'link' },
     { label: 'Image', value: 'image' },
   ];
-  const handleFeatureChange = (event) => {
+  const handleFeatureChange = event => {
     setFeature(event.detail);
   };
   const initialContent =
@@ -63,29 +63,15 @@ ${initialContent}
   const demo = (
     <div className="flex flex-col gap-4">
       <div style={{ overflow: 'overlay' }}>
-        <TkRadioGroup
-          label="Feature"
-          value={feature}
-          onTkChange={handleFeatureChange}
-        >
+        <TkRadioGroup label="Feature" value={feature} onTkChange={handleFeatureChange}>
           {featureTypes.map((type, index) => (
             <TkRadio key={index} label={type.label} value={type.value} />
           ))}
         </TkRadioGroup>
       </div>
-      <TkEditor
-        value={initialContent}
-        toolbar={[['bold', 'italic'], [feature]]}
-      />
+      <TkEditor value={initialContent} toolbar={[['bold', 'italic'], [feature]]} />
     </div>
   );
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''} />;
 };
 export default MediaAndUrl;

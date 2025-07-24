@@ -13,24 +13,11 @@ const Clearable = () => {
 
   const demo = (
     <div className="flex gap-2 w-[300px] max-w-[300px]">
-      <TkSelect
-        label="Clearable Select"
-        options={options}
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-        clearable
-      />
+      <TkSelect label="Clearable Select" options={options} value={value} onTkChange={e => setValue(e.detail)} clearable />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Clearable;

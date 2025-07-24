@@ -49,12 +49,7 @@ const Example = () => {
   ];
   return (
     <div className="p-2">
-      <TkTable
-        ref={tableRef}
-        cardTitle="Sticky"
-        columns={column}
-        data={stickyData}
-      ></TkTable>
+      <TkTable ref={tableRef} cardTitle="Sticky" columns={column} data={stickyData}></TkTable>
     </div>
   );
 };
@@ -222,14 +217,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default StickyColumn;

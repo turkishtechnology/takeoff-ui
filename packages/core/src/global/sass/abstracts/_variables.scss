@@ -175,10 +175,10 @@
 
   /* typography */
 
-  --family-title: "Geologica";
-  --family-label: "Geologica";
-  --family-body: "Geologica";
-  --family-subheading: "Geologica";
+  --family-title: 'Geologica';
+  --family-label: 'Geologica';
+  --family-body: 'Geologica';
+  --family-subheading: 'Geologica';
   --size-xxs: 11px;
   --size-xs: 12px;
   --size-sm: 14px;
@@ -551,28 +551,21 @@
 
   /* -------------------------- SEMANTICS -------------------------- */
   /* effect 1 default */
-  --effect-1-default-xl: 0px 2px 2px -1px var(--shadow-black-alpha-darkest),
-    0px 6px 12px -2px var(--shadow-black-alpha-darkest), 0px 8px 20px 0px var(--shadow-black-alpha-darkest);
-  --effect-1-default-lg: 0px 2px 2px -1px var(--shadow-black-alpha-dark),
-    0px 6px 12px -2px var(--shadow-black-alpha-dark), 0px 8px 20px 0px var(--shadow-black-alpha-dark);
-  --effect-1-default-base: 0px 2px 2px -1px var(--shadow-black-alpha-base),
-    0px 6px 12px -2px var(--shadow-black-alpha-base), 0px 8px 20px 0px var(--shadow-black-alpha-base);
-  --effect-1-default-sm: 0px 2px 2px -1px var(--shadow-black-alpha-light),
-    0px 6px 12px -2px var(--shadow-black-alpha-light), 0px 8px 20px 0px var(--shadow-black-alpha-light);
-  --effect-1-default-xs: 0px 2px 2px -1px var(--shadow-black-alpha-lightest),
-    0px 6px 12px -2px var(--shadow-black-alpha-lightest), 0px 8px 20px 0px var(--shadow-black-alpha-lightest);
+  --effect-1-default-xl:
+    0px 2px 2px -1px var(--shadow-black-alpha-darkest), 0px 6px 12px -2px var(--shadow-black-alpha-darkest), 0px 8px 20px 0px var(--shadow-black-alpha-darkest);
+  --effect-1-default-lg: 0px 2px 2px -1px var(--shadow-black-alpha-dark), 0px 6px 12px -2px var(--shadow-black-alpha-dark), 0px 8px 20px 0px var(--shadow-black-alpha-dark);
+  --effect-1-default-base: 0px 2px 2px -1px var(--shadow-black-alpha-base), 0px 6px 12px -2px var(--shadow-black-alpha-base), 0px 8px 20px 0px var(--shadow-black-alpha-base);
+  --effect-1-default-sm: 0px 2px 2px -1px var(--shadow-black-alpha-light), 0px 6px 12px -2px var(--shadow-black-alpha-light), 0px 8px 20px 0px var(--shadow-black-alpha-light);
+  --effect-1-default-xs:
+    0px 2px 2px -1px var(--shadow-black-alpha-lightest), 0px 6px 12px -2px var(--shadow-black-alpha-lightest), 0px 8px 20px 0px var(--shadow-black-alpha-lightest);
 
   /* effect 1 hover */
-  --effect-1-hover-xl: 0px 2px 2px -1px var(--shadow-black-alpha-darkest),
-    0px 6px 12px -2px var(--shadow-black-alpha-darkest), 0px 8px 20px 0px var(--shadow-black-alpha-darkest);
-  --effect-1-hover-lg: 0px 2px 2px -1px var(--shadow-black-alpha-dark), 0px 6px 12px 2px var(--shadow-black-alpha-dark),
-    0px 8px 20px 4px var(--shadow-black-alpha-dark);
-  --effect-1-hover-base: 0px 2px 2px -1px var(--shadow-black-alpha-base),
-    0px 6px 12px 2px var(--shadow-black-alpha-base), 0px 8px 20px 4px var(--shadow-black-alpha-base);
-  --effect-1-hover-sm: 0px 2px 2px -1px var(--shadow-black-alpha-light),
-    0px 6px 12px 2px var(--shadow-black-alpha-light), 0px 8px 20px 4px var(--shadow-black-alpha-light);
-  --effect-1-hover-xs: 0px 2px 2px -1px var(--shadow-black-alpha-lightest),
-    0px 6px 12px 2px var(--shadow-black-alpha-lightest), 0px 8px 20px 4px var(--shadow-black-alpha-lightest);
+  --effect-1-hover-xl: 0px 2px 2px -1px var(--shadow-black-alpha-darkest), 0px 6px 12px -2px var(--shadow-black-alpha-darkest), 0px 8px 20px 0px var(--shadow-black-alpha-darkest);
+  --effect-1-hover-lg: 0px 2px 2px -1px var(--shadow-black-alpha-dark), 0px 6px 12px 2px var(--shadow-black-alpha-dark), 0px 8px 20px 4px var(--shadow-black-alpha-dark);
+  --effect-1-hover-base: 0px 2px 2px -1px var(--shadow-black-alpha-base), 0px 6px 12px 2px var(--shadow-black-alpha-base), 0px 8px 20px 4px var(--shadow-black-alpha-base);
+  --effect-1-hover-sm: 0px 2px 2px -1px var(--shadow-black-alpha-light), 0px 6px 12px 2px var(--shadow-black-alpha-light), 0px 8px 20px 4px var(--shadow-black-alpha-light);
+  --effect-1-hover-xs:
+    0px 2px 2px -1px var(--shadow-black-alpha-lightest), 0px 6px 12px 2px var(--shadow-black-alpha-lightest), 0px 8px 20px 4px var(--shadow-black-alpha-lightest);
 
   /* effect 2 default */
   --effect-2-default-xl: 0px 0px 20px 3px var(--shadow-black-alpha-darkest);
@@ -1200,7 +1193,6 @@
   --tabs-items-xxsmall-tab-label-gap: var(--spacing-px);
   --tabs-items-xxsmall-icon-size: var(--spacing-3xl);
 
-
   // timeline variables
   --timeline-h-padding: var(--spacing-m-base);
   --timeline-v-padding: var(--spacing-m-base);
@@ -1290,7 +1282,7 @@
   --breakpoint-xs: 0px;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* semantic colors dark */
   --primary-lightest: var(--primary-900);
   --secondary-lightest: var(--secondary-900);

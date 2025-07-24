@@ -3,9 +3,7 @@ import { TkSpinner, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const CardWithHeaderMode = () => {
-  const [type, setType] = useState<
-    'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader'
-  >('rounded');
+  const [type, setType] = useState<'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader'>('rounded');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const types = [
@@ -16,7 +14,7 @@ const CardWithHeaderMode = () => {
     { label: 'Three Dots', value: 'three-dots' },
     { label: 'Loader', value: 'loader' },
   ];
-  const handleTypeChange = (event) => {
+  const handleTypeChange = event => {
     setType(event.detail);
   };
   useEffect(() => {
@@ -33,15 +31,9 @@ const CardWithHeaderMode = () => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup
-          label="Options"
-          value={type}
-          onTkChange={handleTypeChange}
-        >
+        <TkRadioGroup label="Options" value={type} onTkChange={handleTypeChange}>
           {types.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -51,13 +43,6 @@ const CardWithHeaderMode = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
 };
 export default CardWithHeaderMode;

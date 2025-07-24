@@ -9,25 +9,12 @@ const Example = () => {
   return (
     <>
       <div className="mb-4">
-        <TkCheckbox
-          label="Prevent Dismiss by Clicking Outside"
-          value={preventDismiss}
-          onTkChange={(e) => setPreventDismiss(e.detail)}
-        />
+        <TkCheckbox label="Prevent Dismiss by Clicking Outside" value={preventDismiss} onTkChange={e => setPreventDismiss(e.detail)} />
       </div>
       <TkButton label="Open Drawer" onTkClick={() => setShowDrawer(true)} />
-      <TkDrawer
-        header="Prevent Dismiss Drawer"
-        open={showDrawer}
-        preventDismiss={preventDismiss}
-        onTkDrawerClose={() => setShowDrawer(false)}
-      >
+      <TkDrawer header="Prevent Dismiss Drawer" open={showDrawer} preventDismiss={preventDismiss} onTkDrawerClose={() => setShowDrawer(false)}>
         <div slot="content">
-          <p>
-            {preventDismiss
-              ? 'Clicking outside the drawer will not close it. Please use the close button.'
-              : 'Clicking outside the drawer will close it.'}
-          </p>
+          <p>{preventDismiss ? 'Clicking outside the drawer will not close it. Please use the close button.' : 'Clicking outside the drawer will close it.'}</p>
         </div>
       </TkDrawer>
     </>
@@ -103,13 +90,6 @@ const showDrawer = ref(false);
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default PreventDismiss;

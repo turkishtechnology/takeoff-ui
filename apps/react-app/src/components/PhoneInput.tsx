@@ -16,7 +16,7 @@ function PhoneInput() {
         //label="Enter phone number"
         //showAsterisk
         defaultCountry="TR"
-        onTkChange={(e) => {
+        onTkChange={e => {
           console.log('change', e.detail);
           setValue(e.detail);
         }}

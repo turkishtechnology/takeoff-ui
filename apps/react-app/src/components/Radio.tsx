@@ -3,13 +3,10 @@ import { TkCard, TkRadioGroup, TkRadio, TkIcon } from '@takeoff-ui/react';
 function Radio() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <TkCard
-        header="Radio Group ile kullanım"
-        containerStyle={{ padding: '16px' }}
-      >
+      <TkCard header="Radio Group ile kullanım" containerStyle={{ padding: '16px' }}>
         <div slot="content">
           <TkRadioGroup
-            onTkChange={(e) => {
+            onTkChange={e => {
               console.log('name1', e.detail);
             }}
             position="right"
@@ -49,7 +46,7 @@ function Radio() {
           label="label 1"
           name="name3"
           value="1"
-          onTkChange={(e) => {
+          onTkChange={e => {
             console.log('name3', e.detail);
           }}
         />
@@ -57,7 +54,7 @@ function Radio() {
           label="label 2"
           name="name3"
           value="2"
-          onTkChange={(e) => {
+          onTkChange={e => {
             console.log('name3', e.detail);
           }}
         />

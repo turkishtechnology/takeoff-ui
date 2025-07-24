@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Example = () => {
-  const handleChange = (e) => {
+  const handleChange = e => {
     createToast({
       header: 'Dosya eklendi',
       message: `${e.detail.length} dosya eklendi`,
@@ -15,7 +15,7 @@ const Example = () => {
     });
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = e => {
     console.log(e.detail);
     createToast({
       header: 'Dosya yüklendi',
@@ -30,11 +30,7 @@ const Example = () => {
   return (
     <div>
       <TkUpload onTkChange={handleChange} onTkUpload={handleUpload}></TkUpload>
-      <TkUpload
-        type="centered"
-        onTkChange={handleChange}
-        onTkUpload={handleUpload}
-      ></TkUpload>
+      <TkUpload type="centered" onTkChange={handleChange} onTkUpload={handleUpload}></TkUpload>
     </div>
   );
 };
@@ -120,14 +116,7 @@ const handleChange = (e) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Type;

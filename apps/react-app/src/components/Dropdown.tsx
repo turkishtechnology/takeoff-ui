@@ -26,7 +26,7 @@ function Dropdown() {
         position="bottom-end"
         style={{ width: '200px' }}
         options={dropdownOptions}
-        onTkItemClick={(e) => {
+        onTkItemClick={e => {
           console.log(e);
           alert(e.detail);
         }}

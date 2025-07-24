@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  TkStepper,
-  TkStep,
-  TkButton,
-  TkCard,
-  TkInput,
-} from '@takeoff-ui/react';
+import { TkStepper, TkStep, TkButton, TkCard, TkInput } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const ControlledStepper = () => {
@@ -19,12 +13,12 @@ const ControlledStepper = () => {
   const [reactCodeSample, setReactCodeSample] = useState('');
   const [vueCodeSample, setVueCodeSample] = useState('');
 
-  const handleStepChange = (event) => {
+  const handleStepChange = event => {
     setActiveStep(event.detail);
   };
 
   const handleInputChange = (name: string, event: CustomEvent<any>) => {
-    setFormData((prevState) => ({
+    setFormData(prevState => ({
       ...prevState,
       [name]: event.detail,
     }));
@@ -322,22 +316,10 @@ const submitForm = () => {
             <h3 className="text-lg font-medium mb-4">Personal Information</h3>
             <div className="space-y-4">
               <div className="w-[250px]">
-                <TkInput
-                  label="Full Name"
-                  name="name"
-                  value={formData.name}
-                  onTkChange={(e) => handleInputChange('name', e)}
-                  placeholder="Enter your name"
-                />
+                <TkInput label="Full Name" name="name" value={formData.name} onTkChange={e => handleInputChange('name', e)} placeholder="Enter your name" />
               </div>
               <div className="w-[250px]">
-                <TkInput
-                  label="Email"
-                  name="email"
-                  value={formData.email}
-                  onTkChange={(e) => handleInputChange('email', e)}
-                  placeholder="Enter your email"
-                />
+                <TkInput label="Email" name="email" value={formData.email} onTkChange={e => handleInputChange('email', e)} placeholder="Enter your email" />
               </div>
               <div className="flex justify-end mt-4">
                 <TkButton label="Next" onClick={() => setActiveStep(1)} />
@@ -351,22 +333,10 @@ const submitForm = () => {
             <h3 className="text-lg font-medium mb-4">Address Information</h3>
             <div className="space-y-4">
               <div className="w-[250px]">
-                <TkInput
-                  label="Address"
-                  name="address"
-                  value={formData.address}
-                  onTkChange={(e) => handleInputChange('address', e)}
-                  placeholder="Enter your address"
-                />
+                <TkInput label="Address" name="address" value={formData.address} onTkChange={e => handleInputChange('address', e)} placeholder="Enter your address" />
               </div>
               <div className="w-[250px]">
-                <TkInput
-                  label="City"
-                  name="city"
-                  value={formData.city}
-                  onTkChange={(e) => handleInputChange('city', e)}
-                  placeholder="Enter your city"
-                />
+                <TkInput label="City" name="city" value={formData.city} onTkChange={e => handleInputChange('city', e)} placeholder="Enter your city" />
               </div>
               <div className="flex justify-between mt-4">
                 <TkButton label="Back" onClick={() => setActiveStep(0)} />
@@ -396,10 +366,7 @@ const submitForm = () => {
               </div>
               <div className="flex justify-between mt-4">
                 <TkButton label="Back" onClick={() => setActiveStep(1)} />
-                <TkButton
-                  label="Submit"
-                  onClick={() => alert('Form submitted successfully!')}
-                />
+                <TkButton label="Submit" onClick={() => alert('Form submitted successfully!')} />
               </div>
             </div>
           </TkCard>
@@ -412,43 +379,20 @@ const submitForm = () => {
   const demo = (
     <div className="space-y-6">
       <p className="text-sm mb-4">
-        This example demonstrates a controlled stepper component used with a
-        multi-step form. The active step is controlled by the parent component's
-        state.
+        This example demonstrates a controlled stepper component used with a multi-step form. The active step is controlled by the parent component's state.
       </p>
 
       <TkStepper active={activeStep} onTkStepChange={handleStepChange}>
-        <TkStep
-          header="Personal Info"
-          subheader="Name and contact details"
-          complete={activeStep > 0}
-          isActive={activeStep === 0}
-        />
-        <TkStep
-          header="Address"
-          subheader="Your address information"
-          complete={activeStep > 1}
-          isActive={activeStep === 1}
-        />
-        <TkStep
-          header="Review"
-          subheader="Review and submit"
-          isActive={activeStep === 2}
-        />
+        <TkStep header="Personal Info" subheader="Name and contact details" complete={activeStep > 0} isActive={activeStep === 0} />
+        <TkStep header="Address" subheader="Your address information" complete={activeStep > 1} isActive={activeStep === 1} />
+        <TkStep header="Review" subheader="Review and submit" isActive={activeStep === 2} />
       </TkStepper>
 
       <div className="mt-6">{renderStepContent()}</div>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCodeSample} vueCode={vueCodeSample} angularCode={''} />;
 };
 
 export default ControlledStepper;

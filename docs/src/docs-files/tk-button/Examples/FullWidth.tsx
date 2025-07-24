@@ -9,18 +9,9 @@ const FullWidth = () => {
 
   const angularCode = `<tk-button variant="primary" label="Full Width Button" fullWidth />`;
 
-  const demo = (
-    <TkButton variant="primary" label="Full Width Button" fullWidth />
-  );
+  const demo = <TkButton variant="primary" label="Full Width Button" fullWidth />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default FullWidth;

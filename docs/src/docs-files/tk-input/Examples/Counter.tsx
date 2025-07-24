@@ -16,23 +16,11 @@ const Counter = () => {
 
   const demo = (
     <div className="flex gap-2 max-w-[300px]">
-      <TkInput
-        label="Counter Input"
-        mode="counter"
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-      />
+      <TkInput label="Counter Input" mode="counter" value={value} onTkChange={e => setValue(e.detail)} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Counter;

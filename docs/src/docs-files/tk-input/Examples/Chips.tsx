@@ -20,23 +20,11 @@ const Chips = () => {
 
   const demo = (
     <div className="flex items-end gap-2">
-      <TkInput
-        label="Chips Mode"
-        mode="chips"
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-      />
+      <TkInput label="Chips Mode" mode="chips" value={value} onTkChange={e => setValue(e.detail)} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Chips;
