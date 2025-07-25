@@ -177,7 +177,7 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentWillLoad(): void {
     this.initializeCountries();
-    if (Object.keys(this.value)?.length) {
+    if (this?.value && Object.keys(this?.value)?.length) {
       if (this.value?.country?.id) {
         this.setSelectedCountry(this.value.country.id);
       }
