@@ -19,6 +19,10 @@ tk-icon {
     font-size: var(--size-base);
   }
 
+  &.tk-icon-medium {
+    font-size: var(--size-xl);
+  }
+
   &.tk-icon-large {
     font-size: var(--size-2xl);
   }
@@ -65,6 +69,7 @@ tk-icon {
 
   &.tk-icon-sign {
     background-color: var(--background-lightest);
+
     &.tk-icon-xsmall {
       border: 1px solid;
       border-radius: var(--radius-xs);
@@ -78,6 +83,12 @@ tk-icon {
     }
 
     &.tk-icon-base {
+      border: 1px solid;
+      border-radius: var(--radius-m-base);
+      padding: 4px;
+    }
+
+    &.tk-icon-medium {
       border: 1px solid;
       border-radius: var(--radius-m-base);
       padding: 4px;

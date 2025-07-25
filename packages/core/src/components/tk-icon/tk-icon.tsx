@@ -31,7 +31,7 @@ export class TkIcon implements ComponentInterface {
    * Sets size for the component.
    * @defaultValue 'base'
    */
-  @Prop() size: 'xxlarge' | 'xlarge' | 'large' | 'base' | 'small' | 'xsmall' = 'base';
+  @Prop() size: 'xxlarge' | 'xlarge' | 'large' | 'medium' | 'base' | 'small' | 'xsmall' = 'base';
 
   /**
    * Indicates whether the icon should be filled
