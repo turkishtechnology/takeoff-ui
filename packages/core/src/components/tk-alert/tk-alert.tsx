@@ -1,4 +1,4 @@
-import { Component, Prop, h, ComponentInterface, Element } from '@stencil/core';
+import { Component, Prop, h, ComponentInterface, Element, Fragment } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-props';
@@ -19,6 +19,7 @@ import { getIconElementProps } from '../../utils/icon-props';
 export class TkAlert implements ComponentInterface {
   private hasRightActionSlot: boolean = false;
   private hasFooterActionSlot: boolean = false;
+  private hasContentSlot: boolean = false;
 
   @Element() el: HTMLTkAlertElement;
 
@@ -121,6 +122,7 @@ export class TkAlert implements ComponentInterface {
   }
 
   render() {
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
     this.hasRightActionSlot = !!this.el.querySelector('[slot="right-action"]');
     this.hasFooterActionSlot = !!this.el.querySelector('[slot="footer-action"]');
 
@@ -131,8 +133,14 @@ export class TkAlert implements ComponentInterface {
 
     return (
       <div class={rootClasses}>
-        {icon}
-        {content}
+        {this.hasContentSlot ? (
+          <slot name="content" />
+        ) : (
+          <Fragment>
+            {icon}
+            {content}
+          </Fragment>
+        )}
         {this.hasRightActionSlot && <slot name="right-action"></slot>}
         {closeButton}
       </div>
