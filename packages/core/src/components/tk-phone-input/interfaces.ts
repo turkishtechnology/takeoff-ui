@@ -22,8 +22,6 @@ export interface IPhoneInputValue {
   rawValue: string;
   /** The formatted phone number with mask applied */
   maskedValue: string;
-  /** The mask used for formatting the phone number */
-  mask: string;
   /** The selected country object */
   country: ICountry;
 }
