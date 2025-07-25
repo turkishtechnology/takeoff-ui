@@ -12,10 +12,7 @@ export default function ContributionGuide() {
         <div className="container">
           <Gif />
           <h1>Contribution Guide</h1>
-          <p className={'description'}>
-            TakeOff simplifies the process of building web applications. It
-            provides comprehensive and flexible design system and ui library.
-          </p>
+          <p className={'description'}>TakeOff simplifies the process of building web applications. It provides comprehensive and flexible design system and ui library.</p>
         </div>
       </header>
       <main className="release-notes">

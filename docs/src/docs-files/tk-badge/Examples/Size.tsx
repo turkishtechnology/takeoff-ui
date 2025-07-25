@@ -19,35 +19,13 @@ const Size = () => {
 
   const demo = (
     <div className="flex items-end justify-center flex-wrap gap-2">
-      <TkBadge
-        variant="primary"
-        size="large"
-        type="filledlight"
-        label="primary"
-      />
-      <TkBadge
-        variant="primary"
-        size="base"
-        type="filledlight"
-        label="primary"
-      />
-      <TkBadge
-        variant="primary"
-        size="small"
-        type="filledlight"
-        label="primary"
-      />
+      <TkBadge variant="primary" size="large" type="filledlight" label="primary" />
+      <TkBadge variant="primary" size="base" type="filledlight" label="primary" />
+      <TkBadge variant="primary" size="small" type="filledlight" label="primary" />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Size;

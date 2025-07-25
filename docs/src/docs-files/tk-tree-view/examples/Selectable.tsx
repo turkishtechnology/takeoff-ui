@@ -248,15 +248,13 @@ const treeData = [
         value={selectedItems}
         branchIcon="folder"
         leafIcon="insert_drive_file"
-        onTkChange={(e) => {
+        onTkChange={e => {
           setSelectedItems(e.detail);
         }}
       />
 
       <div className="p-4 bg-gray-50 rounded">
-        <p className="font-medium mb-2">
-          Selected items: {selectedItems.length}
-        </p>
+        <p className="font-medium mb-2">Selected items: {selectedItems.length}</p>
         {selectedItems.length > 0 && (
           <ul className="list-disc list-inside text-sm space-y-1">
             {selectedItems.map((key, index) => (
@@ -270,14 +268,7 @@ const treeData = [
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode=""
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
 export default Selectable;

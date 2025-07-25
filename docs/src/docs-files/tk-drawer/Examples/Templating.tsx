@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  TkDrawer,
-  TkButton,
-  TkTabs,
-  TkTabsItem,
-  TkBadge,
-} from '@takeoff-ui/react';
+import { TkDrawer, TkButton, TkTabs, TkTabsItem, TkBadge } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const demoStyles = `.notification-panel-header {
@@ -276,43 +270,17 @@ ${demoStyles}
 
   const demo = (
     <>
-      <TkButton
-        label="Open Custom Drawer"
-        onTkClick={() => setShowDrawer(true)}
-      />
-      <TkDrawer
-        open={showDrawer}
-        header="Settings"
-        onTkDrawerClose={() => setShowDrawer(false)}
-      >
+      <TkButton label="Open Custom Drawer" onTkClick={() => setShowDrawer(true)} />
+      <TkDrawer open={showDrawer} header="Settings" onTkDrawerClose={() => setShowDrawer(false)}>
         <div slot="container">
           <div className="notification-panel-header">
             <span className="header-title">Notification</span>
             <div className="header-actions">
-              <TkButton
-                variant="neutral"
-                icon="more_vert"
-                size="small"
-                type="text"
-              ></TkButton>
-              <TkButton
-                variant="neutral"
-                icon="close"
-                size="small"
-                type="text"
-                onTkClick={() => setShowDrawer(false)}
-              ></TkButton>
+              <TkButton variant="neutral" icon="more_vert" size="small" type="text"></TkButton>
+              <TkButton variant="neutral" icon="close" size="small" type="text" onTkClick={() => setShowDrawer(false)}></TkButton>
             </div>
           </div>
-          <TkTabs
-            orientation="horizontal"
-            size="base"
-            tab-style="basic"
-            variant="primary"
-            is-closable="false"
-            default-active-index="0"
-            is-extendable="false"
-          >
+          <TkTabs orientation="horizontal" size="base" tab-style="basic" variant="primary" is-closable="false" default-active-index="0" is-extendable="false">
             <TkTabsItem slot="tab-content-0" label="All" badgeLabel="01" badged>
               <div className="notification-container">
                 <div className="notification-content">
@@ -323,32 +291,17 @@ ${demoStyles}
                         <div className="message-title">Header Text</div>
                       </div>
                       <div className="message-header-end">
-                        <TkBadge
-                          label="New"
-                          variant="info"
-                          type="filledlight"
-                        ></TkBadge>
+                        <TkBadge label="New" variant="info" type="filledlight"></TkBadge>
                       </div>
                     </div>
-                    <p className="message-text">
-                      Lorem Ipsum dolor sit amet consiquences.
-                    </p>
+                    <p className="message-text">Lorem Ipsum dolor sit amet consiquences.</p>
                   </div>
                   <div className="message-action">
-                    <TkButton
-                      variant="info"
-                      label="Action"
-                      type="text"
-                    ></TkButton>
+                    <TkButton variant="info" label="Action" type="text"></TkButton>
                   </div>
                 </div>
                 <div className="notification-end">
-                  <TkButton
-                    variant="neutral"
-                    size="small"
-                    icon="more_vert"
-                    type="text"
-                  ></TkButton>
+                  <TkButton variant="neutral" size="small" icon="more_vert" type="text"></TkButton>
                 </div>
               </div>
             </TkTabsItem>
@@ -360,13 +313,6 @@ ${demoStyles}
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default CustomContent;

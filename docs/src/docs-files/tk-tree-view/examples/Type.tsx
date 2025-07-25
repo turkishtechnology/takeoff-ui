@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TkTreeView, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
-const typeOptions: Array<'basic' | 'divided' | 'light'> = [
-  'basic',
-  'divided',
-  'light',
-];
+const typeOptions: Array<'basic' | 'divided' | 'light'> = ['basic', 'divided', 'light'];
 
 const sampleData = [
   {
@@ -126,17 +122,9 @@ const treeData = [
     <div className="flex flex-col gap-8 items-start w-full">
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-wrap gap-4">
-          <TkRadioGroup
-            label="Type"
-            value={type}
-            onTkChange={(e) => setType(e.detail)}
-          >
-            {typeOptions.map((opt) => (
-              <TkRadio
-                key={opt}
-                label={opt.charAt(0).toUpperCase() + opt.slice(1)}
-                value={opt}
-              />
+          <TkRadioGroup label="Type" value={type} onTkChange={e => setType(e.detail)}>
+            {typeOptions.map(opt => (
+              <TkRadio key={opt} label={opt.charAt(0).toUpperCase() + opt.slice(1)} value={opt} />
             ))}
           </TkRadioGroup>
         </div>
@@ -147,14 +135,7 @@ const treeData = [
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode=""
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
 export default TreeViewType;

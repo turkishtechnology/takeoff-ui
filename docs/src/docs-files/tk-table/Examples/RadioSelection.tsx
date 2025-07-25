@@ -28,15 +28,7 @@ const Example = () => {
 
   return (
     <div className="p-2">
-      <TkTable
-        columns={column}
-        data={basicData}
-        dataKey="id"
-        selectionMode="radio"
-        onTkSelectionChange={(e: CustomEvent) =>
-          setSelectionList({ ...e.detail })
-        }
-      />
+      <TkTable columns={column} data={basicData} dataKey="id" selectionMode="radio" onTkSelectionChange={(e: CustomEvent) => setSelectionList({ ...e.detail })} />
       <p>{JSON.stringify(selectionList)}</p>
     </div>
   );
@@ -115,14 +107,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default RadioSelection;

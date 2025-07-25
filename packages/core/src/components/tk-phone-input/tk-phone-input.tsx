@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
@@ -67,11 +67,25 @@ export class TkPhoneInput implements ComponentInterface {
    * This is a list of phone input data objects.
    * It can be mutable to allow two-way binding.
    */
-  @Prop({ mutable: true }) value?: IPhoneInputValue;
+  @Prop({ mutable: true }) value?: IPhoneInputValue | any;
+  @Watch('value')
+  protected valueChanged(newValue): void {
+    if (!newValue || (typeof newValue === 'object' && Object.keys(newValue).length === 0)) {
+      this.handleFormReset();
+    }
+    if (!newValue.rawValue && !newValue.maskedValue) {
+      this.inputValue = '';
+    }
+    if (newValue) {
+      if (newValue?.country?.id) {
+        this.setSelectedCountry(newValue?.country?.id);
+      }
+      this.inputValue = this.applyMask(newValue.rawValue, this.selectedCountry.mask);
+    }
+  }
 
   /**
    * The label for the phone input.
-   * Defaults to 'Phone Number'.
    */
   @Prop() label: string;
 
@@ -163,7 +177,14 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentWillLoad(): void {
     this.initializeCountries();
-    this.setSelectedCountry(this.defaultCountry);
+    if (this?.value && Object.keys(this?.value)?.length) {
+      if (this.value?.country?.id) {
+        this.setSelectedCountry(this.value.country.id);
+      }
+      this.inputValue = this.applyMask(this?.value?.rawValue, this?.selectedCountry.mask);
+    } else {
+      this.setSelectedCountry(this.defaultCountry);
+    }
   }
 
   /**
@@ -178,6 +199,10 @@ export class TkPhoneInput implements ComponentInterface {
       this.panelRef?.remove();
       this.cleanup && this.cleanup();
     }
+  }
+
+  formResetCallback() {
+    this.handleFormReset();
   }
 
   /**
@@ -267,6 +292,7 @@ export class TkPhoneInput implements ComponentInterface {
         id: this.selectedCountry.id,
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
+        mask: this.selectedCountry.mask,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -318,6 +344,7 @@ export class TkPhoneInput implements ComponentInterface {
         id: this.selectedCountry.id,
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
+        mask: currentMask,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -331,6 +358,25 @@ export class TkPhoneInput implements ComponentInterface {
   private handleInputFocus = () => {
     this.hasFocus = true;
     this.tkFocus.emit();
+  };
+
+  private handleFormReset = () => {
+    this.value = {
+      rawValue: '',
+      maskedValue: '',
+      country: {
+        id: this.selectedCountry.id,
+        label: this.selectedCountry.label,
+        dialCode: this.selectedCountry.dialCode,
+        mask: this.selectedCountry.mask,
+      },
+    } as IPhoneInputValue;
+    this.tkChange.emit(this.value);
+    this.isDropdownOpen = false;
+    this.inputValue = '';
+    this.inputRef.value = '';
+    this.searchTerm = '';
+    this.inputRef?.focus();
   };
 
   private renderLabel() {

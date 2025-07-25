@@ -3,16 +3,7 @@ import { TkSlider } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Disabled = () => {
-  const demo = (
-    <TkSlider
-      min={0}
-      max={100}
-      step={10}
-      label="Disabled Slider"
-      value={50}
-      disabled
-    />
-  );
+  const demo = <TkSlider min={0} max={100} step={10} label="Disabled Slider" value={50} disabled />;
 
   const reactCode = `<TkSlider
   min={0}
@@ -41,14 +32,7 @@ const Disabled = () => {
   [disabled]="true">
 </tk-slider>`;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Disabled;

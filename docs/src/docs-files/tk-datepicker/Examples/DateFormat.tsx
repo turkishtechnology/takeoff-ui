@@ -5,7 +5,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 const DateFormat = () => {
   const [selectedDate, setSelectedDate] = useState('');
 
-  const handleDateChange = (event) => {
+  const handleDateChange = event => {
     setSelectedDate(event.detail);
   };
 
@@ -26,23 +26,10 @@ const DateFormat = () => {
 
   const demo = (
     <div className="flex justify-center items-center">
-      <TkDatepicker
-        label="Custom Format"
-        placeholder="DD.MM.YYYY"
-        dateFormat="dd.MM.yyyy"
-        value={selectedDate}
-        onTkChange={handleDateChange}
-      />
+      <TkDatepicker label="Custom Format" placeholder="DD.MM.YYYY" dateFormat="dd.MM.yyyy" value={selectedDate} onTkChange={handleDateChange} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default DateFormat;

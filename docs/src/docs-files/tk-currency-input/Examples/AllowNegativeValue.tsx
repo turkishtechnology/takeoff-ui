@@ -31,25 +31,11 @@ const AllowNegativeValue = () => {
   });
   const demo = (
     <div className="flex items-end gap-2">
-      <TkCurrencyInput
-        label="Currency Input"
-        showAsterisk
-        placeholder="Placeholder text"
-        allowNegative
-        onTkChange={(e) => setValue(e.detail)}
-        value={value.value}
-      />
+      <TkCurrencyInput label="Currency Input" showAsterisk placeholder="Placeholder text" allowNegative onTkChange={e => setValue(e.detail)} value={value.value} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default AllowNegativeValue;

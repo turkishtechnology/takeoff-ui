@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const TimePicker = () => {
   const [selectedDateTime, setSelectedDateTime] = useState('');
-  const handleDateChange = (event) => {
+  const handleDateChange = event => {
     setSelectedDateTime(event.detail);
   };
 
@@ -28,25 +28,12 @@ const TimePicker = () => {
   const demo = (
     <div className="flex justify-center">
       <div className="w-66">
-        <TkDatepicker
-          label="Select Date & Time"
-          placeholder="YYYY-MM-DD HH:mm"
-          showTimePicker
-          value={selectedDateTime}
-          onTkChange={handleDateChange}
-        />
+        <TkDatepicker label="Select Date & Time" placeholder="YYYY-MM-DD HH:mm" showTimePicker value={selectedDateTime} onTkChange={handleDateChange} />
       </div>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''} />;
 };
 
 export default TimePicker;

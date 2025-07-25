@@ -1,9 +1,4 @@
-import {
-  TkCard,
-  TkAccordion,
-  TkAccordionItem,
-  TkInput,
-} from '@takeoff-ui/react';
+import { TkCard, TkAccordion, TkAccordionItem, TkInput } from '@takeoff-ui/react';
 import { useState } from 'react';
 
 function Accordion() {
@@ -27,11 +22,7 @@ function Accordion() {
         </TkAccordionItem>
         <TkAccordionItem header="test 2">
           <div slot="content">
-            <TkInput
-              label="test"
-              value={inputValue3}
-              onTkChange={(e) => setInputValue3(e.detail)}
-            />
+            <TkInput label="test" value={inputValue3} onTkChange={e => setInputValue3(e.detail)} />
           </div>
         </TkAccordionItem>
       </TkAccordion>

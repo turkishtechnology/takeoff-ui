@@ -12,17 +12,11 @@ const Example = () => {
   return (
     <>
       <TkButton label="Open Drawer" onTkClick={handleClick} />
-      <TkDrawer
-        header="Header Text"
-        open={showDrawer}
-        onTkDrawerClose={() => setShowDrawer(false)}
-      >
+      <TkDrawer header="Header Text" open={showDrawer} onTkDrawerClose={() => setShowDrawer(false)}>
         <div slot="content">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate neque quas!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
           </p>
         </div>
       </TkDrawer>
@@ -76,14 +70,7 @@ const showDrawer = ref(false);
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

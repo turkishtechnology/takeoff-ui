@@ -15,7 +15,7 @@ function CurrencyInput() {
       <TkCurrencyInput
         label="Currency Input"
         showAsterisk
-        onTkChange={(e) => {
+        onTkChange={e => {
           console.log('change', e.detail);
           setValue(e.detail);
         }}

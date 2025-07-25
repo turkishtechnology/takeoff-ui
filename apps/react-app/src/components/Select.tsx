@@ -25,19 +25,7 @@ function Select() {
 
   //#region text options
   // text base options
-  const textBaseOptions = [
-    'option 1',
-    'option 2',
-    'option 3',
-    'option 4',
-    'option 5',
-    'option 6',
-    'option 7',
-    'option 8',
-    'option 9',
-    'option 10',
-    'option 11',
-  ];
+  const textBaseOptions = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9', 'option 10', 'option 11'];
 
   // text base group options
   const textBaseGroupOptions = [
@@ -63,8 +51,7 @@ function Select() {
   const textEditableOptions = [...textBaseOptions];
 
   // text editable filter
-  const [textEditableFilterOptions, setTextEditableFilterOptions] =
-    useState(textBaseOptions);
+  const [textEditableFilterOptions, setTextEditableFilterOptions] = useState(textBaseOptions);
 
   // text allow custom value
   const textAllowCustomValueOptions = [...textBaseOptions];
@@ -85,20 +72,13 @@ function Select() {
   const textEditableGroup = [...textBaseGroupOptions];
 
   // text editable + filter + allow custom value
-  const [
-    textEditableFilterAllowCustomValueOptions,
-    setTextEditableFilterAllowCustomValueOptions,
-  ] = useState(textBaseOptions);
+  const [textEditableFilterAllowCustomValueOptions, setTextEditableFilterAllowCustomValueOptions] = useState(textBaseOptions);
 
   // text editable + filter + multiple
-  const [
-    textEditableFilterMultipleOptions,
-    setTextEditableFilterMultipleOptions,
-  ] = useState(textBaseOptions);
+  const [textEditableFilterMultipleOptions, setTextEditableFilterMultipleOptions] = useState(textBaseOptions);
 
   // text editable + filter + group
-  const [textEditableFilterGroupOptions, setTextEditableFilterGroupOptions] =
-    useState(textBaseGroupOptions);
+  const [textEditableFilterGroupOptions, setTextEditableFilterGroupOptions] = useState(textBaseGroupOptions);
 
   // text multiple + allow custom value
   const textMultipleAllowCustomValue = [...textBaseOptions];
@@ -151,8 +131,7 @@ function Select() {
   const objectEditableOptions = [...objectBaseOptions];
 
   // object editable filter
-  const [objectEditableFilterOptions, setObjectEditableFilterOptions] =
-    useState(objectBaseOptions);
+  const [objectEditableFilterOptions, setObjectEditableFilterOptions] = useState(objectBaseOptions);
 
   // object allow custom value
   const objectAllowCustomValueOptions = [...objectBaseOptions];
@@ -173,16 +152,10 @@ function Select() {
   const objectEditableGroup = [...objectBaseGroupOptions];
 
   // object editable + filter + allow custom value
-  const [
-    objectEditableFilterAllowCustomValueOptions,
-    setObjectEditableFilterAllowCustomValueOptions,
-  ] = useState(objectBaseOptions);
+  const [objectEditableFilterAllowCustomValueOptions, setObjectEditableFilterAllowCustomValueOptions] = useState(objectBaseOptions);
 
   // object editable + filter + multiple
-  const [
-    objectEditableFilterMultipleOptions,
-    setObjectEditableFilterMultipleOptions,
-  ] = useState(objectBaseOptions);
+  const [objectEditableFilterMultipleOptions, setObjectEditableFilterMultipleOptions] = useState(objectBaseOptions);
 
   // object multiple + allow custom value
   const objectMultipleAllowCustomValue = [...objectBaseOptions];
@@ -191,9 +164,7 @@ function Select() {
   const objectMultipleGroupOptions = [...objectBaseGroupOptions];
 
   // object multiple + allow custom value + group
-  const objectMultipleAllowCustomValueGroupOptions = [
-    ...objectBaseGroupOptions,
-  ];
+  const objectMultipleAllowCustomValueGroupOptions = [...objectBaseGroupOptions];
 
   const [value, setValue] = useState(null);
   const [valueString, setValueString] = useState(null);
@@ -212,7 +183,7 @@ function Select() {
         optionLabelKey="label"
         optionValueKey="value"
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
         clearable
       />
       <p>Seçilen: {JSON.stringify(value)}</p>

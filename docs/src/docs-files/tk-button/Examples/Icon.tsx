@@ -47,30 +47,12 @@ const Icon = () => {
 
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-2">
-      <TkButton
-        variant="primary"
-        size="large"
-        icon="flight"
-        label="left icon"
-      />
-      <TkButton
-        variant="primary"
-        size="large"
-        icon="flight"
-        iconPosition="right"
-        label="right icon"
-      />
+      <TkButton variant="primary" size="large" icon="flight" label="left icon" />
+      <TkButton variant="primary" size="large" icon="flight" iconPosition="right" label="right icon" />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Icon;

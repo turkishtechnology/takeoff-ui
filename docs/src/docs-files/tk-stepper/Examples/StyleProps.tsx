@@ -204,8 +204,7 @@ const StyleProps = () => {
       <div>
         <h3 className="text-lg font-medium mb-4">Container Style</h3>
         <p className="mb-4">
-          Use <code>containerStyle</code> to customize the main container of the
-          stepper component.
+          Use <code>containerStyle</code> to customize the main container of the stepper component.
         </p>
 
         <TkStepper containerStyle={containerStyle}>
@@ -218,8 +217,7 @@ const StyleProps = () => {
       <div>
         <h3 className="text-lg font-medium mb-4">Content Style</h3>
         <p className="mb-4">
-          Use <code>contentStyle</code> to customize the content area (header
-          and subheader) of each step.
+          Use <code>contentStyle</code> to customize the content area (header and subheader) of each step.
         </p>
 
         <TkStepper contentStyle={contentStyle}>
@@ -232,16 +230,10 @@ const StyleProps = () => {
       <div>
         <h3 className="text-lg font-medium mb-4">Sign Style & Custom Icons</h3>
         <p className="mb-4">
-          Use <code>signStyle</code> on the Stepper component for global styling
-          of step indicators, and icon props on both levels for customization.
+          Use <code>signStyle</code> on the Stepper component for global styling of step indicators, and icon props on both levels for customization.
         </p>
 
-        <TkStepper
-          signStyle={signStyle}
-          completeIcon={globalIcons.completeIcon}
-          activeIcon={globalIcons.activeIcon}
-          inactiveIcon={globalIcons.inactiveIcon}
-        >
+        <TkStepper signStyle={signStyle} completeIcon={globalIcons.completeIcon} activeIcon={globalIcons.activeIcon} inactiveIcon={globalIcons.inactiveIcon}>
           <TkStep header="Step 1" subheader="Global sign style" complete />
           <TkStep header="Step 2" subheader="Global icons" isActive />
           <TkStep
@@ -260,14 +252,7 @@ const StyleProps = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''} />;
 };
 
 export default StyleProps;

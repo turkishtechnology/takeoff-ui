@@ -8,7 +8,7 @@ const RangeMode = () => {
     end: '2024-02-20',
   });
 
-  const handleDateChange = (event) => {
+  const handleDateChange = event => {
     setDateRange(event.detail);
   };
   const reactCode = `const [dateRange, setDateRange] = useState({
@@ -41,14 +41,7 @@ const RangeMode = () => {
   const demo = (
     <div className="flex items-center justify-center overflow-auto">
       <div className="flex flex-col items-start justify-center gap-2">
-        <TkDatepicker
-          mode="range"
-          label="Select Date Range"
-          placeholder="Start date - End date"
-          inline
-          value={dateRange}
-          onTkChange={handleDateChange}
-        />
+        <TkDatepicker mode="range" label="Select Date Range" placeholder="Start date - End date" inline value={dateRange} onTkChange={handleDateChange} />
         <p>
           Selected range: {dateRange.start} - {dateRange.end}
         </p>
@@ -56,14 +49,7 @@ const RangeMode = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default RangeMode;

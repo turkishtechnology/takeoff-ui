@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const FirstDayOfWeek = () => {
   const [selectedDate, setSelectedDate] = useState('');
-  const handleDateChange = (event) => {
+  const handleDateChange = event => {
     setSelectedDate(event.detail);
   };
 
@@ -42,13 +42,7 @@ const FirstDayOfWeek = () => {
 
   const demo = (
     <div className="flex flex-wrap justify-center items-center gap-2">
-      <TkDatepicker
-        label="Default for First Day of Week"
-        placeholder="Choose a date"
-        dateFormat="dd/MM/yyyy"
-        value={selectedDate}
-        onTkChange={handleDateChange}
-      />
+      <TkDatepicker label="Default for First Day of Week" placeholder="Choose a date" dateFormat="dd/MM/yyyy" value={selectedDate} onTkChange={handleDateChange} />
       <TkDatepicker
         label="Thursday for First Day of Week"
         placeholder="Choose a date"
@@ -60,13 +54,6 @@ const FirstDayOfWeek = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default FirstDayOfWeek;

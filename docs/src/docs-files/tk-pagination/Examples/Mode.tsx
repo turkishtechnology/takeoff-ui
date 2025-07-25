@@ -24,11 +24,9 @@ const Mode = () => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }}>
-        <TkRadioGroup value={mode} onTkChange={(e) => setMode(e.detail)}>
+        <TkRadioGroup value={mode} onTkChange={e => setMode(e.detail)}>
           {radioModels.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -37,14 +35,7 @@ const Mode = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Mode;

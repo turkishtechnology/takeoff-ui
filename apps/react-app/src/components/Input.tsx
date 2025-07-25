@@ -10,7 +10,7 @@ function Input() {
         // label="Test Label"
         // showAsterisk
         value={value}
-        onTkChange={(e) => {
+        onTkChange={e => {
           console.log('change', e);
           setValue(e.detail);
         }}

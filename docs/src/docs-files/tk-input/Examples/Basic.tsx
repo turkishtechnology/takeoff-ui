@@ -23,25 +23,11 @@ const Basic = () => {
 
   const demo = (
     <div className="flex items-end gap-2">
-      <TkInput
-        label="Text Input"
-        mode="text"
-        hint="Hint text"
-        placeholder="Placeholder text"
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-      />
+      <TkInput label="Text Input" mode="text" hint="Hint text" placeholder="Placeholder text" value={value} onTkChange={e => setValue(e.detail)} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Basic;

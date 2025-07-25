@@ -86,21 +86,11 @@ function OrgChart() {
   return (
     <div>
       <div style={{ marginBottom: '1rem', display: 'flex', gap: '10px' }}>
-        <button onClick={handleToggleZoom}>
-          {zoomEnabled ? 'Disable Zoom' : 'Enable Zoom'}
-        </button>
-        <button onClick={handleToggleCollapsible}>
-          {isCollapsed ? 'Disable Buttons' : 'Enable Buttons'}
-        </button>
+        <button onClick={handleToggleZoom}>{zoomEnabled ? 'Disable Zoom' : 'Enable Zoom'}</button>
+        <button onClick={handleToggleCollapsible}>{isCollapsed ? 'Disable Buttons' : 'Enable Buttons'}</button>
       </div>
       <div style={{ height: '100%', width: '100%' }}>
-        <TkOrgChart
-          ref={chartRef}
-          data={data}
-          options={options}
-          collapsible={isCollapsed}
-          onTkNodeClick={handleNodeClick}
-        />
+        <TkOrgChart ref={chartRef} data={data} options={options} collapsible={isCollapsed} onTkNodeClick={handleNodeClick} />
       </div>
     </div>
   );

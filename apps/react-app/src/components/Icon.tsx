@@ -46,20 +46,8 @@ function Icon() {
       <TkIcon icon="flight" color="#FF5722" />
       <TkIcon icon="flight" color="#2196F3" />
       <TkIcon icon="flight" color="#4CAF50" />
-      <TkIcon
-        icon="flight"
-        sign
-        backgroundColor="#F5F5F5"
-        borderColor="#2196F3"
-        iconColor="#2196F3"
-      />
-      <TkIcon
-        icon="flight"
-        sign
-        backgroundColor="#FFF9C4"
-        borderColor="#FFC107"
-        iconColor="#FFC107"
-      />
+      <TkIcon icon="flight" sign backgroundColor="#F5F5F5" borderColor="#2196F3" iconColor="#2196F3" />
+      <TkIcon icon="flight" sign backgroundColor="#FFF9C4" borderColor="#FFC107" iconColor="#FFC107" />
     </div>
   );
 }

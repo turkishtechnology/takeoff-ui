@@ -13,26 +13,17 @@ const Example = () => {
 
   return (
     <div className="max-w-[215px]">
-      <TkSelect
-        editable
-        label="Default Filter"
-        options={selectOptions}
-        value={value}
-        onTkChange={(e) => setValue(e.detail)}
-      />
+      <TkSelect editable label="Default Filter" options={selectOptions} value={value} onTkChange={e => setValue(e.detail)} />
       <br />
       <TkSelect
         editable
         label="Custom Filter Method"
         options={selectOptions}
         filter={async (text: string, options: any[]) => {
-          return options.filter(
-            (item) =>
-              item.searchField.toLowerCase().indexOf(text.toLowerCase()) > -1,
-          );
+          return options.filter(item => item.searchField.toLowerCase().indexOf(text.toLowerCase()) > -1);
         }}
         value={value1}
-        onTkChange={(e) => setValue1(e.detail)}
+        onTkChange={e => setValue1(e.detail)}
       />
     </div>
   );
@@ -108,14 +99,7 @@ const selectOptions = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Filter;

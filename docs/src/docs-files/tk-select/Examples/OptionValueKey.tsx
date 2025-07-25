@@ -21,7 +21,7 @@ const Example = () => {
           value={selectValue}
           options={selectOptions}
           optionValueKey="symbol"
-          onTkChange={(e) => {
+          onTkChange={e => {
             setSelectValue(e.detail);
           }}
         />
@@ -36,7 +36,7 @@ const Example = () => {
           label="Object Value Select"
           value={selectObjectValue}
           options={selectOptions}
-          onTkChange={(e) => {
+          onTkChange={e => {
             setObjectSelectValue(e.detail);
           }}
         />
@@ -119,14 +119,7 @@ const OptionValueKey = () => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default OptionValueKey;

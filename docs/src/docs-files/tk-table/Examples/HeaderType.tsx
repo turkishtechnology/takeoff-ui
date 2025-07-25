@@ -27,7 +27,7 @@ const Example = ({ type, setType }) => {
   return (
     <div className="p-2">
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup value={type} onTkChange={(e) => setType(e.detail)}>
+        <TkRadioGroup value={type} onTkChange={e => setType(e.detail)}>
           <TkRadio label="Basic" value="basic" />
           <TkRadio label="Primary" value="primary" />
           <TkRadio label="Dark" value="dark" />
@@ -63,14 +63,7 @@ const HeaderType = () => {
 
   const demo = <Example type={type} setType={setType} />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default HeaderType;

@@ -41,7 +41,7 @@ const Example = () => {
     },
   ];
 
-  const handleItemClick = (e) => {
+  const handleItemClick = e => {
     tableRef.current?.exportFile({
       type: e.detail.value,
       fileName: 'custom_file_name',
@@ -52,18 +52,8 @@ const Example = () => {
     <div className="p-2">
       <TkTable ref={tableRef} columns={column} data={basicData}>
         <div slot="header-right">
-          <TkDropdown
-            options={exportOptions}
-            position="bottom-end"
-            onTkItemClick={handleItemClick}
-          >
-            <TkButton
-              slot="trigger"
-              label="Export"
-              icon="keyboard_arrow_down"
-              iconPosition="right"
-              type="outlined"
-            />
+          <TkDropdown options={exportOptions} position="bottom-end" onTkItemClick={handleItemClick}>
+            <TkButton slot="trigger" label="Export" icon="keyboard_arrow_down" iconPosition="right" type="outlined" />
           </TkDropdown>
         </div>
       </TkTable>
@@ -237,14 +227,7 @@ const handleItemClick = (e) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Export;

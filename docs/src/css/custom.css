@@ -22,13 +22,13 @@
   --ifm-container-width: 1280px;
   --ifm-navbar-padding-vertical: 12px;
   --ifm-navbar-link-color: var(--text-base);
-  --ifm-z-index-dropdown:1000;
+  --ifm-z-index-dropdown: 1000;
   --ifm-z-index-fixed: 1000;
-  --ifm-z-index-overlay:1000;
+  --ifm-z-index-overlay: 1000;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --ifm-color-primary: #db5465;
   --ifm-color-primary-dark: var(--primary-300);
   --ifm-color-primary-darker: var(--primary-200);
@@ -57,7 +57,7 @@ body {
 }
 
 .plugin-pages body {
-  background-image: url("/img/bg-body.png");
+  background-image: url('/img/bg-body.png');
   background-repeat: no-repeat;
   background-position-x: center;
   background-position-y: 200px;
@@ -121,7 +121,7 @@ body {
   left: -250px;
 }
 
-@import "./docs/docs.css";
+@import './docs/docs.css';
 
 /**
  * CSS files with the .module.css suffix will be treated as CSS modules
@@ -148,7 +148,7 @@ body {
   color: var(--text-darkest, #222530);
 
   /* Title/H1-60 */
-  font-family: "Geologica";
+  font-family: 'Geologica';
   font-size: 60px;
   font-weight: 400;
   line-height: 100%;
@@ -169,14 +169,14 @@ body {
 .section-image .holder .image {
   width: 100%;
   height: 240px;
-  background-image: url("/img/footer-image.png");
+  background-image: url('/img/footer-image.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-[data-theme="dark"] .section-image .holder .image {
-  background-image: url("/img/footer-image-dark.png");
+[data-theme='dark'] .section-image .holder .image {
+  background-image: url('/img/footer-image-dark.png');
 }
 
 @media screen and (max-width: 996px) {
@@ -204,14 +204,14 @@ body {
   color: var(--background-light);
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: var(--border-base);
-  font-family: var(--desktop-title-h2-font, "Geologica");
+  font-family: var(--desktop-title-h2-font, 'Geologica');
   font-size: var(--desktop-title-h2-size, 48px);
   line-height: var(--desktop-title-h2-line-height, 48px);
 }
 
 .release-notes .release-item span {
   color: var(--text-base, #717784);
-  font-family: var(--body-s-font, "Geologica");
+  font-family: var(--body-s-font, 'Geologica');
   font-size: var(--body-s-size, 14px);
   line-height: var(--body-s-line-height, 20px);
 }
@@ -223,7 +223,7 @@ body {
 
 .release-notes .release-item h1 {
   color: var(--text-darkest, #222530);
-  font-family: var(--title-h3-font, "Geologica");
+  font-family: var(--title-h3-font, 'Geologica');
   font-size: var(--title-h3-size, 36px);
   line-height: var(--title-h3-line-height, 36px);
   margin: 0px;
@@ -255,7 +255,7 @@ body {
 
 .release-notes .release-item .body label {
   color: var(--text-darkest, #222530);
-  font-family: "Geologica";
+  font-family: 'Geologica';
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;

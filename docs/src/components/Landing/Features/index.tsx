@@ -13,9 +13,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/simple.svg').default,
     description: (
       <>
-        TakeOff makes development effortless with a clear and simple design
-        system. Spend less time building and more time innovating with easily
-        accessible and reusable components.
+        TakeOff makes development effortless with a clear and simple design system. Spend less time building and more time innovating with easily accessible and reusable
+        components.
       </>
     ),
   },
@@ -24,33 +23,20 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/flexible.svg').default,
     description: (
       <>
-        Our system adapts to your project’s needs. Whether you’re creating a
-        small web app or a large-scale enterprise solution, TakeOff ensures
-        flexibility and scalability for every project.
+        Our system adapts to your project’s needs. Whether you’re creating a small web app or a large-scale enterprise solution, TakeOff ensures flexibility and scalability for
+        every project.
       </>
     ),
   },
   {
     title: 'Framework Agnostic',
     Svg: require('@site/static/img/framework-agnostic.svg').default,
-    description: (
-      <>
-        TakeOff is designed to work with any framework, giving developers the
-        freedom to choose the best technology for their projects. Build without
-        limitations.
-      </>
-    ),
+    description: <>TakeOff is designed to work with any framework, giving developers the freedom to choose the best technology for their projects. Build without limitations.</>,
   },
   {
     title: 'Powered By Stencil',
     Svg: require('@site/static/img/powered-by-stencil.svg').default,
-    description: (
-      <>
-        TakeOff is designed to work with any framework, giving developers the
-        freedom to choose the best technology for their projects. Build without
-        limitations.
-      </>
-    ),
+    description: <>TakeOff is designed to work with any framework, giving developers the freedom to choose the best technology for their projects. Build without limitations.</>,
   },
 ];
 

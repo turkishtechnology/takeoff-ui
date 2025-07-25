@@ -34,13 +34,6 @@ ${content}
 
   const demo = <TkEditor contentStyle={{ height: '200px' }} value={content} />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''} />;
 };
 export default CustomHeight;

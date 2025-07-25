@@ -1,8 +1,4 @@
-import {
-  ITableColumn,
-  ITableRequest,
-  TkTableCustomEvent,
-} from '@takeoff-ui/core';
+import { ITableColumn, ITableRequest, TkTableCustomEvent } from '@takeoff-ui/core';
 import { TkButton, TkInput, TkTable } from '@takeoff-ui/react';
 import { useRef, useState } from 'react';
 
@@ -280,10 +276,8 @@ function Table() {
     if (e.detail.filters?.length > 0) {
       let filteredData: any[] = [];
 
-      e.detail.filters?.forEach((filter) => {
-        filteredData = allData.filter(
-          (item) => item[filter.field] == filter.value,
-        );
+      e.detail.filters?.forEach(filter => {
+        filteredData = allData.filter(item => item[filter.field] == filter.value);
       });
 
       setTotalItems(filteredData.length);
@@ -304,21 +298,9 @@ function Table() {
       return (
         <div slot={`expand-content-${item.id}`} key={'expanded-row-' + index}>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <TkInput
-              label="data 1"
-              value={item.data1}
-              onTkChange={(e) => (item.data1 = e.detail)}
-            />
-            <TkInput
-              label="data 2"
-              value={item.data2}
-              onTkChange={(e) => (item.data2 = e.detail)}
-            />
-            <TkInput
-              label="data 3"
-              value={item.data3}
-              onTkChange={(e) => (item.data3 = e.detail)}
-            />
+            <TkInput label="data 1" value={item.data1} onTkChange={e => (item.data1 = e.detail)} />
+            <TkInput label="data 2" value={item.data2} onTkChange={e => (item.data2 = e.detail)} />
+            <TkInput label="data 3" value={item.data3} onTkChange={e => (item.data3 = e.detail)} />
           </div>
         </div>
       );
@@ -340,17 +322,17 @@ function Table() {
         data={data}
         selectionMode="checkbox"
         expandedRows={expandedRows}
-        onTkExpandedRowsChange={(e) => handleExpandedRowsChange(e.detail)}
-        onTkCellEdit={(e) => {
+        onTkExpandedRowsChange={e => handleExpandedRowsChange(e.detail)}
+        onTkCellEdit={e => {
           console.log('apptsx cell edit: ', e.detail);
           const cellEdit = e.detail;
           const tmpData = [...data];
-          const rowData = tmpData.find((item) => item.id == cellEdit.rowId);
+          const rowData = tmpData.find(item => item.id == cellEdit.rowId);
           rowData[cellEdit.field] = cellEdit.value;
 
           setData([...tmpData]);
         }}
-        onTkSelectionChange={(e) => console.log(e.detail)}
+        onTkSelectionChange={e => console.log(e.detail)}
         // cellStyle={(row, col) => {
         //   if (col.field == 'name' && row.name == 'Harun') {
         //     return { background: 'var(--primary-base)', color: 'white' };
@@ -367,10 +349,7 @@ function Table() {
       >
         {renderExpandedRows()}
         <div slot="header-right" style={{ display: 'flex', gap: '8px' }}>
-          <TkButton
-            onTkClick={() => setData(allData.slice(5, 10))}
-            label="pdf"
-          ></TkButton>
+          <TkButton onTkClick={() => setData(allData.slice(5, 10))} label="pdf"></TkButton>
           <TkButton
             onTkClick={() =>
               tableRef.current?.exportFile({
@@ -380,10 +359,7 @@ function Table() {
             }
             label="excel"
           ></TkButton>
-          <TkButton
-            onTkClick={() => tableRef.current?.exportFile({ type: 'csv' })}
-            label="csv"
-          ></TkButton>
+          <TkButton onTkClick={() => tableRef.current?.exportFile({ type: 'csv' })} label="csv"></TkButton>
         </div>
       </TkTable>
     </div>

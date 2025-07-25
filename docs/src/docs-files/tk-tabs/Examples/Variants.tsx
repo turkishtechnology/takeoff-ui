@@ -10,7 +10,7 @@ const Type = () => {
     { label: 'Primary', value: 'primary' },
     { label: 'Info', value: 'info' },
   ];
-  const handleHeaderTypeChange = (event) => {
+  const handleHeaderTypeChange = event => {
     setVariant(event.detail);
   };
   useEffect(() => {
@@ -49,9 +49,7 @@ const Type = () => {
       <div className="overflow-auto mb-4">
         <TkRadioGroup value={variant} onTkChange={handleHeaderTypeChange}>
           {variants.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -64,39 +62,26 @@ const Type = () => {
       >
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 1
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 1
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 2
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 2
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 3
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 3
           </p>
         </TkTabsItem>
       </TkTabs>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
 };
 export default Type;

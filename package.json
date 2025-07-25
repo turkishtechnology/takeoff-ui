@@ -29,14 +29,14 @@
     "dev:ng": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd packages/angular && pnpm run start",
     "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run start",
     "prepare": "husky",
-    "format": "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css}\" --cache",
     "lint": "eslint --fix",
     "clean": "pnpm -r exec rimraf dist node_modules .stencil www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --filter=@takeoff-ui/tailwind --access public --no-git-checks"
   },
   "lint-staged": {
-    "*.{tsx,ts,js}": [
-      "prettier --write \"**/*.{ts, tsx, js, jsx, d.ts, d.js, vue}\" --cache"
+    "*.{tsx,ts,js,scss,css}": [
+      "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css}\" --cache"
     ]
   },
   "engines": {

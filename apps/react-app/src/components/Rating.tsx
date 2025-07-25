@@ -6,26 +6,10 @@ function Rating() {
   return (
     <>
       <TkCard>
-        <TkRating
-          type="star"
-          value={value}
-          onTkChange={(e) => setValue(e.detail)}
-        />
-        <TkRating
-          type="heart"
-          value={value}
-          onTkChange={(e) => setValue(e.detail)}
-        />
-        <TkRating
-          type="dot"
-          value={value}
-          onTkChange={(e) => setValue(e.detail)}
-        />
-        <TkRating
-          type="number"
-          value={value}
-          onTkChange={(e) => setValue(e.detail)}
-        />
+        <TkRating type="star" value={value} onTkChange={e => setValue(e.detail)} />
+        <TkRating type="heart" value={value} onTkChange={e => setValue(e.detail)} />
+        <TkRating type="dot" value={value} onTkChange={e => setValue(e.detail)} />
+        <TkRating type="number" value={value} onTkChange={e => setValue(e.detail)} />
       </TkCard>
     </>
   );

@@ -1,8 +1,12 @@
 tk-icon {
   display: inline-flex;
+  display: inline-flex;
 }
 
 .tk-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +14,13 @@ tk-icon {
   &.tk-icon-xsmall {
     font-size: var(--size-xs);
   }
+  &.tk-icon-xsmall {
+    font-size: var(--size-xs);
+  }
 
+  &.tk-icon-small {
+    font-size: var(--size-sm);
+  }
   &.tk-icon-small {
     font-size: var(--size-sm);
   }
@@ -26,7 +36,13 @@ tk-icon {
   &.tk-icon-large {
     font-size: var(--size-2xl);
   }
+  &.tk-icon-large {
+    font-size: var(--size-2xl);
+  }
 
+  &.tk-icon-xlarge {
+    font-size: var(--size-3xl);
+  }
   &.tk-icon-xlarge {
     font-size: var(--size-3xl);
   }
@@ -34,7 +50,13 @@ tk-icon {
   &.tk-icon-xxlarge {
     font-size: var(--size-4xl);
   }
+  &.tk-icon-xxlarge {
+    font-size: var(--size-4xl);
+  }
 
+  &.tk-icon-primary {
+    color: var(--primary-dark);
+  }
   &.tk-icon-primary {
     color: var(--primary-dark);
   }
@@ -42,7 +64,13 @@ tk-icon {
   &.tk-icon-secondary {
     color: var(--secondary-dark);
   }
+  &.tk-icon-secondary {
+    color: var(--secondary-dark);
+  }
 
+  &.tk-icon-neutral {
+    color: var(--background-dark);
+  }
   &.tk-icon-neutral {
     color: var(--background-dark);
   }
@@ -50,7 +78,13 @@ tk-icon {
   &.tk-icon-info {
     color: var(--states-info-dark);
   }
+  &.tk-icon-info {
+    color: var(--states-info-dark);
+  }
 
+  &.tk-icon-success {
+    color: var(--states-success-dark);
+  }
   &.tk-icon-success {
     color: var(--states-success-dark);
   }
@@ -58,11 +92,20 @@ tk-icon {
   &.tk-icon-danger {
     color: var(--states-danger-dark);
   }
+  &.tk-icon-danger {
+    color: var(--states-danger-dark);
+  }
 
   &.tk-icon-warning {
     color: var(--states-warning-dark);
   }
+  &.tk-icon-warning {
+    color: var(--states-warning-dark);
+  }
 
+  &.tk-icon-white {
+    color: var(--secondary-sub-base);
+  }
   &.tk-icon-white {
     color: var(--secondary-sub-base);
   }
@@ -74,71 +117,123 @@ tk-icon {
       border-radius: var(--radius-xs);
       padding: 1px;
     }
+    &.tk-icon-sign {
+      background-color: var(--background-lightest);
+      &.tk-icon-xsmall {
+        border: 1px solid;
+        border-radius: var(--radius-xs);
+        padding: 1px;
+      }
 
-    &.tk-icon-small {
-      border: 1px solid;
-      border-radius: var(--radius-s);
-      padding: 2px;
+      &.tk-icon-small {
+        border: 1px solid;
+        border-radius: var(--radius-s);
+        padding: 2px;
+      }
+      &.tk-icon-small {
+        border: 1px solid;
+        border-radius: var(--radius-s);
+        padding: 2px;
+      }
+
+      &.tk-icon-base {
+        border: 1px solid;
+        border-radius: var(--radius-m-base);
+        padding: 4px;
+      }
+
+      &.tk-icon-medium {
+        border: 1px solid;
+        border-radius: var(--radius-m-base);
+        padding: 4px;
+      }
+
+      &.tk-icon-large {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 6px;
+      }
+      &.tk-icon-large {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 6px;
+      }
+
+      &.tk-icon-xlarge {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 6px;
+      }
+      &.tk-icon-xlarge {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 6px;
+      }
+
+      &.tk-icon-xxlarge {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 8px;
+      }
+      &.tk-icon-xxlarge {
+        border: 1px solid;
+        border-radius: var(--radius-l);
+        padding: 8px;
+      }
+
+      &.tk-icon-primary {
+        border-color: var(--primary-sub-base);
+      }
+      &.tk-icon-primary {
+        border-color: var(--primary-sub-base);
+      }
+
+      &.tk-icon-secondary {
+        border-color: var(--secondary-sub-base);
+      }
+      &.tk-icon-secondary {
+        border-color: var(--secondary-sub-base);
+      }
+
+      &.tk-icon-neutral {
+        border-color: var(--background-sub-base);
+      }
+      &.tk-icon-neutral {
+        border-color: var(--background-sub-base);
+      }
+
+      &.tk-icon-info {
+        border-color: var(--states-info-sub-base);
+      }
+      &.tk-icon-info {
+        border-color: var(--states-info-sub-base);
+      }
+
+      &.tk-icon-success {
+        border-color: var(--states-success-sub-base);
+      }
+      &.tk-icon-success {
+        border-color: var(--states-success-sub-base);
+      }
+
+      &.tk-icon-danger {
+        border-color: var(--states-danger-sub-base);
+      }
+      &.tk-icon-danger {
+        border-color: var(--states-danger-sub-base);
+      }
+
+      &.tk-icon-warning {
+        border-color: var(--states-warning-sub-base);
+      }
+      &.tk-icon-warning {
+        border-color: var(--states-warning-sub-base);
+      }
+
+      &.tk-icon-white {
+        border-color: var(--secondary-light);
+      }
     }
-
-    &.tk-icon-base {
-      border: 1px solid;
-      border-radius: var(--radius-m-base);
-      padding: 4px;
-    }
-
-    &.tk-icon-medium {
-      border: 1px solid;
-      border-radius: var(--radius-m-base);
-      padding: 4px;
-    }
-
-    &.tk-icon-large {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 6px;
-    }
-
-    &.tk-icon-xlarge {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 6px;
-    }
-
-    &.tk-icon-xxlarge {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 8px;
-    }
-
-    &.tk-icon-primary {
-      border-color: var(--primary-sub-base);
-    }
-
-    &.tk-icon-secondary {
-      border-color: var(--secondary-sub-base);
-    }
-
-    &.tk-icon-neutral {
-      border-color: var(--background-sub-base);
-    }
-
-    &.tk-icon-info {
-      border-color: var(--states-info-sub-base);
-    }
-
-    &.tk-icon-success {
-      border-color: var(--states-success-sub-base);
-    }
-
-    &.tk-icon-danger {
-      border-color: var(--states-danger-sub-base);
-    }
-
-    &.tk-icon-warning {
-      border-color: var(--states-warning-sub-base);
-    }
-
     &.tk-icon-white {
       border-color: var(--secondary-light);
     }

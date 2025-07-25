@@ -63,24 +63,11 @@ const CustomCountryList = () => {
 
   const demo = (
     <div className="flex items-end gap-2">
-      <TkCurrencyInput
-        label="Currency Input"
-        showAsterisk={true}
-        defaultCurrency="GBP"
-        currencyList={currencyList}
-        onTkChange={(e) => setValue(e.detail)}
-      />
+      <TkCurrencyInput label="Currency Input" showAsterisk={true} defaultCurrency="GBP" currencyList={currencyList} onTkChange={e => setValue(e.detail)} />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default CustomCountryList;

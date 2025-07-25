@@ -20,9 +20,7 @@ const Placeholder: React.FC = () => {
         </div>
         <div className="bg-gray-100 p-4 rounded mt-4">
           <h3 className="text-lg font-medium mb-2">CSS Override</h3>
-          <p className="text-sm">
-            Target the placeholder selector to customize its style:
-          </p>
+          <p className="text-sm">Target the placeholder selector to customize its style:</p>
           <pre className="bg-gray-800 text-white p-3 rounded mt-2 text-sm overflow-auto">
             {`.custom-placeholder .ProseMirror p.is-editor-empty:first-child::before {
   color: #6A5ACD;
@@ -62,14 +60,7 @@ const Placeholder: React.FC = () => {
 }
 </style>`;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={``}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={``} />;
 };
 
 export default Placeholder;

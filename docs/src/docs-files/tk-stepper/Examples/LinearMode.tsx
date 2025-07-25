@@ -12,7 +12,7 @@ const LinearMode = () => {
     setLinear(!linear);
   };
 
-  const handleStepChange = (event) => {
+  const handleStepChange = event => {
     setActiveStep(event.detail);
   };
 
@@ -148,66 +148,25 @@ const goToPrevious = () => {
   const demo = (
     <div className="space-y-6">
       <div className="mb-4">
-        <TkCheckbox
-          label="Linear Mode"
-          value={linear}
-          onTkChange={handleLinearChange}
-        />
-        <p className="text-sm text-gray-500 mt-1">
-          {linear
-            ? 'In linear mode, steps must be completed in sequence'
-            : 'Non-linear mode allows jumping between steps'}
-        </p>
+        <TkCheckbox label="Linear Mode" value={linear} onTkChange={handleLinearChange} />
+        <p className="text-sm text-gray-500 mt-1">{linear ? 'In linear mode, steps must be completed in sequence' : 'Non-linear mode allows jumping between steps'}</p>
       </div>
 
-      <TkStepper
-        linear={linear}
-        active={activeStep}
-        onTkStepChange={handleStepChange}
-      >
-        <TkStep
-          header="General Information"
-          subheader="Basic campaign details"
-          complete={activeStep > 0}
-        />
-        <TkStep
-          header="Category Details"
-          subheader="Campaign categorization"
-          isActive={activeStep === 1}
-          complete={activeStep > 1}
-        />
-        <TkStep
-          header="Communication"
-          subheader="Communication strategies"
-          isActive={activeStep === 2}
-          complete={activeStep > 2}
-        />
-        <TkStep
-          header="Summary"
-          subheader="Campaign overview"
-          isActive={activeStep === 3}
-        />
+      <TkStepper linear={linear} active={activeStep} onTkStepChange={handleStepChange}>
+        <TkStep header="General Information" subheader="Basic campaign details" complete={activeStep > 0} />
+        <TkStep header="Category Details" subheader="Campaign categorization" isActive={activeStep === 1} complete={activeStep > 1} />
+        <TkStep header="Communication" subheader="Communication strategies" isActive={activeStep === 2} complete={activeStep > 2} />
+        <TkStep header="Summary" subheader="Campaign overview" isActive={activeStep === 3} />
       </TkStepper>
 
       <div className="flex gap-4 mt-4">
-        <TkButton
-          label="Previous"
-          onClick={goToPrevious}
-          disabled={activeStep === 0}
-        />
+        <TkButton label="Previous" onClick={goToPrevious} disabled={activeStep === 0} />
         <TkButton label="Next" onClick={goToNext} disabled={activeStep === 3} />
       </div>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCodeSample} vueCode={vueCodeSample} angularCode={''} />;
 };
 
 export default LinearMode;

@@ -29,24 +29,11 @@ const Icon = () => {
 
   const demo = (
     <div>
-      <TkChips
-        variant="primary"
-        size="large"
-        icon="flight"
-        label="primary"
-        removable
-      />
+      <TkChips variant="primary" size="large" icon="flight" label="primary" removable />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Icon;

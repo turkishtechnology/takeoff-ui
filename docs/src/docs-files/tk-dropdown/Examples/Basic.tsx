@@ -11,12 +11,7 @@ const Example = () => {
 
   return (
     <TkDropdown options={options}>
-      <TkButton
-        label="Select"
-        icon="keyboard_arrow_down"
-        iconPosition="right"
-        slot="trigger"
-      />
+      <TkButton label="Select" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" />
     </TkDropdown>
   );
 };
@@ -78,14 +73,7 @@ const options = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Basic;

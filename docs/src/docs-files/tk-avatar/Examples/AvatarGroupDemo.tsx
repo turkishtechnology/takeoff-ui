@@ -52,57 +52,17 @@ const AvatarGroupDemo = () => {
   const demo = (
     <div className="flex flex-col gap-4 overflow-auto">
       <TkAvatarGroup>
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-1.png')}
-          variant="primary"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-2.png')}
-          variant="light"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-3.png')}
-          variant="success"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-4.png')}
-          variant="info"
-          background="solid"
-          rounded
-        />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-1.png')} variant="primary" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-2.png')} variant="light" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-3.png')} variant="success" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-4.png')} variant="info" background="solid" rounded />
         <TkAvatar variant="light" background="solid" rounded label="+4" />
       </TkAvatarGroup>
       <TkAvatarGroup compact>
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-1.png')}
-          variant="primary"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-2.png')}
-          variant="light"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-3.png')}
-          variant="success"
-          background="solid"
-          rounded
-        />
-        <TkAvatar
-          image={useBaseUrl('img/docs/tk-avatar/user-4.png')}
-          variant="info"
-          background="solid"
-          rounded
-        />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-1.png')} variant="primary" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-2.png')} variant="light" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-3.png')} variant="success" background="solid" rounded />
+        <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-4.png')} variant="info" background="solid" rounded />
         <TkAvatar variant="light" background="solid" rounded label="+4" />
       </TkAvatarGroup>
     </div>
@@ -110,12 +70,7 @@ const AvatarGroupDemo = () => {
 
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

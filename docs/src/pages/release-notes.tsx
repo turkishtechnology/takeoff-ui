@@ -15,10 +15,7 @@ export default function ReleaseNotes() {
         <div className="container">
           <Gif />
           <h1>Release Notes</h1>
-          <p className={'description'}>
-            TakeOff simplifies the process of building web applications. It
-            provides comprehensive and flexible design system and ui library.
-          </p>
+          <p className={'description'}>TakeOff simplifies the process of building web applications. It provides comprehensive and flexible design system and ui library.</p>
         </div>
       </header>
       <main className="release-notes">

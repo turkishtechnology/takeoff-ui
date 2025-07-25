@@ -165,25 +165,11 @@ const treeData = [
 
   const demo = (
     <div className="w-full">
-      <TkTreeView
-        mode="basic"
-        type="light"
-        size="base"
-        items={sampleData}
-        branchIcon="folder"
-        leafIcon="insert_drive_file"
-      />
+      <TkTreeView mode="basic" type="light" size="base" items={sampleData} branchIcon="folder" leafIcon="insert_drive_file" />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode=""
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
 export default TreeViewBasic;

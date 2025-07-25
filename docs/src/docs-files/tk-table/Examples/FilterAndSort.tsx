@@ -54,8 +54,7 @@ const Example = () => {
       field: 'quantity',
       header: 'Quantity',
       sortable: true,
-      sorter: (a: any, b: any) =>
-        Number(a.quantity) > Number(b.quantity) ? 1 : -1,
+      sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
     },
   ];
 
@@ -298,14 +297,7 @@ const data = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default FilterAndSort;

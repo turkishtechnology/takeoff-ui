@@ -198,127 +198,50 @@ const Variants = () => {
   const demo = (
     <>
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="dark"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Dark (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="dark">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Dark (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="white"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   White (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="white">
+          <TkButton slot="trigger" data-tooltip-trigger label="   White (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="info"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Info (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="info">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Info (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="success"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Success (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="success">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Success (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="danger"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Danger (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="danger">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Danger (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="warning"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Warning (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="warning">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Warning (Hover Me!)" />
         </TkTooltip>
       </div>
       <br />
       <div>
-        <TkTooltip
-          header="Tooltip Header"
-          description="Tooltip Explanation Here"
-          position="right"
-          icon="flight"
-          variant="neutral"
-        >
-          <TkButton
-            slot="trigger"
-            data-tooltip-trigger
-            label="   Neutral (Hover Me!)"
-          />
+        <TkTooltip header="Tooltip Header" description="Tooltip Explanation Here" position="right" icon="flight" variant="neutral">
+          <TkButton slot="trigger" data-tooltip-trigger label="   Neutral (Hover Me!)" />
         </TkTooltip>
       </div>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Variants;

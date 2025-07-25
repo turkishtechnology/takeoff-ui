@@ -23,14 +23,7 @@ const WithAsterisk = () => {
   [showAsterisk]="true">
 </tk-slider>`;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default WithAsterisk;

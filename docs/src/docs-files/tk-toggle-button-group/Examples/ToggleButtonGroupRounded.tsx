@@ -1,10 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
-import {
-  TkToggleButtonGroup,
-  TkToggleButton,
-  TkCheckbox,
-} from '@takeoff-ui/react';
+import { TkToggleButtonGroup, TkToggleButton, TkCheckbox } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const ToggleButtonGroupRounded = () => {
@@ -40,26 +36,11 @@ const ToggleButtonGroupRounded = () => {
 
   const demo = (
     <div className="flex flex-col gap-4 w-full">
-      <TkCheckbox
-        label="Rounded"
-        value={rounded}
-        onTkChange={() => setRounded((prev) => !prev)}
-      />
+      <TkCheckbox label="Rounded" value={rounded} onTkChange={() => setRounded(prev => !prev)} />
 
-      <TkToggleButtonGroup
-        value={value}
-        type={groupType}
-        rounded={rounded}
-        onTkChange={(e) => setValue(e.detail)}
-      >
-        {options.map((opt) => (
-          <TkToggleButton
-            key={opt.value}
-            value={opt.value}
-            type="outlined"
-            variant="neutral"
-            label={opt.label}
-          />
+      <TkToggleButtonGroup value={value} type={groupType} rounded={rounded} onTkChange={e => setValue(e.detail)}>
+        {options.map(opt => (
+          <TkToggleButton key={opt.value} value={opt.value} type="outlined" variant="neutral" label={opt.label} />
         ))}
       </TkToggleButtonGroup>
     </div>

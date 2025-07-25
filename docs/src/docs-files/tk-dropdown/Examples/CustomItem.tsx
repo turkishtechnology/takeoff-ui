@@ -22,12 +22,7 @@ const Example = () => {
                   </div>`;
       }}
     >
-      <TkButton
-        label="Custom Item Example"
-        icon="keyboard_arrow_down"
-        iconPosition="right"
-        slot="trigger"
-      />
+      <TkButton label="Custom Item Example" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" />
     </TkDropdown>
   );
 };
@@ -84,14 +79,7 @@ const CustomItem = () => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default CustomItem;

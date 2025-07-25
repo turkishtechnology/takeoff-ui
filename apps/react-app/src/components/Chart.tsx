@@ -14,20 +14,8 @@ function Chart() {
     datasets: [
       {
         data: [12, 19, 3, 5, 2],
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-        ],
-        hoverBackgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-        ],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
         borderWidth: 1,
       },
     ],
@@ -39,34 +27,16 @@ function Chart() {
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Mock data from server - in real app this would be a fetch call
       const updatedData = {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
         datasets: [
           {
-            data: [
-              Math.floor(Math.random() * 30),
-              Math.floor(Math.random() * 30),
-              Math.floor(Math.random() * 30),
-              Math.floor(Math.random() * 30),
-              Math.floor(Math.random() * 30),
-            ],
-            backgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#4BC0C0',
-              '#9966FF',
-            ],
-            hoverBackgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#4BC0C0',
-              '#9966FF',
-            ],
+            data: [Math.floor(Math.random() * 30), Math.floor(Math.random() * 30), Math.floor(Math.random() * 30), Math.floor(Math.random() * 30), Math.floor(Math.random() * 30)],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
             borderWidth: 1,
           },
         ],
@@ -165,16 +135,8 @@ function Chart() {
 
   return (
     <div style={{ width: '50%' }}>
-      <TkChart
-        type="doughnut"
-        data={chartData}
-        options={pieOptions as any}
-        plugins={[centerTextPlugin]}
-        ref={chartRef}
-      />
-      <div
-        style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
-      >
+      <TkChart type="doughnut" data={chartData} options={pieOptions as any} plugins={[centerTextPlugin]} ref={chartRef} />
+      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={refreshChartData}
           disabled={isLoading}

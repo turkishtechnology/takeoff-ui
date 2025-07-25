@@ -1,25 +1,11 @@
 import { data } from './data';
 
-const fetchFromServer = async (
-  page: number,
-  rowsPerPage: number,
-  filters: any[],
-  sortField: string,
-  sortOrder: string,
-) => {
-  return new Promise((resolve) => {
+const fetchFromServer = async (page: number, rowsPerPage: number, filters: any[], sortField: string, sortOrder: string) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       let newPageData;
       let totalItem;
-      newPageData = [...data].filter((row) =>
-        filters.every(
-          (filter) =>
-            row[filter.field]
-              .toString()
-              .toLowerCase()
-              .indexOf(filter.value.toLowerCase()) > -1,
-        ),
-      );
+      newPageData = [...data].filter(row => filters.every(filter => row[filter.field].toString().toLowerCase().indexOf(filter.value.toLowerCase()) > -1));
 
       if (sortField?.length > 0) {
         newPageData = newPageData.sort((a, b) => {

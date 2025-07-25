@@ -3,11 +3,7 @@ import { TkBreadcrumb } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Type = () => {
-  const items = [
-    { label: 'Home', href: '/', isExternal: true },
-    { label: 'Library', href: '/library', isExternal: true },
-    { label: 'Data' },
-  ];
+  const items = [{ label: 'Home', href: '/', isExternal: true }, { label: 'Library', href: '/library', isExternal: true }, { label: 'Data' }];
 
   const reactCode = `const items = [
  { label: 'Home', href: '/', isExternal: true  },
@@ -40,12 +36,7 @@ const items = [
 
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

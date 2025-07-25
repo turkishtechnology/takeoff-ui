@@ -35,11 +35,7 @@ const LabelTooltip = () => {
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-2 mx-2">
         <div className="text-sm">Label with tooltip</div>
-        <TkTooltip
-          header="Tooltip Example?"
-          description="Tooltip description example"
-          variant="white"
-        >
+        <TkTooltip header="Tooltip Example?" description="Tooltip description example" variant="white">
           <TkIcon icon="info" fill variant="info" slot="trigger" />
         </TkTooltip>
       </div>
@@ -47,14 +43,7 @@ const LabelTooltip = () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default LabelTooltip;

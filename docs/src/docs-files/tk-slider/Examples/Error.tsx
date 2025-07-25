@@ -26,7 +26,7 @@ const Error = () => {
       invalid={true}
       error="Invalid value"
       value={value}
-      onTkChange={(e) => {
+      onTkChange={e => {
         if (typeof e.detail === 'number') {
           setValue(e.detail);
         }
@@ -34,14 +34,7 @@ const Error = () => {
     />
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Error;

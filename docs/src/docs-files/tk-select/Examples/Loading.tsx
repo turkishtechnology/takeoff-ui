@@ -12,12 +12,10 @@ const Example = () => {
   ];
 
   const fetchData = async (text: string) => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         let response;
-        response = options.filter(
-          (item) => item.label?.toLowerCase().indexOf(text?.toLowerCase()) > -1,
-        );
+        response = options.filter(item => item.label?.toLowerCase().indexOf(text?.toLowerCase()) > -1);
 
         resolve(response);
       }, 2000);
@@ -38,7 +36,7 @@ const Example = () => {
           return response;
         }}
         value={value}
-        onTkChange={(e) => {
+        onTkChange={e => {
           setValue(e.detail);
         }}
       />
@@ -135,14 +133,7 @@ const loading= ref(false)
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Loading;

@@ -12,7 +12,7 @@ const Range = () => {
       max={100}
       label="Range Slider"
       value={value}
-      onTkChange={(e) => {
+      onTkChange={e => {
         if (Array.isArray(e.detail) && e.detail.length === 2) {
           setValue([e.detail[0], e.detail[1]]);
         }
@@ -50,14 +50,7 @@ const Range = () => {
   (tkChange)="onChange($event)">
 </tk-slider>`;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Range;

@@ -23,8 +23,7 @@ const Example = () => {
       field: 'quantity',
       header: 'Quantity',
       sortable: true,
-      sorter: (a: any, b: any) =>
-        Number(a.quantity) > Number(b.quantity) ? 1 : -1,
+      sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
     },
   ];
 
@@ -40,10 +39,8 @@ const Example = () => {
       return (
         <div slot={`expand-content-${item.id}`} key={'expanded-row-' + index}>
           <div className="flex gap-2">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book.
           </div>
         </div>
       );
@@ -59,7 +56,7 @@ const Example = () => {
       rowsPerPage={5}
       totalItems={data.length}
       expandedRows={expandedRows}
-      onTkExpandedRowsChange={(e) => handleExpandedRowsChange(e.detail)}
+      onTkExpandedRowsChange={e => handleExpandedRowsChange(e.detail)}
     >
       {renderExpandedRows()}
     </TkTable>
@@ -258,14 +255,7 @@ const handleExpandedRowsChange = (rows) => {
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default ExpandedRows;

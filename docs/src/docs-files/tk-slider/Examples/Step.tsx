@@ -32,7 +32,7 @@ const Step = () => {
       step={10}
       label="Step Slider"
       value={value}
-      onTkChange={(e) => {
+      onTkChange={e => {
         if (typeof e.detail === 'number') {
           setValue(e.detail);
         }
@@ -40,14 +40,7 @@ const Step = () => {
     />
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
 export default Step;

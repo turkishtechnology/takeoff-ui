@@ -3,9 +3,7 @@ import { TkTabs, TkTabsItem, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const SpreadHeaders = () => {
-  const [type, setType] = useState<
-    'basic' | 'divided' | 'compact' | 'expanded'
-  >('basic');
+  const [type, setType] = useState<'basic' | 'divided' | 'compact' | 'expanded'>('basic');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const types = [
@@ -14,7 +12,7 @@ const SpreadHeaders = () => {
     { label: 'Compact', value: 'compact' },
     { label: 'Expanded', value: 'expanded' },
   ];
-  const handleHeaderTypeChange = (event) => {
+  const handleHeaderTypeChange = event => {
     setType(event.detail);
   };
   useEffect(() => {
@@ -53,9 +51,7 @@ const SpreadHeaders = () => {
       <div className="overflow-auto mb-4">
         <TkRadioGroup value={type} onTkChange={handleHeaderTypeChange}>
           {types.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -69,39 +65,26 @@ const SpreadHeaders = () => {
       >
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 1
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 1
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 2
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 2
           </p>
         </TkTabsItem>
         <TkTabsItem label="Tab label" icon="flight">
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam
-            repellat libero asperiores earum nam nobis, culpa ratione quam
-            perferendis esse, cupiditate nequequas! 3
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 3
           </p>
         </TkTabsItem>
       </TkTabs>
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
 };
 export default SpreadHeaders;

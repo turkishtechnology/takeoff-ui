@@ -1,8 +1,4 @@
-import {
-  ITableColumn,
-  TkTableCustomEvent,
-  ITableRequest,
-} from '@takeoff-ui/core';
+import { ITableColumn, TkTableCustomEvent, ITableRequest } from '@takeoff-ui/core';
 import { TkButton, TkTable } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useEffect, useRef, useState } from 'react';
@@ -41,13 +37,7 @@ const Example = () => {
 
   const handleRequest = async (e: TkTableCustomEvent<ITableRequest>) => {
     setLoading(true);
-    const result: any = await fetchFromServer(
-      e.detail.currentPage,
-      e.detail.rowsPerPage,
-      e.detail.filters,
-      e.detail.sortField,
-      e.detail.sortOrder,
-    );
+    const result: any = await fetchFromServer(e.detail.currentPage, e.detail.rowsPerPage, e.detail.filters, e.detail.sortField, e.detail.sortOrder);
 
     setTotalItem(result?.totalItem);
     setRowsPerPage(e.detail.rowsPerPage);
@@ -258,14 +248,7 @@ const refreshData = async () => {
 `;
 
   const demo = <Example />;
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default ServerSide;

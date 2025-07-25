@@ -4,7 +4,7 @@ import { useState } from 'react';
 function Stepper() {
   const [activeStep, setActiveStep] = useState<number>(1);
 
-  const handleStepChange = (event) => {
+  const handleStepChange = event => {
     setActiveStep(event.detail);
   };
 
@@ -22,28 +22,10 @@ function Stepper() {
 
   return (
     <div>
-      <TkStepper
-        completeIcon="done_all"
-        active={1}
-        onTkStepChange={handleStepChange}
-      >
-        <TkStep
-          header="Step 1"
-          subheader="Step Description"
-          complete={activeStep > 0}
-        />
-        <TkStep
-          header="Step 2"
-          subheader="Step Description"
-          isActive={activeStep === 1}
-          complete={activeStep > 1}
-        />
-        <TkStep
-          header="Step 3"
-          subheader="Step Description"
-          isActive={activeStep === 2}
-          complete={activeStep > 2}
-        />
+      <TkStepper completeIcon="done_all" active={1} onTkStepChange={handleStepChange}>
+        <TkStep header="Step 1" subheader="Step Description" complete={activeStep > 0} />
+        <TkStep header="Step 2" subheader="Step Description" isActive={activeStep === 1} complete={activeStep > 1} />
+        <TkStep header="Step 3" subheader="Step Description" isActive={activeStep === 2} complete={activeStep > 2} />
         <TkStep
           header="Step 4"
           subheader="Step Description"

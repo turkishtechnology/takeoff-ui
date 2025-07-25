@@ -91,37 +91,19 @@ const popoverRef = ref(null);
           <div className="flex justify-between items-center ">
             <div className="flex gap-2">
               <TkIcon icon="bolt" variant="neutral" sign />
-              <span className="text-lg font-bold text-neutral-900">
-                Popover Header
-              </span>
+              <span className="text-lg font-bold text-neutral-900">Popover Header</span>
             </div>
-            <TkButton
-              icon="close"
-              type="text"
-              size="small"
-              variant="neutral"
-              onTkClick={() => popoverRef.current?.close()}
-            />
+            <TkButton icon="close" type="text" size="small" variant="neutral" onTkClick={() => popoverRef.current?.close()} />
           </div>
           <div className="flex flex-col gap-2">
-            <span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              quos.
-            </span>
+            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</span>
           </div>
         </div>
       </TkPopover>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default CloseMethod;

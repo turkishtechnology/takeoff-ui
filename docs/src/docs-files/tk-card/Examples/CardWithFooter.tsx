@@ -7,27 +7,21 @@ const CardWithFooter = () => {
   const [codeSampleVue, setCodeSampleVue] = useState('');
   const [codeSampleAngular, setCodeSampleAngular] = useState('');
 
-  const [footerType, setFooterType] = useState<'basic' | 'divided' | 'light'>(
-    'divided',
-  );
+  const [footerType, setFooterType] = useState<'basic' | 'divided' | 'light'>('divided');
   const footerTypes = [
     { label: 'Basic', value: 'basic' },
     { label: 'Divided', value: 'divided' },
     { label: 'Light', value: 'light' },
   ];
 
-  const handleFooterTypeChange = (event) => {
+  const handleFooterTypeChange = event => {
     setFooterType(event.detail);
   };
 
   useEffect(() => {
-    const attributesList = [
-      `header="${
-        footerType.charAt(0).toUpperCase() + footerType.slice(1)
-      } Footer"`,
-      `subheader="Interactive Example"`,
-      `footerType="${footerType}"`,
-    ].filter(Boolean);
+    const attributesList = [`header="${footerType.charAt(0).toUpperCase() + footerType.slice(1)} Footer"`, `subheader="Interactive Example"`, `footerType="${footerType}"`].filter(
+      Boolean,
+    );
     const attributes = attributesList.join('\n  ');
 
     const newCodeSampleReact = `import { TkCard, TkButton } from "@takeoff-ui/react";
@@ -77,15 +71,9 @@ const CardWithFooter = () => {
   const demo = (
     <>
       <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup
-          label="Options"
-          value={footerType}
-          onTkChange={handleFooterTypeChange}
-        >
+        <TkRadioGroup label="Options" value={footerType} onTkChange={handleFooterTypeChange}>
           {footerTypes.map((radio, index) => {
-            return (
-              <TkRadio label={radio.label} key={index} value={radio.value} />
-            );
+            return <TkRadio label={radio.label} key={index} value={radio.value} />;
           })}
         </TkRadioGroup>
       </div>
@@ -99,13 +87,6 @@ const CardWithFooter = () => {
     </>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={codeSampleAngular}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={codeSampleAngular}></FeatureDemo>;
 };
 export default CardWithFooter;

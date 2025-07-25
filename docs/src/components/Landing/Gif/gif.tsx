@@ -32,7 +32,7 @@ export default function Gif() {
 
     // 2 saniyede bir kelime değiştir
     const wordTimeout = setTimeout(() => {
-      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+      setCurrentWordIndex(prevIndex => (prevIndex + 1) % words.length);
     }, 1000);
 
     return () => {
@@ -47,10 +47,7 @@ export default function Gif() {
       <span className={styles.slash}>/</span>
       <span className={styles.package}>
         {displayedWord.map((letter, index) => (
-          <span
-            key={index}
-            className={shuffling ? styles.shuffleLetter : styles.normalLetter}
-          >
+          <span key={index} className={shuffling ? styles.shuffleLetter : styles.normalLetter}>
             {letter}
           </span>
         ))}

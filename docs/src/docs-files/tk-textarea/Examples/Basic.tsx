@@ -21,22 +21,9 @@ const Basic = () => {
   placeholder="Placeholder text"
 />`;
 
-  const demo = (
-    <TkTextarea
-      label="Textarea"
-      hint="Hint text"
-      placeholder="Placeholder text"
-    />
-  );
+  const demo = <TkTextarea label="Textarea" hint="Hint text" placeholder="Placeholder text" />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Basic;

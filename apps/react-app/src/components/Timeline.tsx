@@ -27,10 +27,7 @@ function Timeline() {
             <p>
               Custom description with <strong>HTML</strong>
             </p>
-            <img
-              src="https://flagpedia.net/data/flags/h24/tr.webp"
-              alt="Custom image"
-            />
+            <img src="https://flagpedia.net/data/flags/h24/tr.webp" alt="Custom image" />
           </div>
         </TkTimelineItem>
 

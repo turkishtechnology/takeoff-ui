@@ -8,7 +8,7 @@ function Datepicker() {
       <TkDatepicker
         label="Test Label"
         value={value}
-        onTkChange={(e) => {
+        onTkChange={e => {
           console.log(e.detail);
           setValue(e.detail as string);
         }}

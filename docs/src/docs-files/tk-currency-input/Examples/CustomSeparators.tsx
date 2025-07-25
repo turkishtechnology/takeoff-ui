@@ -23,22 +23,11 @@ const CustomSeparators = () => {
 
   const demo = (
     <div className="flex items-end gap-2">
-      <TkCurrencyInput
-        label="Currency Franche Example"
-        decimal-separator=","
-        thousands-separator=" "
-      />
+      <TkCurrencyInput label="Currency Franche Example" decimal-separator="," thousands-separator=" " />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default CustomSeparators;

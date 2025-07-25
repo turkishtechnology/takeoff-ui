@@ -55,12 +55,7 @@ const setToday = async () => {
     <div className="flex justify-center items-center overflow-auto">
       <TkDatepicker ref={dp} className="mt-4" inline>
         <div slot="footer-actions" className="flex justify-between w-full">
-          <TkButton
-            label="Today"
-            type="filled"
-            variant="secondary"
-            onTkClick={setToday}
-          ></TkButton>
+          <TkButton label="Today" type="filled" variant="secondary" onTkClick={setToday}></TkButton>
           <div className="flex gap-2">
             <TkButton label="Cancel" type="text" variant="neutral"></TkButton>
             <TkButton label="Submit"></TkButton>
@@ -70,13 +65,6 @@ const setToday = async () => {
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 export default FooterCustomization;

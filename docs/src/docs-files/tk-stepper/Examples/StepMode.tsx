@@ -7,7 +7,7 @@ const StepMode = () => {
   const [reactCodeSample, setReactCodeSample] = useState('');
   const [vueCodeSample, setVueCodeSample] = useState('');
 
-  const handleStepModeChange = (event) => {
+  const handleStepModeChange = event => {
     setStepMode(event.detail);
   };
 
@@ -44,45 +44,21 @@ const handleStepModeChange = (event) => {
 
   const demo = (
     <div className="space-y-6">
-      <TkRadioGroup
-        label="Step Mode"
-        value={stepMode}
-        onTkChange={handleStepModeChange}
-        className="mb-4"
-      >
+      <TkRadioGroup label="Step Mode" value={stepMode} onTkChange={handleStepModeChange} className="mb-4">
         <TkRadio label="Basic" value="basic" />
         <TkRadio label="Number" value="number" />
       </TkRadioGroup>
 
       <TkStepper stepMode={stepMode}>
-        <TkStep
-          header="General Information"
-          subheader="Basic campaign details"
-          complete
-        />
-        <TkStep
-          header="Category Details"
-          subheader="Campaign categorization"
-          complete
-        />
-        <TkStep
-          header="Communication"
-          subheader="Communication strategies"
-          isActive
-        />
+        <TkStep header="General Information" subheader="Basic campaign details" complete />
+        <TkStep header="Category Details" subheader="Campaign categorization" complete />
+        <TkStep header="Communication" subheader="Communication strategies" isActive />
         <TkStep header="Summary" subheader="Campaign overview" />
       </TkStepper>
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCodeSample}
-      vueCode={vueCodeSample}
-      angularCode={''}
-    />
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCodeSample} vueCode={vueCodeSample} angularCode={''} />;
 };
 
 export default StepMode;

@@ -17,32 +17,13 @@ const Size = () => {
 
   const demo = (
     <div className="flex items-end gap-2 flex-wrap justify-center">
-      <TkChips
-        variant="primary"
-        size="small"
-        type="filled"
-        label="primary"
-        removable
-      />
+      <TkChips variant="primary" size="small" type="filled" label="primary" removable />
       <TkChips variant="primary" size="base" label="primary" removable />
-      <TkChips
-        variant="primary"
-        size="large"
-        type="filled"
-        label="primary"
-        removable
-      />
+      <TkChips variant="primary" size="large" type="filled" label="primary" removable />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Size;

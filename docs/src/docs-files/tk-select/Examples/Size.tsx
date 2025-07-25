@@ -97,7 +97,7 @@ const Size = () => {
         placeholder="Placeholder text"
         size="small"
         value={value}
-        onTkChange={(e) => setValue(e.detail)}
+        onTkChange={e => setValue(e.detail)}
       />
       <TkSelect
         label="Base Select"
@@ -110,7 +110,7 @@ const Size = () => {
         placeholder="Placeholder text"
         size="base"
         value={value1}
-        onTkChange={(e) => setValue1(e.detail)}
+        onTkChange={e => setValue1(e.detail)}
       />
       <TkSelect
         label="Large Select"
@@ -123,19 +123,12 @@ const Size = () => {
         placeholder="Placeholder text"
         size="large"
         value={value2}
-        onTkChange={(e) => setValue2(e.detail)}
+        onTkChange={e => setValue2(e.detail)}
       />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
 export default Size;

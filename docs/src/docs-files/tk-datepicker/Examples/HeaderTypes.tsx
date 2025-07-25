@@ -3,9 +3,7 @@ import { TkDatepicker, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const HeaderTypes = () => {
-  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light'>(
-    'basic',
-  );
+  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light'>('basic');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
 
@@ -15,7 +13,7 @@ const HeaderTypes = () => {
     { label: 'Light', value: 'light' },
   ];
 
-  const handleHeaderTypeChange = (event) => {
+  const handleHeaderTypeChange = event => {
     setHeaderType(event.detail);
   };
 
@@ -29,28 +27,15 @@ const HeaderTypes = () => {
 
   const demo = (
     <div className="flex flex-col items-start gap-2 overflow-auto">
-      <TkRadioGroup
-        label="Header Type"
-        value={headerType}
-        onTkChange={handleHeaderTypeChange}
-      >
+      <TkRadioGroup label="Header Type" value={headerType} onTkChange={handleHeaderTypeChange}>
         {headerTypes.map((radio, index) => {
-          return (
-            <TkRadio label={radio.label} key={index} value={radio.value} />
-          );
+          return <TkRadio label={radio.label} key={index} value={radio.value} />;
         })}
       </TkRadioGroup>
       <TkDatepicker headerType={headerType} inline />
     </div>
   );
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={codeSampleReact}
-      vueCode={codeSampleVue}
-      angularCode={''}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
 };
 export default HeaderTypes;

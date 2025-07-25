@@ -23,7 +23,7 @@ const Example = () => {
       headerHtml: () => {
         const checkbox = document.createElement('tk-checkbox');
         checkbox.label = 'Checkbox';
-        checkbox.addEventListener('tk-change', (e) => {
+        checkbox.addEventListener('tk-change', e => {
           console.log('checkbox status', e.detail);
         });
         return checkbox;
@@ -154,14 +154,7 @@ const column = [
 
   const demo = <Example />;
 
-  return (
-    <FeatureDemo
-      demo={demo}
-      reactCode={reactCode}
-      vueCode={vueCode}
-      angularCode={angularCode}
-    ></FeatureDemo>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default CustomHeader;

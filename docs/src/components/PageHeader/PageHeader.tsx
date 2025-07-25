@@ -8,15 +8,10 @@ export default function PageHeader(): JSX.Element {
       <div className="container">
         <Gif />
 
-        {colorMode === 'dark' ? (
-          <img src="img/hero/hero-logo-dark.svg" />
-        ) : (
-          <img src="img/hero/hero-logo.svg" />
-        )}
+        {colorMode === 'dark' ? <img src="img/hero/hero-logo-dark.svg" /> : <img src="img/hero/hero-logo.svg" />}
         <p className={'description'}>
-          TakeOff simplifies the process of building web applications. It
-          provides comprehensive and flexible design system and ui library that
-          ensures high performance, scalability, and ease of use.{' '}
+          TakeOff simplifies the process of building web applications. It provides comprehensive and flexible design system and ui library that ensures high performance,
+          scalability, and ease of use.{' '}
         </p>
       </div>
     </header>

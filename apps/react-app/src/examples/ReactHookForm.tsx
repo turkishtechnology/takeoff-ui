@@ -1,15 +1,4 @@
-import {
-  TkButton,
-  TkCard,
-  TkCheckbox,
-  TkDatepicker,
-  TkInput,
-  TkRadio,
-  TkRadioGroup,
-  TkSelect,
-  TkTextarea,
-  TkToggle,
-} from '@takeoff-ui/react';
+import { TkButton, TkCard, TkCheckbox, TkDatepicker, TkInput, TkRadio, TkRadioGroup, TkSelect, TkTextarea, TkToggle } from '@takeoff-ui/react';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 function ReactHookForm() {
   // React Hook Form
@@ -49,7 +38,7 @@ function ReactHookForm() {
       gender: GenderEnum.male,
     },
   });
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = data => {
     console.log(data);
   };
   const handleReset = () => {
@@ -71,14 +60,7 @@ function ReactHookForm() {
             control={control}
             name="name"
             render={({ field }) => (
-              <TkInput
-                mode="text"
-                label="Name"
-                invalid={!!errors?.name}
-                error={errors?.name && 'Bu alan gerekli'}
-                value={field.value}
-                onTkChange={(e) => field.onChange(e.detail)}
-              />
+              <TkInput mode="text" label="Name" invalid={!!errors?.name} error={errors?.name && 'Bu alan gerekli'} value={field.value} onTkChange={e => field.onChange(e.detail)} />
             )}
           />
 
@@ -92,7 +74,7 @@ function ReactHookForm() {
                 value={field.value}
                 invalid={!!errors?.gender}
                 error={errors?.gender && 'Bu alan gerekli'}
-                onTkChange={(e) => field.onChange(e.detail)}
+                onTkChange={e => field.onChange(e.detail)}
               />
             )}
           />
@@ -101,13 +83,7 @@ function ReactHookForm() {
             control={control}
             name="address"
             render={({ field }) => (
-              <TkTextarea
-                label="Address"
-                invalid={!!errors?.address}
-                error={errors?.address && 'Bu alan gerekli'}
-                value={field.value}
-                onTkChange={(e) => field.onChange(e.detail)}
-              />
+              <TkTextarea label="Address" invalid={!!errors?.address} error={errors?.address && 'Bu alan gerekli'} value={field.value} onTkChange={e => field.onChange(e.detail)} />
             )}
           />
           <Controller
@@ -121,70 +97,33 @@ function ReactHookForm() {
                 invalid={!!errors?.password}
                 error={errors?.password && 'Bu alan gerekli'}
                 value={field.value}
-                onTkChange={(e) => field.onChange(e.detail)}
+                onTkChange={e => field.onChange(e.detail)}
               />
             )}
           />
           <Controller
             control={control}
             name="date"
-            render={({ field }) => (
-              <TkDatepicker
-                label="Date"
-                mode="single"
-                invalid={!!errors?.date}
-                onTkChange={(e) => field.onChange(e.detail)}
-                value={field.value}
-              />
-            )}
+            render={({ field }) => <TkDatepicker label="Date" mode="single" invalid={!!errors?.date} onTkChange={e => field.onChange(e.detail)} value={field.value} />}
           />
-          <Controller
-            control={control}
-            name="toggle"
-            render={({ field }) => (
-              <TkToggle onTkChange={(e) => field.onChange(e.detail)} />
-            )}
-          />
+          <Controller control={control} name="toggle" render={({ field }) => <TkToggle onTkChange={e => field.onChange(e.detail)} />} />
           <Controller
             control={control}
             name="check"
-            render={({ field }) => (
-              <TkCheckbox
-                label="Okudum onayladım."
-                invalid={!!errors?.check}
-                onTkChange={(e) => field.onChange(e.detail)}
-                value={field.value}
-              />
-            )}
+            render={({ field }) => <TkCheckbox label="Okudum onayladım." invalid={!!errors?.check} onTkChange={e => field.onChange(e.detail)} value={field.value} />}
           />
           <Controller
             control={control}
             name="radio"
             render={({ field }) => (
-              <TkRadioGroup
-                value={field.value}
-                onTkChange={(e) => field.onChange(e.detail)}
-                invalid={!!errors?.radio}
-              >
+              <TkRadioGroup value={field.value} onTkChange={e => field.onChange(e.detail)} invalid={!!errors?.radio}>
                 <TkRadio value="test-1" label="Test 1" />
                 <TkRadio value="test-2" label="Test 2" />
               </TkRadioGroup>
             )}
           />
-          <TkButton
-            onTkClick={() => handleReset()}
-            label="reset"
-            variant="primary"
-            fullWidth={true}
-            type="outlined"
-            mode="reset"
-          />
-          <TkButton
-            mode="submit"
-            label="Validate"
-            variant="primary"
-            fullWidth={true}
-          />
+          <TkButton onTkClick={() => handleReset()} label="reset" variant="primary" fullWidth={true} type="outlined" mode="reset" />
+          <TkButton mode="submit" label="Validate" variant="primary" fullWidth={true} />
         </div>
       </form>
     </TkCard>
