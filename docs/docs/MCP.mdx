@@ -9,7 +9,7 @@ Takeoff UI now has an official [Model Context Protocol (MCP)](https://modelconte
 
 MCP server provides AI assistants with access to Takeoff UI component information and utilities so that it can generate code with minimal errors.
 
-## What are the advantages of using Takeoff UI MCP?
+## Key Features
 
 - 🧩 **Component Discovery**: Get a complete list of all available Takeoff UI components.
 - 📚 **Component Information**: Access detailed information, documentation, and usage examples for specific Takeoff UI components.
@@ -21,7 +21,7 @@ MCP server provides AI assistants with access to Takeoff UI component informatio
 
 ## Installation
 
-### Option 1: Local Development (Recommended)
+### Local Development
 
 1. **Clone the Repository**:
 
@@ -42,25 +42,11 @@ npm install
 npm run build
 ```
 
-4. **Run the Server**:
-
-```bash
-npm start
-```
-
-5. **Test the Server**:
+4. **Test the Server**:
    Verify the server is running by sending a test request:
 
 ```bash
 echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/list"}' | node dist/index.js
-```
-
-### Option 2: Use via npx (Available after npm publish)
-
-**Note**: This option will work after the package is published to Nexus registry.
-
-```bash
-npx @takeoff-ui/mcp
 ```
 
 ## Configuration
