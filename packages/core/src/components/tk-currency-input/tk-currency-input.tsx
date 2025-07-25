@@ -74,36 +74,38 @@ export class TkCurrencyInput implements ComponentInterface {
    * Placeholder text for the input field.
    */
   @Prop() placeholder?: string;
+
   /**
    * Disables the input field if set to true.
    */
   @Prop() disabled: boolean = false;
+
   /**
    * Marks the input field as invalid if set to true.
    */
   @Prop() invalid: boolean = false;
+
   /**
    * Makes the input field read-only if set to true.
    */
   @Prop() readonly: boolean = false;
+
   /**
    * Sets size for the component.
    */
   @Prop() size: 'large' | 'base' | 'small' = 'base';
+
   /**
    * Displays a red asterisk (*) next to the label for visual emphasis.
    */
   @Prop() showAsterisk: boolean = false;
-  /**
-   * The step value for the input, used for numeric inputs.
-   * Default is 0.01, which is suitable for currency inputs.
-   */
-  @Prop() step: number = 0.01;
+
   /**
    * The number of decimal places to display in the formatted currency value.
    * Default is 2, which is common for most currencies.
    */
   @Prop() precision: number = 2;
+
   /**
    * The default currency to use when the component is initialized.
    * Default is 'TRY'.
@@ -157,11 +159,13 @@ export class TkCurrencyInput implements ComponentInterface {
    * If provided, it will be displayed above the input.
    */
   @Prop() label: string;
+
   /**
    * The name attribute for the input element.
    * Useful for form submissions.
    */
   @Prop() name: string;
+
   /**
    * Provided a hint or additional information about the input.
    */
@@ -176,10 +180,12 @@ export class TkCurrencyInput implements ComponentInterface {
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
+
   /**
    * Emitted when the input loses focus.
    */
   @Event() tkBlur: EventEmitter<void>;
+
   /**
    * Emitted when the input has focus.
    */
