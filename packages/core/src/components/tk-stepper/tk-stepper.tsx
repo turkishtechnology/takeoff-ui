@@ -20,11 +20,13 @@ export class TkStepper implements ComponentInterface {
   @Element() el: HTMLTkStepperElement;
 
   @State() private steps: IStep[] = [];
-  @State() private internalActive: number = 0;
-  @Watch('internalActive')
-  internalActiveChanged(newValue: number) {
-    this.updateStepsState(newValue);
-  }
+
+  /**
+   * Controls if the tabs component is controlled.
+   * @defaultValue false
+   */
+  @Prop() controlled: boolean = false;
+
   /**
    * Controls the orientation of the stepper component.
    * @defaultValue 'horizontal'
@@ -50,10 +52,7 @@ export class TkStepper implements ComponentInterface {
   @Prop() active: number = 0;
   @Watch('active')
   activeChanged(newValue: number) {
-    if (newValue !== this.internalActive) {
-      this.internalActive = newValue;
-      this.tkStepChange.emit(newValue);
-    }
+    this.updateStepsState(newValue);
   }
 
   /**
@@ -64,7 +63,7 @@ export class TkStepper implements ComponentInterface {
   @Prop() showCompleteState: boolean = true;
   @Watch('showCompleteState')
   showCompleteStateChanged() {
-    this.updateStepsState(this.internalActive);
+    this.updateStepsState(this.active);
   }
 
   /**
@@ -113,7 +112,6 @@ export class TkStepper implements ComponentInterface {
   @Event({ eventName: 'tk-step-click' }) tkStepClick: EventEmitter<IStepClickDetail>;
 
   componentWillLoad() {
-    this.internalActive = this.active;
     this.initializeSteps();
   }
 
@@ -131,8 +129,11 @@ export class TkStepper implements ComponentInterface {
    */
   @Method()
   async setActive(index: number) {
-    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.internalActive) {
-      this.internalActive = index;
+    if (index >= 0 && index < this.steps.length && this.canStepBeSelected(index) && index !== this.active) {
+      if (!this.controlled) {
+        this.active = index;
+      }
+
       this.tkStepChange.emit(index);
     }
   }
@@ -154,9 +155,9 @@ export class TkStepper implements ComponentInterface {
       activeIcon: step.activeIcon,
       inactiveIcon: step.inactiveIcon,
       errorIcon: step.errorIcon,
-      complete: this.showCompleteState && index < this.internalActive && !step.error,
+      complete: this.showCompleteState && index < this.active && !step.error,
       error: step.error,
-      isActive: index === this.internalActive,
+      isActive: index === this.active,
       disabled: step.disabled || false,
       isClickable: step.isClickable !== undefined ? step.isClickable : true,
     }));
@@ -175,9 +176,9 @@ export class TkStepper implements ComponentInterface {
     if (!targetStep || targetStep.disabled || !targetStep.isClickable) return false;
 
     if (!this.linear) return true;
-    if (targetIndex < this.internalActive) return true;
-    if (targetIndex === this.internalActive + 1) {
-      const currentStep = this.steps[this.internalActive];
+    if (targetIndex < this.active) return true;
+    if (targetIndex === this.active + 1) {
+      const currentStep = this.steps[this.active];
       return !currentStep?.error && !currentStep?.disabled;
     }
     return false;
@@ -208,9 +209,7 @@ export class TkStepper implements ComponentInterface {
     const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
     this.tkStepClick.emit({ index, status });
 
-    if (this.canStepBeSelected(index)) {
-      this.setActive(index);
-    }
+    this.setActive(index);
   };
 
   private createStepIcon(step: IStep, index: number): JSX.Element {

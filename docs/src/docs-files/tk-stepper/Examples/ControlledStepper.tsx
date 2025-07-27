@@ -49,6 +49,7 @@ const handleInputChange = (name, event) => {
 <TkStepper
     active={activeStep}
     onTkStepChange={handleStepChange}
+    controlled
 >
     <TkStep
         header="Personal Info"
@@ -167,6 +168,7 @@ const handleInputChange = (name, event) => {
   <tk-stepper
     :active="activeStep"
     @tk-step-change="handleStepChange"
+    controlled
   >
     <tk-step
       header="Personal Info"
@@ -382,7 +384,7 @@ const submitForm = () => {
         This example demonstrates a controlled stepper component used with a multi-step form. The active step is controlled by the parent component's state.
       </p>
 
-      <TkStepper active={activeStep} onTkStepChange={handleStepChange}>
+      <TkStepper active={activeStep} onTkStepChange={handleStepChange} controlled>
         <TkStep header="Personal Info" subheader="Name and contact details" complete={activeStep > 0} isActive={activeStep === 0} />
         <TkStep header="Address" subheader="Your address information" complete={activeStep > 1} isActive={activeStep === 1} />
         <TkStep header="Review" subheader="Review and submit" isActive={activeStep === 2} />
