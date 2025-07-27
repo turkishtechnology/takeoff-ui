@@ -77,30 +77,29 @@ tk-input.tk-table-input {
         color: var(--icon-dark);
         cursor: pointer;
       }
-
     }
-    .tk-input-prefix-container{
+    .tk-input-prefix-container {
       display: inline-flex;
       font-weight: 300;
-      &.large{
+      &.large {
         font-size: var(--desktop-body-m-base-size);
         line-height: var(--desktop-body-m-base-line-height);
       }
-      &.base{
+      &.base {
         font-size: var(--desktop-body-s-size);
         line-height: var(--desktop-body-s-line-height);
       }
-      &.small{
+      &.small {
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-body-xs-line-height);
       }
 
-      .tk-input-prefix-text{
+      .tk-input-prefix-text {
         color: var(--text-sub-base);
-        size: inherit
-    }
+        size: inherit;
+      }
 
-      .tk-input-divider{
+      .tk-input-divider {
         position: relative;
         display: flex;
         justify-content: center;
@@ -117,8 +116,8 @@ tk-input.tk-table-input {
           border-inline-start: var(--spacing-px) solid var(--background-light);
           box-sizing: border-box;
         }
+      }
     }
- }
     input {
       outline: none;
       border: none;

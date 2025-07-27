@@ -10,11 +10,11 @@
 
   &.tk-avatar-group-compact {
     border-radius: var(--radius-full);
-    border: 1px solid var(--border-light, #E1E4EA);
-    background: var(--static-light, #FFF);
+    border: 1px solid var(--border-light, #e1e4ea);
+    background: var(--static-light, #fff);
     padding: 4px;
 
-    >tk-avatar:last-child .tk-avatar-container {
+    > tk-avatar:last-child .tk-avatar-container {
       margin-left: 0;
 
       .tk-avatar {
@@ -30,23 +30,22 @@
     }
   }
 
-  >tk-avatar:not(:last-child) .tk-avatar {
+  > tk-avatar:not(:last-child) .tk-avatar {
     box-shadow: var(--effect-1-default-base);
   }
 
-  >tk-avatar+tk-avatar {
-
-    >.tk-avatar-xlarge,
-    >.tk-avatar-large {
+  > tk-avatar + tk-avatar {
+    > .tk-avatar-xlarge,
+    > .tk-avatar-large {
       margin-left: -20px;
     }
 
-    >.tk-avatar-base {
+    > .tk-avatar-base {
       margin-left: var(--neutral-darker-shadows-2xl-spread, -12px);
     }
 
-    >.tk-avatar-small,
-    >.tk-avatar-xsmall {
+    > .tk-avatar-small,
+    > .tk-avatar-xsmall {
       margin-left: -8px;
     }
   }

@@ -3,7 +3,6 @@ tk-radio {
 }
 
 .tk-radio-container {
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,20 +59,18 @@ tk-radio {
     }
   }
 
-
   &:hover {
     .mask {
       background-color: var(--background-lightest);
     }
-
   }
 
-  input:focus-visible+.mask {
+  input:focus-visible + .mask {
     border-color: var(--states-info-base);
     background-color: var(--static-light);
   }
 
-  input:checked+.mask {
+  input:checked + .mask {
     border-color: var(--states-info-lightest);
     background-color: var(--static-light);
 
@@ -82,7 +79,7 @@ tk-radio {
     }
   }
 
-  &:hover input:checked+.mask {
+  &:hover input:checked + .mask {
     border-color: var(--states-info-light);
     background-color: var(--states-info-lightest);
   }
@@ -93,7 +90,7 @@ tk-radio[disabled] {
   .tk-radio-container {
     color: var(--text-sub-base);
 
-    input+.mask {
+    input + .mask {
       border: 2px solid var(--border-light);
       background-color: var(--background-light);
 
@@ -111,7 +108,7 @@ tk-radio[aria-invalid] {
       background: var(--static-light);
     }
 
-    input:checked+.mask {
+    input:checked + .mask {
       border-color: var(--states-danger-light);
 
       div {
@@ -119,5 +116,4 @@ tk-radio[aria-invalid] {
       }
     }
   }
-
 }

@@ -14,15 +14,15 @@
   font-style: normal;
   font-weight: 400;
   line-height: var(--label-m-base-line-height, 20px);
-  color: var(--text-primary, #1E1E1E);
+  color: var(--text-primary, #1e1e1e);
 }
 
 .tk-slider-disabled .tk-slider-label {
-  color: var(--text-sub-base, #99A0AE);
+  color: var(--text-sub-base, #99a0ae);
 }
 
 .tk-slider-label .asterisk {
-  color: var(--states-danger-base, #C90019);
+  color: var(--states-danger-base, #c90019);
   margin-left: 4px;
   font-size: 14px;
 }
@@ -30,7 +30,7 @@
 .tk-slider-track-wrapper {
   position: relative;
   height: 6px;
-  background: var(--background-light, #E1E4EA);
+  background: var(--background-light, #e1e4ea);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -49,13 +49,13 @@
 .tk-slider-fill {
   position: absolute;
   height: 6px;
-  background: var(--primary-base, #C90019);
+  background: var(--primary-base, #c90019);
   border-radius: 8px;
   top: 0;
 }
 
 .tk-slider-disabled .tk-slider-fill {
-  background: var(--background-sub-base, #CACFD8);
+  background: var(--background-sub-base, #cacfd8);
 }
 
 .tk-slider-thumb {
@@ -69,8 +69,8 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid var(--static-Light, #FFF);
-  background: var(--primary-base, #C90019);
+  border: 1px solid var(--static-Light, #fff);
+  background: var(--primary-base, #c90019);
   z-index: 2;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
@@ -90,15 +90,15 @@
 
 .tk-slider-thumb-active {
   background: white;
-  border: 1px solid var(--primary-base, #C90019);
+  border: 1px solid var(--primary-base, #c90019);
 }
 
 .tk-slider-thumb-active svg circle {
-  fill: var(--primary-base, #C90019);
+  fill: var(--primary-base, #c90019);
 }
 
 .tk-slider-thumb-disabled {
-  background: var(--background-sub-base, #CACFD8);
+  background: var(--background-sub-base, #cacfd8);
   cursor: not-allowed;
 }
 
@@ -107,7 +107,7 @@
 }
 
 .tk-slider-thumb-active {
-  box-shadow: 0 0 0 2px var(--primary-base, #C90019);
+  box-shadow: 0 0 0 2px var(--primary-base, #c90019);
 }
 
 .tk-slider-labels {
@@ -124,7 +124,7 @@
 }
 
 .tk-slider-labels-disabled {
-  color: var(--text-light, #CACFD8);
+  color: var(--text-light, #cacfd8);
 }
 
 .tk-slider-ticks {
@@ -149,7 +149,7 @@
   width: 2px;
   height: 8px;
   border-radius: 4px;
-  background: var(--background-sub-base, #CACFD8);
+  background: var(--background-sub-base, #cacfd8);
 }
 
 .tk-slider-tooltip {
@@ -194,11 +194,11 @@
 }
 
 .tk-slider-hint {
-  color: var(--text-base, #6B7280);
+  color: var(--text-base, #6b7280);
 }
 
 .tk-slider-error {
-  color: var(--states-danger-base, #C90019);
+  color: var(--states-danger-base, #c90019);
 }
 
 .tk-slider-hint i,

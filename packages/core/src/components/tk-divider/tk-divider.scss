@@ -25,14 +25,14 @@
       &::before {
         flex: 1 1 0%;
         height: 1px;
-        content: "";
+        content: '';
         border-top: var(--spacing-px) solid var(--background-light);
         margin-right: 8px;
       }
 
       &::after {
         flex: 1 1 0%;
-        content: "";
+        content: '';
         border-top: var(--spacing-px) solid var(--background-light);
         margin-left: 8px;
       }

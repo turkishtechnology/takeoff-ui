@@ -2,7 +2,7 @@ tk-dialog {
   display: none;
 
   &[visible],
-  &[visible="true"] {
+  &[visible='true'] {
     display: block;
   }
 }
@@ -31,7 +31,6 @@ tk-dialog {
     width: 100%;
     height: 100%;
     z-index: 0;
-
   }
 
   &.tk-dialog-visible {

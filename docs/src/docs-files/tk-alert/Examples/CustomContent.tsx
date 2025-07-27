@@ -28,36 +28,23 @@ const Content = () => {
   const demo = (
     <div className="mb-4 flex flex-col gap-2">
       <TkAlert type="outlined" variant="info">
-        <div
-          slot="content"
-          className="text-sm text-gray-800 leading-relaxed space-y-2"
-        >
+        <div slot="content" className="text-sm text-gray-800 leading-relaxed space-y-2">
           <p>
-            <h4 className="text-blue-600">İnfo</h4> lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quisquam, quos.
+            <h4 className="text-blue-600">İnfo</h4> lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
           </p>
           <ul className="list-disc list-inside text-gray-700 space-y-1">
             <li>
-              <span className="font-medium">Email</span>: lorem ipsum dolor sit
-              amet
+              <span className="font-medium">Email</span>: lorem ipsum dolor sit amet
             </li>
           </ul>
-          <p>
-            lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            quos.
-          </p>
+          <p>lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
         </div>
       </TkAlert>
     </div>
   );
   return (
     <>
-      <FeatureDemo
-        demo={demo}
-        reactCode={reactCode}
-        vueCode={vueCode}
-        angularCode={angularCode}
-      ></FeatureDemo>
+      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
     </>
   );
 };

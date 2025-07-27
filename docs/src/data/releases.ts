@@ -16,11 +16,7 @@ export const releases: IReleaseItem[] = [
     title: 'Beta Release',
     version: '0.0.2-beta.17',
     date: '25.07.2025',
-    newFeatures: [
-      'Added content slot to alert',
-      'Added medium size option to icon',
-      'Added phone mask and reset value to phone input',
-    ],
+    newFeatures: ['Added content slot to alert', 'Added medium size option to icon', 'Added phone mask and reset value to phone input'],
     bugFixes: ['Enhance value handling for chips and selections to select'],
   },
   {

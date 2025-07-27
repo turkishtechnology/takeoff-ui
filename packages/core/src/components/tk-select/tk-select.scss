@@ -50,11 +50,11 @@ tk-select {
           cursor: pointer;
           background: var(--background-lightest);
         }
-        &[data-active="true"] {
+        &[data-active='true'] {
           cursor: pointer;
           background: var(--background-light);
         }
-        &[data-selected="true"] {
+        &[data-selected='true'] {
           cursor: pointer;
           background: var(--states-info-light);
         }
