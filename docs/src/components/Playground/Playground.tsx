@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { ControlConfig, PlaygroundProps } from './Playground.types';
-import './playground.model.css';
+import './playground.css';
 import { createConfigFromJson } from './utils/createConfig';
 import {
   TkButton,
