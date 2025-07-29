@@ -10,12 +10,12 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
 | <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
 | <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
-| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label for the phone input. Defaults to 'Phone Number'. |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label for the phone input. |
 | <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text for the phone input. |
 | <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
 | <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
-| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>IPhoneInputValue</code> | null | The value of the phone input. This is a list of phone input data objects. It can be mutable to allow two-way binding. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The value of the phone input. This is a list of phone input data objects. It can be mutable to allow two-way binding. |
 
 ### Events
 
@@ -35,8 +35,6 @@ interface IPhoneInputValue {
   rawValue: string;
   /** The formatted phone number with mask applied */
   maskedValue: string;
-  /** The international dialing code */
-  dialCode: string;
   /** The selected country object */
   country: ICountry;
 }

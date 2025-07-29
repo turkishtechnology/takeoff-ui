@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Pr
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
-import { IInputMaskOptions } from './interfaces';
+import { IInputMaskOptions, IMultiIconOptions } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
@@ -67,7 +67,7 @@ export class TkInput implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Defines the position of the icon.
@@ -225,6 +225,10 @@ export class TkInput implements ComponentInterface {
   @Method()
   async setFocus() {
     this.nativeInput?.focus();
+  }
+
+  private isMultiIconFormat(): boolean {
+    return this.icon && typeof this.icon === 'object' && ('left' in this.icon || 'right' in this.icon) && !('name' in this.icon);
   }
 
   private validateMinMax() {
@@ -613,7 +617,8 @@ export class TkInput implements ComponentInterface {
   }
 
   render() {
-    let _icon: HTMLTkIconElement;
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
     let safetyStatus: HTMLElement;
 
     if (this.showSafetyStatus) {
@@ -623,8 +628,26 @@ export class TkInput implements ComponentInterface {
     const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
     const prefixClass = classNames('tk-input-prefix-container', this.size);
 
+    // Handle icon rendering based on format
     if (this.icon && !this.isCounter) {
-      _icon = <tk-icon {...getIconElementProps(this.icon)} />;
+      if (this.isMultiIconFormat()) {
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
+        if (leftIconConfig) {
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
+        }
+        if (rightIconConfig) {
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
+        }
+      } else {
+        if (this.icon) {
+          if (this.iconPosition === 'left') {
+            _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
+          } else {
+            _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
+          }
+        }
+      }
     }
 
     let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
@@ -640,8 +663,8 @@ export class TkInput implements ComponentInterface {
         {this.renderLabel()}
         <label class="tk-input" htmlFor={this.uniqueId}>
           {this.renderChips()}
-          {!this.icon && this.iconPosition !== 'left' && this.renderPasswordIcons().left}
-          {this.icon && this.iconPosition === 'left' && _icon}
+          {!_leftIcon && this.renderPasswordIcons().left}
+          {_leftIcon}
           {this.renderAlignmentButtons().left}
           {this.pre && (
             <div class={prefixClass}>
@@ -651,8 +674,8 @@ export class TkInput implements ComponentInterface {
           )}
           {this.renderInput()}
           {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)}></tk-button>}
-          {this.icon && this.iconPosition === 'right' && _icon}
-          {!this.icon && this.iconPosition !== 'right' && this.renderPasswordIcons().right}
+          {_rightIcon}
+          {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}
         </label>
         {safetyStatus}

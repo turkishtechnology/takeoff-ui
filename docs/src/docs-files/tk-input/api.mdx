@@ -10,7 +10,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | the user cannot interact with the input. |
 | <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
 | <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
-| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon name to be displayed. |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, IMultiIconOptions, string</code> | null | Specifies a material icon name to be displayed. |
 | <TkBadge label="iconPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code> | 'left' | Defines the position of the icon. |
 | <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
 | <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines the label for the input. |
@@ -44,6 +44,15 @@ import { TkBadge } from "@takeoff-ui/react";
 | setFocus | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |
 
 ### Interfaces
+
+Interface for multi-position icon configuration
+
+```typescript
+interface IMultiIconOptions {
+  left?: string | IIconOptions;
+  right?: string | IIconOptions;
+}
+```
 
 See cleave.js documentation https://nosir.github.io/cleave.js
 
