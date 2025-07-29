@@ -66,9 +66,6 @@ export class TkInput implements ComponentInterface {
 
   /**
    * Specifies a material icon name to be displayed.
-   * - A string: icon name (uses iconPosition prop)
-   * - IIconOptions: icon configuration object (uses iconPosition prop)
-   * - IMultiIconOptions: { left?: string | IIconOptions, right?: string | IIconOptions }
    */
   @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
