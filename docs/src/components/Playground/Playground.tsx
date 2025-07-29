@@ -48,14 +48,6 @@ export default function Playground({
     Record<string, string | number | boolean>
   >(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
 
-  const [children, setChildren] = useState<React.ReactNode>(() => {
-    const config = processedConfigs[defaultConfigIndex];
-    if (config.name.toLowerCase().includes('input')) {
-      return '';
-    }
-    return config.defaultChildren || 'Sample Text';
-  });
-
   const currentConfig = processedConfigs[defaultConfigIndex];
 
   const handlePropChange = (key: string, value: string | number | boolean) => {
@@ -66,13 +58,6 @@ export default function Playground({
     setPropValues(() =>
       getDefaultPropValues(processedConfigs[defaultConfigIndex]),
     );
-
-    // Reset children only for components that support them
-    if (currentConfig.hasChildren) {
-      setChildren(currentConfig.defaultChildren || 'Sample Text');
-    } else {
-      setChildren('');
-    }
   };
 
   const renderControl = (control: ControlConfig) => {
@@ -160,12 +145,7 @@ export default function Playground({
       ),
     );
 
-    // Don't pass children to Input components
-    if (currentConfig.name.toLowerCase().includes('input')) {
-      return <Component {...cleanProps} />;
-    }
-
-    return <Component {...cleanProps}>{children}</Component>;
+    return <Component {...cleanProps} />;
   };
 
   const generateCodeString = () => {
@@ -183,17 +163,11 @@ export default function Playground({
         }
       })
       .filter(Boolean)
-      .join(' ');
+      .join('\n');
 
     const propsString = props ? ` ${props}` : '';
-    const childrenString = currentConfig.name.toLowerCase().includes('input')
-      ? ''
-      : `\n  ${children}\n`;
-    const closingTag = currentConfig.name.toLowerCase().includes('input')
-      ? ' />'
-      : `>${childrenString}</${currentConfig.name}>`;
 
-    return `<${currentConfig.name}${propsString}${closingTag}`;
+    return `<${currentConfig.name}${propsString} />`;
   };
 
   const handleCloseModal = () => {
@@ -206,7 +180,19 @@ export default function Playground({
   function renderControls() {
     return (
       <div className="playground-section">
-        <h3 className="playground-section-title">Controls</h3>
+        <h3 className="playground-section-title flex justify-between items-center">
+          Controls
+          <TkButton
+            variant="secondary"
+            size="small"
+            type="outlined"
+            mode="button"
+            iconPosition="left"
+            icon="refresh"
+            onClick={resetPlayground}
+          />
+        </h3>
+
         <div className="playground-controls-grid">
           {currentConfig.props.map((control) => (
             <div key={control.key}>
@@ -216,19 +202,7 @@ export default function Playground({
               {renderControl(control)}
             </div>
           ))}
-          {currentConfig.hasChildren && (
-            <div>
-              <label className="playground-label">Children:</label>
-              <input
-                type="text"
-                value={String(children)}
-                onChange={(e) => setChildren(e.target.value)}
-                className="playground-input"
-              />
-            </div>
-          )}
         </div>
-        <TkButton onClick={resetPlayground} label="Reset" />
       </div>
     );
   }
@@ -257,42 +231,18 @@ export default function Playground({
 
   function renderPlaygroundModal() {
     return (
-      <div className="playground-modal-backdrop" onClick={handleCloseModal}>
-        <div className="playground-modal" onClick={(e) => e.stopPropagation()}>
-          <button
-            className="playground-modal-close"
-            onClick={handleCloseModal}
-            aria-label="Close"
-          >
-            ×
-          </button>
-          <div className="playground-container">
-            <h2 className="playground-title">Component Playground</h2>
+      <div className="playground-container">
+        <div className="playground-container-left-side">
+          {renderPreview()}
 
-            {/* Controls */}
-            {renderControls()}
-
-            {/* Preview */}
-            {renderPreview()}
-
-            {/* Code Preview */}
-            {renderCodePreview()}
-          </div>
+          {renderCodePreview()}
+        </div>
+        <div className="playground-container-right-side">
+          {renderControls()}
         </div>
       </div>
     );
   }
 
-  return (
-    <>
-      <TkButton
-        label="Playground"
-        variant="info"
-        size="large"
-        onClick={() => setShowModal(true)}
-      ></TkButton>
-
-      {showModal && renderPlaygroundModal()}
-    </>
-  );
+  return <>{renderPlaygroundModal()}</>;
 }
