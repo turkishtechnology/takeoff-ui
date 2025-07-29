@@ -231,7 +231,7 @@ export class TkInput implements ComponentInterface {
   }
 
   private isMultiIconFormat(): boolean {
-    return this.icon && typeof this.icon === 'object' && ('left' in this.icon || 'right' in this.icon);
+    return this.icon && typeof this.icon === 'object' && ('left' in this.icon || 'right' in this.icon) && !('name' in this.icon);
   }
 
   private validateMinMax() {
@@ -634,9 +634,8 @@ export class TkInput implements ComponentInterface {
     // Handle icon rendering based on format
     if (this.icon && !this.isCounter) {
       if (this.isMultiIconFormat()) {
-        const leftIconConfig = (this.icon as IMultiIconOptions)['left'];
-        const rightIconConfig = (this.icon as IMultiIconOptions)['right'];
-
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
         if (leftIconConfig) {
           _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
         }
@@ -644,7 +643,7 @@ export class TkInput implements ComponentInterface {
           _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
         }
       } else {
-        if (this.icon as string | IIconOptions) {
+        if (this.icon) {
           if (this.iconPosition === 'left') {
             _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
           } else {
