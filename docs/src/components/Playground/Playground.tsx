@@ -8,6 +8,8 @@ import {
   TkSelect,
   TkCheckbox,
   TkTooltip,
+  TkTabs,
+  TkTabsItem,
 } from '@takeoff-ui/react';
 
 export default function Playground({
@@ -31,8 +33,6 @@ export default function Playground({
       throw new Error('Config must have either componentName property');
     });
   }, [configs, componentMap]);
-
-  const [showModal, setShowModal] = useState(false);
 
   function getDefaultPropValues(config: (typeof processedConfigs)[number]) {
     return config.props.reduce(
@@ -135,7 +135,6 @@ export default function Playground({
   const renderPreviewComponent = () => {
     const Component = currentConfig.component;
 
-    // Filter out undefined/null props
     const cleanProps = Object.fromEntries(
       Object.entries(propValues).filter(
         ([_, value]) =>
@@ -148,33 +147,204 @@ export default function Playground({
     return <Component {...cleanProps} />;
   };
 
-  const generateCodeString = () => {
+  const generateCodeString = (framework: 'react' | 'vue' | 'angular') => {
     const props = Object.entries(propValues)
       .filter(
         ([_, value]) => value !== undefined && value !== null && value !== '',
       )
       .map(([key, value]) => {
-        if (typeof value === 'string') {
-          return `${key}="${value}"`;
-        } else if (typeof value === 'boolean') {
-          return value ? key : '';
+        if (framework === 'vue') {
+          if (typeof value === 'string') {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{value}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          } else if (typeof value === 'boolean') {
+            return value ? (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-operator">:</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">.</span>
+                <span className="syntax-attribute">prop</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-boolean">true</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            ) : null;
+          } else {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-operator">:</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{value}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          }
+        } else if (framework === 'angular') {
+          if (typeof value === 'string') {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{value}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          } else if (typeof value === 'boolean') {
+            return value ? (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-bracket">[</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-bracket">]</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-boolean">true</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            ) : null;
+          } else {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-bracket">[</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-bracket">]</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{value}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          }
         } else {
-          return `${key}={${JSON.stringify(value)}}`;
+          // React
+          if (typeof value === 'string') {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{value}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          } else if (typeof value === 'boolean') {
+            return value ? (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+              </div>
+            ) : null;
+          } else {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-bracket">{'{'}</span>
+                <span className="syntax-number">{JSON.stringify(value)}</span>
+                <span className="syntax-bracket">{'}'}</span>
+              </div>
+            );
+          }
+        }
+      })
+      .filter(Boolean);
+
+    // Angular için component adını kebab-case'e çevir
+    const getComponentName = () => {
+      if (framework === 'angular') {
+        return currentConfig.name
+          .replace(/([a-z])([A-Z])/g, '$1-$2')
+          .toLowerCase();
+      }
+      return currentConfig.name;
+    };
+
+    return (
+      <div>
+        <span className="syntax-bracket">{'<'}</span>
+        <span className="syntax-component-name">{getComponentName()}</span>
+        {props.length > 0 && <>{props}</>}
+        <span className="syntax-bracket">
+          {props.length > 0 ? '/>' : ' />'}
+        </span>
+      </div>
+    );
+  };
+
+  const generateCodeStringAsText = (framework: 'react' | 'vue' | 'angular') => {
+    const props = Object.entries(propValues)
+      .filter(
+        ([_, value]) => value !== undefined && value !== null && value !== '',
+      )
+      .map(([key, value]) => {
+        if (framework === 'vue') {
+          if (typeof value === 'string') {
+            return `${key}="${value}"`;
+          } else if (typeof value === 'boolean') {
+            return value ? `:${key}.prop="true"` : ``;
+          } else {
+            return `:${key}="${value}"`;
+          }
+        } else if (framework === 'angular') {
+          if (typeof value === 'string') {
+            return `${key}="${value}"`;
+          } else if (typeof value === 'boolean') {
+            return value ? `[${key}]="true"` : ``;
+          } else {
+            return `[${key}]="${value}"`;
+          }
+        } else {
+          // React
+          if (typeof value === 'string') {
+            return `${key}="${value}"`;
+          } else if (typeof value === 'boolean') {
+            return value ? key : '';
+          } else {
+            return `${key}={${JSON.stringify(value)}}`;
+          }
         }
       })
       .filter(Boolean)
-      .join('\n');
+      .join('\n  ');
 
-    const propsString = props ? ` ${props}` : '';
+    const propsString = props ? `\n  ${props}` : '';
 
-    return `<${currentConfig.name}${propsString} />`;
+    const getComponentName = () => {
+      if (framework === 'angular') {
+        return currentConfig.name
+          .replace(/([a-z])([A-Z])/g, '$1-$2')
+          .toLowerCase();
+      }
+      return currentConfig.name;
+    };
+
+    return `<${getComponentName()}${propsString} />`;
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setPropValues(() =>
-      getDefaultPropValues(processedConfigs[defaultConfigIndex]),
-    );
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
   };
 
   function renderControls() {
@@ -222,14 +392,77 @@ export default function Playground({
     return (
       <div className="playground-code">
         <h3 className="playground-section-title">Generated Code</h3>
-        <pre className="playground-code-block">
-          <code>{generateCodeString()}</code>
-        </pre>
+        <TkTabs className="playground-tabs">
+          <TkTabsItem label="React">
+            <div className="relative">
+              <div className="absolute top-2 right-2 z-10">
+                <TkButton
+                  variant="secondary"
+                  size="small"
+                  type="outlined"
+                  mode="button"
+                  iconPosition="left"
+                  icon="content_copy"
+                  onClick={() => {
+                    // Copy işlemi için text versiyonunu oluştur
+                    const textVersion = generateCodeStringAsText('react');
+                    copyToClipboard(textVersion);
+                  }}
+                />
+              </div>
+              <pre className="playground-code-block">
+                <code>{generateCodeString('react')}</code>
+              </pre>
+            </div>
+          </TkTabsItem>
+          <TkTabsItem label="Vue">
+            <div className="relative">
+              <div className="absolute top-2 right-2 z-10">
+                <TkButton
+                  variant="secondary"
+                  size="small"
+                  type="outlined"
+                  mode="button"
+                  iconPosition="left"
+                  icon="content_copy"
+                  onClick={() => {
+                    const textVersion = generateCodeStringAsText('vue');
+                    copyToClipboard(textVersion);
+                  }}
+                />
+              </div>
+              <pre className="playground-code-block">
+                <code>{generateCodeString('vue')}</code>
+              </pre>
+            </div>
+          </TkTabsItem>
+          <TkTabsItem label="Angular">
+            <div className="relative">
+              <div className="absolute top-2 right-2 z-10">
+                <TkButton
+                  variant="secondary"
+                  size="small"
+                  type="outlined"
+                  mode="button"
+                  iconPosition="left"
+                  icon="content_copy"
+                  onClick={() => {
+                    const textVersion = generateCodeStringAsText('angular');
+                    copyToClipboard(textVersion);
+                  }}
+                />
+              </div>
+              <pre className="playground-code-block">
+                <code>{generateCodeString('angular')}</code>
+              </pre>
+            </div>
+          </TkTabsItem>
+        </TkTabs>
       </div>
     );
   }
 
-  function renderPlaygroundModal() {
+  function renderPlayground() {
     return (
       <div className="playground-container">
         <div className="playground-container-left-side">
@@ -244,5 +477,5 @@ export default function Playground({
     );
   }
 
-  return <>{renderPlaygroundModal()}</>;
+  return <>{renderPlayground()}</>;
 }
