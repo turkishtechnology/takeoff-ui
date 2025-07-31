@@ -38,6 +38,7 @@ const Example = () => {
           if (row.quantity > 50) {
             return {
               background: 'var(--states-success-sub-base)',
+              color: 'darkgreen',
             };
           }
           if (index % 2 === 0) {
@@ -85,6 +86,7 @@ const RowCellStyle = () => {
           if (row.quantity > 50) {
             return {
               background: "var(--states-success-sub-base)",
+              color: "darkgreen",
             };
           }
           if (index % 2 === 0) {
@@ -166,6 +168,7 @@ const column = [
       if (row.quantity > 50) {
         return {
           background: 'var(--states-success-sub-base)',
+          color: 'darkgreen',
         };
       }
       if (index % 2 === 0) {
