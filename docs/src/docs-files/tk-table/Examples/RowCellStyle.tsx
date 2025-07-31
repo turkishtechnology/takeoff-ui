@@ -92,7 +92,7 @@ const RowCellStyle = () => {
               background: "var(--states-info-sub-base)",
             };
           }
-        }}}
+        }}
       />
     </div>
   );`;
