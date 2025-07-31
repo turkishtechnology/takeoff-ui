@@ -35,7 +35,7 @@ const Example = () => {
           }
         }}
         rowStyle={(row, index) => {
-          if (row.quantity > 30) {
+          if (row.quantity > 50) {
             return {
               background: 'var(--states-success-sub-base)',
             };
@@ -82,16 +82,14 @@ const RowCellStyle = () => {
           }
         }}
         rowStyle={(row, index) => {
-          if (row.quantity > 30) {
+          if (row.quantity > 50) {
             return {
               background: "var(--states-success-sub-base)",
-              color: "black",
             };
           }
           if (index % 2 === 0) {
             return {
               background: "var(--states-info-sub-base)",
-              color: "black",
             };
           }
         }}}
@@ -165,16 +163,14 @@ const column = [
       }
     }"
     :rowStyle.prop="(row, index) => {
-      if (row.quantity > 30) {
+      if (row.quantity > 50) {
         return {
           background: 'var(--states-success-sub-base)',
-          color: 'black',
         };
       }
       if (index % 2 === 0) {
         return {
           background: 'var(--states-info-sub-base)',
-          color: 'black',
         };
       }
     }"
