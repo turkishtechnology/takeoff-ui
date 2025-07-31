@@ -34,11 +34,16 @@ const Example = () => {
             return { background: 'var(--primary-base)', color: 'white' };
           }
         }}
-        rowStyle={row => {
-          if (row.quantity > 30) {
+        rowStyle={(row, index) => {
+          if (row.quantity > 50) {
             return {
               background: 'var(--states-success-sub-base)',
-              color: 'black',
+              color: 'darkgreen',
+            };
+          }
+          if (index % 2 === 0) {
+            return {
+              background: 'var(--states-info-sub-base)',
             };
           }
         }}
@@ -77,11 +82,16 @@ const RowCellStyle = () => {
             return { background: "var(--primary-base)", color: "white" };
           }
         }}
-        rowStyle={(row) => {
-          if (row.quantity > 30) {
+        rowStyle={(row, index) => {
+          if (row.quantity > 50) {
             return {
               background: "var(--states-success-sub-base)",
-              color: "black",
+              color: "darkgreen",
+            };
+          }
+          if (index % 2 === 0) {
+            return {
+              background: "var(--states-info-sub-base)",
             };
           }
         }}
@@ -154,11 +164,16 @@ const column = [
         return { background: 'var(--primary-base)', color: 'white' };
       }
     }"
-    :rowStyle.prop="(row) => {
-      if (row.quantity > 30) {
+    :rowStyle.prop="(row, index) => {
+      if (row.quantity > 50) {
         return {
           background: 'var(--states-success-sub-base)',
-          color: 'black',
+          color: 'darkgreen',
+        };
+      }
+      if (index % 2 === 0) {
+        return {
+          background: 'var(--states-info-sub-base)',
         };
       }
     }"

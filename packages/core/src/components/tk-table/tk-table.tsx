@@ -165,9 +165,9 @@ export class TkTable implements ComponentInterface {
 
   /**
    * Provides a function to customize row styles.
-   * This function takes row information and returns a style for a specific row.
+   * This function takes row information and row index, and returns a style for a specific row.
    */
-  @Prop() rowStyle: (row: any) => ITableRowCellStyleResponse | undefined;
+  @Prop() rowStyle: (row: any, index?: number) => ITableRowCellStyleResponse | undefined;
 
   /**
    *
@@ -1395,7 +1395,7 @@ export class TkTable implements ComponentInterface {
             let styleRowObject;
 
             if (typeof this.rowStyle == 'function') {
-              const stylesRow = this.rowStyle(row);
+              const stylesRow = this.rowStyle(row, index);
               if (stylesRow !== undefined) styleRowObject = { backgroundColor: stylesRow.background, color: stylesRow.color };
             }
 
