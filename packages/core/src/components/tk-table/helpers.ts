@@ -106,10 +106,8 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
   //#region sort
   //Multi-Sort
   if (sortInfo && sortInfo.length > 0) {
-    const sortedSortInfo = [...sortInfo].sort((a, b) => (a.priority || 0) - (b.priority || 0));
-
     sortAndFilterData = sortAndFilterData.sort((a, b) => {
-      for (const sort of sortedSortInfo) {
+      for (const sort of sortInfo) {
         const col = columns.find(col => col.field === sort.field && col.sortable);
         let comparison = 0;
 

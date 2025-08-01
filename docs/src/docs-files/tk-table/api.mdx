@@ -4,6 +4,7 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
+| <TkBadge label="allowMultiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
 | <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize cell styles. This function takes row and column information and returns a style for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
@@ -13,7 +14,6 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
-| <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
 | <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
 | <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
 | <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns a style for a specific row. |
@@ -217,8 +217,6 @@ interface ITableSortInfo {
   field: string;
   /** The sort direction */
   order: 'asc' | 'desc';
-  /** The priority of this sort in multi-sort scenarios */
-  priority?: number;
 }
 ```
 

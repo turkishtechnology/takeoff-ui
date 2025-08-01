@@ -161,7 +161,8 @@ export class TkTable implements ComponentInterface {
   /**
    * Enables multi-column sorting.
    */
-  @Prop() multiSort: boolean = false;
+
+  @Prop() allowMultiSort: boolean = false;
 
   /**
    * Provides a function to customize cell styles.
@@ -674,7 +675,7 @@ export class TkTable implements ComponentInterface {
   private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
     if (!col.sortable) return;
 
-    if (this.multiSort) {
+    if (this.allowMultiSort) {
       this.handleMultiSort(refSortIcon, col);
     } else {
       this.handleSingleSort(refSortIcon, col);
@@ -723,15 +724,11 @@ export class TkTable implements ComponentInterface {
       this.sortInfo.push({
         field: col.field,
         order: 'asc',
-        priority: this.sortInfo.length + 1,
       });
 
       refSortIcon.icon = 'arrow_drop_up';
     }
 
-    this.sortInfo.forEach((sort, index) => {
-      sort.priority = index + 1;
-    });
     this.applySorting();
   }
 

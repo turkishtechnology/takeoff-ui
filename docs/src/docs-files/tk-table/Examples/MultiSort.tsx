@@ -95,7 +95,7 @@ const Example = () => {
       quantity: 45,
     },
   ];
-  return <TkTable columns={column} data={data} multiSort={true} />;
+  return <TkTable columns={column} data={data} allowMultiSort={true} />;
 };
 
 const MultiSort = () => {
@@ -191,7 +191,7 @@ const MultiSort = () => {
     },
   ];
 
-  return <TkTable columns={column} data={data} multiSort={true} />;`;
+  return <TkTable columns={column} data={data} allowMultiSort={true} />;`;
 
   const vueCode = `<script setup>
 import { TkTable } from '@takeoff-ui/vue';
@@ -289,7 +289,7 @@ const column = [
 </script>
 
 <template>
-  <TkTable :columns.prop="column" :data.prop="data" :multiSort.prop="true" />
+  <TkTable :columns.prop="column" :data.prop="data" :allowMultiSort.prop="true" />
 </template>
 `;
 

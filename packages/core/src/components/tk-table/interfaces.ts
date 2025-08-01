@@ -71,8 +71,6 @@ export interface ITableSortInfo {
   field: string;
   /** The sort direction */
   order: 'asc' | 'desc';
-  /** The priority of this sort in multi-sort scenarios */
-  priority?: number;
 }
 /** It is the return type of the tkRequest event. */
 export interface ITableRequest {
