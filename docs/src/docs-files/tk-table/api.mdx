@@ -13,6 +13,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
+| <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
 | <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
 | <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
 | <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns a style for a specific row. |
@@ -138,9 +139,11 @@ interface ITableRequest {
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
-  sortField: string;
+  sortField?: string;
   /** The order of sorting: 'asc' or 'desc' */
-  sortOrder: string;
+  sortOrder?: string;
+  /** Array of sort information for multi-sort functionality. When multiple sorts are applied, they are processed in priority order. */
+  sortInfo?: ITableSortInfo[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
 }
@@ -203,6 +206,19 @@ interface IFilterOption {
   value: string;
   /** The display label of the option */
   label?: string;
+}
+```
+
+
+
+```typescript
+interface ITableSortInfo {
+  /** The field name being sorted */
+  field: string;
+  /** The sort direction */
+  order: 'asc' | 'desc';
+  /** The priority of this sort in multi-sort scenarios */
+  priority?: number;
 }
 ```
 

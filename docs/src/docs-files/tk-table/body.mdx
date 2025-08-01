@@ -16,6 +16,7 @@ import CustomHeader from './Examples/CustomHeader';
 import DragAndDropSorting from './Examples/DragAndDropSorting';
 import HeaderStyle from './Examples/HeaderStyle';
 import Size from './Examples/Size';
+import MultiSort from './Examples/MultiSort';
 
 ## Basic
 
@@ -66,6 +67,19 @@ The filtering type can be configured using the `filterType` property in column d
 />
 <br />
 <FilterAndSort />
+
+## Multi Sort
+
+This feature allows users to sort the table by multiple columns simultaneously.
+Users can click on the column headers to apply sorting, and the order of sorting can be adjusted by clicking on the headers in the desired sequence.
+<TkAlert
+  header="Information"
+  message="You need to add equal conditions to sorter function for multi-sort to be effective"
+  variant="info"
+  filledlight
+/>
+<br />
+<MultiSort />
 
 ## Clear Filters and Sorting
 
