@@ -1,4 +1,4 @@
-import { ITableColumn, ITableFilter } from './interfaces';
+import { ITableColumn, ITableFilter, ITableSortInfo } from './interfaces';
 
 /**
  * Calculates the optimal starting width for column resizing
@@ -65,7 +65,7 @@ export const handleInputKeydown = (event: KeyboardEvent, el: HTMLTkTableElement)
   }
 };
 
-export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField: string, sortOrder: string) => {
+export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sortInfo?: ITableSortInfo[]) => {
   let sortAndFilterData;
   let _data = [...data];
 
@@ -101,15 +101,39 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
     }),
   );
 
-  const col = columns.find(col => col.field == sortField && col.sortable && typeof col.sorter == 'function');
+  //Multi-Sort
+  if (sortInfo && sortInfo.length > 0) {
+    const sortedSortInfo = [...sortInfo].sort((a, b) => (a.priority || 0) - (b.priority || 0));
 
-  if (sortField && col) {
     sortAndFilterData = sortAndFilterData.sort((a, b) => {
-      const result = col?.sorter(a, b);
-      if (sortOrder === 'asc') return result;
-      if (sortOrder === 'desc') return -result;
+      for (const sort of sortedSortInfo) {
+        const col = columns.find(col => col.field === sort.field && col.sortable);
+        let comparison = 0;
+
+        if (col && typeof col.sorter === 'function') {
+          // Custom sorter
+          comparison = col.sorter(a, b);
+        }
+
+        if (comparison !== 0) {
+          const result = sort.order === 'asc' ? comparison : -comparison;
+          return result;
+        }
+      }
       return 0;
     });
+    //Single-Sort
+  } else if (sortField && sortOrder) {
+    const col = columns.find(col => col.field == sortField && col.sortable && typeof col.sorter == 'function');
+
+    if (sortField && col) {
+      sortAndFilterData = sortAndFilterData.sort((a, b) => {
+        const result = col?.sorter(a, b);
+        if (sortOrder === 'asc') return result;
+        if (sortOrder === 'desc') return -result;
+        return 0;
+      });
+    }
   }
 
   return sortAndFilterData;

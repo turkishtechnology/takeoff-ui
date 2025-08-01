@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse, ITableSortInfo } from './interfaces';
 import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
@@ -48,6 +48,7 @@ export class TkTable implements ComponentInterface {
   @State() isFilterOpen: boolean = false;
   @State() columnWidths: { [key: string]: string } = {};
   @State() stickyOffsets: { left: { [key: string]: number }; right: { [key: string]: number } } = { left: {}, right: {} };
+  @State() sortInfo: ITableSortInfo[] = [];
 
   /**
    * The column definitions (Array of Objects)
@@ -156,6 +157,11 @@ export class TkTable implements ComponentInterface {
    * Specifies which rows are expanded to show additional content.
    */
   @Prop({ mutable: true }) expandedRows: any[] = [];
+
+  /**
+   * Enables multi-column sorting.
+   */
+  @Prop() multiSort: boolean = false;
 
   /**
    * Provides a function to customize cell styles.
@@ -314,6 +320,7 @@ export class TkTable implements ComponentInterface {
       rowsPerPage: this.rowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
+      sortInfo: this.sortInfo,
       filters: this.filters,
     } as ITableRequest);
   }
@@ -330,7 +337,7 @@ export class TkTable implements ComponentInterface {
     if (options?.externalData?.length > 0) {
       _data = options.externalData;
     } else if (options.scope == 'all') {
-      _data = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      _data = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
     } else if (options.scope == 'selected') {
       _data = this.selection;
     } else if (!options.scope || options.scope == 'current-page') {
@@ -417,7 +424,7 @@ export class TkTable implements ComponentInterface {
       this.currentPage = 1;
 
       if (this.paginationMethod !== 'server') {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
         this.generateRenderData(tmpData, 1, true);
       }
     }
@@ -428,15 +435,17 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async clearSorting() {
-    if (this.sortField) {
+    if (this.sortField || this.sortInfo.length > 0) {
       this.sortField = null;
       this.sortOrder = null;
+      this.sortInfo = [];
       this.currentPage = 1;
+
       // all sort icons are reset to their default state
       this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
       if (this.paginationMethod !== 'server') {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
         this.generateRenderData(tmpData, 1, true);
       }
     }
@@ -480,6 +489,7 @@ export class TkTable implements ComponentInterface {
         rowsPerPage: this.rowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
+        sortInfo: this.sortInfo,
         filters: this.filters,
       } as ITableRequest);
     }
@@ -580,7 +590,7 @@ export class TkTable implements ComponentInterface {
 
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -601,7 +611,7 @@ export class TkTable implements ComponentInterface {
 
       // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
       if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
         this.generateRenderData(tmpData, 1);
       } else {
         this.currentPage = 1;
@@ -654,7 +664,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handlePageChange(e) {
-    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
     this.generateRenderData(tmpData, Number(e.detail.page));
     // sayfa değişikliğinde seçilen değerler sıfırlanır
     if (this.refSelectAll) this.refSelectAll.value = false;
@@ -664,9 +674,17 @@ export class TkTable implements ComponentInterface {
   private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
     if (!col.sortable) return;
 
-    this.sortField = col.field;
+    if (this.multiSort) {
+      this.handleMultiSort(refSortIcon, col);
+    } else {
+      this.handleSingleSort(refSortIcon, col);
+    }
+  }
 
+  private handleSingleSort(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
+    this.sortField = col.field;
     const icon = refSortIcon.icon;
+    this.sortInfo = [];
 
     // tüm sort iconlar default duruma getirilir.
     this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
@@ -683,9 +701,43 @@ export class TkTable implements ComponentInterface {
       refSortIcon.icon = 'swap_vert';
     }
 
-    // // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
-    if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+    this.applySorting();
+  }
+
+  private handleMultiSort(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
+    const existingIndex = this.sortInfo.findIndex(s => s.field === col.field);
+
+    const icon = refSortIcon.icon;
+
+    if (existingIndex > -1) {
+      const currentSort = this.sortInfo[existingIndex];
+
+      if (icon === 'arrow_drop_up') {
+        currentSort.order = 'desc';
+        refSortIcon.icon = 'arrow_drop_down';
+      } else if (icon === 'arrow_drop_down') {
+        this.sortInfo.splice(existingIndex, 1);
+        refSortIcon.icon = 'swap_vert';
+      }
+    } else {
+      this.sortInfo.push({
+        field: col.field,
+        order: 'asc',
+        priority: this.sortInfo.length + 1,
+      });
+
+      refSortIcon.icon = 'arrow_drop_up';
+    }
+
+    this.sortInfo.forEach((sort, index) => {
+      sort.priority = index + 1;
+    });
+    this.applySorting();
+  }
+
+  private applySorting() {
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -907,7 +959,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -949,7 +1001,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1612,7 +1664,7 @@ export class TkTable implements ComponentInterface {
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.rowsPerPage = e.detail;
-            const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder);
+            const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sortInfo);
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;
             if (this.selection?.length > 0) this.handleSelectAll(false);

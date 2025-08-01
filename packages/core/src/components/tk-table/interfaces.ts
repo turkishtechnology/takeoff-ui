@@ -66,6 +66,14 @@ export interface IFilterOption {
   label?: string;
 }
 
+export interface ITableSortInfo {
+  /** The field name being sorted */
+  field: string;
+  /** The sort direction */
+  order: 'asc' | 'desc';
+  /** The priority of this sort in multi-sort scenarios */
+  priority?: number;
+}
 /** It is the return type of the tkRequest event. */
 export interface ITableRequest {
   /** The current page number */
@@ -79,9 +87,11 @@ export interface ITableRequest {
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
-  sortField: string;
+  sortField?: string;
   /** The order of sorting: 'asc' or 'desc' */
-  sortOrder: string;
+  sortOrder?: string;
+  /** Array of sort information for multi-sort functionality. When multiple sorts are applied, they are processed in priority order. */
+  sortInfo?: ITableSortInfo[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
 }
