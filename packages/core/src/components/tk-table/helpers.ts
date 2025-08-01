@@ -69,6 +69,7 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
   let sortAndFilterData;
   let _data = [...data];
 
+  //#region filter
   sortAndFilterData = _data.filter(row =>
     filters.every(filter => {
       const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
@@ -100,7 +101,9 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
       else return result;
     }),
   );
+  // #endregion
 
+  //#region sort
   //Multi-Sort
   if (sortInfo && sortInfo.length > 0) {
     const sortedSortInfo = [...sortInfo].sort((a, b) => (a.priority || 0) - (b.priority || 0));
@@ -135,7 +138,7 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
       });
     }
   }
-
+  // #endregion
   return sortAndFilterData;
 };
 
