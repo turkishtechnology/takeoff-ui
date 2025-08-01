@@ -1,0 +1,32 @@
+# .github/release.yml
+# Controls the "Generate release notes" button output.
+changelog:
+  exclude:
+    autors:
+      - dependabot[bot]
+      - renovate[bot]
+
+  categories:
+    - title: "New Component 🚀"
+      labels:
+        - new component
+
+    - title: "New Feature 🎉"
+      labels:
+        - new feature
+
+    - title: "Bug Fix 🐛"
+      labels:
+        - bug
+
+    - title: "Refactor ✏️"
+      labels:
+        - refactor
+
+    - title: "Documentation 📚"
+      labels:
+        - documentation
+        
+    - title: "Breaking Changes 💥"
+      labels: 
+        - breaking changes
