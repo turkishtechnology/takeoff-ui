@@ -3,6 +3,8 @@ sidebar_position: 1
 title: Introduction
 ---
 
+import { TkButton } from '@takeoff-ui/react';
+
 # Takeoff UI Design System
 
 Takeoff UI is a comprehensive design system providing framework-agnostic web components developed with [Stencil.js](https://stenciljs.com/). The system is managed as a monorepo using [Turborepo](https://turbo.build/), enabling fast, incremental builds and consistent workflows across multiple packages.
@@ -10,7 +12,17 @@ Takeoff UI is a comprehensive design system providing framework-agnostic web com
 ## Figma Design System
 
 The Takeoff UI Figma Design System provides a set of design assets, including components, styles, and guidelines to help designers and developers create consistent user interfaces. The Figma library is organized into categories, making it easy to find and use the right components.
-- You can access the Figma Design System [here](https://www.figma.com/design/4fjXE80dA5O1ZehTlHx7aE/Take-Off-Design-System?node-id=1-2&t=9ss3NxC6c0mApqgm-1).
+
+<TkButton 
+  label="Reach Figma" 
+  type="outlined" 
+  variant="neutral" 
+  icon="arrow_outward" 
+  iconPosition="right" 
+  onTkClick={() => {
+      window.open('https://www.figma.com/design/4fjXE80dA5O1ZehTlHx7aE/Take-Off-Design-System?node-id=1-2&t=9ss3NxC6c0mApqgm-1', '_blank', 'noopener,noreferrer');
+  }}
+/>
 
 ## Technical Architecture
 
