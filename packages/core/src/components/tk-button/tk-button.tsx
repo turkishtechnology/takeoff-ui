@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 
 /**
  * TkButton is an extension to standard input element with icons and theming.
@@ -36,7 +36,7 @@ export class TkButton implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Defines the position of the icon.
@@ -125,27 +125,44 @@ export class TkButton implements ComponentInterface {
   }
 
   render() {
+    const hasMultipleIcons = isMultiIconOptions(this.icon);
+
     const rootClasses = classNames(
       'tk-button',
       this.type,
       {
         'loading': this.loading && !this.disabled,
-        'reverse': this.icon && this.iconPosition == 'right',
         'rounded': this.rounded && this.icon && (this.label == '' || this.label == null || this.label.length <= 0),
         'link': this.mode == 'link',
         'underline': this.underline,
-        'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon,
+        'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon && !hasMultipleIcons,
       },
       [this.variant],
       [this.size],
     );
 
-    let icon;
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
     const spinnerElement = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
     if (this.loading) {
-      icon = spinnerElement;
+      _leftIcon = spinnerElement;
     } else if (this.icon) {
-      icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-button-icon', variant: null })} />;
+      if (hasMultipleIcons) {
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
+        if (leftIconConfig) {
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { class: 'tk-button-icon', variant: null })} />;
+        }
+        if (rightIconConfig) {
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { class: 'tk-button-icon', variant: null })} />;
+        }
+      } else {
+        if (this.iconPosition === 'left') {
+          _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: 'tk-button-icon', variant: null })} />;
+        } else {
+          _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: 'tk-button-icon', variant: null })} />;
+        }
+      }
     }
 
     let Tag;
@@ -167,8 +184,9 @@ export class TkButton implements ComponentInterface {
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
         <Tag class={rootClasses} {...props} disabled={this.disabled} onClick={e => this.handleClick(e)}>
-          {icon}
+          {_leftIcon}
           {label}
+          {_rightIcon}
         </Tag>
       </Host>
     );
