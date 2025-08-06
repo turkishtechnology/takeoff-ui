@@ -133,10 +133,10 @@ export class TkBadge implements ComponentInterface {
         const leftIconConfig = (this.icon as IMultiIconOptions).left;
         const rightIconConfig = (this.icon as IMultiIconOptions).right;
         if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { variant: null })} />;
         }
         if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { variant: null })} />;
         }
       } else {
         if (this.iconPosition === 'left') {
