@@ -1,7 +1,7 @@
 import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-props';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
  * The TkBadge component allows you to create a small badge for adding information like contextual data that needs to stand out and get noticed. It is also often useful in combination with other elements like a user avatar to show a number of new messages.
@@ -38,7 +38,7 @@ export class TkBadge implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Defines the position of the icon.
@@ -114,25 +114,45 @@ export class TkBadge implements ComponentInterface {
 
   render() {
     const isCountOnly = this.isValidCount() && !this.label && !this.dot && !this.icon;
+    const hasMultipleIcons = isMultiIconOptions(this.icon);
     const rootClasses = classNames('tk-badge-container', {
       'has-slot': this.hasSlot,
     });
     const badgeClasses = classNames('tk-badge', this.variant, this.size, this.type, {
       'rounded': this.rounded,
-      'reverse': this.icon && this.iconPosition === 'right',
-      'icon-only': this.icon && !this.label && !this.dot,
+      'icon-only': this.icon && !this.label && !this.dot && !hasMultipleIcons,
       'dot': this.dot,
       'count': isCountOnly,
     });
 
-    const icon = !this.dot && this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
-
+    // Handle icon rendering based on format
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
+    if (this.icon && !this.dot) {
+      if (hasMultipleIcons) {
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
+        if (leftIconConfig) {
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
+        }
+        if (rightIconConfig) {
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
+        }
+      } else {
+        if (this.iconPosition === 'left') {
+          _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { variant: null })} />;
+        } else {
+          _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { variant: null })} />;
+        }
+      }
+    }
     return (
       <div class={rootClasses}>
         <slot />
         <span class={badgeClasses}>
-          {icon}
+          {_leftIcon}
           {this.renderContent()}
+          {_rightIcon}
         </span>
       </div>
     );
