@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Fragment } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 import classNames from 'classnames';
 
 /**
@@ -63,9 +63,9 @@ export class TkTooltip implements ComponentInterface {
   @Prop() variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral' = 'neutral';
 
   /**
-   * Sets the icon element of the tooltip.
+   * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * The style attribute of container element
@@ -151,14 +151,28 @@ export class TkTooltip implements ComponentInterface {
   };
 
   render() {
-    let _icon: HTMLTkIconElement;
     let iconVariant;
 
     if (this.variant == 'dark') iconVariant = 'neutral';
-    else iconVariant = this.variant;
-
-    _icon = <tk-icon {...getIconElementProps(this.icon, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
-
+    // Handle icon rendering based on format
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
+    if (this.icon) {
+      if (isMultiIconOptions(this.icon)) {
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
+        if (leftIconConfig) {
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
+        }
+        if (rightIconConfig) {
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
+        }
+      } else {
+        _leftIcon = (
+          <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />
+        );
+      }
+    }
     return (
       <div class="tk-tooltip">
         <slot name="trigger" />
@@ -177,11 +191,12 @@ export class TkTooltip implements ComponentInterface {
               <slot name="content" />
             ) : (
               <Fragment>
-                {_icon}
+                {_leftIcon}
                 <div>
                   <div class="tk-tooltip-header">{this.header}</div>
                   <div class="tk-tooltip-description">{this.description}</div>
                 </div>
+                {_rightIcon}
               </Fragment>
             )}
             <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
