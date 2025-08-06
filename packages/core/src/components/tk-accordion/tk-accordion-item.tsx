@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -54,7 +54,7 @@ export class TkAccordionItem implements ComponentInterface {
   /**
    * Icon for accordion component.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   componentWillLoad(): void {
     this.parentEl = this.el.closest('tk-accordion');
@@ -99,16 +99,29 @@ export class TkAccordionItem implements ComponentInterface {
     const rootClasses = classNames('tk-accordion-item', this.size, this.type, {
       open: this.active,
     });
-
-    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
-
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
+    // Handle icon rendering based on format
+    if (this.icon) {
+      if (isMultiIconOptions(this.icon)) {
+        const leftIconConfig = (this.icon as IMultiIconOptions).left;
+        const rightIconConfig = (this.icon as IMultiIconOptions).right;
+        if (leftIconConfig) {
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
+        }
+        if (rightIconConfig) {
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
+        }
+      }
+    }
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={this.toggleItem}>
             {this.arrowPosition === 'left' && this.createIcon()}
-            {icon}
+            {_leftIcon}
             <span class="title">{this.createHeader()}</span>
+            {_rightIcon}
             {this.arrowPosition === 'right' && this.createIcon()}
           </div>
           <div class={`content ${this.active ? 'open' : ''}`}>
