@@ -1,11 +1,3 @@
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-
-/** Interface for multi-position icon configuration */
-export interface IMultiIconOptions {
-  left?: string | IIconOptions;
-  right?: string | IIconOptions;
-}
-
 /** See cleave.js documentation https://nosir.github.io/cleave.js */
 export interface IInputMaskOptions {
   backspace?: boolean;
