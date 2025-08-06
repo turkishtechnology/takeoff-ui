@@ -1,4 +1,4 @@
-import { IIconOptions } from '../global/interfaces/IIconOptions';
+import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 
 /**
  * Generates the properties object for a tk-icon element based on Material Symbols.
@@ -40,4 +40,8 @@ export const getIconElementProps = (
   }
 
   return mergedProps;
+};
+
+export const isMultiIconOptions = (icon: any): icon is IMultiIconOptions => {
+  return icon && typeof icon === 'object' && ('left' in icon || 'right' in icon) && !('name' in icon);
 };

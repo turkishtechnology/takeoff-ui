@@ -2,11 +2,11 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Pr
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
-import { IInputMaskOptions, IMultiIconOptions } from './interfaces';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IInputMaskOptions } from './interfaces';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 import { IChipOptions } from '../tk-chips/interfaces';
 
 /**
@@ -225,10 +225,6 @@ export class TkInput implements ComponentInterface {
   @Method()
   async setFocus() {
     this.nativeInput?.focus();
-  }
-
-  private isMultiIconFormat(): boolean {
-    return this.icon && typeof this.icon === 'object' && ('left' in this.icon || 'right' in this.icon) && !('name' in this.icon);
   }
 
   private validateMinMax() {
@@ -630,7 +626,7 @@ export class TkInput implements ComponentInterface {
 
     // Handle icon rendering based on format
     if (this.icon && !this.isCounter) {
-      if (this.isMultiIconFormat()) {
+      if (isMultiIconOptions(this.icon)) {
         const leftIconConfig = (this.icon as IMultiIconOptions).left;
         const rightIconConfig = (this.icon as IMultiIconOptions).right;
         if (leftIconConfig) {
