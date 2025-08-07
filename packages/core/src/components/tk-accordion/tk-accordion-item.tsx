@@ -107,11 +107,13 @@ export class TkAccordionItem implements ComponentInterface {
         const leftIconConfig = (this.icon as IMultiIconOptions).left;
         const rightIconConfig = (this.icon as IMultiIconOptions).right;
         if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
+          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { variant: 'neutral', sign: true })} />;
         }
         if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
+          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { variant: 'neutral', sign: true })} />;
         }
+      } else {
+        _leftIcon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })} />;
       }
     }
     return (
