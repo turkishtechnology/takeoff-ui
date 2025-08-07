@@ -1,0 +1,48 @@
+name: Require Any PR Label
+on:
+  pull_request:
+    types: [opened, edited, labeled, unlabeled, synchronize, reopened]
+    branches:
+      - develop
+
+jobs:
+  check-labels:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write   # to close PRs 1
+      issues: write          # to comment 1
+    steps:
+      - name: Validate labels
+        id: validate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+            const count = pr.labels.length;
+            if (count === 0) {
+              core.setFailed("PR must include at least one label.");
+            }
+
+      - name: Comment & close when invalid
+        if: failure()   # runs only when previous step failed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: "Closing: please add at least one label (e.g., NEW COMPONENT, NEW FEATURE, BUG, REFACTOR, DOCUMENTATION, BREAKING CHANGES) and reopen."
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              state: "closed"
+            });

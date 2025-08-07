@@ -13,6 +13,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
+| <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
 | <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
 | <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
 | <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>any</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns the style object for a specific  row. |
@@ -21,7 +22,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="selection" variant="primary" size="large" type="filledlight"/> | <code>any</code> | [] | List of the selected |
 | <TkBadge label="selectionMode" variant="primary" size="large" type="filledlight"/> | <code>"checkbox", "radio"</code> | null | Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection). |
 | <TkBadge label="selectionRowDisabled" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null | A function that returns true if the row should be disabled |
-| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "small", "xsmall"</code> | 'base' | Sets size for the component. |
 | <TkBadge label="striped" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables or disables alternating row background colors for easier readability. |
 | <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Number of total items. |
 
@@ -129,9 +130,11 @@ interface ITableRequest {
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
-  sortField: string;
+  sortField?: string;
   /** The order of sorting: 'asc' or 'desc' */
-  sortOrder: string;
+  sortOrder?: string;
+  /** Array of sort information for multi-sort functionality. When multiple sorts are applied, they are processed in priority order. */
+  sorts?: ITableSort[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
 }
@@ -194,6 +197,17 @@ interface IFilterOption {
   value: string;
   /** The display label of the option */
   label?: string;
+}
+```
+
+
+
+```typescript
+interface ITableSort {
+  /** The field name being sorted */
+  field: string;
+  /** The sort direction */
+  order: 'asc' | 'desc';
 }
 ```
 
