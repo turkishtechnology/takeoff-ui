@@ -1,8 +1,18 @@
-import Variant from "./Examples/Variant";
-import Type from "./Examples/Type";
-import FullWidth from "./Examples/FullWidth";
-import Size from "./Examples/Size";
-import Icon from "./Examples/Icon";
+import Variant from './Examples/Variant';
+import Type from './Examples/Type';
+import FullWidth from './Examples/FullWidth';
+import Size from './Examples/Size';
+import Icon from './Examples/Icon';
+import Playground from '../../components/Playground';
+import buttonConfigData from './buttonPlayGroundConfig.json';
+import { TkButton } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[buttonConfigData]}
+  componentMap={{ TkButton: TkButton }}
+/>
 
 ## Variant
 
