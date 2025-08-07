@@ -589,7 +589,15 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
-
+  private handleSearchButtonClick(columnField: any) {
+    if (this.columns.find(col => col.field === columnField)?.filterType === 'checkbox') {
+      this.handleCheckboxFilterApply(columnField);
+    } else if (this.columns.find(col => col.field === columnField)?.filterType === 'radio') {
+      this.handleRadioFilterApply(columnField);
+    } else {
+      this.handleInputFilterApply(columnField);
+    }
+  }
   private handleSearchCancelButtonClick(columnField) {
     const removeFilterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (removeFilterIndex > -1) {
@@ -831,6 +839,11 @@ export class TkTable implements ComponentInterface {
       input.placeholder = column?.filterElements?.searchInput?.placeholder || 'Search';
       input.setFocus();
       input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
+      input.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+          this.handleSearchButtonClick(field);
+        }
+      });
       this.elFilterPanelElement.appendChild(input);
     }
 
@@ -853,13 +866,7 @@ export class TkTable implements ComponentInterface {
     searchButton.label = column?.filterElements?.searchButton?.label || column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
     searchButton.addEventListener('tk-click', () => {
-      if (this.columns.find(col => col.field === field)?.filterType === 'checkbox') {
-        this.handleCheckboxFilterApply(field);
-      } else if (this.columns.find(col => col.field === field)?.filterType === 'radio') {
-        this.handleRadioFilterApply(field);
-      } else {
-        this.handleInputFilterApply(field);
-      }
+      this.handleSearchButtonClick(field);
       // We don't need to close the filter panel here anymore since it's closed in the apply methods
     });
 
