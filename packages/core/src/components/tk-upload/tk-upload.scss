@@ -161,6 +161,20 @@
         }
       }
     }
+
+    &.drag-over {
+      border-color: var(--primary-color);
+      background-color: rgba(var(--primary-color-rgb), 0.05);
+
+      .tk-upload-icon {
+        color: var(--primary-color);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   .tk-upload-file-holder {
@@ -312,6 +326,16 @@
       border-radius: 3px;
       background: var(--secondary-sub-base);
       opacity: 1;
+    }
+  }
+
+  &.drag-drop-enabled {
+    .tk-upload-dropzone {
+      transition: all 0.2s ease;
+
+      &:hover:not(.disabled) {
+        border-color: var(--primary-color);
+      }
     }
   }
 }

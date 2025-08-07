@@ -42,6 +42,7 @@ import Toggle from './components/Toggle';
 import OrgChart from './components/OrgChart';
 import Tabs from './components/Tabs';
 import TreeView from './components/TreeView';
+import Upload from './components/Upload';
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
         <Route path="components/phone-input" element={<PhoneInput />} />
         <Route path="components/currency-input" element={<CurrencyInput />} />
         <Route path="components/tree-view" element={<TreeView />} />
+        <Route path="components/upload" element={<Upload />} />
       </Routes>
     </Layout>
   );

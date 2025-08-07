@@ -20,12 +20,19 @@ export class TkUpload implements ComponentInterface {
   @Element() el: HTMLTkUploadElement;
 
   @State() errorMessages: string[] = [];
+  @State() isDragOver: boolean = false;
 
   /**
    * If `autoUpload` is set to `true`, the upload button will be hidden,
    * and the `tkUpload` event will be automatically triggered for each newly added file.
    */
   @Prop() autoUpload: boolean = false;
+
+  /**
+   * Enables drag and drop functionality for file uploads.
+   * @defaultValue true
+   */
+  @Prop() dragDrop: boolean = true;
 
   /**
    * Defines the label of the upload area
@@ -94,6 +101,11 @@ export class TkUpload implements ComponentInterface {
   @Prop() title: string = 'Choose a file or drag & drop it here.';
 
   /**
+   * Title displayed in the upload component when drag and drop is active.
+   */
+  @Prop() dragDropTitle: string = 'Drop files here';
+
+  /**
    * The file value of the upload.
    */
   @Prop({ mutable: true }) value: File[] = [];
@@ -106,6 +118,11 @@ export class TkUpload implements ComponentInterface {
    * Description displayed under the title.
    */
   @Prop() description: string = 'JPEG, PNG, PDF and MP4 formats, up to 50 MB.';
+
+  /**
+   * Description displayed under the title when drag and drop is active.
+   */
+  @Prop() dragDropDescription: string = 'Release to upload files';
 
   /**
    * Indicates whether the upload is in an invalid state, uploads will fail eventually
@@ -159,55 +176,100 @@ export class TkUpload implements ComponentInterface {
     return IMAGE_TYPES.includes(file.type);
   }
 
+  private handleDragEnter = (e: DragEvent) => {
+    if (!this.dragDrop || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.isDragOver = true;
+  };
+
+  private handleDragLeave = (e: DragEvent) => {
+    if (!this.dragDrop || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Only set isDragOver to false if we're leaving the dropzone entirely
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      this.isDragOver = false;
+    }
+  };
+
+  private handleDragOver = (e: DragEvent) => {
+    if (!this.dragDrop || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.isDragOver = true;
+  };
+
+  private handleDrop = (e: DragEvent) => {
+    if (!this.dragDrop || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.isDragOver = false;
+
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleProcessFiles(files);
+    }
+  };
+
+  private handleProcessFiles(files: FileList) {
+    const rejectedFiles: { reason: string; file: File | FileList }[] = [];
+    const isFileCountRejected = this.maxFileCount && this.value.length + files.length > this.maxFileCount;
+
+    // Validate file count
+    if (isFileCountRejected) {
+      rejectedFiles.push({
+        reason: `Max file count exceeded, max ${this.maxFileCount} files allowed.`,
+        file: files,
+      });
+    } else {
+      Array.from(files).forEach(file => {
+        // Validate file size
+        if (file.size > this.maxFileSize) {
+          rejectedFiles.push({
+            reason: `File size exceeds the maximum allowed size of ${this.maxFileSize / (1024 * 1024)} MB.`,
+            file,
+          });
+          return;
+        }
+
+        // Validate file type
+        if (this.accept !== '*' && !this.accept.includes(file.type)) {
+          rejectedFiles.push({
+            reason: `Invalid file type. Accepted types are: ${this.accept}.`,
+            file,
+          });
+          return;
+        }
+
+        // If valid, add to accepted files
+        if (this.multiple) this.value.push(file);
+        else this.value = [file];
+      });
+    }
+
+    // Update state and emit events
+    this.errorMessages = rejectedFiles.map(item => (item.file instanceof File ? `${item.file.name}: ${item.reason}` : item.reason));
+    if (!isFileCountRejected && this.value.length > 0) {
+      this.tkChange.emit(this.value);
+      if (this.autoUpload) this.handleUploadButtonClick();
+    }
+    if (rejectedFiles.length > 0) {
+      this.tkFilesRejected.emit(rejectedFiles);
+    }
+  }
+
   private handleInputChange(e: Event) {
     const input = e.target as HTMLInputElement;
     const files = input.files;
 
     if (files && files.length > 0) {
-      const rejectedFiles: { reason: string; file: File | FileList }[] = [];
-      const isFileCountRejected = this.maxFileCount && this.value.length + files.length > this.maxFileCount;
-
-      // Validate file count
-      if (isFileCountRejected) {
-        rejectedFiles.push({
-          reason: `Max file count exceeded, max ${this.maxFileCount} files allowed.`,
-          file: files,
-        });
-      } else {
-        Array.from(files).forEach(file => {
-          // Validate file size
-          if (file.size > this.maxFileSize) {
-            rejectedFiles.push({
-              reason: `File size exceeds the maximum allowed size of ${this.maxFileSize / (1024 * 1024)} MB.`,
-              file,
-            });
-            return;
-          }
-
-          // Validate file type
-          if (this.accept !== '*' && !this.accept.includes(file.type)) {
-            rejectedFiles.push({
-              reason: `Invalid file type. Accepted types are: ${this.accept}.`,
-              file,
-            });
-            return;
-          }
-
-          // If valid, add to accepted files
-          if (this.multiple) this.value.push(file);
-          else this.value = [file];
-        });
-      }
-
-      // Update state and emit events
-      this.errorMessages = rejectedFiles.map(item => (item.file instanceof File ? `${item.file.name}: ${item.reason}` : item.reason));
-      if (!isFileCountRejected && this.value.length > 0) {
-        this.tkChange.emit(this.value);
-        if (this.autoUpload) this.handleUploadButtonClick();
-      }
-      if (rejectedFiles.length > 0) {
-        this.tkFilesRejected.emit(rejectedFiles);
-      }
+      this.handleProcessFiles(files);
     }
   }
 
@@ -275,15 +337,30 @@ export class TkUpload implements ComponentInterface {
   }
 
   private renderDropzone(): HTMLDivElement {
+    const dropzoneClasses = classNames('tk-upload-dropzone', this.type, {
+      'drag-over': this.isDragOver,
+      'disabled': this.disabled,
+    });
+
+    const dropzoneProps =
+      this.dragDrop && !this.disabled
+        ? {
+            onDragEnter: this.handleDragEnter,
+            onDragLeave: this.handleDragLeave,
+            onDragOver: this.handleDragOver,
+            onDrop: this.handleDrop,
+          }
+        : {};
+
     return (
-      <div class={classNames('tk-upload-dropzone', this.type)}>
+      <div class={dropzoneClasses} {...dropzoneProps}>
         <div class="tk-upload-icon">
           <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xlarge' }, undefined, 'span')} />
         </div>
         <div class="tk-upload-content">
           <div class="tk-upload-text-holder">
-            <div class="tk-upload-title">{this.title}</div>
-            <div class="tk-upload-description">{this.description}</div>
+            <div class="tk-upload-title">{this.isDragOver ? this.dragDropTitle : this.title}</div>
+            <div class="tk-upload-description">{this.isDragOver ? this.dragDropDescription : this.description}</div>
           </div>
           <div class="tk-upload-input">
             <tk-button label={this.chooseButtonLabel} variant="neutral" type="outlined" icon="folder" disabled={this.disabled} onTk-click={() => this.inputRef.click()}></tk-button>
@@ -343,7 +420,9 @@ export class TkUpload implements ComponentInterface {
     let label: HTMLLabelElement;
     let hint: HTMLSpanElement;
 
-    const rootClasses = classNames('tk-upload-container');
+    const rootClasses = classNames('tk-upload-container', {
+      'drag-drop-enabled': this.dragDrop,
+    });
 
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
