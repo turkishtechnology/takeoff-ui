@@ -103,7 +103,7 @@ export class TkUpload implements ComponentInterface {
   /**
    * Title displayed in the upload component when drag and drop is active.
    */
-  @Prop() titleDragDrop: string = 'Drop files here';
+  @Prop() dragDropTitle: string = 'Drop files here';
 
   /**
    * The file value of the upload.
@@ -122,7 +122,7 @@ export class TkUpload implements ComponentInterface {
   /**
    * Description displayed under the title when drag and drop is active.
    */
-  @Prop() descriptionDragDrop: string = 'Release to upload files';
+  @Prop() dragDropDescription: string = 'Release to upload files';
 
   /**
    * Indicates whether the upload is in an invalid state, uploads will fail eventually
@@ -359,8 +359,8 @@ export class TkUpload implements ComponentInterface {
         </div>
         <div class="tk-upload-content">
           <div class="tk-upload-text-holder">
-            <div class="tk-upload-title">{this.isDragOver ? this.titleDragDrop : this.title}</div>
-            <div class="tk-upload-description">{this.isDragOver ? this.descriptionDragDrop : this.description}</div>
+            <div class="tk-upload-title">{this.isDragOver ? this.dragDropTitle : this.title}</div>
+            <div class="tk-upload-description">{this.isDragOver ? this.dragDropDescription : this.description}</div>
           </div>
           <div class="tk-upload-input">
             <tk-button label={this.chooseButtonLabel} variant="neutral" type="outlined" icon="folder" disabled={this.disabled} onTk-click={() => this.inputRef.click()}></tk-button>
