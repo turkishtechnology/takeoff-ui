@@ -2,7 +2,9 @@ name: Require Any PR Label
 on:
   pull_request:
     types: [opened, edited, labeled, unlabeled, synchronize, reopened]
-
+    branches:
+      - develop
+      
 jobs:
   check-labels:
     runs-on: ubuntu-latest
