@@ -66,7 +66,7 @@ export interface IFilterOption {
   label?: string;
 }
 
-export interface ITableSortInfo {
+export interface ITableSort {
   /** The field name being sorted */
   field: string;
   /** The sort direction */
@@ -89,7 +89,7 @@ export interface ITableRequest {
   /** The order of sorting: 'asc' or 'desc' */
   sortOrder?: string;
   /** Array of sort information for multi-sort functionality. When multiple sorts are applied, they are processed in priority order. */
-  sortInfo?: ITableSortInfo[];
+  sorts?: ITableSort[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
 }

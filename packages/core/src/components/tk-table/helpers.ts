@@ -1,4 +1,4 @@
-import { ITableColumn, ITableFilter, ITableSortInfo } from './interfaces';
+import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
 
 /**
  * Calculates the optimal starting width for column resizing
@@ -65,7 +65,7 @@ export const handleInputKeydown = (event: KeyboardEvent, el: HTMLTkTableElement)
   }
 };
 
-export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sortInfo?: ITableSortInfo[]) => {
+export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sorts?: ITableSort[]) => {
   let sortAndFilterData;
   let _data = [...data];
 
@@ -105,9 +105,9 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
 
   //#region sort
   //Multi-Sort
-  if (sortInfo && sortInfo.length > 0) {
+  if (sorts && sorts.length > 0) {
     sortAndFilterData = sortAndFilterData.sort((a, b) => {
-      for (const sort of sortInfo) {
+      for (const sort of sorts) {
         const col = columns.find(col => col.field === sort.field && col.sortable);
         let comparison = 0;
 
