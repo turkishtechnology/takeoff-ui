@@ -3,8 +3,8 @@ import Layout from '@theme/Layout';
 import '@takeoff-ui/core/dist/core/core.css';
 import { releases } from '../data/releases';
 import ReleaseItem from '../components/ReleaseItem/ReleaseItem';
+import ReleaseNavigate from '../components/ReleaseNavigate/ReleaseNavigate';
 import Gif from '../components/Landing/Gif/gif';
-import React from 'react';
 
 export default function ReleaseNotes() {
   const { siteConfig } = useDocusaurusContext();
@@ -20,6 +20,7 @@ export default function ReleaseNotes() {
       </header>
       <main className="release-notes">
         <section>
+          <ReleaseNavigate />
           {releases.map((item, index) => {
             return <ReleaseItem data={item} key={'release-item' + index} />;
           })}
