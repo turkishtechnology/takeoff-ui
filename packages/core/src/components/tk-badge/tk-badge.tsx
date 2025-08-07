@@ -1,7 +1,7 @@
 import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
 
 /**
  * The TkBadge component allows you to create a small badge for adding information like contextual data that needs to stand out and get noticed. It is also often useful in combination with other elements like a user avatar to show a number of new messages.
@@ -125,27 +125,21 @@ export class TkBadge implements ComponentInterface {
       'count': isCountOnly,
     });
 
-    // Handle icon rendering based on format
+    // Handle icon rendering using utility function
     let _leftIcon: HTMLTkIconElement;
     let _rightIcon: HTMLTkIconElement;
     if (this.icon && !this.dot) {
-      if (hasMultipleIcons) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { variant: null })} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { variant: null })} />;
-        }
-      } else {
-        if (this.iconPosition === 'left') {
-          _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { variant: null })} />;
-        } else {
-          _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { variant: null })} />;
-        }
-      }
+      const { leftIcon, rightIcon } = renderIcons(
+        this.icon,
+        {
+          additionalProps: { variant: null },
+        },
+        this.iconPosition,
+      );
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
+
     return (
       <div class={rootClasses}>
         <slot />

@@ -1,7 +1,8 @@
-import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, h, State, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
+import { renderIcons } from '../../utils/icon-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -99,23 +100,19 @@ export class TkAccordionItem implements ComponentInterface {
     const rootClasses = classNames('tk-accordion-item', this.size, this.type, {
       open: this.active,
     });
+
+    // Handle icon rendering using utility function
     let _leftIcon: HTMLTkIconElement;
     let _rightIcon: HTMLTkIconElement;
-    // Handle icon rendering based on format
     if (this.icon) {
-      if (isMultiIconOptions(this.icon)) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { variant: 'neutral', sign: true })} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { variant: 'neutral', sign: true })} />;
-        }
-      } else {
-        _leftIcon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })} />;
-      }
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {
+        variant: 'neutral',
+        sign: true,
+      });
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
+
     return (
       <Host>
         <div class={rootClasses}>

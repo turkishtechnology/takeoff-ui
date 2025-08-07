@@ -10,7 +10,7 @@ import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.

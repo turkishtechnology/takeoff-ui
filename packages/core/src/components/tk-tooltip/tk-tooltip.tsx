@@ -1,7 +1,7 @@
-import { Component, ComponentInterface, h, Prop, State, Element, Watch, Fragment } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
+import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
 
 /**
@@ -154,25 +154,21 @@ export class TkTooltip implements ComponentInterface {
     let iconVariant;
 
     if (this.variant == 'dark') iconVariant = 'neutral';
-    // Handle icon rendering based on format
+    else iconVariant = this.variant;
+
     let _leftIcon: HTMLTkIconElement;
     let _rightIcon: HTMLTkIconElement;
     if (this.icon) {
-      if (isMultiIconOptions(this.icon)) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
-        }
-      } else {
-        _leftIcon = (
-          <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />
-        );
-      }
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {
+        variant: iconVariant,
+        sign: true,
+        size: 'small',
+        additionalProps: { class: classNames('tk-tooltip-item-icon') },
+      });
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
+
     return (
       <div class="tk-tooltip">
         <slot name="trigger" />

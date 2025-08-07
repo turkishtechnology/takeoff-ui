@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 @Component({
   tag: 'tk-toggle-button',

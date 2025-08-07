@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
+import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
 
 /**
  * TkButton is an extension to standard input element with icons and theming.
@@ -144,25 +144,13 @@ export class TkButton implements ComponentInterface {
     let _leftIcon: HTMLTkIconElement;
     let _rightIcon: HTMLTkIconElement;
     const spinnerElement = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
+
     if (this.loading) {
       _leftIcon = spinnerElement;
     } else if (this.icon) {
-      if (hasMultipleIcons) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig, { class: 'tk-button-icon', variant: null })} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig, { class: 'tk-button-icon', variant: null })} />;
-        }
-      } else {
-        if (this.iconPosition === 'left') {
-          _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: 'tk-button-icon', variant: null })} />;
-        } else {
-          _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions, { class: 'tk-button-icon', variant: null })} />;
-        }
-      }
+      const { leftIcon, rightIcon } = renderIcons(this.icon, { variant: null, additionalProps: { class: 'tk-button-icon' } }, this.iconPosition);
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
 
     let Tag;

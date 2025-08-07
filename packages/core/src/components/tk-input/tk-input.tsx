@@ -6,8 +6,8 @@ import { IInputMaskOptions } from './interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
-import { getIconElementProps, isMultiIconOptions } from '../../utils/icon-props';
 import { IChipOptions } from '../tk-chips/interfaces';
+import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -624,26 +624,11 @@ export class TkInput implements ComponentInterface {
     const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
     const prefixClass = classNames('tk-input-prefix-container', this.size);
 
-    // Handle icon rendering based on format
+    // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      if (isMultiIconOptions(this.icon)) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
-        }
-      } else {
-        if (this.icon) {
-          if (this.iconPosition === 'left') {
-            _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
-          } else {
-            _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
-          }
-        }
-      }
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {}, this.iconPosition);
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
 
     let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
