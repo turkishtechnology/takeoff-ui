@@ -30,6 +30,7 @@ const Example = () => {
     <div className="p-2">
       <div style={{ overflow: 'overlay' }} className="mb-4">
         <TkRadioGroup value={size} onTkChange={e => setSize(e.detail)}>
+          <TkRadio label="XSmall" value="xsmall" />
           <TkRadio label="Small" value="small" />
           <TkRadio label="Base" value="base" />
         </TkRadioGroup>

@@ -82,7 +82,7 @@ export class TkTable implements ComponentInterface {
   /**
    * Sets size for the component.
    */
-  @Prop() size: 'small' | 'base' = 'base';
+  @Prop() size: 'xsmall' | 'small' | 'base' = 'base';
 
   /**
    * Property of each row that defines the unique key of each row
