@@ -2,29 +2,15 @@ import { useState, useMemo } from 'react';
 import type { ControlConfig, PlaygroundProps } from './Playground.types';
 import './playground.css';
 import { createConfigFromJson } from './utils/createConfig';
-import {
-  TkButton,
-  TkInput,
-  TkSelect,
-  TkCheckbox,
-  TkTooltip,
-  TkTabs,
-  TkTabsItem,
-} from '@takeoff-ui/react';
+import { TkButton, TkInput, TkSelect, TkCheckbox, TkTooltip, TkTabs, TkTabsItem } from '@takeoff-ui/react';
 
-export default function Playground({
-  configs,
-  componentMap = {},
-  defaultConfigIndex = 0,
-}: PlaygroundProps) {
+export default function Playground({ configs, componentMap = {}, defaultConfigIndex = 0 }: PlaygroundProps) {
   const processedConfigs = useMemo(() => {
-    return configs.map((config) => {
+    return configs.map(config => {
       if (config.componentName) {
         const Component = componentMap[config.componentName];
         if (!Component) {
-          throw new Error(
-            `Component ${config.componentName} not found in componentMap`,
-          );
+          throw new Error(`Component ${config.componentName} not found in componentMap`);
         }
 
         return createConfigFromJson(config, Component);
@@ -44,20 +30,16 @@ export default function Playground({
     );
   }
 
-  const [propValues, setPropValues] = useState<
-    Record<string, string | number | boolean>
-  >(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
+  const [propValues, setPropValues] = useState<Record<string, string | number | boolean>>(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
 
   const currentConfig = processedConfigs[defaultConfigIndex];
 
   const handlePropChange = (key: string, value: string | number | boolean) => {
-    setPropValues((prev) => ({ ...prev, [key]: value }));
+    setPropValues(prev => ({ ...prev, [key]: value }));
   };
 
   const resetPlayground = () => {
-    setPropValues(() =>
-      getDefaultPropValues(processedConfigs[defaultConfigIndex]),
-    );
+    setPropValues(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
   };
 
   const renderControl = (control: ControlConfig) => {
@@ -68,11 +50,8 @@ export default function Playground({
         return (
           <TkInput
             value={String(value || '')}
-            onTkChange={(e) => {
-              handlePropChange(
-                control.key,
-                (e.target as HTMLInputElement).value,
-              );
+            onTkChange={e => {
+              handlePropChange(control.key, (e.target as HTMLInputElement).value);
             }}
           />
         );
@@ -80,15 +59,9 @@ export default function Playground({
         return (
           <>
             <TkSelect
-              value={
-                control.options?.find(
-                  (opt) => String(opt.value) === String(value),
-                ) || ''
-              }
-              onTkChange={(e) => {
-                const selectedOption = control.options?.find(
-                  (opt) => String(opt.value) === e.detail.value,
-                );
+              value={control.options?.find(opt => String(opt.value) === String(value)) || ''}
+              onTkChange={e => {
+                const selectedOption = control.options?.find(opt => String(opt.value) === e.detail.value);
                 handlePropChange(control.key, selectedOption?.value || '');
               }}
               options={control.options}
@@ -97,34 +70,11 @@ export default function Playground({
         );
       case 'checkbox':
         return control.tooltip ? (
-          <TkTooltip
-            description={
-              typeof control.tooltip === 'string' ? control.tooltip : null
-            }
-          >
-            <TkCheckbox
-              value={Boolean(value)}
-              onTkChange={(e) =>
-                handlePropChange(
-                  control.key,
-                  (e.target as HTMLInputElement).value,
-                )
-              }
-              label={control.label}
-              slot="trigger"
-            />
+          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
+            <TkCheckbox value={Boolean(value)} onTkChange={e => handlePropChange(control.key, (e.target as HTMLInputElement).value)} label={control.label} slot="trigger" />
           </TkTooltip>
         ) : (
-          <TkCheckbox
-            value={Boolean(value)}
-            onTkChange={(e) =>
-              handlePropChange(
-                control.key,
-                (e.target as HTMLInputElement).value,
-              )
-            }
-            label={control.label}
-          />
+          <TkCheckbox value={Boolean(value)} onTkChange={e => handlePropChange(control.key, (e.target as HTMLInputElement).value)} label={control.label} />
         );
 
       default:
@@ -135,23 +85,14 @@ export default function Playground({
   const renderPreviewComponent = () => {
     const Component = currentConfig.component;
 
-    const cleanProps = Object.fromEntries(
-      Object.entries(propValues).filter(
-        ([_, value]) =>
-          value !== undefined &&
-          value !== null &&
-          (typeof value !== 'string' || value !== ''),
-      ),
-    );
+    const cleanProps = Object.fromEntries(Object.entries(propValues).filter(([_, value]) => value !== undefined && value !== null && (typeof value !== 'string' || value !== '')));
 
     return <Component {...cleanProps} />;
   };
 
   const generateCodeString = (framework: 'react' | 'vue' | 'angular') => {
     const props = Object.entries(propValues)
-      .filter(
-        ([_, value]) => value !== undefined && value !== null && value !== '',
-      )
+      .filter(([_, value]) => value !== undefined && value !== null && value !== '')
       .map(([key, value]) => {
         if (framework === 'vue') {
           if (typeof value === 'string') {
@@ -270,9 +211,7 @@ export default function Playground({
     // Angular için component adını kebab-case'e çevir
     const getComponentName = () => {
       if (framework === 'angular') {
-        return currentConfig.name
-          .replace(/([a-z])([A-Z])/g, '$1-$2')
-          .toLowerCase();
+        return currentConfig.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
       }
       return currentConfig.name;
     };
@@ -282,18 +221,14 @@ export default function Playground({
         <span className="syntax-bracket">{'<'}</span>
         <span className="syntax-component-name">{getComponentName()}</span>
         {props.length > 0 && <>{props}</>}
-        <span className="syntax-bracket">
-          {props.length > 0 ? '/>' : ' />'}
-        </span>
+        <span className="syntax-bracket">{props.length > 0 ? '/>' : ' />'}</span>
       </div>
     );
   };
 
   const generateCodeStringAsText = (framework: 'react' | 'vue' | 'angular') => {
     const props = Object.entries(propValues)
-      .filter(
-        ([_, value]) => value !== undefined && value !== null && value !== '',
-      )
+      .filter(([_, value]) => value !== undefined && value !== null && value !== '')
       .map(([key, value]) => {
         if (framework === 'vue') {
           if (typeof value === 'string') {
@@ -329,9 +264,7 @@ export default function Playground({
 
     const getComponentName = () => {
       if (framework === 'angular') {
-        return currentConfig.name
-          .replace(/([a-z])([A-Z])/g, '$1-$2')
-          .toLowerCase();
+        return currentConfig.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
       }
       return currentConfig.name;
     };
@@ -352,23 +285,13 @@ export default function Playground({
       <div className="playground-section">
         <h3 className="playground-section-title flex justify-between items-center">
           Controls
-          <TkButton
-            variant="secondary"
-            size="small"
-            type="outlined"
-            mode="button"
-            iconPosition="left"
-            icon="refresh"
-            onClick={resetPlayground}
-          />
+          <TkButton variant="secondary" size="small" type="outlined" mode="button" iconPosition="left" icon="refresh" onClick={resetPlayground} />
         </h3>
 
         <div className="playground-controls-grid">
-          {currentConfig.props.map((control) => (
+          {currentConfig.props.map(control => (
             <div key={control.key}>
-              {control.type !== 'checkbox' && (
-                <label className="playground-label">{control.label}:</label>
-              )}
+              {control.type !== 'checkbox' && <label className="playground-label">{control.label}:</label>}
               {renderControl(control)}
             </div>
           ))}
@@ -381,9 +304,7 @@ export default function Playground({
     return (
       <div className="playground-preview">
         <h3 className="playground-section-title">Preview</h3>
-        <div className="playground-component-wrapper">
-          {renderPreviewComponent()}
-        </div>
+        <div className="playground-component-wrapper">{renderPreviewComponent()}</div>
       </div>
     );
   }
@@ -470,9 +391,7 @@ export default function Playground({
 
           {renderCodePreview()}
         </div>
-        <div className="playground-container-right-side">
-          {renderControls()}
-        </div>
+        <div className="playground-container-right-side">{renderControls()}</div>
       </div>
     );
   }

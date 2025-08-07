@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableRowCellStyleResponse, ITableSort } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableSort } from './interfaces';
 import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
@@ -166,15 +166,15 @@ export class TkTable implements ComponentInterface {
 
   /**
    * Provides a function to customize cell styles.
-   * This function takes row and column information and returns a style for a specific cell.
+   * This function takes the row and column information and returns the style object for a specific cell.
    */
-  @Prop() cellStyle: (row: any, column: ITableColumn) => ITableRowCellStyleResponse | undefined;
+  @Prop() cellStyle: (row: any, column: ITableColumn) => any;
 
   /**
    * Provides a function to customize row styles.
-   * This function takes row information and row index, and returns a style for a specific row.
+   * This function takes row information and row index, and returns the style object for a specific  row.
    */
-  @Prop() rowStyle: (row: any, index?: number) => ITableRowCellStyleResponse | undefined;
+  @Prop() rowStyle: (row: any, index?: number) => any;
 
   /**
    *
@@ -1445,7 +1445,7 @@ export class TkTable implements ComponentInterface {
 
             if (typeof this.rowStyle == 'function') {
               const stylesRow = this.rowStyle(row, index);
-              if (stylesRow !== undefined) styleRowObject = { backgroundColor: stylesRow.background, color: stylesRow.color };
+              if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
             }
 
             let isRowDisabled = false;
@@ -1500,7 +1500,7 @@ export class TkTable implements ComponentInterface {
 
                     if (typeof this.cellStyle == 'function') {
                       const stylesCell = this.cellStyle(row, col);
-                      if (stylesCell !== undefined) styleCellObject = { backgroundColor: stylesCell.background, color: stylesCell.color };
+                      if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
                     }
 
                     if (col.expander) {
