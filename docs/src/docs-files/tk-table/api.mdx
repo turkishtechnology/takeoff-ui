@@ -5,7 +5,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
-| <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize cell styles. This function takes row and column information and returns a style for a specific cell. |
+| <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>any</code> | null | Provides a function to customize cell styles. This function takes the row and column information and returns the style object for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
 | <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
@@ -15,7 +15,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
 | <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
 | <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
-| <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>ITableRowCellStyleResponse</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns a style for a specific row. |
+| <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>any</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns the style object for a specific  row. |
 | <TkBadge label="rowsPerPage" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 6 | Number of items per page. |
 | <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/> | <code>number[]</code> | null | Number of rows per page options |
 | <TkBadge label="selection" variant="primary" size="large" type="filledlight"/> | <code>any</code> | [] | List of the selected |
@@ -111,15 +111,6 @@ interface ITableColumn {
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
   };
-}
-```
-
-
-
-```typescript
-interface ITableRowCellStyleResponse {
-  background?: string;
-  color?: string;
 }
 ```
 

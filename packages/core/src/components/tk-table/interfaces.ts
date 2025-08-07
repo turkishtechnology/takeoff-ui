@@ -130,11 +130,6 @@ export interface ITableExportOptions {
   externalData?: any[];
 }
 
-export interface ITableRowCellStyleResponse {
-  background?: string;
-  color?: string;
-}
-
 export interface ITableExportExcelColumn {
   header: string;
   field: string;
