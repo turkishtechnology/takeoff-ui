@@ -1,0 +1,25 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the slider is disabled (non-interactive if true) |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Error message to display when `invalid` is true |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Informational hint message (shown when no error is present) |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Marks the slider as invalid; used to apply error styling |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label text displayed above the slider |
+| <TkBadge label="max" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 100 | The maximum value the slider can take |
+| <TkBadge label="min" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | The minimum value the slider can take |
+| <TkBadge label="range" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the slider operates in range mode (true) or single value mode (false) |
+| <TkBadge label="rangeVisibility" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Whether the bottom label/tick section should be visible |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether to show a red asterisk next to the label (typically for required fields) |
+| <TkBadge label="step" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 1 | The increment step for the slider value (e.g., step = 5 → 0, 5, 10, ...) |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"labels", "ticks"</code> | 'labels' | The type of visual indicator shown below the track. 'labels' shows min/max values, 'ticks' shows evenly spaced tick marks |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>[number, number], number</code> | 0 | Current value of the slider. If `range` is true, it should be [min, max] |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tkChange | Emitted when the slider value changes. Emits a number for single mode, or a [min, max] tuple for range mode. |

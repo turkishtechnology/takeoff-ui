@@ -1,0 +1,341 @@
+.tk-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .label {
+    font-size: var(--desktop-label-m-base-size);
+    line-height: var(--desktop-label-m-base-line-height);
+    padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
+    color: var(--text-darkest);
+    font-weight: 400;
+
+    .asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height);
+    }
+  }
+
+  .hint {
+    color: var(--text-base);
+    line-height: var(--desktop-label-s-line-height);
+    font-size: var(--desktop-label-s-size);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+
+    & i {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
+  }
+
+  &[aria-invalid] {
+    .tk-upload-dropzone {
+      border-color: var(--states-danger-base);
+    }
+
+    .hint,
+    .hint i {
+      color: var(--states-danger-base);
+    }
+  }
+
+  .tk-upload-dropzone {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px dashed var(--border-sub-base);
+    gap: 16px;
+
+    &.default {
+      display: flex;
+
+      .tk-upload-icon .icon i {
+        font-size: 40px;
+        color: var(--primary-base);
+      }
+
+      .tk-upload-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .tk-upload-text-holder {
+          .tk-upload-title {
+            color: var(--text-darkest, #222530);
+
+            /* Body/Small-14 */
+            font-family: var(--desktop-body-s-font, Geologica);
+            font-size: var(--desktop-body-s-size, 14px);
+            font-weight: 400;
+            line-height: var(--desktop-body-s-line-height, 20px);
+            /* 142.857% */
+          }
+
+          .tk-upload-description {
+            color: var(--text-base, #717784);
+
+            /* Body/X-Small-12 */
+            font-family: var(--desktop-body-xs-font, Geologica);
+            font-size: var(--desktop-body-xs-size, 12px);
+            font-style: normal;
+            font-weight: 300;
+            line-height: var(--desktop-body-xs-line-height, 18px);
+            /* 150% */
+          }
+        }
+
+        .tk-upload-input {
+          display: flex;
+          gap: 8px;
+        }
+      }
+
+      .tk-upload-icon .icon i {
+        font-size: 40px;
+        color: var(--primary-base);
+      }
+    }
+
+    &.centered {
+      flex-direction: column;
+      align-items: center;
+
+      .tk-upload-icon {
+        text-align: center;
+
+        .icon {
+          justify-content: center;
+
+          i {
+            font-size: 40px;
+            color: var(--primary-base);
+            padding: 8px;
+          }
+        }
+      }
+
+      .tk-upload-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        .tk-upload-text-holder {
+          display: contents;
+          gap: 8px;
+
+          .tk-upload-title {
+            color: var(--text-darkest, #222530);
+
+            /* Body/Small-14 */
+            font-family: var(--desktop-body-s-font, Geologica);
+            font-size: var(--desktop-body-s-size, 14px);
+            font-weight: 400;
+            line-height: var(--desktop-body-s-line-height, 20px);
+            /* 142.857% */
+          }
+
+          .tk-upload-description {
+            color: var(--text-base, #717784);
+
+            /* Body/X-Small-12 */
+            font-family: var(--desktop-body-xs-font, Geologica);
+            font-size: var(--desktop-body-xs-size, 12px);
+            font-style: normal;
+            font-weight: 300;
+            line-height: var(--desktop-body-xs-line-height, 18px);
+            /* 150% */
+          }
+        }
+
+        .tk-upload-input {
+          display: flex;
+          gap: 8px;
+          padding: 8px;
+        }
+      }
+    }
+
+    &.drag-over {
+      border-color: var(--primary-color);
+      background-color: rgba(var(--primary-color-rgb), 0.05);
+
+      .tk-upload-icon {
+        color: var(--primary-color);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .tk-upload-file-holder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+
+    .tk-upload-file-item {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-sub-base);
+      background: var(--static-light);
+
+      .tk-upload-file-preview {
+        width: 50px;
+        height: 50px;
+        position: relative;
+
+        svg {
+          width: 50px;
+          height: 50px;
+        }
+
+        .extension-text {
+          position: absolute;
+          left: 0;
+          bottom: 10px;
+          min-width: 36px;
+          font-size: 12px;
+          padding: 4px 0;
+          background-color: var(--secondary-500);
+          border-radius: 8px;
+          color: var(--static-light);
+          text-align: center;
+
+          &.pdf {
+            background-color: var(--primary-base);
+          }
+
+          &.jpg {
+            background-color: var(--states-warning-base);
+          }
+
+          &.png {
+            background-color: var(--states-warning-dark);
+          }
+
+          &.mp4 {
+            background-color: var(--states-info-base);
+          }
+
+          &.xls,
+          &.xlsx,
+          &.cvs {
+            background-color: var(--states-success-darkest);
+          }
+
+          &.doc,
+          &.docx {
+            background-color: var(--states-info-dark);
+          }
+
+          &.txt {
+            background-color: var(--states-verified-base);
+          }
+
+          &.zip,
+          &.rar {
+            background-color: var(--secondary-500);
+          }
+        }
+
+        img {
+          border-radius: 8px;
+        }
+      }
+
+      .tk-upload-file-icon {
+      }
+
+      .tk-upload-file-content {
+        display: flex;
+        justify-content: space-between;
+        flex-grow: 1;
+
+        .tk-upload-file-name {
+          color: var(--text-darkest);
+          font-size: var(--desktop-body-s-size);
+          line-height: var(--desktop-body-s-line-height);
+          word-break: break-word;
+        }
+
+        .tk-upload-file-size-state {
+          display: flex;
+          gap: 8px;
+          color: var(--text-base);
+          font-size: var(--desktop-label-s-size, 12px);
+          font-weight: 300;
+          margin-top: 6px;
+
+          .tk-upload-size {
+          }
+
+          .tk-upload-state {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+            }
+
+            &.added .icon {
+              color: var(--states-success-base);
+            }
+
+            &.failed .icon {
+              color: var(--states-danger-base);
+            }
+          }
+        }
+
+        .tk-upload-file-buttons {
+          display: flex;
+          gap: 4px;
+        }
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      background: var(--background-lightest);
+      opacity: 1;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 2px;
+      background: var(--background-lightest);
+      opacity: 1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background: var(--secondary-sub-base);
+      opacity: 1;
+    }
+  }
+
+  &.drag-drop-enabled {
+    .tk-upload-dropzone {
+      transition: all 0.2s ease;
+
+      &:hover:not(.disabled) {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+}

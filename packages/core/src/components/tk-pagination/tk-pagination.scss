@@ -1,0 +1,205 @@
+tk-pagination {
+  display: block;
+}
+
+.tk-pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .tk-pagination-start {
+    margin-right: auto;
+  }
+
+  .tk-pagination-end {
+    margin-left: auto;
+    display: flex;
+    gap: var(--pagination-base-right-gap, 12px);
+  }
+
+  .tk-pagination-tag {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--pagination-base-tag-gap, 0px);
+
+    .tk-pagination-tag-label {
+      color: var(--text-base, #717784);
+      /* Body/X-Small-12 */
+      font-family: var(--desktop-body-xs-font, Geologica);
+      font-size: var(--desktop-body-xs-size, 12px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--desktop-body-xs-line-height, 18px);
+      /* 150% */
+    }
+  }
+
+  .tk-pagination {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pagination-base-gap, 6px);
+
+    .tk-pagination-prev-actions,
+    .tk-pagination-next-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--pagination-base-arrow-gap, 4px);
+    }
+
+    .tk-pagination-cell {
+      display: flex;
+      min-width: 32px;
+      height: 32px;
+      // The numbers in the design do not match exactly; 8px and 12px actually correspond to 6px and 11px
+      padding: 6px 11px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-darkest, #222530);
+      /* Body/Small-14 */
+      font-family: var(--desktop-body-s-font);
+      font-size: var(--desktop-body-s-size, 14px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--desktop-body-s-line-height, 20px); /* 142.857% */
+      .tk-pagination-page-label {
+        color: var(--text-darkest);
+      }
+
+      .tk-pagination-cell-icon i {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: var(--icon-base);
+      }
+
+      &:hover:not(:disabled):not(.tk-pagination-ellipsis) {
+        background: var(--background-lightest, #f9fafc);
+      }
+
+      &:focus-visible {
+        border: var(--spacing-px, 1px) solid var(--states-info-base, #3b82f6);
+      }
+
+      &:disabled {
+        .tk-pagination-page-label,
+        .tk-pagination-cell-icon i {
+          color: var(--text-sub-base, #99a0ae);
+        }
+      }
+    }
+
+    &.tk-pagination-rounded {
+      &:not(.tk-pagination-compact-expanded) {
+        .tk-pagination-page {
+          border-radius: var(--radius-full);
+        }
+      }
+    }
+
+    &.tk-pagination-outlined {
+      .tk-pagination-page {
+        border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+      }
+    }
+
+    &.tk-pagination-grouped {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--pagination-base-container-v-padding, 2px) 0px;
+      border-radius: 8px;
+      border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+      background: var(--static-light, #fff);
+      overflow: hidden;
+
+      .tk-pagination-divider {
+        width: 1px;
+        height: 16px;
+        background-color: var(--border-light, #e1e4ea);
+      }
+    }
+
+    &.tk-pagination-compact {
+      .tk-pagination-cell {
+        width: 36px;
+        height: 36px;
+      }
+
+      .tk-pagination-current-label {
+        color: var(--text-base, #717784);
+
+        /* Body/Small-14 */
+        font-family: var(--desktop-body-s-font, Geologica);
+        font-size: var(--desktop-body-s-size, 14px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--desktop-body-s-line-height, 20px);
+        /* 142.857% */
+      }
+
+      .tk-pagination-first,
+      .tk-pagination-prev,
+      .tk-pagination-next,
+      .tk-pagination-last {
+        border: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+      }
+
+      &.tk-pagination-rounded {
+        .tk-pagination-first,
+        .tk-pagination-prev,
+        .tk-pagination-next,
+        .tk-pagination-last {
+          border-radius: var(--radius-full);
+        }
+      }
+
+      tk-input {
+        width: 48px;
+        height: 40px;
+      }
+    }
+
+    .tk-pagination-page {
+      &.tk-pagination-page-active {
+        border: var(--spacing-px, 1px) solid var(--states-info-sub-base);
+        background: var(--background-lightest, #f9fafc);
+      }
+    }
+
+    .tk-pagination-last,
+    .tk-pagination-prev,
+    .tk-pagination-page,
+    .tk-pagination-next,
+    .tk-pagination-first {
+      &:focus-visible {
+        border: var(--spacing-px, 1px) solid var(--states-info-base, #3b82f6);
+        outline: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .tk-pagination-container {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr;
+
+    .tk-pagination-start {
+      display: none;
+    }
+
+    .tk-pagination,
+    .tk-pagination-end {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

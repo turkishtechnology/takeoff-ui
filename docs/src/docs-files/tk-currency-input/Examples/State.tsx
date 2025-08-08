@@ -1,0 +1,68 @@
+import { TkCurrencyInput } from '@takeoff-ui/react';
+import FeatureDemo from '../../../components/FeatureDemo';
+import React from 'react';
+
+const State = () => {
+  const reactCode = `<TkCurrencyInput
+  label="Error"
+  placeholder="Error"
+  invalid={true}
+  error="Bu alan zorunludur"
+/>
+<TkCurrencyInput
+  label="Readonly"
+  placeholder="Readonly"
+  readonly
+/>
+<TkCurrencyInput
+  label="Disabled"
+  placeholder="Disabled"
+  disabled
+/>`;
+
+  const vueCode = `<TkCurrencyInput
+  label="Error"
+  placeholder="Error"
+  invalid={true}
+  error="Bu alan zorunludur"
+/>
+<TkCurrencyInput
+  label="Readonly"
+  placeholder="Readonly"
+  readonly
+/>
+<TkCurrencyInput
+  label="Disabled"
+  placeholder="Disabled"
+  disabled
+/>`;
+
+  const angularCode = `<tk-currency-input
+  label="Error"
+  placeholder="Error"
+  [invalid]="true"
+  error="Bu alan zorunludur"
+/>
+<tk-currency-input
+  label="Readonly"
+  placeholder="Readonly"
+  readonly
+/>
+<tk-currency-input
+  label="Disabled"
+  placeholder="Disabled"
+  disabled
+/>`;
+
+  const demo = (
+    <div className="flex flex-col flex-wrap items-start gap-3">
+      <TkCurrencyInput label="Error" placeholder="Error" invalid={true} error="Bu alan zorunludur" />
+      <TkCurrencyInput label="Readonly" placeholder="Readonly" readonly />
+      <TkCurrencyInput label="Disabled" placeholder="Disabled" disabled />
+    </div>
+  );
+
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
+};
+
+export default State;

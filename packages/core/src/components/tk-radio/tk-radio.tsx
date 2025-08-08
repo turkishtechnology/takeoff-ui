@@ -1,0 +1,163 @@
+import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
+import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
+
+/**
+ * The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.
+ * @slot content - Custom content template.
+ * @react `import { TkRadio } from '@takeoff-ui/react'`
+ * @vue `import { TkRadio } from '@takeoff-ui/vue'`
+ * @angular `import { TkRadio } from '@takeoff-ui/angular'`
+ */
+@Component({
+  tag: 'tk-radio',
+  styleUrl: 'tk-radio.scss',
+  formAssociated: true,
+})
+export class TkRadio implements ComponentInterface {
+  private parentEl: HTMLTkRadioGroupElement;
+  private uniqueId: string;
+  private windowClickHandler: (event: MouseEvent) => void;
+
+  @Element() el: HTMLTkRadioElement;
+
+  @AttachInternals() internals: ElementInternals;
+
+  constructor() {
+    this.uniqueId = uuidv4();
+    // radio group ile birlikte kullanımlarda diğer radio ya tıklandığı durumda kendini false yapmaya ihtiyaç olmadığı için bu işlemi radio group tarafında yapıldığı için outside click eventi atanmasına gerek yoktur.
+    if (!this.el.closest('tk-radio-group')) {
+      this.windowClickHandler = this.handleWindowClick.bind(this);
+    }
+  }
+
+  /**
+   * Controls if radio has custom content.
+   * @defaultValue false
+   */
+  @State() hasContentSlot: boolean = false;
+
+  /**
+   * Disables the radio button if true.
+   * @defaultValue false
+   */
+  @Prop() disabled: boolean = false;
+
+  /**
+   * The description sub text displayed.
+   */
+  @Prop() description: string;
+
+  /**
+   * Indicates whether the input is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
+
+  /**
+   * Defines the label for the element.
+   */
+  @Prop() label: string;
+
+  /**
+   * Determines the position of the radio and label.
+   */
+  @Prop() position?: 'left' | 'right';
+
+  /**
+   * Marks the radio button as checked or unchecked.
+   * @defaultValue false
+   */
+  @Prop({ mutable: true }) checked: boolean = false;
+
+  /**
+   * The name of the radio group, used to group radio buttons together.
+   */
+  @Prop({ reflect: true }) name: string;
+
+  /**
+   * The value of the radio button.
+   */
+  @Prop() value: any;
+
+  /**
+   * Emitted when the radio button's checked state changes.
+   */
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<any>;
+
+  componentWillLoad(): void {
+    this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
+
+    this.parentEl = this.el.closest('tk-radio-group');
+
+    if (this.parentEl && !this.position) {
+      this.position = this.parentEl.position;
+    }
+  }
+
+  componentDidRender(): void {
+    this.bindWindowClickListener();
+  }
+
+  disconnectedCallback() {
+    this.unbindWindowClickListener();
+  }
+
+  private bindWindowClickListener() {
+    window.addEventListener('click', this.windowClickHandler);
+  }
+
+  private unbindWindowClickListener() {
+    window.removeEventListener('click', this.windowClickHandler);
+  }
+
+  private handleWindowClick(event: MouseEvent) {
+    let clickedElement = event.target as HTMLElement;
+
+    if (clickedElement.tagName !== 'TK-RADIO') {
+      clickedElement = clickedElement.closest('tk-radio') as HTMLTkRadioElement;
+    }
+
+    if (
+      clickedElement?.getAttribute('name')?.length > 0 &&
+      clickedElement?.getAttribute('name') == this.name &&
+      clickedElement?.getAttribute('data-tk-radio-id')?.length > 0 &&
+      clickedElement?.getAttribute('data-tk-radio-id') !== this.uniqueId
+    ) {
+      this.checked = false;
+    }
+  }
+
+  private handleInputChange() {
+    if (!this.disabled) {
+      this.checked = true;
+      this.tkChange.emit(this.value);
+    }
+  }
+
+  render() {
+    const labelClass = classNames('tk-radio-container', this.position, {
+      'disabled': this.disabled,
+      'width-description': !!this.description,
+    });
+
+    return (
+      <Host data-tk-radio-id={this.uniqueId}>
+        <label class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+          <input type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
+          <div class="mask">
+            <div></div>
+          </div>
+          {this.hasContentSlot ? (
+            <slot name="content" />
+          ) : (
+            <div class="tk-radio-text-holder">
+              <div class="tk-radio-label">{this.label}</div>
+              <div class="tk-radio-description">{this.description}</div>
+            </div>
+          )}
+        </label>
+      </Host>
+    );
+  }
+}

@@ -1,0 +1,45 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The header text |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "divided", "light", "primary"</code> | 'basic' | Header type |
+| <TkBadge label="hideBackdrop" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the backdrop is shown |
+| <TkBadge label="isMaskBlur" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the dialog has a blur background |
+| <TkBadge label="maskVariant" variant="primary" size="large" type="filledlight"/> | <code>"base", "dark", "darkest", "light", "lightest"</code> | 'base' | Appearance of the mask |
+| <TkBadge label="preventDismiss" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Prevents the dialog from being dismissed by clicking outside |
+| <TkBadge label="showCloseButton" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Controls whether the close button is shown |
+| <TkBadge label="showHeader" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Controls whether the header is shown |
+| <TkBadge label="showVariantSign" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Controls whether the variant sign is shown |
+| <TkBadge label="subheader" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The subheader text |
+| <TkBadge label="variant" variant="primary" size="large" type="filledlight"/> | <code>"danger", "info", "success", "warning"</code> | 'info' | The variant of the dialog |
+| <TkBadge label="visible" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls the visibility of the dialog |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-close | Event emitted when the dialog is closed |
+| tk-open | Event emitted when the dialog is opened |
+| tk-visible-change | Event emitted when the dialog visibility changes |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| close | Requests to close the dialog by emitting a tk-close event. Note: This method only emits an event. The dialog will only close if the parent component listens for this event and updates the 'visible' prop to false. |
+| open | Requests to open the dialog by emitting a tk-open event. Note: This method only emits an event. The dialog will only open if the parent component listens for this event and updates the 'visible' prop to true. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| container | Custom container template. |
+| content | Custom content template. |
+| default | Default slot to detect child to inner content. |
+| footer | Custom footer template. |
+| footer-actions | Custom actions template to default footer. |
+| header | Custom header template. |

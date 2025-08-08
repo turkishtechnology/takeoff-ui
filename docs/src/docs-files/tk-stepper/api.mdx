@@ -1,0 +1,44 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="active" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | Currently active step index |
+| <TkBadge label="activeIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for active steps. |
+| <TkBadge label="completeIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for completed steps. |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="contentStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of content elements |
+| <TkBadge label="controlled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls if the tabs component is controlled. |
+| <TkBadge label="errorIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for error steps. |
+| <TkBadge label="inactiveIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon or icon options for inactive steps. |
+| <TkBadge label="linear" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the steps follow a linear progression (can only navigate to the next step when current step is completed). |
+| <TkBadge label="orientation" variant="primary" size="large" type="filledlight"/> | <code>"horizontal", "vertical"</code> | 'horizontal' | Controls the orientation of the stepper component. |
+| <TkBadge label="showCompleteState" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Whether to show completed steps with the complete state. If false, completed steps will appear as just passed and not with complete styling. |
+| <TkBadge label="signStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of step sign elements |
+| <TkBadge label="stepMode" variant="primary" size="large" type="filledlight"/> | <code>"basic", "number"</code> | 'basic' | Controls the step mode of the stepper component. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-step-change | Emitted when the active step changes. |
+| tk-step-click | Emitted when a step is clicked. |
+
+### Methods
+
+| Name | Description |
+| ---- | ----------- |
+| setActive | Sets the active step index. |
+
+### Interfaces
+
+
+
+```typescript
+interface IStepClickDetail {
+  index: number;
+  status: 'completed' | 'active' | 'inactive' | 'error' | 'disabled';
+}
+```
+

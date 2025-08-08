@@ -1,0 +1,304 @@
+---
+sidebar_position: 4
+title: Coding Guidelines
+---
+
+# Takeoff UI Coding Standards
+
+This document outlines comprehensive guidelines for component development using the Stencil library. These standards ensure consistency and maintainability across projects.
+
+## Folder Structure
+
+Each component directory should contain:
+```plaintext 
+tk-component/
+├── tk-component.tsx        # Component logic
+├── tk-component.scss       # Component styles
+├── interfaces.ts           # Type definitions (if needed)
+└── test/                  
+    ├── tk-component.spec.tsx    # Unit tests
+    └── tk-component.e2e.tsx     # E2E tests (if needed)
+```
+---
+## Naming Conventions
+
+### Component Naming
+**File/Tag Name**: Use dash-case with `tk-` prefix
+  ```typescript
+  // Example: tk-button.tsx
+  @Component({
+    tag: 'tk-button',
+    styleUrl: 'tk-button.scss',
+    shadow: true
+  })
+  ```
+
+### Class Names
+**Component Class**: Use PascalCase with `Tk` prefix
+  ```typescript
+  export class TkButton implements ComponentInterface {
+    // ...
+  }
+  ```
+
+### Decorators and Methods
+**`@Element`**: Use `el` as name
+  ```typescript
+  @Element() el: HTMLTkButtonElement;
+  ```
+
+**`@State`**, **`@Prop`**: Use camelCase
+  ```typescript
+  @Prop() buttonSize: 'small' | 'medium' | 'large' = 'medium';
+  @State() isPressed = false;
+  ```
+
+**`@Watch`**: Use camelCase with `Changed` suffix
+  ```typescript
+  @Watch('value')
+  valueChanged(newValue: string) {
+    // ...
+  }
+  ```
+
+**`@Event`**: Use camelCase with `tk` prefix
+  ```typescript
+  @Event() tkChange: EventEmitter<string>;
+  @Event() tkFocus: EventEmitter<void>;
+  ```
+
+**Handler Methods**: Use camelCase with `handle` prefix
+  ```typescript
+  private handleClick() {
+    // ...
+  }
+  ```
+
+## Component Implementation
+
+### Code Organization Template
+```typescript
+import { Component, h, Prop, State, Event, Element, Watch } from '@stencil/core';
+import { ComponentInterface } from '@stencil/core';
+import classNames from 'classnames';
+
+@Component({
+  tag: 'tk-component',
+  styleUrl: 'tk-component.scss',
+  shadow: true
+})
+export class TkComponent implements ComponentInterface {
+  // 1. Element decorator
+  @Element() el: HTMLTkMyComponentElement;
+
+  // 2. State decorators
+  @State() private isActive = false;
+
+  // 3. Prop decorators
+  @Prop() value: string;
+  
+  // 4. Watch decorators (immediately after related prop)
+  @Watch('value')
+  valueChanged(newValue: string) {
+    // ...
+  }
+
+  // 5. Event decorators
+  @Event() tkChange: EventEmitter<string>;
+
+  // 6. Lifecycle methods
+  componentWillLoad() {
+    // ...
+  }
+
+  // 7. Public methods
+  @Method()
+  async setValue(value: string) {
+    // ...
+  }
+
+  // 8. Private methods
+  private handleClick() {
+    // ...
+  }
+
+  // 9. Render - Create methods
+  private createHeaderLabel() {
+    // ...
+    return (
+      <span class="tk-component-header-label">
+        {this.header}
+      </span>
+    );
+  }
+
+  private renderHeader() {
+    // ...
+    return (
+      <div class={classNames('tk-component-header', {
+        /** ... */
+      })}>
+        /** Use create prefix for outer of render*/
+        {this.createHeaderLabel()}
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div class={classNames('tk-component', {
+        'tk-component-active': this.isActive
+      })}>
+        {this.renderHeader()}
+      </div>
+    );
+  }
+}
+```
+---
+# Testing Standards
+
+## Test Types
+
+### Unit Tests (`*.spec.tsx`)
+- Located in `test` directory
+- Tests component props, states, and synchronous methods
+- Uses `newSpecPage()` for virtual DOM testing
+- Focuses on isolated component behavior
+
+### E2E Tests (`*.e2e.ts`)
+- Located in `test` directory alongside spec files
+- Tests user interactions and animations
+- Uses `newE2EPage()` for browser environment testing
+- Validates component behavior in real browser context
+
+## Test Structure
+
+```typescript
+describe('tk-component', () => {
+  // Basic rendering tests
+  describe('basic rendering', () => {
+    it('renders with default props', async () => {
+      const page = await newSpecPage({
+        components: [TkComponent],
+        html: `<tk-component></tk-component>`,
+      });
+      expect(page.root).toBeTruthy();
+    });
+  });
+
+  // Event testing
+  describe('event handling', () => {
+    it('emits change event', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<tk-component></tk-component>`);
+      const eventSpy = await page.spyOnEvent('tkChange');
+      const element = await page.find('[data-testid="interactive-element"]');
+      await element.click();
+      expect(eventSpy).toHaveReceivedEvent();
+    });
+  });
+});
+```
+
+## Best Practices
+
+### DOM Queries
+```typescript
+// Recommended: Use data-testid
+const element = await page.find('tk-component >>> [data-testid="component-element"]');
+
+// Not Recommended: Direct DOM manipulation
+const element = page.root.shadowRoot.querySelector('.component-class');
+```
+
+### Asynchronous Operations
+```typescript
+// Recommended: Wait for changes
+await page.waitForChanges();
+
+// Not Recommended: Arbitrary timeouts
+await page.waitForTimeout(1000);
+```
+
+### Event Testing
+```typescript
+// Recommended: Simulate user interaction
+const button = await page.find('[data-testid="submit-button"]');
+await button.click();
+
+// Not Recommended: Direct method calls
+await element.callMethod('submit');
+```
+
+## Coverage Requirements
+
+The following coverage thresholds must be maintained:
+- Statements: 90%
+- Branches: 80%
+- Functions: 90%
+- Lines: 90%
+
+## Test Implementation Checklist
+
+Before submitting a component, ensure all these aspects are tested:
+
+- [ ] Basic rendering with default props
+- [ ] All prop combinations
+  - Different variants (primary, secondary, etc.)
+  - Different sizes
+  - Different states (disabled, readonly, etc.)
+- [ ] State changes and updates
+- [ ] Event emissions
+- [ ] Public methods (if present)
+- [ ] Edge cases
+  - Null values
+  - Undefined values
+  - Minimum/maximum values
+- [ ] Lifecycle methods
+  - `componentWillLoad`
+  - `componentDidLoad`
+  - `componentWillUpdate`
+  - `componentDidUpdate`
+- [ ] Responsive behavior (if applicable)
+
+## Test Development Flow
+
+1. Start with basic render tests
+2. Add variant testing
+3. Implement state testing
+4. Add event testing
+5. Test public methods
+6. Add edge case testing
+7. Check coverage report
+8. Address coverage gaps
+---
+## Styling
+
+### SCSS Notes
+- Use design system variables from Figma
+- Follow `tk-` naming with component prefix
+```css
+.tk-component {
+  color: var(--static-white);
+  
+  &.tk-component-large {
+    font-size: var(--desktop-body-m-base-size);
+  }
+
+  &.tk-component-active {
+    background: var(--primary-sub-base);
+  }
+}
+```
+---
+## Framework Integration
+
+### Binding Support
+The framework integration is handled through the Stencil configuration. Component developers should ensure their components emit proper events for framework bindings:
+
+For `v-model` support (Vue.js):
+  ```typescript
+  @Event() tkChange: EventEmitter<string>;
+  @Prop() value: string;
+  ```

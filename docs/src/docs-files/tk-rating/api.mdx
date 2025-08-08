@@ -1,0 +1,18 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The user cannot interact with the input. |
+| <TkBadge label="maxRating" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 5 | The maximum rating value. Possible options are 5 or 10. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="showRatingValue" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Determines whether to show the numerical rating value under to the icon. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"dot", "heart", "number", "star"</code> | 'star' | The type of icon to display for each rating element. Options include 'star', 'heart', 'dot' and 'number'. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | The currently selected rating value. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-change | Emitted when the value has changed. |

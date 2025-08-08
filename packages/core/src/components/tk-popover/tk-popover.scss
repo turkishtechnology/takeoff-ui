@@ -1,0 +1,50 @@
+.tk-popover-content {
+  display: flex;
+  gap: 8px;
+  position: fixed;
+  padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
+  border-radius: var(--tooltips-base-radius, 8px);
+  width: max-content;
+  color: var(--text-base);
+  line-height: 20px;
+  z-index: 1300;
+  box-shadow: var(--shadow-base);
+
+  &.tk-popover-dark {
+    border: 1px solid var(--border-light);
+    background: var(--background-darkest);
+
+    .tk-popover-arrow {
+      background: var(--background-darkest);
+    }
+  }
+
+  &.tk-popover-white {
+    border: 1px solid var(--border-light);
+    background: var(--static-light);
+
+    .tk-popover-arrow {
+      background: var(--static-light);
+    }
+  }
+
+  &.tk-popover-basic {
+    border: 1px solid var(--states-light);
+    background: var(--background-lightest);
+
+    .tk-popover-arrow {
+      background: var(--background-lightest);
+    }
+  }
+}
+
+.tk-popover-arrow {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: inherit;
+  border: 1px solid;
+  border-color: inherit;
+  transform: rotate(45deg);
+  z-index: 1300;
+}

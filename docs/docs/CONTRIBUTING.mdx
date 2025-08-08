@@ -1,0 +1,176 @@
+---
+sidebar_position: 4
+title: Contributing Guide
+---
+
+# Contributing to Takeoff UI
+
+Thank you for your interest in contributing to the Takeoff UI Design System! Whether you’re a community contributor or a core team member, this guide will help you navigate our project structure, issue management, commit message guidelines, and pull request process.
+
+---
+
+## Project Overview
+
+The Takeoff UI Design System is a monorepo built using:
+
+- **Core Web Components**: Developed with [Stencil.js](https://stenciljs.com/) (`@takeoff-ui/core`)
+- **Monorepo Management**: Managed with [Turborepo](https://turbo.build/) (`turbo`)
+- **Framework-Specific Targets**:
+  - `@takeoff-ui/react`
+  - `@takeoff-ui/vue`
+  - `@takeoff-ui/angular`
+- **Tailwind Plugin**: `@takeoff-ui/tailwind`
+
+**Directory Structure:**
+```plaintext
+packages/
+├── core/      # Core web components
+├── react/     # React wrapper library
+├── vue/       # Vue wrapper library
+├── angular/   # Angular wrapper library
+└── tailwind/  # Tailwind plugin for the design system
+```
+---
+
+## Code Standards
+
+All contributions must follow our [Coding Standards](/docs/Coding-Standards) covering:
+
+- Stencil.js component architecture
+- Cross-framework compatibility
+- Testing requirements (coverage)
+- Design system variable usage
+
+---
+
+## Issue Management
+
+We use **GitHub Issues** for bug reports and feature requests. Before opening a new issue, please search existing issues to avoid duplicates.
+
+### Available Issue Templates
+
+When you click **New issue** in our repo, choose one of the following templates (they live under `.github/ISSUE_TEMPLATE/`):
+
+- **Bug Report**
+- **New Feature Request**
+
+Follow the prompts in the template you select and fill in all required sections.
+
+---
+
+## For Community Contributors
+
+### Claim an Issue
+
+- Issues will be labeled by the Core Team first.
+- Look for issues which are not labeled as **Core Team**, available issues can be self-assigned when identified.
+
+### Branch Naming
+
+Use the format:
+```plaintext
+{type}/{issue-number}-{short-description}
+```
+- `type` = feature, fix, docs, style, refactor, test, chore  
+- `issue-number` = the GitHub issue number (e.g. `123`)  
+- `short-description` = brief, kebab-case summary  
+
+Example:  
+```plaintext
+feature/123-add-loading-state
+```
+
+### Creating a Pull Request
+
+1. Push your branch to GitHub.
+2. Click **Compare & pull request**.
+3. Reference the issue in your PR title:  
+   ```plaintext
+   #123: Add loading state to Button component
+   ```
+4. Fill out our PR template (you’ll see it pre-populated).
+
+---
+
+## For Core Team
+
+- **Sprint Management**  
+    Maintain sprint assignments via GitHub Projects or through our corporate Jira environment (as configured).
+- **Labeling & Milestones**  
+  Move issues between columns and update milestones as work progresses.
+- **Release Notes**  
+  Tag PRs with version labels and draft release notes when closing a version cycle.
+
+---
+
+## Commit Guidelines
+
+We follow a conventional-style commit format:
+
+```plaintext
+<type>(<scope>): <subject>
+```
+
+- **type**: feat, fix, docs, style, refactor, test, chore  
+- **scope**: affected package or area (e.g. `tk-button`, `core`)  
+- **subject**: short imperative description (≤ 75 chars)  
+
+**Examples:**
+```plaintext
+feat(tk-button): Add loading state animation
+chore(deps): Bump stenciljs to v3.5.0
+```
+
+- Use **imperative mood** (“add”, “fix”, “update”)
+- Capitalize the subject (no trailing period)
+- If needed, include a body separated by a blank line
+- Reference issues by number (e.g. `Closes #123`)
+
+---
+
+## Pull Request Guidelines
+
+Our PR template will guide you through these sections:
+
+```markdown
+### Description
+Explain your changes in 1–2 sentences.
+
+### Related Issue
+Closes #123
+
+### Testing Steps
+1. Step 1
+2. Step 2
+
+### Screenshots
+![Component Preview](https://via.placeholder.com/400x200)
+```
+
+Make sure all CI checks pass and tests are up-to-date before requesting review.
+
+---
+
+## Action Permissions
+
+| Action                    | Community | Core Team |
+|---------------------------|:---------:|:---------:|
+| Create Issues             | ✅        | ✅        |
+| Comment on Issues         | ✅        | ✅        |
+| Assign Issues             | ✅        | ✅        |
+| Approve & Merge PRs       | ❌        | ✅        |
+| Manage Labels & Projects  | ❌        | ✅        |
+
+---
+
+## Contact the Team
+
+For general questions and discussion, please use **GitHub Discussions**:
+
+[Discussions](https://github.com/turkishtechnology/takeoff-ui/discussions)
+
+You can also reach us by email at **takeoffui@thy.com**.
+
+---
+
+Thank you for helping us build a high-quality, cross-framework component library!

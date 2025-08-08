@@ -1,0 +1,37 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/> | <code>number, number[], string, string[]</code> | null | Currently active panel indexes. Can be a single value or an array. When allowMultiple is false, only the last value in the array will be used. |
+| <TkBadge label="allowMultiple" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Allows multiple accordion items to be expanded simultaneously. |
+| <TkBadge label="arrowPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code> | 'right' | Sets the position of opening and closing chevrons. |
+| <TkBadge label="collapseIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | 'keyboard_arrow_up' | Sets the collapse icon |
+| <TkBadge label="expandIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | 'keyboard_arrow_down' | Sets the expand icon |
+| <TkBadge label="hideArrows" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether to hide the arrow icons. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"divided", "grouped"</code> | 'grouped' | Sets accordion style for the component. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tkAccordionItemSelected | Emitted when an accordion item is selected |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| default | Default slot to detect TkAccordionItem components. |
+
+### Interfaces
+
+
+
+```typescript
+interface IAccordionItemSelect {
+  index: string | number;
+  active: boolean;
+}
+```
+

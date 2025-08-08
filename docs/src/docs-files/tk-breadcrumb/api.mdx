@@ -1,0 +1,34 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="model" variant="primary" size="large" type="filledlight"/> | <code>IBreadcrumbModel[]</code> | null | Array of breadcrumb items |
+| <TkBadge label="separator" variant="primary" size="large" type="filledlight"/> | <code>"dot", "icon", "slash", "vertical"</code> | 'icon' | Type of separator to use between breadcrumb items |
+| <TkBadge label="separatorIcon" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'chevron_right' | Icon to use as separator when separator is set to 'icon' |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"basic", "outlined"</code> | 'basic' | Defines the visual style of the component, possible values are 'basic' and 'outlined'. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| default | Default slot to detect TkBreadcrumbItem components. |
+
+### Interfaces
+
+
+
+```typescript
+interface IBreadcrumbModel {
+  /** Label text for the item */
+  label: string;
+  /** URL for the item */
+  href?: string;
+  /** Icon to display alongside the label */
+  icon?: string;
+  /** Whether the item is an external url */
+  isExternal?: boolean;
+}
+```
+

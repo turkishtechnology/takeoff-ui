@@ -1,0 +1,21 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="alignItems" variant="primary" size="large" type="filledlight"/> | <code>"center", "end", "start"</code> | 'center' | Alignment of the alert content ('start', 'center', or 'end'). |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The header text displayed at the top of the alert. |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | The icon displayed in the alert. If not provided, a default icon is used based on the variant. |
+| <TkBadge label="iconSize" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small", "xlarge"</code> | 'large' | Size of the icon displayed in the alert ('small', 'base', or 'large'). |
+| <TkBadge label="message" variant="primary" size="large" type="filledlight"/> | <code>string, string[]</code> | null | The message text displayed within the alert. |
+| <TkBadge label="removable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The alert can be closed by the user. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"filled", "filledlight", "gradient", "outlined"</code> | 'filled' | This field specifies the design type of the component. |
+| <TkBadge label="variant" variant="primary" size="large" type="filledlight"/> | <code>"danger", "info", "neutral", "success", "warning"</code> | 'neutral' | Defines the visual variant of the alert. |
+
+### Slots
+
+| Name | Description |
+| ---- | ----------- |
+| footer-action | Custom actions template to default footer. |
+| right-action | Custom actions template to right content. |

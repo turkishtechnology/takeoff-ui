@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+.tk-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  overflow: hidden;
+
+  &.tk-avatar-group-compact {
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-light, #e1e4ea);
+    background: var(--static-light, #fff);
+    padding: 4px;
+
+    > tk-avatar:last-child .tk-avatar-container {
+      margin-left: 0;
+
+      .tk-avatar {
+        background: transparent;
+        border: 1px solid transparent;
+        box-shadow: none;
+        user-select: none;
+
+        .tk-avatar-label {
+          color: var(--text-darkest, #222530);
+        }
+      }
+    }
+  }
+
+  > tk-avatar:not(:last-child) .tk-avatar {
+    box-shadow: var(--effect-1-default-base);
+  }
+
+  > tk-avatar + tk-avatar {
+    > .tk-avatar-xlarge,
+    > .tk-avatar-large {
+      margin-left: -20px;
+    }
+
+    > .tk-avatar-base {
+      margin-left: var(--neutral-darker-shadows-2xl-spread, -12px);
+    }
+
+    > .tk-avatar-small,
+    > .tk-avatar-xsmall {
+      margin-left: -8px;
+    }
+  }
+}

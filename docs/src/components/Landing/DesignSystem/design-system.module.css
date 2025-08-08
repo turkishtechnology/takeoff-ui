@@ -1,0 +1,40 @@
+.titleDesc {
+  color: var(--text-base);
+}
+
+.designSystem {
+  border-radius: 16px;
+  border: 2px solid var(--border-light);
+  background: var(--static-light);
+  padding: 16px;
+}
+
+.figmaLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  padding: 8px;
+  border-radius: 100%;
+  border: 2px solid var(--surface-light);
+  background: var(--static-light);
+  margin-bottom: 16px;
+}
+
+.designSystemDesc {
+  color: var(--text-base);
+  font-size: 14px;
+}
+
+.previewImage {
+  height: 100%;
+  background-image: url('/img/design-system-preview.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+[data-theme='dark'] .previewImage {
+  background-image: url('/img/design-system-preview-dark.svg');
+}

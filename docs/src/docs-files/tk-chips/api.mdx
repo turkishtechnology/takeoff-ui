@@ -1,0 +1,36 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="autoSelfDestroy" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Determines whether the chip automatically removes itself when the close button is clicked. |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The disabled status. |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Specifies a material icon name to be displayed. |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label to display inside the chip. |
+| <TkBadge label="removable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | This property determines whether the chip component is removable. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"avatar", "filled", "filledlight", "outlined"</code> | 'filled' | This field specifies the design type of the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The value of the chips |
+| <TkBadge label="variant" variant="primary" size="large" type="filledlight"/> | <code>"danger", "info", "neutral", "primary", "secondary", "success", "verified", "warning"</code> | 'primary' | The variant of the chip for styling. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-remove | When an element is deleted, it is triggered. It returns the label. |
+
+### Interfaces
+
+
+
+```typescript
+interface IChipOptions {
+  label?: string;
+  icon?: string | IIconOptions;
+  type?: 'filled' | 'filledlight' | 'outlined' | 'avatar';
+  size?: 'large' | 'base' | 'small';
+  variant?: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified';
+}
+```
+

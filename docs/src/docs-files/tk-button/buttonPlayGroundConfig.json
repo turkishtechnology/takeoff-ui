@@ -1,0 +1,123 @@
+{
+  "name": "TkButton",
+  "componentName": "TkButton",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "White", "value": "white" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "filled",
+      "options": [
+        { "label": "Elevated", "value": "elevated" },
+        { "label": "Filled", "value": "filled" },
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Text", "value": "text" }
+      ]
+    },
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "button",
+      "options": [
+        { "label": "Button", "value": "button" },
+        { "label": "Link", "value": "link" },
+        { "label": "Submit", "value": "submit" },
+        { "label": "Reset", "value": "reset" }
+      ]
+    },
+    {
+      "key": "iconPosition",
+      "label": "Icon Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Hello World!"
+    },
+    {
+      "key": "href",
+      "label": "Href",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "target",
+      "label": "Target",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "fullWidth",
+      "label": "Full Width",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "underline",
+      "label": "Underline",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "For 'Underline' prop, 'mode': 'link' and 'type': 'Text || Outlined' are required."
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

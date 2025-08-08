@@ -1,0 +1,374 @@
+:host {
+  display: inline-flex;
+}
+
+.tk-chips {
+  font-family: 'Geologica', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--chips-large-radius, 6px);
+  border-width: 0px;
+  background-color: var(--static-Light, #fff);
+
+  &.removable {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    color: var(--text-sub-base, #cacfd8) !important;
+    background-color: var(--frames-light) !important;
+
+    &.avatar,
+    &.outlined {
+      border: 1px solid var(--border-sub-base, #cacfd8) !important;
+      background-color: var(--static-Light, #fff) !important;
+    }
+
+    &:active {
+      box-shadow: none !important;
+    }
+  }
+
+  &:active {
+    box-shadow: var(--secondary-focus);
+  }
+
+  &.primary {
+    color: var(--primary-base, #c90019);
+
+    &:active {
+      box-shadow: var(--primary-focus);
+    }
+
+    &.filled {
+      color: var(--text-lightest);
+      background-color: var(--primary-base);
+
+      &:hover {
+        background-color: var(--primary-dark, #b70017);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--primary-base);
+
+      &:hover {
+        background-color: var(--primary-lightest, #fae6e8);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--primary-light, #eeb0b8);
+      color: var(--primary-base);
+    }
+
+    &.avatar {
+      border: 1px solid var(--primary-base, #c90019);
+
+      &:hover {
+        background-color: var(--primary-lightest, #fae6e8);
+      }
+    }
+  }
+
+  &.secondary {
+    color: var(--secondary-darkest);
+
+    &.filled {
+      background-color: var(--secondary-darkest);
+      color: var(--text-lightest);
+
+      &:hover {
+        background-color: var(--secondary-dark, #607083);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--secondary-darkest);
+
+      &:hover {
+        background-color: var(--secondary-lightest, #f2f3f5);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--secondary-light);
+      color: var(--secondary-darkest);
+
+      &:hover {
+        color: var(--secondary-dark);
+        background-color: var(--secondary-light, #dadee3);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--secondary-darkest, #34404f);
+
+      &:hover {
+        background-color: var(--secondary-lightest, #dadee3);
+      }
+    }
+  }
+
+  &.neutral {
+    color: var(--text-darkest);
+
+    &.filled {
+      background-color: var(--background-darkest);
+      color: var(--text-lightest, #f9fafc);
+
+      &:hover {
+        background-color: var(--background-dark, #525866);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--background-darkest);
+
+      &:hover {
+        background-color: var(--background-lightest, #f9fafc);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--icon-lightest);
+
+      &:hover {
+        color: var(--text-dark);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--background-darkest, #222530);
+
+      &:hover {
+        background-color: var(--background-lightest, #f9fafc);
+      }
+    }
+  }
+
+  &.info {
+    color: var(--states-info-dark, #295bac);
+
+    &.filled {
+      color: var(--text-lightest, #f9fafc);
+      background-color: var(--states-info-dark);
+
+      &:hover {
+        background-color: var(--states-info-darkest);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--states-info-dark, #295bac);
+
+      &:hover {
+        background-color: var(--states-info-lightest, #d0e1fd);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--states-info-lightest, #d0e1fd);
+
+      &:hover {
+        color: var(--states-info-darkest, #183462);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--states-info-dark, #295bac);
+
+      &:hover {
+        background-color: var(--states-info-lightest, #d0e1fd);
+      }
+    }
+  }
+
+  &.success {
+    color: var(--states-success-dark, #188a42);
+
+    &.filled {
+      color: var(--text-lightest, #f9fafc);
+      background-color: var(--states-success-dark, #188a42);
+
+      &:hover {
+        background-color: var(--states-success-darkest, #0e4f26);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--states-success-dark, #188a42);
+
+      &:hover {
+        background-color: var(--states-success-lightest, #caf1d8);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--states-success-lightest, #caf1d8);
+
+      &:hover {
+        color: var(--states-success-darkest, #0e4f26);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--states-success-dark, #188a42);
+
+      &:hover {
+        background-color: var(--states-success-lightest, #caf1d8);
+      }
+    }
+  }
+
+  &.danger {
+    color: var(--states-danger-dark, #b32b23);
+
+    &.filled {
+      color: var(--text-lightest, #f9fafc);
+      background-color: var(--states-danger-dark, #b32b23);
+
+      &:hover {
+        background-color: var(--states-danger-darkest, #661814);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--states-danger-dark, #b32b23);
+
+      &:hover {
+        background-color: var(--states-danger-lightest, #ffd0ce);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--states-danger-lightest, #ffd0ce);
+
+      &:hover {
+        color: var(--states-danger-darkest, #661814);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--states-danger-dark, #b32b23);
+
+      &:hover {
+        background-color: var(--states-danger-lightest, #ffd0ce);
+      }
+    }
+  }
+
+  &.warning {
+    color: var(--states-warning-dark, #c79807);
+
+    &.filled {
+      background-color: var(--states-warning-dark, #c79807);
+      color: var(--text-lightest, #f9fafc);
+
+      &:hover {
+        background-color: var(--states-warning-lightest, #f6de95);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--states-warning-dark, #c79807);
+
+      &:hover {
+        background-color: var(--states-warning-lightest, #f6de95);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--states-warning-lightest, #f6de95);
+
+      &:hover {
+        color: var(--states-warning-darkest, #816204);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--states-warning-dark, #c79807);
+
+      &:hover {
+        background-color: var(--states-warning-lightest, #f6de95);
+      }
+    }
+  }
+
+  &.verified {
+    color: var(--states-verified-dark, #609af8);
+
+    &.filled {
+      color: var(--text-lightest, #f9fafc);
+      background-color: var(--states-verified-dark, #609af8);
+
+      &:hover {
+        background-color: var(--states-verified-darkest, #3b82f6);
+      }
+    }
+
+    &.outlined {
+      border: 1px solid var(--states-verified-dark, #609af8);
+
+      &:hover {
+        background-color: var(--states-verified-lightest, #d0e1fd);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--states-verified-lightest, #d0e1fd);
+
+      &:hover {
+        color: var(--states-verified-darkest, #3b82f6);
+      }
+    }
+
+    &.avatar {
+      border: 1px solid var(--states-verified-dark, #609af8);
+
+      &:hover {
+        background-color: var(--states-verified-lightest, #d0e1fd);
+      }
+    }
+  }
+
+  &.small {
+    padding: calc(var(--chips-small-v-padding, 1px) - 1px) var(--chips-small-h-padding, 4px);
+    font-size: var(--desktop-body-xs-size, 12px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--desktop-body-xs-line-height, 18px);
+    gap: 2px;
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  &.base {
+    padding: calc(var(--chips-base-v-padding - 1, 2px) - 1px) var(--chips-base-h-padding, 6px);
+    font-size: var(--desktop-body-s-size, 14px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--desktop-body-s-line-height, 20px);
+    gap: 4px;
+
+    i {
+      font-size: 16px;
+    }
+  }
+
+  &.large {
+    padding: calc(var(--chips-large-v-padding, 4px) - 2px) var(--chips-large-h-padding, 8px);
+    font-size: var(--desktop-body-s-size, 14px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--desktop-body-s-line-height, 20px);
+    gap: 6px;
+
+    i {
+      font-size: 20px;
+    }
+  }
+}

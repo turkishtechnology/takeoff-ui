@@ -1,0 +1,27 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | Controls the currently active tab index. Can be controlled programmatically from outside. |
+| <TkBadge label="alignHeaders" variant="primary" size="large" type="filledlight"/> | <code>"center", "end", "start"</code> | 'start' | Sets the alignment of the header. |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="contentStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of tabs item element |
+| <TkBadge label="controlled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls if the tabs component is controlled. |
+| <TkBadge label="defaultActiveIndex" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 0 | Default Active Index for tabs component. |
+| <TkBadge label="headerContainerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of headers container element |
+| <TkBadge label="isClosable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls if tabs are closable. |
+| <TkBadge label="isExtendable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls if new tabs can be added or not. |
+| <TkBadge label="orientation" variant="primary" size="large" type="filledlight"/> | <code>"horizontal", "vertical"</code> | 'horizontal' | Controls the orientation of the tabs component. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small", "xsmall", "xxsmall"</code> | 'base' | Controls the size of the tabs component. |
+| <TkBadge label="spreadHeaders" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Determines whether the tab headers will spread evenly across the horizontal space. |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"basic", "compact", "divided", "expanded"</code> | 'basic' | Controls the tab style of the tabs component. |
+| <TkBadge label="variant" variant="primary" size="large" type="filledlight"/> | <code>"info", "neutral", "primary"</code> | 'primary' | Controls the color variant of the tabs component. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-tab-change | Triggered when the currently open tab changes. Returns the active index. |
+| tk-tab-click | Triggered when a tab is clicked. Returns the clicked tab index. |

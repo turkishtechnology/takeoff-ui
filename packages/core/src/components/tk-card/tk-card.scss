@@ -1,0 +1,210 @@
+:host {
+  display: block;
+}
+
+.tk-card {
+  display: flex;
+  background: var(--static-light);
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--effect-1-default-base);
+
+  &.has-hover-shadow {
+    &:hover {
+      box-shadow: var(--effect-1-hover-base);
+    }
+  }
+
+  &.tk-card-vertical {
+    flex-direction: column;
+  }
+
+  &.tk-card-horizontal {
+    flex-direction: row;
+    align-items: stretch;
+
+    &:has(.tk-card-image-top) {
+      flex-direction: column;
+      justify-content: stretch;
+    }
+
+    .tk-card-horizontal-has-image-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 0;
+      align-self: stretch;
+    }
+
+    .tk-card-image {
+      &:not(.tk-card-windowed-image) {
+        &.tk-card-image-left img {
+          border-radius: 8px 0 0 8px;
+        }
+
+        &.tk-card-image-right img {
+          border-radius: 0 8px 8px 0;
+        }
+      }
+    }
+  }
+
+  .tk-card-header {
+    display: flex;
+    padding: var(--card-header-base-v-padding, 12px) var(--card-header-base-h-padding, 16px);
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+
+    .tk-card-header-content {
+      display: flex;
+      align-items: center;
+      gap: var(--dialog-header-base-gap);
+
+      .tk-card-title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .tk-card-title {
+          color: var(--text-darkest);
+          font-family: var(--desktop-title-h6-font, Geologica);
+          font-size: var(--desktop-title-h6-size, 20px);
+          font-weight: 400;
+          line-height: var(--desktop-title-h6-line-height);
+        }
+
+        .tk-card-subtitle {
+          color: var(--text-base);
+          font-family: var(--desktop-subheading-2xs-font, Geologica);
+          font-size: var(--desktop-subheading-2xs-size, 11px);
+          font-weight: 400;
+          line-height: var(--desktop-subheading-2xs-line-height, 16px);
+        }
+      }
+    }
+
+    &.tk-card-header-top:not(.tk-card-horizontal .tk-card-horizontal-has-image-container .tk-card-header) {
+      border-radius: 8px 8px 0 0;
+
+      &.tk-card-header-divided,
+      &.tk-card-header-light {
+        border-bottom: var(--spacing-px) solid var(--border-light);
+      }
+
+      &.tk-card-header-light {
+        background: var(--background-lightest);
+        border-top-left-radius: var(--radius-xl);
+        border-top-right-radius: var(--radius-xl);
+      }
+
+      &.tk-card-header-dark {
+        background: var(--background-darkest);
+
+        .tk-card-title-container {
+          .tk-card-subtitle {
+            color: var(--text-sub-base);
+          }
+
+          .tk-card-title {
+            color: var(--text-lightest);
+          }
+        }
+
+        .tk-card-header-menu-button {
+          color: var(--icon-base);
+        }
+      }
+
+      &.tk-card-header-primary {
+        background: var(--primary-base);
+
+        .tk-card-title-container {
+          .tk-card-subtitle {
+            color: var(--primary-lightest);
+          }
+
+          .tk-card-title {
+            color: var(--text-lightest);
+          }
+        }
+
+        .tk-card-header-menu-button {
+          color: var(--primary-lightest);
+        }
+      }
+    }
+  }
+
+  .tk-card-image {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+
+    &.tk-card-windowed-image {
+      padding: var(--card-image-windowed-v-padding, 16px) var(--card-image-windowed-h-padding, 16px);
+
+      img {
+        border-radius: 8px;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      flex: 1 0 0;
+      align-self: stretch;
+    }
+  }
+
+  .tk-card-content {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    padding: var(--card-body-relaxed-v-padding, 16px) var(--card-body-relaxed-h-padding, 16px);
+    color: var(--text-base, #717784);
+    gap: 8px;
+  }
+
+  .tk-card-footer {
+    display: flex;
+    padding: var(--card-footer-base-v-padding, 16px) var(--card-footer-base-h-padding, 16px);
+    justify-content: flex-end;
+    align-self: stretch;
+
+    ::slotted([slot='footer-actions']) {
+      display: flex;
+      align-items: center;
+      gap: var(--dialog-footer-base-gap);
+    }
+
+    &:not(.tk-card-horizontal .tk-card-footer) {
+      &.tk-card-footer-divided,
+      &.tk-card-footer-light {
+        border-top: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+      }
+
+      &.tk-card-footer-light {
+        background: var(--background-lightest, #f9fafc);
+        border-bottom-left-radius: var(--radius-xl);
+        border-bottom-right-radius: var(--radius-xl);
+      }
+    }
+  }
+
+  &.tk-card-image-background {
+    .tk-card-header .tk-card-header-content .tk-card-title-container {
+      .tk-card-subtitle {
+        color: var(--text-light, #e1e4ea);
+      }
+
+      .tk-card-title {
+        color: var(--text-lightest, #f9fafc);
+      }
+    }
+
+    .tk-card-content {
+      color: var(--text-light, #e1e4ea);
+    }
+  }
+}

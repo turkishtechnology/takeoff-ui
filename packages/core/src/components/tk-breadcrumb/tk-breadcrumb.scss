@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.tk-breadcrumb {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tk-breadcrumb-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: var(--breadcrumb-container-gap);
+
+    .tk-breadcrumb-separator {
+      display: flex;
+      width: var(--breadcrumb-symbol-size);
+      height: var(--breadcrumb-symbol-size);
+      justify-content: center;
+      align-items: center;
+
+      .tk-breadcrumb-dot-separator {
+        &::before {
+          content: '•';
+        }
+      }
+
+      .tk-breadcrumb-slash-separator {
+        &::before {
+          content: '/';
+        }
+      }
+
+      .tk-breadcrumb-vertical-separator {
+        &::before {
+          content: '|';
+        }
+      }
+
+      .tk-breadcrumb-separator-icon {
+        color: var(--icon-sub-base);
+        font-size: 1rem;
+      }
+    }
+  }
+}

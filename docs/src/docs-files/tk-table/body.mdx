@@ -1,0 +1,144 @@
+import Basic from './Examples/Basic';
+import Striped from './Examples/Striped';
+import HeaderType from './Examples/HeaderType';
+import Selection from './Examples/Selection';
+import FilterAndSort from './Examples/FilterAndSort';
+import Pagination from './Examples/Pagination';
+import ServerSide from './Examples/ServerSide';
+import CustomCell from './Examples/CustomCell';
+import RowCellStyle from './Examples/RowCellStyle';
+import ExpandedRows from './Examples/ExpandedRows';
+import Export from './Examples/Export';
+import StickyColumn from './Examples/StickyColumn';
+import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
+import { TkAlert } from '@takeoff-ui/react';
+import CustomHeader from './Examples/CustomHeader';
+import DragAndDropSorting from './Examples/DragAndDropSorting';
+import HeaderStyle from './Examples/HeaderStyle';
+import Size from './Examples/Size';
+import MultiSort from './Examples/MultiSort';
+
+## Basic
+
+The basic features of the TkTable component are demonstrated.
+
+<Basic />
+
+## Striped
+
+To enable striped mode, set the striped prop to true. This feature displays rows with alternating background colors.
+
+<Striped />
+
+## Header Type
+
+The headerType prop is used to change the style of the table headers and allows you to customize the headers' style with values such as basic, primary, and dark.
+
+<HeaderType />
+
+## Selection
+
+This feature allows users to select rows in the table. The selected rows are visually highlighted and can be used for various actions.
+
+<Selection />
+
+## Filter and Sorting
+
+The table supports three types of filtering:
+
+- Text input filtering: Allows free text search in columns
+- Checkbox filtering: Enables selecting multiple values from predefined options
+- Radio filtering: Allows selecting a single value from predefined options
+
+The filtering type can be configured using the `filterType` property in column definition. For checkbox and radio filters, you need to provide `filterOptions` with value-label pairs.
+
+<TkAlert
+  header="Deprecation"
+  message="Future releases will not support filterButtons instead please use filterElements. For more information, see Column Interface."
+  variant="danger"
+  filledlight
+/>
+<br />
+<TkAlert
+  header="Information"
+  message='It does not work when paginationType = "server". In this case, filtering and sorting should be done by the backend. See serverSide'
+  variant="info"
+  filledlight
+/>
+<br />
+<FilterAndSort />
+
+## Multi Sorting
+
+This feature allows users to sort the table by multiple columns simultaneously.
+Users can click on the column headers to apply sorting, and the order of sorting can be adjusted by clicking on the headers in the desired sequence.
+<TkAlert
+  header="Information"
+  message="You need to add equal conditions to sorter function for multi-sort to be effective"
+  variant="info"
+  filledlight
+/>
+<br />
+<MultiSort />
+
+## Clear Filters and Sorting
+
+This example demonstrates how to clear all filters and sorting settings programmatically using the `clearFilters` and `clearSorting` methods.
+
+<ClearFiltersAndSort />
+
+## Pagination
+
+Client side pagination
+
+<Pagination />
+
+## Server Side
+
+Server side sorting, filter ang pagination example.
+
+<ServerSide />
+
+## Custom Cell
+
+<CustomCell />
+
+## Custom Header
+
+<CustomHeader />
+
+## Header Style
+
+<HeaderStyle />
+
+## Row/Cell Style
+
+<RowCellStyle />
+
+## Expanded Rows
+
+<ExpandedRows />
+
+## Export File
+
+The basic features of the TkTable component are demonstrated.
+
+<Export />
+
+## Sticky Column
+
+This feature allows the selected columns stay in their position in case of having multiple columns that extands the space.
+
+<StickyColumn />
+
+## Drag and Drop Sorting
+
+This feature allows the user to drag and drop the columns to the desired position.
+
+<DragAndDropSorting />
+
+## Size
+
+This feature allows the user to use alternative sizes.
+
+<Size />

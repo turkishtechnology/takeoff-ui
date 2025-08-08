@@ -1,0 +1,57 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="countryList" variant="primary" size="large" type="filledlight"/> | <code>ICountry[]</code> | null | The list of countries to display in the dropdown. Can be provided as an array of Country objects or as a JSON string. |
+| <TkBadge label="defaultCountry" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'TR' | The default country to select (ISO country code). |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the input is disabled. * |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label for the phone input. |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text for the phone input. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The value of the phone input. This is a list of phone input data objects. It can be mutable to allow two-way binding. |
+
+### Events
+
+| Name | Description |
+| ---- | ----------- |
+| tk-blur | Emitted when the input loses focus. |
+| tk-change | Emitted when the value has changed. |
+| tk-focus | Emitted when the input has focus. |
+
+### Interfaces
+
+Interface for the output data emitted by the phone input
+
+```typescript
+interface IPhoneInputValue {
+  /** The raw phone number without formatting */
+  rawValue: string;
+  /** The formatted phone number with mask applied */
+  maskedValue: string;
+  /** The selected country object */
+  country: ICountry;
+}
+```
+
+Interface representing a country for phone number input
+
+```typescript
+interface ICountry {
+  /** The display name of the country */
+  label: string;
+  /** The ISO country code */
+  id: string;
+  /** The international dialing code with + prefix */
+  dialCode: string;
+  /** The phone number mask pattern where 9 represents a digit */
+  mask: string;
+}
+```
+

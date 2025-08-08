@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.tk-divider {
+  &.tk-divider-horizontal {
+    margin: 16px 0;
+    border-top: var(--spacing-px) solid var(--background-light);
+
+    &:has(.tk-divider-content) {
+      border-top: 0 !important;
+    }
+
+    .tk-divider-content {
+      display: flex;
+      align-items: center;
+
+      color: var(--text-base);
+      font-family: var(--desktop-body-2xs-font, Geologica);
+      font-size: var(--desktop-body-2xs-size, 11px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--line-height-xxs-normal, 16px);
+
+      &::before {
+        flex: 1 1 0%;
+        height: 1px;
+        content: '';
+        border-top: var(--spacing-px) solid var(--background-light);
+        margin-right: 8px;
+      }
+
+      &::after {
+        flex: 1 1 0%;
+        content: '';
+        border-top: var(--spacing-px) solid var(--background-light);
+        margin-left: 8px;
+      }
+    }
+  }
+
+  &.tk-divider-vertical {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+    margin: 0 16px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      height: 100%;
+      inset-block-start: 0;
+      inset-inline-start: 50%;
+      border-inline-start: var(--spacing-px) solid var(--background-light);
+      box-sizing: border-box;
+    }
+  }
+}

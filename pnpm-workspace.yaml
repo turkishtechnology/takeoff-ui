@@ -1,0 +1,10 @@
+packages:
+  - 'packages/angular'
+  - 'packages/angular/projects/library'
+  - 'packages/react'
+  - 'packages/vue'
+  - 'packages/core'
+  - 'packages/tailwind'
+  - 'docs'
+  - 'apps/react-app'
+  - 'apps/vue-app'
