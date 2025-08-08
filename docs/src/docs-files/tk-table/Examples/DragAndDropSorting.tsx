@@ -63,7 +63,7 @@ const Example = () => {
     <div className="flex flex-col gap-2">
       <TkPopover className="flex justify-end" position="bottom" trigger="click">
         <TkButton variant="neutral" type="outlined" slot="trigger" label="Arrange Columns" />
-        <div slot="content" className="p-2">
+        <div slot="content">
           <div className="flex flex-col gap-2">
             {columns.map((col, index) => (
               <div key={col.field} className="flex justify-between gap-2 py-2 px-3 hover:bg-gray-100 transition-colors">
@@ -165,7 +165,7 @@ const dragAndDropSorting = () => {
           slot="trigger"
           label="Arrange Columns"
         />
-        <div slot="content" className="p-2">
+        <div slot="content">
           <div className="flex flex-col gap-2">
             {columns.map((col, index) => (
               <div
@@ -289,7 +289,7 @@ const handleCheckboxChange = (e: any, col: ITableColumn) => {
         slot="trigger"
         label="Arrange Columns"
       />
-      <div slot="content" style="padding: 8px">
+      <div slot="content">
         <div
           style="display: flex; flex-direction: column; gap: 8px; padding: 8px"
         >
