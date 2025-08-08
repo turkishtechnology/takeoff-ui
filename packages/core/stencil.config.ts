@@ -62,8 +62,6 @@ export const config: Config = {
     reactOutputTarget({
       stencilPackageName: '@takeoff-ui/core',
       outDir: '../react/src',
-      clientModule: '@takeoff-ui/react',
-      includeDefineCustomElements: true,
     }),
     vueOutputTarget({
       includeImportCustomElements: true,

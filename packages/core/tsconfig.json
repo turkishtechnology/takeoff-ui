@@ -16,6 +16,7 @@
     "skipLibCheck": true,
     "jsx": "react",
     "jsxFactory": "h"
+    
   },
   "include": [
     "src",

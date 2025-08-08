@@ -9,30 +9,7 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs.js",
-      "default": "./dist/index.mjs"
-    },
-    "./loader": {
-      "types": "./loader/index.d.ts",
-      "import": "./loader/index.js",
-      "require": "./loader/index.js",
-      "default": "./loader/index.js"
-    },
-    "./components/*.js": {
-      "types": "./dist/types/components/*.d.ts",
-      "import": "./components/*.js"
-    },
-    "./components": {
-      "types": "./dist/types/components.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs.js",
-      "default": "./dist/index.js"
-    }
-  },
+  "unpkg": "dist/core/core.esm.js",
   "files": [
     "dist/",
     "loader/"
