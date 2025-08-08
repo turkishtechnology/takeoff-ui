@@ -2,7 +2,7 @@ import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, S
 import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkUpload component is an interface element that allows users to select and upload files from their devices to a server or a target location. It typically includes a "Choose File" button and a field displaying the selected file's name. This component simplifies the process of file selection and uploading.

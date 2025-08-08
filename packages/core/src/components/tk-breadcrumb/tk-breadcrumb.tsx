@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, Element, h, State, Fragment } from '@stencil/core';
 import classNames from 'classnames';
 import { IBreadcrumbModel } from './interfaces';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The `TkBreadcrumb` provides a navigational aid, allowing users to keep track of their location within the application's hierarchy.

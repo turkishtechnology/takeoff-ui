@@ -17,3 +17,9 @@ export interface IIconOptions {
    */
   fill?: boolean;
 }
+
+/** Interface for multi-position icon configuration */
+export interface IMultiIconOptions {
+  left?: string | IIconOptions;
+  right?: string | IIconOptions;
+}
