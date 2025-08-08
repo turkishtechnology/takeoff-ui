@@ -14,12 +14,11 @@ export const config: Config = {
     //   directivesProxyFile: '../component-library-angular/projects/library/src/directives/proxies.ts',
 
     // }),
-    // reactOutputTarget({
-    //   outDir: '../component-library-react/src',
-    //   hydrateModule: 'component-library/hydrate',
-    //   clientModule: 'component-library-react',
-    //   serializeShadowRoot: { scoped: ['my-counter'], default: 'declarative-shadow-dom' }
-    // }),
+    reactOutputTarget({
+      outDir: '../react/src',
+      hydrateModule: '@takeoff-ui/core/hydrate',
+      clientModule: '@takeoff-ui/react',
+    }),
     // vueOutputTarget({
     //   includeImportCustomElements: true,
     //   includePolyfills: false,
