@@ -37,7 +37,7 @@
     "jest-cli": "^29.7.0",
     "rollup": "^4.18.0"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
   "dependencies": {
     "@floating-ui/dom": "^1.7.0",
