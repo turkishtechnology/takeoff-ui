@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/@takeoff-ui/react.svg)](https://www.npmjs.com/package/@takeoff-ui/react)
 [![npm downloads](https://img.shields.io/npm/dm/@takeoff-ui/react.svg)](https://www.npmjs.com/package/@takeoff-ui/react)
 
-React bindings for the Takeoff UI Design System. This package provides familiar React components generated from the framework-agnostic web components in `@takeoff-ui/core` (built with Stencil.js), enabling a seamless React developer experience with JSX, types, and familiar event props.
+React bindings for the Takeoff UI Design System. This package exposes React components that wrap the framework‑agnostic web components in `@takeoff-ui/core` (built with Stencil.js), giving you a smooth React developer experience.
 
 ## Documentation
 
