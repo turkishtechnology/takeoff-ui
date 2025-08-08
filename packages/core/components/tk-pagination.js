@@ -1,4 +1,4 @@
-import { T as TkPagination$1, d as defineCustomElement$1 } from './p-DVCLG-t4.js';
+import { T as TkPagination$1, d as defineCustomElement$1 } from './p-Dn-_FO5-.js';
 
 const TkPagination = TkPagination$1;
 const defineCustomElement = defineCustomElement$1;

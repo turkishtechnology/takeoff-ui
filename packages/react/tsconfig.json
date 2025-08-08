@@ -7,6 +7,8 @@
     "declaration": true,
     "declarationDir": "./dist",
     "rootDir": "./src",
-    "strict": true
+    "strict": true,
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
   }
 }

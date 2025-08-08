@@ -16,12 +16,6 @@
       "require": "./dist/index.cjs.js",
       "default": "./dist/index.mjs"
     },
-    "./hydrate": {
-      "types": "./hydrate/index.d.ts",
-      "import": "./hydrate/index.mjs",
-      "require": "./hydrate/index.js",
-      "default": "./hydrate/index.mjs"
-    },
     "./loader": {
       "types": "./loader/index.d.ts",
       "import": "./loader/index.js",
@@ -57,11 +51,11 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/angular-output-target": "workspace:*",
+    "@stencil/angular-output-target": "1.1.1",
     "@stencil/core": "4.35.1",
-    "@stencil/react-output-target": "workspace:*",
+    "@stencil/react-output-target": "1.2.0",
+    "@stencil/vue-output-target": "0.11.8",
     "@stencil/sass": "3.0.12",
-    "@stencil/vue-output-target": "workspace:*",
     "@types/jest": "^29.5.6",
     "@types/node": "^16.18.11",
     "@types/puppeteer": "2.0.1",

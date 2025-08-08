@@ -1,4 +1,4 @@
-import { p as proxyCustomElement, H, c as createEvent, h } from './p-CsLMRZQo.js';
+import { p as proxyCustomElement, H, c as createEvent, h } from './p-F5eU3Bfi.js';
 import { a as autoUpdate, c as computePosition, o as offset, f as flip, s as shift } from './p-B0XocndT.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 import { v as v4 } from './p-BF0_OXTe.js';

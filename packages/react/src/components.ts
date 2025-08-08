@@ -6,51 +6,703 @@
  */
 
 /* eslint-disable */
-export {
-  TkAccordion,
-  TkAccordionItem,
-  TkAlert,
-  TkAvatar,
-  TkAvatarGroup,
-  TkBadge,
-  TkBreadcrumb,
-  TkBreadcrumbItem,
-  TkButton,
-  TkCard,
-  TkChart,
-  TkCheckbox,
-  TkChips,
-  TkCurrencyInput,
-  TkDatepicker,
-  TkDialog,
-  TkDivider,
-  TkDrawer,
-  TkDropdown,
-  TkEditor,
-  TkIcon,
-  TkInput,
-  TkOrgChart,
-  TkPagination,
-  TkPhoneInput,
-  TkPopover,
-  TkRadio,
-  TkRadioGroup,
-  TkRating,
-  TkSelect,
-  TkSlider,
-  TkSpinner,
-  TkStep,
-  TkStepper,
-  TkTable,
-  TkTabs,
-  TkTabsItem,
-  TkTextarea,
-  TkTimeline,
-  TkTimelineItem,
-  TkToggle,
-  TkToggleButton,
-  TkToggleButtonGroup,
-  TkTooltip,
-  TkTreeView,
-  TkUpload,
-} from './components.server';
+
+import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
+import { createComponent } from '@stencil/react-output-target/runtime';
+import {
+  type IAccordionItemSelect,
+  type IDateSelection,
+  type IStepClickDetail,
+  type ITableCellEdit,
+  type ITableRequest,
+  type ITreeItem,
+  type TkAccordionCustomEvent,
+  type TkButtonCustomEvent,
+  type TkDatepickerCustomEvent,
+  type TkStepperCustomEvent,
+  type TkTableCustomEvent,
+  type TkTextareaCustomEvent,
+  type TkTreeViewCustomEvent,
+  type TkUploadCustomEvent,
+} from '@takeoff-ui/core';
+import { TkAccordionItem as TkAccordionItemElement, defineCustomElement as defineTkAccordionItem } from '@takeoff-ui/core/components/tk-accordion-item.js';
+import { TkAccordion as TkAccordionElement, defineCustomElement as defineTkAccordion } from '@takeoff-ui/core/components/tk-accordion.js';
+import { TkAlert as TkAlertElement, defineCustomElement as defineTkAlert } from '@takeoff-ui/core/components/tk-alert.js';
+import { TkAvatarGroup as TkAvatarGroupElement, defineCustomElement as defineTkAvatarGroup } from '@takeoff-ui/core/components/tk-avatar-group.js';
+import { TkAvatar as TkAvatarElement, defineCustomElement as defineTkAvatar } from '@takeoff-ui/core/components/tk-avatar.js';
+import { TkBadge as TkBadgeElement, defineCustomElement as defineTkBadge } from '@takeoff-ui/core/components/tk-badge.js';
+import { TkBreadcrumbItem as TkBreadcrumbItemElement, defineCustomElement as defineTkBreadcrumbItem } from '@takeoff-ui/core/components/tk-breadcrumb-item.js';
+import { TkBreadcrumb as TkBreadcrumbElement, defineCustomElement as defineTkBreadcrumb } from '@takeoff-ui/core/components/tk-breadcrumb.js';
+import { TkButton as TkButtonElement, defineCustomElement as defineTkButton } from '@takeoff-ui/core/components/tk-button.js';
+import { TkCard as TkCardElement, defineCustomElement as defineTkCard } from '@takeoff-ui/core/components/tk-card.js';
+import { TkChart as TkChartElement, defineCustomElement as defineTkChart } from '@takeoff-ui/core/components/tk-chart.js';
+import { TkCheckbox as TkCheckboxElement, defineCustomElement as defineTkCheckbox } from '@takeoff-ui/core/components/tk-checkbox.js';
+import { TkChips as TkChipsElement, defineCustomElement as defineTkChips } from '@takeoff-ui/core/components/tk-chips.js';
+import { TkCurrencyInput as TkCurrencyInputElement, defineCustomElement as defineTkCurrencyInput } from '@takeoff-ui/core/components/tk-currency-input.js';
+import { TkDatepicker as TkDatepickerElement, defineCustomElement as defineTkDatepicker } from '@takeoff-ui/core/components/tk-datepicker.js';
+import { TkDialog as TkDialogElement, defineCustomElement as defineTkDialog } from '@takeoff-ui/core/components/tk-dialog.js';
+import { TkDivider as TkDividerElement, defineCustomElement as defineTkDivider } from '@takeoff-ui/core/components/tk-divider.js';
+import { TkDrawer as TkDrawerElement, defineCustomElement as defineTkDrawer } from '@takeoff-ui/core/components/tk-drawer.js';
+import { TkDropdown as TkDropdownElement, defineCustomElement as defineTkDropdown } from '@takeoff-ui/core/components/tk-dropdown.js';
+import { TkEditor as TkEditorElement, defineCustomElement as defineTkEditor } from '@takeoff-ui/core/components/tk-editor.js';
+import { TkIcon as TkIconElement, defineCustomElement as defineTkIcon } from '@takeoff-ui/core/components/tk-icon.js';
+import { TkInput as TkInputElement, defineCustomElement as defineTkInput } from '@takeoff-ui/core/components/tk-input.js';
+import { TkOrgChart as TkOrgChartElement, defineCustomElement as defineTkOrgChart } from '@takeoff-ui/core/components/tk-org-chart.js';
+import { TkPagination as TkPaginationElement, defineCustomElement as defineTkPagination } from '@takeoff-ui/core/components/tk-pagination.js';
+import { TkPhoneInput as TkPhoneInputElement, defineCustomElement as defineTkPhoneInput } from '@takeoff-ui/core/components/tk-phone-input.js';
+import { TkPopover as TkPopoverElement, defineCustomElement as defineTkPopover } from '@takeoff-ui/core/components/tk-popover.js';
+import { TkRadioGroup as TkRadioGroupElement, defineCustomElement as defineTkRadioGroup } from '@takeoff-ui/core/components/tk-radio-group.js';
+import { TkRadio as TkRadioElement, defineCustomElement as defineTkRadio } from '@takeoff-ui/core/components/tk-radio.js';
+import { TkRating as TkRatingElement, defineCustomElement as defineTkRating } from '@takeoff-ui/core/components/tk-rating.js';
+import { TkSelect as TkSelectElement, defineCustomElement as defineTkSelect } from '@takeoff-ui/core/components/tk-select.js';
+import { TkSlider as TkSliderElement, defineCustomElement as defineTkSlider } from '@takeoff-ui/core/components/tk-slider.js';
+import { TkSpinner as TkSpinnerElement, defineCustomElement as defineTkSpinner } from '@takeoff-ui/core/components/tk-spinner.js';
+import { TkStep as TkStepElement, defineCustomElement as defineTkStep } from '@takeoff-ui/core/components/tk-step.js';
+import { TkStepper as TkStepperElement, defineCustomElement as defineTkStepper } from '@takeoff-ui/core/components/tk-stepper.js';
+import { TkTable as TkTableElement, defineCustomElement as defineTkTable } from '@takeoff-ui/core/components/tk-table.js';
+import { TkTabsItem as TkTabsItemElement, defineCustomElement as defineTkTabsItem } from '@takeoff-ui/core/components/tk-tabs-item.js';
+import { TkTabs as TkTabsElement, defineCustomElement as defineTkTabs } from '@takeoff-ui/core/components/tk-tabs.js';
+import { TkTextarea as TkTextareaElement, defineCustomElement as defineTkTextarea } from '@takeoff-ui/core/components/tk-textarea.js';
+import { TkTimelineItem as TkTimelineItemElement, defineCustomElement as defineTkTimelineItem } from '@takeoff-ui/core/components/tk-timeline-item.js';
+import { TkTimeline as TkTimelineElement, defineCustomElement as defineTkTimeline } from '@takeoff-ui/core/components/tk-timeline.js';
+import { TkToggleButtonGroup as TkToggleButtonGroupElement, defineCustomElement as defineTkToggleButtonGroup } from '@takeoff-ui/core/components/tk-toggle-button-group.js';
+import { TkToggleButton as TkToggleButtonElement, defineCustomElement as defineTkToggleButton } from '@takeoff-ui/core/components/tk-toggle-button.js';
+import { TkToggle as TkToggleElement, defineCustomElement as defineTkToggle } from '@takeoff-ui/core/components/tk-toggle.js';
+import { TkTooltip as TkTooltipElement, defineCustomElement as defineTkTooltip } from '@takeoff-ui/core/components/tk-tooltip.js';
+import { TkTreeView as TkTreeViewElement, defineCustomElement as defineTkTreeView } from '@takeoff-ui/core/components/tk-tree-view.js';
+import { TkUpload as TkUploadElement, defineCustomElement as defineTkUpload } from '@takeoff-ui/core/components/tk-upload.js';
+import React from 'react';
+
+type TkAccordionEvents = { onTkAccordionItemSelected: EventName<TkAccordionCustomEvent<IAccordionItemSelect>> };
+
+export const TkAccordion: StencilReactComponent<TkAccordionElement, TkAccordionEvents> = /*@__PURE__*/ createComponent<TkAccordionElement, TkAccordionEvents>({
+  tagName: 'tk-accordion',
+  elementClass: TkAccordionElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkAccordionItemSelected: 'tkAccordionItemSelected' } as TkAccordionEvents,
+  defineCustomElement: defineTkAccordion,
+});
+
+type TkAccordionItemEvents = NonNullable<unknown>;
+
+export const TkAccordionItem: StencilReactComponent<TkAccordionItemElement, TkAccordionItemEvents> = /*@__PURE__*/ createComponent<TkAccordionItemElement, TkAccordionItemEvents>({
+  tagName: 'tk-accordion-item',
+  elementClass: TkAccordionItemElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkAccordionItemEvents,
+  defineCustomElement: defineTkAccordionItem,
+});
+
+type TkAlertEvents = NonNullable<unknown>;
+
+export const TkAlert: StencilReactComponent<TkAlertElement, TkAlertEvents> = /*@__PURE__*/ createComponent<TkAlertElement, TkAlertEvents>({
+  tagName: 'tk-alert',
+  elementClass: TkAlertElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkAlertEvents,
+  defineCustomElement: defineTkAlert,
+});
+
+type TkAvatarEvents = NonNullable<unknown>;
+
+export const TkAvatar: StencilReactComponent<TkAvatarElement, TkAvatarEvents> = /*@__PURE__*/ createComponent<TkAvatarElement, TkAvatarEvents>({
+  tagName: 'tk-avatar',
+  elementClass: TkAvatarElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkAvatarEvents,
+  defineCustomElement: defineTkAvatar,
+});
+
+type TkAvatarGroupEvents = NonNullable<unknown>;
+
+export const TkAvatarGroup: StencilReactComponent<TkAvatarGroupElement, TkAvatarGroupEvents> = /*@__PURE__*/ createComponent<TkAvatarGroupElement, TkAvatarGroupEvents>({
+  tagName: 'tk-avatar-group',
+  elementClass: TkAvatarGroupElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkAvatarGroupEvents,
+  defineCustomElement: defineTkAvatarGroup,
+});
+
+type TkBadgeEvents = NonNullable<unknown>;
+
+export const TkBadge: StencilReactComponent<TkBadgeElement, TkBadgeEvents> = /*@__PURE__*/ createComponent<TkBadgeElement, TkBadgeEvents>({
+  tagName: 'tk-badge',
+  elementClass: TkBadgeElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkBadgeEvents,
+  defineCustomElement: defineTkBadge,
+});
+
+type TkBreadcrumbEvents = NonNullable<unknown>;
+
+export const TkBreadcrumb: StencilReactComponent<TkBreadcrumbElement, TkBreadcrumbEvents> = /*@__PURE__*/ createComponent<TkBreadcrumbElement, TkBreadcrumbEvents>({
+  tagName: 'tk-breadcrumb',
+  elementClass: TkBreadcrumbElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkBreadcrumbEvents,
+  defineCustomElement: defineTkBreadcrumb,
+});
+
+type TkBreadcrumbItemEvents = NonNullable<unknown>;
+
+export const TkBreadcrumbItem: StencilReactComponent<TkBreadcrumbItemElement, TkBreadcrumbItemEvents> = /*@__PURE__*/ createComponent<
+  TkBreadcrumbItemElement,
+  TkBreadcrumbItemEvents
+>({
+  tagName: 'tk-breadcrumb-item',
+  elementClass: TkBreadcrumbItemElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkBreadcrumbItemEvents,
+  defineCustomElement: defineTkBreadcrumbItem,
+});
+
+type TkButtonEvents = { onTkClick: EventName<TkButtonCustomEvent<MouseEvent>> };
+
+export const TkButton: StencilReactComponent<TkButtonElement, TkButtonEvents> = /*@__PURE__*/ createComponent<TkButtonElement, TkButtonEvents>({
+  tagName: 'tk-button',
+  elementClass: TkButtonElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkClick: 'tk-click' } as TkButtonEvents,
+  defineCustomElement: defineTkButton,
+});
+
+type TkCardEvents = NonNullable<unknown>;
+
+export const TkCard: StencilReactComponent<TkCardElement, TkCardEvents> = /*@__PURE__*/ createComponent<TkCardElement, TkCardEvents>({
+  tagName: 'tk-card',
+  elementClass: TkCardElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkCardEvents,
+  defineCustomElement: defineTkCard,
+});
+
+type TkChartEvents = NonNullable<unknown>;
+
+export const TkChart: StencilReactComponent<TkChartElement, TkChartEvents> = /*@__PURE__*/ createComponent<TkChartElement, TkChartEvents>({
+  tagName: 'tk-chart',
+  elementClass: TkChartElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkChartEvents,
+  defineCustomElement: defineTkChart,
+});
+
+type TkCheckboxEvents = { onTkChange: EventName<CustomEvent<boolean>> };
+
+export const TkCheckbox: StencilReactComponent<TkCheckboxElement, TkCheckboxEvents> = /*@__PURE__*/ createComponent<TkCheckboxElement, TkCheckboxEvents>({
+  tagName: 'tk-checkbox',
+  elementClass: TkCheckboxElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkCheckboxEvents,
+  defineCustomElement: defineTkCheckbox,
+});
+
+type TkChipsEvents = { onTkRemove: EventName<CustomEvent<any>> };
+
+export const TkChips: StencilReactComponent<TkChipsElement, TkChipsEvents> = /*@__PURE__*/ createComponent<TkChipsElement, TkChipsEvents>({
+  tagName: 'tk-chips',
+  elementClass: TkChipsElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkRemove: 'tk-remove' } as TkChipsEvents,
+  defineCustomElement: defineTkChips,
+});
+
+type TkCurrencyInputEvents = {
+  onTkChange: EventName<CustomEvent<any>>;
+  onTkBlur: EventName<CustomEvent<void>>;
+  onTkFocus: EventName<CustomEvent<void>>;
+};
+
+export const TkCurrencyInput: StencilReactComponent<TkCurrencyInputElement, TkCurrencyInputEvents> = /*@__PURE__*/ createComponent<TkCurrencyInputElement, TkCurrencyInputEvents>({
+  tagName: 'tk-currency-input',
+  elementClass: TkCurrencyInputElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkChange: 'tk-change',
+    onTkBlur: 'tkBlur',
+    onTkFocus: 'tkFocus',
+  } as TkCurrencyInputEvents,
+  defineCustomElement: defineTkCurrencyInput,
+});
+
+type TkDatepickerEvents = {
+  onTkInputChange: EventName<CustomEvent<string>>;
+  onTkChange: EventName<TkDatepickerCustomEvent<IDateSelection | string>>;
+};
+
+export const TkDatepicker: StencilReactComponent<TkDatepickerElement, TkDatepickerEvents> = /*@__PURE__*/ createComponent<TkDatepickerElement, TkDatepickerEvents>({
+  tagName: 'tk-datepicker',
+  elementClass: TkDatepickerElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkInputChange: 'tk-input-change',
+    onTkChange: 'tk-change',
+  } as TkDatepickerEvents,
+  defineCustomElement: defineTkDatepicker,
+});
+
+type TkDialogEvents = {
+  onTkClose: EventName<CustomEvent<void>>;
+  onTkOpen: EventName<CustomEvent<void>>;
+  onTkVisibleChange: EventName<CustomEvent<boolean>>;
+};
+
+export const TkDialog: StencilReactComponent<TkDialogElement, TkDialogEvents> = /*@__PURE__*/ createComponent<TkDialogElement, TkDialogEvents>({
+  tagName: 'tk-dialog',
+  elementClass: TkDialogElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkClose: 'tk-close',
+    onTkOpen: 'tk-open',
+    onTkVisibleChange: 'tk-visible-change',
+  } as TkDialogEvents,
+  defineCustomElement: defineTkDialog,
+});
+
+type TkDividerEvents = NonNullable<unknown>;
+
+export const TkDivider: StencilReactComponent<TkDividerElement, TkDividerEvents> = /*@__PURE__*/ createComponent<TkDividerElement, TkDividerEvents>({
+  tagName: 'tk-divider',
+  elementClass: TkDividerElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkDividerEvents,
+  defineCustomElement: defineTkDivider,
+});
+
+type TkDrawerEvents = {
+  onTkDrawerClose: EventName<CustomEvent<void>>;
+  onTkDrawerOpen: EventName<CustomEvent<void>>;
+  onTkDrawerEnter: EventName<CustomEvent<void>>;
+  onTkDrawerLeave: EventName<CustomEvent<void>>;
+  onTkDrawerChange: EventName<CustomEvent<boolean>>;
+};
+
+export const TkDrawer: StencilReactComponent<TkDrawerElement, TkDrawerEvents> = /*@__PURE__*/ createComponent<TkDrawerElement, TkDrawerEvents>({
+  tagName: 'tk-drawer',
+  elementClass: TkDrawerElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkDrawerClose: 'tk-drawer-close',
+    onTkDrawerOpen: 'tk-drawer-open',
+    onTkDrawerEnter: 'tk-drawer-enter',
+    onTkDrawerLeave: 'tk-drawer-leave',
+    onTkDrawerChange: 'tk-drawer-change',
+  } as TkDrawerEvents,
+  defineCustomElement: defineTkDrawer,
+});
+
+type TkDropdownEvents = { onTkItemClick: EventName<CustomEvent<any>> };
+
+export const TkDropdown: StencilReactComponent<TkDropdownElement, TkDropdownEvents> = /*@__PURE__*/ createComponent<TkDropdownElement, TkDropdownEvents>({
+  tagName: 'tk-dropdown',
+  elementClass: TkDropdownElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkItemClick: 'tk-item-click' } as TkDropdownEvents,
+  defineCustomElement: defineTkDropdown,
+});
+
+type TkEditorEvents = {
+  onTkChange: EventName<CustomEvent<string>>;
+  onTkFocus: EventName<CustomEvent<void>>;
+  onTkBlur: EventName<CustomEvent<void>>;
+};
+
+export const TkEditor: StencilReactComponent<TkEditorElement, TkEditorEvents> = /*@__PURE__*/ createComponent<TkEditorElement, TkEditorEvents>({
+  tagName: 'tk-editor',
+  elementClass: TkEditorElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkChange: 'tk-change',
+    onTkFocus: 'tkFocus',
+    onTkBlur: 'tkBlur',
+  } as TkEditorEvents,
+  defineCustomElement: defineTkEditor,
+});
+
+type TkIconEvents = NonNullable<unknown>;
+
+export const TkIcon: StencilReactComponent<TkIconElement, TkIconEvents> = /*@__PURE__*/ createComponent<TkIconElement, TkIconEvents>({
+  tagName: 'tk-icon',
+  elementClass: TkIconElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkIconEvents,
+  defineCustomElement: defineTkIcon,
+});
+
+type TkInputEvents = {
+  onTkChange: EventName<CustomEvent<any>>;
+  onTkBlur: EventName<CustomEvent<void>>;
+  onTkFocus: EventName<CustomEvent<void>>;
+  onTkClearClick: EventName<CustomEvent<void>>;
+};
+
+export const TkInput: StencilReactComponent<TkInputElement, TkInputEvents> = /*@__PURE__*/ createComponent<TkInputElement, TkInputEvents>({
+  tagName: 'tk-input',
+  elementClass: TkInputElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkChange: 'tk-change',
+    onTkBlur: 'tk-blur',
+    onTkFocus: 'tk-focus',
+    onTkClearClick: 'tk-clear-click',
+  } as TkInputEvents,
+  defineCustomElement: defineTkInput,
+});
+
+type TkOrgChartEvents = { onTkNodeClick: EventName<CustomEvent<any>> };
+
+export const TkOrgChart: StencilReactComponent<TkOrgChartElement, TkOrgChartEvents> = /*@__PURE__*/ createComponent<TkOrgChartElement, TkOrgChartEvents>({
+  tagName: 'tk-org-chart',
+  elementClass: TkOrgChartElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkNodeClick: 'tk-node-click' } as TkOrgChartEvents,
+  defineCustomElement: defineTkOrgChart,
+});
+
+type TkPaginationEvents = {
+  onTkNextPage: EventName<CustomEvent<{ page: number }>>;
+  onTkPageChange: EventName<CustomEvent<{ page: number; totalPages: number; startItem: number; endItem: number }>>;
+  onTkPrevPage: EventName<CustomEvent<{ page: number }>>;
+  onTkRowsPerPageChange: EventName<CustomEvent<number>>;
+};
+
+export const TkPagination: StencilReactComponent<TkPaginationElement, TkPaginationEvents> = /*@__PURE__*/ createComponent<TkPaginationElement, TkPaginationEvents>({
+  tagName: 'tk-pagination',
+  elementClass: TkPaginationElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkNextPage: 'tk-next-page',
+    onTkPageChange: 'tk-page-change',
+    onTkPrevPage: 'tk-prev-page',
+    onTkRowsPerPageChange: 'tk-rows-per-page-change',
+  } as TkPaginationEvents,
+  defineCustomElement: defineTkPagination,
+});
+
+type TkPhoneInputEvents = {
+  onTkChange: EventName<CustomEvent<any>>;
+  onTkBlur: EventName<CustomEvent<void>>;
+  onTkFocus: EventName<CustomEvent<void>>;
+};
+
+export const TkPhoneInput: StencilReactComponent<TkPhoneInputElement, TkPhoneInputEvents> = /*@__PURE__*/ createComponent<TkPhoneInputElement, TkPhoneInputEvents>({
+  tagName: 'tk-phone-input',
+  elementClass: TkPhoneInputElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkChange: 'tk-change',
+    onTkBlur: 'tk-blur',
+    onTkFocus: 'tk-focus',
+  } as TkPhoneInputEvents,
+  defineCustomElement: defineTkPhoneInput,
+});
+
+type TkPopoverEvents = NonNullable<unknown>;
+
+export const TkPopover: StencilReactComponent<TkPopoverElement, TkPopoverEvents> = /*@__PURE__*/ createComponent<TkPopoverElement, TkPopoverEvents>({
+  tagName: 'tk-popover',
+  elementClass: TkPopoverElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkPopoverEvents,
+  defineCustomElement: defineTkPopover,
+});
+
+type TkRadioEvents = { onTkChange: EventName<CustomEvent<any>> };
+
+export const TkRadio: StencilReactComponent<TkRadioElement, TkRadioEvents> = /*@__PURE__*/ createComponent<TkRadioElement, TkRadioEvents>({
+  tagName: 'tk-radio',
+  elementClass: TkRadioElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkRadioEvents,
+  defineCustomElement: defineTkRadio,
+});
+
+type TkRadioGroupEvents = { onTkChange: EventName<CustomEvent<any>> };
+
+export const TkRadioGroup: StencilReactComponent<TkRadioGroupElement, TkRadioGroupEvents> = /*@__PURE__*/ createComponent<TkRadioGroupElement, TkRadioGroupEvents>({
+  tagName: 'tk-radio-group',
+  elementClass: TkRadioGroupElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkRadioGroupEvents,
+  defineCustomElement: defineTkRadioGroup,
+});
+
+type TkRatingEvents = { onTkChange: EventName<CustomEvent<number>> };
+
+export const TkRating: StencilReactComponent<TkRatingElement, TkRatingEvents> = /*@__PURE__*/ createComponent<TkRatingElement, TkRatingEvents>({
+  tagName: 'tk-rating',
+  elementClass: TkRatingElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkRatingEvents,
+  defineCustomElement: defineTkRating,
+});
+
+type TkSelectEvents = { onTkChange: EventName<CustomEvent<any>> };
+
+export const TkSelect: StencilReactComponent<TkSelectElement, TkSelectEvents> = /*@__PURE__*/ createComponent<TkSelectElement, TkSelectEvents>({
+  tagName: 'tk-select',
+  elementClass: TkSelectElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkSelectEvents,
+  defineCustomElement: defineTkSelect,
+});
+
+type TkSliderEvents = { onTkChange: EventName<CustomEvent<number | [number, number]>> };
+
+export const TkSlider: StencilReactComponent<TkSliderElement, TkSliderEvents> = /*@__PURE__*/ createComponent<TkSliderElement, TkSliderEvents>({
+  tagName: 'tk-slider',
+  elementClass: TkSliderElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tkChange' } as TkSliderEvents,
+  defineCustomElement: defineTkSlider,
+});
+
+type TkSpinnerEvents = NonNullable<unknown>;
+
+export const TkSpinner: StencilReactComponent<TkSpinnerElement, TkSpinnerEvents> = /*@__PURE__*/ createComponent<TkSpinnerElement, TkSpinnerEvents>({
+  tagName: 'tk-spinner',
+  elementClass: TkSpinnerElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkSpinnerEvents,
+  defineCustomElement: defineTkSpinner,
+});
+
+type TkStepEvents = NonNullable<unknown>;
+
+export const TkStep: StencilReactComponent<TkStepElement, TkStepEvents> = /*@__PURE__*/ createComponent<TkStepElement, TkStepEvents>({
+  tagName: 'tk-step',
+  elementClass: TkStepElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkStepEvents,
+  defineCustomElement: defineTkStep,
+});
+
+type TkStepperEvents = {
+  onTkStepChange: EventName<CustomEvent<number>>;
+  onTkStepClick: EventName<TkStepperCustomEvent<IStepClickDetail>>;
+};
+
+export const TkStepper: StencilReactComponent<TkStepperElement, TkStepperEvents> = /*@__PURE__*/ createComponent<TkStepperElement, TkStepperEvents>({
+  tagName: 'tk-stepper',
+  elementClass: TkStepperElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkStepChange: 'tk-step-change',
+    onTkStepClick: 'tk-step-click',
+  } as TkStepperEvents,
+  defineCustomElement: defineTkStepper,
+});
+
+type TkTableEvents = {
+  onTkSelectionChange: EventName<CustomEvent<any[] | any>>;
+  onTkRequest: EventName<TkTableCustomEvent<ITableRequest>>;
+  onTkExpandedRowsChange: EventName<CustomEvent<any[]>>;
+  onTkCellEdit: EventName<TkTableCustomEvent<ITableCellEdit>>;
+  onTkRowClick: EventName<CustomEvent<any>>;
+};
+
+export const TkTable: StencilReactComponent<TkTableElement, TkTableEvents> = /*@__PURE__*/ createComponent<TkTableElement, TkTableEvents>({
+  tagName: 'tk-table',
+  elementClass: TkTableElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkSelectionChange: 'tk-selection-change',
+    onTkRequest: 'tk-request',
+    onTkExpandedRowsChange: 'tk-expanded-rows-change',
+    onTkCellEdit: 'tk-cell-edit',
+    onTkRowClick: 'tk-row-click',
+  } as TkTableEvents,
+  defineCustomElement: defineTkTable,
+});
+
+type TkTabsEvents = {
+  onTkTabClick: EventName<CustomEvent<number>>;
+  onTkTabChange: EventName<CustomEvent<number>>;
+};
+
+export const TkTabs: StencilReactComponent<TkTabsElement, TkTabsEvents> = /*@__PURE__*/ createComponent<TkTabsElement, TkTabsEvents>({
+  tagName: 'tk-tabs',
+  elementClass: TkTabsElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkTabClick: 'tk-tab-click',
+    onTkTabChange: 'tk-tab-change',
+  } as TkTabsEvents,
+  defineCustomElement: defineTkTabs,
+});
+
+type TkTabsItemEvents = NonNullable<unknown>;
+
+export const TkTabsItem: StencilReactComponent<TkTabsItemElement, TkTabsItemEvents> = /*@__PURE__*/ createComponent<TkTabsItemElement, TkTabsItemEvents>({
+  tagName: 'tk-tabs-item',
+  elementClass: TkTabsItemElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkTabsItemEvents,
+  defineCustomElement: defineTkTabsItem,
+});
+
+type TkTextareaEvents = {
+  onTkInput: EventName<TkTextareaCustomEvent<KeyboardEvent>>;
+  onTkChange: EventName<CustomEvent<string | number | undefined | null>>;
+  onTkBlur: EventName<CustomEvent<void>>;
+  onTkFocus: EventName<CustomEvent<void>>;
+};
+
+export const TkTextarea: StencilReactComponent<TkTextareaElement, TkTextareaEvents> = /*@__PURE__*/ createComponent<TkTextareaElement, TkTextareaEvents>({
+  tagName: 'tk-textarea',
+  elementClass: TkTextareaElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkInput: 'tk-input',
+    onTkChange: 'tk-change',
+    onTkBlur: 'tk-blur',
+    onTkFocus: 'tk-focus',
+  } as TkTextareaEvents,
+  defineCustomElement: defineTkTextarea,
+});
+
+type TkTimelineEvents = NonNullable<unknown>;
+
+export const TkTimeline: StencilReactComponent<TkTimelineElement, TkTimelineEvents> = /*@__PURE__*/ createComponent<TkTimelineElement, TkTimelineEvents>({
+  tagName: 'tk-timeline',
+  elementClass: TkTimelineElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkTimelineEvents,
+  defineCustomElement: defineTkTimeline,
+});
+
+type TkTimelineItemEvents = NonNullable<unknown>;
+
+export const TkTimelineItem: StencilReactComponent<TkTimelineItemElement, TkTimelineItemEvents> = /*@__PURE__*/ createComponent<TkTimelineItemElement, TkTimelineItemEvents>({
+  tagName: 'tk-timeline-item',
+  elementClass: TkTimelineItemElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkTimelineItemEvents,
+  defineCustomElement: defineTkTimelineItem,
+});
+
+type TkToggleEvents = { onTkChange: EventName<CustomEvent<boolean>> };
+
+export const TkToggle: StencilReactComponent<TkToggleElement, TkToggleEvents> = /*@__PURE__*/ createComponent<TkToggleElement, TkToggleEvents>({
+  tagName: 'tk-toggle',
+  elementClass: TkToggleElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkToggleEvents,
+  defineCustomElement: defineTkToggle,
+});
+
+type TkToggleButtonEvents = { onTkToggle: EventName<CustomEvent<any>> };
+
+export const TkToggleButton: StencilReactComponent<TkToggleButtonElement, TkToggleButtonEvents> = /*@__PURE__*/ createComponent<TkToggleButtonElement, TkToggleButtonEvents>({
+  tagName: 'tk-toggle-button',
+  elementClass: TkToggleButtonElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkToggle: 'tk-toggle' } as TkToggleButtonEvents,
+  defineCustomElement: defineTkToggleButton,
+});
+
+type TkToggleButtonGroupEvents = { onTkChange: EventName<CustomEvent<any>> };
+
+export const TkToggleButtonGroup: StencilReactComponent<TkToggleButtonGroupElement, TkToggleButtonGroupEvents> = /*@__PURE__*/ createComponent<
+  TkToggleButtonGroupElement,
+  TkToggleButtonGroupEvents
+>({
+  tagName: 'tk-toggle-button-group',
+  elementClass: TkToggleButtonGroupElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: { onTkChange: 'tk-change' } as TkToggleButtonGroupEvents,
+  defineCustomElement: defineTkToggleButtonGroup,
+});
+
+type TkTooltipEvents = NonNullable<unknown>;
+
+export const TkTooltip: StencilReactComponent<TkTooltipElement, TkTooltipEvents> = /*@__PURE__*/ createComponent<TkTooltipElement, TkTooltipEvents>({
+  tagName: 'tk-tooltip',
+  elementClass: TkTooltipElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {} as TkTooltipEvents,
+  defineCustomElement: defineTkTooltip,
+});
+
+type TkTreeViewEvents = {
+  onTkItemClick: EventName<TkTreeViewCustomEvent<ITreeItem>>;
+  onTkChange: EventName<CustomEvent<string[]>>;
+};
+
+export const TkTreeView: StencilReactComponent<TkTreeViewElement, TkTreeViewEvents> = /*@__PURE__*/ createComponent<TkTreeViewElement, TkTreeViewEvents>({
+  tagName: 'tk-tree-view',
+  elementClass: TkTreeViewElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkItemClick: 'tk-item-click',
+    onTkChange: 'tk-change',
+  } as TkTreeViewEvents,
+  defineCustomElement: defineTkTreeView,
+});
+
+type TkUploadEvents = {
+  onTkChange: EventName<TkUploadCustomEvent<File[]>>;
+  onTkFilesRejected: EventName<TkUploadCustomEvent<{ reason: string; file: File | FileList }[]>>;
+  onTkUpload: EventName<TkUploadCustomEvent<File[]>>;
+  onTkRemovedFile: EventName<TkUploadCustomEvent<File>>;
+  onTkDownloadFile: EventName<TkUploadCustomEvent<File>>;
+};
+
+export const TkUpload: StencilReactComponent<TkUploadElement, TkUploadEvents> = /*@__PURE__*/ createComponent<TkUploadElement, TkUploadEvents>({
+  tagName: 'tk-upload',
+  elementClass: TkUploadElement,
+  // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+  react: React,
+  events: {
+    onTkChange: 'tk-change',
+    onTkFilesRejected: 'tk-files-rejected',
+    onTkUpload: 'tk-upload',
+    onTkRemovedFile: 'tk-removed-file',
+    onTkDownloadFile: 'tk-download-file',
+  } as TkUploadEvents,
+  defineCustomElement: defineTkUpload,
+});

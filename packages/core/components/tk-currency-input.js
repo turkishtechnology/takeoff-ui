@@ -1,8 +1,8 @@
-import { p as proxyCustomElement, H, c as createEvent, h } from './p-CsLMRZQo.js';
+import { p as proxyCustomElement, H, c as createEvent, h } from './p-F5eU3Bfi.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 import { a as autoUpdate, c as computePosition, o as offset, f as flip, s as shift } from './p-B0XocndT.js';
 import { g as getIconElementProps } from './p-DwXIfk8y.js';
-import { d as defineCustomElement$2 } from './p-vR69rcDp.js';
+import { d as defineCustomElement$2 } from './p-75KyitY6.js';
 import { v as v4 } from './p-BF0_OXTe.js';
 
 const INTERNAL_CURRENCY_LIST = [

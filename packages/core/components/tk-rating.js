@@ -1,4 +1,4 @@
-import { h, p as proxyCustomElement, H, c as createEvent } from './p-CsLMRZQo.js';
+import { h, p as proxyCustomElement, H, c as createEvent } from './p-F5eU3Bfi.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 
 const getIcon = (type = 'star', state = 'default') => {

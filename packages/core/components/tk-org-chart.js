@@ -1,4 +1,4 @@
-import { p as proxyCustomElement, H, c as createEvent, h } from './p-CsLMRZQo.js';
+import { p as proxyCustomElement, H, c as createEvent, h } from './p-F5eU3Bfi.js';
 import { l as lodashExports } from './p-BVf-UonN.js';
 import { g as getAugmentedNamespace } from './p-Dr0z5XX9.js';
 

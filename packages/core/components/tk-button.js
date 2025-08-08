@@ -1,4 +1,4 @@
-import { T as TkButton$1, d as defineCustomElement$1 } from './p-DFQnxT5R.js';
+import { T as TkButton$1, d as defineCustomElement$1 } from './p-DOzOzA8V.js';
 
 const TkButton = TkButton$1;
 const defineCustomElement = defineCustomElement$1;

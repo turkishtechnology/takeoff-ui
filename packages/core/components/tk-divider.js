@@ -1,4 +1,4 @@
-import { T as TkDivider$1, d as defineCustomElement$1 } from './p-t-FXzcgX.js';
+import { T as TkDivider$1, d as defineCustomElement$1 } from './p-QOLD8QYn.js';
 
 const TkDivider = TkDivider$1;
 const defineCustomElement = defineCustomElement$1;
