@@ -1,0 +1,12 @@
+{
+  "name": "@takeoff-ui/core/hydrate",
+  "description": "core component hydration app.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    }
+  }
+}

@@ -9,17 +9,45 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/core/core.esm.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.mjs"
+    },
+    "./hydrate": {
+      "types": "./hydrate/index.d.ts",
+      "import": "./hydrate/index.mjs",
+      "require": "./hydrate/index.js",
+      "default": "./hydrate/index.mjs"
+    },
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js",
+      "require": "./loader/index.js",
+      "default": "./loader/index.js"
+    },
+    "./components/*.js": {
+      "types": "./dist/types/components/*.d.ts",
+      "import": "./components/*.js"
+    },
+    "./components": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js"
+    }
+  },
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/turkishtechnology/takeoff-ui.git"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+
   "scripts": {
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
@@ -29,13 +57,18 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "4.26.0",
+    "@stencil/angular-output-target": "workspace:*",
+    "@stencil/core": "4.35.1",
+    "@stencil/react-output-target": "workspace:*",
     "@stencil/sass": "3.0.12",
+    "@stencil/vue-output-target": "workspace:*",
     "@types/jest": "^29.5.6",
     "@types/node": "^16.18.11",
+    "@types/puppeteer": "2.0.1",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
-    "rollup": "^4.18.0"
+    "rollup": "^4.18.0",
+    "rollup-plugin-node-polyfills": "^0.2.1"
   },
   "license": "MIT",
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
