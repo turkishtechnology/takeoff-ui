@@ -11,7 +11,7 @@ React bindings for the Takeoff UI Design System. This package provides familiar 
 
 - Full docs: [Introduction](https://takeoff-ui-blond.vercel.app/docs/Introduction)
 - Getting started: [Installation Guide](https://takeoff-ui-blond.vercel.app/docs/Installation)
-- Component APIs and examples: See the Components section in the docs
+- Component APIs and examples: [Components Overview](https://takeoff-ui-blond.vercel.app/docs/Components/Overview)  
 
 ## Installation
 
@@ -64,7 +64,7 @@ export default function App() {
 
 ### Next.js (App Router) note
 
-- Use these components in a client component (the generated wrappers are client-ready).
+- These proxies include 'use client'; use them inside Client Components.
 - Import `@takeoff-ui/core/dist/core/core.css` in your global CSS or root layout.
 
 ## Features
@@ -78,7 +78,7 @@ export default function App() {
 
 Takeoff UI ships with a Tailwind CSS plugin for tokens and utilities. See the docs for setup and usage details.
 
-- Tailwind plugin: see the Tailwind CSS Plugin section in the docs
+- [Tailwind CSS Plugin](https://takeoff-ui-blond.vercel.app/docs/Tailwind)
 
 ## Contributing
 
