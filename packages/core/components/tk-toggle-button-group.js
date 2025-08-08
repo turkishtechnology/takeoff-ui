@@ -1,8 +1,8 @@
-import { p as proxyCustomElement, H, c as createEvent, h } from './p-B4rZamdt.js';
+import { p as proxyCustomElement, H, c as createEvent, h } from './p-CsLMRZQo.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 
-const tkToggleButtonGroupScss =
-  '.tk-toggle-button-group {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  padding: 4px;\n  align-self: stretch;\n  background: var(--static-Light, #fff);\n  border-radius: 12px;\n\n  &.light {\n    border: 1px solid var(--border-light, #e1e4ea);\n    background: var(--background-lightest, #f9fafc);\n  }\n\n  &.divided {\n    border: 1px solid var(--border-light, #e1e4ea);\n  }\n\n  &.horizontal {\n    flex-direction: row;\n\n    &.rounded {\n      border-radius: 999px;\n    }\n  }\n\n  &.vertical {\n    flex-direction: column;\n\n    &.rounded {\n      border-radius: 24px;\n    }\n  }\n}\n';
+const tkToggleButtonGroupCss =
+  '@font-face{font-family:"Material Symbols Outlined";src:url("./assets/fonts/Material-Symbols-Outlined.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-outlined{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-outlined{font-variation-settings:"FILL" 0}.material-symbols-outlined.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Rounded";src:url("./assets/fonts/Material-Symbols-Rounded.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:"FILL" 0}.material-symbols-rounded.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Sharp";src:url("./assets/fonts/Material-Symbols-Sharp.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-sharp{font-family:"Material Symbols Sharp";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-sharp{font-variation-settings:"FILL" 0}.material-symbols-sharp.fill{font-variation-settings:"FILL" 1}.tk-toggle-button-group{display:flex;align-items:center;gap:8px;width:100%;padding:4px;align-self:stretch;background:var(--static-Light, #fff);border-radius:12px}.tk-toggle-button-group.light{border:1px solid var(--border-light, #e1e4ea);background:var(--background-lightest, #f9fafc)}.tk-toggle-button-group.divided{border:1px solid var(--border-light, #e1e4ea)}.tk-toggle-button-group.horizontal{flex-direction:row}.tk-toggle-button-group.horizontal.rounded{border-radius:999px}.tk-toggle-button-group.vertical{flex-direction:column}.tk-toggle-button-group.vertical.rounded{border-radius:24px}';
 
 const TkToggleButtonGroup$1 = /*@__PURE__*/ proxyCustomElement(
   class TkToggleButtonGroup extends H {
@@ -84,7 +84,7 @@ const TkToggleButtonGroup$1 = /*@__PURE__*/ proxyCustomElement(
       };
     }
     static get style() {
-      return tkToggleButtonGroupScss;
+      return tkToggleButtonGroupCss;
     }
   },
   [

@@ -1,4 +1,4 @@
-import { T as TkBreadcrumbItem$1, d as defineCustomElement$1 } from './p-x-rqbSpx.js';
+import { T as TkBreadcrumbItem$1, d as defineCustomElement$1 } from './p-DquuPHrA.js';
 
 const TkBreadcrumbItem = TkBreadcrumbItem$1;
 const defineCustomElement = defineCustomElement$1;

@@ -1,4 +1,4 @@
-import { p as proxyCustomElement, H, h } from './p-B4rZamdt.js';
+import { p as proxyCustomElement, H, h } from './p-CsLMRZQo.js';
 import { l as lodashExports } from './p-BVf-UonN.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 
@@ -15010,8 +15010,8 @@ function getDefaultOptionsForType(type) {
         Debug final plugins
 */
 
-const tkChartScss =
-  '.tk-chart-container {\n  position: relative;\n  box-sizing: border-box;\n  margin: auto;\n  width: 100%;\n  height: 100%;\n  canvas {\n    width: 100%;\n    height: 100%;\n  }\n\n  // Style-based classes\n  &.tk-chart-bar {\n    background-color: transparent;\n  }\n\n  &.tk-chart-pie {\n    background-color: #f9fafb;\n    border-radius: 8px;\n    padding: 16px;\n  }\n}\n';
+const tkChartCss =
+  '@font-face{font-family:"Material Symbols Outlined";src:url("./assets/fonts/Material-Symbols-Outlined.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-outlined{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-outlined{font-variation-settings:"FILL" 0}.material-symbols-outlined.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Rounded";src:url("./assets/fonts/Material-Symbols-Rounded.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:"FILL" 0}.material-symbols-rounded.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Sharp";src:url("./assets/fonts/Material-Symbols-Sharp.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-sharp{font-family:"Material Symbols Sharp";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-sharp{font-variation-settings:"FILL" 0}.material-symbols-sharp.fill{font-variation-settings:"FILL" 1}.tk-chart-container{position:relative;box-sizing:border-box;margin:auto;width:100%;height:100%}.tk-chart-container canvas{width:100%;height:100%}.tk-chart-container.tk-chart-bar{background-color:transparent}.tk-chart-container.tk-chart-pie{background-color:#f9fafb;border-radius:8px;padding:16px}';
 
 const TkChart$1 = /*@__PURE__*/ proxyCustomElement(
   class TkChart extends H {
@@ -15146,7 +15146,7 @@ const TkChart$1 = /*@__PURE__*/ proxyCustomElement(
       };
     }
     static get style() {
-      return tkChartScss;
+      return tkChartCss;
     }
   },
   [

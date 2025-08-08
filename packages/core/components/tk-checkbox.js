@@ -1,4 +1,4 @@
-import { T as TkCheckbox$1, d as defineCustomElement$1 } from './p-B2GrZHBf.js';
+import { T as TkCheckbox$1, d as defineCustomElement$1 } from './p-DOZWa_LM.js';
 
 const TkCheckbox = TkCheckbox$1;
 const defineCustomElement = defineCustomElement$1;

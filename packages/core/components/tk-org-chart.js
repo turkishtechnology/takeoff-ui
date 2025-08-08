@@ -1,4 +1,4 @@
-import { p as proxyCustomElement, H, c as createEvent, h } from './p-B4rZamdt.js';
+import { p as proxyCustomElement, H, c as createEvent, h } from './p-CsLMRZQo.js';
 import { l as lodashExports } from './p-BVf-UonN.js';
 import { g as getAugmentedNamespace } from './p-Dr0z5XX9.js';
 
@@ -11173,7 +11173,7 @@ function requireD3OrgChart_min() {
 
 var d3OrgChart_minExports = requireD3OrgChart_min();
 
-const tkOrgChartScss = '';
+const tkOrgChartCss = '';
 
 const TkOrgChart$1 = /*@__PURE__*/ proxyCustomElement(
   class TkOrgChart extends H {
@@ -11469,7 +11469,7 @@ const TkOrgChart$1 = /*@__PURE__*/ proxyCustomElement(
       };
     }
     static get style() {
-      return tkOrgChartScss;
+      return tkOrgChartCss;
     }
   },
   [

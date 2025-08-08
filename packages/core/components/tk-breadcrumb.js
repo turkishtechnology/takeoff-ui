@@ -1,11 +1,11 @@
-import { p as proxyCustomElement, H, h, F as Fragment } from './p-B4rZamdt.js';
+import { p as proxyCustomElement, H, h, F as Fragment } from './p-CsLMRZQo.js';
 import { c as classNames } from './p-GRXVFTDh.js';
 import { g as getIconElementProps } from './p-DwXIfk8y.js';
-import { d as defineCustomElement$3 } from './p-x-rqbSpx.js';
-import { d as defineCustomElement$2 } from './p-DrRHtkyE.js';
+import { d as defineCustomElement$3 } from './p-DquuPHrA.js';
+import { d as defineCustomElement$2 } from './p-vR69rcDp.js';
 
-const tkBreadcrumbScss =
-  ":host {\n  display: block;\n}\n\n.tk-breadcrumb {\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n\n  &::-webkit-scrollbar {\n    display: none;\n  }\n\n  .tk-breadcrumb-list {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-wrap: nowrap;\n    gap: var(--breadcrumb-container-gap);\n\n    .tk-breadcrumb-separator {\n      display: flex;\n      width: var(--breadcrumb-symbol-size);\n      height: var(--breadcrumb-symbol-size);\n      justify-content: center;\n      align-items: center;\n\n      .tk-breadcrumb-dot-separator {\n        &::before {\n          content: '•';\n        }\n      }\n\n      .tk-breadcrumb-slash-separator {\n        &::before {\n          content: '/';\n        }\n      }\n\n      .tk-breadcrumb-vertical-separator {\n        &::before {\n          content: '|';\n        }\n      }\n\n      .tk-breadcrumb-separator-icon {\n        color: var(--icon-sub-base);\n        font-size: 1rem;\n      }\n    }\n  }\n}\n";
+const tkBreadcrumbCss =
+  '@charset "UTF-8";@font-face{font-family:"Material Symbols Outlined";src:url("./assets/fonts/Material-Symbols-Outlined.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-outlined{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-outlined{font-variation-settings:"FILL" 0}.material-symbols-outlined.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Rounded";src:url("./assets/fonts/Material-Symbols-Rounded.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:"FILL" 0}.material-symbols-rounded.fill{font-variation-settings:"FILL" 1}@font-face{font-family:"Material Symbols Sharp";src:url("./assets/fonts/Material-Symbols-Sharp.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}.material-symbols-sharp{font-family:"Material Symbols Sharp";font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}.material-symbols-sharp{font-variation-settings:"FILL" 0}.material-symbols-sharp.fill{font-variation-settings:"FILL" 1}:host{display:block}.tk-breadcrumb{display:flex;align-items:center;overflow-x:auto}.tk-breadcrumb::-webkit-scrollbar{display:none}.tk-breadcrumb .tk-breadcrumb-list{margin:0;padding:0;list-style-type:none;display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;gap:var(--breadcrumb-container-gap)}.tk-breadcrumb .tk-breadcrumb-list .tk-breadcrumb-separator{display:flex;width:var(--breadcrumb-symbol-size);height:var(--breadcrumb-symbol-size);justify-content:center;align-items:center}.tk-breadcrumb .tk-breadcrumb-list .tk-breadcrumb-separator .tk-breadcrumb-dot-separator::before{content:"•"}.tk-breadcrumb .tk-breadcrumb-list .tk-breadcrumb-separator .tk-breadcrumb-slash-separator::before{content:"/"}.tk-breadcrumb .tk-breadcrumb-list .tk-breadcrumb-separator .tk-breadcrumb-vertical-separator::before{content:"|"}.tk-breadcrumb .tk-breadcrumb-list .tk-breadcrumb-separator .tk-breadcrumb-separator-icon{color:var(--icon-sub-base);font-size:1rem}';
 
 const TkBreadcrumb$1 = /*@__PURE__*/ proxyCustomElement(
   class TkBreadcrumb extends H {
@@ -85,7 +85,7 @@ const TkBreadcrumb$1 = /*@__PURE__*/ proxyCustomElement(
       return this;
     }
     static get style() {
-      return tkBreadcrumbScss;
+      return tkBreadcrumbCss;
     }
   },
   [
