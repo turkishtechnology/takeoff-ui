@@ -98,7 +98,7 @@ const Example = () => {
   );
 };
 
-const dragAndDropSorting = () => {
+const columnArrangement = () => {
   const reactCode = `const [columns, setColumns] = useState<ITableColumn[]>([
     {
       field: 'id',
@@ -337,4 +337,4 @@ const handleCheckboxChange = (e: any, col: ITableColumn) => {
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
-export default dragAndDropSorting;
+export default columnArrangement;
