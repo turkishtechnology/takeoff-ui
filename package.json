@@ -22,7 +22,7 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app",
+    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app --filter=!./apps/angular-app",
     "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",

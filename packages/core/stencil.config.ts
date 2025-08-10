@@ -69,6 +69,7 @@ export const config: Config = {
     cloneNodeFix: true,
     enableImportInjection: true,
   },
+  taskQueue: 'async',
   outputTargets: [
     vueOutputTarget({
       componentCorePackage: '@takeoff-ui/core',
@@ -87,6 +88,11 @@ export const config: Config = {
       directivesArrayFile: '../angular/projects/library/src/lib/stencil-generated/index.ts',
       valueAccessorConfigs: angularValueAccessorBindings,
     }),
+    angularOutputTarget({
+      componentCorePackage: '@takeoff-ui/core',
+      directivesProxyFile: '../component-library-angular/projects/library/src/directives/proxies.ts',
+      valueAccessorConfigs: angularValueAccessorBindings,
+    }),
     {
       type: 'docs-json',
       file: '../../docs/src/docs-files/docs.json',
@@ -94,12 +100,14 @@ export const config: Config = {
     },
     {
       type: 'dist',
+      esmLoaderPath: '../loader',
       copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
     },
     {
       type: 'dist-custom-elements',
       // customElementsExportBehavior: 'auto-define-custom-elements',
       externalRuntime: false,
+      dir: 'components',
       copy: [
         {
           src: '**/*.{jpg,png}',

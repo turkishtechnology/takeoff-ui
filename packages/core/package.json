@@ -4,18 +4,49 @@
   "description": "Core components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.thy.com",
+  "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js"
+    },
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js",
+      "require": "./loader/index.js",
+      "default": "./loader/index.js"
+    },
+    "./components/*.js": {
+      "types": "./dist/types/components/*.d.ts",
+      "import": "./components/*.js"
+    },
+    "./components": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js"
+    },
+    "./core.css": {
+      "default": "./dist/core/core.css"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "style": "dist/core/core.css",
   "unpkg": "dist/core/core.esm.js",
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/turkishtechnology/takeoff-ui.git"
+    "url": "https://github.com/turkish-technology/takeoff-ui.git"
   },
   "publishConfig": {
     "access": "public"
@@ -29,7 +60,7 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "4.26.0",
+    "@stencil/core": "4.35.3",
     "@stencil/sass": "3.0.12",
     "@types/jest": "^29.5.6",
     "@types/node": "^16.18.11",
@@ -41,7 +72,7 @@
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
   "dependencies": {
     "@floating-ui/dom": "^1.7.0",
-    "@stencil/angular-output-target": "0.10.1",
+    "@stencil/angular-output-target": "1.1.1",
     "@stencil/react-output-target": "0.8.0",
     "@stencil/vue-output-target": "0.8.9",
     "@tiptap/core": "^2.11.0",
