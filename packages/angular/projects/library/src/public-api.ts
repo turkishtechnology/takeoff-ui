@@ -1,3 +1,10 @@
-export * from './lib/library.module';
-export { DIRECTIVES } from './lib/stencil-generated';
-export * from './lib/stencil-generated/components';
+/*
+ * Public API Surface of library
+ */
+
+export * from './lib/library';
+export * from './directives/proxies';
+export * from './directives/boolean-value-accessor';
+export * from './directives/radio-value-accessor';
+export * from './directives/text-value-accessor';
+export * from './directives/value-accessor';

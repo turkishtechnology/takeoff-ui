@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TkButton } from 'component-library-angular/dist';
+import { TkButton } from '@takeoff-ui/angular/dist';
 
 @Component({
   selector: 'app-root',

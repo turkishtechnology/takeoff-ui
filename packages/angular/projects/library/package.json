@@ -4,14 +4,6 @@
   "description": "Angular components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.thy.com",
-  "peerDependencies": {
-    "@angular/common": "^18.2.0",
-    "@angular/core": "^18.2.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0",
-    "@takeoff-ui/core": "workspace:*"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/turkishtechnology/takeoff-ui.git"
@@ -22,11 +14,17 @@
       "@takeoff-ui/core": "^0.1.0"
     }
   },
-  "scripts": {
-    "build": "pnpm ng build"
+  "peerDependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/core": "^20.0.0"
   },
-  "sideEffects": false,
-  "devDependencies": {
-    "@angular/cli": "^18.2.18"
-  }
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "dependencies": {
+    "@takeoff-ui/core": "workspace:*",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
 }

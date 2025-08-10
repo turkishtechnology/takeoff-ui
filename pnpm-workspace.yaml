@@ -1,8 +1,6 @@
 packages:
   - 'packages/angular'
   - 'packages/angular/projects/library'
-  - 'packages/component-library-angular'
-  - 'packages/component-library-angular/projects/library'
   - 'packages/react'
   - 'packages/vue'
   - 'packages/core'
