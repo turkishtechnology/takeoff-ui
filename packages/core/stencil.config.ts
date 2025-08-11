@@ -76,6 +76,7 @@ export const config: Config = {
       proxiesFile: '../vue/lib/components.ts',
       componentModels: vueComponentModels,
       includePolyfills: true,
+      loaderDir: '/loader',
     }),
     reactOutputTarget({
       outDir: '../react/lib/components/stencil-generated/',
@@ -83,14 +84,7 @@ export const config: Config = {
     }),
     angularOutputTarget({
       componentCorePackage: '@takeoff-ui/core',
-      outputType: 'component',
-      directivesProxyFile: '../angular/projects/library/src/lib/stencil-generated/components.ts',
-      directivesArrayFile: '../angular/projects/library/src/lib/stencil-generated/index.ts',
-      valueAccessorConfigs: angularValueAccessorBindings,
-    }),
-    angularOutputTarget({
-      componentCorePackage: '@takeoff-ui/core',
-      directivesProxyFile: '../component-library-angular/projects/library/src/directives/proxies.ts',
+      directivesProxyFile: '../angular/projects/library/src/directives/proxies.ts',
       valueAccessorConfigs: angularValueAccessorBindings,
     }),
     {

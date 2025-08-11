@@ -22,16 +22,16 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app --filter=!./apps/angular-app",
+    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app --filter=!./apps/angular-app --filter=!./packages/vue",
     "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",
-    "dev:ng": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd apps/angular-app && pnpm run start",
+    "dev:ng": "turbo run build --filter=@takeoff-ui/core && cd packages/angular && pnpm run build && cd ../../apps/angular-app && pnpm run start",
     "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run start",
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css}\" --cache",
     "lint": "eslint --fix",
-    "clean": "pnpm -r exec rimraf dist node_modules .stencil www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
+    "clean": "pnpm -r exec rimraf dist node_modules .stencil www .angular .next .output .turbo build .docusaurus .loader packages/core/components && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --filter=@takeoff-ui/tailwind --access public --no-git-checks"
   },
   "lint-staged": {
