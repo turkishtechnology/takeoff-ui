@@ -59,7 +59,7 @@ export const getIconElementProps = (
 };
 
 export const isMultiIconOptions = (icon: any): icon is IMultiIconOptions => {
-  return icon && typeof icon === 'object' && ('left' in icon || 'right' in icon) && !('name' in icon);
+  return icon && typeof icon === 'object' && ('left' in icon || 'right' in icon);
 };
 
 /**
