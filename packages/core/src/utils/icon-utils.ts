@@ -8,6 +8,7 @@ export interface IconRendererOptions {
   iconStyle?: 'outlined' | 'rounded' | 'sharp';
   iconTag?: 'i' | 'span';
   additionalProps?: Record<string, any>;
+  onClick?: (event: MouseEvent) => void;
 }
 
 export interface IconRendererResult {
@@ -89,18 +90,21 @@ export const renderIcons = (
     if (leftIconConfig) {
       leftIcon = h('tk-icon', {
         ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        onClick: options.onClick,
       });
     }
 
     if (rightIconConfig) {
       rightIcon = h('tk-icon', {
         ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        onClick: options.onClick,
       });
     }
   } else {
     // Single icon with position control
     const iconElement = h('tk-icon', {
       ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+      onClick: options.onClick,
     });
 
     if (position === 'left') {
