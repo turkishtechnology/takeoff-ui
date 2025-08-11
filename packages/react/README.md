@@ -15,14 +15,12 @@ React bindings for the Takeoff UI Design System. This package exposes React comp
 
 ## Installation
 
-Install the React bindings. `@takeoff-ui/core` is required at runtime since the React proxies wrap the underlying web components.
-
 ```bash
-npm install @takeoff-ui/react @takeoff-ui/core
+npm install @takeoff-ui/react
 # or
-pnpm add @takeoff-ui/react @takeoff-ui/core
+pnpm add @takeoff-ui/react
 # or
-yarn add @takeoff-ui/react @takeoff-ui/core
+yarn add @takeoff-ui/react
 ```
 
 ## Quick Start
@@ -62,23 +60,12 @@ export default function App() {
 }
 ```
 
-### Next.js (App Router) note
-
-- These proxies include 'use client'; use them inside Client Components.
-- Import `@takeoff-ui/core/dist/core/core.css` in your global CSS or root layout.
-
 ## Features
 
 - React wrappers for all Takeoff UI components (e.g., `TkButton`, `TkInput`, `TkDialog`, ...)
 - Full TypeScript support and JSX props
 - Event handlers mapped to React-style props (e.g., `onTkChange`)
 - Works with Create React App, Vite, Next.js, and other React setups
-
-## Theming and Tailwind CSS (Optional)
-
-Takeoff UI ships with a Tailwind CSS plugin for tokens and utilities. See the docs for setup and usage details.
-
-- [Tailwind CSS Plugin](https://takeoff-ui-blond.vercel.app/docs/Tailwind)
 
 ## Contributing
 

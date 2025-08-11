@@ -15,14 +15,12 @@ Vue bindings for the Takeoff UI Design System. This package exposes Vue componen
 
 ## Installation
 
-Install the Vue bindings. `@takeoff-ui/core` is required at runtime since the Vue wrappers use the underlying web components.
-
 ```bash
-npm install @takeoff-ui/vue @takeoff-ui/core
+npm install @takeoff-ui/vue
 # or
-pnpm add @takeoff-ui/vue @takeoff-ui/core
+pnpm add @takeoff-ui/vue
 # or
-yarn add @takeoff-ui/vue @takeoff-ui/core
+yarn add @takeoff-ui/vue
 ```
 
 ## Quick Start
