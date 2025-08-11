@@ -1,8 +1,7 @@
-import { Component, ComponentInterface, Element, Prop, h, State, Host } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { renderIcons } from '../../utils/icon-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -55,7 +54,7 @@ export class TkAccordionItem implements ComponentInterface {
   /**
    * Icon for accordion component.
    */
-  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
+  @Prop() icon?: string | IIconOptions;
 
   componentWillLoad(): void {
     this.parentEl = this.el.closest('tk-accordion');
@@ -101,26 +100,15 @@ export class TkAccordionItem implements ComponentInterface {
       open: this.active,
     });
 
-    // Handle icon rendering using utility function
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
-    if (this.icon) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, {
-        variant: 'neutral',
-        sign: true,
-      });
-      _leftIcon = leftIcon;
-      _rightIcon = rightIcon;
-    }
+    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
 
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={this.toggleItem}>
             {this.arrowPosition === 'left' && this.createIcon()}
-            {_leftIcon}
+            {icon}
             <span class="title">{this.createHeader()}</span>
-            {_rightIcon}
             {this.arrowPosition === 'right' && this.createIcon()}
           </div>
           <div class={`content ${this.active ? 'open' : ''}`}>
