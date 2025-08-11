@@ -41,7 +41,6 @@
     border-radius: 4px;
     flex-direction: column;
     position: relative;
-    width: 100%;
 
     &.expanded {
       font-weight: 500;
@@ -79,23 +78,6 @@
     }
   }
 
-  &.text-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    &.large {
-      gap: var(--items-tree-large-gap, 10px);
-    }
-
-    &.base {
-      gap: var(--items-tree-base-gap, 8px);
-    }
-
-    &.small {
-      gap: var(--items-tree-small-gap, 4px);
-    }
-  }
-
   &.label {
     display: flex;
     flex-direction: row;
@@ -104,25 +86,29 @@
     color: var(--text-dark, #525866);
     user-select: none;
     border-radius: 4px;
-    width: 100%;
-    justify-content: space-between;
 
     &.large {
+      gap: var(--items-tree-large-gap, 10px);
       padding: var(--items-tree-large-v-padding, 10px) var(--items-tree-large-h-padding, 12px);
+
       & .tk-icon {
         font-size: 20px;
       }
     }
 
     &.base {
+      gap: var(--items-tree-base-gap, 8px);
       padding: var(--items-tree-base-v-padding, 6px) var(--items-tree-base-h-padding, 8px);
+
       & .tk-icon {
         font-size: 20px;
       }
     }
 
     &.small {
+      gap: var(--items-tree-small-gap, 4px);
       padding: var(--items-tree-small-v-padding, 4px) var(--items-tree-small-h-padding, 6px);
+
       & .tk-icon {
         font-size: 16px;
       }
@@ -170,7 +156,5 @@
     border-left: 1px solid var(--border-light, #e1e4ea);
     padding-left: 10px;
     gap: 2px;
-    width: calc(100% - 18px);
-    box-sizing: border-box; /* keep right edge aligned with parent */
   }
 }
