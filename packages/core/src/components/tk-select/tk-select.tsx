@@ -237,8 +237,8 @@ export class TkSelect implements ComponentInterface {
     this.nativeInputRef = this.inputRef.querySelector('input');
 
     // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.findDialogHost();
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll);
+    this.dialogRef = this.el.closest('tk-dialog');
+    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
 
     if (this.allowCustomValue) {
       this.editable = true;
@@ -273,7 +273,7 @@ export class TkSelect implements ComponentInterface {
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
-    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll);
+    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
   }
 
   formResetCallback() {
@@ -459,27 +459,12 @@ export class TkSelect implements ComponentInterface {
     window.removeEventListener('click', this.windowClickHandler);
   }
 
-  private findDialogHost(): HTMLTkDialogElement | null {
-    let current: HTMLElement | null = this.el;
-    while (current) {
-      const dialog = current.closest?.('tk-dialog');
-      if (dialog) return dialog as HTMLTkDialogElement;
-
-      const rootNode = current.getRootNode?.();
-      if (rootNode instanceof ShadowRoot) {
-        current = (rootNode as ShadowRoot).host as HTMLElement;
-      } else {
-        current = current.parentElement;
-      }
-    }
-    return null;
-  }
   // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll = () => {
+  private handleDialogScroll() {
     if (this.isOpen) {
       this.isOpen = false;
     }
-  };
+  }
 
   private handleFormReset() {
     this.value = null;
