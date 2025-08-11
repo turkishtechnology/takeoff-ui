@@ -16,6 +16,11 @@ export interface IIconOptions {
    * Indicates whether the icon should be filled
    */
   fill?: boolean;
+
+  /**
+   * Indicates whether the icon is a sign
+   */
+  sign?: boolean;
 }
 
 /** Interface for multi-position icon configuration */

@@ -51,7 +51,7 @@ export class TkAlert implements ComponentInterface {
   @Prop() iconSize: 'small' | 'base' | 'large' | 'xlarge' = 'large';
 
   /**
-   * Alignment of the alert content ('start', 'center', or 'end').
+   * Alignment of the alert content ('start', 'center' or 'end').
    * @defaultValue 'center'
    */
   @Prop() alignItems: 'start' | 'center' | 'end' = 'center';
@@ -75,10 +75,10 @@ export class TkAlert implements ComponentInterface {
   private createIcon() {
     let iconValue = this.icon;
     if (iconValue == undefined) {
-      if (this.variant == 'success') iconValue = { name: 'check_circle', fill: true };
-      else if (this.variant == 'info') iconValue = { name: 'info', fill: true };
-      else if (this.variant == 'danger') iconValue = { name: 'error', fill: true };
-      else if (this.variant == 'warning') iconValue = { name: 'warning', fill: true };
+      if (this.variant == 'success') iconValue = { name: 'check_circle', fill: true, sign: true };
+      else if (this.variant == 'info') iconValue = { name: 'info', fill: true, sign: true };
+      else if (this.variant == 'danger') iconValue = { name: 'error', fill: true, sign: true };
+      else if (this.variant == 'warning') iconValue = { name: 'warning', fill: true, sign: true };
     }
     return iconValue;
   }
@@ -130,9 +130,9 @@ export class TkAlert implements ComponentInterface {
 
     // Handle icon rendering using utility function
     let iconValue = this.createIcon();
-    const { leftIcon: _leftIcon, rightIcon: _rightIcon } = renderIcons(iconValue, {
+
+    const { leftIcon, rightIcon } = renderIcons(iconValue, {
       variant: this.variant,
-      sign: true,
       size: this.iconSize,
       iconStyle: 'rounded',
       iconTag: 'i',
@@ -147,9 +147,9 @@ export class TkAlert implements ComponentInterface {
           <slot name="content" />
         ) : (
           <Fragment>
-            {_leftIcon}
+            {leftIcon}
             {content}
-            {_rightIcon}
+            {rightIcon}
           </Fragment>
         )}
         {this.hasRightActionSlot && <slot name="right-action"></slot>}

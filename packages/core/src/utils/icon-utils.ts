@@ -41,12 +41,13 @@ export const getIconElementProps = (
     mergedProps.icon = icon;
   } else {
     mergedProps = {
-      ...icon,
       ...mergedProps,
+      ...icon,
       icon: icon.name,
-      iconType: props.iconType || icon.style || iconStyle,
-      color: props.color || icon.color,
-      fill: props.fill !== undefined ? props.fill : icon.fill,
+      iconType: icon.style || props.iconType || iconStyle,
+      iconTag: props.iconTag || iconTag,
+      color: icon.color || props.color,
+      fill: icon.fill !== undefined ? icon.fill : props.fill,
     };
 
     delete mergedProps?.style;
@@ -72,7 +73,7 @@ export const renderIcons = (
   options: IconRendererOptions = {},
   position: 'left' | 'right' = 'left',
 ): IconRendererResult => {
-  const { variant, sign = false, size = 'base', iconStyle = 'outlined', iconTag = 'i', additionalProps = {} } = options;
+  const { variant, sign = false, fill = false, size = 'base', iconStyle = 'outlined', iconTag = 'i', additionalProps = {} } = options;
 
   let leftIcon: any;
   let rightIcon: any;
@@ -87,19 +88,19 @@ export const renderIcons = (
 
     if (leftIconConfig) {
       leftIcon = h('tk-icon', {
-        ...getIconElementProps(leftIconConfig, { variant, sign, size, ...additionalProps }, iconStyle, iconTag),
+        ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
       });
     }
 
     if (rightIconConfig) {
       rightIcon = h('tk-icon', {
-        ...getIconElementProps(rightIconConfig, { variant, sign, size, ...additionalProps }, iconStyle, iconTag),
+        ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
       });
     }
   } else {
     // Single icon with position control
     const iconElement = h('tk-icon', {
-      ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, ...additionalProps }, iconStyle, iconTag),
+      ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
     });
 
     if (position === 'left') {
