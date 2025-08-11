@@ -416,12 +416,6 @@ export class TkInput implements ComponentInterface {
       this.tkChange.emit(this.value);
     }
   }
-  private handleIconClick() {
-    if (this.nativeInput) {
-      this.nativeInput.focus();
-      this.nativeInput.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    }
-  }
 
   private handleChipsRemove(item: any) {
     const chipsArr = [...(this.value as any[])];
@@ -632,7 +626,7 @@ export class TkInput implements ComponentInterface {
 
     // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, { onClick: this.handleIconClick.bind(this) }, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {}, this.iconPosition);
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }

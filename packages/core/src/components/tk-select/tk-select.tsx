@@ -550,13 +550,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleInputClick() {
-    if (this.disabled) return;
-    this.hasFocus = true;
-    this.isOpen = !this.isOpen;
-    if (this.isOpen) {
+    if (!this.isOpen && !this.disabled) {
+      this.hasFocus = true;
+      this.isOpen = true;
       this.bindWindowClickListener();
-    } else {
-      this.unbindWindowClickListener();
     }
   }
 
