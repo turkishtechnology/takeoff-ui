@@ -57,4 +57,22 @@ tk-radio-group {
       flex-direction: column;
     }
   }
+
+  .tk-radio-group-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--spacing-xxs);
+
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-m-base);
+      color: var(--states-danger-base);
+      line-height: var(--desktop-label-s-line-height);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+    }
+  }
 }
