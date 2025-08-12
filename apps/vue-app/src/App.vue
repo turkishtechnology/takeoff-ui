@@ -1,5 +1,5 @@
 <script setup>
-import { TkInput } from '@takeoff-ui/vue';
+import { TkInput, TkButton } from '@takeoff-ui/vue';
 import { ref } from 'vue';
 
 const value = ref('1');
@@ -9,5 +9,6 @@ const value = ref('1');
   <div>
     <h1>{{ value }}</h1>
     <TkInput v-model="value"> </TkInput>
+    <TkButton label="Click me" />
   </div>
 </template>

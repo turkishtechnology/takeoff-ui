@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "directories": {
-    "lib": "lib",
+    "lib": "src",
     "test": "__tests__"
   },
   "files": [
@@ -25,12 +25,11 @@
     }
   },
   "scripts": {
-    "test": "node ./__tests__/takeoff-ui-vue.test.js",
-    "update-utils": "node lib/update-utils.js",
-    "build": "npm run update-utils && npm run tsc",
+    "build": "npm run tsc",
     "tsc": "tsc -p . --outDir ./dist"
   },
   "dependencies": {
+    "@stencil/vue-output-target": "0.11.8",
     "@takeoff-ui/core": "workspace:*"
   },
   "devDependencies": {

@@ -1,13 +1,27 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "lib": ["dom", "es2020"],
-    "module": "es2015",
+    "allowUnreachableCode": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
+    "module": "ES2022",
     "moduleResolution": "bundler",
-    "target": "es2017",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "removeComments": false,
+    "sourceMap": true,
+    "jsx": "react",
+    "target": "esnext",
     "skipLibCheck": true
   },
-  "include": ["lib"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"],
+  "compileOnSave": false,
+  "buildOnSave": false
 }

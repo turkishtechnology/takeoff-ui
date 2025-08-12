@@ -74,7 +74,7 @@
     "@floating-ui/dom": "^1.7.0",
     "@stencil/angular-output-target": "1.1.1",
     "@stencil/react-output-target": "0.8.0",
-    "@stencil/vue-output-target": "0.8.9",
+    "@stencil/vue-output-target": "0.11.8",
     "@tiptap/core": "^2.11.0",
     "@tiptap/extension-font-family": "^2.1.12",
     "@tiptap/extension-image": "^2.11.0",

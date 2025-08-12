@@ -72,11 +72,12 @@ export const config: Config = {
   taskQueue: 'async',
   outputTargets: [
     vueOutputTarget({
+      includeImportCustomElements: true,
+      includePolyfills: false,
+      includeDefineCustomElements: false,
       componentCorePackage: '@takeoff-ui/core',
-      proxiesFile: '../vue/lib/components.ts',
+      proxiesFile: '../vue/src/index.ts',
       componentModels: vueComponentModels,
-      includePolyfills: true,
-      loaderDir: '/loader',
     }),
     reactOutputTarget({
       outDir: '../react/lib/components/stencil-generated/',
