@@ -41,7 +41,7 @@ After installing, import the core CSS and register the component library for you
 
 Add the core stylesheet in your entry point (e.g. `src/main.tsx`):
 ```jsx
-import "@takeoff-ui/core/dist/core/core.css";
+import "@takeoff-ui/core/core.css";
 ```
 
 Then use a component:
@@ -59,7 +59,7 @@ export default function App() {
 Add core.css and ComponentLibrary to main.ts file.
 
 ```typescript title="/src/main.ts"
-import "@takeoff-ui/core/dist/core/core.css";
+import "@takeoff-ui/core/core.css";
 import { createApp } from "vue";
 import { ComponentLibrary } from "@takeoff-ui/vue";
 import App from "./App.vue";
@@ -79,25 +79,25 @@ createApp(App)
 
 
 ```css title="/src/styles.css"
-@import url("@takeoff-ui/core/dist/core/core.css");
+@import url("@takeoff-ui/core/core.css");
 ```
 
 Add ComponentLibraryModule to app.module.ts file.
-```typescript title="/src/app/app.module.ts"
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+```typescript title="/src/app/app.ts"
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { TkButton } from '@takeoff-ui/angular/dist';
 
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { ComponentLibraryModule } from "@takeoff-ui/angular/dist";
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, ComponentLibraryModule],
-  providers: [],
-  bootstrap: [AppComponent],
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, TkButton],
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
-export class AppModule {}
+export class App {
+  protected readonly title = signal('angular-app');
+}
+
 ```
 
 In a component template:
@@ -109,7 +109,7 @@ In a component template:
 
 In `src/app/layout.tsx` or `src/app/page.tsx`:
 ```tsx
-import "@takeoff-ui/core/dist/core/core.css";
+import "@takeoff-ui/core/core.css";
 ```
 
 If you need dynamic imports for client-only components:
