@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkSelect component description.
@@ -23,7 +24,6 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
-  private dialogRef?: HTMLTkDialogElement;
   private uniqueId: string;
   private filterDebounceTimeout;
   private windowClickHandler: (event: MouseEvent) => void;
@@ -236,9 +236,7 @@ export class TkSelect implements ComponentInterface {
 
     this.nativeInputRef = this.inputRef.querySelector('input');
 
-    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.findDialogHost();
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll);
+    addDialogScrollListener(this.el);
 
     if (this.allowCustomValue) {
       this.editable = true;
@@ -273,7 +271,7 @@ export class TkSelect implements ComponentInterface {
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
-    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll);
+    removeDialogScrollListener(this.el);
   }
 
   formResetCallback() {
@@ -458,28 +456,6 @@ export class TkSelect implements ComponentInterface {
   private unbindWindowClickListener() {
     window.removeEventListener('click', this.windowClickHandler);
   }
-
-  private findDialogHost(): HTMLTkDialogElement | null {
-    let current: HTMLElement | null = this.el;
-    while (current) {
-      const dialog = current.closest?.('tk-dialog');
-      if (dialog) return dialog as HTMLTkDialogElement;
-
-      const rootNode = current.getRootNode?.();
-      if (rootNode instanceof ShadowRoot) {
-        current = (rootNode as ShadowRoot).host as HTMLElement;
-      } else {
-        current = current.parentElement;
-      }
-    }
-    return null;
-  }
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll = () => {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
-  };
 
   private handleFormReset() {
     this.value = null;
