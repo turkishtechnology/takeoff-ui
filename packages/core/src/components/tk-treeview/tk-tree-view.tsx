@@ -239,11 +239,24 @@ export class TkTreeView implements ComponentInterface {
   /**
    * Handle item click events.
    */
-  private handleItemClick = (pathStr: string, item: ITreeItem, isDirectory: boolean, isDisabled: boolean) => {
+  private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
     if (isDirectory) {
       this.handleToggleUnified(pathStr, item);
     } else {
+      // In stepper mode, when a file (leaf) is clicked, collapse any expanded
+      // directory at the same level by keeping only the ancestors of the file's parent
+      if (this.mode === 'stepper') {
+        const parentPath = pathStr.includes('-') ? pathStr.split('-').slice(0, -1).join('-') : '';
+        const ancestors: string[] = [];
+        if (parentPath) {
+          const parentParts = parentPath.split('-');
+          for (let i = 1; i <= parentParts.length; i++) {
+            ancestors.push(parentParts.slice(0, i).join('-'));
+          }
+        }
+        this.expandedPaths = new Set(ancestors);
+      }
       this.handleSelect(pathStr, item);
     }
   };
@@ -277,7 +290,7 @@ export class TkTreeView implements ComponentInterface {
             this.size,
           )}
           onClick={() => {
-            this.handleItemClick(pathStr, item, isDirectory, isDisabled);
+            this.handleItemClick(pathStr, item, isDisabled, isDirectory);
           }}
         >
           {isDirectory && this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />}
