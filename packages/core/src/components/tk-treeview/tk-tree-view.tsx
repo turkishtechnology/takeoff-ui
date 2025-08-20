@@ -266,7 +266,7 @@ export class TkTreeView implements ComponentInterface {
     return (
       <div class={nodeClass}>
         {this.showPointer && (isExpanded || isSelected) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
-        <span
+        <div
           class={classNames(
             'tk-tree-view',
             'label',
@@ -294,22 +294,24 @@ export class TkTreeView implements ComponentInterface {
           )}
           {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
           {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
-          <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
-          {isDirectory && this.showBadge && (
-            <tk-badge
-              count={item.children?.length ?? 0}
-              size={this.size}
-              type={this.badgeOptions?.type ?? 'filledlight'}
-              variant={this.badgeOptions?.variant ?? 'neutral'}
-              rounded={this.badgeOptions?.rounded ?? true}
-              icon={this.badgeOptions?.icon}
-              iconPosition={this.badgeOptions?.iconPosition}
-            />
-          )}
+          <div class={classNames('tk-tree-view', 'text-container', this.size)}>
+            <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
+            {isDirectory && this.showBadge && (
+              <tk-badge
+                count={item.children?.length ?? 0}
+                size={this.size}
+                type={this.badgeOptions?.type ?? 'filledlight'}
+                variant={this.badgeOptions?.variant ?? 'neutral'}
+                rounded={this.badgeOptions?.rounded ?? true}
+                icon={this.badgeOptions?.icon}
+                iconPosition={this.badgeOptions?.iconPosition}
+              />
+            )}
+          </div>
           {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
             <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} size={this.size} />
           )}
-        </span>
+        </div>
         {this.mode === 'basic' && isDirectory && isExpanded && item.children && item.children.length > 0 && (
           <div class={classNames('tk-tree-view', 'children')}>{item.children.map((child, childIndex) => this.renderItem(child, pathStr, childIndex, depth + 1))}</div>
         )}
