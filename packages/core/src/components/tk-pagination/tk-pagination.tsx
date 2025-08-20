@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * TkPagination component description.

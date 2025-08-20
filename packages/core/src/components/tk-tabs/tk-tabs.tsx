@@ -1,7 +1,7 @@
 import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../components';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * TkTabs component description.

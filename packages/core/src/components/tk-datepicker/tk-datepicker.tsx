@@ -4,7 +4,7 @@ import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 
 export interface IDateSelection {
   start: string;
@@ -128,7 +128,7 @@ export class TkDatePicker {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions = 'calendar_month';
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions = 'calendar_month';
 
   /**
    * Defines the position of the icon.

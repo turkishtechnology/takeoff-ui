@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
+import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
  * TkSelect component description.
@@ -75,6 +76,10 @@ export class TkSelect implements ComponentInterface {
    */
   @Prop() clearable: boolean = false;
 
+  /**
+   * The icon displayed in the select box.
+   */
+  @Prop() icon: string | IIconOptions;
   /**
    * If `true`, the user cannot interact with the input.
    * @defaultValue false
@@ -706,8 +711,7 @@ export class TkSelect implements ComponentInterface {
         placeholder={this.value?.length > 0 ? '' : this.placeholder}
         invalid={this.invalid}
         error={this.error}
-        icon="keyboard_arrow_down"
-        iconPosition="right"
+        icon={{ left: this.icon, right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
         mode={this.multiple ? 'chips' : 'text'}
         chipLabelKey={this.optionLabelKey}
         readonly={this.readonly}

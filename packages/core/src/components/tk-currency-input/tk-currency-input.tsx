@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 
