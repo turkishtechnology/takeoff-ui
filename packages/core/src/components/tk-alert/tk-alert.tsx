@@ -1,7 +1,7 @@
 import { Component, Prop, h, ComponentInterface, Element, Fragment } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.
