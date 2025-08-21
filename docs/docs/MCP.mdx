@@ -16,12 +16,14 @@ Takeoff UI is a comprehensive design system of framework-agnostic web components
 
 ## Features
 
-- **Component discovery and details**: List all components and fetch in-depth docs and examples
-- **Tailwind CSS integration**: Guidance on setup, tokens, typography, spacing, and more
-- **Framework integration**: React, Vue, Angular, Next.js, Nuxt guides
-- **Smart prompts**: Figma-to-code and refactoring prompts tailored to Takeoff UI
-- **Flexible transports**: STDIO, Streamable HTTP, and legacy SSE
-
+- 🧩 **Component Discovery**: Get a complete list of all available Takeoff UI components.
+- 📚 **Component Information**: Access detailed information, documentation, and usage examples for specific Takeoff UI components.
+- 💨 **Tailwind CSS Integration**: Obtain comprehensive guides for integrating Takeoff UI with Tailwind CSS, including framework-specific setup (React, Vue, Angular, Next.js) and topic-focused details (colors, typography, spacing, etc.).
+- 🔧 **Framework Integration**: Get detailed framework-specific integration guides for React, Vue, Angular, Next.js, and Nuxt.js with various complexity levels.
+- 🎨 **Figma to Code**: Convert Figma designs to production-ready code using Takeoff UI components (via prompts).
+- ♻️ **Code Refactoring**: Refactor existing code to follow Takeoff UI best practices and conventions (via prompts).
+ - 🚀 **Easy Integration**: Seamlessly works with Claude Desktop, Cursor, and other MCP-compatible clients.
+ 
 ## Transport options
 
 - **STDIO (default)**: Best for local development with desktop assistants
@@ -29,54 +31,6 @@ Takeoff UI is a comprehensive design system of framework-agnostic web components
 - **SSE (legacy)**: Backwards compatibility only; not recommended for new setups
 
 ## Quick start
-
-### Remote usage (recommended)
-
-Use the hosted version without local installation:
-
-```bash
-# Using mcp-remote
-npx -y mcp-remote https://takeoffui.turkishtechlab.com/mcp
-```
-
-### Local install
-
-```bash
-git clone https://github.com/turkishtechnology/takeoff-ui-mcp.git
-cd takeoff-ui-mcp
-npm install
-npm run build
-```
-
-### Run
-
-```bash
-# STDIO (default)
-npm start
-
-# Streamable HTTP
-npm run start:stream
-
-# SSE (legacy)
-npm run start:sse
-```
-
-Default addresses:
-- **Main (Streamable HTTP)**: `http://127.0.0.1:3845/mcp`
-- **SSE events**: `http://127.0.0.1:3845/sse`
-- **Health**: `http://127.0.0.1:3845/health`
-- **Info**: `http://127.0.0.1:3845/info`
-
-### Test the HTTP server
-
-```bash
-curl -X POST http://127.0.0.1:3845/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"initialize","id":1}'
-
-curl http://127.0.0.1:3845/health
-curl http://127.0.0.1:3845/info
-```
 
 ## Configuration
 
@@ -92,8 +46,6 @@ LOG_LEVEL=1
 
 ## Client setup
 
-### Continue.dev
-
 Remote (recommended):
 
 ```yaml
@@ -104,25 +56,6 @@ mcpServers:
       - "-y"
       - "mcp-remote"
       - "https://takeoffui.turkishtechlab.com/mcp"
-```
-
-Local STDIO:
-
-```yaml
-mcpServers:
-  - name: takeoff-ui-mcp
-    command: node
-    args:
-      - /absolute/path/to/takeoff-ui-mcp/dist/index.js
-```
-
-Local HTTP:
-
-```yaml
-mcpServers:
-  - name: takeoff-ui-mcp
-    type: streamable-http
-    url: http://127.0.0.1:3845/mcp
 ```
 
 ### VS Code (Copilot)
@@ -140,59 +73,6 @@ Remote (recommended):
 }
 ```
 
-Local STDIO:
-
-```json
-"mcp": {
-  "servers": {
-    "takeoff-ui-mcp": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["/absolute/path/to/takeoff-ui-mcp/dist/index.js"]
-    }
-  }
-}
-```
-
-Local HTTP:
-
-```json
-"mcp": {
-  "servers": {
-    "takeoff-ui-mcp": {
-      "type": "streamable-http",
-      "url": "http://127.0.0.1:3845/mcp"
-    }
-  }
-}
-```
-
-### Claude Desktop
-
-STDIO:
-
-```json
-{
-  "mcpServers": {
-    "takeoff-ui-mcp": {
-      "command": "node",
-      "args": ["/absolute/path/to/takeoff-ui-mcp/dist/index.js"]
-    }
-  }
-}
-```
-
-HTTP:
-
-```json
-{
-  "mcpServers": {
-    "takeoff-ui-mcp": {
-      "url": "http://127.0.0.1:3845/mcp"
-    }
-  }
-}
-```
 
 Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your prompts (for example: "Show Tailwind setup for React — use takeoff-ui-mcp").
 
@@ -202,9 +82,15 @@ Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your pr
 - **`get_component_info`**: Detailed docs and examples for components
   - Parameters: `component` (string) or `components` (string[])
 - **`get_tailwind_integration`**: Tailwind integration guidance
-  - Parameters: `framework`, `topic`
+  - Parameters: 
+    - `framework` (string; `react` | `vue` | `angular`, default value `react`)
+    - `topic` (string; `setup` | `colors` | `typography` | `spacing` | `shadows` | `breakpoints` | `examples` | `troubleshooting`, default value `setup`)
 - **`get_framework_integration`**: Framework-specific integration
-  - Parameters: `framework`, `topic`, `complexity`, `includeExamples`
+  - Parameters: 
+    - `framework` (string; default `react` | `vue` | `angular`)
+    - `topic` (string; default `tailwind`)
+    - `complexity` (string; default `basic` | `advanced`)
+    - `includeExamples` (boolean; default `true`)
 
 ## Prompts
 
