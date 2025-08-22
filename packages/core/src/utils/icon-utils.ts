@@ -88,19 +88,20 @@ export const renderIcons = (
 
     if (leftIconConfig) {
       leftIcon = h('tk-icon', {
-        ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps, class: 'tk-icon-left' }, iconStyle, iconTag),
       });
     }
 
     if (rightIconConfig) {
       rightIcon = h('tk-icon', {
-        ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps, class: 'tk-icon-right' }, iconStyle, iconTag),
       });
     }
   } else {
     // Single icon with position control
+    const iconClass = position === 'left' ? 'tk-icon-left' : 'tk-icon-right';
     const iconElement = h('tk-icon', {
-      ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+      ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, fill, ...additionalProps, class: iconClass }, iconStyle, iconTag),
     });
 
     if (position === 'left') {

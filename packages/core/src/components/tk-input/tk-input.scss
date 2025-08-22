@@ -342,5 +342,20 @@ tk-input.tk-table-input {
   }
   .tk-input-clearable {
     padding-right: 42px !important;
+
+    .tk-input-clear-button {
+      right: 8px !important;
+    }
+    &.has-right-icon {
+      padding-right: 66px !important;
+
+      .tk-input-clear-button {
+        right: 32px !important;
+      }
+      .tk-icon-right {
+        position: absolute;
+        right: 10px;
+      }
+    }
   }
 }
