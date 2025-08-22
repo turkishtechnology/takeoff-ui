@@ -58,12 +58,6 @@ tk-input.tk-table-input {
     width: -webkit-fill-available;
     position: relative;
 
-    .tk-input-clear-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
     i {
       color: var(--icon-base);
       user-select: none;
@@ -344,6 +338,9 @@ tk-input.tk-table-input {
     padding-right: 42px !important;
 
     .tk-input-clear-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       right: 8px !important;
     }
     &.has-right-icon {
