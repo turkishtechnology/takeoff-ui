@@ -52,9 +52,42 @@ tk-radio-group {
     }
   }
 
+  .hint {
+    color: var(--text-base);
+    line-height: var(--desktop-label-s-line-height);
+    font-size: var(--desktop-label-s-size);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m-base);
+    padding-left: 8px;
+
+    & i {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
+  }
+
   &.vertical {
     .tk-radio-holder {
       flex-direction: column;
+
+      .hint {
+        padding-left: 0;
+      }
+    }
+  }
+
+  &[aria-invalid] {
+    .tk-radio-holder.card tk-radio {
+      border-color: var(--states-danger-base);
+    }
+
+    & .hint,
+    & .hint i {
+      color: var(--states-danger-base);
     }
   }
 }
