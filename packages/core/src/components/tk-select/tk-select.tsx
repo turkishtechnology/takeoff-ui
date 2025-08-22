@@ -238,7 +238,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Emitted when the selectAll option is changed
    */
-  @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<any>;
+  @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<boolean>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
@@ -351,6 +351,7 @@ export class TkSelect implements ComponentInterface {
       });
     }
   }
+  //optionlar object ise deep equal ile kontrol eder, primitive ise includes ile kontrol eder
   private isOptionSelected(valueArr: any[], optionValue: any): boolean {
     if (typeof optionValue === 'object' && !Array.isArray(optionValue) && optionValue !== null) {
       return valueArr.some(v => _.isEqual(v, optionValue));
@@ -358,7 +359,7 @@ export class TkSelect implements ComponentInterface {
       return valueArr.includes(optionValue);
     }
   }
-
+  // tüm optionların seçili olup olmadığını kontrol eder, optionlar seçilenlerin kümesinde ise doğru döner
   private isAllSelected(valueArr?: any[]): boolean {
     const arr = Array.isArray(valueArr) ? valueArr : Array.isArray(this.value) ? this.value : [];
     const optionValues = this.options.map(opt => this.getOptionValue(opt));
@@ -522,7 +523,7 @@ export class TkSelect implements ComponentInterface {
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
-      if (this.selectAll && item.label == this.selectAllLabel) {
+      if (this.selectAll && item.selectAll) {
         const optionValues = this.options.map(opt => this.getOptionValue(opt));
         const normalizedValue = Array.isArray(this.value) ? this.value : [];
         const customValues = normalizedValue.filter(val => !optionValues.includes(val));
@@ -693,7 +694,7 @@ export class TkSelect implements ComponentInterface {
   private handleInputClearClick() {
     this.value = null;
     this.tkChange.emit(null);
-    this.tkSelectAll.emit(false);
+    if (this.multiple && this.selectAll) this.tkSelectAll.emit(false);
   }
 
   private createOptionItem(options: any[]) {
@@ -739,10 +740,10 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private createAllItem() {
+  private createSelectAllItem() {
     if (this.selectAll && this.multiple) {
       let selectAll;
-      let item = { value: 'all', label: this.selectAllLabel };
+      let item = { value: 'all', label: this.selectAllLabel, selectAll: true };
       let itemProps = {};
       const checking = this.isAllSelected();
       if (this.optionHtml != undefined) {
@@ -838,7 +839,7 @@ export class TkSelect implements ComponentInterface {
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (
             <Fragment>
-              {this.createAllItem()}
+              {this.createSelectAllItem()}
               {this.createOptions()}
             </Fragment>
           ) : this.hasEmptyDataSlot ? (
