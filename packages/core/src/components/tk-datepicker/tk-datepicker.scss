@@ -389,11 +389,19 @@
 }
 
 .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
-  height: 40px;
-  padding: 8px 16px 4px;
+  width: 84px;
+  height: 52px;
+  padding: 0 var(--datepicker-header-base-h-padding) 0 var(--datepicker-header-base-h-padding);
+
   border-bottom: 1px solid var(--border-light);
   border-top-right-radius: var(--radius-sm);
   border-top-left-radius: var(--radius-sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.tk-datepicker-timepicker-header-light {
+    background: var(--background-lightest);
+  }
 }
 
 .tk-datepicker-timepicker-header-colon {
