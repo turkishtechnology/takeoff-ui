@@ -238,7 +238,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Emitted when the selectAll option is changed
    */
-  @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<any>;
+  @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<boolean>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
@@ -518,35 +518,39 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private async handleSelectAllClick() {
+    this.isItemClickFlag = true;
+    if (this.multiple) {
+      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
+      const optionValues = this.options.map(opt => this.getOptionValue(opt));
+      const normalizedValue = Array.isArray(this.value) ? this.value : [];
+      const customValues = normalizedValue.filter(val => !optionValues.includes(val));
+      const checking = this.isAllSelected();
+      if (checking) {
+        // Deselect all
+        tmpValue = [];
+        this.tkSelectAll.emit(false);
+      } else {
+        // Select all (optionValue + custom values)
+        tmpValue = [...optionValues, ...customValues];
+        this.tkSelectAll.emit(true);
+      }
+      // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
+      if (this.multiple && this.editable) {
+        this.nativeInputRef.value = null;
+        this.renderOptions = await this.filter(null, this.options);
+      }
+      // Prevent adding 'all' item to value
+      this.inputRef.value = [...tmpValue];
+      this.value = [...tmpValue];
+      this.tkChange.emit([...tmpValue]);
+    }
+  }
+
   private async handleItemClick(item) {
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
-      if (this.selectAll && item.label == this.selectAllLabel) {
-        const optionValues = this.options.map(opt => this.getOptionValue(opt));
-        const normalizedValue = Array.isArray(this.value) ? this.value : [];
-        const customValues = normalizedValue.filter(val => !optionValues.includes(val));
-        const checking = this.isAllSelected();
-        if (checking) {
-          // Deselect all
-          tmpValue = [];
-          this.tkSelectAll.emit(false);
-        } else {
-          // Select all (optionValue + custom values)
-          tmpValue = [...optionValues, ...customValues];
-          this.tkSelectAll.emit(true);
-        }
-        // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
-        if (this.multiple && this.editable) {
-          this.nativeInputRef.value = null;
-          this.renderOptions = await this.filter(null, this.options);
-        }
-        // Prevent adding 'all' item to value
-        this.inputRef.value = [...tmpValue];
-        this.value = [...tmpValue];
-        this.tkChange.emit([...tmpValue]);
-        return;
-      }
 
       const tmpItem = this.getOptionValue(item);
 
@@ -693,7 +697,7 @@ export class TkSelect implements ComponentInterface {
   private handleInputClearClick() {
     this.value = null;
     this.tkChange.emit(null);
-    this.tkSelectAll.emit(false);
+    this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
   }
 
   private createOptionItem(options: any[]) {
@@ -739,7 +743,7 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private createAllItem() {
+  private createSelectAllOption() {
     if (this.selectAll && this.multiple) {
       let selectAll;
       let item = { value: 'all', label: this.selectAllLabel };
@@ -765,7 +769,7 @@ export class TkSelect implements ComponentInterface {
         <div
           class={classNames('dropdown-item', { multiple: this.multiple })}
           data-selected={this.multiple && checking ? 'true' : 'false'}
-          onClick={() => this.handleItemClick(item)}
+          onClick={() => this.handleSelectAllClick()}
           data-option-index="-1"
           {...itemProps}
         >
@@ -838,7 +842,7 @@ export class TkSelect implements ComponentInterface {
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (
             <Fragment>
-              {this.createAllItem()}
+              {this.createSelectAllOption()}
               {this.createOptions()}
             </Fragment>
           ) : this.hasEmptyDataSlot ? (
