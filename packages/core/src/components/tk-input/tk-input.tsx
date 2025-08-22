@@ -643,7 +643,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class="tk-input" htmlFor={this.uniqueId}>
+        <label htmlFor={this.uniqueId} class={classNames('tk-input', { 'tk-input-clearable': this.clearable })}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
