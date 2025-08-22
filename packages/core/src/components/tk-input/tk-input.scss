@@ -56,6 +56,13 @@ tk-input.tk-table-input {
     background-color: var(--static-light);
     box-sizing: border-box;
     width: -webkit-fill-available;
+    position: relative;
+
+    .tk-input-clear-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
     i {
       color: var(--icon-base);
