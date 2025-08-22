@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.

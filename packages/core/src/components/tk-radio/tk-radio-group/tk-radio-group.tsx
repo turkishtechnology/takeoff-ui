@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../../utils/icon-utils';
 
 @Component({
   tag: 'tk-radio-group',
@@ -71,6 +72,11 @@ export class TkRadioGroup implements ComponentInterface {
   @Prop() type: 'default' | 'card' = 'default';
 
   /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error: string;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
@@ -113,6 +119,21 @@ export class TkRadioGroup implements ComponentInterface {
     this.updateTkRadio();
   }
 
+  private renderError() {
+    let error;
+    if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
+
+      error = (
+        <span class="hint">
+          {hintIcon}
+          {this.error}
+        </span>
+      );
+    }
+    return error;
+  }
+
   render() {
     let _label: HTMLLabelElement;
 
@@ -131,9 +152,10 @@ export class TkRadioGroup implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} aria-invalid={this.invalid}>
         {_label}
         <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>{this.slottedItems.length > 0 ? <slot /> : ''}</div>
+        {this.error && this.renderError()}
       </div>
     );
   }
