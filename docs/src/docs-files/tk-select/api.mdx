@@ -29,6 +29,8 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="options" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | The list of options to be displayed in the select box. |
 | <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
 | <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="selectAll" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If true enables selectAll option |
+| <TkBadge label="selectAllLabel" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'All' | Sets the label of the selectAll option |
 | <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The value of the input. |
@@ -38,6 +40,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | Name | Description |
 | ---- | ----------- |
 | tk-change | Emitted when the value has changed. |
+| tk-select-all | Emitted when the selectAll option is changed |
 
 ### Slots
 
