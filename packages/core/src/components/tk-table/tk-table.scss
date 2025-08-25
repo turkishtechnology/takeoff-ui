@@ -123,6 +123,11 @@
                   overflow: hidden;
                   text-overflow: ellipsis;
                 }
+
+                .header.wrap,
+                .sub-header.wrap {
+                  white-space: normal;
+                }
               }
 
               .icons {
