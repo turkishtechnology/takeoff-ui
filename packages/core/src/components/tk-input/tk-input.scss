@@ -56,7 +56,20 @@ tk-input.tk-table-input {
     background-color: var(--static-light);
     box-sizing: border-box;
     width: -webkit-fill-available;
-
+    .tk-input-clear-button {
+      margin-left: auto;
+      visibility: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    &.tk-input-clearable {
+      .tk-input-clear-button {
+        visibility: visible;
+        pointer-events: auto;
+        opacity: 1;
+      }
+    }
     i {
       color: var(--icon-base);
       user-select: none;

@@ -642,7 +642,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class="tk-input" htmlFor={this.uniqueId}>
+        <label class={classNames('tk-input', { 'tk-input-clearable': showClearButton })} htmlFor={this.uniqueId}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
@@ -654,7 +654,9 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)}></tk-button>}
+          {this.clearable && (
+            <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)} class="tk-input-clear-button"></tk-button>
+          )}
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}
