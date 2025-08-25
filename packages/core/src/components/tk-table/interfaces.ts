@@ -8,8 +8,6 @@ export interface ITableColumn {
   header: string;
   /** Defines sub heading for the column */
   subHeader?: string;
-  /** Enables wrapping of the header text. If true, header text will wrap to multiple lines when necessary. */
-  headerTextWrap?: boolean;
   /** Defines width for the column */
   width?: string;
   /** Indicates if the column supports sorting */

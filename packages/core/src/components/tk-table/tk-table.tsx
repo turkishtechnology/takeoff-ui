@@ -1346,11 +1346,11 @@ export class TkTable implements ComponentInterface {
             } else {
               _headerStructure = (
                 <div class="header-container">
-                  <div class={`header ${col.headerTextWrap ? ' wrap' : ''}`} title={col.header}>
+                  <div class="header" title={col.header}>
                     {col.header}
                   </div>
                   {col?.subHeader?.length > 0 && (
-                    <div class={`sub-header ${col.headerTextWrap ? ' wrap' : ''}`} title={col.subHeader}>
+                    <div class="sub-header" title={col.subHeader}>
                       {col.subHeader}
                     </div>
                   )}
