@@ -638,12 +638,11 @@ export class TkInput implements ComponentInterface {
     } else {
       this.readOnly = this.readonly;
     }
-    const hasRightIcon = !!_rightIcon || this.renderPasswordIcons().right;
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label htmlFor={this.uniqueId} class={classNames('tk-input', { 'tk-input-clearable': this.clearable, 'has-right-icon': hasRightIcon })}>
+        <label class={classNames('tk-input', { 'tk-input-clearable': showClearButton })} htmlFor={this.uniqueId}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
@@ -655,7 +654,7 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {showClearButton && (
+          {this.clearable && (
             <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)} class="tk-input-clear-button"></tk-button>
           )}
           {_rightIcon}

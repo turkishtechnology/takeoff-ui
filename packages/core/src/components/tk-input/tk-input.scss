@@ -56,8 +56,22 @@ tk-input.tk-table-input {
     background-color: var(--static-light);
     box-sizing: border-box;
     width: -webkit-fill-available;
-    position: relative;
-
+    .tk-input-clear-button {
+      margin-left: auto;
+      visibility: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transition:
+        visibility 0.2s,
+        opacity 0.2s;
+    }
+    &.tk-input-clearable {
+      .tk-input-clear-button {
+        visibility: visible;
+        pointer-events: auto;
+        opacity: 1;
+      }
+    }
     i {
       color: var(--icon-base);
       user-select: none;
@@ -331,27 +345,6 @@ tk-input.tk-table-input {
         flex: 1;
         width: unset;
         min-width: 30px;
-      }
-    }
-  }
-  .tk-input-clearable {
-    padding-right: 42px !important;
-
-    .tk-input-clear-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 8px !important;
-    }
-    &.has-right-icon {
-      padding-right: 66px !important;
-
-      .tk-input-clear-button {
-        right: 32px !important;
-      }
-      .tk-icon-right {
-        position: absolute;
-        right: 10px;
       }
     }
   }
