@@ -524,7 +524,7 @@ export class TkSelect implements ComponentInterface {
       let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
       const optionValues = this.options.map(opt => this.getOptionValue(opt));
       const normalizedValue = Array.isArray(this.value) ? this.value : [];
-      const customValues = normalizedValue.filter(val => !optionValues.includes(val));
+      const customValues = normalizedValue.filter(val => !this.isOptionSelected(optionValues, val));
       const checking = this.isAllSelected();
       if (checking) {
         // Deselect all
