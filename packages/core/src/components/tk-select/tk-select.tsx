@@ -521,16 +521,17 @@ export class TkSelect implements ComponentInterface {
   private async handleSelectAllClick() {
     this.isItemClickFlag = true;
     if (this.multiple) {
-      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
-      const optionValues = this.options.map(opt => this.getOptionValue(opt));
-      const normalizedValue = Array.isArray(this.value) ? this.value : [];
-      const customValues = normalizedValue.filter(val => !this.isOptionSelected(optionValues, val));
+      let tmpValue;
       const checking = this.isAllSelected();
       if (checking) {
         // Deselect all
         tmpValue = [];
         this.tkSelectAll.emit(false);
       } else {
+        //optionsdaki değerleri almak için
+        const optionValues = this.options.map(opt => this.getOptionValue(opt));
+        // allowcustom trueyken optionsda olmayan valueların eklenmesi için
+        const customValues = Array.isArray(this.value) ? this.value?.filter(val => !this.isOptionSelected(optionValues, val)) : [];
         // Select all (optionValue + custom values)
         tmpValue = [...optionValues, ...customValues];
         this.tkSelectAll.emit(true);
