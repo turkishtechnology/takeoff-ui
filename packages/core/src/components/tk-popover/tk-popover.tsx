@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -20,7 +21,6 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
-  private dialogRef?: HTMLTkDialogElement;
 
   @Element() el: HTMLTkPopoverElement;
 
@@ -76,9 +76,7 @@ export class TkPopover implements ComponentInterface {
       document.addEventListener('click', this.handleDocumentClick);
     }
 
-    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.el.closest('tk-dialog');
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+    addDialogScrollListener(this.el);
   }
 
   disconnectedCallback() {
@@ -90,8 +88,7 @@ export class TkPopover implements ComponentInterface {
       document.removeEventListener('click', this.handleDocumentClick);
     }
     this.cleanup && this.cleanup();
-
-    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
+    removeDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
@@ -122,13 +119,6 @@ export class TkPopover implements ComponentInterface {
   @Method()
   async close() {
     this.isOpen = false;
-  }
-
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll() {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
   }
 
   private updatePosition() {

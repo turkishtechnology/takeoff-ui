@@ -3,6 +3,7 @@ import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floati
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -81,6 +82,7 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
+    addDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
@@ -92,7 +94,9 @@ export class TkTooltip implements ComponentInterface {
       this.cleanup && this.cleanup();
     }
   }
-
+  disconnectedCallback() {
+    removeDialogScrollListener(this.el);
+  }
   private updatePosition() {
     computePosition(this.triggerElement, this.tooltipElement, {
       strategy: 'fixed',

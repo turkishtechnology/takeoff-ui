@@ -5,6 +5,7 @@ import { computePosition, flip, shift, offset, size, autoUpdate } from '@floatin
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkSelect component description.
@@ -24,7 +25,6 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
-  private dialogRef?: HTMLTkDialogElement;
   private uniqueId: string;
   private filterDebounceTimeout;
   private windowClickHandler: (event: MouseEvent) => void;
@@ -262,9 +262,7 @@ export class TkSelect implements ComponentInterface {
 
     this.nativeInputRef = this.inputRef.querySelector('input');
 
-    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.el.closest('tk-dialog');
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+    addDialogScrollListener(this.el);
 
     if (this.allowCustomValue) {
       this.editable = true;
@@ -299,7 +297,7 @@ export class TkSelect implements ComponentInterface {
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     this.unbindWindowClickListener();
-    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
+    removeDialogScrollListener(this.el);
   }
 
   formResetCallback() {
@@ -496,13 +494,6 @@ export class TkSelect implements ComponentInterface {
 
   private unbindWindowClickListener() {
     window.removeEventListener('click', this.windowClickHandler);
-  }
-
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll() {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
   }
 
   private handleFormReset() {
