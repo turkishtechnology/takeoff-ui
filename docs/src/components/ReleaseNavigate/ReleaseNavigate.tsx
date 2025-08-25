@@ -6,7 +6,7 @@ export default function ReleaseNavigate() {
       <h1>Version 0.1.0 and later release notes are available on GitHub!</h1>
       <a href="https://github.com/turkishtechnology/takeoff-ui/releases" target="_blank" rel="noopener noreferrer">
         <TkButton
-          label="View on GitHub"
+          label="View Release Note"
           variant="primary"
           size="large"
           style={{
