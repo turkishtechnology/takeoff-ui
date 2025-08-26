@@ -8,16 +8,20 @@
   align-items: center;
   justify-content: center;
   flex: 1 0 auto;
-
   border: 0px;
-  height: 32px;
-  padding: 10px 12px;
-  gap: 6px;
+  padding: var(--button-sizes-large-v-padding) var(--button-sizes-base-h-padding);
+  gap: var(--button-sizes-base-gap);
   cursor: pointer;
-  border-radius: var(--radius-m-base, 8px);
+  border-radius: var(--button-sizes-base-radius);
 
   background-color: transparent;
 
+  &.selected {
+    box-shadow:
+      0 2px 2px -1px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
+      0 6px 12px -2px var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08)),
+      0 8px 20px 0 var(--shadow-black-alpha-base, rgba(82, 88, 102, 0.08));
+  }
   &.neutral {
     &.filled {
       &.selected {
@@ -135,18 +139,18 @@
     font-style: normal;
 
     &.large {
-      line-height: var(--body-m-base-line-height, 24px);
-      font-size: var(--body-m-base-size, 16px);
+      line-height: var(--desktop-label-l-line-height);
+      font-size: var(--desktop-label-l-size);
     }
 
     &.base {
-      line-height: var(--body-m-base-line-height, 20px);
-      font-size: var(--body-m-base-size, 14px);
+      line-height: var(--desktop-label-m-base-line-height);
+      font-size: var(--desktop-label-m-base-size);
     }
 
     &.small {
-      line-height: var(--body-m-base-line-height, 28px);
-      font-size: var(--body-m-base-size, 12px);
+      line-height: var(--desktop-label-s-line-height);
+      font-size: var(--desktop-label-s-size);
     }
   }
 
@@ -174,17 +178,18 @@
   }
 
   &.small {
-    height: 24px;
+    height: 0px;
+    padding: var(--button-sizes-large-v-padding) var(--button-sizes-small-h-padding);
   }
 
   &.base {
-    height: 32px;
+    height: 8px;
   }
 
   &.large {
-    height: 40px;
-    padding: 12px 14px;
-    gap: 8px;
+    height: 16px;
+    padding: var(--button-sizes-large-v-padding) var(--button-sizes-large-h-padding);
+    gap: var(--button-sizes-large-gap);
   }
 
   &.rounded {
