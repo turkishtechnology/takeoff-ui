@@ -119,6 +119,9 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
+  componentWillLoad() {
+    this.initializeExpandedPaths();
+  }
   /**
    * Collect all descendant paths recursively
    */
@@ -175,10 +178,6 @@ export class TkTreeView implements ComponentInterface {
     }
 
     this.expandedPaths = expanded;
-  }
-
-  componentWillLoad() {
-    this.initializeExpandedPaths();
   }
 
   /**
@@ -449,7 +448,7 @@ export class TkTreeView implements ComponentInterface {
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
             {isDirectory && this.showBadge && (
               <tk-badge
-                count={selectedCount}
+                count={this.selectable ? selectedCount : item.children?.length}
                 size={this.size}
                 type={this.badgeOptions?.type ?? 'filledlight'}
                 variant={this.badgeOptions?.variant ?? 'neutral'}
