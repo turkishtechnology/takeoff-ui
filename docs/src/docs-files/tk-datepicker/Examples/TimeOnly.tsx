@@ -11,10 +11,14 @@ const TimeOnly = () => {
   const handleTimeFormatChange = event => {
     setTimeFormat(event.detail as '12' | '24');
   };
+  const [type, setType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
+  const handleTypeChange = event => {
+    setType(event.detail as 'basic' | 'divided' | 'light' | 'dark' | 'primary');
+  };
   const reactCode = `const [selectedTime, setSelectedTime] = useState("");
 <TkDatepicker
     label="Select Time"
-    placeholder="HH:mm"
+    headerType="${type}"
     timeOnly
     value={selectedTime}
     onTkChange={(event) => setSelectedTime(event.detail)}
@@ -24,8 +28,8 @@ const TimeOnly = () => {
   const vueCode = `const selectedTime = ref("");
 <TkDatepicker
     label="Select Time"
-    placeholder="HH:mm"
     timeOnly
+    headerType="${type}"
     v-model="selectedTime"
     timeFormat="${timeFormat}"
 />`;
@@ -39,7 +43,16 @@ const TimeOnly = () => {
         </TkRadioGroup>
       </div>
       <div className="w-66">
-        <TkDatepicker label="Select Time" placeholder="HH:mm" timeOnly value={selectedTime} onTkChange={handleDateChange} timeFormat={timeFormat} />
+        <TkRadioGroup value={type} onTkChange={handleTypeChange} label="Header Type">
+          <TkRadio label="Basic" value="basic" />
+          <TkRadio label="Divided" value="divided" />
+          <TkRadio label="Light" value="light" />
+          <TkRadio label="Dark" value="dark" />
+          <TkRadio label="Primary" value="primary" />
+        </TkRadioGroup>
+      </div>
+      <div className="w-66">
+        <TkDatepicker label="Select Time" timeOnly value={selectedTime} onTkChange={handleDateChange} timeFormat={timeFormat} headerType={type} />
       </div>
     </div>
   );

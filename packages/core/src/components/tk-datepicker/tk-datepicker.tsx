@@ -96,6 +96,13 @@ export class TkDatePicker {
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
+        // Initialize default time and AM/PM when time UI is shown and no time set yet
+        if ((this.showTimePicker || this.timeOnly) && !this.internalStartTime) {
+          const def = this.getDefaultTime();
+          this.internalStartTime = def;
+          if (this.mode !== 'range') this.internalEndTime = def;
+          if (this.timeFormat === '12') this.internalAmPm = def.hour >= 12 ? 'PM' : 'AM';
+        }
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
@@ -317,6 +324,10 @@ export class TkDatePicker {
   timeFormatChanged() {
     if (this.timeOnly || this.showTimePicker) {
       this.maskOptions = { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat };
+      // Sync AM/PM with the current hour when switching to 12h
+      if (this.timeFormat === '12' && this.internalStartTime) {
+        this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
+      }
     }
   }
 
@@ -411,6 +422,7 @@ export class TkDatePicker {
       const defaultTime = this.getDefaultTime();
       this.internalStartTime = defaultTime;
       this.internalEndTime = null;
+      if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
     } else {
       this.internalStartTime = null;
       this.internalEndTime = null;
@@ -521,7 +533,37 @@ export class TkDatePicker {
   }
 
   private getDefaultTime(): { hour: number; minute: number } {
-    return { hour: 0, minute: 0 };
+    const now = new Date();
+    let hour = now.getHours();
+    let minute = now.getMinutes();
+
+    // Align minutes to the configured step (floor to nearest step)
+    const step = Math.max(1, this.minuteStep || 1);
+    minute = Math.floor(minute / step) * step;
+
+    // Respect optional min/max time bounds if provided
+    const toTotalMinutes = (h: number, m: number) => h * 60 + m;
+    const currentTotal = toTotalMinutes(hour, minute);
+
+    const parseBound = (val?: string): number | null => {
+      if (!val) return null;
+      const parsed = this.parseTimeString(val);
+      if (!parsed) return null;
+      return toTotalMinutes(parsed.getHours(), parsed.getMinutes());
+    };
+
+    const minBound = parseBound(this.minTime);
+    const maxBound = parseBound(this.maxTime);
+
+    if (minBound !== null && currentTotal < minBound) {
+      hour = Math.floor(minBound / 60);
+      minute = minBound % 60;
+    } else if (maxBound !== null && currentTotal > maxBound) {
+      hour = Math.floor(maxBound / 60);
+      minute = maxBound % 60;
+    }
+
+    return { hour, minute };
   }
 
   private getDateWithTime(date: Date, type: 'start' | 'end'): Date | null {
@@ -678,6 +720,7 @@ export class TkDatePicker {
     if (this.showTimePicker && !this.internalStartTime && this.internalSelectedDates.start) {
       const defaultTime = this.getDefaultTime();
       this.internalStartTime = defaultTime;
+      if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
       if (this.mode === 'range' && !this.internalEndTime && this.internalSelectedDates.end) {
         this.internalEndTime = this.internalStartTime;
       } else if (this.mode === 'single') {
@@ -887,6 +930,7 @@ export class TkDatePicker {
         const resolvedTime = parsedFromInput ? { hour: parsedFromInput.getHours(), minute: parsedFromInput.getMinutes() } : this.getDefaultTime();
         this.internalStartTime = resolvedTime;
         this.internalEndTime = resolvedTime;
+        if (this.timeFormat === '12') this.internalAmPm = resolvedTime.hour >= 12 ? 'PM' : 'AM';
       }
       return;
     }
@@ -903,6 +947,7 @@ export class TkDatePicker {
       const defaultTime = this.getDefaultTime();
       if (type === 'start' && !this.internalStartTime) {
         this.internalStartTime = defaultTime;
+        if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
       }
       if (type === 'end' && this.mode === 'range' && this.internalSelectedDates.end && !this.internalEndTime) {
         this.internalEndTime = this.internalStartTime || defaultTime;
@@ -1180,7 +1225,10 @@ export class TkDatePicker {
     if (this.mode === 'single') {
       this.internalSelectedDates = { start: normalizedDate, end: null };
       if (this.showTimePicker) {
-        this.internalStartTime = this.internalStartTime || defaultTime;
+        if (!this.internalStartTime) {
+          this.internalStartTime = defaultTime;
+          if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
+        }
       } else {
         this.internalStartTime = null;
       }
@@ -1197,7 +1245,10 @@ export class TkDatePicker {
       if (!start || (start && end)) {
         this.internalSelectedDates = { start: normalizedDate, end: null };
         if (this.showTimePicker) {
-          this.internalStartTime = this.internalStartTime || defaultTime;
+          if (!this.internalStartTime) {
+            this.internalStartTime = defaultTime;
+            if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
+          }
           this.internalEndTime = null;
         } else {
           this.internalStartTime = null;
