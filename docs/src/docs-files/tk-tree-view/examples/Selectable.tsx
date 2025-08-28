@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TkTreeView } from '@takeoff-ui/react';
+import { TkRadioGroup, TkRadio, TkTreeView } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const sampleData = [
@@ -83,7 +83,7 @@ const sampleData = [
 
 const Selectable = () => {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
-
+  const [selectionStrategy, setSelectionStrategy] = useState<'all' | 'leaf'>('all');
   const reactCode = `
 const [selectedItems, setSelectedItems] = useState([]);
 
@@ -142,6 +142,7 @@ const treeData = [
   size="base"
   items={treeData}
   selectable={true}
+  selectionStrategy={${selectionStrategy}}
   value={selectedItems}
   branchIcon="folder"
   leafIcon="insert_drive_file"
@@ -224,6 +225,7 @@ const treeData = [
     size="base"
     :items="treeData"
     :selectable="true"
+    :selection-strategy="${selectionStrategy}"
     v-model="selectedItems"
     branch-icon="folder"
     leaf-icon="insert_drive_file"
@@ -240,11 +242,18 @@ const treeData = [
 
   const demo = (
     <div className="w-full space-y-4">
+      <div className="flex flex-wrap mb-4">
+        <TkRadioGroup label="Selection Strategy" value={selectionStrategy} onTkChange={e => setSelectionStrategy(e.detail)}>
+          <TkRadio value="all" label="All" />
+          <TkRadio value="leaf" label="Leaf" />
+        </TkRadioGroup>
+      </div>
       <TkTreeView
         type="light"
         size="base"
         items={sampleData}
         selectable={true}
+        selectionStrategy={selectionStrategy}
         value={selectedItems}
         branchIcon="folder"
         leafIcon="insert_drive_file"
