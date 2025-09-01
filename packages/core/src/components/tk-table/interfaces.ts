@@ -54,7 +54,7 @@ export interface ITableColumn {
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
   };
-  headerActionsOptions: {
+  headerActionsOptions?: {
     direction?: 'vertical' | 'horizontal';
   };
 }
