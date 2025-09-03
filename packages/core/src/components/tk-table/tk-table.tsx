@@ -1414,7 +1414,7 @@ export class TkTable implements ComponentInterface {
             const rightColumns = this.columns.filter(c => c.fixed === 'right');
             const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
             const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
-
+            const buttonDirection = col?.headerActionsOptions?.direction ?? 'horizontal';
             return (
               <th
                 class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
@@ -1426,7 +1426,7 @@ export class TkTable implements ComponentInterface {
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
-                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement })}>
+                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
                       {_sortIcon}
                       {_searchIcon}
                     </div>
