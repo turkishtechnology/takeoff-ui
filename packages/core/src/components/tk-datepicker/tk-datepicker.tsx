@@ -1616,14 +1616,14 @@ export class TkDatePicker {
           <div class="tk-datepicker-header-content-start">
             <tk-button
               variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? '#F9FAFC' : '' }}
+              icon={{ name: 'keyboard_double_arrow_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
               variant="neutral"
-              icon={{ name: 'chevron_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? '#F9FAFC' : '' }}
+              icon={{ name: 'chevron_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
             ></tk-button>
@@ -1639,14 +1639,14 @@ export class TkDatePicker {
           <div class="tk-datepicker-header-content-end">
             <tk-button
               variant="neutral"
-              icon={{ name: 'chevron_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? '#F9FAFC' : '' }}
+              icon={{ name: 'chevron_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
               variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? '#F9FAFC' : '' }}
+              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest' : '' }}
               onTk-click={() => this.handleYearChange(1)}
               type="text"
             ></tk-button>
@@ -1720,7 +1720,7 @@ export class TkDatePicker {
           {this.timeFormat === '12' && (
             <tk-toggle-button-group
               value={this.internalAmPm}
-              type={this.headerType === 'basic' ? 'basic' : 'divided'}
+              type={this.headerType === 'basic' ? 'basic' : this.headerType === 'light' ? 'light' : 'divided'}
               onTk-change={e => this.handleAmPmToggle(e)}
               class="tk-datepicker-ampm-toggle"
             >
@@ -1761,7 +1761,10 @@ export class TkDatePicker {
                 variant="neutral"
                 type="text"
                 size="base"
-                icon={{ name: 'expand_less', color: this.headerType === 'dark' ? '#717784' : this.headerType === 'primary' ? '#EEB0B8' : '#CACFD8' }}
+                icon={{
+                  name: 'expand_less',
+                  color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
+                }}
                 onTk-click={this.handleDecreaseHour}
                 disabled={isMinHour}
               ></tk-button>
@@ -1799,7 +1802,10 @@ export class TkDatePicker {
                 variant="neutral"
                 type="text"
                 size="base"
-                icon={{ name: 'expand_more', color: this.headerType === 'dark' ? '#CACFD8' : this.headerType === 'primary' ? '#FAE6E8' : '#717784' }}
+                icon={{
+                  name: 'expand_more',
+                  color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
+                }}
                 onTk-click={this.handleIncreaseHour}
                 disabled={isMaxHour}
               ></tk-button>
@@ -1811,7 +1817,10 @@ export class TkDatePicker {
                 variant="neutral"
                 type="text"
                 size="base"
-                icon={{ name: 'expand_less', color: this.headerType === 'dark' ? '#717784' : this.headerType === 'primary' ? '#EEB0B8' : '#CACFD8' }}
+                icon={{
+                  name: 'expand_less',
+                  color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
+                }}
                 onTk-click={this.handleDecreaseMinute}
                 disabled={isMinMinute}
               ></tk-button>
@@ -1849,7 +1858,10 @@ export class TkDatePicker {
                 variant="neutral"
                 type="text"
                 size="base"
-                icon={{ name: 'expand_more', color: this.headerType === 'dark' ? '#CACFD8' : this.headerType === 'primary' ? '#FAE6E8' : '#717784' }}
+                icon={{
+                  name: 'expand_more',
+                  color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
+                }}
                 onTk-click={this.handleIncreaseMinute}
                 disabled={isMaxMinute}
               ></tk-button>

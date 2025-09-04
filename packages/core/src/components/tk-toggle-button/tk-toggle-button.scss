@@ -25,14 +25,14 @@
   &.neutral {
     &.filled {
       &.selected {
-        background-color: var(--neutral-800);
+        background-color: var(--background-darkest);
       }
     }
 
     &.outlined {
       &.selected {
-        background-color: var(--neutral-50);
-        border: 1px solid var(--neutral-300);
+        background-color: var(--background-lightest);
+        border: 1px solid var(--border-sub-base);
       }
     }
 
@@ -44,24 +44,24 @@
 
     &.raised {
       &.selected {
-        background-color: var(--neutral-800);
+        background-color: var(--background-darkest);
         border: 1px solid var(--static-black);
       }
     }
 
     &.filled-light {
       &.selected {
-        background-color: var(--neutral-200);
+        background-color: var(--background-light);
       }
     }
 
     &.filled.selected,
     &.raised.selected {
       .tk-toggle-button-label {
-        color: var(--neutral-50);
+        color: var(--text-lightest);
       }
       .tk-toggle-button-icon {
-        color: var(--neutral-50);
+        color: var(--text-lightest);
       }
     }
 
@@ -69,10 +69,10 @@
     &.text.selected,
     &.filled-light.selected {
       .tk-toggle-button-label {
-        color: var(--neutral-800);
+        color: var(--background-darkest);
       }
       .tk-toggle-button-icon {
-        color: var(--neutral-800);
+        color: var(--background-darkest);
       }
     }
   }
@@ -80,14 +80,14 @@
   &.primary {
     &.filled {
       &.selected {
-        background-color: var(--primary-500);
+        background-color: var(--primary-base);
       }
     }
 
     &.outlined {
       &.selected {
-        background-color: var(--neutral-50);
-        border: 1px solid var(--primary-300);
+        background-color: var(--background-lightest);
+        border: 1px solid var(--primary-sub-base);
       }
     }
 
@@ -99,14 +99,14 @@
 
     &.raised {
       &.selected {
-        background-color: var(--primary-500);
+        background-color: var(--primary-base);
         border: 1px solid var(--primary-sub-base);
       }
     }
 
     &.filled-light {
       &.selected {
-        background-color: var(--primary-50);
+        background-color: var(--primary-lightest);
       }
     }
 
@@ -124,10 +124,10 @@
     &.text.selected,
     &.filled-light.selected {
       .tk-toggle-button-label {
-        color: var(--primary-500);
+        color: var(--primary-base);
       }
       .tk-toggle-button-icon {
-        color: var(--primary-500);
+        color: var(--primary-base);
       }
     }
   }

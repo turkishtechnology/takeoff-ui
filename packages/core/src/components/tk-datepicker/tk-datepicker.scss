@@ -445,9 +445,9 @@
     background: var(--primary-base);
 
     &::before {
-      background: var(--primary-sub-base);
-      color: var(--primary-lightest);
-      border-color: var(--primary-light);
+      background: var(--primary-300);
+      color: var(--primary-50);
+      border-color: var(--primary-100);
     }
   }
 
@@ -520,7 +520,7 @@
     color: var(--text-lightest);
   }
   &.tk-datepicker-timepicker-value-primary {
-    color: var(--primary-lightest);
+    color: var(--primary-50);
   }
 
   &.tk-datepicker-timepicker-value-empty {
@@ -548,6 +548,6 @@
   }
 
   &.tk-datepicker-timepicker-separator-primary {
-    background-color: var(--primary-sub-base);
+    background-color: var(--primary-300);
   }
 }
