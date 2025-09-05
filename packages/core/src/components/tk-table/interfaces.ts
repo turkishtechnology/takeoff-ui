@@ -37,7 +37,7 @@ export interface ITableColumn {
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
-  filterType?: 'text' | 'checkbox' | 'radio';
+  filterType?: 'text' | 'checkbox' | 'radio' | 'datepicker';
   /** Defines options for checkbox or radio filter type */
   filterOptions?: IFilterOption[];
   /** Defines the label of the buttons */
@@ -53,6 +53,7 @@ export interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
+    optionsDatepicker?: { label?: string; placeholder?: string; mode?: 'single' | 'range' };
   };
   headerActionsOptions?: {
     direction?: 'vertical' | 'horizontal';
@@ -99,12 +100,12 @@ export interface ITableRequest {
 
 /** Represents a filter applied to a table */
 export interface ITableFilter {
-  /** The value of the filter - string for text/radio filter, string array for checkbox filter */
-  value?: string | string[];
+  /** The value of the filter - string for text/radio filter, string array for checkbox filter, Date for datepicker filter */
+  value?: string | string[] | Date;
   /** The field to which the filter is applied */
   field: string;
-  /** The type of the filter (text, checkbox or radio) */
-  type?: 'text' | 'checkbox' | 'radio';
+  /** The type of the filter (text, checkbox, radio, or datepicker) */
+  type?: 'text' | 'checkbox' | 'radio' | 'datepicker';
 }
 
 /** It is the return type of the tkCellEdit event. */

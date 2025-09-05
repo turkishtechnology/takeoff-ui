@@ -96,6 +96,36 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
         }
       }
 
+      if (filter.type === 'datepicker' && filter.value) {
+        // If the column has a custom filter function, use it
+        if (filterableColumn) {
+          return filterableColumn.filter(filter.value, row);
+        } else {
+          const fieldValue = getNestedValue(row, filter.field);
+          if (!fieldValue) return false;
+          const rowDate = new Date(fieldValue);
+          // Range mode
+          if (typeof filter.value === 'string' && filter.value.includes(' - ')) {
+            const [start, end] = filter.value.split(' - ').map(s => s.trim());
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const rowDateStr = rowDate.toISOString().slice(0, 10);
+            const startDateStr = startDate.toISOString().slice(0, 10);
+            const endDateStr = endDate.toISOString().slice(0, 10);
+            return rowDateStr >= startDateStr && rowDateStr <= endDateStr;
+          } else {
+            // Single date mode
+            let filterDateStr = '';
+            if (typeof filter.value === 'string') {
+              filterDateStr = new Date(filter.value).toISOString().slice(0, 10);
+            } else if (filter.value instanceof Date) {
+              filterDateStr = filter.value.toISOString().slice(0, 10);
+            } else return false;
+            return rowDate.toISOString().slice(0, 10) === filterDateStr;
+          }
+        }
+      }
+
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;
       else return result;

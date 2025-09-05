@@ -56,6 +56,15 @@ const Example = () => {
       sortable: true,
       sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
     },
+    {
+      field: 'date',
+      header: 'Date',
+      sortable: true,
+      searchable: true,
+      sorter: (a: any, b: any) => (Number(a.date) > Number(b.date) ? 1 : -1),
+      filterType: 'datepicker',
+      filterElements: { optionsDatepicker: { label: 'Choose a date', placeholder: '2024-05-09', mode: 'range' } },
+    },
   ];
 
   const data = [
@@ -65,6 +74,7 @@ const Example = () => {
       status: 'active',
       group: 'group 1',
       quantity: 24,
+      date: '2025-09-07',
     },
     {
       id: 'nvklal433',
@@ -72,6 +82,7 @@ const Example = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 42,
+      date: '2025-09-08',
     },
     {
       id: 'zz21cz3c1',
@@ -79,6 +90,7 @@ const Example = () => {
       status: 'active',
       group: 'group 3',
       quantity: 87,
+      date: '2025-09-09',
     },
     {
       id: '244wgerg2',
@@ -86,6 +98,7 @@ const Example = () => {
       status: 'pending',
       group: 'group 1',
       quantity: 12,
+      date: '2025-09-10',
     },
     {
       id: 'h456wer53',
@@ -93,6 +106,7 @@ const Example = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 45,
+      date: '2025-09-11',
     },
   ];
   return <TkTable columns={column} data={data} />;
@@ -152,16 +166,26 @@ const FilterAndSort = () => {
       sorter: (a: any, b: any) =>
         Number(a.quantity) > Number(b.quantity) ? 1 : -1,
     },
+    {
+      field: 'date',
+      header: 'Date',
+      sortable: true,
+      searchable: true,
+      sorter: (a: any, b: any) => (Number(a.date) > Number(b.date) ? 1 : -1),
+      filterType: 'datepicker',
+      filterElements: { optionsDatepicker: { label: 'Choose a date', placeholder: '2024-05-09', mode: 'range' } },
+    },
   ];
 
 
-   const data = [
+    const data = [
     {
       id: 'f230fh0g3',
       name: 'Bamboo Watch',
       status: 'active',
       group: 'group 1',
       quantity: 24,
+      date: '2025-09-07',
     },
     {
       id: 'nvklal433',
@@ -169,6 +193,7 @@ const FilterAndSort = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 42,
+      date: '2025-09-08',
     },
     {
       id: 'zz21cz3c1',
@@ -176,6 +201,7 @@ const FilterAndSort = () => {
       status: 'active',
       group: 'group 3',
       quantity: 87,
+      date: '2025-09-09',
     },
     {
       id: '244wgerg2',
@@ -183,6 +209,7 @@ const FilterAndSort = () => {
       status: 'pending',
       group: 'group 1',
       quantity: 12,
+      date: '2025-09-10',
     },
     {
       id: 'h456wer53',
@@ -190,6 +217,7 @@ const FilterAndSort = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 45,
+      date: '2025-09-11',
     },
   ];
   
@@ -250,44 +278,58 @@ const column = [
     sortable: true,
     sorter: (a, b) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
   },
-];
-const data = [
   {
-    id: 'f230fh0g3',
-    name: 'Bamboo Watch',
-    status: 'active',
-    group: 'group 1',
-    quantity: 24,
-  },
-  {
-    id: 'nvklal433',
-    name: 'Black Watch',
-    status: 'inactive',
-    group: 'group 2',
-    quantity: 42,
-  },
-  {
-    id: 'zz21cz3c1',
-    name: 'Blue Band',
-    status: 'active',
-    group: 'group 3',
-    quantity: 87,
-  },
-  {
-    id: '244wgerg2',
-    name: 'Blue T-Shirt',
-    status: 'pending',
-    group: 'group 1',
-    quantity: 12,
-  },
-  {
-    id: 'h456wer53',
-    name: 'Bracelet',
-    status: 'inactive',
-    group: 'group 2',
-    quantity: 45,
+    field: 'date',
+    header: 'Date',
+    sortable: true,
+    searchable: true,
+    sorter: (a: any, b: any) => (Number(a.date) > Number(b.date) ? 1 : -1),
+    filterType: 'datepicker',
+      filterElements: { optionsDatepicker: { label: 'Choose a date', placeholder: '2024-05-09', mode: 'range' } },
   },
 ];
+  const data = [
+    {
+      id: 'f230fh0g3',
+      name: 'Bamboo Watch',
+      status: 'active',
+      group: 'group 1',
+      quantity: 24,
+      date: '2025-09-07',
+    },
+    {
+      id: 'nvklal433',
+      name: 'Black Watch',
+      status: 'inactive',
+      group: 'group 2',
+      quantity: 42,
+      date: '2025-09-08',
+    },
+    {
+      id: 'zz21cz3c1',
+      name: 'Blue Band',
+      status: 'active',
+      group: 'group 3',
+      quantity: 87,
+      date: '2025-09-09',
+    },
+    {
+      id: '244wgerg2',
+      name: 'Blue T-Shirt',
+      status: 'pending',
+      group: 'group 1',
+      quantity: 12,
+      date: '2025-09-10',
+    },
+    {
+      id: 'h456wer53',
+      name: 'Bracelet',
+      status: 'inactive',
+      group: 'group 2',
+      quantity: 45,
+      date: '2025-09-11',
+    },
+  ];
 </script>
 
 <template>
