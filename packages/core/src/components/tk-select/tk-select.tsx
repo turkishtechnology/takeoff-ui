@@ -249,6 +249,12 @@ export class TkSelect implements ComponentInterface {
   componentDidRender(): void {
     // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
     // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
+    if (this.readonly) {
+      const nativeInput = this.inputRef?.querySelector('input');
+      if (nativeInput) {
+        nativeInput.setAttribute('readonly', 'true');
+      }
+    }
     if (this.multiple && this.editable) {
       this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
       this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
@@ -510,6 +516,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleSelectAllClick() {
+    if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue;
@@ -540,6 +547,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleItemClick(item) {
+    if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
