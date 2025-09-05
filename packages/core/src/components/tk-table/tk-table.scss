@@ -129,12 +129,11 @@
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
-                gap: var(--table-items-head-base-text-gap);
 
+                &.vertical {
+                  flex-direction: column;
+                }
                 i {
-                  font-size: 20px;
-                  width: 20px;
-                  height: 20px;
                   cursor: pointer;
                   flex-shrink: 0;
                 }
@@ -299,9 +298,28 @@
     }
   }
 
+  &.base table thead tr .icons {
+    gap: 8px;
+    i {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   &.small {
-    table thead tr th {
-      padding: var(--table-items-head-small-text-v-padding);
+    table thead tr {
+      .icons {
+        gap: 4px;
+        i {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+      th {
+        padding: var(--table-items-head-small-text-v-padding);
+      }
     }
 
     table tbody tr td {
@@ -314,9 +332,19 @@
   }
 
   &.xsmall {
-    table thead tr th {
-      padding: var(--table-items-head-xsmall-text-v-padding) var(--table-items-head-xsmall-text-h-padding);
-      font-size: var(--desktop-body-xs-size);
+    table thead tr {
+      .icons {
+        gap: 2px;
+        i {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+      th {
+        padding: var(--table-items-head-xsmall-text-v-padding) var(--table-items-head-xsmall-text-h-padding);
+        font-size: var(--desktop-body-xs-size);
+      }
     }
 
     table tbody tr td {
