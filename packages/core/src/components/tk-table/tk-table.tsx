@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
 
@@ -1259,7 +1259,7 @@ export class TkTable implements ComponentInterface {
     return classes.join(' ');
   }
 
-  private getStickyColumnStyle(col: ITableColumn) {
+  private getStickyColumnStyle(col: ITableColumn, rowIndex?: number) {
     const style: any = {
       width: this.columnWidths[col.field] || col.width,
       minWidth: this.columnWidths[col.field] || col.width,
@@ -1272,8 +1272,9 @@ export class TkTable implements ComponentInterface {
 
       style['--tk-table-sticky-left-offset'] = `${this.stickyOffsets.left[col.field]}px`;
       style['left'] = `${this.stickyOffsets.left[col.field]}px`;
+      // Z-index: hem columnIndex hem rowIndex'e göre azalt
       // En soldaki kolon en yüksek z-index'e sahip olmalı (en üstte durmalı)
-      style['zIndex'] = 30 - columnIndex; // Left sticky: 30, 29, 28... (soldan sağa azalıyor)
+      style['zIndex'] = Math.max(99 - columnIndex - (rowIndex ?? 0), 0);
     } else if (col.fixed === 'right' && this.stickyOffsets.right[col.field] !== undefined) {
       style['--tk-table-sticky-right-offset'] = `${this.stickyOffsets.right[col.field]}px`;
       style['right'] = `${this.stickyOffsets.right[col.field]}px`;
@@ -1285,8 +1286,8 @@ export class TkTable implements ComponentInterface {
       // offset=0 (en sağdaki) -> z-index=30
       // offset arttıkça z-index azalır
       const offsetLevel = Math.floor(rightOffset / 50); // Her 50px'te bir level
-      const zIndex = 30 - offsetLevel;
-      style['zIndex'] = Math.max(zIndex, 20); // Minimum z-index 20
+      const zIndex = 99 - offsetLevel;
+      style['zIndex'] = Math.max(zIndex - (rowIndex ?? 0), 0); // Satır aşağı indikçe z-index azalır
     }
 
     return style;
@@ -1413,7 +1414,7 @@ export class TkTable implements ComponentInterface {
             const rightColumns = this.columns.filter(c => c.fixed === 'right');
             const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
             const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
-
+            const buttonDirection = col?.headerActionsOptions?.direction ?? 'horizontal';
             return (
               <th
                 class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
@@ -1425,7 +1426,7 @@ export class TkTable implements ComponentInterface {
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
-                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement })}>
+                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
                       {_sortIcon}
                       {_searchIcon}
                     </div>
@@ -1514,7 +1515,7 @@ export class TkTable implements ComponentInterface {
                       return (
                         <td
                           class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                          style={{ ...this.getStickyColumnStyle(col), ...styleRowObject, ...styleCellObject }}
+                          style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
                         >
                           <tk-button
                             ref={el => (tdExpanderButtonRef = el)}
@@ -1536,7 +1537,7 @@ export class TkTable implements ComponentInterface {
                             class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                             innerHTML={cellElement}
                             style={{
-                              ...this.getStickyColumnStyle(col),
+                              ...this.getStickyColumnStyle(col, index),
                               ...styleRowObject,
                               ...styleCellObject,
                             }}
@@ -1548,7 +1549,7 @@ export class TkTable implements ComponentInterface {
                             ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
                             class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                             style={{
-                              ...this.getStickyColumnStyle(col),
+                              ...this.getStickyColumnStyle(col, index),
                               ...styleRowObject,
                               ...styleCellObject,
                             }}
@@ -1561,7 +1562,7 @@ export class TkTable implements ComponentInterface {
                         <td
                           class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                           style={{
-                            ...this.getStickyColumnStyle(col),
+                            ...this.getStickyColumnStyle(col, index),
                             ...styleRowObject,
                             ...styleCellObject,
                           }}
@@ -1580,7 +1581,7 @@ export class TkTable implements ComponentInterface {
                         <td
                           class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                           style={{
-                            ...this.getStickyColumnStyle(col),
+                            ...this.getStickyColumnStyle(col, index),
                             ...styleRowObject,
                             ...styleCellObject,
                           }}

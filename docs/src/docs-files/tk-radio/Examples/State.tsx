@@ -37,7 +37,7 @@ const State = () => {
       }}
       className="flex flex-col gap-4"
     >
-      <TkRadioGroup invalid={true} label="Error">
+      <TkRadioGroup invalid={true} label="Error" error="This is an error message">
         <TkRadio label="label 1" value="1" />
         <TkRadio label="label 2" value="2" />
       </TkRadioGroup>

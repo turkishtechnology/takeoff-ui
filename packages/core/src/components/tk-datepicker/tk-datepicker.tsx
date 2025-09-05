@@ -4,7 +4,8 @@ import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 export interface IDateSelection {
   start: string;
@@ -29,7 +30,6 @@ export class TkDatePicker {
   private debounceTimer: number;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
-  private dialogRef?: HTMLTkDialogElement;
   private uniqueId: string;
   private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
@@ -173,7 +173,7 @@ export class TkDatePicker {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions = 'calendar_month';
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions = 'calendar_month';
 
   /**
    * Defines the position of the icon.
@@ -373,10 +373,7 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-
-    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.el.closest('tk-dialog');
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+    addDialogScrollListener(this.el);
 
     if (this.inline && this.showTimePicker) {
       requestAnimationFrame(() => {
@@ -403,6 +400,7 @@ export class TkDatePicker {
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
     this.unbindWindowClickListener();
+    removeDialogScrollListener(this.el);
   }
 
   formResetCallback() {
@@ -1429,13 +1427,6 @@ export class TkDatePicker {
     }
     this.processDateValue(initialValue, true);
     this.tkChange.emit(this.value);
-  }
-
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll() {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
   }
 
   private createDayCell(date: Date, isAdjacentMonth: boolean) {

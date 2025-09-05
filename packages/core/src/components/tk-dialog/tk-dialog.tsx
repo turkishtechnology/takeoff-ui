@@ -1,6 +1,6 @@
 import { Component, Method, Prop, State, Watch, h, Event, EventEmitter, Element, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The `TkDialog` component provides a customizable modal dialog for displaying important information or requesting user input. It supports various configurations including different header types, variants, and customizable content.

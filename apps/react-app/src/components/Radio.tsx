@@ -1,16 +1,32 @@
-import { TkCard, TkRadioGroup, TkRadio, TkIcon } from '@takeoff-ui/react';
+import { TkCard, TkRadioGroup, TkRadio, TkIcon, TkButton } from '@takeoff-ui/react';
+import { useState } from 'react';
 
 function Radio() {
+  const [invalid, setInvalid] = useState(false);
+  const [error, setError] = useState('');
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <TkCard header="Radio Group ile kullanım" containerStyle={{ padding: '16px' }}>
         <div slot="content">
+          <TkButton
+            variant="neutral"
+            onClick={() => {
+              setInvalid(!invalid);
+              setError(invalid ? '' : 'This is an error message');
+            }}
+            label={invalid ? 'Invalid' : 'Valid'}
+          >
+            {invalid ? 'Invalid' : 'Valid'}
+          </TkButton>
           <TkRadioGroup
             onTkChange={e => {
               console.log('name1', e.detail);
             }}
             position="right"
             type="card"
+            invalid={invalid}
+            error={error}
           >
             <TkRadio label="label 1" name="name1" value="1" description="test">
               <div slot="content">

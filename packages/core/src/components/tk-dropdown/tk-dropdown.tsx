@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitte
 import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -106,6 +107,9 @@ export class TkDropdown implements ComponentInterface {
       });
     }
   }
+  componentDidLoad(): void {
+    addDialogScrollListener(this.el);
+  }
 
   componentDidUpdate() {
     if (this.isOpen) {
@@ -121,6 +125,7 @@ export class TkDropdown implements ComponentInterface {
 
   disconnectedCallback() {
     this.unbindWindowClickListener();
+    removeDialogScrollListener(this.el);
   }
 
   private updatePosition() {

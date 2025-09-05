@@ -9,6 +9,8 @@ import Clearable from './Examples/Clearable';
 import Loading from './Examples/Loading';
 import GroupedOptions from './Examples/GroupedOptions';
 import ChipOptions from './Examples/ChipOptions';
+import Icon from './Examples/Icon';
+import SelectAll from "./Examples/SelectAll"
 import { TkAlert } from '@takeoff-ui/react';
 
 ## Basic
@@ -47,23 +49,34 @@ The "size" prop can be used with one of the sizes "small", "base", and "large". 
 
 <State />
 
+## Select All
+
+You can add `selectAll` option and edit the label via `selectAllLabel`.
+<TkAlert
+  header="Note"
+  variant="info"
+  message="This feature works in conjunction with the `multiple` prop set to `true`."
+  filledlight
+/>
+<br />
+<SelectAll/>
+
 ## OptionValueKey
 
 Allows usage of Key for option values.
 
 <OptionValueKey />
 
+## Icon
+
+You can use the `icon` prop to add an icon to the select input.
+
+<Icon />
+
 ## Clearable
 
 This example clears the input of the select.
 
-<TkAlert
-  header="Note"
-  variant="warning"
-  message="This feature works in conjunction with the `editable` prop set to `true`."
-  filledlight
-/>
-<br />
 <Clearable />
 
 ## Grouped Options
