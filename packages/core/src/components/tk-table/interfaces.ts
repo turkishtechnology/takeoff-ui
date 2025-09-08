@@ -53,7 +53,22 @@ export interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
-    optionsDatepicker?: { label?: string; placeholder?: string; mode?: 'single' | 'range' };
+    optionsDatepicker?: {
+      label?: string;
+      placeholder?: string;
+      mode?: 'single' | 'range';
+      dateFormat?: string;
+      timeFormat?: '24' | '12';
+      minDate?: string;
+      maxDate?: string;
+      minTime?: string;
+      maxTime?: string;
+      hourStep?: number;
+      minuteStep?: number;
+      locale?: string;
+      showTimePicker?: boolean;
+      size?: 'small' | 'base' | 'large';
+    };
   };
   headerActionsOptions?: {
     direction?: 'vertical' | 'horizontal';

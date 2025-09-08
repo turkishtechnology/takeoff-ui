@@ -1,4 +1,5 @@
 import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
+import { parse, isWithinInterval, format } from 'date-fns';
 
 /**
  * Calculates the optimal starting width for column resizing
@@ -103,25 +104,25 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
         } else {
           const fieldValue = getNestedValue(row, filter.field);
           if (!fieldValue) return false;
-          const rowDate = new Date(fieldValue);
+          // Get dateFormat and timeFormat from column definition
+          const column = columns.find(col => col.field === filter.field);
+          const dateFormat = column?.filterElements?.optionsDatepicker?.dateFormat || 'yyyy-MM-dd';
+          const timeFormat = column?.filterElements?.optionsDatepicker?.timeFormat || '24';
+          const formatType = dateFormat + (timeFormat === '24' ? ' HH:mm' : timeFormat === '12' ? ' hh:mm aa' : '');
+
+          const rowDate = parse(fieldValue, formatType, new Date());
           // Range mode
           if (typeof filter.value === 'string' && filter.value.includes(' - ')) {
             const [start, end] = filter.value.split(' - ').map(s => s.trim());
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            const rowDateStr = rowDate.toISOString().slice(0, 10);
-            const startDateStr = startDate.toISOString().slice(0, 10);
-            const endDateStr = endDate.toISOString().slice(0, 10);
-            return rowDateStr >= startDateStr && rowDateStr <= endDateStr;
+            const startDate = parse(start, formatType, new Date());
+
+            const endDate = parse(end, formatType, new Date());
+            if (!rowDate || !startDate || !endDate) return false;
+            return isWithinInterval(rowDate, { start: startDate, end: endDate });
           } else {
             // Single date mode
-            let filterDateStr = '';
-            if (typeof filter.value === 'string') {
-              filterDateStr = new Date(filter.value).toISOString().slice(0, 10);
-            } else if (filter.value instanceof Date) {
-              filterDateStr = filter.value.toISOString().slice(0, 10);
-            } else return false;
-            return rowDate.toISOString().slice(0, 10) === filterDateStr;
+            const filterDateStr = parse(filter.value as string, formatType, new Date());
+            return format(rowDate, formatType) == format(filterDateStr, formatType);
           }
         }
       }

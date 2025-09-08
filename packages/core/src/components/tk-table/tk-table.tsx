@@ -892,6 +892,18 @@ export class TkTable implements ComponentInterface {
       datepicker.label = column?.filterElements?.optionsDatepicker?.label || 'Select a date';
       datepicker.placeholder = column?.filterElements?.optionsDatepicker?.placeholder || 'Choose a date';
       datepicker.mode = (column?.filterElements?.optionsDatepicker?.mode as 'single' | 'range') || 'single';
+      datepicker.dateFormat = column?.filterElements?.optionsDatepicker?.dateFormat || 'yyyy-MM-dd';
+      datepicker.timeFormat = (column?.filterElements?.optionsDatepicker?.timeFormat as '24' | '12') || '24';
+      datepicker.minDate = column?.filterElements?.optionsDatepicker?.minDate || '';
+      datepicker.maxDate = column?.filterElements?.optionsDatepicker?.maxDate || '';
+      datepicker.minTime = column?.filterElements?.optionsDatepicker?.minTime || null;
+      datepicker.maxTime = column?.filterElements?.optionsDatepicker?.maxTime || null;
+      datepicker.hourStep = column?.filterElements?.optionsDatepicker?.hourStep || 1;
+      datepicker.minuteStep = column?.filterElements?.optionsDatepicker?.minuteStep || 1;
+      datepicker.locale = column?.filterElements?.optionsDatepicker?.locale || 'en';
+      datepicker.showTimePicker = column?.filterElements?.optionsDatepicker?.showTimePicker || false;
+      datepicker.size = (column?.filterElements?.optionsDatepicker?.size as 'small' | 'base' | 'large') || 'base';
+
       filterContainer.appendChild(datepicker);
       this.elFilterPanelElement.appendChild(filterContainer);
     } else {
