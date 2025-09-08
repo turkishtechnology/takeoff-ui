@@ -726,6 +726,7 @@ export class TkTable implements ComponentInterface {
         refSortIcon.icon = 'arrow_drop_down';
       } else if (icon === 'arrow_drop_down') {
         this.sorts.splice(existingIndex, 1);
+        this.el.shadowRoot.querySelector(`thead th[data-field="${col.field}"] tk-badge`)?.remove();
         refSortIcon.icon = 'swap_vert';
       }
     } else {
@@ -743,7 +744,25 @@ export class TkTable implements ComponentInterface {
   private applySorting() {
     if (this.currentPage === 1) {
       const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
-      this.generateRenderData(tmpData, 1);
+      if (this.multiSort && tmpData.sorts) {
+        this.el.shadowRoot.querySelectorAll('thead th tk-badge').forEach(badge => badge.remove());
+        for (const sort of tmpData.sorts) {
+          const thElement = this.el.shadowRoot.querySelector(`thead th[data-field="${sort.field}"] .tk-table-head-cell .icons`);
+          if (thElement) {
+            const badge = document.createElement('tk-badge');
+            badge.count = sort.index;
+            badge.type = 'filledlight';
+            badge.rounded = true;
+            badge.variant = 'info';
+            badge.size = 'small';
+
+            thElement.appendChild(badge);
+          }
+        }
+        this.generateRenderData(tmpData.data, 1);
+      } else {
+        this.generateRenderData(tmpData, 1);
+      }
     } else {
       this.currentPage = 1;
     }
@@ -1422,6 +1441,7 @@ export class TkTable implements ComponentInterface {
                   ...this.getStickyColumnStyle(col),
                   ...col?.style,
                 }}
+                data-field={col.field}
               >
                 <div class="tk-table-head-cell">
                   {_headerStructure}
