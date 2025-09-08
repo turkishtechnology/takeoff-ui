@@ -656,7 +656,7 @@ export class TkTable implements ComponentInterface {
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
-      _.pull(tmpSelection, row);
+      tmpSelection = tmpSelection.filter(item => item[this.dataKey] !== row[this.dataKey]);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
     } else if (isSelect == true && !hasSelect) {

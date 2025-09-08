@@ -24,8 +24,15 @@ const Example = () => {
     },
   ];
 
-  const [selectionList, setSelectionList] = useState();
-  const [mode, setMode] = useState();
+  const [selectionList, setSelectionList] = useState([
+    {
+      id: 'h456wer53',
+      name: 'Bracelet',
+      category: 'Clothing',
+      quantity: 45,
+    },
+  ]);
+  const [mode, setMode] = useState<'checkbox' | 'radio'>('checkbox');
 
   return (
     <div className="p-2">
@@ -39,9 +46,12 @@ const Example = () => {
         columns={column}
         data={basicData}
         dataKey="id"
+        selection={selectionList}
         selectionMode={mode}
         selectionRowDisabled={row => row.id === 'zz21cz3c1'}
-        onTkSelectionChange={(e: CustomEvent) => setSelectionList({ ...e.detail })}
+        onTkSelectionChange={(e: CustomEvent) => {
+          setSelectionList(e.detail);
+        }}
       />
       <p>{JSON.stringify(selectionList)}</p>
     </div>
@@ -75,9 +85,10 @@ return (
       columns={column}
       data={basicData}
       dataKey="id"
+      selection={selectionList}
       selectionMode={mode}
       onTkSelectionChange={(e: CustomEvent) =>
-        setSelectionList({ ...e.detail })
+        setSelectionList(e.detail)
       }
     />
     <p>{JSON.stringify(selectionList)}</p>
@@ -86,6 +97,7 @@ return (
 
   const vueCode = `<script setup>
 import { TkTable } from '@takeoff-ui/vue'
+import { ref } from 'vue';
 
 const column = [
   {
@@ -105,16 +117,25 @@ const column = [
     header: "Quantity",
   },
 ];
+const selectionList = ref([
+  {
+    id: 'h456wer53',
+    name: 'Bracelet',
+    category: 'Clothing',
+    quantity: 45,
+  },
+]);
 </script>
-
+ 
 <template>
   <div :style="{ padding: '8px' }">
-    <TkTable 
-      :columns.prop="column" 
-      :data.prop="basicData" 
-      dataKey="id" 
+    <TkTable
+      :columns.prop="column"
+      :data.prop="basicData"
+      dataKey="id"
+      :selection="selectionList"
       selectionMode.prop="mode"
-      @tkSelectionChange="(e) => setSelectionList({ ...e.detail })" 
+      @tkSelectionChange="e => (selectionList.value = e.detail)"
     />
     <p>{{ JSON.stringify(selectionList) }}</p>
   </div>
