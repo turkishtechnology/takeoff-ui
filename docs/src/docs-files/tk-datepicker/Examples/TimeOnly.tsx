@@ -36,22 +36,18 @@ const TimeOnly = () => {
 
   const demo = (
     <div className="flex flex-col gap-4 justify-center">
-      <div className="w-66">
-        <TkRadioGroup value={timeFormat} onTkChange={handleTimeFormatChange} label="Time Format">
-          <TkRadio label="12" value="12" />
-          <TkRadio label="24" value="24" />
-        </TkRadioGroup>
-      </div>
-      <div className="w-66">
-        <TkRadioGroup value={type} onTkChange={handleTypeChange} label="Header Type">
-          <TkRadio label="Basic" value="basic" />
-          <TkRadio label="Divided" value="divided" />
-          <TkRadio label="Light" value="light" />
-          <TkRadio label="Dark" value="dark" />
-          <TkRadio label="Primary" value="primary" />
-        </TkRadioGroup>
-      </div>
-      <div className="w-66">
+      <TkRadioGroup value={timeFormat} onTkChange={handleTimeFormatChange} label="Time Format">
+        <TkRadio label="12" value="12" />
+        <TkRadio label="24" value="24" />
+      </TkRadioGroup>
+      <TkRadioGroup value={type} onTkChange={handleTypeChange} label="Header Type">
+        <TkRadio label="Basic" value="basic" />
+        <TkRadio label="Divided" value="divided" />
+        <TkRadio label="Light" value="light" />
+        <TkRadio label="Dark" value="dark" />
+        <TkRadio label="Primary" value="primary" />
+      </TkRadioGroup>
+      <div className="w-28">
         <TkDatepicker label="Select Time" timeOnly value={selectedTime} onTkChange={handleDateChange} timeFormat={timeFormat} headerType={type} />
       </div>
     </div>
