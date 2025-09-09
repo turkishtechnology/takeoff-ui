@@ -747,14 +747,17 @@ export class TkSelect implements ComponentInterface {
     if (this.selectAll && this.multiple) {
       const checking = this.isAllSelected();
       return (
-        <div
-          class={classNames('dropdown-item', { multiple: this.multiple })}
-          data-selected={this.multiple && checking ? 'true' : 'false'}
-          onClick={() => this.handleSelectAllClick()}
-          data-option-index="-1"
-        >
-          <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
-          <div>{this.selectAllLabel}</div>
+        <div>
+          <div
+            class={classNames('dropdown-item', { multiple: this.multiple })}
+            data-selected={this.multiple && checking ? 'true' : 'false'}
+            onClick={() => this.handleSelectAllClick()}
+            data-option-index="-1"
+          >
+            <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+            <div>{this.selectAllLabel}</div>
+          </div>
+          <tk-divider my={1} style={{ margin: '4px' }} />
         </div>
       );
     }
