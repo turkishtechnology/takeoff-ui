@@ -508,7 +508,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleWindowClick(event: MouseEvent) {
-    const isInnerClicked = event.composedPath().some(item => item == this.el);
+    const tkInputEl = this.el.querySelector('.tk-input');
+    const tkSelectPanelEl = this.el.querySelector('.tk-select-panel');
+    const isInnerClicked = event.composedPath().some(item => item === tkInputEl || item === tkSelectPanelEl);
+
     if (!isInnerClicked) {
       this.isOpen = false;
       this.unbindWindowClickListener();
