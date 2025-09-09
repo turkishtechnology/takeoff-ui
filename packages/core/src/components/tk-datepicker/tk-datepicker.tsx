@@ -1637,7 +1637,7 @@ export class TkDatePicker {
             <span class="tk-datepicker-divider"></span>
             <tk-button
               variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest' : '' }}
+              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleYearChange(1)}
               type="text"
             ></tk-button>
