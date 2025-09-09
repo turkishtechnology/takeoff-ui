@@ -1402,7 +1402,10 @@ export class TkTable implements ComponentInterface {
               );
 
               // filtrelenmiş ise badge ile göster
-              if (this.filters.findIndex(item => item.field == col.field) > -1) {
+              const filterIndex = this.filters.findIndex(item => item.field == col.field);
+              const filterObj = this.filters[filterIndex];
+              const hasFilter = filterIndex > -1 && filterObj && filterObj.value !== '';
+              if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
                 if (col.showIconsOnHover) {
                   _headerStructure = <tk-badge dot>{_headerStructure}</tk-badge>;
