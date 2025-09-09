@@ -2,17 +2,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
   padding: 4px;
   align-self: stretch;
-  background: var(--static-Light, #fff);
+  background: var(--static-light);
   border-radius: 12px;
-
+  &.basic {
+    background-color: transparent;
+  }
   &.light {
     border: 1px solid var(--border-light, #e1e4ea);
-    background: var(--background-lightest, #f9fafc);
+    background: var(--background-lightest);
   }
-
   &.divided {
     border: 1px solid var(--border-light, #e1e4ea);
   }

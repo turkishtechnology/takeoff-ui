@@ -3,7 +3,7 @@ import { TkDatepicker, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const HeaderTypes = () => {
-  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light'>('basic');
+  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
 
@@ -11,6 +11,8 @@ const HeaderTypes = () => {
     { label: 'Basic', value: 'basic' },
     { label: 'Divided', value: 'divided' },
     { label: 'Light', value: 'light' },
+    { label: 'Primary', value: 'primary' },
+    { label: 'Dark', value: 'dark' },
   ];
 
   const handleHeaderTypeChange = event => {
