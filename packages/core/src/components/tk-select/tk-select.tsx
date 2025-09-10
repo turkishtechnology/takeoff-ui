@@ -249,6 +249,12 @@ export class TkSelect implements ComponentInterface {
   componentDidRender(): void {
     // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
     // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
+    if (this.readonly) {
+      const nativeInput = this.inputRef?.querySelector('input');
+      if (nativeInput) {
+        nativeInput.setAttribute('readonly', 'true');
+      }
+    }
     if (this.multiple && this.editable) {
       this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
       this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
@@ -502,7 +508,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleWindowClick(event: MouseEvent) {
-    const isInnerClicked = event.composedPath().some(item => item == this.el);
+    const tkInputEl = this.el.querySelector('.tk-input');
+    const tkSelectPanelEl = this.el.querySelector('.tk-select-panel');
+    const isInnerClicked = event.composedPath().some(item => item === tkInputEl || item === tkSelectPanelEl);
+
     if (!isInnerClicked) {
       this.isOpen = false;
       this.unbindWindowClickListener();
@@ -510,6 +519,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleSelectAllClick() {
+    if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue;
@@ -540,6 +550,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleItemClick(item) {
+    if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
@@ -739,14 +750,17 @@ export class TkSelect implements ComponentInterface {
     if (this.selectAll && this.multiple) {
       const checking = this.isAllSelected();
       return (
-        <div
-          class={classNames('dropdown-item', { multiple: this.multiple })}
-          data-selected={this.multiple && checking ? 'true' : 'false'}
-          onClick={() => this.handleSelectAllClick()}
-          data-option-index="-1"
-        >
-          <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
-          <div>{this.selectAllLabel}</div>
+        <div>
+          <div
+            class={classNames('dropdown-item', { multiple: this.multiple })}
+            data-selected={this.multiple && checking ? 'true' : 'false'}
+            onClick={() => this.handleSelectAllClick()}
+            data-option-index="-1"
+          >
+            <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+            <div>{this.selectAllLabel}</div>
+          </div>
+          <tk-divider my={1} style={{ margin: '4px' }} />
         </div>
       );
     }
