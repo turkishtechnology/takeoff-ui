@@ -1,5 +1,5 @@
 import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
-import { parse, isWithinInterval, format } from 'date-fns';
+import { parse, isWithinInterval } from 'date-fns';
 
 /**
  * Calculates the optimal starting width for column resizing
@@ -106,23 +106,31 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
           if (!fieldValue) return false;
           // Get dateFormat and timeFormat from column definition
           const column = columns.find(col => col.field === filter.field);
-          const dateFormat = column?.filterElements?.optionsDatepicker?.dateFormat || 'yyyy-MM-dd';
-          const timeFormat = column?.filterElements?.optionsDatepicker?.timeFormat || '24';
+          const dateFormat = column?.filterElements?.optionsSearchDatepicker?.dateFormat;
+          const timeFormat = column?.filterElements?.optionsSearchDatepicker?.timeFormat;
           const formatType = dateFormat + (timeFormat === '24' ? ' HH:mm' : timeFormat === '12' ? ' hh:mm aa' : '');
 
           const rowDate = parse(fieldValue, formatType, new Date());
           // Range mode
-          if (typeof filter.value === 'string' && filter.value.includes(' - ')) {
-            const [start, end] = filter.value.split(' - ').map(s => s.trim());
-            const startDate = parse(start, formatType, new Date());
+          if (
+            typeof filter.value === 'object' &&
+            filter.value !== null &&
+            'start' in filter.value &&
+            'end' in filter.value &&
+            filter.value.start &&
+            filter.value.end &&
+            filter.value.start !== '' &&
+            filter.value.end !== ''
+          ) {
+            const startDate = parse(filter.value.start, formatType, new Date());
+            const endDate = parse(filter.value.end, formatType, new Date());
 
-            const endDate = parse(end, formatType, new Date());
             if (!rowDate || !startDate || !endDate) return false;
             return isWithinInterval(rowDate, { start: startDate, end: endDate });
-          } else {
+          } else if (typeof filter.value == 'string' && filter.value !== '') {
             // Single date mode
-            const filterDateStr = parse(filter.value as string, formatType, new Date());
-            return format(rowDate, formatType) == format(filterDateStr, formatType);
+            const filterDate = parse(filter.value, formatType, new Date());
+            return rowDate.getTime() == filterDate.getTime();
           }
         }
       }

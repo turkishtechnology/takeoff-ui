@@ -889,21 +889,24 @@ export class TkTable implements ComponentInterface {
       filterContainer.classList.add('tk-table-filter-datepicker-container');
 
       const datepicker = document.createElement('tk-datepicker');
-      datepicker.label = column?.filterElements?.optionsDatepicker?.label || 'Select a date';
-      datepicker.placeholder = column?.filterElements?.optionsDatepicker?.placeholder || 'Choose a date';
-      datepicker.mode = (column?.filterElements?.optionsDatepicker?.mode as 'single' | 'range') || 'single';
-      datepicker.dateFormat = column?.filterElements?.optionsDatepicker?.dateFormat || 'yyyy-MM-dd';
-      datepicker.timeFormat = (column?.filterElements?.optionsDatepicker?.timeFormat as '24' | '12') || '24';
-      datepicker.minDate = column?.filterElements?.optionsDatepicker?.minDate || '';
-      datepicker.maxDate = column?.filterElements?.optionsDatepicker?.maxDate || '';
-      datepicker.minTime = column?.filterElements?.optionsDatepicker?.minTime || null;
-      datepicker.maxTime = column?.filterElements?.optionsDatepicker?.maxTime || null;
-      datepicker.hourStep = column?.filterElements?.optionsDatepicker?.hourStep || 1;
-      datepicker.minuteStep = column?.filterElements?.optionsDatepicker?.minuteStep || 1;
-      datepicker.locale = column?.filterElements?.optionsDatepicker?.locale || 'en';
-      datepicker.showTimePicker = column?.filterElements?.optionsDatepicker?.showTimePicker || false;
-      datepicker.size = (column?.filterElements?.optionsDatepicker?.size as 'small' | 'base' | 'large') || 'base';
-
+      const defaultDatepickerProps = {
+        label: 'Select a date',
+        placeholder: 'Choose a date',
+        mode: 'single',
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: '24',
+        minDate: '',
+        maxDate: '',
+        hourStep: 1,
+        minuteStep: 1,
+        locale: 'en',
+        showTimePicker: false,
+        size: 'base',
+      };
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      datepicker.addEventListener('tk-change', (e: Event) => {
+        datepicker.value = (e as CustomEvent).detail;
+      });
       filterContainer.appendChild(datepicker);
       this.elFilterPanelElement.appendChild(filterContainer);
     } else {
@@ -1039,7 +1042,8 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
   private handleDatepickerFilterApply(columnField: string) {
-    const selectedDate = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker').shadowRoot.querySelector('tk-input').value;
+    const datepickerEl = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
+    const selectedDate = datepickerEl?.value;
     const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (selectedDate) {
       if (filterIndex > -1) {

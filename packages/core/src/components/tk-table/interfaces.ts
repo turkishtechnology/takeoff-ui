@@ -1,3 +1,5 @@
+import { IDateSelection } from '../tk-datepicker/tk-datepicker';
+
 /**
  * Defines the columns for the table
  */
@@ -53,7 +55,7 @@ export interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
-    optionsDatepicker?: {
+    optionsSearchDatepicker?: {
       label?: string;
       placeholder?: string;
       mode?: 'single' | 'range';
@@ -61,8 +63,6 @@ export interface ITableColumn {
       timeFormat?: '24' | '12';
       minDate?: string;
       maxDate?: string;
-      minTime?: string;
-      maxTime?: string;
       hourStep?: number;
       minuteStep?: number;
       locale?: string;
@@ -115,8 +115,8 @@ export interface ITableRequest {
 
 /** Represents a filter applied to a table */
 export interface ITableFilter {
-  /** The value of the filter - string for text/radio filter, string array for checkbox filter, Date for datepicker filter */
-  value?: string | string[] | Date;
+  /** The value of the filter - string for text/radio/datepciker filter, string array for checkbox filter, IDateSelection for datepicker filter */
+  value?: string | string[] | IDateSelection;
   /** The field to which the filter is applied */
   field: string;
   /** The type of the filter (text, checkbox, radio, or datepicker) */

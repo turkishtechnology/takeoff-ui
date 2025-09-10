@@ -64,7 +64,7 @@ const Example = () => {
       sorter: (a: any, b: any) => (a.date > b.date ? 1 : -1),
       filterType: 'datepicker',
       filterElements: {
-        optionsDatepicker: {
+        optionsSearchDatepicker: {
           label: 'Choose a date',
           placeholder: '2025-09-07',
           mode: 'range',
@@ -72,8 +72,6 @@ const Example = () => {
           timeFormat: '12',
           minDate: '2025-09-01',
           maxDate: '2025-12-31',
-          minTime: '09:00',
-          maxTime: '18:00',
           hourStep: 2,
           minuteStep: 15,
           locale: 'tr',
@@ -191,7 +189,7 @@ const FilterAndSort = () => {
       sorter: (a: any, b: any) => (a.date > b.date ? 1 : -1),
       filterType: 'datepicker',
       filterElements: {
-        optionsDatepicker: {
+        optionsSearchDatepicker: {
           label: 'Choose a date',
           placeholder: '2025-09-07',
           mode: 'range',
@@ -199,8 +197,6 @@ const FilterAndSort = () => {
           timeFormat: '12',
           minDate: '2025-09-01',
           maxDate: '2025-12-31',
-          minTime: '09:00',
-          maxTime: '18:00',
           hourStep: 2,
           minuteStep: 15,
           locale: 'tr',
@@ -320,7 +316,7 @@ const column = [
     sorter: (a: any, b: any) => (a.date > b.date ? 1 : -1),
     filterType: 'datepicker',
     filterElements: {
-        optionsDatepicker: {
+        optionsSearchDatepicker: {
           label: 'Choose a date',
           placeholder: '2025-09-07',
           mode: 'range',
@@ -328,8 +324,6 @@ const column = [
           timeFormat: '12',
           minDate: '2025-09-01',
           maxDate: '2025-12-31',
-          minTime: '09:00',
-          maxTime: '18:00',
           hourStep: 2,
           minuteStep: 15,
           locale: 'tr',
