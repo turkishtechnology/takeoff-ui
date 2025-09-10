@@ -1047,7 +1047,7 @@ export class TkTable implements ComponentInterface {
     const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
     if (selectedDate) {
       if (filterIndex > -1) {
-        this.filters[filterIndex].value = selectedDate as string;
+        this.filters[filterIndex].value = selectedDate;
         this.filters[filterIndex].type = 'datepicker';
       } else {
         this.filters.push({ field: columnField, value: selectedDate, type: 'datepicker' } as ITableFilter);
