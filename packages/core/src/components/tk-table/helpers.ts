@@ -136,12 +136,6 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
       });
     }
   }
-  if (sorts && sorts.length > 0) {
-    return {
-      data: sortAndFilterData,
-      sorts: sorts.map((s, i) => ({ ...s, index: i + 1 })),
-    };
-  }
   return sortAndFilterData;
 };
 // #endregion

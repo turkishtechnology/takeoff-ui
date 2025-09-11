@@ -723,19 +723,14 @@ export class TkTable implements ComponentInterface {
 
       if (icon === 'arrow_drop_up') {
         currentSort.order = 'desc';
-        refSortIcon.icon = 'arrow_drop_down';
       } else if (icon === 'arrow_drop_down') {
         this.sorts.splice(existingIndex, 1);
-        this.el.shadowRoot.querySelector(`thead th[data-field="${col.field}"] tk-badge`)?.remove();
-        refSortIcon.icon = 'swap_vert';
       }
     } else {
       this.sorts.push({
         field: col.field,
         order: 'asc',
       });
-
-      refSortIcon.icon = 'arrow_drop_up';
     }
 
     this.applySorting();
@@ -744,25 +739,7 @@ export class TkTable implements ComponentInterface {
   private applySorting() {
     if (this.currentPage === 1) {
       const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
-      if (this.multiSort && tmpData.sorts) {
-        this.el.shadowRoot.querySelectorAll('thead th tk-badge').forEach(badge => badge.remove());
-        for (const sort of tmpData.sorts) {
-          const thElement = this.el.shadowRoot.querySelector(`thead th[data-field="${sort.field}"] .tk-table-head-cell .icons`);
-          if (thElement) {
-            const badge = document.createElement('tk-badge');
-            badge.count = sort.index;
-            badge.type = 'filledlight';
-            badge.rounded = true;
-            badge.variant = 'info';
-            badge.size = 'small';
-
-            thElement.appendChild(badge);
-          }
-        }
-        this.generateRenderData(tmpData.data, 1);
-      } else {
-        this.generateRenderData(tmpData, 1);
-      }
+      this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
     }
@@ -1397,7 +1374,24 @@ export class TkTable implements ComponentInterface {
 
             // generate head sort and search icons
 
-            _sortIcon = col.sortable && (
+            // generate head sort and search icons
+            const sortIndex = this.sorts.findIndex(s => s.field === col.field);
+            const sortObj = this.sorts.find(s => s.field === col.field);
+            const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
+
+            const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
+            _sortIcon = showBadge ? (
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small">
+                <tk-icon
+                  {...getIconElementProps(iconType, {
+                    class: classNames('sort-icon'),
+                    variant: null,
+                    ref: (el: any) => (refSortIcon = el),
+                    onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
+                  })}
+                />
+              </tk-badge>
+            ) : (
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
@@ -1447,7 +1441,7 @@ export class TkTable implements ComponentInterface {
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
-                      {_sortIcon}
+                      {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
                   )}
