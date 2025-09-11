@@ -33,8 +33,8 @@ export class TkTable implements ComponentInterface {
   private resizeColumnIndex: number = -1;
   private startX: number = 0;
   private startWidth: number = 0;
-  private customCellCache: Map<string, HTMLElement> = new Map();
-  private isSelectionUpdating: boolean = false;
+  private customCellCache: Map<string, HTMLElement> = new Map(); // cache mapping
+  private isSelectionUpdating: boolean = false; // flag to check if the selection is updating
 
   @Element() el: HTMLTkTableElement;
 
