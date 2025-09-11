@@ -10,6 +10,7 @@ import RowCellStyle from './Examples/RowCellStyle';
 import ExpandedRows from './Examples/ExpandedRows';
 import Export from './Examples/Export';
 import StickyColumn from './Examples/StickyColumn';
+import StickyHeader from './Examples/StickyHeader';
 import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
 import { TkAlert } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
@@ -130,6 +131,12 @@ The basic features of the TkTable component are demonstrated.
 This feature allows the selected columns stay in their position in case of having multiple columns that extands the space.
 
 <StickyColumn />
+
+## Sticky Header
+
+This feature allows the table header to remain fixed at the top when scrolling through large datasets. To enable sticky header functionality, you must provide a height value through the `containerStyle` prop.
+
+<StickyHeader />
 
 ## Column Arrangement
 
