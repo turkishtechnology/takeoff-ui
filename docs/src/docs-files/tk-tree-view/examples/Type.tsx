@@ -6,32 +6,32 @@ const typeOptions: Array<'basic' | 'divided' | 'light'> = ['basic', 'divided', '
 
 const sampleData = [
   {
-    itemId: '1',
+    key: '1',
     label: 'Root Directory',
     children: [
       {
-        itemId: '1.2',
+        key: '1.2',
         label: 'Second Directory',
         children: [
           {
-            itemId: '1.3',
+            key: '1.3',
             label: 'Third Directory',
             children: [
               {
-                itemId: '1.4',
+                key: '1.4',
                 label: 'Fourth Directory',
               },
             ],
           },
         ],
       },
-      { itemId: '2', label: 'Child 1' },
-      { itemId: '3', label: 'Child 2' },
-      { itemId: '4', label: 'Child 3' },
-      { itemId: '5', label: 'Child 4' },
-      { itemId: '6', label: 'Child 5' },
-      { itemId: '7', label: 'Child 6' },
-      { itemId: '8', label: 'Child 7' },
+      { key: '2', label: 'Child 1' },
+      { key: '3', label: 'Child 2' },
+      { key: '4', label: 'Child 3' },
+      { key: '5', label: 'Child 4' },
+      { key: '6', label: 'Child 5' },
+      { key: '7', label: 'Child 6' },
+      { key: '8', label: 'Child 7' },
     ],
   },
 ];
@@ -45,32 +45,32 @@ const TreeViewType = () => {
     setReactCode(`
 const treeData = [
   {
-    itemId: '1',
+    key: '1',
     label: 'Root Directory',
     children: [
       {
-        itemId: '1.2',
+        key: '1.2',
         label: 'Second Directory',
         children: [
           {
-            itemId: '1.3',
+            key: '1.3',
             label: 'Third Directory',
             children: [
               {
-                itemId: '1.4',
+                key: '1.4',
                 label: 'Fourth Directory'
               }
             ]
           }
         ]
       },
-      { itemId: '2', label: 'Child 1' },
-      { itemId: '3', label: 'Child 2' },
-      { itemId: '4', label: 'Child 3' },
-      { itemId: '5', label: 'Child 4' },
-      { itemId: '6', label: 'Child 5' },
-      { itemId: '7', label: 'Child 6' },
-      { itemId: '8', label: 'Child 7' },
+      { key: '2', label: 'Child 1' },
+      { key: '3', label: 'Child 2' },
+      { key: '4', label: 'Child 3' },
+      { key: '5', label: 'Child 4' },
+      { key: '6', label: 'Child 5' },
+      { key: '7', label: 'Child 6' },
+      { key: '8', label: 'Child 7' },
     ]
   }
 ];
@@ -81,32 +81,32 @@ const treeData = [
 <script setup>
 const treeData = [
   {
-    itemId: '1',
+    key: '1',
     label: 'Root Directory',
     children: [
       {
-        itemId: '1.2',
+        key: '1.2',
         label: 'Second Directory',
         children: [
           {
-            itemId: '1.3',
+            key: '1.3',
             label: 'Third Directory',
             children: [
               {
-                itemId: '1.4',
+                key: '1.4',
                 label: 'Fourth Directory'
               }
             ]
           }
         ]
       },
-      { itemId: '2', label: 'Child 1' },
-      { itemId: '3', label: 'Child 2' },
-      { itemId: '4', label: 'Child 3' },
-      { itemId: '5', label: 'Child 4' },
-      { itemId: '6', label: 'Child 5' },
-      { itemId: '7', label: 'Child 6' },
-      { itemId: '8', label: 'Child 7' },
+      { key: '2', label: 'Child 1' },
+      { key: '3', label: 'Child 2' },
+      { key: '4', label: 'Child 3' },
+      { key: '5', label: 'Child 4' },
+      { key: '6', label: 'Child 5' },
+      { key: '7', label: 'Child 6' },
+      { key: '8', label: 'Child 7' },
     ]
   }
 ];
