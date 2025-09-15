@@ -3,7 +3,7 @@ import { TkButton } from '@takeoff-ui/react';
 export default function ReleaseNavigate() {
   return (
     <div className="flex flex-col gap-4 justify-center items-center">
-      <h1>Version 0.1.0 and later release notes are available on GitHub!</h1>
+      <h1>From now on, you can access release notes from GitHub!</h1>
       <a href="https://github.com/turkishtechnology/takeoff-ui/releases" target="_blank" rel="noopener noreferrer">
         <TkButton
           label="View Release Note"
