@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { ITreeItem } from './interfaces';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
@@ -25,12 +25,22 @@ export class TkTreeView implements ComponentInterface {
    * Array of tree items data. This is the primary way to provide data to the tree view.
    */
   @Prop() items: ITreeItem[] = [];
-
+  @Watch('items')
+  handleItemsChange() {
+    if (this.expandAll) {
+      this.initializeExpandedPaths();
+    }
+  }
   /**
    * Tree view mode: 'basic' or 'stepper'.
    */
   @Prop() mode: 'basic' | 'stepper' = 'basic';
-
+  @Watch('mode')
+  handleModeChange() {
+    if (this.expandAll) {
+      this.initializeExpandedPaths();
+    }
+  }
   /**
    * Tree view type: 'basic', 'divided', or 'light'.
    */
@@ -82,6 +92,24 @@ export class TkTreeView implements ComponentInterface {
   @Prop() showPointer: boolean = true;
 
   /**
+   * Selection strategy for checkboxes:
+   * - 'all': selecting a node selects the node itself and all descendants
+   * - 'leaf': selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
+   */
+  @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
+
+  /**
+   * If true, expands all nodes.
+   */
+  @Prop() expandAll: boolean = false;
+  @Watch('expandAll')
+  handleExpandAllChange(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue && newValue) {
+      this.initializeExpandedPaths();
+    }
+  }
+
+  /**
    * Event emitted when a tree item is clicked.
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<ITreeItem>;
@@ -91,6 +119,9 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
+  componentWillLoad() {
+    this.initializeExpandedPaths();
+  }
   /**
    * Collect all descendant paths recursively
    */
@@ -106,6 +137,47 @@ export class TkTreeView implements ComponentInterface {
     }
 
     return paths;
+  }
+
+  /**
+   * Initialize expanded paths based on mode and expandAll configuration
+   */
+  private initializeExpandedPaths() {
+    const expanded = new Set<string>();
+    if (!this.items || this.items.length === 0) {
+      this.expandedPaths = expanded;
+      return;
+    }
+
+    if (this.mode === 'basic') {
+      if (this.expandAll) {
+        // Expand all directory nodes
+        const traverse = (nodes: ITreeItem[], base: string = '') => {
+          nodes.forEach((node, idx) => {
+            const path = base ? `${base}-${idx}` : `${idx}`;
+            if (node.children && node.children.length > 0) {
+              expanded.add(path);
+              traverse(node.children, path);
+            }
+          });
+        };
+        traverse(this.items);
+      }
+    } else if (this.mode === 'stepper') {
+      // Expand the first directory all the way down
+      let level = this.items;
+      let base = '';
+      while (level && level.length > 0) {
+        const idx = level.findIndex(n => n.children && n.children.length > 0);
+        if (idx === -1) break;
+        const path = base ? `${base}-${idx}` : `${idx}`;
+        expanded.add(path);
+        base = path;
+        level = level[idx].children;
+      }
+    }
+
+    this.expandedPaths = expanded;
   }
 
   /**
@@ -198,18 +270,49 @@ export class TkTreeView implements ComponentInterface {
   };
 
   /**
+   * Get all leaf descendant keys including the item's own key if it is a leaf
+   */
+  private getLeafKeys = (item: ITreeItem): string[] => {
+    const keys: string[] = [];
+    const isLeaf = !item.children || item.children.length === 0;
+    if (isLeaf) {
+      if (item.key) keys.push(item.key);
+      return keys;
+    }
+    for (const child of item.children) {
+      keys.push(...this.getLeafKeys(child));
+    }
+    return keys;
+  };
+
+  /**
    * Handle checkbox change events.
    */
   private handleCheckboxChange = (checked: boolean, item: ITreeItem) => {
-    const childKeys = this.getAllChildKeys(item);
-
-    if (checked) {
-      // Add current item and all children
-      this.value = [...(this.value || []), item.key, ...childKeys];
+    if (this.selectionStrategy === 'all') {
+      const childKeys = this.getAllChildKeys(item);
+      if (checked) {
+        // Add current item and all children
+        this.value = [...(this.value || []), item.key, ...childKeys];
+      } else {
+        // Remove current item and all children
+        this.value = this.value?.filter(key => key !== item.key && !childKeys.includes(key));
+      }
     } else {
-      // Remove current item and all children
-      this.value = this.value?.filter(key => key !== item.key && !childKeys.includes(key));
+      // 'leaf' strategy
+      const leafKeys = this.getLeafKeys(item);
+      if (checked) {
+        this.value = [...(this.value || []), ...leafKeys];
+      } else {
+        this.value = (this.value || []).filter(key => !leafKeys.includes(key));
+      }
+      // Ensure we don't keep non-leaf keys selected under leaf strategy
+      const allLeafsUnderRoot = this.items.flatMap(root => this.getLeafKeys(root));
+      this.value = (this.value || []).filter(key => allLeafsUnderRoot.includes(key));
     }
+
+    // Deduplicate and clean undefined/null
+    this.value = Array.from(new Set((this.value || []).filter((k): k is string => !!k)));
     this.tkChange.emit(this.value);
   };
 
@@ -217,23 +320,53 @@ export class TkTreeView implements ComponentInterface {
    * Check if all child nodes are selected and return checkbox state
    */
   private getCheckboxState = (item: ITreeItem): { checked: boolean; indeterminate: boolean } => {
+    const isLeaf = !item.children || item.children.length === 0;
     const isDirectlySelected = this.value?.includes(item.key) || false;
 
-    if (!item.children || item.children.length === 0) {
+    // Leaf nodes: direct selection matters in both strategies
+    if (isLeaf) {
       return { checked: isDirectlySelected, indeterminate: false };
     }
 
+    // Directory nodes: compute based on children
     const childStates = item.children.map(child => this.getCheckboxState(child));
     const checkedChildren = childStates.filter(state => state.checked || state.indeterminate);
     const allChecked = childStates.every(state => state.checked);
 
-    if (allChecked && checkedChildren.length === item.children.length) {
-      return { checked: true, indeterminate: false };
-    } else if (checkedChildren.length > 0) {
-      return { checked: false, indeterminate: true };
+    if (this.selectionStrategy === 'all') {
+      if (allChecked && checkedChildren.length === item.children.length) {
+        return { checked: true, indeterminate: false };
+      } else if (checkedChildren.length > 0) {
+        return { checked: false, indeterminate: true };
+      } else {
+        return { checked: isDirectlySelected, indeterminate: false };
+      }
     } else {
-      return { checked: isDirectlySelected, indeterminate: false };
+      // 'leaf' strategy: ignore isDirectlySelected for directories
+      if (allChecked && checkedChildren.length === item.children.length) {
+        return { checked: true, indeterminate: false };
+      } else if (checkedChildren.length > 0) {
+        return { checked: false, indeterminate: true };
+      } else {
+        return { checked: false, indeterminate: false };
+      }
     }
+  };
+
+  /**
+   * Count selected items within the subtree rooted at the given item
+   */
+  private getSelectedCount = (item: ITreeItem): number => {
+    let count = 0;
+    if (item.key && this.value?.includes(item.key)) {
+      count += 1;
+    }
+    if (item.children && item.children.length > 0) {
+      for (const child of item.children) {
+        count += this.getSelectedCount(child);
+      }
+    }
+    return count;
   };
 
   /**
@@ -275,6 +408,7 @@ export class TkTreeView implements ComponentInterface {
       selected: isSelected,
       disabled: isDisabled,
     });
+    const selectedCount = this.getSelectedCount(item);
 
     return (
       <div class={nodeClass}>
@@ -296,6 +430,9 @@ export class TkTreeView implements ComponentInterface {
           {isDirectory && this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />}
           {this.selectable && (
             <tk-checkbox
+              onClick={e => {
+                e.stopPropagation();
+              }}
               value={this.getCheckboxState(item).checked}
               indeterminate={this.getCheckboxState(item).indeterminate}
               disabled={isDisabled}
@@ -311,7 +448,7 @@ export class TkTreeView implements ComponentInterface {
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
             {isDirectory && this.showBadge && (
               <tk-badge
-                count={item.children?.length ?? 0}
+                count={this.selectable ? selectedCount : item.children?.length}
                 size={this.size}
                 type={this.badgeOptions?.type ?? 'filledlight'}
                 variant={this.badgeOptions?.variant ?? 'neutral'}

@@ -14,7 +14,6 @@ const findDialogHost = (el: HTMLElement): HTMLTkDialogElement | null => {
   return null;
 };
 const handleDialogScroll = (el: HTMLElement) => () => {
-  console.log(el);
   // Only close if the element has isOpen property
   if ('isOpen' in el && (el as any).isOpen) {
     (el as any).isOpen = false;

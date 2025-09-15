@@ -15,6 +15,9 @@ tk-select {
 
     .dropdown-item-holder {
       margin: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
 
       .dropdown-group-label {
         display: flex;
@@ -52,11 +55,12 @@ tk-select {
         }
         &[data-active='true'] {
           cursor: pointer;
-          background: var(--background-light);
+          border: 1px solid var(--states-info-base);
         }
         &[data-selected='true'] {
           cursor: pointer;
-          background: var(--states-info-light);
+          background: var(--states-info-lightest);
+          border: 1px solid var(--states-info-light);
         }
       }
     }

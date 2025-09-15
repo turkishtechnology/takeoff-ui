@@ -37,6 +37,9 @@
       display: flex;
       flex-direction: column;
       border-left: 1px solid var(--border-light);
+      &.tk-datepicker-timepicker-panel-only {
+        border-left: 0;
+      }
     }
   }
 }
@@ -386,11 +389,31 @@
 }
 
 .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
-  height: 40px;
-  padding: 8px 16px 4px;
+  width: 88px;
+  height: 52px;
+  padding: 0 var(--datepicker-header-base-h-padding) 0 var(--datepicker-header-base-h-padding);
   border-bottom: 1px solid var(--border-light);
-  border-top-right-radius: var(--radius-sm);
-  border-top-left-radius: var(--radius-sm);
+  border-top-right-radius: var(--radius-xl);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.tk-datepicker-timepicker-header-only {
+    border-left: 0;
+    border-top-left-radius: var(--radius-xl);
+  }
+  &.tk-datepicker-timepicker-header-light {
+    background: var(--background-lightest);
+  }
+
+  &.tk-datepicker-timepicker-header-primary {
+    background: var(--primary-base);
+    border-bottom: 1px solid var(--primary-sub-base);
+  }
+
+  &.tk-datepicker-timepicker-header-dark {
+    background: var(--background-darkest);
+    border-bottom: 1px solid var(--border-dark);
+  }
 }
 
 .tk-datepicker-timepicker-header-colon {
@@ -402,14 +425,55 @@
   gap: 4px;
   padding: var(--datepicker-body-base-day-v-padding) var(--datepicker-body-base-day-h-padding);
   flex: none;
-  height: calc(var(--datepicker-items-base-size) * 4 + (var(--spacing-1) * 3));
+  height: 260px;
   overflow-y: auto;
   position: relative;
+  &.tk-datepicker-timepicker-body-only {
+    border-left: 0;
+    border-bottom-left-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+  }
+  &.tk-datepicker-timepicker-body-light {
+    background: var(--background-lightest);
+
+    &::before {
+      background: var(--static-light);
+    }
+  }
+
+  &.tk-datepicker-timepicker-body-primary {
+    background: var(--primary-base);
+
+    &::before {
+      background: var(--primary-300);
+      color: var(--primary-50);
+      border-color: var(--primary-100);
+    }
+  }
+
+  &.tk-datepicker-timepicker-body-dark {
+    background: var(--background-darkest);
+
+    &::before {
+      background: var(--static-dark);
+      color: var(--text-lightest);
+      border-color: var(--border-dark);
+    }
+  }
+
+  &.tk-datepicker-timepicker-body-4-weeks {
+    &::before {
+      top: 100px;
+    }
+  }
 
   &::before {
-    content: '';
+    place-content: center;
+    display: grid;
+    color: var(--text-darkest);
+    content: ':';
     position: absolute;
-    top: 50%;
+    top: 144px;
     left: 16px;
     right: 16px;
     height: 40px;
@@ -428,13 +492,6 @@
   align-items: center;
   gap: 4px;
   flex: 1;
-}
-
-.tk-datepicker-timepicker-label {
-  font-family: var(--desktop-body-xs-font, Geologica);
-  font-size: var(--desktop-body-xs-size);
-  font-weight: 400;
-  color: var(--text-base);
 }
 
 .tk-datepicker-timepicker-arrow {
@@ -458,6 +515,21 @@
   position: relative;
   z-index: 100;
   cursor: pointer;
+  font-weight: 400;
+  &.tk-datepicker-timepicker-value-dark {
+    color: var(--text-lightest);
+  }
+  &.tk-datepicker-timepicker-value-primary {
+    color: var(--primary-50);
+  }
+
+  &.tk-datepicker-timepicker-value-empty {
+    visibility: hidden;
+    height: 40px;
+    min-height: 40px;
+    line-height: 40px;
+    flex: 0 0 40px;
+  }
 }
 
 .tk-datepicker-timepicker-value-selected {
@@ -470,4 +542,12 @@
   width: 100%;
   height: 1px;
   background-color: var(--border-light);
+
+  &.tk-datepicker-timepicker-separator-dark {
+    background-color: var(--border-dark);
+  }
+
+  &.tk-datepicker-timepicker-separator-primary {
+    background-color: var(--primary-300);
+  }
 }

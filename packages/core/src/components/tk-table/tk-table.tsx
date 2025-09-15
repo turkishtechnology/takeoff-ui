@@ -611,6 +611,8 @@ export class TkTable implements ComponentInterface {
       this.handleCheckboxFilterApply(columnField);
     } else if (this.columns.find(col => col.field === columnField)?.filterType === 'radio') {
       this.handleRadioFilterApply(columnField);
+    } else if (this.columns.find(col => col.field === columnField)?.filterType === 'datepicker') {
+      this.handleDatepickerFilterApply(columnField);
     } else {
       this.handleInputFilterApply(columnField);
     }
@@ -662,7 +664,7 @@ export class TkTable implements ComponentInterface {
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
-      _.pull(tmpSelection, row);
+      tmpSelection = tmpSelection.filter(item => item[this.dataKey] !== row[this.dataKey]);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
     } else if (isSelect == true && !hasSelect) {
@@ -729,18 +731,14 @@ export class TkTable implements ComponentInterface {
 
       if (icon === 'arrow_drop_up') {
         currentSort.order = 'desc';
-        refSortIcon.icon = 'arrow_drop_down';
       } else if (icon === 'arrow_drop_down') {
         this.sorts.splice(existingIndex, 1);
-        refSortIcon.icon = 'swap_vert';
       }
     } else {
       this.sorts.push({
         field: col.field,
         order: 'asc',
       });
-
-      refSortIcon.icon = 'arrow_drop_up';
     }
 
     this.applySorting();
@@ -888,6 +886,31 @@ export class TkTable implements ComponentInterface {
       });
 
       this.elFilterPanelElement.appendChild(filterContainer);
+    } else if (column?.filterType === 'datepicker') {
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-datepicker-container');
+
+      const datepicker = document.createElement('tk-datepicker');
+      const defaultDatepickerProps = {
+        label: 'Select a date',
+        placeholder: 'Choose a date',
+        mode: 'single',
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: '24',
+        minDate: '',
+        maxDate: '',
+        hourStep: 1,
+        minuteStep: 1,
+        locale: 'en',
+        showTimePicker: false,
+        size: 'base',
+      };
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      datepicker.addEventListener('tk-change', (e: Event) => {
+        datepicker.value = (e as CustomEvent).detail;
+      });
+      filterContainer.appendChild(datepicker);
+      this.elFilterPanelElement.appendChild(filterContainer);
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
@@ -1020,7 +1043,31 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
-
+  private handleDatepickerFilterApply(columnField: string) {
+    const datepickerEl = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
+    const selectedDate = datepickerEl?.value;
+    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (selectedDate) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].value = selectedDate;
+        this.filters[filterIndex].type = 'datepicker';
+      } else {
+        this.filters.push({ field: columnField, value: selectedDate, type: 'datepicker' } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if date is cleared
+      this.filters.splice(filterIndex, 1);
+    }
+    // Update table data
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+    // Close the filter panel
+    this.closeFilterPanel();
+  }
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
@@ -1414,7 +1461,24 @@ export class TkTable implements ComponentInterface {
 
             // generate head sort and search icons
 
-            _sortIcon = col.sortable && (
+            // generate head sort and search icons
+            const sortIndex = this.sorts.findIndex(s => s.field === col.field);
+            const sortObj = this.sorts.find(s => s.field === col.field);
+            const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
+
+            const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
+            _sortIcon = showBadge ? (
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small">
+                <tk-icon
+                  {...getIconElementProps(iconType, {
+                    class: classNames('sort-icon'),
+                    variant: null,
+                    ref: (el: any) => (refSortIcon = el),
+                    onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
+                  })}
+                />
+              </tk-badge>
+            ) : (
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
@@ -1438,7 +1502,11 @@ export class TkTable implements ComponentInterface {
               );
 
               // filtrelenmiş ise badge ile göster
-              if (this.filters.findIndex(item => item.field == col.field) > -1) {
+
+              const currentFilter = this.filters.find(item => item.field == col.field);
+              const hasFilter =
+                currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
+              if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
                 if (col.showIconsOnHover) {
                   _headerStructure = <tk-badge dot>{_headerStructure}</tk-badge>;
@@ -1458,12 +1526,13 @@ export class TkTable implements ComponentInterface {
                   ...this.getStickyColumnStyle(col),
                   ...col?.style,
                 }}
+                data-field={col.field}
               >
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
-                      {_sortIcon}
+                      {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
                   )}
