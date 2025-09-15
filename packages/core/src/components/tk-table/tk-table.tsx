@@ -260,6 +260,9 @@ export class TkTable implements ComponentInterface {
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
+
+    // Ensure sticky shadows are correct after any render update (e.g., expand/collapse)
+    this.refreshStickyShadows();
   }
 
   componentWillUpdate(): Promise<void> | void {
@@ -521,6 +524,9 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = newExpandedRows;
 
     this.tkExpandedRowsChange.emit(this.expandedRows);
+
+    // After state change, recalc shadows on next frame
+    requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
   private clearCustomElements() {
@@ -1236,42 +1242,48 @@ export class TkTable implements ComponentInterface {
     const tableHolder = this.el.shadowRoot?.querySelector('.table-holder');
     if (tableHolder) {
       tableHolder.addEventListener('scroll', this.handleScroll.bind(this));
+      // Initialize shadow state on mount
+      this.handleScroll({ target: tableHolder } as unknown as Event);
     }
   }
 
   private handleScroll = (e: Event) => {
     const target = e.target as HTMLElement;
+
     const scrollLeft = target.scrollLeft;
     const scrollWidth = target.scrollWidth;
     const clientWidth = target.clientWidth;
-    const maxScrollLeft = scrollWidth - clientWidth;
+    const maxScrollLeft = Math.max(0, scrollWidth - clientWidth);
+
+    const EPS = 1; // tolerance for float rounding
+    const hasOverflow = scrollWidth > clientWidth + EPS;
+    const atLeft = scrollLeft <= EPS;
+    const atRight = scrollLeft >= maxScrollLeft - EPS;
 
     // Update shadow visibility based on scroll position
     const leftStickyElements = this.el.shadowRoot?.querySelectorAll('.tk-table-sticky-shadow-right');
     const rightStickyElements = this.el.shadowRoot?.querySelectorAll('.tk-table-sticky-shadow-left');
 
-    // Show/hide left sticky shadow
+    // Left shadow visibility
     if (leftStickyElements) {
       leftStickyElements.forEach((el: HTMLElement) => {
-        if (scrollLeft > 0) {
-          el.style.setProperty('--shadow-opacity', '1');
-        } else {
-          el.style.setProperty('--shadow-opacity', '0');
-        }
+        el.style.setProperty('--shadow-opacity', hasOverflow && !atLeft ? '1' : '0');
       });
     }
 
-    // Show/hide right sticky shadow
+    // Right shadow visibility
     if (rightStickyElements) {
       rightStickyElements.forEach((el: HTMLElement) => {
-        if (scrollLeft < maxScrollLeft) {
-          el.style.setProperty('--shadow-opacity', '1');
-        } else {
-          el.style.setProperty('--shadow-opacity', '0');
-        }
+        el.style.setProperty('--shadow-opacity', hasOverflow && !atRight ? '1' : '0');
       });
     }
   };
+
+  private refreshStickyShadows() {
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder');
+    if (!tableHolder) return;
+    this.handleScroll({ target: tableHolder } as unknown as Event);
+  }
 
   private getStickyColumnClasses(col: ITableColumn, isFirst: boolean = false, isLast: boolean = false) {
     const classes = [];
@@ -1340,6 +1352,20 @@ export class TkTable implements ComponentInterface {
     return style;
   }
 
+  private getSelectionStickyStyle(rowIndex?: number) {
+    const style: any = {};
+
+    // Selection column is always the left-most sticky column
+    style['--tk-table-sticky-left-offset'] = `0px`;
+    style['left'] = `0px`;
+
+    if (rowIndex !== undefined) {
+      style['zIndex'] = Math.max(99 - (rowIndex ?? 0), 0);
+    }
+
+    return style;
+  }
+
   private createHead() {
     this.customHeaderElements = [];
 
@@ -1347,8 +1373,12 @@ export class TkTable implements ComponentInterface {
     let selectionTh;
 
     if (this.selectionMode === 'checkbox') {
+      const leftColumns = this.columns.filter(c => c.fixed === 'left');
       selectionTh = (
-        <th style={{ width: '20px', maxWidth: '20px' }} class="non-text">
+        <th
+          style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+        >
           <tk-checkbox
             value={Array.isArray(this.selection) && this.selection.length === this.renderData.length && this.renderData.length > 0}
             disabled={!(this.renderData.length > 0)}
@@ -1358,7 +1388,13 @@ export class TkTable implements ComponentInterface {
         </th>
       );
     } else if (this.selectionMode === 'radio') {
-      selectionTh = <th style={{ width: '20px', maxWidth: '20px' }} class="non-text"></th>;
+      const leftColumns = this.columns.filter(c => c.fixed === 'left');
+      selectionTh = (
+        <th
+          style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+        ></th>
+      );
     }
 
     return (
@@ -1533,7 +1569,7 @@ export class TkTable implements ComponentInterface {
             let selectionTd;
             if (this.selectionMode === 'checkbox') {
               selectionTd = (
-                <td class="non-text">
+                <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
                   <tk-checkbox
                     value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
                     disabled={isRowDisabled}
@@ -1543,7 +1579,7 @@ export class TkTable implements ComponentInterface {
               );
             } else if (this.selectionMode === 'radio') {
               selectionTd = (
-                <td class="non-text">
+                <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
                   <tk-radio
                     value={row}
                     name="selection"
