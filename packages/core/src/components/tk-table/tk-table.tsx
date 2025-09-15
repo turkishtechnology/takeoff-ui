@@ -605,6 +605,8 @@ export class TkTable implements ComponentInterface {
       this.handleCheckboxFilterApply(columnField);
     } else if (this.columns.find(col => col.field === columnField)?.filterType === 'radio') {
       this.handleRadioFilterApply(columnField);
+    } else if (this.columns.find(col => col.field === columnField)?.filterType === 'datepicker') {
+      this.handleDatepickerFilterApply(columnField);
     } else {
       this.handleInputFilterApply(columnField);
     }
@@ -882,6 +884,31 @@ export class TkTable implements ComponentInterface {
       });
 
       this.elFilterPanelElement.appendChild(filterContainer);
+    } else if (column?.filterType === 'datepicker') {
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-datepicker-container');
+
+      const datepicker = document.createElement('tk-datepicker');
+      const defaultDatepickerProps = {
+        label: 'Select a date',
+        placeholder: 'Choose a date',
+        mode: 'single',
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: '24',
+        minDate: '',
+        maxDate: '',
+        hourStep: 1,
+        minuteStep: 1,
+        locale: 'en',
+        showTimePicker: false,
+        size: 'base',
+      };
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      datepicker.addEventListener('tk-change', (e: Event) => {
+        datepicker.value = (e as CustomEvent).detail;
+      });
+      filterContainer.appendChild(datepicker);
+      this.elFilterPanelElement.appendChild(filterContainer);
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
@@ -1014,7 +1041,31 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
-
+  private handleDatepickerFilterApply(columnField: string) {
+    const datepickerEl = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
+    const selectedDate = datepickerEl?.value;
+    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+    if (selectedDate) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].value = selectedDate;
+        this.filters[filterIndex].type = 'datepicker';
+      } else {
+        this.filters.push({ field: columnField, value: selectedDate, type: 'datepicker' } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if date is cleared
+      this.filters.splice(filterIndex, 1);
+    }
+    // Update table data
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+    // Close the filter panel
+    this.closeFilterPanel();
+  }
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
