@@ -175,9 +175,9 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
       });
     }
   }
-  // #endregion
   return sortAndFilterData;
 };
+// #endregion
 
 export const getNestedValue = (row, path) => {
   return path.split('.').reduce((acc, key) => {

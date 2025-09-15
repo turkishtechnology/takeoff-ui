@@ -725,18 +725,14 @@ export class TkTable implements ComponentInterface {
 
       if (icon === 'arrow_drop_up') {
         currentSort.order = 'desc';
-        refSortIcon.icon = 'arrow_drop_down';
       } else if (icon === 'arrow_drop_down') {
         this.sorts.splice(existingIndex, 1);
-        refSortIcon.icon = 'swap_vert';
       }
     } else {
       this.sorts.push({
         field: col.field,
         order: 'asc',
       });
-
-      refSortIcon.icon = 'arrow_drop_up';
     }
 
     this.applySorting();
@@ -1429,7 +1425,24 @@ export class TkTable implements ComponentInterface {
 
             // generate head sort and search icons
 
-            _sortIcon = col.sortable && (
+            // generate head sort and search icons
+            const sortIndex = this.sorts.findIndex(s => s.field === col.field);
+            const sortObj = this.sorts.find(s => s.field === col.field);
+            const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
+
+            const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
+            _sortIcon = showBadge ? (
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small">
+                <tk-icon
+                  {...getIconElementProps(iconType, {
+                    class: classNames('sort-icon'),
+                    variant: null,
+                    ref: (el: any) => (refSortIcon = el),
+                    onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
+                  })}
+                />
+              </tk-badge>
+            ) : (
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
@@ -1477,12 +1490,13 @@ export class TkTable implements ComponentInterface {
                   ...this.getStickyColumnStyle(col),
                   ...col?.style,
                 }}
+                data-field={col.field}
               >
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
-                      {_sortIcon}
+                      {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
                   )}
