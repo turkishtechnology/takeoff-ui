@@ -66,16 +66,7 @@ const Example = () => {
       filterElements: {
         optionsSearchDatepicker: {
           label: 'Choose a date',
-          placeholder: '2025-09-07',
-          mode: 'range',
           dateFormat: 'yyyy-MM-dd',
-          timeFormat: '12',
-          minDate: '2025-09-01',
-          maxDate: '2025-12-31',
-          hourStep: 2,
-          minuteStep: 15,
-          locale: 'tr',
-          showTimePicker: true,
           size: 'small',
         },
       },
@@ -89,7 +80,7 @@ const Example = () => {
       status: 'active',
       group: 'group 1',
       quantity: 24,
-      date: '2025-09-07 11:45 AM',
+      date: '2025-09-07',
     },
     {
       id: 'nvklal433',
@@ -97,7 +88,7 @@ const Example = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 42,
-      date: '2025-09-08 12:15 AM',
+      date: '2025-09-08',
     },
     {
       id: 'zz21cz3c1',
@@ -105,7 +96,7 @@ const Example = () => {
       status: 'active',
       group: 'group 3',
       quantity: 87,
-      date: '2025-09-09 10:00 AM',
+      date: '2025-09-09',
     },
     {
       id: '244wgerg2',
@@ -113,7 +104,7 @@ const Example = () => {
       status: 'pending',
       group: 'group 1',
       quantity: 12,
-      date: '2025-09-10 09:30 AM',
+      date: '2025-09-10',
     },
     {
       id: 'h456wer53',
@@ -121,7 +112,7 @@ const Example = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 45,
-      date: '2025-09-11 12:45 AM',
+      date: '2025-09-11',
     },
   ];
   return <TkTable columns={column} data={data} />;
@@ -191,16 +182,7 @@ const FilterAndSort = () => {
       filterElements: {
         optionsSearchDatepicker: {
           label: 'Choose a date',
-          placeholder: '2025-09-07',
-          mode: 'range',
           dateFormat: 'yyyy-MM-dd',
-          timeFormat: '12',
-          minDate: '2025-09-01',
-          maxDate: '2025-12-31',
-          hourStep: 2,
-          minuteStep: 15,
-          locale: 'tr',
-          showTimePicker: true,
           size: 'small',
         },
       },
@@ -215,7 +197,7 @@ const FilterAndSort = () => {
       status: 'active',
       group: 'group 1',
       quantity: 24,
-      date: '2025-09-07 11:45 AM',
+      date: '2025-09-07',
     },
     {
       id: 'nvklal433',
@@ -223,7 +205,7 @@ const FilterAndSort = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 42,
-      date: '2025-09-08 12:15 AM',
+      date: '2025-09-08',
     },
     {
       id: 'zz21cz3c1',
@@ -231,7 +213,7 @@ const FilterAndSort = () => {
       status: 'active',
       group: 'group 3',
       quantity: 87,
-      date: '2025-09-09 10:00 AM',
+      date: '2025-09-09',
     },
     {
       id: '244wgerg2',
@@ -239,7 +221,7 @@ const FilterAndSort = () => {
       status: 'pending',
       group: 'group 1',
       quantity: 12,
-      date: '2025-09-10 09:30 AM',
+      date: '2025-09-10',
     },
     {
       id: 'h456wer53',
@@ -247,7 +229,7 @@ const FilterAndSort = () => {
       status: 'inactive',
       group: 'group 2',
       quantity: 45,
-      date: '2025-09-11 12:45 AM',
+      date: '2025-09-11',
     },
   ];
   
@@ -318,16 +300,7 @@ const column = [
     filterElements: {
         optionsSearchDatepicker: {
           label: 'Choose a date',
-          placeholder: '2025-09-07',
-          mode: 'range',
           dateFormat: 'yyyy-MM-dd',
-          timeFormat: '12',
-          minDate: '2025-09-01',
-          maxDate: '2025-12-31',
-          hourStep: 2,
-          minuteStep: 15,
-          locale: 'tr',
-          showTimePicker: true,
           size: 'small',
         },
       },
@@ -340,7 +313,7 @@ const column = [
       status: 'active',
       group: 'group 1',
       quantity: 24,
-      date: '2025-09-07 11:45 AM',
+      date: '2025-09-07',
     },
     {
       id: 'nvklal433',
@@ -348,7 +321,7 @@ const column = [
       status: 'inactive',
       group: 'group 2',
       quantity: 42,
-      date: '2025-09-08 12:15 AM',
+      date: '2025-09-08',
     },
     {
       id: 'zz21cz3c1',
@@ -356,7 +329,7 @@ const column = [
       status: 'active',
       group: 'group 3',
       quantity: 87,
-      date: '2025-09-09 10:00 AM',
+      date: '2025-09-09',
     },
     {
       id: '244wgerg2',
@@ -364,7 +337,7 @@ const column = [
       status: 'pending',
       group: 'group 1',
       quantity: 12,
-      date: '2025-09-10 09:30 AM',
+      date: '2025-09-10',
     },
     {
       id: 'h456wer53',
@@ -372,7 +345,7 @@ const column = [
       status: 'inactive',
       group: 'group 2',
       quantity: 45,
-      date: '2025-09-11 12:45 AM',
+      date: '2025-09-11',
     },
   ];
 </script>
