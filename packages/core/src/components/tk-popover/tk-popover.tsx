@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
@@ -25,6 +25,11 @@ export class TkPopover implements ComponentInterface {
   @Element() el: HTMLTkPopoverElement;
 
   @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged() {
+    console.log('isOpen', this.isOpen);
+    this.tkChange.emit(this.isOpen);
+  }
 
   /**
    * Controls if popover has custom content.
@@ -61,6 +66,11 @@ export class TkPopover implements ComponentInterface {
    * The style attribute of container element
    */
   @Prop() containerStyle?: any = null;
+
+  /**
+   * Emitted when the open state of the popover changes
+   */
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<boolean>;
 
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
