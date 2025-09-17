@@ -663,7 +663,6 @@ export class TkSelect implements ComponentInterface {
         if (!this.disabled && !this.readonly) {
           this.hasFocus = true;
           this.isOpen = true;
-          this.bindWindowClickListener();
         }
         return;
       }
@@ -675,23 +674,8 @@ export class TkSelect implements ComponentInterface {
         // Escape: Close dropdown without selecting
         this.isOpen = false;
         this.hasFocus = false;
-        this.unbindWindowClickListener();
         return;
       }
-
-      if (e.key === ' ') {
-        // Space: Select active item and close dropdown
-        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        if (activeItem) {
-          activeItem.click();
-          if (!this.multiple) {
-            this.isOpen = false;
-            this.hasFocus = false;
-          }
-        }
-        return;
-      }
-
       if (e.key === 'ArrowDown') {
         const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
         const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
@@ -732,11 +716,8 @@ export class TkSelect implements ComponentInterface {
         return;
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === ' ') {
         const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        if (this.multiple && this.editable && this.allowCustomValue) {
-          this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
-        }
         if (activeItem) {
           activeItem.click();
         }
