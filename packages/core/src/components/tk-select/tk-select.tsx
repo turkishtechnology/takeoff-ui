@@ -718,6 +718,9 @@ export class TkSelect implements ComponentInterface {
 
       if (e.key === 'Enter' || e.key === ' ') {
         const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+        if (this.multiple && this.editable && this.allowCustomValue) {
+          this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
+        }
         if (activeItem) {
           activeItem.click();
         }
