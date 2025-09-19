@@ -651,47 +651,85 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleInputKeydown(e) {
-    if (e.key == 'ArrowDown') {
-      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-      const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-      if (activeItem) {
-        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
-        if (newActiveItem) {
-          activeItem.setAttribute('data-active', 'false');
-          newActiveItem.setAttribute('data-active', 'true');
-          this.scrollItem(newActiveItem);
+    // Prevent default behavior for accessibility keys
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' ', 'Escape'].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    // Handle keyboard shortcuts when dropdown is closed
+    if (!this.isOpen) {
+      if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        // Space, Enter, Arrow Up/Down: Open dropdown
+        if (!this.disabled && !this.readonly) {
+          this.hasFocus = true;
+          this.isOpen = true;
         }
-      } else {
-        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-        if (newActiveItem) {
-          newActiveItem.setAttribute('data-active', 'true');
-          this.scrollItem(newActiveItem);
-        }
+        return;
       }
-    } else if (e.key == 'ArrowUp') {
-      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-      const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-      if (activeItem) {
-        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
-        if (newActiveItem) {
-          activeItem.setAttribute('data-active', 'false');
-          newActiveItem.setAttribute('data-active', 'true');
-          this.scrollItem(newActiveItem);
-        }
-      } else {
-        const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-        if (newActiveItem) {
-          newActiveItem.setAttribute('data-active', 'true');
-          this.scrollItem(newActiveItem);
-        }
+    }
+
+    // Handle keyboard shortcuts when dropdown is open
+    if (this.isOpen) {
+      if (e.key === 'Escape') {
+        // Escape: Close dropdown without selecting
+        this.isOpen = false;
+        this.hasFocus = false;
+        return;
       }
-    } else if (e.key == 'Enter') {
-      const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-      if (this.multiple && this.editable && this.allowCustomValue) {
-        this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
+      if (e.key === 'ArrowDown') {
+        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
+        if (activeItem) {
+          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
+          if (newActiveItem) {
+            activeItem.setAttribute('data-active', 'false');
+            newActiveItem.setAttribute('data-active', 'true');
+            this.scrollItem(newActiveItem);
+          }
+        } else {
+          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
+          if (firstItem) {
+            firstItem.setAttribute('data-active', 'true');
+            this.scrollItem(firstItem);
+          }
+        }
+        return;
       }
-      activeItem?.click();
-    } else if (e.key == 'Tab') {
+
+      if (e.key === 'ArrowUp') {
+        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
+        if (activeItem) {
+          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
+          if (newActiveItem) {
+            activeItem.setAttribute('data-active', 'false');
+            newActiveItem.setAttribute('data-active', 'true');
+            this.scrollItem(newActiveItem);
+          }
+        } else {
+          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
+          if (firstItem) {
+            firstItem.setAttribute('data-active', 'true');
+            this.scrollItem(firstItem);
+          }
+        }
+        return;
+      }
+
+      if (e.key === 'Enter' || e.key === ' ') {
+        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
+        if (this.multiple && this.editable && this.allowCustomValue) {
+          this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
+        }
+        if (activeItem) {
+          activeItem.click();
+        }
+        return;
+      }
+    }
+
+    // Handle Tab key
+    if (e.key === 'Tab') {
       this.hasFocus = false;
       this.isOpen = false;
     }
@@ -703,7 +741,7 @@ export class TkSelect implements ComponentInterface {
     this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
   }
 
-  private createOptionItem(options: any[]) {
+  private createOptionItem(options: any[], startIndex: number = 0) {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
@@ -735,7 +773,7 @@ export class TkSelect implements ComponentInterface {
       return (
         <div
           class={classNames('dropdown-item', { multiple: this.multiple })}
-          data-option-index={index}
+          data-option-index={startIndex + index}
           data-selected={this.multiple && checking ? 'true' : this.value == item ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
@@ -768,15 +806,20 @@ export class TkSelect implements ComponentInterface {
 
   private createOptions() {
     if (this.isGrouped()) {
-      return this.renderOptions.map(group => (
-        <div class="dropdown-group">
-          <div class="dropdown-group-label">
-            <label>{group[this.groupNameKey]}</label>
-            <div class="line"></div>
+      let currentIndex = 0;
+      return this.renderOptions.map(group => {
+        const groupItems = this.createOptionItem(group[this.groupOptionsKey], currentIndex);
+        currentIndex += group[this.groupOptionsKey]?.length || 0;
+        return (
+          <div class="dropdown-group">
+            <div class="dropdown-group-label">
+              <label>{group[this.groupNameKey]}</label>
+              <div class="line"></div>
+            </div>
+            {groupItems}
           </div>
-          {this.createOptionItem(group[this.groupOptionsKey])}
-        </div>
-      ));
+        );
+      });
     } else {
       return this.createOptionItem(this.renderOptions);
     }
