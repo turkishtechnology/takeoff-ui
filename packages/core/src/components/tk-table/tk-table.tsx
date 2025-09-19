@@ -33,6 +33,8 @@ export class TkTable implements ComponentInterface {
   private resizeColumnIndex: number = -1;
   private startX: number = 0;
   private startWidth: number = 0;
+  private customCellCache: Map<string, HTMLElement> = new Map();
+  private isSelectionUpdating: boolean = false;
 
   @Element() el: HTMLTkTableElement;
 
@@ -109,6 +111,8 @@ export class TkTable implements ComponentInterface {
       if (this.refSelectAll) this.refSelectAll.value = false;
       this.handleSelectAll(false);
       this.expandedRows = [];
+      // Invalidate cached custom cell elements on data change
+      this.customCellCache.clear();
     }
   }
 
@@ -260,9 +264,10 @@ export class TkTable implements ComponentInterface {
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
-
-    // Ensure sticky shadows are correct after any render update (e.g., expand/collapse)
-    this.refreshStickyShadows();
+    // Reset transient selection flag after a render cycle
+    if (this.isSelectionUpdating) {
+      this.isSelectionUpdating = false;
+    }
   }
 
   componentWillUpdate(): Promise<void> | void {
@@ -507,6 +512,8 @@ export class TkTable implements ComponentInterface {
     }
 
     this.expandedRows = [];
+    // Slice/view changed -> clear cached custom cells to avoid stale nodes
+    this.customCellCache.clear();
   }
 
   private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
@@ -650,6 +657,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleSelectAll(value: boolean) {
+    this.isSelectionUpdating = true;
     if (value) {
       this.selection = [...this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true))];
     } else {
@@ -659,6 +667,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleCheckboxSelectChange(isSelect: boolean, row) {
+    this.isSelectionUpdating = true;
     let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
     const hasSelect = _.some(tmpSelection, item => _.isEqual(item, row));
 
@@ -676,6 +685,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handleRadioSelectChange(row: any) {
+    this.isSelectionUpdating = true;
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
   }
@@ -1548,7 +1558,13 @@ export class TkTable implements ComponentInterface {
   }
 
   private createBody() {
-    this.clearCustomElements();
+    if (!this.isResizing && !this.isSelectionUpdating) {
+      this.clearCustomElements();
+      this.customCellCache.clear();
+    } else {
+      // When resizing or only selection changes, keep cache and just reset mount refs
+      this.customCellElements = [];
+    }
 
     if (this.renderData?.length > 0) {
       return (
@@ -1634,13 +1650,24 @@ export class TkTable implements ComponentInterface {
                         </td>
                       );
                     } else if (typeof col?.html == 'function') {
-                      const cellElement = col?.html(row, index) as HTMLElement;
+                      // Reuse cached custom cell elements whenever possible
+                      let usedElement: any = null;
+                      let computedElement: any = null;
 
-                      if (typeof cellElement == 'string') {
+                      const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
+                      const cached = this.customCellCache.get(cacheKey);
+                      if (cached) {
+                        usedElement = cached;
+                      } else {
+                        computedElement = col?.html(row, index) as any;
+                      }
+
+                      const effectiveElement: any = usedElement ?? computedElement;
+                      if (typeof effectiveElement == 'string') {
                         return (
                           <td
                             class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                            innerHTML={cellElement}
+                            innerHTML={effectiveElement}
                             style={{
                               ...this.getStickyColumnStyle(col, index),
                               ...styleRowObject,
@@ -1648,10 +1675,14 @@ export class TkTable implements ComponentInterface {
                             }}
                           ></td>
                         );
-                      } else if (typeof cellElement == 'object') {
+                      } else if (typeof effectiveElement == 'object') {
+                        // Update cache if we computed a new element in this render
+                        if (!usedElement) {
+                          this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
+                        }
                         return (
                           <td
-                            ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: cellElement })}
+                            ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
                             class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                             style={{
                               ...this.getStickyColumnStyle(col, index),
