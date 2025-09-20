@@ -25,9 +25,6 @@
     "url": "https://github.com/turkishtechnology/takeoff-ui/issues"
   },
   "repository": "github:turkishtechnology/takeoff-ui",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app",
     "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build",
