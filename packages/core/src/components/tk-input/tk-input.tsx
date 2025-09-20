@@ -156,8 +156,12 @@ export class TkInput implements ComponentInterface {
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
   protected valueChanged(newValue, oldValue) {
-    if (_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
-      this.nativeInput.value = newValue;
+    if (!_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
+      if (typeof newValue === 'object' && typeof oldValue === 'object') {
+        this.nativeInput.value = this.getNestedValue(newValue, this.chipLabelKey);
+      } else {
+        this.nativeInput.value = newValue;
+      }
     }
   }
 
