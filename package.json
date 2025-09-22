@@ -71,6 +71,7 @@
     "turbo": "^2.5.0",
     "typescript": "^5.5.4"
   },
+  "packageManager": "pnpm@10.8.1",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
