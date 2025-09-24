@@ -82,7 +82,7 @@ export const config: Config = {
     }),
     angularOutputTarget({
       componentCorePackage: '@takeoff-ui/core',
-      outputType: 'component',
+      outputType: 'standalone',
       directivesProxyFile: '../angular/projects/library/src/lib/stencil-generated/components.ts',
       directivesArrayFile: '../angular/projects/library/src/lib/stencil-generated/index.ts',
       valueAccessorConfigs: angularValueAccessorBindings,
