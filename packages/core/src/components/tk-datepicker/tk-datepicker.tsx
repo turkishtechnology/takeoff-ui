@@ -476,22 +476,70 @@ export class TkDatePicker {
     } else if (newAmPm === 'AM' && currentHour >= 12) {
       currentHour -= 12;
       needsUpdate = true;
-    } else {
     }
 
-    // Only update if the hour actually changed
     if (needsUpdate) {
+      let finalHour = currentHour;
+      let finalMinute = targetTimeState.time.minute;
+
+      // If the converted time is not within bounds, find the closest valid time in this AM/PM period
+      if (!this.isTimeWithinBounds(currentHour, targetTimeState.time.minute)) {
+        const validTime = this.findClosestValidTime(newAmPm);
+        if (validTime) {
+          finalHour = validTime.hour;
+          finalMinute = validTime.minute;
+        }
+      }
+
       if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: currentHour };
+        this.internalStartTime = { hour: finalHour, minute: finalMinute };
       } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: currentHour };
+        this.internalEndTime = { hour: finalHour, minute: finalMinute };
       }
 
       this.emitTimeChange();
-    } else {
     }
 
     this.isUpdatingAmPm = false;
+  }
+
+  private findClosestValidTime(ampm: 'AM' | 'PM'): { hour: number; minute: number } | null {
+    const hourRangeStart = ampm === 'AM' ? 0 : 12;
+    const hourRangeEnd = ampm === 'AM' ? 11 : 23;
+
+    // Find the first valid time in this AM/PM period
+    for (let hour = hourRangeStart; hour <= hourRangeEnd; hour++) {
+      for (let minute = 0; minute < 60; minute += this.minuteStep) {
+        if (this.isTimeWithinBounds(hour, minute)) {
+          return { hour, minute };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private findClosestValidTimeForInput(targetHour: number, targetMinute: number): { hour: number; minute: number } | null {
+    const targetTotalMinutes = targetHour * 60 + targetMinute;
+    let closestTime: { hour: number; minute: number } | null = null;
+    let minDistance = Infinity;
+
+    // Check all possible times and find the closest valid one
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += this.minuteStep) {
+        if (this.isTimeWithinBounds(hour, minute)) {
+          const timeTotalMinutes = hour * 60 + minute;
+          const distance = Math.abs(timeTotalMinutes - targetTotalMinutes);
+
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestTime = { hour, minute };
+          }
+        }
+      }
+    }
+
+    return closestTime;
   }
 
   private getResolvedFirstDayIndex(): number {
@@ -545,7 +593,7 @@ export class TkDatePicker {
 
     const parseBound = (val?: string): number | null => {
       if (!val) return null;
-      const parsed = this.parseTimeString(val);
+      const parsed = this.parseMinMaxTime(val);
       if (!parsed) return null;
       return toTotalMinutes(parsed.getHours(), parsed.getMinutes());
     };
@@ -816,6 +864,70 @@ export class TkDatePicker {
     return this.parseInputDate(dateTimeString.split(' ')[0]);
   }
 
+  private parseMinMaxTime(timeString: string): Date | null {
+    // minTime and maxTime are always expected in 24-hour format (HH:mm)
+    // regardless of the timeFormat display setting
+    const base = new Date();
+    const parsed = parse(timeString, 'HH:mm', base);
+    if (isValid(parsed) && format(parsed, 'HH:mm') === timeString) {
+      return parsed;
+    }
+    return null;
+  }
+
+  private isTimeWithinBounds(hour: number, minute: number): boolean {
+    const totalMinutes = hour * 60 + minute;
+
+    let minTotalMinutes = 0;
+    let maxTotalMinutes = 24 * 60 - 1; // 23:59
+
+    if (this.minTime) {
+      const minTimeDate = this.parseMinMaxTime(this.minTime);
+      if (minTimeDate) {
+        minTotalMinutes = minTimeDate.getHours() * 60 + minTimeDate.getMinutes();
+      }
+    }
+
+    if (this.maxTime) {
+      const maxTimeDate = this.parseMinMaxTime(this.maxTime);
+      if (maxTimeDate) {
+        maxTotalMinutes = maxTimeDate.getHours() * 60 + maxTimeDate.getMinutes();
+      }
+    }
+
+    // Handle overnight ranges (when minTime > maxTime, like 22:00 to 02:00)
+    if (minTotalMinutes > maxTotalMinutes) {
+      // Overnight range: valid if time >= minTime OR time <= maxTime
+      return totalMinutes >= minTotalMinutes || totalMinutes <= maxTotalMinutes;
+    } else {
+      // Normal range: valid if minTime <= time <= maxTime
+      return totalMinutes >= minTotalMinutes && totalMinutes <= maxTotalMinutes;
+    }
+  }
+
+  private isAmPmDisabled(ampm: 'AM' | 'PM'): boolean {
+    if (this.timeFormat !== '12') return false;
+
+    // If no time constraints are set, don't disable anything
+    if (!this.minTime && !this.maxTime) return false;
+
+    // Check if there are any valid times in the entire AM/PM period (not just current hour)
+    const hourRangeStart = ampm === 'AM' ? 0 : 12;
+    const hourRangeEnd = ampm === 'AM' ? 11 : 23;
+
+    // Check if any hour in this AM/PM period has valid times
+    for (let hour = hourRangeStart; hour <= hourRangeEnd; hour++) {
+      // Check if any minute value for this hour would be valid
+      for (let minute = 0; minute < 60; minute += this.minuteStep) {
+        if (this.isTimeWithinBounds(hour, minute)) {
+          return false; // Found a valid time, so don't disable this AM/PM
+        }
+      }
+    }
+
+    return true; // No valid times found in this entire AM/PM period
+  }
+
   private parseTimeString(timeString: string): Date | null {
     const base = new Date();
     const primaryFmt = this.getOnlyTimeFormat();
@@ -1056,87 +1168,83 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
+    // Prevent cascading updates
+    if (this.isUpdatingTime || this.isUpdatingAmPm) return;
     this.isUpdatingTime = true;
 
+    const currentHour = targetTimeState.time.hour;
+    const currentMinute = targetTimeState.time.minute;
+
+    // Get the valid hour range for current time period
+    let hourRangeEnd = 23;
+
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
-      let displayHour = targetTimeState.time.hour % 12;
-      displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const nextIdx = Math.min(idx + this.hourStep, hoursList.length - 1);
-      const newDisplayHour = hoursList[nextIdx];
+      const isCurrentlyPM = this.internalAmPm === 'PM';
+      hourRangeEnd = isCurrentlyPM ? 23 : 11;
+    }
 
-      // Convert back to 24-hour format
-      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
-      if (this.internalAmPm === 'PM') {
-        newHour24 += 12;
-      }
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: newHour24 };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
-      }
-    } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour + this.hourStep;
-      hour = Math.min(hour, 23);
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: hour };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: hour };
+    // Find next valid hour in current AM/PM period
+    for (let hour = currentHour + 1; hour <= hourRangeEnd; hour++) {
+      const isValid = this.isTimeWithinBounds(hour, currentMinute);
+      if (isValid) {
+        if (targetTimeState.type === 'start') {
+          this.internalStartTime = { hour: hour, minute: currentMinute };
+        } else {
+          this.internalEndTime = { hour: hour, minute: currentMinute };
+        }
+        this.isUpdatingTime = false;
+        this.emitTimeChange();
+        return;
       }
     }
 
     this.isUpdatingTime = false;
-    this.emitTimeChange();
   };
 
   private handleDecreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
+    // Prevent cascading updates
+    if (this.isUpdatingTime || this.isUpdatingAmPm) return;
     this.isUpdatingTime = true;
 
+    const currentHour = targetTimeState.time.hour;
+    const currentMinute = targetTimeState.time.minute;
+
+    // Get the valid hour range for current time period
+    let hourRangeStart = 0;
+
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
-      let displayHour = targetTimeState.time.hour % 12;
-      displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const prevIdx = Math.max(idx - this.hourStep, 0);
-      const newDisplayHour = hoursList[prevIdx];
+      const isCurrentlyPM = this.internalAmPm === 'PM';
+      hourRangeStart = isCurrentlyPM ? 12 : 0;
+    }
 
-      // Convert back to 24-hour format
-      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
-      if (this.internalAmPm === 'PM') {
-        newHour24 += 12;
-      }
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: newHour24 };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
-      }
-    } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour - this.hourStep;
-      hour = Math.max(hour, 0);
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: hour };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: hour };
+    // Find previous valid hour in current AM/PM period
+    for (let hour = currentHour - 1; hour >= hourRangeStart; hour--) {
+      if (this.isTimeWithinBounds(hour, currentMinute)) {
+        if (targetTimeState.type === 'start') {
+          this.internalStartTime = { hour: hour, minute: currentMinute };
+        } else {
+          this.internalEndTime = { hour: hour, minute: currentMinute };
+        }
+        this.isUpdatingTime = false;
+        this.emitTimeChange();
+        return;
       }
     }
 
     this.isUpdatingTime = false;
-    this.emitTimeChange();
   };
 
   private handleHourClick = (hour: number) => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
+
+    // Check if the new time is within bounds
+    if (!this.isTimeWithinBounds(hour, targetTimeState.time.minute)) {
+      return;
+    }
 
     this.isUpdatingTime = true;
 
@@ -1157,12 +1265,15 @@ export class TkDatePicker {
     let minute = targetTimeState.time.minute + this.minuteStep;
     minute = Math.min(minute, 59);
 
-    if (targetTimeState.type === 'start') {
-      this.internalStartTime = { ...targetTimeState.time, minute: minute };
-    } else {
-      this.internalEndTime = { ...targetTimeState.time, minute: minute };
+    // Check if the new time is within bounds
+    if (this.isTimeWithinBounds(targetTimeState.time.hour, minute)) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, minute: minute };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, minute: minute };
+      }
+      this.emitTimeChange();
     }
-    this.emitTimeChange();
   };
 
   private handleDecreaseMinute = () => {
@@ -1172,17 +1283,25 @@ export class TkDatePicker {
     let minute = targetTimeState.time.minute - this.minuteStep;
     minute = Math.max(minute, 0);
 
-    if (targetTimeState.type === 'start') {
-      this.internalStartTime = { ...targetTimeState.time, minute: minute };
-    } else {
-      this.internalEndTime = { ...targetTimeState.time, minute: minute };
+    // Check if the new time is within bounds
+    if (this.isTimeWithinBounds(targetTimeState.time.hour, minute)) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, minute: minute };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, minute: minute };
+      }
+      this.emitTimeChange();
     }
-    this.emitTimeChange();
   };
 
   private handleMinuteClick = (min: number) => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
+
+    // Check if the new time is within bounds
+    if (!this.isTimeWithinBounds(targetTimeState.time.hour, min)) {
+      return;
+    }
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: min };
@@ -1199,7 +1318,7 @@ export class TkDatePicker {
 
     const newAmPm = event.detail as 'AM' | 'PM';
 
-    // Just update the state - the watcher will handle the time conversion
+    // Always allow the AM/PM change - the watcher will handle time adjustment
     this.internalAmPm = newAmPm;
   };
 
@@ -1334,10 +1453,30 @@ export class TkDatePicker {
         if (this.timeOnly) {
           const parsedTime = this.parseTimeString(this.inputValue);
           if (parsedTime) {
-            this.internalStartTime = { hour: parsedTime.getHours(), minute: parsedTime.getMinutes() };
-            this.internalEndTime = this.internalStartTime;
-            this.isInvalid = false;
-            this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
+            const hour = parsedTime.getHours();
+            const minute = parsedTime.getMinutes();
+
+            // Check if the parsed time is within bounds
+            if (this.isTimeWithinBounds(hour, minute)) {
+              this.internalStartTime = { hour, minute };
+              this.internalEndTime = this.internalStartTime;
+              this.isInvalid = false;
+              this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
+            } else {
+              // Find closest valid time and auto-correct
+              const closestTime = this.findClosestValidTimeForInput(hour, minute);
+              if (closestTime) {
+                this.internalStartTime = closestTime;
+                this.internalEndTime = this.internalStartTime;
+                this.isInvalid = false;
+                const correctedDate = new Date();
+                correctedDate.setHours(closestTime.hour, closestTime.minute, 0, 0);
+                this.tkChange.emit(format(correctedDate, this.getOnlyTimeFormat()));
+              } else {
+                this.isInvalid = true;
+                this.tkChange.emit(undefined);
+              }
+            }
           } else {
             this.isInvalid = true;
             this.tkChange.emit(undefined);
@@ -1353,17 +1492,41 @@ export class TkDatePicker {
               end: null,
             };
             if (this.showTimePicker) {
-              const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
-              this.internalStartTime = time;
-              this.internalEndTime = time;
+              const hour = parsedDate.getHours();
+              const minute = parsedDate.getMinutes();
+
+              // Check if the parsed time is within bounds
+              if (this.isTimeWithinBounds(hour, minute)) {
+                const time = { hour, minute };
+                this.internalStartTime = time;
+                this.internalEndTime = time;
+                this.isInvalid = false;
+                const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
+                this.tkChange.emit(formattedValue);
+              } else {
+                // Find closest valid time and auto-correct
+                const closestTime = this.findClosestValidTimeForInput(hour, minute);
+                if (closestTime) {
+                  this.internalStartTime = closestTime;
+                  this.internalEndTime = closestTime;
+                  this.isInvalid = false;
+                  // Create corrected date with the same date but closest valid time
+                  const correctedDate = new Date(parsedDate);
+                  correctedDate.setHours(closestTime.hour, closestTime.minute, 0, 0);
+                  const formattedValue = this.formatDateOrDateTime(correctedDate, 'start');
+                  this.tkChange.emit(formattedValue);
+                } else {
+                  this.isInvalid = true;
+                  this.tkChange.emit(undefined);
+                }
+              }
             } else {
               this.internalStartTime = null;
               this.internalEndTime = null;
+              this.isInvalid = false;
+              const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
+              this.tkChange.emit(formattedValue);
             }
-
-            this.isInvalid = false;
-            const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
-            this.tkChange.emit(formattedValue);
           } else {
             this.isInvalid = true;
             this.tkChange.emit(undefined);
@@ -1701,10 +1864,67 @@ export class TkDatePicker {
     const visibleHours = sliceRange(hours, currentHour);
     const visibleMinutes = sliceRange(minutes, currentMinute);
 
-    const isMinHour = currentHour === hours[0];
-    const isMaxHour = currentHour === hours[hours.length - 1];
-    const isMinMinute = currentMinute === minutes[0];
-    const isMaxMinute = currentMinute === minutes[minutes.length - 1];
+    // Check if we can decrease/increase based on both standard limits and time bounds
+    let nextHour: number;
+    let prevHour: number;
+    let nextMinute: number;
+    let prevMinute: number;
+
+    if (this.timeFormat === '12') {
+      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
+      const idx = hoursList.indexOf(currentHour);
+      const nextIdx = Math.min(idx + this.hourStep, hoursList.length - 1);
+      const prevIdx = Math.max(idx - this.hourStep, 0);
+      const nextDisplayHour = hoursList[nextIdx];
+      const prevDisplayHour = hoursList[prevIdx];
+
+      nextHour = nextDisplayHour === 12 ? 0 : nextDisplayHour;
+      prevHour = prevDisplayHour === 12 ? 0 : prevDisplayHour;
+      if (this.internalAmPm === 'PM') {
+        nextHour += 12;
+        prevHour += 12;
+      }
+    } else {
+      nextHour = Math.min(currentTime.hour + this.hourStep, 23);
+      prevHour = Math.max(currentTime.hour - this.hourStep, 0);
+    }
+
+    nextMinute = Math.min(currentTime.minute + this.minuteStep, 59);
+    prevMinute = Math.max(currentTime.minute - this.minuteStep, 0);
+
+    // Check if we can go to next/prev hour within current time period
+    let hourRangeStart = 0;
+    let hourRangeEnd = 23;
+
+    if (this.timeFormat === '12') {
+      const isCurrentlyPM = this.internalAmPm === 'PM';
+      hourRangeStart = isCurrentlyPM ? 12 : 0;
+      hourRangeEnd = isCurrentlyPM ? 23 : 11;
+    }
+
+    let canIncreaseHour = false;
+    let canDecreaseHour = false;
+
+    // Check if there's any valid hour after current hour in this AM/PM period
+    for (let hour = currentTime.hour + 1; hour <= hourRangeEnd; hour++) {
+      if (this.isTimeWithinBounds(hour, currentTime.minute)) {
+        canIncreaseHour = true;
+        break;
+      }
+    }
+
+    // Check if there's any valid hour before current hour in this AM/PM period
+    for (let hour = currentTime.hour - 1; hour >= hourRangeStart; hour--) {
+      if (this.isTimeWithinBounds(hour, currentTime.minute)) {
+        canDecreaseHour = true;
+        break;
+      }
+    }
+
+    const isMinHour = !canDecreaseHour;
+    const isMaxHour = !canIncreaseHour;
+    const isMinMinute = currentMinute === minutes[0] || !this.isTimeWithinBounds(currentTime.hour, prevMinute);
+    const isMaxMinute = currentMinute === minutes[minutes.length - 1] || !this.isTimeWithinBounds(currentTime.hour, nextMinute);
     return (
       <div class={classNames('tk-datepicker-timepicker-panel', this.timeOnly && 'tk-datepicker-timepicker-panel-only')}>
         <div class={classNames('tk-datepicker-timepicker-header', `tk-datepicker-timepicker-header-${this.headerType}`, this.timeOnly && 'tk-datepicker-timepicker-header-only')}>
@@ -1722,6 +1942,7 @@ export class TkDatePicker {
                 value="AM"
                 label="AM"
                 size="small"
+                disabled={this.isAmPmDisabled('AM')}
               />
               <tk-toggle-button
                 key="PM"
@@ -1730,6 +1951,7 @@ export class TkDatePicker {
                 value="PM"
                 label="PM"
                 size="small"
+                disabled={this.isAmPmDisabled('PM')}
               />
             </tk-toggle-button-group>
           )}
@@ -1775,6 +1997,7 @@ export class TkDatePicker {
                     'selected': hour === currentHour,
                     'tk-datepicker-timepicker-value-dark': this.headerType === 'dark',
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
+                    'disabled': !this.isTimeWithinBounds(this.timeFormat === '12' ? (hour === 12 ? 0 : hour) + (this.internalAmPm === 'PM' ? 12 : 0) : hour, currentTime.minute),
                   })}
                   onClick={() => this.handleHourClick(this.timeFormat === '12' ? (hour === 12 ? 0 : hour) + (this.internalAmPm === 'PM' ? 12 : 0) : hour)}
                 >
@@ -1831,6 +2054,7 @@ export class TkDatePicker {
                     'selected': m === currentMinute,
                     'tk-datepicker-timepicker-value-dark': this.headerType === 'dark',
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
+                    'disabled': !this.isTimeWithinBounds(currentTime.hour, m),
                   })}
                   onClick={() => this.handleMinuteClick(m)}
                 >
