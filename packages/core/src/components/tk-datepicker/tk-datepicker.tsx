@@ -521,10 +521,17 @@ export class TkDatePicker {
 
   private findClosestValidTimeForInput(targetHour: number, targetMinute: number): { hour: number; minute: number } | null {
     const targetTotalMinutes = targetHour * 60 + targetMinute;
+
+    // First, try to snap to closest boundary (minTime or maxTime)
+    const closestBoundary = this.findClosestBoundaryTime(targetTotalMinutes);
+    if (closestBoundary) {
+      return closestBoundary;
+    }
+
+    // Fallback: find any closest valid time (original logic)
     let closestTime: { hour: number; minute: number } | null = null;
     let minDistance = Infinity;
 
-    // Check all possible times and find the closest valid one
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += this.minuteStep) {
         if (this.isTimeWithinBounds(hour, minute)) {
@@ -540,6 +547,46 @@ export class TkDatePicker {
     }
 
     return closestTime;
+  }
+
+  private findClosestBoundaryTime(targetTotalMinutes: number): { hour: number; minute: number } | null {
+    let minBoundary: { hour: number; minute: number } | null = null;
+    let maxBoundary: { hour: number; minute: number } | null = null;
+
+    // Get minTime boundary
+    if (this.minTime) {
+      const minTimeDate = this.parseMinMaxTime(this.minTime);
+      if (minTimeDate) {
+        minBoundary = { hour: minTimeDate.getHours(), minute: minTimeDate.getMinutes() };
+      }
+    }
+
+    // Get maxTime boundary
+    if (this.maxTime) {
+      const maxTimeDate = this.parseMinMaxTime(this.maxTime);
+      if (maxTimeDate) {
+        maxBoundary = { hour: maxTimeDate.getHours(), minute: maxTimeDate.getMinutes() };
+      }
+    }
+
+    // If we don't have both boundaries, return null to use fallback logic
+    if (!minBoundary || !maxBoundary) {
+      return null;
+    }
+
+    const minBoundaryTotalMinutes = minBoundary.hour * 60 + minBoundary.minute;
+    const maxBoundaryTotalMinutes = maxBoundary.hour * 60 + maxBoundary.minute;
+
+    // Calculate distances to boundaries
+    const distanceToMin = Math.abs(targetTotalMinutes - minBoundaryTotalMinutes);
+    const distanceToMax = Math.abs(targetTotalMinutes - maxBoundaryTotalMinutes);
+
+    // Return the closer boundary
+    if (distanceToMin <= distanceToMax) {
+      return minBoundary;
+    } else {
+      return maxBoundary;
+    }
   }
 
   private getResolvedFirstDayIndex(): number {
@@ -1175,22 +1222,96 @@ export class TkDatePicker {
     const currentHour = targetTimeState.time.hour;
     const currentMinute = targetTimeState.time.minute;
 
-    // Get the valid hour range for current time period
-    let hourRangeEnd = 23;
+    // Check if we're at the last valid hour and should jump to exact maxTime
+    if (this.maxTime) {
+      const maxTimeDate = this.parseMinMaxTime(this.maxTime);
+      if (maxTimeDate) {
+        const maxHour = maxTimeDate.getHours();
+        const maxMinute = maxTimeDate.getMinutes();
 
-    if (this.timeFormat === '12') {
-      const isCurrentlyPM = this.internalAmPm === 'PM';
-      hourRangeEnd = isCurrentlyPM ? 23 : 11;
+        // If we're currently at the max hour but not at max minute, jump to exact maxTime
+        if (currentHour === maxHour && currentMinute < maxMinute) {
+          if (targetTimeState.type === 'start') {
+            this.internalStartTime = { hour: maxHour, minute: maxMinute };
+          } else {
+            this.internalEndTime = { hour: maxHour, minute: maxMinute };
+          }
+          this.isUpdatingTime = false;
+          this.emitTimeChange();
+          return;
+        }
+      }
     }
 
-    // Find next valid hour in current AM/PM period
-    for (let hour = currentHour + 1; hour <= hourRangeEnd; hour++) {
-      const isValid = this.isTimeWithinBounds(hour, currentMinute);
-      if (isValid) {
+    // Try the immediate next hour first
+    const nextHour = currentHour + 1;
+
+    // For 12-hour format, handle AM/PM boundary crossing
+    let actualNextHour = nextHour;
+    let willCrossAmPm = false;
+
+    if (this.timeFormat === '12') {
+      // If we're at 11 AM, next hour is 12 PM (noon) - hour 12 in 24h format
+      if (currentHour === 11 && this.internalAmPm === 'AM') {
+        actualNextHour = 12; // 12 PM = hour 12
+        willCrossAmPm = true;
+      }
+      // If we're at 11 PM, next hour is 12 AM (midnight) - hour 0 in 24h format
+      else if (currentHour === 23 && this.internalAmPm === 'PM') {
+        actualNextHour = 0; // 12 AM = hour 0
+        willCrossAmPm = true;
+      }
+    }
+
+    if (this.isTimeWithinBounds(actualNextHour, currentMinute)) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { hour: actualNextHour, minute: currentMinute };
+      } else {
+        this.internalEndTime = { hour: actualNextHour, minute: currentMinute };
+      }
+
+      // Update AM/PM if we crossed the boundary
+      if (willCrossAmPm && this.timeFormat === '12') {
+        this.internalAmPm = this.internalAmPm === 'AM' ? 'PM' : 'AM';
+      }
+
+      this.isUpdatingTime = false;
+      this.emitTimeChange();
+      return;
+    }
+
+    // If no valid hour found in current range and we have maxTime, try to jump to maxTime hour with current minute
+    if (this.maxTime) {
+      const maxTimeDate = this.parseMinMaxTime(this.maxTime);
+      if (maxTimeDate) {
+        const maxHour = maxTimeDate.getHours();
+        const maxMinute = maxTimeDate.getMinutes();
+
+        // First try with the current minute at max hour
+        if (this.isTimeWithinBounds(maxHour, currentMinute)) {
+          if (targetTimeState.type === 'start') {
+            this.internalStartTime = { hour: maxHour, minute: currentMinute };
+          } else {
+            this.internalEndTime = { hour: maxHour, minute: currentMinute };
+          }
+          // Update AM/PM for 12-hour format if needed
+          if (this.timeFormat === '12') {
+            this.internalAmPm = maxHour >= 12 ? 'PM' : 'AM';
+          }
+          this.isUpdatingTime = false;
+          this.emitTimeChange();
+          return;
+        }
+
+        // If that's not valid, fall back to exact maxTime
         if (targetTimeState.type === 'start') {
-          this.internalStartTime = { hour: hour, minute: currentMinute };
+          this.internalStartTime = { hour: maxHour, minute: maxMinute };
         } else {
-          this.internalEndTime = { hour: hour, minute: currentMinute };
+          this.internalEndTime = { hour: maxHour, minute: maxMinute };
+        }
+        // Update AM/PM for 12-hour format if needed
+        if (this.timeFormat === '12') {
+          this.internalAmPm = maxHour >= 12 ? 'PM' : 'AM';
         }
         this.isUpdatingTime = false;
         this.emitTimeChange();
@@ -1220,13 +1341,72 @@ export class TkDatePicker {
       hourRangeStart = isCurrentlyPM ? 12 : 0;
     }
 
-    // Find previous valid hour in current AM/PM period
-    for (let hour = currentHour - 1; hour >= hourRangeStart; hour--) {
-      if (this.isTimeWithinBounds(hour, currentMinute)) {
+    // Check if we're at the first valid hour and should jump to exact minTime
+    if (this.minTime) {
+      const minTimeDate = this.parseMinMaxTime(this.minTime);
+      if (minTimeDate) {
+        const minHour = minTimeDate.getHours();
+        const minMinute = minTimeDate.getMinutes();
+
+        // If we're currently at the min hour but not at min minute, jump to exact minTime
+        if (currentHour === minHour && currentMinute > minMinute) {
+          if (targetTimeState.type === 'start') {
+            this.internalStartTime = { hour: minHour, minute: minMinute };
+          } else {
+            this.internalEndTime = { hour: minHour, minute: minMinute };
+          }
+          this.isUpdatingTime = false;
+          this.emitTimeChange();
+          return;
+        }
+      }
+    }
+
+    // Try the immediate previous hour first
+    const prevHour = currentHour - 1;
+    if (prevHour >= hourRangeStart && this.isTimeWithinBounds(prevHour, currentMinute)) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { hour: prevHour, minute: currentMinute };
+      } else {
+        this.internalEndTime = { hour: prevHour, minute: currentMinute };
+      }
+      this.isUpdatingTime = false;
+      this.emitTimeChange();
+      return;
+    }
+
+    // If no valid hour found in current range and we have minTime, try to jump to minTime hour with current minute
+    if (this.minTime) {
+      const minTimeDate = this.parseMinMaxTime(this.minTime);
+      if (minTimeDate) {
+        const minHour = minTimeDate.getHours();
+        const minMinute = minTimeDate.getMinutes();
+
+        // First try with the current minute at min hour
+        if (this.isTimeWithinBounds(minHour, currentMinute)) {
+          if (targetTimeState.type === 'start') {
+            this.internalStartTime = { hour: minHour, minute: currentMinute };
+          } else {
+            this.internalEndTime = { hour: minHour, minute: currentMinute };
+          }
+          // Update AM/PM for 12-hour format if needed
+          if (this.timeFormat === '12') {
+            this.internalAmPm = minHour >= 12 ? 'PM' : 'AM';
+          }
+          this.isUpdatingTime = false;
+          this.emitTimeChange();
+          return;
+        }
+
+        // If that's not valid, fall back to exact minTime
         if (targetTimeState.type === 'start') {
-          this.internalStartTime = { hour: hour, minute: currentMinute };
+          this.internalStartTime = { hour: minHour, minute: minMinute };
         } else {
-          this.internalEndTime = { hour: hour, minute: currentMinute };
+          this.internalEndTime = { hour: minHour, minute: minMinute };
+        }
+        // Update AM/PM for 12-hour format if needed
+        if (this.timeFormat === '12') {
+          this.internalAmPm = minHour >= 12 ? 'PM' : 'AM';
         }
         this.isUpdatingTime = false;
         this.emitTimeChange();
@@ -1892,37 +2072,40 @@ export class TkDatePicker {
     nextMinute = Math.min(currentTime.minute + this.minuteStep, 59);
     prevMinute = Math.max(currentTime.minute - this.minuteStep, 0);
 
-    // Check if we can go to next/prev hour within current time period
-    let hourRangeStart = 0;
-    let hourRangeEnd = 23;
+    // Since our new logic allows jumping to min/maxTime, we should almost never disable buttons
+    // Only disable if we're already at the exact boundary time
+    let canIncreaseHour = true;
+    let canDecreaseHour = true;
 
-    if (this.timeFormat === '12') {
-      const isCurrentlyPM = this.internalAmPm === 'PM';
-      hourRangeStart = isCurrentlyPM ? 12 : 0;
-      hourRangeEnd = isCurrentlyPM ? 23 : 11;
-    }
-
-    let canIncreaseHour = false;
-    let canDecreaseHour = false;
-
-    // Check if there's any valid hour after current hour in this AM/PM period
-    for (let hour = currentTime.hour + 1; hour <= hourRangeEnd; hour++) {
-      if (this.isTimeWithinBounds(hour, currentTime.minute)) {
-        canIncreaseHour = true;
-        break;
+    // Check if we're already at exact maxTime
+    if (this.maxTime) {
+      const maxTimeDate = this.parseMinMaxTime(this.maxTime);
+      if (maxTimeDate) {
+        const maxHour = maxTimeDate.getHours();
+        const maxMinute = maxTimeDate.getMinutes();
+        if (currentTime.hour === maxHour && currentTime.minute === maxMinute) {
+          canIncreaseHour = false;
+          console.log('Disabling increase hour: already at exact maxTime', currentTime.hour, currentTime.minute);
+        }
       }
     }
 
-    // Check if there's any valid hour before current hour in this AM/PM period
-    for (let hour = currentTime.hour - 1; hour >= hourRangeStart; hour--) {
-      if (this.isTimeWithinBounds(hour, currentTime.minute)) {
-        canDecreaseHour = true;
-        break;
+    // Check if we're already at exact minTime
+    if (this.minTime) {
+      const minTimeDate = this.parseMinMaxTime(this.minTime);
+      if (minTimeDate) {
+        const minHour = minTimeDate.getHours();
+        const minMinute = minTimeDate.getMinutes();
+        if (currentTime.hour === minHour && currentTime.minute === minMinute) {
+          canDecreaseHour = false;
+          console.log('Disabling decrease hour: already at exact minTime', currentTime.hour, currentTime.minute);
+        }
       }
     }
 
     const isMinHour = !canDecreaseHour;
     const isMaxHour = !canIncreaseHour;
+    console.log('Button states:', { isMinHour, isMaxHour, currentTime: currentTime.hour + ':' + currentTime.minute });
     const isMinMinute = currentMinute === minutes[0] || !this.isTimeWithinBounds(currentTime.hour, prevMinute);
     const isMaxMinute = currentMinute === minutes[minutes.length - 1] || !this.isTimeWithinBounds(currentTime.hour, nextMinute);
     return (
