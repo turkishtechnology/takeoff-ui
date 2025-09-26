@@ -29,7 +29,7 @@ export class TkPhoneInput implements ComponentInterface {
    * Reference to the country search input element.
    */
   private searchInput!: HTMLTkInputElement;
-  private cleanup?: () => unknown;
+  private cleanup;
   private panelRef?: HTMLDivElement;
 
   /**
@@ -201,6 +201,10 @@ export class TkPhoneInput implements ComponentInterface {
     }
   }
 
+  formResetCallback() {
+    this.handleFormReset();
+  }
+
   /**
    * Initialize the list of countries from the provided prop or fallback to internal list.
    */
@@ -270,7 +274,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Get the filtered list of countries based on the search term.
    */
-  private getFilteredCountries() {
+  private getFilteredCountries(): ICountry[] {
     const term = this.searchTerm.toLowerCase();
     if (!term) return this.countries;
 
@@ -325,6 +329,8 @@ export class TkPhoneInput implements ComponentInterface {
     if (!this.selectedCountry.mask?.length) {
       this.inputValue = rawValue;
       this.inputRef.value = this.inputValue;
+
+      // reassign the value object and emit the change event before returning. Masked Value consists of raw value
       this.value = {
         rawValue,
         maskedValue: rawValue,
@@ -391,13 +397,18 @@ export class TkPhoneInput implements ComponentInterface {
   };
 
   private renderLabel() {
-    if (!this.label?.length) return;
-    return (
-      <label htmlFor="phone-input" class="tk-phone-input__label">
-        <span class="tk-phone-input__label-title">{this.label}</span>
-        {this.showAsterisk ?? <span class="tk-phone-input__label-red-asterisk">*</span>}
-      </label>
-    );
+    let label;
+    if (this.label?.length > 0) {
+      const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
+      label = (
+        <label htmlFor="phone-input" class="tk-phone-input__label">
+          <span class="tk-phone-input__label-title">{this.label}</span>
+          {this.showAsterisk ? asterisk : ''}
+        </label>
+      );
+    }
+
+    return label;
   }
 
   /**
@@ -421,8 +432,9 @@ export class TkPhoneInput implements ComponentInterface {
    * Create the dropdown button for selecting a country.
    */
   private renderDropdownButton() {
-    let selectedClass = 'tk-phone-input__dropdown-button-selected';
-    if (!this.selectedCountry.dialCode) selectedClass += ' tk-phone-input__dropdown-button-selected--no-dial-code';
+    const selectedClass = classNames('tk-phone-input__dropdown-button-selected', {
+      'tk-phone-input__dropdown-button-selected--no-dial-code': !this.selectedCountry.dialCode,
+    });
 
     return (
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
@@ -503,10 +515,11 @@ export class TkPhoneInput implements ComponentInterface {
   }
 
   private renderHint() {
-    const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
+    let hint;
 
-    if (!!this.hint?.length) {
-      return (
+    if (this.hint?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
+      hint = (
         <span class="tk-phone-input__hint">
           {hintIcon}
           <span class="tk-phone-input__hint-text">{this.hint}</span>
@@ -514,8 +527,9 @@ export class TkPhoneInput implements ComponentInterface {
       );
     }
 
-    if (!!this.error?.length) {
-      return (
+    if (this.error?.length > 0) {
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
+      hint = (
         <span class="tk-phone-input__hint">
           {hintIcon}
           <span class="tk-phone-input__hint-text">{this.error}</span>
@@ -523,7 +537,7 @@ export class TkPhoneInput implements ComponentInterface {
       );
     }
 
-    return;
+    return hint;
   }
 
   /**

@@ -247,5 +247,4 @@ export const INTERNAL_COUNTRIES: ICountry[] = [
   { label: 'Yemen', id: 'YE', dialCode: '+967', mask: '999 999 999' },
   { label: 'Zambia', id: 'ZM', dialCode: '+260', mask: '99-9999999' },
   { label: 'Zimbabwe', id: 'ZW', dialCode: '+263', mask: '99 999-9999' },
-  { label: 'Other', id: 'OT' },
 ];
