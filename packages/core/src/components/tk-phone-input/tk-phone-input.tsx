@@ -325,6 +325,16 @@ export class TkPhoneInput implements ComponentInterface {
     if (!this.selectedCountry.mask?.length) {
       this.inputValue = rawValue;
       this.inputRef.value = this.inputValue;
+      this.value = {
+        rawValue,
+        maskedValue: rawValue,
+        country: {
+          id: this.selectedCountry.id,
+          label: this.selectedCountry.label,
+          dialCode: this.selectedCountry.dialCode,
+        },
+      };
+      this.tkChange.emit(this.value);
       return;
     }
 
