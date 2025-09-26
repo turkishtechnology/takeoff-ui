@@ -268,6 +268,7 @@ export class TkTable implements ComponentInterface {
     if (this.isSelectionUpdating) {
       this.isSelectionUpdating = false;
     }
+    this.refreshStickyShadows();
   }
 
   componentWillUpdate(): Promise<void> | void {
