@@ -282,6 +282,13 @@ export class TkPhoneInput implements ComponentInterface {
   }
 
   /**
+   * Get the flag class based on the country object.
+   */
+  private getFlagClass(country: ICountry): string {
+    return classNames('flag', { [`flag-${country.id.toLowerCase()}`]: !!country.dialCode });
+  }
+
+  /**
    * Handle country selection from the dropdown.
    */
   private handleCountrySelect = (country: ICountry): void => {
@@ -443,7 +450,7 @@ export class TkPhoneInput implements ComponentInterface {
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
             alt={`${this.selectedCountry.label} flag`}
-            class={`flag flag-${this.selectedCountry.id.toLowerCase()}`}
+            class={this.getFlagClass(this.selectedCountry)}
           />
           {this.selectedCountry.dialCode && <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
@@ -484,7 +491,7 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={`flag flag-${country.id.toLowerCase()}`} />
+            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={this.getFlagClass(country)} />
             <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
             {country.dialCode && <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>}
           </li>
