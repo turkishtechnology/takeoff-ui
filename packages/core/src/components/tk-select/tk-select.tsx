@@ -476,7 +476,7 @@ export class TkSelect implements ComponentInterface {
     // Set input value based on selection state
     if (this.selectedItem) {
       this.inputRef.value = this.selectedItem;
-    } else {
+    } else if (!this.editable) {
       this.inputRef.value = null;
     }
   }
