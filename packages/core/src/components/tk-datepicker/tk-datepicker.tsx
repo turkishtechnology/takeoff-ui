@@ -35,6 +35,7 @@ export class TkDatePicker {
   private cleanup;
   private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
+  private isManualInput: boolean = false;
   private weeksLength: number = 0;
   @Element() el: HTMLTkDatepickerElement;
 
@@ -54,23 +55,32 @@ export class TkDatePicker {
   } = { start: null, end: null };
   @Watch('internalSelectedDates')
   internalSelectedDatesChanged() {
-    this.inputValue = this.formatInputValue();
+    if (this.isManualInput) {
+      return;
+    }
+    const newInputValue = this.formatInputValue();
+    this.inputValue = newInputValue;
   }
 
   @State() inputValue: string = '';
   @State() internalStartTime: { hour: number; minute: number } | null = null;
   @Watch('internalStartTime')
   internalStartTimeChanged() {
-    if (this.isUpdatingTime || this.isUpdatingAmPm) {
+    if (this.isUpdatingTime || this.isUpdatingAmPm || this.isManualInput) {
       return;
     }
-    this.inputValue = this.formatInputValue();
+    const newInputValue = this.formatInputValue();
+    this.inputValue = newInputValue;
   }
 
   @State() internalEndTime: { hour: number; minute: number } | null = null;
   @Watch('internalEndTime')
   internalEndTimeChanged() {
-    this.inputValue = this.formatInputValue();
+    if (this.isManualInput) {
+      return;
+    }
+    const newInputValue = this.formatInputValue();
+    this.inputValue = newInputValue;
   }
 
   @State() internalAmPm: 'AM' | 'PM' = 'AM';
@@ -1333,14 +1343,6 @@ export class TkDatePicker {
     const currentHour = targetTimeState.time.hour;
     const currentMinute = targetTimeState.time.minute;
 
-    // Get the valid hour range for current time period
-    let hourRangeStart = 0;
-
-    if (this.timeFormat === '12') {
-      const isCurrentlyPM = this.internalAmPm === 'PM';
-      hourRangeStart = isCurrentlyPM ? 12 : 0;
-    }
-
     // Check if we're at the first valid hour and should jump to exact minTime
     if (this.minTime) {
       const minTimeDate = this.parseMinMaxTime(this.minTime);
@@ -1364,12 +1366,36 @@ export class TkDatePicker {
 
     // Try the immediate previous hour first
     const prevHour = currentHour - 1;
-    if (prevHour >= hourRangeStart && this.isTimeWithinBounds(prevHour, currentMinute)) {
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { hour: prevHour, minute: currentMinute };
-      } else {
-        this.internalEndTime = { hour: prevHour, minute: currentMinute };
+
+    // For 12-hour format, handle AM/PM boundary crossing
+    let actualPrevHour = prevHour;
+    let willCrossAmPm = false;
+
+    if (this.timeFormat === '12') {
+      // If we're at 12 PM, previous hour is 11 AM - hour 11 in 24h format
+      if (currentHour === 12 && this.internalAmPm === 'PM') {
+        actualPrevHour = 11; // 11 AM = hour 11
+        willCrossAmPm = true;
       }
+      // If we're at 12 AM, previous hour is 11 PM - hour 23 in 24h format
+      else if (currentHour === 0 && this.internalAmPm === 'AM') {
+        actualPrevHour = 23; // 11 PM = hour 23
+        willCrossAmPm = true;
+      }
+    }
+
+    if (this.isTimeWithinBounds(actualPrevHour, currentMinute)) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { hour: actualPrevHour, minute: currentMinute };
+      } else {
+        this.internalEndTime = { hour: actualPrevHour, minute: currentMinute };
+      }
+
+      // Update AM/PM if we crossed the boundary
+      if (willCrossAmPm && this.timeFormat === '12') {
+        this.internalAmPm = this.internalAmPm === 'AM' ? 'PM' : 'AM';
+      }
+
       this.isUpdatingTime = false;
       this.emitTimeChange();
       return;
@@ -1605,10 +1631,16 @@ export class TkDatePicker {
   };
 
   private handleInputChange = (event: CustomEvent) => {
-    if (this.disableMask || this.mode === 'range') {
+    // For showTimePicker mode, we should allow input changes since masking is disabled
+    // Only prevent changes if explicitly disabled or in range mode
+    const shouldPrevent = this.disableMask || this.mode === 'range';
+
+    if (shouldPrevent) {
       event.preventDefault();
       return;
     }
+
+    this.isManualInput = true; // Flag that user is manually typing
     this.remeasureCalendarOnNextFrame();
     this.inputValue = event.detail;
     this.tkInputChange.emit(this.inputValue);
@@ -1629,6 +1661,8 @@ export class TkDatePicker {
 
     clearTimeout(this.debounceTimer);
     this.debounceTimer = window.setTimeout(() => {
+      // Clear manual input flag - we're now processing/validating
+      this.isManualInput = false;
       if (this.inputValue) {
         if (this.timeOnly) {
           const parsedTime = this.parseTimeString(this.inputValue);
@@ -1662,8 +1696,40 @@ export class TkDatePicker {
             this.tkChange.emit(undefined);
           }
         } else {
+          console.log('Processing date/datetime input. showTimePicker:', this.showTimePicker);
           const parser = this.showTimePicker ? this.parseFullDateTime.bind(this) : this.parseInputDate.bind(this);
-          const parsedDate = parser(this.inputValue);
+          let parsedDate = parser(this.inputValue);
+          console.log('Parsed date:', parsedDate);
+
+          // If showTimePicker mode and full datetime parsing failed, try parsing as time-only
+          if (!parsedDate && this.showTimePicker) {
+            console.log('Full datetime parsing failed, trying time-only parsing...');
+            const parsedTime = this.parseTimeString(this.inputValue);
+            if (parsedTime) {
+              console.log('Successfully parsed as time-only:', parsedTime);
+
+              // Create a date with existing date or today's date
+              let baseDate = this.internalSelectedDates.start || new Date();
+
+              // If baseDate is outside minDate/maxDate bounds, use a valid date within bounds
+              if (this.minDate || this.maxDate) {
+                const minDateBound = this.minDate ? this.parseInputDate(this.minDate) : null;
+                const maxDateBound = this.maxDate ? this.parseInputDate(this.maxDate) : null;
+
+                if (minDateBound && baseDate < minDateBound) {
+                  console.log('Base date is before minDate, using minDate:', this.minDate);
+                  baseDate = minDateBound;
+                } else if (maxDateBound && baseDate > maxDateBound) {
+                  console.log('Base date is after maxDate, using maxDate:', this.maxDate);
+                  baseDate = maxDateBound;
+                }
+              }
+
+              parsedDate = new Date(baseDate);
+              parsedDate.setHours(parsedTime.getHours(), parsedTime.getMinutes(), 0, 0);
+              console.log('Created combined date with bounds check:', parsedDate, 'minDate:', this.minDate, 'maxDate:', this.maxDate);
+            }
+          }
 
           if (parsedDate && !this.isDateDisabled(parsedDate)) {
             const normalized = this.normalizeDate(parsedDate);
@@ -1676,7 +1742,8 @@ export class TkDatePicker {
               const minute = parsedDate.getMinutes();
 
               // Check if the parsed time is within bounds
-              if (this.isTimeWithinBounds(hour, minute)) {
+              const isWithinBounds = this.isTimeWithinBounds(hour, minute);
+              if (isWithinBounds) {
                 const time = { hour, minute };
                 this.internalStartTime = time;
                 this.internalEndTime = time;
@@ -1694,6 +1761,10 @@ export class TkDatePicker {
                   const correctedDate = new Date(parsedDate);
                   correctedDate.setHours(closestTime.hour, closestTime.minute, 0, 0);
                   const formattedValue = this.formatDateOrDateTime(correctedDate, 'start');
+                  console.log('Auto-corrected to:', formattedValue);
+                  // Update the inputValue to show the corrected value
+                  this.inputValue = formattedValue;
+                  console.log('Updated inputValue to show corrected value:', this.inputValue);
                   this.tkChange.emit(formattedValue);
                 } else {
                   this.isInvalid = true;
@@ -2085,7 +2156,6 @@ export class TkDatePicker {
         const maxMinute = maxTimeDate.getMinutes();
         if (currentTime.hour === maxHour && currentTime.minute === maxMinute) {
           canIncreaseHour = false;
-          console.log('Disabling increase hour: already at exact maxTime', currentTime.hour, currentTime.minute);
         }
       }
     }
@@ -2098,14 +2168,12 @@ export class TkDatePicker {
         const minMinute = minTimeDate.getMinutes();
         if (currentTime.hour === minHour && currentTime.minute === minMinute) {
           canDecreaseHour = false;
-          console.log('Disabling decrease hour: already at exact minTime', currentTime.hour, currentTime.minute);
         }
       }
     }
 
     const isMinHour = !canDecreaseHour;
     const isMaxHour = !canIncreaseHour;
-    console.log('Button states:', { isMinHour, isMaxHour, currentTime: currentTime.hour + ':' + currentTime.minute });
     const isMinMinute = currentMinute === minutes[0] || !this.isTimeWithinBounds(currentTime.hour, prevMinute);
     const isMaxMinute = currentMinute === minutes[minutes.length - 1] || !this.isTimeWithinBounds(currentTime.hour, nextMinute);
     return (
@@ -2273,9 +2341,11 @@ export class TkDatePicker {
   private renderInput() {
     if (this.inline) return null;
 
-    const displayValue = this.formatInputValue();
+    // Use manually set inputValue if available, otherwise use formatted value
+    const displayValue = this.inputValue || this.formatInputValue();
     const shouldUseMask = !this.disableMask && (this.timeOnly ? this.timeFormat === '24' : this.mode === 'single' && !this.showTimePicker);
     const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
+    console.log('renderInput - displayValue:', displayValue, 'inputValue:', this.inputValue, 'formatInputValue():', this.formatInputValue());
 
     return (
       <tk-input
