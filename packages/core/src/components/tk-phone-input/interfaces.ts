@@ -8,9 +8,9 @@ export interface ICountry {
   /** The ISO country code */
   id: string;
   /** The international dialing code with + prefix */
-  dialCode: string;
+  dialCode?: string;
   /** The phone number mask pattern where 9 represents a digit */
-  mask: string;
+  mask?: string;
 }
 
 /**

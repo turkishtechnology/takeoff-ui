@@ -205,6 +205,10 @@
         align-items: center;
         gap: var(--spacing-xs);
         border-right: var(--spacing-px) solid var(--border-light);
+
+        &--no-dial-code {
+          padding-right: var(--input-external-label-large-label-h-padding);
+        }
       }
       &-dial-code {
         padding-right: var(--input-external-label-large-label-h-padding);

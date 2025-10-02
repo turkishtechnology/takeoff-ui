@@ -212,7 +212,7 @@ export class TkPhoneInput implements ComponentInterface {
     if (this.countryList) {
       this.countries = this.countryList;
     } else {
-      this.countries = INTERNAL_COUNTRIES as ICountry[];
+      this.countries = INTERNAL_COUNTRIES;
     }
   }
 
@@ -227,7 +227,8 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Apply the mask to a raw phone number.
    */
-  private applyMask(rawValue: string, mask: string): string {
+  private applyMask(rawValue: string, mask: string | undefined) {
+    if (!mask?.length || !rawValue?.length) return rawValue;
     let maskedValue = '';
     let digitIndex = 0;
 
@@ -277,7 +278,14 @@ export class TkPhoneInput implements ComponentInterface {
     const term = this.searchTerm.toLowerCase();
     if (!term) return this.countries;
 
-    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country.dialCode.includes(term));
+    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country?.dialCode.includes(term));
+  }
+
+  /**
+   * Get the flag class based on the country object.
+   */
+  private getFlagClass(country: ICountry): string {
+    return classNames('flag', { [`flag-${country.id.toLowerCase()}`]: !!country.dialCode });
   }
 
   /**
@@ -321,17 +329,33 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Handle changes to the phone number input.
    */
-  private handleInput = (event: Event): void => {
+  private handleInput = (event: Event) => {
     const inputElement = event.target as HTMLInputElement;
     const rawValue = inputElement.value.replace(/\D/g, '');
+
+    if (!this.selectedCountry.mask?.length) {
+      this.inputValue = rawValue;
+      this.inputRef.value = this.inputValue;
+
+      // reassign the value object and emit the change event before returning. Masked Value consists of raw value
+      this.value = {
+        rawValue,
+        maskedValue: rawValue,
+        country: {
+          id: this.selectedCountry.id,
+          label: this.selectedCountry.label,
+          dialCode: this.selectedCountry.dialCode,
+        },
+      };
+      this.tkChange.emit(this.value);
+      return;
+    }
+
     const currentMask = this.selectedCountry.mask;
     const maxDigits = (currentMask.match(/9/g) || []).length;
     const hasNoDigits = /[^\d() ]/.test(inputElement.value);
 
-    if (rawValue.length > maxDigits || hasNoDigits) {
-      this.inputRef.value = this.inputValue;
-      return;
-    }
+    if (rawValue.length > maxDigits || hasNoDigits) return (this.inputRef.value = this.inputValue);
 
     this.hasFocus = false;
     this.inputValue = this.applyMask(rawValue, currentMask);
@@ -415,16 +439,20 @@ export class TkPhoneInput implements ComponentInterface {
    * Create the dropdown button for selecting a country.
    */
   private renderDropdownButton() {
+    const selectedClass = classNames('tk-phone-input__dropdown-button-selected', {
+      'tk-phone-input__dropdown-button-selected--no-dial-code': !this.selectedCountry.dialCode,
+    });
+
     return (
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
-        <div class="tk-phone-input__dropdown-button-selected">
+        <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
             alt={`${this.selectedCountry.label} flag`}
-            class={`flag flag-${this.selectedCountry.id.toLowerCase()}`}
+            class={this.getFlagClass(this.selectedCountry)}
           />
-          <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>
+          {this.selectedCountry.dialCode && <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
     );
@@ -463,9 +491,9 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={`flag flag-${country.id.toLowerCase()}`} />
+            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={this.getFlagClass(country)} />
             <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
-            <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>
+            {country.dialCode && <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>}
           </li>
         ))}
       </ul>
@@ -482,7 +510,7 @@ export class TkPhoneInput implements ComponentInterface {
         id="phone-input"
         class="tk-phone-input__input"
         autoComplete="off"
-        placeholder={this.placeholder || this.selectedCountry.mask.replace(/9/g, '9')}
+        placeholder={this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
         value={this.inputValue}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
@@ -493,12 +521,11 @@ export class TkPhoneInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
+  private renderHint() {
     let hint;
 
     if (this.hint?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
-
       hint = (
         <span class="tk-phone-input__hint">
           {hintIcon}
@@ -509,7 +536,6 @@ export class TkPhoneInput implements ComponentInterface {
 
     if (this.error?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
-
       hint = (
         <span class="tk-phone-input__hint">
           {hintIcon}
