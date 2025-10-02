@@ -93,7 +93,7 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
-          to: '/release-notes',
+          to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
           label: 'v0.3.1',
           position: 'right',
         },
@@ -138,7 +138,7 @@ const config: Config = {
             },
             {
               label: 'Release Notes',
-              href: '/release-notes',
+              href: 'https://github.com/turkishtechnology/takeoff-ui/releases',
             },
             {
               label: 'FAQs',
