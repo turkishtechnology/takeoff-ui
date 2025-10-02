@@ -133,10 +133,6 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Teams',
-              href: 'https://teams.microsoft.com/l/channel/19%3A0nXc9kArhdOj5OZMqW1vEKb27I_eifVafanAKKhGYjI1%40thread.tacv2/General?groupId=5a0cad67-57e7-4b91-b45e-8b6a3d0d1514&tenantId=745a1b8b-9958-4d1e-ac1c-f741f0ff4eba',
-            },
-            {
               label: 'Contribution Guide',
               href: '/contribution-guide',
             },
