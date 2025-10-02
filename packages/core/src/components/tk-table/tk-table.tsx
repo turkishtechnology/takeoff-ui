@@ -476,15 +476,65 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async getSorting() {
-    return {
-      field: this.sortField,
-      order: this.sortOrder,
-    };
+    if (this.multiSort) {
+      return this.sorts;
+    } else {
+      return {
+        field: this.sortField,
+        order: this.sortOrder,
+      };
+    }
   }
 
+  /**
+   * Sets the current page for pagination
+   * @param page The page number to set (1-based index)
+   */
   @Method()
   async setCurrentPage(page: number) {
     this.currentPage = page;
+  }
+
+  /**
+   * Sets the current filter settings
+   */
+  @Method()
+  async setFilters(filters: ITableFilter[]) {
+    this.filters = filters;
+  }
+
+  /**
+   * Sets the current sorting settings
+   */
+  @Method()
+  async setSorting(sorts: ITableSort[] | { field: string; order: 'asc' | 'desc' }) {
+    if (this.multiSort && Array.isArray(sorts)) {
+      this.sorts = sorts;
+
+      this.sorts?.forEach(sort => {
+        const sortIcon: HTMLTkIconElement = this.el.shadowRoot.querySelector(`thead tr th[data-field="${sort.field}"] tk-icon`);
+
+        if (sortIcon) {
+          if (sort.order == 'asc') {
+            sortIcon.icon = 'arrow_drop_up';
+          } else if (sort.order == 'desc') {
+            sortIcon.icon = 'arrow_drop_down';
+          }
+        }
+      });
+    } else if (!this.multiSort && !Array.isArray(sorts)) {
+      this.sortField = sorts.field;
+      this.sortOrder = sorts.order;
+
+      const sortIcon: HTMLTkIconElement = this.el.shadowRoot.querySelector(`thead tr th[data-field="${sorts.field}"] tk-icon`);
+      if (sortIcon) {
+        if (sorts.order == 'asc') {
+          sortIcon.icon = 'arrow_drop_up';
+        } else if (sorts.order == 'desc') {
+          sortIcon.icon = 'arrow_drop_down';
+        }
+      }
+    }
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {

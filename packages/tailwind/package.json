@@ -3,7 +3,7 @@
   "version": "0.3.1",
   "description": "Tailwind CSS plugin for Takeoff UI",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
-  "homepage": "https://takeoffui.thy.com",
+  "homepage": "https://takeoffui.com",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
