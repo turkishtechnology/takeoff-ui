@@ -2,6 +2,7 @@ import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, 
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { updateArrowPosition } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -138,13 +139,13 @@ export class TkPopover implements ComponentInterface {
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.popoverElement.style, {
+      applyStyles(this.popoverElement, {
         left: `${x}px`,
         top: `${y}px`,
       });
 
       const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
+      applyStyles(this.arrowElement, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
       });

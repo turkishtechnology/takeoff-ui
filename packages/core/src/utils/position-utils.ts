@@ -1,40 +1,48 @@
+import { applyStyles, resetBorderStyles } from './style-utils';
+
 /**
  * Updates arrow position based on placement side
  * @param arrowElement - The arrow element to position
  * @param side - The side where the arrow should be positioned
  */
-export const updateArrowPosition = (arrowElement: HTMLElement, side: string) => {
-  // Reset all positions
-  arrowElement.style.top = '';
-  arrowElement.style.bottom = '';
-  arrowElement.style.left = '';
-  arrowElement.style.right = '';
-  arrowElement.style.borderTop = '';
-  arrowElement.style.borderBottom = '';
-  arrowElement.style.borderLeft = '';
-  arrowElement.style.borderRight = '';
 export const updateArrowPosition = (arrowElement: HTMLElement, side?: string) => {
+  // Reset all positions and borders
+  applyStyles(arrowElement, {
+    top: '',
+    bottom: '',
+    left: '',
+    right: '',
+  });
+  resetBorderStyles(arrowElement);
 
   switch (side) {
     case 'top':
-      arrowElement.style.bottom = '-5px';
-      arrowElement.style.borderTop = 'none';
-      arrowElement.style.borderLeft = 'none';
+      applyStyles(arrowElement, {
+        bottom: '-5px',
+        borderTop: 'none',
+        borderLeft: 'none',
+      });
       break;
     case 'bottom':
-      arrowElement.style.top = '-5px';
-      arrowElement.style.borderBottom = 'none';
-      arrowElement.style.borderRight = 'none';
+      applyStyles(arrowElement, {
+        top: '-5px',
+        borderBottom: 'none',
+        borderRight: 'none',
+      });
       break;
     case 'left':
-      arrowElement.style.right = '-5px';
-      arrowElement.style.borderLeft = 'none';
-      arrowElement.style.borderTop = 'none';
+      applyStyles(arrowElement, {
+        right: '-5px',
+        borderLeft: 'none',
+        borderTop: 'none',
+      });
       break;
     case 'right':
-      arrowElement.style.left = '-5px';
-      arrowElement.style.borderRight = 'none';
-      arrowElement.style.borderBottom = 'none';
+      applyStyles(arrowElement, {
+        left: '-5px',
+        borderRight: 'none',
+        borderBottom: 'none',
+      });
       break;
   }
 };

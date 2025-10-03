@@ -3,6 +3,7 @@ import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/d
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -134,7 +135,7 @@ export class TkDropdown implements ComponentInterface {
         placement: this.position,
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });

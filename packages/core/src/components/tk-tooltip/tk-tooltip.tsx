@@ -5,6 +5,7 @@ import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { updateArrowPosition } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -104,13 +105,13 @@ export class TkTooltip implements ComponentInterface {
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.tooltipElement.style, {
+      applyStyles(this.tooltipElement, {
         left: `${x}px`,
         top: `${y}px`,
       });
 
       const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
+      applyStyles(this.arrowElement, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
       });

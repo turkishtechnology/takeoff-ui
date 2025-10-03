@@ -7,6 +7,7 @@ import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { getNestedValue } from '../../utils/object-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * TkSelect component description.
@@ -337,11 +338,11 @@ export class TkSelect implements ComponentInterface {
           size({
             apply({ rects, elements }) {
               if (dropdownWidthMode === 'match-parent') {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: `${rects.reference.width}px`,
                 });
               } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: dropdownWidthMode,
                 });
               }
@@ -349,7 +350,7 @@ export class TkSelect implements ComponentInterface {
           }),
         ],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });
