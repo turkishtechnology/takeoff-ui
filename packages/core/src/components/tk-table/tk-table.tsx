@@ -17,6 +17,8 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
  * @vue `import { TkTable } from '@takeoff-ui/vue'`
  * @angular `import { TkTable } from '@takeoff-ui/angular'`
  * @slot empty-data - Set how the table will appear when there is no data
+ * @slot body-header - Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows)
+ * @slot body-footer - Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows)
  */
 @Component({
   tag: 'tk-table',
@@ -1620,6 +1622,8 @@ export class TkTable implements ComponentInterface {
     if (this.renderData?.length > 0) {
       return (
         <tbody>
+          <slot name="body-header"></slot>
+
           {this.renderData?.map((row, index) => {
             let styleRowObject;
 
@@ -1789,6 +1793,8 @@ export class TkTable implements ComponentInterface {
               </Fragment>
             );
           })}
+
+          <slot name="body-footer"></slot>
         </tbody>
       );
     } else if (this.hasEmptyDataSlot) {
