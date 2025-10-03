@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableSort } from './interfaces';
-import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
+import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -10,6 +10,7 @@ import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
+import { getNestedValue } from '../../utils/object-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.

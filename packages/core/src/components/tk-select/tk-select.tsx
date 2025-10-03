@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { getNestedValue } from '../../utils/object-utils';
 
 /**
  * TkSelect component description.
@@ -370,13 +371,13 @@ export class TkSelect implements ComponentInterface {
   }
 
   private getOptionLabel(item: any): string {
-    return typeof item === 'object' ? this.getNestedValue(item, this.optionLabelKey) : item;
+    return typeof item === 'object' ? getNestedValue(item, this.optionLabelKey) : item;
   }
 
   private getOptionValue(item: any): any {
     if (typeof item === 'object') {
       if (this.optionValueKey?.length > 0) {
-        return this.getNestedValue(item, this.optionValueKey);
+        return getNestedValue(item, this.optionValueKey);
       } else {
         return item;
       }
@@ -479,12 +480,6 @@ export class TkSelect implements ComponentInterface {
     } else {
       this.inputRef.value = null;
     }
-  }
-
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
   }
 
   private scrollItem(item: HTMLDivElement) {
