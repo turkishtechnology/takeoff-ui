@@ -53,7 +53,7 @@ export class TkPopover implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.popoverElement) {
-      this.updateArrowPosition();
+      updateArrowPosition(this.arrowElement);
     }
   }
 

@@ -13,6 +13,7 @@ export const updateArrowPosition = (arrowElement: HTMLElement, side: string) => 
   arrowElement.style.borderBottom = '';
   arrowElement.style.borderLeft = '';
   arrowElement.style.borderRight = '';
+export const updateArrowPosition = (arrowElement: HTMLElement, side?: string) => {
 
   switch (side) {
     case 'top':
