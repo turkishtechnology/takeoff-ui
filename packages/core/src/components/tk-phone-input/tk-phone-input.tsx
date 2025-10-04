@@ -5,6 +5,7 @@ import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/d
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -252,7 +253,7 @@ export class TkPhoneInput implements ComponentInterface {
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           top: `${y}px`,
         });
       });

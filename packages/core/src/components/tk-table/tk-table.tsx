@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableSort } from './interfaces';
-import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
+import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -10,6 +10,8 @@ import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
+import { getNestedValue } from '../../utils/object-utils';
+import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -279,9 +281,9 @@ export class TkTable implements ComponentInterface {
 
     if (slotEmptyData) {
       if (this.loading || this.data?.length > 0) {
-        slotEmptyData.style.display = 'none';
+        hideElement(slotEmptyData);
       } else {
-        slotEmptyData.style.display = 'block';
+        showElement(slotEmptyData);
       }
     }
   }
@@ -605,7 +607,7 @@ export class TkTable implements ComponentInterface {
       }).then(({ x, y }) => {
         // Ensure the element still exists before updating its position
         if (this.elFilterPanelElement) {
-          Object.assign(this.elFilterPanelElement.style, {
+          applyStyles(this.elFilterPanelElement, {
             left: `${x}px`,
             top: `${y}px`,
           });

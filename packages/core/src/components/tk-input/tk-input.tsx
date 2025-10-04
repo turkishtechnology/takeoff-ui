@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
+import { getNestedValue } from '../../utils/object-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -158,7 +159,7 @@ export class TkInput implements ComponentInterface {
   protected valueChanged(newValue, oldValue) {
     if (!_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
       if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.nativeInput.value = this.getNestedValue(newValue, this.chipLabelKey);
+        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
       } else {
         this.nativeInput.value = newValue;
       }
@@ -287,11 +288,6 @@ export class TkInput implements ComponentInterface {
     if (/[0-9]/.test(password)) strength++;
     if (/[^A-Za-z0-9]/.test(password)) strength++;
     return strength;
-  }
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
   }
 
   private handleInput = (ev: Event) => {
@@ -501,7 +497,7 @@ export class TkInput implements ComponentInterface {
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
         };
-        const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
+        const label = typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
         return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(item)} {...baseProps}></tk-chips>;
       });
@@ -523,7 +519,7 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}
-        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? this.getNestedValue(this.value, this.chipLabelKey) : this.value}
+        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
