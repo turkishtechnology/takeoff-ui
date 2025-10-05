@@ -479,7 +479,16 @@ export class TkSelect implements ComponentInterface {
     if (this.selectedItem) {
       this.inputRef.value = this.selectedItem;
     } else {
-      this.inputRef.value = null;
+      if (this.filter) {
+        this.selectedItem = this.getSelectedItem();
+        if (this.selectedItem) {
+          this.inputRef.value = this.selectedItem;
+        } else {
+          this.inputRef.value = null;
+        }
+      } else {
+        this.inputRef.value = null;
+      }
     }
   }
 
@@ -638,6 +647,7 @@ export class TkSelect implements ComponentInterface {
           (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
       ) {
         this.value = null;
+        this.inputRef.value = null;
         this.tkChange.emit(null);
         this.renderOptions = await this.filter(null, this.options);
       } else {
