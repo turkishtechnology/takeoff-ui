@@ -464,15 +464,15 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Find the selected item based on value type
-    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
+    if (typeof this.value !== 'object' && innerOptions?.every(item => typeof item !== 'object')) {
       // Handle primitive values
-      this.selectedItem = innerOptions.find(item => item === this.value);
+      this.selectedItem = innerOptions?.find(item => item === this.value);
     } else if (this.optionValueKey?.length > 0) {
       // Handle object values with optionValueKey
-      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
+      this.selectedItem = innerOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
+      this.selectedItem = innerOptions?.find(item => _.isEqual(item, this.value));
     }
 
     // Set input value based on selection state
