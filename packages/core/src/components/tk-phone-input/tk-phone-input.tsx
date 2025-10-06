@@ -278,7 +278,7 @@ export class TkPhoneInput implements ComponentInterface {
     const term = this.searchTerm.toLowerCase();
     if (!term) return this.countries;
 
-    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country?.dialCode.includes(term));
+    return this.countries.filter(country => country.label.toLowerCase().includes(term) || country.dialCode?.includes(term));
   }
 
   /**
