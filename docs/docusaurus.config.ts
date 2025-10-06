@@ -12,7 +12,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://takeoffui.thy.com',
+  url: 'https://takeoffui.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -93,8 +93,8 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
-          to: '/release-notes',
-          label: 'v0.3.1',
+          to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
+          label: 'v0.4.0',
           position: 'right',
         },
         {
@@ -133,16 +133,12 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Teams',
-              href: 'https://teams.microsoft.com/l/channel/19%3A0nXc9kArhdOj5OZMqW1vEKb27I_eifVafanAKKhGYjI1%40thread.tacv2/General?groupId=5a0cad67-57e7-4b91-b45e-8b6a3d0d1514&tenantId=745a1b8b-9958-4d1e-ac1c-f741f0ff4eba',
-            },
-            {
               label: 'Contribution Guide',
               href: '/contribution-guide',
             },
             {
               label: 'Release Notes',
-              href: '/release-notes',
+              href: 'https://github.com/turkishtechnology/takeoff-ui/releases',
             },
             {
               label: 'FAQs',

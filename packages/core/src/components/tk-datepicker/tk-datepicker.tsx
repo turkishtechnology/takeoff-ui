@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 export interface IDateSelection {
   start: string;
@@ -736,7 +737,7 @@ export class TkDatePicker {
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });

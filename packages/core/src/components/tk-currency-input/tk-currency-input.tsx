@@ -6,6 +6,7 @@ import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-utils';
 import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -244,7 +245,7 @@ export class TkCurrencyInput implements ComponentInterface {
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ y }) => {
-        Object.assign(this.dropdownEl.style, {
+        applyStyles(this.dropdownEl, {
           top: `${y}px`,
         });
       });

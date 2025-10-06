@@ -6,6 +6,8 @@ import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { getNestedValue } from '../../utils/object-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * TkSelect component description.
@@ -336,11 +338,11 @@ export class TkSelect implements ComponentInterface {
           size({
             apply({ rects, elements }) {
               if (dropdownWidthMode === 'match-parent') {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: `${rects.reference.width}px`,
                 });
               } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: dropdownWidthMode,
                 });
               }
@@ -348,7 +350,7 @@ export class TkSelect implements ComponentInterface {
           }),
         ],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });
@@ -370,13 +372,13 @@ export class TkSelect implements ComponentInterface {
   }
 
   private getOptionLabel(item: any): string {
-    return typeof item === 'object' ? this.getNestedValue(item, this.optionLabelKey) : item;
+    return typeof item === 'object' ? getNestedValue(item, this.optionLabelKey) : item;
   }
 
   private getOptionValue(item: any): any {
     if (typeof item === 'object') {
       if (this.optionValueKey?.length > 0) {
-        return this.getNestedValue(item, this.optionValueKey);
+        return getNestedValue(item, this.optionValueKey);
       } else {
         return item;
       }
@@ -462,29 +464,32 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Find the selected item based on value type
-    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
+    if (typeof this.value !== 'object' && innerOptions?.every(item => typeof item !== 'object')) {
       // Handle primitive values
-      this.selectedItem = innerOptions.find(item => item === this.value);
+      this.selectedItem = innerOptions?.find(item => item === this.value);
     } else if (this.optionValueKey?.length > 0) {
       // Handle object values with optionValueKey
-      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
+      this.selectedItem = innerOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
+      this.selectedItem = innerOptions?.find(item => _.isEqual(item, this.value));
     }
 
     // Set input value based on selection state
     if (this.selectedItem) {
       this.inputRef.value = this.selectedItem;
     } else {
-      this.inputRef.value = null;
+      if (this.filter) {
+        this.selectedItem = this.getSelectedItem();
+        if (this.selectedItem) {
+          this.inputRef.value = this.selectedItem;
+        } else {
+          this.inputRef.value = null;
+        }
+      } else {
+        this.inputRef.value = null;
+      }
     }
-  }
-
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
   }
 
   private scrollItem(item: HTMLDivElement) {
@@ -642,6 +647,7 @@ export class TkSelect implements ComponentInterface {
           (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
       ) {
         this.value = null;
+        this.inputRef.value = null;
         this.tkChange.emit(null);
         this.renderOptions = await this.filter(null, this.options);
       } else {

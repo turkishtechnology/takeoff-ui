@@ -46,12 +46,16 @@ import { TkBadge } from "@takeoff-ui/react";
 | getFilters | Returns the current filters |
 | getSorting | Returns the current sorting settings |
 | serverRequest | Allows tk-request event to be triggered manually |
-| setCurrentPage |  |
+| setCurrentPage | Sets the current page for pagination |
+| setFilters | Sets the current filter settings |
+| setSorting | Sets the current sorting settings |
 
 ### Slots
 
 | Name | Description |
 | ---- | ----------- |
+| body-footer | Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows) |
+| body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows) |
 | empty-data | Set how the table will appear when there is no data |
 
 ### Interfaces
@@ -206,17 +210,6 @@ interface ITableFilter {
 }
 ```
 
-Defines options for checkbox filter
-
-```typescript
-interface IFilterOption {
-  /** The value of the option */
-  value: string;
-  /** The display label of the option */
-  label?: string;
-}
-```
-
 
 
 ```typescript
@@ -225,6 +218,17 @@ interface ITableSort {
   field: string;
   /** The sort direction */
   order: 'asc' | 'desc';
+}
+```
+
+Defines options for checkbox filter
+
+```typescript
+interface IFilterOption {
+  /** The value of the option */
+  value: string;
+  /** The display label of the option */
+  label?: string;
 }
 ```
 

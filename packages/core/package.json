@@ -1,9 +1,9 @@
 {
   "name": "@takeoff-ui/core",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Core components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
-  "homepage": "https://takeoffui.thy.com",
+  "homepage": "https://takeoffui.com",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",

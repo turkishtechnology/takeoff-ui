@@ -4,6 +4,8 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { updateArrowPosition } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -54,7 +56,7 @@ export class TkTooltip implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.tooltipElement) {
-      this.updateArrowPosition();
+      updateArrowPosition(this.arrowElement);
     }
   }
   /**
@@ -103,47 +105,20 @@ export class TkTooltip implements ComponentInterface {
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.tooltipElement.style, {
+      applyStyles(this.tooltipElement, {
         left: `${x}px`,
         top: `${y}px`,
       });
 
       const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
+      applyStyles(this.arrowElement, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
       const [side] = placement.split('-');
-      this.updateArrowPosition(side);
+      updateArrowPosition(this.arrowElement, side);
     });
-  }
-
-  private updateArrowPosition(side?: string) {
-    const arrowElement = this.arrowElement;
-    switch (side) {
-      case 'top':
-        arrowElement.style.bottom = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'bottom':
-        arrowElement.style.top = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderRight = 'none';
-
-        break;
-      case 'left':
-        arrowElement.style.right = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'right':
-        arrowElement.style.left = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderRight = 'none';
-        break;
-    }
   }
 
   private handleMouseEnter = () => {

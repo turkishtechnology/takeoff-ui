@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableSort } from './interfaces';
-import { filterAndSort, handleInputKeydown, getNestedValue, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
+import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -10,6 +10,8 @@ import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
+import { getNestedValue } from '../../utils/object-utils';
+import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -17,6 +19,8 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
  * @vue `import { TkTable } from '@takeoff-ui/vue'`
  * @angular `import { TkTable } from '@takeoff-ui/angular'`
  * @slot empty-data - Set how the table will appear when there is no data
+ * @slot body-header - Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows)
+ * @slot body-footer - Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows)
  */
 @Component({
   tag: 'tk-table',
@@ -268,6 +272,7 @@ export class TkTable implements ComponentInterface {
     if (this.isSelectionUpdating) {
       this.isSelectionUpdating = false;
     }
+    this.refreshStickyShadows();
   }
 
   componentWillUpdate(): Promise<void> | void {
@@ -276,9 +281,9 @@ export class TkTable implements ComponentInterface {
 
     if (slotEmptyData) {
       if (this.loading || this.data?.length > 0) {
-        slotEmptyData.style.display = 'none';
+        hideElement(slotEmptyData);
       } else {
-        slotEmptyData.style.display = 'block';
+        showElement(slotEmptyData);
       }
     }
   }
@@ -475,15 +480,65 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async getSorting() {
-    return {
-      field: this.sortField,
-      order: this.sortOrder,
-    };
+    if (this.multiSort) {
+      return this.sorts;
+    } else {
+      return {
+        field: this.sortField,
+        order: this.sortOrder,
+      };
+    }
   }
 
+  /**
+   * Sets the current page for pagination
+   * @param page The page number to set (1-based index)
+   */
   @Method()
   async setCurrentPage(page: number) {
     this.currentPage = page;
+  }
+
+  /**
+   * Sets the current filter settings
+   */
+  @Method()
+  async setFilters(filters: ITableFilter[]) {
+    this.filters = filters;
+  }
+
+  /**
+   * Sets the current sorting settings
+   */
+  @Method()
+  async setSorting(sorts: ITableSort[] | { field: string; order: 'asc' | 'desc' }) {
+    if (this.multiSort && Array.isArray(sorts)) {
+      this.sorts = sorts;
+
+      this.sorts?.forEach(sort => {
+        const sortIcon: HTMLTkIconElement = this.el.shadowRoot.querySelector(`thead tr th[data-field="${sort.field}"] tk-icon`);
+
+        if (sortIcon) {
+          if (sort.order == 'asc') {
+            sortIcon.icon = 'arrow_drop_up';
+          } else if (sort.order == 'desc') {
+            sortIcon.icon = 'arrow_drop_down';
+          }
+        }
+      });
+    } else if (!this.multiSort && !Array.isArray(sorts)) {
+      this.sortField = sorts.field;
+      this.sortOrder = sorts.order;
+
+      const sortIcon: HTMLTkIconElement = this.el.shadowRoot.querySelector(`thead tr th[data-field="${sorts.field}"] tk-icon`);
+      if (sortIcon) {
+        if (sorts.order == 'asc') {
+          sortIcon.icon = 'arrow_drop_up';
+        } else if (sorts.order == 'desc') {
+          sortIcon.icon = 'arrow_drop_down';
+        }
+      }
+    }
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
@@ -552,7 +607,7 @@ export class TkTable implements ComponentInterface {
       }).then(({ x, y }) => {
         // Ensure the element still exists before updating its position
         if (this.elFilterPanelElement) {
-          Object.assign(this.elFilterPanelElement.style, {
+          applyStyles(this.elFilterPanelElement, {
             left: `${x}px`,
             top: `${y}px`,
           });
@@ -1569,6 +1624,8 @@ export class TkTable implements ComponentInterface {
     if (this.renderData?.length > 0) {
       return (
         <tbody>
+          <slot name="body-header"></slot>
+
           {this.renderData?.map((row, index) => {
             let styleRowObject;
 
@@ -1738,6 +1795,8 @@ export class TkTable implements ComponentInterface {
               </Fragment>
             );
           })}
+
+          <slot name="body-footer"></slot>
         </tbody>
       );
     } else if (this.hasEmptyDataSlot) {
