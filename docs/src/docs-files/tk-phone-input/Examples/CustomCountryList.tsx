@@ -37,7 +37,7 @@ const CustomCountryList = () => {
     { label: 'Japan', id: 'JP', dialCode: '+81', mask: '99-9999-9999' },
     { label: 'Portugal', id: 'PT', dialCode: '+351', mask: '999 999 999' },
     { label: 'Turkey', id: 'TR', dialCode: '+90', mask: '(999) 999 9999' },
-    { label: 'None', id: 'NO' },
+    { label: 'None', id: 'XX' },
   ];
 
   const demo = (
