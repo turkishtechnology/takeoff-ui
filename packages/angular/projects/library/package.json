@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/angular",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Angular components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.com",
@@ -19,7 +19,7 @@
   "publishConfig": {
     "access": "public",
     "dependencies": {
-      "@takeoff-ui/core": "^0.4.0"
+      "@takeoff-ui/core": "^0.4.1"
     }
   },
   "scripts": {
