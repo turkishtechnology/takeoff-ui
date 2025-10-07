@@ -658,14 +658,14 @@ export class TkSelect implements ComponentInterface {
 
   private async handleInputKeydown(e) {
     // Prevent default behavior for accessibility keys
-    if (['ArrowDown', 'ArrowUp', 'Enter', ' ', 'Escape'].includes(e.key)) {
+    if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(e.key)) {
       e.preventDefault();
     }
 
     // Handle keyboard shortcuts when dropdown is closed
     if (!this.isOpen) {
-      if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        // Space, Enter, Arrow Up/Down: Open dropdown
+      if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        // Enter, Arrow Up/Down: Open dropdown
         if (!this.disabled && !this.readonly) {
           this.hasFocus = true;
           this.isOpen = true;
@@ -722,7 +722,7 @@ export class TkSelect implements ComponentInterface {
         return;
       }
 
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === 'Enter') {
         const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
         if (this.multiple && this.editable && this.allowCustomValue) {
           this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
