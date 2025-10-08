@@ -599,6 +599,55 @@ export class TkDatePicker {
     }
   }
 
+  private findClosestValidDateForInput(targetDate: Date): Date | null {
+    // First, try to snap to closest boundary (minDate or maxDate)
+    const minDateBound = this.minDate ? this.parseInputDate(this.minDate) : null;
+    const maxDateBound = this.maxDate ? this.parseInputDate(this.maxDate) : null;
+
+    if (minDateBound) {
+      minDateBound.setHours(0, 0, 0, 0);
+    }
+
+    if (maxDateBound) {
+      maxDateBound.setHours(23, 59, 59, 999);
+    }
+
+    // If we don't have both boundaries, check which one we have
+    if (!minDateBound && !maxDateBound) {
+      return null; // No boundaries to converge to
+    }
+
+    // If only one boundary exists, use it
+    if (!maxDateBound && minDateBound) {
+      if (targetDate < minDateBound) {
+        return minDateBound;
+      }
+      return null; // Target is above min, so it's not a boundary issue
+    }
+
+    if (!minDateBound && maxDateBound) {
+      if (targetDate > maxDateBound) {
+        return maxDateBound;
+      }
+      return null; // Target is below max, so it's not a boundary issue
+    }
+
+    // Both boundaries exist - find the closer one
+    const targetTime = targetDate.getTime();
+    const minTime = minDateBound.getTime();
+    const maxTime = maxDateBound.getTime();
+
+    // Check if out of bounds
+    if (targetTime < minTime) {
+      return minDateBound;
+    } else if (targetTime > maxTime) {
+      return maxDateBound;
+    }
+
+    // Target is within bounds, no convergence needed
+    return null;
+  }
+
   private getResolvedFirstDayIndex(): number {
     if (this.firstDayOfWeekIndex !== undefined && this.firstDayOfWeekIndex !== null) {
       if (this.firstDayOfWeekIndex >= 0 && this.firstDayOfWeekIndex <= 6) {
@@ -1696,18 +1745,13 @@ export class TkDatePicker {
             this.tkChange.emit(undefined);
           }
         } else {
-          console.log('Processing date/datetime input. showTimePicker:', this.showTimePicker);
           const parser = this.showTimePicker ? this.parseFullDateTime.bind(this) : this.parseInputDate.bind(this);
           let parsedDate = parser(this.inputValue);
-          console.log('Parsed date:', parsedDate);
 
           // If showTimePicker mode and full datetime parsing failed, try parsing as time-only
           if (!parsedDate && this.showTimePicker) {
-            console.log('Full datetime parsing failed, trying time-only parsing...');
             const parsedTime = this.parseTimeString(this.inputValue);
             if (parsedTime) {
-              console.log('Successfully parsed as time-only:', parsedTime);
-
               // Create a date with existing date or today's date
               let baseDate = this.internalSelectedDates.start || new Date();
 
@@ -1717,17 +1761,14 @@ export class TkDatePicker {
                 const maxDateBound = this.maxDate ? this.parseInputDate(this.maxDate) : null;
 
                 if (minDateBound && baseDate < minDateBound) {
-                  console.log('Base date is before minDate, using minDate:', this.minDate);
                   baseDate = minDateBound;
                 } else if (maxDateBound && baseDate > maxDateBound) {
-                  console.log('Base date is after maxDate, using maxDate:', this.maxDate);
                   baseDate = maxDateBound;
                 }
               }
 
               parsedDate = new Date(baseDate);
               parsedDate.setHours(parsedTime.getHours(), parsedTime.getMinutes(), 0, 0);
-              console.log('Created combined date with bounds check:', parsedDate, 'minDate:', this.minDate, 'maxDate:', this.maxDate);
             }
           }
 
@@ -1740,7 +1781,6 @@ export class TkDatePicker {
             if (this.showTimePicker) {
               const hour = parsedDate.getHours();
               const minute = parsedDate.getMinutes();
-
               // Check if the parsed time is within bounds
               const isWithinBounds = this.isTimeWithinBounds(hour, minute);
               if (isWithinBounds) {
@@ -1761,10 +1801,8 @@ export class TkDatePicker {
                   const correctedDate = new Date(parsedDate);
                   correctedDate.setHours(closestTime.hour, closestTime.minute, 0, 0);
                   const formattedValue = this.formatDateOrDateTime(correctedDate, 'start');
-                  console.log('Auto-corrected to:', formattedValue);
                   // Update the inputValue to show the corrected value
                   this.inputValue = formattedValue;
-                  console.log('Updated inputValue to show corrected value:', this.inputValue);
                   this.tkChange.emit(formattedValue);
                 } else {
                   this.isInvalid = true;
@@ -1777,6 +1815,63 @@ export class TkDatePicker {
               this.isInvalid = false;
               const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
               this.tkChange.emit(formattedValue);
+            }
+          } else if (parsedDate) {
+            // Date is parsed but disabled - try to converge to closest valid date
+            const closestDate = this.findClosestValidDateForInput(parsedDate);
+            if (closestDate) {
+              const normalized = this.normalizeDate(closestDate);
+              this.internalSelectedDates = {
+                start: normalized,
+                end: null,
+              };
+
+              if (this.showTimePicker) {
+                const hour = parsedDate.getHours();
+                const minute = parsedDate.getMinutes();
+
+                // Check if the parsed time is within bounds
+                const isWithinBounds = this.isTimeWithinBounds(hour, minute);
+                if (isWithinBounds) {
+                  const time = { hour, minute };
+                  this.internalStartTime = time;
+                  this.internalEndTime = time;
+                  this.isInvalid = false;
+                  // Create corrected date with the closest valid date but keep the original time
+                  const correctedDate = new Date(closestDate);
+                  correctedDate.setHours(hour, minute, 0, 0);
+                  const formattedValue = this.formatDateOrDateTime(correctedDate, 'start');
+
+                  this.inputValue = formattedValue;
+                  this.tkChange.emit(formattedValue);
+                } else {
+                  // Find closest valid time and auto-correct both date and time
+                  const closestTime = this.findClosestValidTimeForInput(hour, minute);
+                  if (closestTime) {
+                    this.internalStartTime = closestTime;
+                    this.internalEndTime = closestTime;
+                    this.isInvalid = false;
+                    const correctedDate = new Date(closestDate);
+                    correctedDate.setHours(closestTime.hour, closestTime.minute, 0, 0);
+                    const formattedValue = this.formatDateOrDateTime(correctedDate, 'start');
+                    this.inputValue = formattedValue;
+                    this.tkChange.emit(formattedValue);
+                  } else {
+                    this.isInvalid = true;
+                    this.tkChange.emit(undefined);
+                  }
+                }
+              } else {
+                this.internalStartTime = null;
+                this.internalEndTime = null;
+                this.isInvalid = false;
+                const formattedValue = this.formatDateOrDateTime(closestDate, 'start');
+                this.inputValue = formattedValue;
+                this.tkChange.emit(formattedValue);
+              }
+            } else {
+              this.isInvalid = true;
+              this.tkChange.emit(undefined);
             }
           } else {
             this.isInvalid = true;
@@ -2345,7 +2440,6 @@ export class TkDatePicker {
     const displayValue = this.inputValue || this.formatInputValue();
     const shouldUseMask = !this.disableMask && (this.timeOnly ? this.timeFormat === '24' : this.mode === 'single' && !this.showTimePicker);
     const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
-    console.log('renderInput - displayValue:', displayValue, 'inputValue:', this.inputValue, 'formatInputValue():', this.formatInputValue());
 
     return (
       <tk-input
