@@ -54,6 +54,10 @@ function TreeView() {
     },
   ]);
 
+  // Test the new expandedKeys prop and tk-expand-change event
+  const [expandedKeys, setExpandedKeys] = useState<string[]>(['0']); // Start with first parent expanded
+  const [isControlled, setIsControlled] = useState(false);
+
   // Function to append new items
   const handleAddItems = () => {
     console.log('Adding new items');
@@ -82,12 +86,63 @@ function TreeView() {
     console.log('Tree changed:', event.detail);
   };
 
+  const handleExpandChange = (event: CustomEvent) => {
+    console.log('Expanded paths changed:', event.detail);
+    if (isControlled) {
+      setExpandedKeys(event.detail);
+    }
+  };
+
+  const toggleControlled = () => {
+    setIsControlled(prev => !prev);
+    console.log('Controlled mode:', !isControlled);
+  };
+
+  const collapseAll = () => {
+    setExpandedKeys([]);
+    console.log('Collapsing all paths');
+  };
+
+  const expandFirstBranch = () => {
+    // Simplified: just specify the deepest path, ancestors are auto-included
+    setExpandedKeys(['0-1-0-0']);
+    console.log('Expanding first branch to deepest level: 0-1-0-0 (ancestors auto-included)');
+  };
+
+  const expandSecondBranch = () => {
+    // Simplified: just specify the target path
+    setExpandedKeys(['1-0-0']);
+    console.log('Expanding second branch: 1-1 (ancestor "1" auto-included)');
+  };
+
   return (
     <>
-      <button onClick={handleAddItems} style={{ marginBottom: 16 }}>
-        Add New Items
-      </button>
-      <TkTreeView selectable mode="basic" type="light" size="base" items={items} onTkItemClick={handleItemClick} onTkChange={handleChange} />
+      <div style={{ marginBottom: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button onClick={handleAddItems}>Add New Items</button>
+        <button onClick={toggleControlled}>{isControlled ? 'Switch to Uncontrolled' : 'Switch to Controlled'}</button>
+        {isControlled && (
+          <>
+            <button onClick={collapseAll}>Collapse All</button>
+            <button onClick={expandFirstBranch}>Expand First Branch</button>
+            <button onClick={expandSecondBranch}>Expand Second Branch</button>
+          </>
+        )}
+      </div>
+      <div style={{ marginBottom: 8, padding: 8, background: '#f0f0f0', borderRadius: 4 }}>
+        <strong>Mode:</strong> {isControlled ? 'Controlled' : 'Uncontrolled'} |<strong> Expanded Keys:</strong> {isControlled ? JSON.stringify(expandedKeys) : 'Auto-managed'}
+      </div>
+      <TkTreeView
+        selectable
+        expandAll={true}
+        mode="basic"
+        type="light"
+        size="base"
+        items={items}
+        expandedKeys={isControlled ? expandedKeys : undefined}
+        onTkItemClick={handleItemClick}
+        onTkChange={handleChange}
+        onTkExpandChange={handleExpandChange}
+      />
     </>
   );
 }

@@ -27,6 +27,10 @@ export class TkTreeView implements ComponentInterface {
   @Prop() items: ITreeItem[] = [];
   @Watch('items')
   handleItemsChange() {
+    // Skip if in controlled mode
+    if (this.expandedKeys !== undefined) {
+      return;
+    }
     if (this.expandAll) {
       this.initializeExpandedPaths();
     }
@@ -37,9 +41,12 @@ export class TkTreeView implements ComponentInterface {
   @Prop() mode: 'basic' | 'stepper' = 'basic';
   @Watch('mode')
   handleModeChange() {
-    if (this.expandAll) {
-      this.initializeExpandedPaths();
+    // Skip if in controlled mode
+    if (this.expandedKeys !== undefined) {
+      return;
     }
+    // Re-initialize expansion based on new mode
+    this.initializeExpandedPaths();
   }
   /**
    * Tree view type: 'basic', 'divided', or 'light'.
@@ -99,13 +106,37 @@ export class TkTreeView implements ComponentInterface {
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
 
   /**
-   * If true, expands all nodes.
+   * If true, expands all nodes in basic mode.
+   * Note: This prop is ignored when expandedKeys is provided (controlled mode).
    */
   @Prop() expandAll: boolean = false;
   @Watch('expandAll')
   handleExpandAllChange(newValue: boolean, oldValue: boolean) {
+    // Skip if in controlled mode
+    if (this.expandedKeys !== undefined) {
+      return;
+    }
+    // Skip if in stepper mode (expandAll doesn't make sense for stepper)
+    if (this.mode === 'stepper') {
+      return;
+    }
     if (newValue !== oldValue && newValue) {
       this.initializeExpandedPaths();
+    }
+  }
+
+  /**
+   * Array of paths that should be expanded. Use this for controlled expansion state.
+   * Paths are represented as hyphen-separated indices (e.g., "0", "0-1", "0-1-2").
+   * When set, this enables controlled mode and overrides expandAll and default expansion behavior.
+   * Use with onTkExpandChange event for two-way binding.
+   * Note: Parent paths are automatically included. For example, setting ["0-1-2"] will also expand "0" and "0-1".
+   */
+  @Prop({ mutable: true }) expandedKeys?: string[];
+  @Watch('expandedKeys')
+  handleExpandedKeysChange(newValue: string[]) {
+    if (newValue !== undefined) {
+      this.expandedPaths = this.expandKeysWithAncestors(newValue);
     }
   }
 
@@ -119,8 +150,40 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
+  /**
+   * Event emitted when the expanded paths change.
+   */
+  @Event({ eventName: 'tk-expand-change' }) tkExpandChange: EventEmitter<string[]>;
+
   componentWillLoad() {
-    this.initializeExpandedPaths();
+    // If expandedKeys is provided, use it; otherwise initialize based on mode/expandAll
+    if (this.expandedKeys !== undefined) {
+      this.expandedPaths = this.expandKeysWithAncestors(this.expandedKeys);
+    } else {
+      this.initializeExpandedPaths();
+    }
+  }
+
+  /**
+   * Expand keys and automatically include all ancestor paths
+   * Example: ["0-1-2"] -> Set(["0", "0-1", "0-1-2"])
+   */
+  private expandKeysWithAncestors(keys: string[]): Set<string> {
+    const expandedSet = new Set<string>();
+
+    keys.forEach(key => {
+      // Add the key itself
+      expandedSet.add(key);
+
+      // Add all ancestor paths
+      const parts = key.split('-');
+      for (let i = 1; i < parts.length; i++) {
+        const ancestorPath = parts.slice(0, i).join('-');
+        expandedSet.add(ancestorPath);
+      }
+    });
+
+    return expandedSet;
   }
   /**
    * Collect all descendant paths recursively
@@ -143,9 +206,15 @@ export class TkTreeView implements ComponentInterface {
    * Initialize expanded paths based on mode and expandAll configuration
    */
   private initializeExpandedPaths() {
+    // Skip initialization if expandedKeys is being used for control
+    if (this.expandedKeys !== undefined) {
+      return;
+    }
+
     const expanded = new Set<string>();
     if (!this.items || this.items.length === 0) {
       this.expandedPaths = expanded;
+      this.emitExpandChange();
       return;
     }
 
@@ -178,6 +247,16 @@ export class TkTreeView implements ComponentInterface {
     }
 
     this.expandedPaths = expanded;
+    this.emitExpandChange();
+  }
+
+  /**
+   * Emit expand change event when not in controlled mode
+   */
+  private emitExpandChange() {
+    if (this.expandedKeys === undefined) {
+      this.tkExpandChange.emit(Array.from(this.expandedPaths));
+    }
   }
 
   /**
@@ -232,6 +311,7 @@ export class TkTreeView implements ComponentInterface {
         // Stepper: Open path to this item
         this.expandedPaths = new Set(ancestors);
         this.handleSelect(pathStr, item);
+        this.emitExpandChange();
         return;
       }
     } else {
@@ -248,6 +328,7 @@ export class TkTreeView implements ComponentInterface {
         this.handleSelect(pathStr, item);
       }
     }
+    this.emitExpandChange();
   };
 
   private handleSelect = (pathStr: string, item: ITreeItem) => {
@@ -389,6 +470,7 @@ export class TkTreeView implements ComponentInterface {
           }
         }
         this.expandedPaths = new Set(ancestors);
+        this.emitExpandChange();
       }
       this.handleSelect(pathStr, item);
     }
