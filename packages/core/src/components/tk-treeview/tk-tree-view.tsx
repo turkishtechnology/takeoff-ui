@@ -6,6 +6,21 @@ import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 /**
  * The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
  * Uses array-based data structure for better performance and easier data management.
+ *
+ * ## Controlled vs Uncontrolled Mode
+ *
+ * **Uncontrolled Mode** (default):
+ * - Component manages its own expansion state internally
+ * - Use `expandAll` prop to control initial expansion
+ * - Listen to `tk-expand-change` event to get state updates
+ * - The component automatically handles node expand/collapse
+ *
+ * **Controlled Mode** (when `expandedKeys` is provided):
+ * - Parent component fully controls which nodes are expanded via `expandedKeys` prop
+ * - `expandAll` prop is ignored
+ * - Must listen to `tk-expand-change` and update `expandedKeys` for two-way binding
+ * - Parent has complete control over expansion state
+ *
  * @react `import { TkTreeView } from '@takeoff-ui/react'`
  * @vue `import { TkTreeView } from '@takeoff-ui/vue'`
  * @angular `import { TkTreeView } from '@takeoff-ui/angular'`
@@ -28,7 +43,7 @@ export class TkTreeView implements ComponentInterface {
   @Watch('items')
   handleItemsChange() {
     // Skip if in controlled mode
-    if (this.expandedKeys !== undefined) {
+    if (this.isControlled()) {
       return;
     }
     if (this.expandAll) {
@@ -42,7 +57,7 @@ export class TkTreeView implements ComponentInterface {
   @Watch('mode')
   handleModeChange() {
     // Skip if in controlled mode
-    if (this.expandedKeys !== undefined) {
+    if (this.isControlled()) {
       return;
     }
     // Re-initialize expansion based on new mode
@@ -113,7 +128,7 @@ export class TkTreeView implements ComponentInterface {
   @Watch('expandAll')
   handleExpandAllChange(newValue: boolean, oldValue: boolean) {
     // Skip if in controlled mode
-    if (this.expandedKeys !== undefined) {
+    if (this.isControlled()) {
       return;
     }
     // Skip if in stepper mode (expandAll doesn't make sense for stepper)
@@ -128,9 +143,17 @@ export class TkTreeView implements ComponentInterface {
   /**
    * Array of paths that should be expanded. Use this for controlled expansion state.
    * Paths are represented as hyphen-separated indices (e.g., "0", "0-1", "0-1-2").
-   * When set, this enables controlled mode and overrides expandAll and default expansion behavior.
-   * Use with onTkExpandChange event for two-way binding.
-   * Note: Parent paths are automatically included. For example, setting ["0-1-2"] will also expand "0" and "0-1".
+   *
+   * **Controlled Mode:**
+   * - When this prop is provided (any array, including empty []), the component enters controlled mode
+   * - Parent component must manage expansion state and update this prop
+   * - `expandAll` prop will be ignored
+   * - Use with `tk-expand-change` event for two-way binding
+   *
+   * **Note:**
+   * - Parent paths are automatically included. For example, setting ["0-1-2"] will also expand "0" and "0-1"
+   * - Pass `[]` (empty array) to collapse all nodes in controlled mode
+   * - Do not pass this prop (or pass `undefined`) for uncontrolled mode
    */
   @Prop({ mutable: true }) expandedKeys?: string[];
   @Watch('expandedKeys')
@@ -155,9 +178,18 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-expand-change' }) tkExpandChange: EventEmitter<string[]>;
 
+  /**
+   * Check if the component is in controlled mode.
+   * Controlled mode is when the parent component manages expansion state via expandedKeys prop.
+   * We use Array.isArray() instead of checking undefined to handle edge cases like null.
+   */
+  private isControlled(): boolean {
+    return Array.isArray(this.expandedKeys);
+  }
+
   componentWillLoad() {
     // If expandedKeys is provided, use it; otherwise initialize based on mode/expandAll
-    if (this.expandedKeys !== undefined) {
+    if (this.isControlled()) {
       this.expandedPaths = this.expandKeysWithAncestors(this.expandedKeys);
     } else {
       this.initializeExpandedPaths();
@@ -207,7 +239,7 @@ export class TkTreeView implements ComponentInterface {
    */
   private initializeExpandedPaths() {
     // Skip initialization if expandedKeys is being used for control
-    if (this.expandedKeys !== undefined) {
+    if (this.isControlled()) {
       return;
     }
 
@@ -254,7 +286,7 @@ export class TkTreeView implements ComponentInterface {
    * Emit expand change event when not in controlled mode
    */
   private emitExpandChange() {
-    if (this.expandedKeys === undefined) {
+    if (!this.isControlled()) {
       this.tkExpandChange.emit(Array.from(this.expandedPaths));
     }
   }
