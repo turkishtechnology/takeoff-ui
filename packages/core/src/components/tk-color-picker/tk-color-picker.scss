@@ -4,398 +4,363 @@
 
 .tk-color-picker {
   display: inline-block;
+
   &.tk-color-picker-overlay {
     position: relative;
-    .tk-color-picker-trigger {
-      // min-width: var();
-      // min-height: var();
-      border-radius: var(--external-label-base-text-area-radius, 8px);
-      border: 1px solid var(--border-light, #E1E4EA);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: flex-start;
-      justify-content: center;
-      gap: var(--external-label-base-input-gap, 4px);
-      // transition: all var();
-      background: var(--static-light);
-      padding: var(--external-label-base-input-v-padding, 10px) var(--external-label-base-input-h-padding, 10px);
-
-      .tk-color-picker-preview {
-        position: relative;
-        // border-radius: var();
-        // width: var();
-        // height: var();
-        // box-shadow: inset 0 0 1px 0 var();
-        flex: none;
-        // background-image: conic-gradient(var());
-        background-size: 50% 50%;
-
-        .tk-color-picker-preview-inner {
-          width: 100%;
-          height: 100%;
-          // box-shadow: inset 0 0 0 var();
-          border-radius: inherit;
-        }
-      }
-      .tk-color-picker-trigger-text {
-        // margin-inline-start: var();
-        // margin-inline-end: calc(var());
-        // font-size: var();
-        // color: var();
-        align-self: center;
-        span {
-          // font-size: var();
-          // color: var();
-        }
-      }
-    }
   }
-  .tk-color-picker-inline {
+  &.tk-color-picker-inline {
     width: 20px;
     height: 20px;
   }
-}
 
-.tk-color-picker-panel {
-  z-index: 1001;
-  width: 280px;
-  background: var(--static-light, #ffffff);
-  border-radius: 16px;
-  border: 1px solid var(--border-light, #E1E4EA);
-  box-shadow: 0px 2px 2px -1px rgba(82, 88, 102, 0.08),
-              0px 6px 12px -2px rgba(82, 88, 102, 0.08),
-              0px 8px 20px 0px rgba(82, 88, 102, 0.08);
-  transform-origin: center top;
-
-  &.tk-color-picker-panel-inline {
-    position: relative;
-  }
-
-  &.tk-color-picker-panel-overlay {
-    position: absolute;
-  }
-
-  .tk-color-picker-panel-header {
-    display: flex;
+  .tk-color-picker-trigger {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 4px 12px;
-    border-bottom: 1px solid var(--border-light, #E1E4EA);
+    cursor: pointer;
+    border: 1px solid var(--border-light, #E1E4EA);
+    border-radius: var(--external-label-base-text-area-radius, 8px);
+    padding: var(--external-label-base-input-v-padding, 10px) var(--external-label-base-input-h-padding, 10px);
+    background: var(--static-light, #ffffff);
+    gap: var(--external-label-base-input-gap, 4px);
 
-    .tk-color-picker-panel-header-title {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
-      color: var(--text-darkest, #222530);
-    }
-
-    .tk-color-picker-panel-close {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      padding: 6px;
-      border-radius: 8px;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      transition: background-color 0.2s;
-
-      &:hover {
-        background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
-      }
-    }
-  }
-
-  .tk-color-picker-panel-body {
-    padding: 8px;
-
-    .tk-color-picker-saturation {
-      position: relative;
-      width: 264px;
-      height: 264px;
-      border-radius: 8px;
+    .tk-color-picker-color-preview {
+      width: 24px;
+      height: 24px;
       border: 1px solid var(--border-light, #E1E4EA);
+      border-radius: 4px;
       overflow: hidden;
-      cursor: crosshair;
-
-      .tk-color-picker-saturation-white {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to right, white 0%, transparent 100%);
-      }
-
-      .tk-color-picker-saturation-black {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, transparent 0%, black 100%);
-      }
-
-      .tk-color-picker-saturation-pointer {
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-        transform: translate(-50%, -50%);
-        pointer-events: none;
+      .tk-color-picker-color-preview-inner {
+        width: 100%;
+        height: 100%;
       }
     }
 
-    .tk-color-picker-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
-
-      .tk-color-picker-sliders {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .tk-color-picker-eyedropper {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          padding: 6px;
-          border-radius: 8px;
-          border: 1px solid var(--border-sub-base, #CACFD8);
-          background: var(--static-light, #ffffff);
-          cursor: pointer;
-          flex-shrink: 0;
-
-          &:hover {
-            background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
-          }
-        }
-
-        .tk-color-picker-slider-group {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          flex: 1;
-
-          .tk-color-picker-slider {
-            position: relative;
-            height: 12px;
-            border-radius: 24px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-
-            &.tk-color-picker-hue {
-              background: linear-gradient(to right,
-                #ff0000 0%,
-                #ffff00 17%,
-                #00ff00 33%,
-                #00ffff 50%,
-                #0000ff 67%,
-                #ff00ff 83%,
-                #ff0000 100%);
-            }
-
-            &.tk-color-picker-alpha {
-              background-image: linear-gradient(to right, transparent 0%, var(--current-color, #000000) 100%),
-                              url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKElEQVQYlWP4////f4YBBEwMAwkGqihaVDAUFTGMKiI1FRXBUK4oAACzBgIJvuPoywAAAABJRU5ErkJggg==');
-              background-size: 100%, 10px 10px;
-              background-position: 0 0, 0 0;
-            }
-
-            .tk-color-picker-slider-thumb {
-              position: absolute;
-              width: 16px;
-              height: 16px;
-              top: 50%;
-              transform: translate(-50%, -50%);
-              border-radius: 50%;
-              background: white;
-              border: 1px solid var(--border-light, #E1E4EA);
-              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-              pointer-events: none;
-            }
-          }
-        }
-
-        .tk-color-picker-preview {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          border: 1px solid var(--border-light, #E1E4EA);
-          flex-shrink: 0;
-          position: relative;
-          overflow: hidden;
-
-          .tk-color-picker-preview-color {
-            position: absolute;
-            inset: 0;
-          }
-        }
-      }
-
-      .tk-color-picker-inputs {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-
-        .tk-color-picker-format-select {
-          position: relative;
-
-          .tk-color-picker-format-input {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            height: 32px;
-            padding: 6px 8px;
-            background: var(--static-light, #ffffff);
-            border: 1px solid var(--border-light, #E1E4EA);
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 18px;
-            color: var(--text-darkest, #222530);
-            cursor: pointer;
-
-            .tk-color-picker-format-arrow {
-              width: 20px;
-              height: 20px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-          }
-        }
-
-        .tk-color-picker-input-group {
-          display: flex;
-          gap: 4px;
-          flex: 1;
-        }
-
-        .tk-color-picker-alpha-input {
-          position: relative;
-          width: 56px;
-
-          .tk-color-picker-alpha-input-field {
-            width: 100%;
-            height: 32px;
-            padding: 6px 20px 6px 8px;
-            background: var(--static-light, #ffffff);
-            border: 1px solid var(--border-light, #E1E4EA);
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 18px;
-            color: var(--text-darkest, #222530);
-            text-align: center;
-
-            &:focus {
-              outline: none;
-              border-color: var(--primary-base, #C90019);
-            }
-          }
-
-          .tk-color-picker-alpha-arrows {
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-
-            button {
-              width: 16px;
-              height: 16px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: var(--static-light, #ffffff);
-              border: 1px solid var(--border-light, #E1E4EA);
-              cursor: pointer;
-
-              &:first-child {
-                border-radius: 0 8px 0 0;
-                border-bottom: none;
-              }
-
-              &:last-child {
-                border-radius: 0 0 8px 0;
-              }
-
-              &:hover {
-                background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .tk-color-picker-presets {
-      padding: 8px;
-
-      .tk-color-picker-presets-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        padding: 2px;
-
-        .tk-color-picker-preset {
-          width: 20px;
-          height: 20px;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: transform 0.1s;
-
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
+    .tk-color-picker-trigger-text {
+      span {
+        font-size: 14px;
+        color: var(--text-darkest, #222530);
       }
     }
   }
 
-  .tk-color-picker-panel-footer {
-    display: flex;
-    gap: 8px;
-    padding: 8px;
-    border-top: 1px solid var(--border-light, #E1E4EA);
-    justify-content: flex-end;
+  .tk-color-picker-panel {
+    position: absolute;
+    z-index: 1001;
+    width: 280px;
+    background: var(--static-light, #ffffff);
+    border: 1px solid var(--border-light, #E1E4EA);
+    border-radius: 16px;
+    box-shadow:
+      0px 2px 2px -1px rgba(82, 88, 102, 0.08),
+      0px 6px 12px -2px rgba(82, 88, 102, 0.08),
+      0px 8px 20px 0px rgba(82, 88, 102, 0.08);
+    transform-origin: center top;
 
-    .tk-color-picker-footer-button {
-      flex: 1;
-      height: 40px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 14px;
-      line-height: 20px;
-      font-weight: 400;
+    &.tk-color-picker-panel-inline {
+      position: relative;
+    }
+
+    .tk-color-picker-panel-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
+      justify-content: space-between;
+      padding: 4px 12px;
+      border-bottom: 1px solid var(--border-light, #E1E4EA);
 
-      &.tk-color-picker-cancel {
-        background: var(--static-light, #ffffff);
-        border: 1px solid var(--border-sub-base, #CACFD8);
+      .tk-color-picker-panel-header-title {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
         color: var(--text-darkest, #222530);
+      }
+
+      .tk-color-picker-panel-close {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color 0.2s;
 
         &:hover {
           background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
         }
       }
+    }
 
-      &.tk-color-picker-apply {
-        background: var(--primary-base, #C90019);
-        color: var(--static-white, #ffffff);
+    .tk-color-picker-panel-body {
+      padding: 8px;
 
-        &:hover {
-          background: var(--primary-dark, #A00015);
+      .tk-color-picker-saturation {
+        position: relative;
+        width: 264px;
+        height: 264px;
+        border-radius: 8px;
+        border: 1px solid var(--border-light, #E1E4EA);
+        overflow: hidden;
+        cursor: crosshair;
+
+        .tk-color-picker-saturation-white {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to right, white 0%, transparent 100%);
+        }
+        .tk-color-picker-saturation-black {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, transparent 0%, black 100%);
+        }
+        .tk-color-picker-saturation-pointer {
+          position: absolute;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          border: 2px solid white;
+          box-shadow: 0 0 0 1px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(0,0,0,0.2);
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+        }
+      }
+
+      .tk-color-picker-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 16px;
+
+        .tk-color-picker-sliders {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .tk-color-picker-eyedropper {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-sub-base, #CACFD8);
+            background: var(--static-light, #ffffff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+
+            &:hover {
+              background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
+            }
+          }
+
+          .tk-color-picker-slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+
+            .tk-color-picker-slider {
+              position: relative;
+              height: 12px;
+              border-radius: 24px;
+              border: 1px solid rgba(0, 0, 0, 0.08);
+              cursor: pointer;
+
+              &.tk-color-picker-hue {
+                background: linear-gradient(
+                  to right,
+                  #ff0000 0%,
+                  #ffff00 17%,
+                  #00ff00 33%,
+                  #00ffff 50%,
+                  #0000ff 67%,
+                  #ff00ff 83%,
+                  #ff0000 100%
+                );
+              }
+              &.tk-color-picker-alpha {
+                background-image:
+                  linear-gradient(to right, transparent 0%, var(--current-color, #000000) 100%),
+                  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKElEQVQYlWP4////f4YBBEwMAwkGqihaVDAUFTGMKiI1FRXBUK4oAACzBgIJvuPoywAAAABJRU5ErkJggg==');
+                background-size: 100%, 10px 10px;
+                background-position: 0 0, 0 0;
+              }
+
+              .tk-color-picker-slider-thumb {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                background: white;
+                border: 1px solid var(--border-light, #E1E4EA);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                pointer-events: none;
+              }
+            }
+          }
+
+          .tk-color-picker-preview {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light, #E1E4EA);
+            overflow: hidden;
+            position: relative;
+
+            .tk-color-picker-preview-color {
+              position: absolute;
+              inset: 0;
+            }
+          }
+        }
+
+        .tk-color-picker-inputs {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          .tk-color-picker-format-select {
+            position: relative;
+            .tk-color-picker-format-input {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              height: 32px;
+              padding: 6px 8px;
+              background: var(--static-light, #ffffff);
+              border: 1px solid var(--border-light, #E1E4EA);
+              border-radius: 8px;
+              font-size: 12px;
+              line-height: 18px;
+              color: var(--text-darkest, #222530);
+              cursor: pointer;
+
+              .tk-color-picker-format-arrow {
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+            }
+          }
+
+          .tk-color-picker-input-group {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+          }
+
+          .tk-color-picker-alpha-input {
+            width: 56px;
+
+            .tk-color-picker-alpha-input-field {
+              width: 100%;
+              height: 32px;
+              padding: 6px 20px 6px 8px;
+              background: var(--static-light, #ffffff);
+              border: 1px solid var(--border-light, #E1E4EA);
+              border-radius: 8px;
+              font-size: 12px;
+              line-height: 18px;
+              color: var(--text-darkest, #222530);
+              text-align: center;
+
+              &:focus {
+                outline: none;
+                border-color: var(--primary-base, #C90019);
+              }
+            }
+
+            .tk-color-picker-alpha-arrows {
+              position: absolute;
+              right: 0;
+              top: 0;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+
+              button {
+                width: 16px;
+                height: 16px;
+                background: var(--static-light, #ffffff);
+                border: 1px solid var(--border-light, #E1E4EA);
+                cursor: pointer;
+
+                &:first-child {
+                  border-radius: 0 8px 0 0;
+                  border-bottom: none;
+                }
+                &:last-child {
+                  border-radius: 0 0 8px 0;
+                }
+                &:hover {
+                  background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .tk-color-picker-presets {
+        padding: 8px;
+
+        .tk-color-picker-presets-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          padding: 2px;
+
+          .tk-color-picker-preset {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+    }
+
+    .tk-color-picker-panel-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px;
+      border-top: 1px solid var(--border-light, #E1E4EA);
+
+      .tk-color-picker-footer-actions {
+        display: flex;
+        gap: 8px;
+
+        tk-button {
+          &.tk-color-picker-cancel {
+            background: var(--static-light, #ffffff);
+            border: 1px solid var(--border-sub-base, #CACFD8);
+            color: var(--text-darkest, #222530);
+
+            &:hover {
+              background: var(--states-hover-light, rgba(0,0,0,0.04));
+            }
+          }
+          &.tk-color-picker-apply {
+            background: var(--primary-base, #C90019);
+            color: var(--static-white, #ffffff);
+
+            &:hover {
+              background: var(--primary-dark, #A00015);
+            }
+          }
         }
       }
     }
   }
 }
-
