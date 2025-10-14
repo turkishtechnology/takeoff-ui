@@ -354,7 +354,7 @@ export class TkPhoneInput implements ComponentInterface {
 
     const currentMask = this.selectedCountry.mask;
     const maxDigits = (currentMask.match(/9/g) || []).length;
-    const hasNoDigits = /[^\d() ]/.test(inputElement.value);
+    const hasNoDigits = /[^\d() -]/.test(inputElement.value);
 
     if (rawValue.length > maxDigits || hasNoDigits) return (this.inputRef.value = this.inputValue);
 
