@@ -429,18 +429,25 @@ export class TkTable implements ComponentInterface {
   }
 
   /**
-   * Clears all filters for server side pagination
+   * Clears all filters or specific column filters
+   * @param columns Optional array of column field names to clear filters for. If not provided, all filters are cleared.
    */
   @Method()
-  async clearFilters() {
-    if (this.filters?.length > 0) {
+  async clearFilters(columns?: string[]) {
+    if (!this.filters?.length) return;
+    if (!!columns?.length) {
+      // Clear filters for specific columns
+      this.filters = this.filters.filter(filter => !columns.includes(filter.field));
+    } else {
+      // Clear all filters
       this.filters = [];
-      this.currentPage = 1;
+    }
 
-      if (this.paginationMethod !== 'server') {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
-        this.generateRenderData(tmpData, 1, true);
-      }
+    this.currentPage = 1;
+
+    if (this.paginationMethod !== 'server') {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.generateRenderData(tmpData, 1, true);
     }
   }
 
