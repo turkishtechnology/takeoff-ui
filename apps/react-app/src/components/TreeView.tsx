@@ -131,28 +131,33 @@ function TreeView() {
   };
 
   const collapseFirstRoot = () => {
-    setExpandedKeys(['1']);
-    console.log('Collapsing first root, keeping second: ["1"]');
+    // Remove all paths starting with "0" (including "0" itself)
+    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('0')));
+    console.log('Collapsing first root: removing all paths starting with "0"');
   };
 
   const collapseSecondRoot = () => {
-    setExpandedKeys(['0']);
-    console.log('Collapsing second root, keeping first: ["0"]');
+    // Remove all paths starting with "1" (including "1" itself)
+    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('1')));
+    console.log('Collapsing second root: removing all paths starting with "1"');
   };
 
   const collapseToRoots = () => {
-    setExpandedKeys(['0', '1']);
-    console.log('Collapsing to roots only: ["0", "1"]');
+    // Keep only root-level paths (paths without hyphens), remove all deep paths
+    setExpandedKeys(expandedKeys.filter(key => !key.includes('-')));
+    console.log('Collapsing to roots only: keeping only root paths (no hyphens)');
   };
 
   const collapseFirstBranch = () => {
-    setExpandedKeys(['0', '1']);
-    console.log('Collapsing first deep branch: ["0", "1"]');
+    // Remove all deep paths from first branch, but keep the root "0"
+    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('0-')));
+    console.log('Collapsing first deep branch: removing paths starting with "0-"');
   };
 
   const collapseSecondBranch = () => {
-    setExpandedKeys(['0', '1']);
-    console.log('Collapsing second branch: ["0", "1"]');
+    // Remove all deep paths from second branch, but keep the root "1"
+    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('1-')));
+    console.log('Collapsing second branch: removing paths starting with "1-"');
   };
 
   return (
