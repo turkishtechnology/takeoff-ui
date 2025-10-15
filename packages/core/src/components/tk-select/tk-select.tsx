@@ -142,6 +142,11 @@ export class TkSelect implements ComponentInterface {
   @Prop() multiple: boolean;
 
   /**
+   * The number of items to show in the collapsed select before listing `+N others`.
+   */
+  @Prop() visibleItemCount: number;
+
+  /**
    * The name of the control, which is submitted with the form data.
    */
   @Prop() name: string;
@@ -387,6 +392,22 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private getDisplayValueForMultiple(selectedItems: any[]): any[] {
+    if (!this.visibleItemCount || selectedItems.length <= this.visibleItemCount) {
+      return selectedItems;
+    }
+
+    const visibleItems = selectedItems.slice(0, this.visibleItemCount);
+    const remainingCount = selectedItems.length - this.visibleItemCount;
+    const othersIndicator = {
+      __isOthersIndicator: true,
+      label: `+${remainingCount} others`,
+      removable: false,
+    };
+
+    return [...visibleItems, othersIndicator];
+  }
+
   private async setRenderOptions(value) {
     if (this.isGrouped()) {
       this.renderOptions = this.options
@@ -452,7 +473,10 @@ export class TkSelect implements ComponentInterface {
           return null;
         })
         .filter(val => val !== null && val !== undefined);
-      this.inputRef.value = this.selectedItem;
+
+      // Apply visible item count logic for display
+      const displayValue = this.getDisplayValueForMultiple(this.selectedItem);
+      this.inputRef.value = displayValue;
       return;
     }
 
@@ -591,12 +615,14 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        const resolvedValues = (Array.isArray(value) ? value : [value]).map(val => {
-          if (typeof val === 'object' && val !== null && this.optionValueKey) {
-            return this.getOptionValue(val);
-          }
-          return val;
-        });
+        const resolvedValues = (Array.isArray(value) ? value : [value])
+          .filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator)) // Filter out the "others" indicator
+          .map(val => {
+            if (typeof val === 'object' && val !== null && this.optionValueKey) {
+              return this.getOptionValue(val);
+            }
+            return val;
+          });
         this.value = resolvedValues;
       }
       this.tkChange.emit(this.value);
