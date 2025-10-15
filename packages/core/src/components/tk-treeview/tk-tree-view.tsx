@@ -12,14 +12,14 @@ import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
  * **Uncontrolled Mode** (default):
  * - Component manages its own expansion state internally
  * - Use `expandAll` prop to control initial expansion
- * - Listen to `tk-expand-change` event to get state updates
  * - The component automatically handles node expand/collapse
  *
  * **Controlled Mode** (when `expandedKeys` is provided):
  * - Parent component fully controls which nodes are expanded via `expandedKeys` prop
  * - `expandAll` prop is ignored
- * - Must listen to `tk-expand-change` and update `expandedKeys` for two-way binding
+ * - Must listen to `tk-expand-change` and update `expandedKeys`.
  * - Parent has complete control over expansion state
+ * - Invalid paths in `expandedKeys` are logged as errors and ignored.
  *
  * @react `import { TkTreeView } from '@takeoff-ui/react'`
  * @vue `import { TkTreeView } from '@takeoff-ui/vue'`
@@ -160,6 +160,28 @@ export class TkTreeView implements ComponentInterface {
   handleExpandedKeysChange(newValue: string[]) {
     if (newValue !== undefined) {
       this.expandedPaths = this.expandKeysWithAncestors(newValue);
+
+      // In controlled mode, clear selection if the selected node is no longer expanded
+      if (this.selectedPath !== null) {
+        // Check if the selected path or any of its ancestors is collapsed
+        const selectedPathParts = this.selectedPath.split('-');
+        let isSelectedPathVisible = true;
+
+        // Check each ancestor up to and including the selected path
+        for (let i = 1; i <= selectedPathParts.length; i++) {
+          const ancestorPath = selectedPathParts.slice(0, i).join('-');
+          // For directories, they need to be expanded to show their children
+          if (i < selectedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
+            isSelectedPathVisible = false;
+            break;
+          }
+        }
+
+        // Clear selection if not visible
+        if (!isSelectedPathVisible) {
+          this.selectedPath = null;
+        }
+      }
     }
   }
 
@@ -174,7 +196,7 @@ export class TkTreeView implements ComponentInterface {
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
   /**
-   * Event emitted when the expanded paths change.
+   * Event emitted when the expanded paths change in controlled mode.
    */
   @Event({ eventName: 'tk-expand-change' }) tkExpandChange: EventEmitter<string[]>;
 
@@ -197,6 +219,24 @@ export class TkTreeView implements ComponentInterface {
   }
 
   /**
+   * Validate if a path exists in the tree structure
+   */
+  private isValidPath(path: string): boolean {
+    const indices = path.split('-').map(Number);
+    let currentLevel = this.items;
+
+    for (const index of indices) {
+      if (!currentLevel || index < 0 || index >= currentLevel.length) {
+        return false;
+      }
+      const item = currentLevel[index];
+      currentLevel = item.children;
+    }
+
+    return true;
+  }
+
+  /**
    * Expand keys and automatically include all ancestor paths
    * Example: ["0-1-2"] -> Set(["0", "0-1", "0-1-2"])
    */
@@ -204,6 +244,12 @@ export class TkTreeView implements ComponentInterface {
     const expandedSet = new Set<string>();
 
     keys.forEach(key => {
+      // Validate the path
+      if (!this.isValidPath(key)) {
+        console.error('Invalid path given to expandedKeys prop:', key);
+        return;
+      }
+
       // Add the key itself
       expandedSet.add(key);
 
@@ -246,7 +292,6 @@ export class TkTreeView implements ComponentInterface {
     const expanded = new Set<string>();
     if (!this.items || this.items.length === 0) {
       this.expandedPaths = expanded;
-      this.emitExpandChange();
       return;
     }
 
@@ -279,16 +324,6 @@ export class TkTreeView implements ComponentInterface {
     }
 
     this.expandedPaths = expanded;
-    this.emitExpandChange();
-  }
-
-  /**
-   * Emit expand change event when not in controlled mode
-   */
-  private emitExpandChange() {
-    if (!this.isControlled()) {
-      this.tkExpandChange.emit(Array.from(this.expandedPaths));
-    }
   }
 
   /**
@@ -334,33 +369,63 @@ export class TkTreeView implements ComponentInterface {
 
       if (isExpanded) {
         // Stepper: Close self and descendants
-        this.expandedPaths.delete(pathStr);
-        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (!this.isControlled()) {
+          this.expandedPaths.delete(pathStr);
+          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        }
         if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
           this.selectedPath = null;
         }
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.delete(pathStr);
+          descendants.forEach(descPath => newPaths.delete(descPath));
+          this.tkExpandChange.emit(Array.from(newPaths));
+        }
       } else {
         // Stepper: Open path to this item
-        this.expandedPaths = new Set(ancestors);
+        if (!this.isControlled()) {
+          this.expandedPaths = new Set(ancestors);
+        }
         this.handleSelect(pathStr, item);
-        this.emitExpandChange();
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          this.tkExpandChange.emit(ancestors);
+        }
         return;
       }
     } else {
       if (this.expandedPaths.has(pathStr)) {
         // Basic: Close self and descendants
-        this.expandedPaths.delete(pathStr);
-        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (!this.isControlled()) {
+          this.expandedPaths.delete(pathStr);
+          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        }
         if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
           this.selectedPath = null;
         }
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.delete(pathStr);
+          descendants.forEach(descPath => newPaths.delete(descPath));
+          this.tkExpandChange.emit(Array.from(newPaths));
+        }
       } else {
         // Basic: Open only self
-        this.expandedPaths.add(pathStr);
+        if (!this.isControlled()) {
+          this.expandedPaths.add(pathStr);
+        }
         this.handleSelect(pathStr, item);
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.add(pathStr);
+          this.tkExpandChange.emit(Array.from(newPaths));
+        }
       }
     }
-    this.emitExpandChange();
   };
 
   private handleSelect = (pathStr: string, item: ITreeItem) => {
@@ -501,8 +566,11 @@ export class TkTreeView implements ComponentInterface {
             ancestors.push(parentParts.slice(0, i).join('-'));
           }
         }
-        this.expandedPaths = new Set(ancestors);
-        this.emitExpandChange();
+        if (this.isControlled()) {
+          this.tkExpandChange.emit(ancestors);
+        } else {
+          this.expandedPaths = new Set(ancestors);
+        }
       }
       this.handleSelect(pathStr, item);
     }
