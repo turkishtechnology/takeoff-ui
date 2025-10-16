@@ -158,7 +158,7 @@ export class TkTreeView implements ComponentInterface {
   @Prop({ mutable: true }) expandedKeys?: string[];
   @Watch('expandedKeys')
   handleExpandedKeysChange(newValue: string[]) {
-    if (newValue !== undefined) {
+    if (Array.isArray(newValue)) {
       this.expandedPaths = this.expandKeysWithAncestors(newValue);
 
       // In controlled mode, clear selection if the selected node is no longer expanded
