@@ -22,6 +22,7 @@ import { getIconElementProps } from '../../utils/icon-utils';
 })
 export class TkEditor {
   private editorRef?: HTMLDivElement;
+  private isExternalUpdate: boolean = false;
 
   @Element() el: HTMLTkEditorElement;
 
@@ -39,7 +40,6 @@ export class TkEditor {
     link?: boolean;
   } = {};
   @State() private isEmpty: boolean = false;
-  @State() private hasInitialized: boolean = false;
 
   /**
    * The value of the editor
@@ -49,6 +49,7 @@ export class TkEditor {
   @Watch('value')
   valueChanged(newValue: string) {
     if (this.editor && newValue !== this.editor.getHTML()) {
+      this.isExternalUpdate = true;
       this.editor.commands.setContent(newValue);
     }
   }
@@ -253,12 +254,12 @@ export class TkEditor {
           this.isEmpty = editor.getText().length === 0;
         },
         onUpdate: ({ editor }) => {
-          if (!this.hasInitialized) {
-            this.hasInitialized = true;
-            if (editor.getText().trim() === '') {
-              return;
-            }
+          if (this.isExternalUpdate) {
+            this.isExternalUpdate = false;
+            this.isEmpty = editor.getText().length === 0;
+            return;
           }
+          
           const html = editor.getHTML();
           this.value = html;
           this.tkChange.emit(html);
