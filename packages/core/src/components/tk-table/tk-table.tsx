@@ -55,6 +55,9 @@ export class TkTable implements ComponentInterface {
   @State() columnWidths: { [key: string]: string } = {};
   @State() stickyOffsets: { left: { [key: string]: number }; right: { [key: string]: number } } = { left: {}, right: {} };
   @State() sorts: ITableSort[] = [];
+  @State() groupedData: { groupValue: any; groupCount: number; rows: any[] }[] = [];
+  @State() groupByColumnField: string = null;
+  @State() isGroupingOverridden: boolean = false;
 
   /**
    * The column definitions (Array of Objects)
@@ -110,6 +113,12 @@ export class TkTable implements ComponentInterface {
         this.renderData = [...newValue]?.slice(startIndex, endIndex) || [];
       } else {
         this.renderData = newValue?.length > 0 ? [...newValue] : [];
+      }
+
+      // Re-apply grouping if it was previously set
+      if (this.groupBy || this.groupByColumnField) {
+        const groupField = this.groupBy || this.groupByColumnField;
+        this.applyGrouping(groupField);
       }
 
       if (this.refSelectAll) this.refSelectAll.value = false;
@@ -185,6 +194,27 @@ export class TkTable implements ComponentInterface {
   @Prop() rowStyle: (row: any, index?: number) => any;
 
   /**
+   * Column field name to group the table data by.
+   * When specified, the table will automatically group rows by unique values in this column.
+   * Set to null or undefined to disable grouping.
+   * @example groupBy="status" // Groups by the 'status' column
+   */
+  @Prop() groupBy: string;
+  @Watch('groupBy')
+  groupByChanged(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      // Only apply prop changes if grouping hasn't been overridden by method calls
+      if (!this.isGroupingOverridden) {
+        if (newValue) {
+          this.applyGrouping(newValue);
+        } else {
+          this.clearGroupingInternal();
+        }
+      }
+    }
+  }
+
+  /**
    *
    */
   @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<any[] | any>;
@@ -234,6 +264,11 @@ export class TkTable implements ComponentInterface {
 
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
+    }
+
+    // Apply grouping if groupBy prop is set
+    if (this.groupBy) {
+      this.applyGrouping(this.groupBy);
     }
 
     // Initialize column widths from column definitions
@@ -548,10 +583,131 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  /**
+   * Groups table data by the specified column field
+   * Creates group header rows that display the unique value and count of items in that group.
+   * For example, if you have a 'status' column with values 'Open' and 'Closed',
+   * this will create group headers like "Open (5)" and "Closed (3)".
+   *
+   * When called, this method overrides any groupBy prop until clearGrouping() or
+   * resetGroupingOverride() is called.
+   *
+   * @param columnField The field name to group by (e.g., 'status', 'category', 'department')
+   *
+   * @example
+   * // Group by status column (overrides groupBy prop)
+   * await tableRef.groupByColumn('status');
+   *
+   * // Clear grouping and restore prop control
+   * await tableRef.clearGrouping();
+   *
+   * // Or just reset override without clearing grouping
+   * await tableRef.resetGroupingOverride();
+   */
+  @Method()
+  async groupByColumn(columnField: string) {
+    // Mark grouping as overridden by method call
+    this.isGroupingOverridden = true;
+
+    if (!columnField) {
+      this.clearGroupingInternal();
+      return;
+    }
+
+    this.applyGrouping(columnField);
+  }
+
+  /**
+   * Clears the current grouping and returns to normal table view
+   * Also resets override flag, allowing props to control grouping again
+   */
+  @Method()
+  async clearGrouping() {
+    this.isGroupingOverridden = false;
+    this.clearGroupingInternal();
+
+    // After clearing override, check if prop wants to apply grouping
+    if (this.groupBy) {
+      this.applyGrouping(this.groupBy);
+    }
+  }
+
+  /**
+   * Resets the override flag, allowing the groupBy prop to control grouping again
+   * without clearing current grouping state
+   */
+  @Method()
+  async resetGroupingOverride() {
+    this.isGroupingOverridden = false;
+
+    // Check if prop wants to apply different grouping
+    if (this.groupBy && this.groupBy !== this.groupByColumnField) {
+      this.applyGrouping(this.groupBy);
+    } else if (!this.groupBy && this.groupByColumnField) {
+      this.clearGroupingInternal();
+    }
+  }
+
+  private applyGrouping(columnField: string) {
+    if (!columnField) {
+      this.clearGroupingInternal();
+      return;
+    }
+
+    const filteredData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+
+    // Group data by the specified column
+    const groups = new Map<any, any[]>();
+
+    filteredData.forEach(row => {
+      const groupValue = getNestedValue(row, columnField);
+      if (!groups.has(groupValue)) {
+        groups.set(groupValue, []);
+      }
+      groups.get(groupValue).push(row);
+    });
+
+    // Convert to array format for rendering
+    this.groupedData = Array.from(groups.entries()).map(([groupValue, rows]) => ({
+      groupValue,
+      groupCount: rows.length,
+      rows,
+    }));
+
+    this.groupByColumnField = columnField;
+
+    // Generate render data from grouped data
+    const flatRenderData = [];
+    this.groupedData.forEach(group => {
+      flatRenderData.push(...group.rows);
+    });
+
+    if (this.paginationMethod === 'client') {
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
+      const endIndex = startIndex + this.rowsPerPage;
+      this.renderData = flatRenderData.slice(startIndex, endIndex);
+    } else {
+      this.renderData = flatRenderData;
+    }
+
+    this.totalItems = flatRenderData.length;
+  }
+
+  private clearGroupingInternal() {
+    this.groupByColumnField = null;
+    this.groupedData = [];
+    this.generateRenderData(this.data, this.currentPage, true);
+  }
+
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
     let _data = [...data];
     this.currentPage = currentPage;
     this.totalItems = _data?.length;
+
+    // Clear grouping when generating render data with new dataset
+    if (!this.groupByColumnField) {
+      this.groupedData = [];
+    }
 
     // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
     if (!isWillLoad) {
@@ -1357,6 +1513,221 @@ export class TkTable implements ComponentInterface {
     this.handleScroll({ target: tableHolder } as unknown as Event);
   }
 
+  private createGroupedRows() {
+    const rows = [];
+    let globalIndex = 0;
+
+    // For pagination, we need to determine which groups and rows to show
+    let startIndex = 0;
+    let endIndex = this.renderData.length;
+
+    if (this.paginationMethod === 'client') {
+      startIndex = (this.currentPage - 1) * this.rowsPerPage;
+      endIndex = startIndex + this.rowsPerPage;
+    }
+
+    let currentRowIndex = 0;
+
+    this.groupedData.forEach(group => {
+      // Check if this group contains any rows in the current page range
+      const groupStartIndex = currentRowIndex;
+      const groupEndIndex = currentRowIndex + group.rows.length;
+
+      // If this group overlaps with the visible range, show it
+      if (groupEndIndex > startIndex && groupStartIndex < endIndex) {
+        // Create group header row
+        const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
+        const groupHeaderRow = (
+          <tr class="tk-table-group-header">
+            <td colSpan={totalColumns} class="tk-table-group-header-cell">
+              <div class="tk-table-group-header-content">
+                <span class="tk-table-group-value">{group.groupValue}</span>
+                <span class="tk-table-group-count">({group.groupCount})</span>
+              </div>
+            </td>
+          </tr>
+        );
+        rows.push(groupHeaderRow);
+
+        // Show only the visible rows from this group
+        group.rows.forEach((row, groupRowIndex) => {
+          const absoluteRowIndex = currentRowIndex + groupRowIndex;
+
+          // Only show rows that are in the visible range
+          if (absoluteRowIndex >= startIndex && absoluteRowIndex < endIndex) {
+            const dataRow = this.createDataRow(row, globalIndex + groupRowIndex);
+            rows.push(dataRow);
+          }
+        });
+      }
+
+      currentRowIndex += group.rows.length;
+      globalIndex += group.rows.length;
+    });
+
+    return rows;
+  }
+
+  private createDataRow(row: any, index: number) {
+    let styleRowObject;
+
+    if (typeof this.rowStyle == 'function') {
+      const stylesRow = this.rowStyle(row, index);
+      if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
+    }
+
+    let isRowDisabled = false;
+    if (this.selectionRowDisabled) {
+      isRowDisabled = this.selectionRowDisabled(row);
+    }
+
+    let selectionTd;
+    if (this.selectionMode === 'checkbox') {
+      selectionTd = (
+        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+          <tk-checkbox
+            value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
+            disabled={isRowDisabled}
+            onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
+          ></tk-checkbox>
+        </td>
+      );
+    } else if (this.selectionMode === 'radio') {
+      selectionTd = (
+        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+          <tk-radio value={row} name="selection" checked={_.isEqual(this.selection, row)} disabled={isRowDisabled} onTk-change={() => this.handleRadioSelectChange(row)}></tk-radio>
+        </td>
+      );
+    }
+
+    const isSelected =
+      this.selectionMode === 'checkbox' ? _.some(this.selection, itemValue => _.isEqual(itemValue, row)) : this.selectionMode === 'radio' ? _.isEqual(this.selection, row) : false;
+
+    return (
+      <Fragment>
+        <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
+          {selectionTd}
+          {this.columns.map(col => {
+            let tdExpanderButtonRef!: HTMLTkButtonElement;
+            let styleCellObject;
+
+            const leftColumns = this.columns.filter(c => c.fixed === 'left');
+            const rightColumns = this.columns.filter(c => c.fixed === 'right');
+            const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
+            const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
+
+            if (typeof this.cellStyle == 'function') {
+              const stylesCell = this.cellStyle(row, col);
+              if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
+            }
+
+            if (col.expander) {
+              return (
+                <td
+                  class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                  style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
+                >
+                  <tk-button
+                    ref={el => (tdExpanderButtonRef = el)}
+                    variant="info"
+                    icon="keyboard_arrow_down"
+                    iconPosition="right"
+                    type="text"
+                    size="small"
+                    onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
+                  ></tk-button>
+                </td>
+              );
+            } else if (typeof col?.html == 'function') {
+              // Reuse cached custom cell elements whenever possible
+              let usedElement: any = null;
+              let computedElement: any = null;
+
+              const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
+              const cached = this.customCellCache.get(cacheKey);
+              if (cached) {
+                usedElement = cached;
+              } else {
+                computedElement = col?.html(row, index) as any;
+              }
+
+              const effectiveElement: any = usedElement ?? computedElement;
+              if (typeof effectiveElement == 'string') {
+                return (
+                  <td
+                    class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                    innerHTML={effectiveElement}
+                    style={{
+                      ...this.getStickyColumnStyle(col, index),
+                      ...styleRowObject,
+                      ...styleCellObject,
+                    }}
+                  ></td>
+                );
+              } else if (typeof effectiveElement == 'object') {
+                // Update cache if we computed a new element in this render
+                if (!usedElement) {
+                  this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
+                }
+                return (
+                  <td
+                    ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
+                    class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                    style={{
+                      ...this.getStickyColumnStyle(col, index),
+                      ...styleRowObject,
+                      ...styleCellObject,
+                    }}
+                  />
+                );
+              }
+            } else if (col.editable) {
+              let editableInputRef: HTMLInputElement;
+              return (
+                <td
+                  class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                  style={{
+                    ...this.getStickyColumnStyle(col, index),
+                    ...styleRowObject,
+                    ...styleCellObject,
+                  }}
+                >
+                  <input
+                    ref={el => (editableInputRef = el)}
+                    value={getNestedValue(row, col.field)}
+                    type="text"
+                    onKeyDown={e => handleInputKeydown(e, this.el)}
+                    onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
+                  ></input>
+                </td>
+              );
+            } else {
+              return (
+                <td
+                  class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                  style={{
+                    ...this.getStickyColumnStyle(col, index),
+                    ...styleRowObject,
+                    ...styleCellObject,
+                  }}
+                >
+                  {getNestedValue(row, col.field)}
+                </td>
+              );
+            }
+          })}
+        </tr>
+        {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
+          <tr>
+            <td colSpan={100}>
+              <slot name={`expand-content-${row[this.dataKey]}`} />
+            </td>
+          </tr>
+        )}
+      </Fragment>
+    );
+  }
+
   private getStickyColumnClasses(col: ITableColumn, isFirst: boolean = false, isLast: boolean = false) {
     const classes = [];
 
@@ -1633,175 +2004,177 @@ export class TkTable implements ComponentInterface {
         <tbody>
           <slot name="body-header"></slot>
 
-          {this.renderData?.map((row, index) => {
-            let styleRowObject;
+          {this.groupByColumnField
+            ? this.createGroupedRows()
+            : this.renderData?.map((row, index) => {
+                let styleRowObject;
 
-            if (typeof this.rowStyle == 'function') {
-              const stylesRow = this.rowStyle(row, index);
-              if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
-            }
+                if (typeof this.rowStyle == 'function') {
+                  const stylesRow = this.rowStyle(row, index);
+                  if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
+                }
 
-            let isRowDisabled = false;
-            if (this.selectionRowDisabled) {
-              isRowDisabled = this.selectionRowDisabled(row);
-            }
+                let isRowDisabled = false;
+                if (this.selectionRowDisabled) {
+                  isRowDisabled = this.selectionRowDisabled(row);
+                }
 
-            let selectionTd;
-            if (this.selectionMode === 'checkbox') {
-              selectionTd = (
-                <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                  <tk-checkbox
-                    value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
-                    disabled={isRowDisabled}
-                    onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
-                  ></tk-checkbox>
-                </td>
-              );
-            } else if (this.selectionMode === 'radio') {
-              selectionTd = (
-                <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                  <tk-radio
-                    value={row}
-                    name="selection"
-                    checked={_.isEqual(this.selection, row)}
-                    disabled={isRowDisabled}
-                    onTk-change={() => this.handleRadioSelectChange(row)}
-                  ></tk-radio>
-                </td>
-              );
-            }
-
-            const isSelected =
-              this.selectionMode === 'checkbox'
-                ? _.some(this.selection, itemValue => _.isEqual(itemValue, row))
-                : this.selectionMode === 'radio'
-                  ? _.isEqual(this.selection, row)
-                  : false;
-
-            return (
-              <Fragment>
-                <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
-                  {selectionTd}
-                  {this.columns.map(col => {
-                    let tdExpanderButtonRef!: HTMLTkButtonElement;
-                    let styleCellObject;
-
-                    const leftColumns = this.columns.filter(c => c.fixed === 'left');
-                    const rightColumns = this.columns.filter(c => c.fixed === 'right');
-                    const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
-                    const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
-
-                    if (typeof this.cellStyle == 'function') {
-                      const stylesCell = this.cellStyle(row, col);
-                      if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
-                    }
-
-                    if (col.expander) {
-                      return (
-                        <td
-                          class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                          style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
-                        >
-                          <tk-button
-                            ref={el => (tdExpanderButtonRef = el)}
-                            variant="info"
-                            icon="keyboard_arrow_down"
-                            iconPosition="right"
-                            type="text"
-                            size="small"
-                            onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                          ></tk-button>
-                        </td>
-                      );
-                    } else if (typeof col?.html == 'function') {
-                      // Reuse cached custom cell elements whenever possible
-                      let usedElement: any = null;
-                      let computedElement: any = null;
-
-                      const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
-                      const cached = this.customCellCache.get(cacheKey);
-                      if (cached) {
-                        usedElement = cached;
-                      } else {
-                        computedElement = col?.html(row, index) as any;
-                      }
-
-                      const effectiveElement: any = usedElement ?? computedElement;
-                      if (typeof effectiveElement == 'string') {
-                        return (
-                          <td
-                            class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                            innerHTML={effectiveElement}
-                            style={{
-                              ...this.getStickyColumnStyle(col, index),
-                              ...styleRowObject,
-                              ...styleCellObject,
-                            }}
-                          ></td>
-                        );
-                      } else if (typeof effectiveElement == 'object') {
-                        // Update cache if we computed a new element in this render
-                        if (!usedElement) {
-                          this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
-                        }
-                        return (
-                          <td
-                            ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
-                            class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                            style={{
-                              ...this.getStickyColumnStyle(col, index),
-                              ...styleRowObject,
-                              ...styleCellObject,
-                            }}
-                          />
-                        );
-                      }
-                    } else if (col.editable) {
-                      let editableInputRef: HTMLInputElement;
-                      return (
-                        <td
-                          class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                          style={{
-                            ...this.getStickyColumnStyle(col, index),
-                            ...styleRowObject,
-                            ...styleCellObject,
-                          }}
-                        >
-                          <input
-                            ref={el => (editableInputRef = el)}
-                            value={getNestedValue(row, col.field)}
-                            type="text"
-                            onKeyDown={e => handleInputKeydown(e, this.el)}
-                            onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
-                          ></input>
-                        </td>
-                      );
-                    } else {
-                      return (
-                        <td
-                          class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                          style={{
-                            ...this.getStickyColumnStyle(col, index),
-                            ...styleRowObject,
-                            ...styleCellObject,
-                          }}
-                        >
-                          {getNestedValue(row, col.field)}
-                        </td>
-                      );
-                    }
-                  })}
-                </tr>
-                {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
-                  <tr>
-                    <td colSpan={100}>
-                      <slot name={`expand-content-${row[this.dataKey]}`} />
+                let selectionTd;
+                if (this.selectionMode === 'checkbox') {
+                  selectionTd = (
+                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+                      <tk-checkbox
+                        value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
+                        disabled={isRowDisabled}
+                        onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
+                      ></tk-checkbox>
                     </td>
-                  </tr>
-                )}
-              </Fragment>
-            );
-          })}
+                  );
+                } else if (this.selectionMode === 'radio') {
+                  selectionTd = (
+                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+                      <tk-radio
+                        value={row}
+                        name="selection"
+                        checked={_.isEqual(this.selection, row)}
+                        disabled={isRowDisabled}
+                        onTk-change={() => this.handleRadioSelectChange(row)}
+                      ></tk-radio>
+                    </td>
+                  );
+                }
+
+                const isSelected =
+                  this.selectionMode === 'checkbox'
+                    ? _.some(this.selection, itemValue => _.isEqual(itemValue, row))
+                    : this.selectionMode === 'radio'
+                      ? _.isEqual(this.selection, row)
+                      : false;
+
+                return (
+                  <Fragment>
+                    <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
+                      {selectionTd}
+                      {this.columns.map(col => {
+                        let tdExpanderButtonRef!: HTMLTkButtonElement;
+                        let styleCellObject;
+
+                        const leftColumns = this.columns.filter(c => c.fixed === 'left');
+                        const rightColumns = this.columns.filter(c => c.fixed === 'right');
+                        const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
+                        const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
+
+                        if (typeof this.cellStyle == 'function') {
+                          const stylesCell = this.cellStyle(row, col);
+                          if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
+                        }
+
+                        if (col.expander) {
+                          return (
+                            <td
+                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                              style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
+                            >
+                              <tk-button
+                                ref={el => (tdExpanderButtonRef = el)}
+                                variant="info"
+                                icon="keyboard_arrow_down"
+                                iconPosition="right"
+                                type="text"
+                                size="small"
+                                onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
+                              ></tk-button>
+                            </td>
+                          );
+                        } else if (typeof col?.html == 'function') {
+                          // Reuse cached custom cell elements whenever possible
+                          let usedElement: any = null;
+                          let computedElement: any = null;
+
+                          const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
+                          const cached = this.customCellCache.get(cacheKey);
+                          if (cached) {
+                            usedElement = cached;
+                          } else {
+                            computedElement = col?.html(row, index) as any;
+                          }
+
+                          const effectiveElement: any = usedElement ?? computedElement;
+                          if (typeof effectiveElement == 'string') {
+                            return (
+                              <td
+                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                                innerHTML={effectiveElement}
+                                style={{
+                                  ...this.getStickyColumnStyle(col, index),
+                                  ...styleRowObject,
+                                  ...styleCellObject,
+                                }}
+                              ></td>
+                            );
+                          } else if (typeof effectiveElement == 'object') {
+                            // Update cache if we computed a new element in this render
+                            if (!usedElement) {
+                              this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
+                            }
+                            return (
+                              <td
+                                ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
+                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                                style={{
+                                  ...this.getStickyColumnStyle(col, index),
+                                  ...styleRowObject,
+                                  ...styleCellObject,
+                                }}
+                              />
+                            );
+                          }
+                        } else if (col.editable) {
+                          let editableInputRef: HTMLInputElement;
+                          return (
+                            <td
+                              class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                              style={{
+                                ...this.getStickyColumnStyle(col, index),
+                                ...styleRowObject,
+                                ...styleCellObject,
+                              }}
+                            >
+                              <input
+                                ref={el => (editableInputRef = el)}
+                                value={getNestedValue(row, col.field)}
+                                type="text"
+                                onKeyDown={e => handleInputKeydown(e, this.el)}
+                                onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
+                              ></input>
+                            </td>
+                          );
+                        } else {
+                          return (
+                            <td
+                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
+                              style={{
+                                ...this.getStickyColumnStyle(col, index),
+                                ...styleRowObject,
+                                ...styleCellObject,
+                              }}
+                            >
+                              {getNestedValue(row, col.field)}
+                            </td>
+                          );
+                        }
+                      })}
+                    </tr>
+                    {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
+                      <tr>
+                        <td colSpan={100}>
+                          <slot name={`expand-content-${row[this.dataKey]}`} />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
 
           <slot name="body-footer"></slot>
         </tbody>

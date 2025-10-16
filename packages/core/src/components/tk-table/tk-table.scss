@@ -376,6 +376,39 @@
       &.selected td {
         background-color: var(--states-info-light);
       }
+
+      &.tk-table-group-header {
+        background-color: var(--background-light);
+        border-top: 2px solid var(--border-base);
+
+        &:hover td {
+          background-color: var(--background-light);
+        }
+
+        .tk-table-group-header-cell {
+          padding: var(--table-items-body-base-text-v-padding) var(--table-items-body-base-text-h-padding);
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-dark);
+          border: none;
+
+          .tk-table-group-header-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .tk-table-group-value {
+              font-size: var(--desktop-body-m-size);
+              color: var(--text-darkest);
+            }
+
+            .tk-table-group-count {
+              font-size: var(--desktop-body-s-size);
+              color: var(--text-base);
+              font-weight: var(--font-weight-regular);
+            }
+          }
+        }
+      }
     }
   }
 
