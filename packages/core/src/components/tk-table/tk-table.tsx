@@ -57,7 +57,7 @@ export class TkTable implements ComponentInterface {
   @State() sorts: ITableSort[] = [];
   @State() groupedData: { groupValue: any; groupCount: number; rows: any[] }[] = [];
   @State() groupByColumnField: string = null;
-  @State() isGroupingOverridden: boolean = false;
+  @State() isControlledGrouping: boolean = false;
 
   /**
    * The column definitions (Array of Objects)
@@ -197,20 +197,19 @@ export class TkTable implements ComponentInterface {
    * Column field name to group the table data by.
    * When specified, the table will automatically group rows by unique values in this column.
    * Set to null or undefined to disable grouping.
+   * This makes the component controlled - changes should be handled via tkGroupByChange event.
    * @example groupBy="status" // Groups by the 'status' column
    */
   @Prop() groupBy: string;
   @Watch('groupBy')
   groupByChanged(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
-      // Only apply prop changes if grouping hasn't been overridden by method calls
-      if (!this.isGroupingOverridden) {
-        if (newValue) {
-          this.applyGrouping(newValue);
-        } else {
-          this.clearGroupingInternal();
-        }
+      if (newValue) {
+        this.applyGrouping(newValue);
+      } else {
+        this.clearGroupingInternal();
       }
+      this.tkGroupByChange.emit(newValue || null);
     }
   }
 
@@ -240,6 +239,14 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
 
+  /**
+   * Emitted when the groupBy value changes.
+   * Always emitted for both controlled and uncontrolled components.
+   * For controlled components, handle this event to update the groupBy prop.
+   * @param groupBy The new groupBy field name (null if grouping is cleared)
+   */
+  @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
+
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -261,6 +268,9 @@ export class TkTable implements ComponentInterface {
   componentWillLoad(): Promise<void> | void {
     this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+
+    // Determine if this is a controlled component based on initial groupBy prop
+    this.isControlledGrouping = this.groupBy !== undefined;
 
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
@@ -589,63 +599,42 @@ export class TkTable implements ComponentInterface {
    * For example, if you have a 'status' column with values 'Open' and 'Closed',
    * this will create group headers like "Open (5)" and "Closed (3)".
    *
-   * When called, this method overrides any groupBy prop until clearGrouping() or
-   * resetGroupingOverride() is called.
+   * Always emits tkGroupByChange event. For uncontrolled components, also updates internal state.
    *
    * @param columnField The field name to group by (e.g., 'status', 'category', 'department')
    *
    * @example
-   * // Group by status column (overrides groupBy prop)
-   * await tableRef.groupByColumn('status');
+   * // Controlled usage (with groupBy prop)
+   * await tableRef.groupByColumn('status'); // Emits tkGroupByChange event
    *
-   * // Clear grouping and restore prop control
-   * await tableRef.clearGrouping();
-   *
-   * // Or just reset override without clearing grouping
-   * await tableRef.resetGroupingOverride();
+   * // Uncontrolled usage (no groupBy prop)
+   * await tableRef.groupByColumn('status'); // Updates internal state and emits tkGroupByChange event
    */
   @Method()
   async groupByColumn(columnField: string) {
-    // Mark grouping as overridden by method call
-    this.isGroupingOverridden = true;
-
-    if (!columnField) {
-      this.clearGroupingInternal();
-      return;
+    if (!this.isControlledGrouping) {
+      // Uncontrolled component - update internal state directly
+      if (!columnField) {
+        this.clearGroupingInternal();
+      } else {
+        this.applyGrouping(columnField);
+      }
     }
-
-    this.applyGrouping(columnField);
+    this.tkGroupByChange.emit(columnField || null);
   }
 
   /**
    * Clears the current grouping and returns to normal table view
-   * Also resets override flag, allowing props to control grouping again
+   *
+   * Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state.
    */
   @Method()
   async clearGrouping() {
-    this.isGroupingOverridden = false;
-    this.clearGroupingInternal();
-
-    // After clearing override, check if prop wants to apply grouping
-    if (this.groupBy) {
-      this.applyGrouping(this.groupBy);
-    }
-  }
-
-  /**
-   * Resets the override flag, allowing the groupBy prop to control grouping again
-   * without clearing current grouping state
-   */
-  @Method()
-  async resetGroupingOverride() {
-    this.isGroupingOverridden = false;
-
-    // Check if prop wants to apply different grouping
-    if (this.groupBy && this.groupBy !== this.groupByColumnField) {
-      this.applyGrouping(this.groupBy);
-    } else if (!this.groupBy && this.groupByColumnField) {
+    if (!this.isControlledGrouping) {
+      // Uncontrolled component - clear internal state directly
       this.clearGroupingInternal();
     }
+    this.tkGroupByChange.emit(null);
   }
 
   private applyGrouping(columnField: string) {
