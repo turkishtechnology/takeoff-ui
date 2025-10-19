@@ -536,6 +536,10 @@ export class TkDatePicker {
     let hour = now.getHours();
     let minute = now.getMinutes();
 
+    // Align hour to the configured hourStep (floor to nearest step)
+    const hourStep = Math.max(1, this.hourStep || 1);
+    hour = Math.floor(hour / hourStep) * hourStep;
+
     // Align minutes to the configured step (floor to nearest step)
     const step = Math.max(1, this.minuteStep || 1);
     minute = Math.floor(minute / step) * step;
@@ -1060,11 +1064,17 @@ export class TkDatePicker {
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => (i * this.hourStep) + 1);
       let displayHour = targetTimeState.time.hour % 12;
       displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const nextIdx = Math.min(idx + this.hourStep, hoursList.length - 1);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) =>
+        Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev
+      );
+
+      const idx = hoursList.indexOf(closestHour);
+      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
       const newDisplayHour = hoursList[nextIdx];
 
       // Convert back to 24-hour format
@@ -1079,9 +1089,17 @@ export class TkDatePicker {
         this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
       }
     } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour + this.hourStep;
-      hour = Math.min(hour, 23);
+      // 24h mode - move to next hour in step list
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) =>
+        Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev
+      );
+
+      const idx = hoursList.indexOf(closestHour);
+      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
+      const hour = hoursList[nextIdx];
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1101,11 +1119,17 @@ export class TkDatePicker {
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => (i * this.hourStep) + 1);
       let displayHour = targetTimeState.time.hour % 12;
       displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const prevIdx = Math.max(idx - this.hourStep, 0);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) =>
+        Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev
+      );
+
+      const idx = hoursList.indexOf(closestHour);
+      const prevIdx = Math.max(idx - 1, 0);
       const newDisplayHour = hoursList[prevIdx];
 
       // Convert back to 24-hour format
@@ -1120,9 +1144,17 @@ export class TkDatePicker {
         this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
       }
     } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour - this.hourStep;
-      hour = Math.max(hour, 0);
+      // 24h mode - move to previous hour in step list
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) =>
+        Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev
+      );
+
+      const idx = hoursList.indexOf(closestHour);
+      const prevIdx = Math.max(idx - 1, 0);
+      const hour = hoursList[prevIdx];
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1155,8 +1187,16 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    let minute = targetTimeState.time.minute + this.minuteStep;
-    minute = Math.min(minute, 59);
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest minute in step list
+    const closestMinute = minutesList.reduce((prev, curr) =>
+      Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev
+    );
+
+    const idx = minutesList.indexOf(closestMinute);
+    const nextIdx = Math.min(idx + 1, minutesList.length - 1);
+    const minute = minutesList[nextIdx];
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1170,8 +1210,16 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    let minute = targetTimeState.time.minute - this.minuteStep;
-    minute = Math.max(minute, 0);
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest minute in step list
+    const closestMinute = minutesList.reduce((prev, curr) =>
+      Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev
+    );
+
+    const idx = minutesList.indexOf(closestMinute);
+    const prevIdx = Math.max(idx - 1, 0);
+    const minute = minutesList[prevIdx];
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1685,11 +1733,22 @@ export class TkDatePicker {
     }
     const displayMinute = currentTime.minute;
 
-    const currentHour = displayHour;
-    const currentMinute = displayMinute;
-
-    const hours = this.timeFormat === '12' ? Array.from({ length: 12 }, (_, i) => i + 1) : Array.from({ length: 24 }, (_, i) => i);
+    const hours = this.timeFormat === '12'
+    ? Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => (i * this.hourStep) + 1)
+    : Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
     const minutes = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest hour in the hours array
+    const findClosestInArray = (value: number, arr: number[]): number => {
+      if (arr.includes(value)) return value;
+      // Find the closest value in the array
+      return arr.reduce((prev, curr) =>
+        Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+      );
+    };
+
+    const currentHour = findClosestInArray(displayHour, hours);
+    const currentMinute = findClosestInArray(displayMinute, minutes);
 
     const sliceRange = (options: number[], selected: number): (number | null)[] => {
       const idx = options.indexOf(selected);
