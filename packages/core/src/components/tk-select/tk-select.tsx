@@ -320,7 +320,21 @@ export class TkSelect implements ComponentInterface {
     if (!text) {
       return [...this.options];
     }
-    return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+
+    if (this.isGrouped()) {
+      return options
+        .map(group => ({
+          ...group,
+          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
+            this.getOptionLabel(option)
+              .toLowerCase()
+              .includes(text.toLowerCase()),
+          ),
+        }))
+        .filter(group => group[this.groupOptionsKey].length > 0);
+    } else {
+      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+    }
   }
 
   private updatePosition() {
@@ -372,11 +386,16 @@ export class TkSelect implements ComponentInterface {
   }
 
   private getOptionLabel(item: any): string {
-    return typeof item === 'object' ? getNestedValue(item, this.optionLabelKey) : item;
+    if (typeof item === 'object' && item !== null) {
+      const label = getNestedValue(item, this.optionLabelKey);
+
+      return label != null ? String(label) : '';
+    }
+    return item != null ? String(item) : '';
   }
 
   private getOptionValue(item: any): any {
-    if (typeof item === 'object') {
+    if (typeof item === 'object' && item !== null) {
       if (this.optionValueKey?.length > 0) {
         return getNestedValue(item, this.optionValueKey);
       } else {
@@ -388,33 +407,25 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async setRenderOptions(value) {
-    if (this.isGrouped()) {
-      this.renderOptions = this.options
-        .map(group => ({
-          ...group,
-          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
-            this.getOptionLabel(option)
-              .toLowerCase()
-              .includes(value?.toLowerCase() || ''),
-          ),
-        }))
-        .filter(group => group[this.groupOptionsKey].length > 0);
-    } else {
-      this.renderOptions = await this.filter(value, this.options);
-    }
+    this.renderOptions = await this.filter(value, this.options);
   }
 
   private getSelectedItem() {
     if (this.renderOptions?.length > 0) {
-      if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
+      let searchOptions = this.renderOptions;
+      if (this.isGrouped()) {
+        searchOptions = this.renderOptions.flatMap(group => group[this.groupOptionsKey] || []);
+      }
+
+      if (typeof this.value != 'object' && searchOptions?.every(item => typeof item != 'object')) {
         // value ve her bir option object değilse. Yani bu primitive tiplerle çalışan bir selectbox ise
 
-        return this.renderOptions.find(item => item == this.value);
-      } else if (this.renderOptions?.every(item => typeof item === 'object')) {
+        return searchOptions.find(item => item == this.value);
+      } else if (searchOptions?.every(item => typeof item === 'object')) {
         if (this.optionValueKey?.length > 0) {
-          return this.renderOptions.find(item => this.getOptionValue(item) == this.value);
+          return searchOptions.find(item => this.getOptionValue(item) == this.value);
         } else {
-          return this.renderOptions.find(item => _.isEqual(item, this.value));
+          return searchOptions.find(item => _.isEqual(item, this.value));
         }
       } else {
         return null;
@@ -477,12 +488,21 @@ export class TkSelect implements ComponentInterface {
 
     // Set input value based on selection state
     if (this.selectedItem) {
-      this.inputRef.value = this.selectedItem;
+      if (this.multiple) {
+        this.inputRef.value = this.selectedItem;
+      } else {
+        const label = this.getOptionLabel(this.selectedItem);
+        this.inputRef.value = label;
+      }
     } else {
       if (this.filter) {
         this.selectedItem = this.getSelectedItem();
         if (this.selectedItem) {
-          this.inputRef.value = this.selectedItem;
+          if (this.multiple) {
+            this.inputRef.value = this.selectedItem;
+          } else {
+            this.inputRef.value = this.getOptionLabel(this.selectedItem);
+          }
         } else {
           this.inputRef.value = null;
         }
