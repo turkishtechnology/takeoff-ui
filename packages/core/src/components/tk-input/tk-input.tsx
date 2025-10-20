@@ -487,9 +487,10 @@ export class TkInput implements ComponentInterface {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
+        const isRemovable = typeof item === 'object' && item !== null && item.hasOwnProperty('removable') ? item.removable : true;
         const baseProps = {
           ...itemChipOptions,
-          removable: true,
+          removable: isRemovable,
           key: index,
           autoSelfDestroy: false,
           value: item,
@@ -497,7 +498,8 @@ export class TkInput implements ComponentInterface {
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
         };
-        const label = typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
+        const label =
+          typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
         return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(item)} {...baseProps}></tk-chips>;
       });

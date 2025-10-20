@@ -142,6 +142,11 @@ export class TkSelect implements ComponentInterface {
   @Prop() multiple: boolean;
 
   /**
+   * The number of items to show in the collapsed select before listing `+N others`.
+   */
+  @Prop() visibleItemCount: number;
+
+  /**
    * The name of the control, which is submitted with the form data.
    */
   @Prop() name: string;
@@ -406,6 +411,64 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  private getDisplayValueForMultiple(selectedItems: any[]): any[] {
+    if (!this.visibleItemCount || selectedItems.length <= this.visibleItemCount) {
+      return selectedItems;
+    }
+
+    // When allowCustomValue is true, prioritize predefined options over custom values
+    if (this.allowCustomValue) {
+      const innerOptions = this.isGrouped ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
+
+      // Separate predefined options from custom values
+      const predefinedItems = selectedItems.filter(item => {
+        return innerOptions.some(opt => {
+          if (this.optionValueKey) {
+            return this.getOptionValue(opt) === this.getOptionValue(item);
+          } else {
+            return _.isEqual(opt, item);
+          }
+        });
+      });
+
+      const customItems = selectedItems.filter(item => {
+        return !innerOptions.some(opt => {
+          if (this.optionValueKey) {
+            return this.getOptionValue(opt) === this.getOptionValue(item);
+          } else {
+            return _.isEqual(opt, item);
+          }
+        });
+      });
+
+      // Take predefined items first, then custom items if there's room
+      const visibleItems = [...predefinedItems.slice(0, this.visibleItemCount), ...customItems.slice(0, Math.max(0, this.visibleItemCount - predefinedItems.length))];
+
+      if (selectedItems.length > this.visibleItemCount) {
+        const remainingCount = selectedItems.length - this.visibleItemCount;
+        const othersIndicator = {
+          __isOthersIndicator: true,
+          label: `+${remainingCount} others`,
+          removable: false,
+        };
+        return [...visibleItems, othersIndicator];
+      }
+
+      return visibleItems;
+    }
+
+    // Original logic for when allowCustomValue is false
+    const visibleItems = selectedItems.slice(0, this.visibleItemCount);
+    const remainingCount = selectedItems.length - this.visibleItemCount;
+    const othersIndicator = {
+      __isOthersIndicator: true,
+      label: `+${remainingCount} others`,
+      removable: false,
+    };
+
+    return [...visibleItems, othersIndicator];
+  }
+
   private async setRenderOptions(value) {
     this.renderOptions = await this.filter(value, this.options);
   }
@@ -463,7 +526,10 @@ export class TkSelect implements ComponentInterface {
           return null;
         })
         .filter(val => val !== null && val !== undefined);
-      this.inputRef.value = this.selectedItem;
+
+      // Apply visible item count logic for display
+      const displayValue = this.getDisplayValueForMultiple(this.selectedItem);
+      this.inputRef.value = displayValue;
       return;
     }
 
@@ -611,7 +677,48 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        const resolvedValues = (Array.isArray(value) ? value : [value]).map(val => {
+        const incomingChips = Array.isArray(value) ? value : [value];
+
+        // Filter out the "others" indicator
+        const validChips = incomingChips.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
+
+        // When visibleItemCount is active and we have reordered display, we need to handle removals carefully
+        if (this.visibleItemCount && this.selectedItem && this.selectedItem.length > this.visibleItemCount) {
+          // Get the current display value (what the user sees)
+          const currentDisplayValue = this.getDisplayValueForMultiple(this.selectedItem);
+          const currentValidDisplayChips = currentDisplayValue.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
+
+          // Find which chip was removed by comparing the arrays
+          const removedChip = currentValidDisplayChips.find(
+            displayChip =>
+              !validChips.some(validChip => {
+                if (this.optionValueKey && typeof displayChip === 'object' && typeof validChip === 'object') {
+                  return this.getOptionValue(displayChip) === this.getOptionValue(validChip);
+                }
+                return _.isEqual(displayChip, validChip);
+              }),
+          );
+
+          if (removedChip) {
+            // Remove the chip from the actual value array (not the display array)
+            const currentValue = Array.isArray(this.value) ? [...this.value] : [];
+            const removedValue = this.optionValueKey && typeof removedChip === 'object' ? this.getOptionValue(removedChip) : removedChip;
+
+            const updatedValue = currentValue.filter(val => {
+              if (this.optionValueKey && typeof removedChip === 'object') {
+                return val !== removedValue;
+              }
+              return !_.isEqual(val, removedValue);
+            });
+
+            this.value = updatedValue;
+            this.tkChange.emit(this.value);
+            return;
+          }
+        }
+
+        // Normal case: no visibleItemCount or no reordering needed
+        const resolvedValues = validChips.map(val => {
           if (typeof val === 'object' && val !== null && this.optionValueKey) {
             return this.getOptionValue(val);
           }
