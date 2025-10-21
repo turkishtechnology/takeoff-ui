@@ -330,11 +330,7 @@ export class TkSelect implements ComponentInterface {
       return options
         .map(group => ({
           ...group,
-          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
-            this.getOptionLabel(option)
-              .toLowerCase()
-              .includes(text.toLowerCase()),
-          ),
+          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option => this.getOptionLabel(option).toLowerCase().includes(text.toLowerCase())),
         }))
         .filter(group => group[this.groupOptionsKey].length > 0);
     } else {
