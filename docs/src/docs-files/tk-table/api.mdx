@@ -11,6 +11,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
+| <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
 | <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
@@ -32,6 +33,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | ---- | ----------- |
 | tk-cell-edit | Emitted when a cell is edited. |
 | tk-expanded-rows-change | Emitted when the expanded rows change. |
+| tk-group-by-change | Emitted when the groupBy value changes. Always emitted for both controlled and uncontrolled components. For controlled components, handle this event to update the groupBy prop. |
 | tk-request | Emitted when a request needs to be made to the server. |
 | tk-row-click | Emitted when a row is clicked. |
 | tk-selection-change |  |
@@ -41,10 +43,12 @@ import { TkBadge } from "@takeoff-ui/react";
 | Name | Description |
 | ---- | ----------- |
 | clearFilters | Clears all filters or specific column filters |
+| clearGrouping | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
 | clearSorting | Clears all sorting for server side pagination |
 | exportFile | Exports the table data to a file |
 | getFilters | Returns the current filters |
 | getSorting | Returns the current sorting settings |
+| groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
 | serverRequest | Allows tk-request event to be triggered manually |
 | setCurrentPage | Sets the current page for pagination |
 | setFilters | Sets the current filter settings |
@@ -248,6 +252,19 @@ interface ITableExportExcelColumn {
   header: string;
   field: string;
   width: number;
+}
+```
+
+Represents a group of table rows with associated metadata
+
+```typescript
+interface ITableGroup {
+  /** The value that this group represents (e.g., "Active", "Completed") */
+  groupValue: any;
+  /** The number of rows in this group */
+  groupCount: number;
+  /** The array of row data objects belonging to this group */
+  rows: any[];
 }
 ```
 

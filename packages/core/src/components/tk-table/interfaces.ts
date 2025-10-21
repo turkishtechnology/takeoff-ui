@@ -162,3 +162,15 @@ export interface ITableExportExcelColumn {
   field: string;
   width: number;
 }
+
+/**
+ * Represents a group of table rows with associated metadata
+ */
+export interface ITableGroup {
+  /** The value that this group represents (e.g., "Active", "Completed") */
+  groupValue: any;
+  /** The number of rows in this group */
+  groupCount: number;
+  /** The array of row data objects belonging to this group */
+  rows: any[];
+}
