@@ -410,7 +410,7 @@ export class TkPhoneInput implements ComponentInterface {
       const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
       label = (
         <label htmlFor="phone-input" class="tk-phone-input__label">
-          <span class="tk-phone-input__label-title">{this.label}</span>
+          {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
       );
