@@ -20,6 +20,7 @@ import Size from './Examples/Size';
 import MultiSort from './Examples/MultiSort';
 import EmptySlot from './Examples/EmptySlot';
 import HeaderAndFooterSlot from './Examples/HeaderAndFooterSlot';
+import GroupedRows from './Examples/GroupedRows';
 
 ## Basic
 
@@ -163,3 +164,35 @@ This feature allows you to customize the content displayed when there are no dat
 This feature allows you to add custom header and footer rows within the table body (`<tbody>`). You can use the `slot` attribute to specify whether the row is a header or footer. This is useful for adding summary rows, additional information, or custom styling to specific sections of the table body.
 
 <HeaderAndFooterSlot />
+
+## Grouped Rows
+
+The TkTable component supports row grouping functionality that allows you to
+organize table data by specific column values. This feature provides visual
+grouping with headers showing group names and item counts, and works seamlessly
+with pagination, sorting, and selection.
+
+### Key Features
+
+- **Visual Group Headers**: Automatically generated headers for each group
+  showing the group value and count
+- **Pagination Support**: Groups work correctly with both client-side and
+  server-side pagination
+- **Selection Persistence**: Row selections are maintained across grouping
+  changes
+- **Sorting Integration**: Grouped data respects existing sort configurations
+- **Event Handling**: Listen to grouping changes with the `onTkGroupByChange`
+  event
+
+### Two Implementation Approaches
+
+**1. Controlled Grouping (State-driven)** Use the `groupBy` prop with component
+state for external control. This approach gives you full control over the
+grouping state and allows integration with other application state management.
+
+**2. Uncontrolled Grouping (Method-driven)**  
+Use imperative methods like `groupByColumn()` and `clearGrouping()` for internal
+control. This approach is simpler when you don't need to manage grouping state
+externally.
+
+<GroupedRows />
