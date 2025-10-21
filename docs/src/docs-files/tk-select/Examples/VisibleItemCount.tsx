@@ -19,6 +19,10 @@ const VisibleItemCount = () => {
     { value: "8", label: "Option 8" },
   ]}
   hint="Only 3 items will be visible before showing +N others"
+  value={value}
+  onTkChange={e => {
+    setValue(e.detail);
+  }}
 />`;
 
   const vueCode = `<script setup>
@@ -75,7 +79,9 @@ const selectValue = ref([]);
         visibleItemCount={3}
         options={options}
         value={value}
-        onTkChange={e => setValue(e.detail.value)}
+        onTkChange={e => {
+          setValue(e.detail);
+        }}
         hint="Only 3 items will be visible before showing +N others"
       />
     </div>
