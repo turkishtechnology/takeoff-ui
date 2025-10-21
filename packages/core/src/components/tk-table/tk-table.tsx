@@ -194,6 +194,12 @@ export class TkTable implements ComponentInterface {
   @Prop() rowStyle: (row: any, index?: number) => any;
 
   /**
+   * Provides a function to customize expanded row styles.
+   * This function takes row information and returns the style object for the expanded row content.
+   */
+  @Prop() expandedRowStyle: (row: any) => any;
+
+  /**
    * Column field name to group the table data by.
    * When specified, the table will automatically group rows by unique values in this column.
    * Set to null or undefined to disable grouping.
@@ -1708,7 +1714,7 @@ export class TkTable implements ComponentInterface {
         </tr>
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
           <tr>
-            <td colSpan={100}>
+            <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}}>
               <slot name={`expand-content-${row[this.dataKey]}`} />
             </td>
           </tr>
@@ -2156,7 +2162,7 @@ export class TkTable implements ComponentInterface {
                     </tr>
                     {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
                       <tr>
-                        <td colSpan={100}>
+                        <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}}>
                           <slot name={`expand-content-${row[this.dataKey]}`} />
                         </td>
                       </tr>
