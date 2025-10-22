@@ -152,11 +152,11 @@ export class TkDropdown implements ComponentInterface {
   }
 
   private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
+    window.addEventListener('click', this.windowClickHandler, true);
   }
 
   private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
+    window.removeEventListener('click', this.windowClickHandler, true);
   }
 
   private handleWindowClick(event: MouseEvent) {
