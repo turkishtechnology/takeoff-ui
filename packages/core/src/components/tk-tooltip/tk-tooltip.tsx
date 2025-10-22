@@ -116,8 +116,7 @@ export class TkTooltip implements ComponentInterface {
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      const [side] = placement.split('-');
-      updateArrowPosition(this.arrowElement, side);
+      updateArrowPosition(this.arrowElement, placement);
     });
   }
 
