@@ -55,7 +55,7 @@ export class TkButton implements ComponentInterface {
   @Prop() target: string;
 
   /**
-   * Applies underline styling to the button (for type="link" buttons).
+   * Applies underline styling to the button label regardless of mode.
    */
   @Prop() underline: boolean;
 
