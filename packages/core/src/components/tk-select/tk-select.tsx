@@ -8,6 +8,7 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * TkSelect component description.
@@ -29,10 +30,10 @@ export class TkSelect implements ComponentInterface {
   private panelRef?: HTMLDivElement;
   private uniqueId: string;
   private filterDebounceTimeout;
-  private windowClickHandler: (event: MouseEvent) => void;
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
   private isItemClickFlag = false;
+  private clickOutsideMixin: ClickOutsideMixin;
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -40,8 +41,12 @@ export class TkSelect implements ComponentInterface {
 
   constructor() {
     this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
+
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin();
+    // Configure the mixin to use this component's element and handler
+    this.clickOutsideMixin.clickOutsideHandler = this.clickOutsideHandler;
   }
 
   @State() hasFocus = false;
@@ -268,12 +273,22 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  protected clickOutsideHandler = () => {
+    this.isOpen = false;
+  };
+
   componentDidLoad(): void {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
 
     this.nativeInputRef = this.inputRef.querySelector('input');
+
+    // Set the element reference for the click outside mixin
+    this.clickOutsideMixin.referenceElement = this.el;
 
     addDialogScrollListener(this.el);
 
@@ -295,12 +310,13 @@ export class TkSelect implements ComponentInterface {
           animationFrame: true,
         });
       }
-      this.bindWindowClickListener();
     } else {
       this.panelRef?.remove();
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
+
+    // Call mixin's componentDidUpdate for click outside listener management
+    this.clickOutsideMixin.componentDidUpdate();
   }
 
   private isGrouped(): boolean {
@@ -309,8 +325,10 @@ export class TkSelect implements ComponentInterface {
 
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin.disconnectedCallback();
   }
 
   formResetCallback() {
@@ -581,28 +599,9 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
   private handleFormReset() {
     this.value = null;
     this.tkChange.emit(null);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    const tkInputEl = this.el.querySelector('.tk-input');
-    const tkSelectPanelEl = this.el.querySelector('.tk-select-panel');
-    const isInnerClicked = event.composedPath().some(item => item === tkInputEl || item === tkSelectPanelEl);
-
-    if (!isInnerClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
   }
 
   private async handleSelectAllClick() {
@@ -748,7 +747,6 @@ export class TkSelect implements ComponentInterface {
     if (!this.isOpen && !this.disabled) {
       this.hasFocus = true;
       this.isOpen = true;
-      this.bindWindowClickListener();
     }
   }
 

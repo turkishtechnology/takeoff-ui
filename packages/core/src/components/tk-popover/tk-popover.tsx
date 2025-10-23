@@ -3,6 +3,7 @@ import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { updateArrowPosition } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -23,8 +24,16 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
+  private clickOutsideMixin: ClickOutsideMixin;
 
   @Element() el: HTMLTkPopoverElement;
+
+  constructor() {
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin();
+    // Configure the mixin to use this component's element and handler
+    this.clickOutsideMixin.clickOutsideHandler = this.clickOutsideHandler;
+  }
 
   @State() isOpen: boolean = false;
   @Watch('isOpen')
@@ -74,18 +83,30 @@ export class TkPopover implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<boolean>;
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  protected clickOutsideHandler = () => {
+    this.isOpen = false;
+  };
+
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
+
+    // Configure click outside to be disabled when trigger is hover
+    this.clickOutsideMixin.clickOutsideDisabled = this.trigger === 'hover';
   }
 
   componentDidLoad() {
+    // Set the element reference for the click outside mixin
+    this.clickOutsideMixin.referenceElement = this.el;
+
     this.triggerElement = this.el.querySelector('[slot="trigger"]');
     if (this.trigger === 'hover') {
       this.triggerElement?.addEventListener('mouseenter', () => (this.isOpen = true));
       this.triggerElement?.addEventListener('mouseleave', () => (this.isOpen = false));
     } else {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
-      document.addEventListener('click', this.handleDocumentClick);
     }
 
     addDialogScrollListener(this.el);
@@ -97,13 +118,18 @@ export class TkPopover implements ComponentInterface {
       this.triggerElement?.removeEventListener('mouseleave', () => (this.isOpen = false));
     } else {
       this.triggerElement?.removeEventListener('click', () => (this.isOpen = !this.isOpen));
-      document.removeEventListener('click', this.handleDocumentClick);
     }
     this.cleanup && this.cleanup();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin.disconnectedCallback();
   }
 
   componentDidUpdate() {
+    // Update click outside disabled state based on trigger type
+    this.clickOutsideMixin.clickOutsideDisabled = this.trigger === 'hover';
+
     if (this.isOpen) {
       const updatePosition = () => {
         if (this.isOpen) {
@@ -123,6 +149,9 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.cleanup && this.cleanup();
     }
+
+    // Call mixin's componentDidUpdate for click outside listener management
+    this.clickOutsideMixin.componentDidUpdate();
   }
 
   /**
@@ -153,13 +182,6 @@ export class TkPopover implements ComponentInterface {
       updateArrowPosition(this.arrowElement, placement);
     });
   }
-
-  private handleDocumentClick = (e: MouseEvent) => {
-    const isInnerClicked = e.composedPath().some(item => item === this.el);
-    if (!isInnerClicked) {
-      this.isOpen = false;
-    }
-  };
 
   render() {
     return (

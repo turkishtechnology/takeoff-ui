@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -22,14 +23,19 @@ export class TkDropdown implements ComponentInterface {
   private uniqueId: string;
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
-  private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
+  private clickOutsideMixin: ClickOutsideMixin;
 
   @Element() el: HTMLTkDropdownElement;
 
   constructor() {
     this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
+
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin();
+    this.clickOutsideMixin.useCapture = true;
+    // Configure the mixin to use this component's element and handler
+    this.clickOutsideMixin.clickOutsideHandler = this.clickOutsideHandler;
   }
 
   @State() isOpen: boolean = false;
@@ -97,6 +103,13 @@ export class TkDropdown implements ComponentInterface {
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<any>;
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  protected clickOutsideHandler = () => {
+    this.isOpen = false;
+  };
+
   componentWillLoad() {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
@@ -107,26 +120,39 @@ export class TkDropdown implements ComponentInterface {
         this.isOpen = !this.isOpen;
       });
     }
+
+    // Configure click outside to be disabled when component is disabled
+    this.clickOutsideMixin.clickOutsideDisabled = this.disabled;
   }
+
   componentDidLoad(): void {
+    // Set the element reference for the click outside mixin
+    this.clickOutsideMixin.referenceElement = this.el;
+
     addDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
+    // Update click outside disabled state based on disabled prop
+    this.clickOutsideMixin.clickOutsideDisabled = this.disabled;
+
     if (this.isOpen) {
       this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
         animationFrame: true,
       });
-      this.bindWindowClickListener();
     } else {
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
+
+    // Call mixin's componentDidUpdate for click outside listener management
+    this.clickOutsideMixin.componentDidUpdate();
   }
 
   disconnectedCallback() {
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin.disconnectedCallback();
   }
 
   private updatePosition() {
@@ -149,22 +175,6 @@ export class TkDropdown implements ComponentInterface {
 
   private getOptionLabel(item: any): string {
     return typeof item === 'object' ? item[this.optionLabelKey] : item;
-  }
-
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler, true);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler, true);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    const isInnerClicked = event.composedPath().some(item => item == this.el);
-    if (!isInnerClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
   }
 
   private handleItemClick(item) {
