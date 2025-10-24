@@ -7,6 +7,7 @@ import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 export interface IDateSelection {
   start: string;
@@ -32,18 +33,17 @@ export class TkDatePicker {
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
   private uniqueId: string;
-  private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
   private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
   private weeksLength: number = 0;
+  private clickOutsideMixin?: ClickOutsideMixin;
   @Element() el: HTMLTkDatepickerElement;
 
   @AttachInternals() internals: ElementInternals;
 
   constructor() {
     this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
   }
 
   @State() hasFooterSlot: boolean;
@@ -376,6 +376,15 @@ export class TkDatePicker {
     });
     addDialogScrollListener(this.el);
 
+    // Initialize click outside mixin only if not inline mode
+    if (!this.inline) {
+      this.clickOutsideMixin = new ClickOutsideMixin({
+        referenceElement: this.el,
+        handler: this.clickOutsideHandler,
+        disabled: this.disabled || !this.isOpen,
+      });
+    }
+
     if (this.inline && this.showTimePicker) {
       requestAnimationFrame(() => {
         const h = this.measureCalendarTableHeight();
@@ -385,23 +394,28 @@ export class TkDatePicker {
   }
 
   componentDidUpdate() {
+    // Update click outside mixin configuration based on current state
+    this.clickOutsideMixin?.updateConfig({
+      disabled: this.disabled || this.inline || !this.isOpen,
+    });
+
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
           animationFrame: true,
         });
       }
-      this.bindWindowClickListener();
     } else {
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
   }
 
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   formResetCallback() {
@@ -1014,30 +1028,13 @@ export class TkDatePicker {
     this.inputValue = this.formatInputValue();
   }
 
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private clickOutsideHandler = (): void => {
     if (this.inline) return;
-    const clickedElement = event.target as any;
-
-    const clickedDatepickerId = clickedElement?.el?.shadowRoot.querySelector('.tk-datepicker-panel')?.getAttribute('data-tk-datepicker-id');
-    const isOutsideClicked = !(
-      this.el.contains(clickedElement) ||
-      clickedDatepickerId === this.uniqueId ||
-      event.composedPath().some(item => item == this.inputRef) ||
-      event.composedPath().some(item => item == this.el)
-    );
-    if (isOutsideClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
-  }
+    this.isOpen = false;
+  };
 
   private getTimeStateToModify(): { time: { hour: number; minute: number }; type: 'start' | 'end' } | null {
     // Allow time changes if any time UI is active: showTimePicker or timeOnly mode

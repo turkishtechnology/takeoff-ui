@@ -8,6 +8,7 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * TkSelect component description.
@@ -29,10 +30,10 @@ export class TkSelect implements ComponentInterface {
   private panelRef?: HTMLDivElement;
   private uniqueId: string;
   private filterDebounceTimeout;
-  private windowClickHandler: (event: MouseEvent) => void;
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
   private isItemClickFlag = false;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -40,7 +41,6 @@ export class TkSelect implements ComponentInterface {
 
   constructor() {
     this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
@@ -268,12 +268,25 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private clickOutsideHandler = (): void => {
+    this.isOpen = false;
+  };
+
   componentDidLoad(): void {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
 
     this.nativeInputRef = this.inputRef.querySelector('input');
+
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.clickOutsideHandler,
+      disabled: this.disabled,
+    });
 
     addDialogScrollListener(this.el);
 
@@ -295,11 +308,9 @@ export class TkSelect implements ComponentInterface {
           animationFrame: true,
         });
       }
-      this.bindWindowClickListener();
     } else {
       this.panelRef?.remove();
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
   }
 
@@ -309,8 +320,10 @@ export class TkSelect implements ComponentInterface {
 
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   formResetCallback() {
@@ -581,28 +594,9 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
   private handleFormReset() {
     this.value = null;
     this.tkChange.emit(null);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    const tkInputEl = this.el.querySelector('.tk-input');
-    const tkSelectPanelEl = this.el.querySelector('.tk-select-panel');
-    const isInnerClicked = event.composedPath().some(item => item === tkInputEl || item === tkSelectPanelEl);
-
-    if (!isInnerClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
   }
 
   private async handleSelectAllClick() {
@@ -640,7 +634,7 @@ export class TkSelect implements ComponentInterface {
     if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
-      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
+      const tmpValue = Array.isArray(this.value) ? [...this.value] : [];
 
       const tmpItem = this.getOptionValue(item);
 
@@ -748,7 +742,6 @@ export class TkSelect implements ComponentInterface {
     if (!this.isOpen && !this.disabled) {
       this.hasFocus = true;
       this.isOpen = true;
-      this.bindWindowClickListener();
     }
   }
 
@@ -874,7 +867,7 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      let checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      const checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
