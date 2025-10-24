@@ -30,12 +30,6 @@ export class TkDropdown implements ComponentInterface {
 
   constructor() {
     this.uniqueId = uuidv4();
-
-    // Initialize click outside mixin
-    this.clickOutsideMixin = new ClickOutsideMixin();
-    this.clickOutsideMixin.useCapture = true;
-    // Configure the mixin to use this component's element and handler
-    this.clickOutsideMixin.clickOutsideHandler = this.clickOutsideHandler;
   }
 
   @State() isOpen: boolean = false;
@@ -106,7 +100,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  protected clickOutsideHandler = () => {
+  private clickOutsideHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -120,21 +114,22 @@ export class TkDropdown implements ComponentInterface {
         this.isOpen = !this.isOpen;
       });
     }
-
-    // Configure click outside to be disabled when component is disabled
-    this.clickOutsideMixin.clickOutsideDisabled = this.disabled;
   }
 
   componentDidLoad(): void {
-    // Set the element reference for the click outside mixin
-    this.clickOutsideMixin.referenceElement = this.el;
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.clickOutsideHandler,
+      disabled: this.disabled,
+    });
 
     addDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
     // Update click outside disabled state based on disabled prop
-    this.clickOutsideMixin.clickOutsideDisabled = this.disabled;
+    this.clickOutsideMixin.updateConfig({ disabled: this.disabled });
 
     if (this.isOpen) {
       this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
@@ -143,9 +138,6 @@ export class TkDropdown implements ComponentInterface {
     } else {
       this.cleanup && this.cleanup();
     }
-
-    // Call mixin's componentDidUpdate for click outside listener management
-    this.clickOutsideMixin.componentDidUpdate();
   }
 
   disconnectedCallback() {

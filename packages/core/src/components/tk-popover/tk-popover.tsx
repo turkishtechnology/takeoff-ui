@@ -28,13 +28,6 @@ export class TkPopover implements ComponentInterface {
 
   @Element() el: HTMLTkPopoverElement;
 
-  constructor() {
-    // Initialize click outside mixin
-    this.clickOutsideMixin = new ClickOutsideMixin();
-    // Configure the mixin to use this component's element and handler
-    this.clickOutsideMixin.clickOutsideHandler = this.clickOutsideHandler;
-  }
-
   @State() isOpen: boolean = false;
   @Watch('isOpen')
   isOpenChanged() {
@@ -90,16 +83,21 @@ export class TkPopover implements ComponentInterface {
     this.isOpen = false;
   };
 
+  private get isHover() {
+    return this.trigger === 'hover';
+  }
+
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
-
-    // Configure click outside to be disabled when trigger is hover
-    this.clickOutsideMixin.clickOutsideDisabled = this.trigger === 'hover';
   }
 
   componentDidLoad() {
-    // Set the element reference for the click outside mixin
-    this.clickOutsideMixin.referenceElement = this.el;
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.clickOutsideHandler,
+      disabled: this.isHover,
+    });
 
     this.triggerElement = this.el.querySelector('[slot="trigger"]');
     if (this.trigger === 'hover') {
@@ -128,7 +126,7 @@ export class TkPopover implements ComponentInterface {
 
   componentDidUpdate() {
     // Update click outside disabled state based on trigger type
-    this.clickOutsideMixin.clickOutsideDisabled = this.trigger === 'hover';
+    this.clickOutsideMixin.updateConfig({ disabled: this.isHover });
 
     if (this.isOpen) {
       const updatePosition = () => {
@@ -149,9 +147,6 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.cleanup && this.cleanup();
     }
-
-    // Call mixin's componentDidUpdate for click outside listener management
-    this.clickOutsideMixin.componentDidUpdate();
   }
 
   /**
