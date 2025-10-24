@@ -52,8 +52,11 @@ export class ClickOutsideMixin {
   private _isListenerActive: boolean = false;
 
   private checkConfig(): void {
-    if (!this.config.referenceElement || !this.config.handler) {
-      throw new Error('Reference element and handler must be provided');
+    if (!this.config.referenceElement) {
+      throw new Error('Reference element must be provided');
+    }
+    if (!this.config.handler) {
+      throw new Error('Handler must be provided');
     }
   }
 

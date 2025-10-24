@@ -33,7 +33,7 @@ export class TkSelect implements ComponentInterface {
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
   private isItemClickFlag = false;
-  private clickOutsideMixin: ClickOutsideMixin;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -323,7 +323,7 @@ export class TkSelect implements ComponentInterface {
     removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
-    this.clickOutsideMixin.disconnectedCallback();
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   formResetCallback() {

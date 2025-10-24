@@ -24,7 +24,7 @@ export class TkDropdown implements ComponentInterface {
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
   private cleanup;
-  private clickOutsideMixin: ClickOutsideMixin;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkDropdownElement;
 
@@ -144,7 +144,7 @@ export class TkDropdown implements ComponentInterface {
     removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
-    this.clickOutsideMixin.disconnectedCallback();
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   private updatePosition() {

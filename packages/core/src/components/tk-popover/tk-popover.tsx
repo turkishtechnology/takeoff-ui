@@ -24,7 +24,7 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
-  private clickOutsideMixin: ClickOutsideMixin;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkPopoverElement;
 
@@ -121,7 +121,7 @@ export class TkPopover implements ComponentInterface {
     removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
-    this.clickOutsideMixin.disconnectedCallback();
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   componentDidUpdate() {
