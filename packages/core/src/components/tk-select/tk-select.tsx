@@ -457,7 +457,7 @@ export class TkSelect implements ComponentInterface {
         const remainingCount = selectedItems.length - this.visibleItemCount;
         const othersIndicator = {
           __isOthersIndicator: true,
-          label: `+${remainingCount} others`,
+          label: `+${remainingCount}`,
           removable: false,
         };
         return [...visibleItems, othersIndicator];
@@ -471,7 +471,7 @@ export class TkSelect implements ComponentInterface {
     const remainingCount = selectedItems.length - this.visibleItemCount;
     const othersIndicator = {
       __isOthersIndicator: true,
-      label: `+${remainingCount} others`,
+      label: `+${remainingCount}`,
       removable: false,
     };
 
