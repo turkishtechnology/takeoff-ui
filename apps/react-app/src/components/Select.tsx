@@ -175,8 +175,6 @@ function Select() {
   return (
     <TkCard className="p-10">
       <TkSelect
-        multiple
-        visibleItemCount={3}
         label="Acente"
         placeholder="Acente seçin"
         options={groupedOptions}
