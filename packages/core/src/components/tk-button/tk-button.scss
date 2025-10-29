@@ -145,13 +145,7 @@
     color: var(--static-white);
 
     &.filled {
-      @include button-variant-filled(
-        var(--primary-base),
-        var(--primary-darkest),
-        var(--primary-base),
-        var(--primary-focus),
-        var(--frames-sub-base)
-      );
+      @include button-variant-filled(var(--primary-base), var(--primary-darkest), var(--primary-base), var(--primary-focus), var(--frames-sub-base));
     }
 
     &.outlined {
@@ -167,13 +161,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--primary-base),
-        var(--primary-lightest),
-        var(--primary-lightest),
-        var(--primary-focus),
-        var(--text-sub-base)
-      );
+      @include button-variant-text(var(--primary-base), var(--primary-lightest), var(--primary-lightest), var(--primary-focus), var(--text-sub-base));
     }
 
     &.link {
@@ -186,13 +174,7 @@
     color: var(--text-lightest);
 
     &.filled {
-      @include button-variant-filled(
-        var(--secondary-darkest),
-        var(--secondary-dark),
-        var(--secondary-darkest),
-        var(--secondary-focus),
-        var(--frames-sub-base)
-      );
+      @include button-variant-filled(var(--secondary-darkest), var(--secondary-dark), var(--secondary-darkest), var(--secondary-focus), var(--frames-sub-base));
 
       @include tk-button-disabled {
         color: var(--text-lightest);
@@ -212,13 +194,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--secondary-base),
-        var(--secondary-lightest),
-        var(--secondary-lightest),
-        var(--secondary-focus),
-        var(--text-sub-base)
-      );
+      @include button-variant-text(var(--secondary-base), var(--secondary-lightest), var(--secondary-lightest), var(--secondary-focus), var(--text-sub-base));
     }
 
     &.link {
@@ -231,13 +207,7 @@
     color: var(--text-lightest);
 
     &.filled {
-      @include button-variant-filled(
-        var(--frames-base),
-        var(--frames-darkest),
-        var(--frames-base),
-        var(--secondary-focus),
-        var(--frames-sub-base)
-      );
+      @include button-variant-filled(var(--frames-base), var(--frames-darkest), var(--frames-base), var(--secondary-focus), var(--frames-sub-base));
     }
 
     &.outlined {
@@ -309,13 +279,7 @@
     color: var(--text-lightest);
 
     &.filled {
-      @include button-variant-filled(
-        var(--states-info-dark),
-        var(--states-info-darkest),
-        var(--states-info-base),
-        var(--secondary-focus),
-        var(--states-info-sub-base)
-      );
+      @include button-variant-filled(var(--states-info-dark), var(--states-info-darkest), var(--states-info-base), var(--secondary-focus), var(--states-info-sub-base));
     }
 
     &.outlined {
@@ -331,13 +295,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--states-info-dark),
-        var(--states-info-light),
-        var(--states-info-light),
-        var(--secondary-focus),
-        var(--states-info-light)
-      );
+      @include button-variant-text(var(--states-info-dark), var(--states-info-light), var(--states-info-light), var(--secondary-focus), var(--states-info-light));
     }
 
     &.link {
@@ -350,13 +308,7 @@
     color: var(--text-lightest);
 
     &.filled {
-      @include button-variant-filled(
-        var(--states-success-dark),
-        var(--states-success-darkest),
-        var(--states-success-dark),
-        var(--secondary-focus),
-        var(--states-success-sub-base)
-      );
+      @include button-variant-filled(var(--states-success-dark), var(--states-success-darkest), var(--states-success-dark), var(--secondary-focus), var(--states-success-sub-base));
     }
 
     &.outlined {
@@ -372,13 +324,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--states-success-dark),
-        var(--states-success-light),
-        var(--states-success-light),
-        var(--secondary-focus),
-        var(--states-success-light)
-      );
+      @include button-variant-text(var(--states-success-dark), var(--states-success-light), var(--states-success-light), var(--secondary-focus), var(--states-success-light));
     }
 
     &.link {
@@ -414,13 +360,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--states-danger-dark),
-        var(--states-danger-light),
-        var(--states-danger-light),
-        var(--secondary-focus),
-        var(--states-danger-light)
-      );
+      @include button-variant-text(var(--states-danger-dark), var(--states-danger-light), var(--states-danger-light), var(--secondary-focus), var(--states-danger-light));
     }
 
     &.link {
@@ -464,13 +404,7 @@
     }
 
     &.text {
-      @include button-variant-text(
-        var(--states-warning-dark),
-        var(--states-warning-light),
-        var(--states-warning-light),
-        var(--secondary-focus),
-        var(--states-warning-light)
-      );
+      @include button-variant-text(var(--states-warning-dark), var(--states-warning-light), var(--states-warning-light), var(--secondary-focus), var(--states-warning-light));
     }
 
     &.link {

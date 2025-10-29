@@ -259,7 +259,7 @@ export class TkEditor {
             this.isEmpty = editor.getText().length === 0;
             return;
           }
-          
+
           const html = editor.getHTML();
           this.value = html;
           this.tkChange.emit(html);
