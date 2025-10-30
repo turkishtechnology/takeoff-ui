@@ -5,7 +5,7 @@
 .tk-color-picker {
   display: inline-block;
 
-  &.tk-color-picker-overlay {
+  &.tk-color-picker-slider-overlay {
     position: relative;
   }
   &.tk-color-picker-inline {
@@ -96,24 +96,20 @@
     .tk-color-picker-panel-body {
       padding: 8px;
 
-      .tk-color-picker-saturation {
+      .tk-color-picker-saturation-container {
         position: relative;
         width: 264px;
         height: 264px;
         border-radius: 8px;
-        border: 1px solid var(--border-light, #E1E4EA);
+        border: 1px solid var(--border-light);
         overflow: hidden;
         cursor: crosshair;
 
-        .tk-color-picker-saturation-white {
+        .tk-color-picker-saturation {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to right, white 0%, transparent 100%);
-        }
-        .tk-color-picker-saturation-black {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, transparent 0%, black 100%);
+          background: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0) 100%),
+                      linear-gradient(to right, #fff 0%, rgb(255 255 255 / 0) 100%);
         }
         .tk-color-picker-saturation-pointer {
           position: absolute;
@@ -142,8 +138,8 @@
             width: 32px;
             height: 32px;
             border-radius: 8px;
-            border: 1px solid var(--border-sub-base, #CACFD8);
-            background: var(--static-light, #ffffff);
+            border: 1px solid var(--border-sub-base);
+            background: var(--static-light);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -151,7 +147,7 @@
             flex-shrink: 0;
 
             &:hover {
-              background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
+              background: var(--states-hover-light);
             }
           }
 
@@ -164,9 +160,15 @@
             .tk-color-picker-slider {
               position: relative;
               height: 12px;
-              border-radius: 24px;
-              border: 1px solid rgba(0, 0, 0, 0.08);
               cursor: pointer;
+
+              .tk-color-picker-slider-overlay {
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  border-radius: 24px;
+                  border: 1px solid rgba(0, 0, 0, 0.08);
+              }
 
               &.tk-color-picker-hue {
                 background: linear-gradient(
@@ -179,13 +181,6 @@
                   #ff00ff 83%,
                   #ff0000 100%
                 );
-              }
-              &.tk-color-picker-alpha {
-                background-image:
-                  linear-gradient(to right, transparent 0%, var(--current-color, #000000) 100%),
-                  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKElEQVQYlWP4////f4YBBEwMAwkGqihaVDAUFTGMKiI1FRXBUK4oAACzBgIJvuPoywAAAABJRU5ErkJggg==');
-                background-size: 100%, 10px 10px;
-                background-position: 0 0, 0 0;
               }
 
               .tk-color-picker-slider-thumb {

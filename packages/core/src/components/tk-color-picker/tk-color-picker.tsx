@@ -413,12 +413,11 @@ export class TkColorPicker {
         </div>
         <div class="tk-color-picker-panel-body">
           <div
-            class="tk-color-picker-saturation"
+            class="tk-color-picker-saturation-container"
             style={{ backgroundColor: `hsl(${this.internalHSLA.h},100%,50%)` }}
             onMouseDown={e => this.handleSaturationMouseDown(e)}
           >
-            <div class="tk-color-picker-saturation-white" />
-            <div class="tk-color-picker-saturation-black" />
+            <div class="tk-color-picker-saturation"></div>
             <div
               class="tk-color-picker-saturation-pointer"
               style={{
@@ -444,9 +443,36 @@ export class TkColorPicker {
                   />
                 </div>
                 <div
-                  class="tk-color-picker-slider tk-color-picker-alpha"
+                  class="tk-color-picker-slider"
                   onMouseDown={e => this.handleAlphaMouseDown(e)}
                 >
+                  <div
+                    class="tk-color-picker-slider-overlay"
+                    style={{
+                      backgroundImage: `linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+                      linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+                      linear-gradient(-45deg, white 75%, #e0e0e0 75%)`,
+                      backgroundSize: '8px 8px',
+                      backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0',
+                      insetInline: '-12px'
+                    }}
+                  />
+                  <div
+                    class="tk-color-picker-slider-overlay"
+                    style={{
+                      backgroundImage: `linear-gradient(90deg, transparent, ${this.hslaToHex(this.internalHSLA)})`,
+                      insetInline: '-12px'
+                    }}
+                  />
+                  <div
+                    class="tk-color-picker-slider-overlay"
+                    style={{
+                      boxShadow: 'rgba(0, 0, 0, .1) 0 0 0 1px inset, rgb(0, 0, 0, .15) 0 0 4px inset',
+                      insetInline: '-12px'
+                    }}
+                  />
+
                   <div
                     class="tk-color-picker-slider-thumb"
                     style={{ left: `${this.internalHSLA.a * 100}%` }}
@@ -534,7 +560,7 @@ export class TkColorPicker {
   render() {
     const rootCls = classNames('tk-color-picker', {
       'tk-color-picker-inline': this.inline,
-      'tk-color-picker-overlay': !this.inline,
+      'tk-color-picker-slider-overlay': !this.inline,
     });
 
     return (
