@@ -94,16 +94,12 @@ export class TkDatePicker {
   isOpenChanged(newValue: boolean) {
     if (!this.inline) {
       if (newValue) {
+        // Panel opening
+        this.isInvalid = false;
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
-        // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if ((this.showTimePicker || this.timeOnly) && !this.internalStartTime) {
-          const def = this.getDefaultTime();
-          this.internalStartTime = def;
-          if (this.mode !== 'range') this.internalEndTime = def;
-          if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(def.hour);
-        }
+        // Don't initialize time automatically - let user select from panel or type in input
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
@@ -113,6 +109,11 @@ export class TkDatePicker {
           });
         }
       } else {
+        // Panel closing - validate time
+        if ((this.showTimePicker || this.timeOnly) && this.internalStartTime) {
+          this.handleInputBlur();
+        }
+
         this.currentView = 'days';
         this.calendarTableHeightPx = undefined;
         this.concealUntilMeasured = false;
@@ -286,7 +287,11 @@ export class TkDatePicker {
    * @defaultValue false
    */
   @Prop() timeOnly: boolean = false;
-
+  @Watch('timeOnly')
+  timeOnlyChanged(newValue: boolean) {
+    // Update mask according to the active mode
+    this.maskOptions = newValue ? { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat } : this.getMaskOptionsFromDateFormat(this.dateFormat);
+  }
   /**
    * Minimum selectable time (HH:mm format).
    */
@@ -314,19 +319,12 @@ export class TkDatePicker {
    * @defaultValue '24'
    */
   @Prop() timeFormat: '12' | '24' = '24';
-
-  @Watch('timeOnly')
-  timeOnlyChanged(newValue: boolean) {
-    // Update mask according to the active mode
-    this.maskOptions = newValue ? { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat } : this.getMaskOptionsFromDateFormat(this.dateFormat);
-  }
-
   @Watch('timeFormat')
   timeFormatChanged() {
     if (this.timeOnly || this.showTimePicker) {
       this.maskOptions = { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat };
       // Sync AM/PM with the current hour when switching to 12h
-      if (this.timeFormat === '12' && this.internalStartTime) {
+      if (this.timeFormat === '12') {
         this.internalAmPm = this.getAmPmFromHour(this.internalStartTime.hour);
       }
     }
@@ -366,6 +364,11 @@ export class TkDatePicker {
       });
     }
     this.initializeDates();
+    // NEW: seed AM/PM from default time without setting a time
+    if (this.timeFormat === '12') {
+      const baseHour = this.internalStartTime?.hour ?? this.getDefaultTime().hour;
+      this.internalAmPm = this.getAmPmFromHour(baseHour);
+    }
     this.hasFooterSlot = !!this.el.querySelector('[slot="footer"]');
     this.hasFooterActionsSlot = !!this.el.querySelector('[slot="footer-actions"]');
   }
@@ -474,15 +477,24 @@ export class TkDatePicker {
       return;
     }
 
-    this.isUpdatingAmPm = true;
-    const targetTimeState = this.getTimeStateToModify();
-    if (!targetTimeState) {
-      this.isUpdatingAmPm = false;
+    // Don't initialize time if it doesn't exist - only convert existing time
+    // Check which time to modify based on mode
+    let targetType: 'start' | 'end' = 'start';
+    if (this.mode === 'range' && this.internalSelectedDates.end) {
+      targetType = 'end';
+    }
+
+    const timeState = targetType === 'start' ? this.internalStartTime : this.internalEndTime;
+
+    // If no time is set yet, just update AM/PM state without initializing time
+    if (!timeState) {
       return;
     }
 
+    this.isUpdatingAmPm = true;
+
     // Convert current hour based on AM/PM change
-    let currentHour = targetTimeState.time.hour;
+    let currentHour = timeState.hour;
     let needsUpdate = false;
 
     if (newAmPm === 'PM' && currentHour < 12) {
@@ -491,19 +503,17 @@ export class TkDatePicker {
     } else if (newAmPm === 'AM' && currentHour >= 12) {
       currentHour -= 12;
       needsUpdate = true;
-    } else {
     }
 
     // Only update if the hour actually changed
     if (needsUpdate) {
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: currentHour };
+      if (targetType === 'start') {
+        this.internalStartTime = { ...timeState, hour: currentHour };
       } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: currentHour };
+        this.internalEndTime = { ...timeState, hour: currentHour };
       }
 
       this.emitTimeChange();
-    } else {
     }
 
     this.isUpdatingAmPm = false;
@@ -551,9 +561,9 @@ export class TkDatePicker {
 
   private parseTimeBound(val?: string): number | null {
     if (!val) return null;
-    const parsed = this.parseTimeString(val);
-    if (!parsed) return null;
-    return this.toTotalMinutes(parsed.getHours(), parsed.getMinutes());
+    const base = new Date(2000, 0, 1);
+    const d = parse(val.trim(), 'HH:mm', base);
+    return isValid(d) ? d.getHours() * 60 + d.getMinutes() : null;
   }
 
   private getDefaultTime(): { hour: number; minute: number } {
@@ -592,21 +602,6 @@ export class TkDatePicker {
     };
   }
 
-  private getHoursList(): number[] {
-    return this.timeFormat === '12'
-      ? Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1)
-      : Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
-  }
-
-  private getMinutesList(): number[] {
-    return Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
-  }
-
-  private findClosestInArray(value: number, arr: number[]): number {
-    if (arr.includes(value)) return value;
-    return arr.reduce((prev, curr) => (Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev));
-  }
-
   private convert24HourTo12Hour(hour24: number): number {
     const hour12 = hour24 % 12;
     return hour12 === 0 ? 12 : hour12;
@@ -628,8 +623,8 @@ export class TkDatePicker {
     if (!(this.showTimePicker || this.timeOnly)) return true;
 
     const { minBound, maxBound } = this.getMinMaxTimeBounds();
-    const totalMinutes = hour * 60 + minute;
 
+    const totalMinutes = hour * 60 + minute;
     if (minBound !== null && totalMinutes < minBound) return false;
     if (maxBound !== null && totalMinutes > maxBound) return false;
 
@@ -683,19 +678,13 @@ export class TkDatePicker {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
         }
       }
-      // Don't set default time automatically - keep it null if no value provided
-      // Default time will be set when user opens the picker (in isOpenChanged watcher)
-
-      // For initial load, set AM/PM based on actual time, but respect user changes after that
-      if (this.timeFormat === '12' && startTime) {
-        // Only set if this is the initial default state, otherwise respect user choice
-        if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
-          this.internalAmPm = 'PM';
-        }
-      }
 
       this.internalStartTime = startTime;
       this.internalEndTime = startTime;
+      // Don't set AM/PM automatically, only when time is actually set
+      if (this.timeFormat === '12' && startTime) {
+        this.internalAmPm = this.getAmPmFromHour(startTime.hour);
+      }
       // Do not set any dates in time-only mode
       this.internalSelectedDates = { start: null, end: null };
       this.inputValue = this.formatInputValue();
@@ -762,16 +751,18 @@ export class TkDatePicker {
         endDate = null;
         endTime = null;
       }
-    } else {
-      if (this.showTimePicker) {
-        startTime = defaultTime;
-        endTime = this.mode === 'range' ? null : defaultTime;
-      }
     }
+    // Don't set default time automatically when value is empty
+    // Let user set time from panel or input
 
     this.internalSelectedDates = { start: startDate, end: endDate };
     this.internalStartTime = startTime;
     this.internalEndTime = this.mode === 'range' ? endTime : startTime;
+
+    // Only set AM/PM when time is actually set
+    if (this.timeFormat === '12' && startTime) {
+      this.internalAmPm = this.getAmPmFromHour(startTime.hour);
+    }
 
     if (updateCurrentMonth && startDate) {
       this.currentMonth = new Date(startDate.getFullYear(), startDate.getMonth());
@@ -785,18 +776,7 @@ export class TkDatePicker {
   private initializeDates(): void {
     this.currentMonth = new Date();
     this.processDateValue(this.value, true);
-
-    if (this.showTimePicker && !this.internalStartTime && this.internalSelectedDates.start) {
-      const defaultTime = this.getDefaultTime();
-      this.internalStartTime = defaultTime;
-      if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(defaultTime.hour);
-      if (this.mode === 'range' && !this.internalEndTime && this.internalSelectedDates.end) {
-        this.internalEndTime = this.internalStartTime;
-      } else if (this.mode === 'single') {
-        this.internalEndTime = this.internalStartTime;
-      }
-    }
-
+    // Don't initialize default time automatically - let user select from panel or type in input
     this.inputValue = this.formatInputValue();
   }
 
@@ -889,32 +869,36 @@ export class TkDatePicker {
 
   private parseTimeString(timeString: string): Date | null {
     const base = new Date();
-    const primaryFmt = this.getOnlyTimeFormat();
-    let parsed = parse(timeString, primaryFmt, base);
-    if (isValid(parsed) && format(parsed, primaryFmt) === timeString) {
-      return parsed;
-    }
-    // Fallbacks
-    // 1) In 12h mode, allow typing time without AM/PM (e.g., "11:00").
-    //    We interpret it using the current AM/PM selection.
+    const trimmed = (timeString || '').trim();
+
     if (this.timeFormat === '12') {
-      const simpleMatch = timeString.match(/^(\d{1,2}):(\d{2})$/);
-      if (simpleMatch) {
-        let hour = parseInt(simpleMatch[1], 10);
-        const minute = parseInt(simpleMatch[2], 10);
-        if (Number.isFinite(hour) && Number.isFinite(minute) && minute >= 0 && minute <= 59) {
-          if (this.internalAmPm === 'PM' && hour < 12) hour += 12;
-          if (this.internalAmPm === 'AM' && hour === 12) hour = 0;
+      // 1) Accept explicit "hh:mm a"
+      let d = parse(trimmed.toUpperCase(), 'hh:mm a', base);
+      if (isValid(d) && format(d, 'hh:mm a').toUpperCase() === trimmed.toUpperCase()) {
+        return d; // hours already 0-23 on the Date
+      }
+
+      // 2) Accept bare "h:mm" and use current AM/PM toggle
+      const m = trimmed.match(/^(\d{1,2}):(\d{2})$/);
+      if (m) {
+        let hour12 = parseInt(m[1], 10);
+        const minute = parseInt(m[2], 10);
+        if (hour12 >= 1 && hour12 <= 12 && minute >= 0 && minute <= 59) {
+          const hour24 = this.convert12HourTo24Hour(hour12, this.internalAmPm);
           const t = new Date(base);
-          t.setHours(Math.max(0, Math.min(23, hour)), minute, 0, 0);
+          t.setHours(hour24, minute, 0, 0);
           return t;
         }
       }
-      // Also accept explicit 24h input (HH:mm) and convert to a Date directly
-      const alt24 = parse(timeString, 'HH:mm', base);
-      if (isValid(alt24) && format(alt24, 'HH:mm') === timeString) {
-        return alt24;
-      }
+
+      // IMPORTANT: Do NOT accept "HH:mm" (e.g., "20:00") in 12h mode.
+      return null;
+    }
+
+    // 24h mode: accept "HH:mm"
+    const d = parse(trimmed, 'HH:mm', base);
+    if (isValid(d) && format(d, 'HH:mm') === trimmed) {
+      return d;
     }
     return null;
   }
@@ -990,19 +974,30 @@ export class TkDatePicker {
 
   private ensureDateTimeInitialized(type: 'start' | 'end') {
     if (this.timeOnly) {
-      // In time-only mode, prefer parsing the current input value instead of resetting to default
       if (!this.internalStartTime) {
         let parsedFromInput: Date | null = null;
-        if (this.inputValue) {
-          parsedFromInput = this.parseTimeString(this.inputValue);
-        }
-        const resolvedTime = parsedFromInput ? { hour: parsedFromInput.getHours(), minute: parsedFromInput.getMinutes() } : this.getDefaultTime();
-        this.internalStartTime = resolvedTime;
-        this.internalEndTime = resolvedTime;
-        if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(resolvedTime.hour);
+        if (this.inputValue) parsedFromInput = this.parseTimeString(this.inputValue);
+
+        const now = new Date();
+        const hourStep = Math.max(1, this.hourStep || 1);
+        const minuteStep = Math.max(1, this.minuteStep || 1);
+        const base = parsedFromInput
+          ? { hour: parsedFromInput.getHours(), minute: parsedFromInput.getMinutes() }
+          : {
+              hour: Math.floor(now.getHours() / hourStep) * hourStep,
+              minute: Math.floor(now.getMinutes() / minuteStep) * minuteStep,
+            };
+
+        // Respect current AM/PM selection instead of resetting it
+        const desiredAmPm = this.internalAmPm; // 'AM' or 'PM' the user picked
+        const hour24 = this.timeFormat === '12' ? this.convert12HourTo24Hour(this.convert24HourTo12Hour(base.hour), desiredAmPm) : base.hour;
+
+        this.internalStartTime = { hour: hour24, minute: base.minute };
+        this.internalEndTime = this.internalStartTime;
       }
       return;
     }
+    // For date+time mode: initialize date if needed when user interacts with time
     if (!this.internalSelectedDates.start && type === 'start') {
       const today = this.normalizeDate(new Date());
       this.internalSelectedDates = { ...this.internalSelectedDates, start: today };
@@ -1012,14 +1007,32 @@ export class TkDatePicker {
       return; // Don't initialize end date if not set
     }
 
+    // Initialize time when user clicks increase/decrease buttons
+    // Use raw current time without bounds - same as displayed in panel
     if (this.showTimePicker) {
-      const defaultTime = this.getDefaultTime();
       if (type === 'start' && !this.internalStartTime) {
-        this.internalStartTime = defaultTime;
-        if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(defaultTime.hour);
+        const now = new Date();
+        const hourStep = Math.max(1, this.hourStep || 1);
+        const minuteStep = Math.max(1, this.minuteStep || 1);
+        const displayTime = {
+          hour: Math.floor(now.getHours() / hourStep) * hourStep,
+          minute: Math.floor(now.getMinutes() / minuteStep) * minuteStep,
+        };
+        this.internalStartTime = displayTime;
+        if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(displayTime.hour);
       }
       if (type === 'end' && this.mode === 'range' && this.internalSelectedDates.end && !this.internalEndTime) {
-        this.internalEndTime = this.internalStartTime || defaultTime;
+        this.internalEndTime =
+          this.internalStartTime ||
+          (() => {
+            const now = new Date();
+            const hourStep = Math.max(1, this.hourStep || 1);
+            const minuteStep = Math.max(1, this.minuteStep || 1);
+            return {
+              hour: Math.floor(now.getHours() / hourStep) * hourStep,
+              minute: Math.floor(now.getMinutes() / minuteStep) * minuteStep,
+            };
+          })();
       }
     }
   }
@@ -1108,28 +1121,26 @@ export class TkDatePicker {
 
   private handleIncreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
+
     if (!targetTimeState) return;
 
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = this.getHoursList();
-      const displayHour = this.convert24HourTo12Hour(targetTimeState.time.hour);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
+      let displayHour = targetTimeState.time.hour % 12;
+      displayHour = displayHour === 0 ? 12 : displayHour;
 
       // Find closest hour in step list
-      const closestHour = this.findClosestInArray(displayHour, hoursList);
-
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
       const idx = hoursList.indexOf(closestHour);
       const nextIdx = Math.min(idx + 1, hoursList.length - 1);
       const newDisplayHour = hoursList[nextIdx];
 
       // Convert back to 24-hour format
-      const newHour24 = this.convert12HourTo24Hour(newDisplayHour, this.internalAmPm);
-
-      // Validate the new time
-      if (!this.isTimeWithinBounds(newHour24, targetTimeState.time.minute)) {
-        this.isUpdatingTime = false;
-        return; // Don't allow setting invalid time
+      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
+      if (this.internalAmPm === 'PM') {
+        newHour24 += 12;
       }
 
       if (targetTimeState.type === 'start') {
@@ -1139,20 +1150,11 @@ export class TkDatePicker {
       }
     } else {
       // 24h mode - move to next hour in step list
-      const hoursList = this.getHoursList();
-
-      // Find closest hour in step list
-      const closestHour = this.findClosestInArray(targetTimeState.time.hour, hoursList);
-
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
       const idx = hoursList.indexOf(closestHour);
       const nextIdx = Math.min(idx + 1, hoursList.length - 1);
       const hour = hoursList[nextIdx];
-
-      // Validate the new time
-      if (!this.isTimeWithinBounds(hour, targetTimeState.time.minute)) {
-        this.isUpdatingTime = false;
-        return; // Don't allow setting invalid time
-      }
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1172,23 +1174,20 @@ export class TkDatePicker {
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = this.getHoursList();
-      const displayHour = this.convert24HourTo12Hour(targetTimeState.time.hour);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
+      let displayHour = targetTimeState.time.hour % 12;
+      displayHour = displayHour === 0 ? 12 : displayHour;
 
       // Find closest hour in step list
-      const closestHour = this.findClosestInArray(displayHour, hoursList);
-
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
       const idx = hoursList.indexOf(closestHour);
       const prevIdx = Math.max(idx - 1, 0);
       const newDisplayHour = hoursList[prevIdx];
 
       // Convert back to 24-hour format
-      const newHour24 = this.convert12HourTo24Hour(newDisplayHour, this.internalAmPm);
-
-      // Validate the new time
-      if (!this.isTimeWithinBounds(newHour24, targetTimeState.time.minute)) {
-        this.isUpdatingTime = false;
-        return; // Don't allow setting invalid time
+      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
+      if (this.internalAmPm === 'PM') {
+        newHour24 += 12;
       }
 
       if (targetTimeState.type === 'start') {
@@ -1198,20 +1197,11 @@ export class TkDatePicker {
       }
     } else {
       // 24h mode - move to previous hour in step list
-      const hoursList = this.getHoursList();
-
-      // Find closest hour in step list
-      const closestHour = this.findClosestInArray(targetTimeState.time.hour, hoursList);
-
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
       const idx = hoursList.indexOf(closestHour);
       const prevIdx = Math.max(idx - 1, 0);
       const hour = hoursList[prevIdx];
-
-      // Validate the new time
-      if (!this.isTimeWithinBounds(hour, targetTimeState.time.minute)) {
-        this.isUpdatingTime = false;
-        return; // Don't allow setting invalid time
-      }
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1228,18 +1218,12 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    // Validate the new time against bounds
-    const newMinute = targetTimeState.time.minute;
-    if (!this.isTimeWithinBounds(hour, newMinute)) {
-      return; // Don't allow setting invalid time
-    }
-
     this.isUpdatingTime = true;
 
     if (targetTimeState.type === 'start') {
-      this.internalStartTime = { hour, minute: newMinute };
+      this.internalStartTime = { hour, minute: targetTimeState.time.minute };
     } else {
-      this.internalEndTime = { hour, minute: newMinute };
+      this.internalEndTime = { hour, minute: targetTimeState.time.minute };
     }
 
     this.isUpdatingTime = false;
@@ -1250,19 +1234,14 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    const minutesList = this.getMinutesList();
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
 
     // Find closest minute in step list
-    const closestMinute = this.findClosestInArray(targetTimeState.time.minute, minutesList);
+    const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
 
     const idx = minutesList.indexOf(closestMinute);
     const nextIdx = Math.min(idx + 1, minutesList.length - 1);
     const minute = minutesList[nextIdx];
-
-    // Validate the new time
-    if (!this.isTimeWithinBounds(targetTimeState.time.hour, minute)) {
-      return; // Don't allow setting invalid time
-    }
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1276,19 +1255,14 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    const minutesList = this.getMinutesList();
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
 
     // Find closest minute in step list
-    const closestMinute = this.findClosestInArray(targetTimeState.time.minute, minutesList);
+    const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
 
     const idx = minutesList.indexOf(closestMinute);
     const prevIdx = Math.max(idx - 1, 0);
     const minute = minutesList[prevIdx];
-
-    // Validate the new time
-    if (!this.isTimeWithinBounds(targetTimeState.time.hour, minute)) {
-      return; // Don't allow setting invalid time
-    }
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1302,16 +1276,10 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    // Validate the new time against bounds
-    const newHour = targetTimeState.time.hour;
-    if (!this.isTimeWithinBounds(newHour, min)) {
-      return; // Don't allow setting invalid time
-    }
-
     if (targetTimeState.type === 'start') {
-      this.internalStartTime = { hour: newHour, minute: min };
+      this.internalStartTime = { hour: targetTimeState.time.hour, minute: min };
     } else {
-      this.internalEndTime = { hour: newHour, minute: min };
+      this.internalEndTime = { hour: targetTimeState.time.hour, minute: min };
     }
     this.emitTimeChange();
   };
@@ -1322,7 +1290,6 @@ export class TkDatePicker {
     if (this.timeFormat !== '12') return;
 
     const newAmPm = event.detail as 'AM' | 'PM';
-
     // Just update the state - the watcher will handle the time conversion
     this.internalAmPm = newAmPm;
   };
@@ -1342,15 +1309,12 @@ export class TkDatePicker {
 
     const normalizedDate = this.normalizeDate(date);
     let emitValue: string | IDateSelection;
-    const defaultTime = this.getDefaultTime();
 
     if (this.mode === 'single') {
       this.internalSelectedDates = { start: normalizedDate, end: null };
       if (this.showTimePicker) {
-        if (!this.internalStartTime) {
-          this.internalStartTime = defaultTime;
-          if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(defaultTime.hour);
-        }
+        // Keep existing time if set, otherwise leave as null for user to set
+        // Don't auto-initialize time when clicking a date
       } else {
         this.internalStartTime = null;
       }
@@ -1367,10 +1331,8 @@ export class TkDatePicker {
       if (!start || (start && end)) {
         this.internalSelectedDates = { start: normalizedDate, end: null };
         if (this.showTimePicker) {
-          if (!this.internalStartTime) {
-            this.internalStartTime = defaultTime;
-            if (this.timeFormat === '12') this.internalAmPm = this.getAmPmFromHour(defaultTime.hour);
-          }
+          // Keep existing start time if set, otherwise leave as null
+          // Don't auto-initialize time when clicking a date
           this.internalEndTime = null;
         } else {
           this.internalStartTime = null;
@@ -1389,15 +1351,17 @@ export class TkDatePicker {
           newStart = normalizedDate;
           newEnd = start;
           if (this.showTimePicker) {
+            // Swap times if dates are swapped
             const tempTime = this.internalStartTime;
-            this.internalStartTime = this.internalEndTime || this.internalStartTime || defaultTime;
-            this.internalEndTime = tempTime || defaultTime;
+            this.internalStartTime = this.internalEndTime || this.internalStartTime;
+            this.internalEndTime = tempTime;
           }
         } else {
           newStart = start;
           newEnd = normalizedDate;
-          if (this.showTimePicker && !this.internalEndTime) {
-            this.internalEndTime = this.internalStartTime || defaultTime;
+          if (this.showTimePicker) {
+            // Keep existing times, don't auto-initialize
+            // User will set time from panel or input
           }
         }
         this.internalSelectedDates = { start: newStart, end: newEnd };
@@ -1451,7 +1415,7 @@ export class TkDatePicker {
 
   private handleInputBlur = () => {
     if (this.disableMask || this.mode === 'range') return;
-
+    if (this.isOpen) return;
     clearTimeout(this.debounceTimer);
     this.debounceTimer = window.setTimeout(() => {
       if (this.inputValue) {
@@ -1831,22 +1795,46 @@ export class TkDatePicker {
       }
     }
 
-    const defaultTime = this.getDefaultTime();
-    const currentTime = timeToDisplay || defaultTime;
+    // When no time is set, use raw current time for stable display (no bounds applied)
+    // This ensures the display doesn't change when toggling AM/PM
+    // Bounds are only enforced when user actually selects a time
+    let displayTime: { hour: number; minute: number };
+    if (timeToDisplay) {
+      // Time is set - use it
+      displayTime = timeToDisplay;
+    } else {
+      // No time set - use current time without bounds for stable display
+      const now = new Date();
+      const hourStep = Math.max(1, this.hourStep || 1);
+      const minuteStep = Math.max(1, this.minuteStep || 1);
+      displayTime = {
+        hour: Math.floor(now.getHours() / hourStep) * hourStep,
+        minute: Math.floor(now.getMinutes() / minuteStep) * minuteStep,
+      };
+    }
 
-    let displayHour = currentTime.hour;
+    let displayHour = displayTime.hour;
 
     if (this.timeFormat === '12') {
-      displayHour = this.convert24HourTo12Hour(currentTime.hour);
+      displayHour = this.convert24HourTo12Hour(displayTime.hour);
     }
-    const displayMinute = currentTime.minute;
+    const displayMinute = displayTime.minute;
 
     // Always show all hours/minutes in the UI
-    const hours = this.getHoursList();
-    const minutes = this.getMinutesList();
+    const hours =
+      this.timeFormat === '12'
+        ? Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1)
+        : Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+    const minutes = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
 
-    const currentHour = this.findClosestInArray(displayHour, hours);
-    const currentMinute = this.findClosestInArray(displayMinute, minutes);
+    // Find closest hour in the hours array
+    const findClosestInArray = (value: number, arr: number[]): number => {
+      if (arr.includes(value)) return value;
+      // Find the closest value in the array
+      return arr.reduce((prev, curr) => (Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev));
+    };
+    const currentHour = findClosestInArray(displayHour, hours);
+    const currentMinute = findClosestInArray(displayMinute, minutes);
 
     const sliceRange = (options: number[], selected: number): (number | null)[] => {
       const idx = options.indexOf(selected);
