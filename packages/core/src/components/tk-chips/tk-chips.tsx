@@ -2,6 +2,7 @@ import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } 
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
+import type { CSSStyleProperties } from './interfaces';
 
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
@@ -70,6 +71,11 @@ export class TkChips implements ComponentInterface {
   @Prop() value: any;
 
   /**
+   * Custom style to apply to the chip component.
+   */
+  @Prop() styles: Partial<CSSStyleProperties>;
+
+  /**
    * When an element is deleted, it is triggered. It returns the label.
    */
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
@@ -90,7 +96,7 @@ export class TkChips implements ComponentInterface {
     });
     const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} style={this.styles}>
         {icon}
         {this.label}
         {this.removable && (
