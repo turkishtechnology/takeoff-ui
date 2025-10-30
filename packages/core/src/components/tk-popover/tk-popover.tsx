@@ -4,6 +4,7 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 import { updateArrowPosition } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -69,7 +70,7 @@ export class TkPopover implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * Emitted when the open state of the popover changes

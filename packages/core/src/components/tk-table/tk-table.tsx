@@ -12,6 +12,7 @@ import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -67,7 +68,7 @@ export class TkTable implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection).

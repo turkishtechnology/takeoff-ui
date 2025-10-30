@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { updateArrowPosition } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -73,7 +74,7 @@ export class TkTooltip implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
