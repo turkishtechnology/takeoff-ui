@@ -109,9 +109,40 @@ export class TkDatePicker {
           });
         }
       } else {
-        // Panel closing - validate time
-        if ((this.showTimePicker || this.timeOnly) && this.internalStartTime) {
-          this.handleInputBlur();
+        // Panel closing - validate time for both timeOnly and showTimePicker modes
+        if (this.timeOnly && this.internalStartTime) {
+          const { hour, minute } = this.internalStartTime;
+          if (!this.isTimeWithinBounds(hour, minute)) {
+            // Time is out of bounds - clear it and mark as invalid
+            this.inputValue = '';
+            this.internalStartTime = null;
+            this.internalEndTime = null;
+            this.isInvalid = true;
+            this.tkChange.emit(undefined);
+          }
+        } else if (this.showTimePicker && this.internalStartTime) {
+          const { hour, minute } = this.internalStartTime;
+          if (!this.isTimeWithinBounds(hour, minute)) {
+            // Time is out of bounds - clear it and mark as invalid
+            this.inputValue = '';
+            this.internalSelectedDates = { start: null, end: null };
+            this.internalStartTime = null;
+            this.internalEndTime = null;
+            this.isInvalid = true;
+            this.tkChange.emit(undefined);
+          } else if (this.mode === 'range' && this.internalEndTime) {
+            // Also validate end time in range mode
+            const { hour: endHour, minute: endMinute } = this.internalEndTime;
+            if (!this.isTimeWithinBounds(endHour, endMinute)) {
+              // End time is out of bounds - clear it and mark as invalid
+              this.inputValue = '';
+              this.internalSelectedDates = { start: null, end: null };
+              this.internalStartTime = null;
+              this.internalEndTime = null;
+              this.isInvalid = true;
+              this.tkChange.emit(undefined);
+            }
+          }
         }
 
         this.currentView = 'days';
@@ -828,6 +859,8 @@ export class TkDatePicker {
       temp.setHours(this.internalStartTime.hour, this.internalStartTime.minute, 0, 0);
       return format(temp, this.getOnlyTimeFormat());
     }
+    // burası gün seçildiğinde saati 12 AM de sabitliyor.
+
     if (this.showTimePicker && date && type) {
       const dateWithCorrectTime = this.getDateWithTime(date, type);
 
@@ -1313,8 +1346,13 @@ export class TkDatePicker {
     if (this.mode === 'single') {
       this.internalSelectedDates = { start: normalizedDate, end: null };
       if (this.showTimePicker) {
-        // Keep existing time if set, otherwise leave as null for user to set
-        // Don't auto-initialize time when clicking a date
+        // Initialize time to current system time if not already set
+        if (!this.internalStartTime) {
+          this.internalStartTime = this.getDefaultTime();
+          if (this.timeFormat === '12') {
+            this.internalAmPm = this.getAmPmFromHour(this.internalStartTime.hour);
+          }
+        }
       } else {
         this.internalStartTime = null;
       }
@@ -1331,8 +1369,13 @@ export class TkDatePicker {
       if (!start || (start && end)) {
         this.internalSelectedDates = { start: normalizedDate, end: null };
         if (this.showTimePicker) {
-          // Keep existing start time if set, otherwise leave as null
-          // Don't auto-initialize time when clicking a date
+          // Initialize start time to current system time if not already set
+          if (!this.internalStartTime) {
+            this.internalStartTime = this.getDefaultTime();
+            if (this.timeFormat === '12') {
+              this.internalAmPm = this.getAmPmFromHour(this.internalStartTime.hour);
+            }
+          }
           this.internalEndTime = null;
         } else {
           this.internalStartTime = null;
@@ -1360,8 +1403,10 @@ export class TkDatePicker {
           newStart = start;
           newEnd = normalizedDate;
           if (this.showTimePicker) {
-            // Keep existing times, don't auto-initialize
-            // User will set time from panel or input
+            // Initialize end time to current system time if not already set
+            if (!this.internalEndTime) {
+              this.internalEndTime = this.getDefaultTime();
+            }
           }
         }
         this.internalSelectedDates = { start: newStart, end: newEnd };
