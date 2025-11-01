@@ -110,6 +110,27 @@ export class TkDatePicker {
         }
       } else {
         // Panel closing - validate time for both timeOnly and showTimePicker modes
+        // First, parse typed input to sync with internal state
+        if (this.inputValue && (this.timeOnly || this.showTimePicker)) {
+          if (this.timeOnly) {
+            const parsedTime = this.parseTimeString(this.inputValue);
+            if (parsedTime) {
+              const hour = parsedTime.getHours();
+              const minute = parsedTime.getMinutes();
+              this.internalStartTime = { hour, minute };
+              this.internalEndTime = this.internalStartTime;
+            }
+          } else if (this.showTimePicker && !this.mode.includes('range')) {
+            const parsedDate = this.parseFullDateTime(this.inputValue);
+            if (parsedDate && !this.isDateDisabled(parsedDate)) {
+              const hour = parsedDate.getHours();
+              const minute = parsedDate.getMinutes();
+              this.internalStartTime = { hour, minute };
+              this.internalEndTime = this.internalStartTime;
+            }
+          }
+        }
+
         if (this.timeOnly && this.internalStartTime) {
           const { hour, minute } = this.internalStartTime;
           if (!this.isTimeWithinBounds(hour, minute)) {
@@ -712,7 +733,6 @@ export class TkDatePicker {
 
       this.internalStartTime = startTime;
       this.internalEndTime = startTime;
-      // Don't set AM/PM automatically, only when time is actually set
       if (this.timeFormat === '12' && startTime) {
         this.internalAmPm = this.getAmPmFromHour(startTime.hour);
       }
@@ -783,14 +803,11 @@ export class TkDatePicker {
         endTime = null;
       }
     }
-    // Don't set default time automatically when value is empty
-    // Let user set time from panel or input
 
     this.internalSelectedDates = { start: startDate, end: endDate };
     this.internalStartTime = startTime;
     this.internalEndTime = this.mode === 'range' ? endTime : startTime;
 
-    // Only set AM/PM when time is actually set
     if (this.timeFormat === '12' && startTime) {
       this.internalAmPm = this.getAmPmFromHour(startTime.hour);
     }
@@ -807,7 +824,6 @@ export class TkDatePicker {
   private initializeDates(): void {
     this.currentMonth = new Date();
     this.processDateValue(this.value, true);
-    // Don't initialize default time automatically - let user select from panel or type in input
     this.inputValue = this.formatInputValue();
   }
 
@@ -859,7 +875,6 @@ export class TkDatePicker {
       temp.setHours(this.internalStartTime.hour, this.internalStartTime.minute, 0, 0);
       return format(temp, this.getOnlyTimeFormat());
     }
-    // burası gün seçildiğinde saati 12 AM de sabitliyor.
 
     if (this.showTimePicker && date && type) {
       const dateWithCorrectTime = this.getDateWithTime(date, type);
@@ -905,13 +920,11 @@ export class TkDatePicker {
     const trimmed = (timeString || '').trim();
 
     if (this.timeFormat === '12') {
-      // 1) Accept explicit "hh:mm a"
       let d = parse(trimmed.toUpperCase(), 'hh:mm a', base);
       if (isValid(d) && format(d, 'hh:mm a').toUpperCase() === trimmed.toUpperCase()) {
-        return d; // hours already 0-23 on the Date
+        return d;
       }
 
-      // 2) Accept bare "h:mm" and use current AM/PM toggle
       const m = trimmed.match(/^(\d{1,2}):(\d{2})$/);
       if (m) {
         let hour12 = parseInt(m[1], 10);
@@ -1369,7 +1382,6 @@ export class TkDatePicker {
       if (!start || (start && end)) {
         this.internalSelectedDates = { start: normalizedDate, end: null };
         if (this.showTimePicker) {
-          // Initialize start time to current system time if not already set
           if (!this.internalStartTime) {
             this.internalStartTime = this.getDefaultTime();
             if (this.timeFormat === '12') {
@@ -1394,7 +1406,6 @@ export class TkDatePicker {
           newStart = normalizedDate;
           newEnd = start;
           if (this.showTimePicker) {
-            // Swap times if dates are swapped
             const tempTime = this.internalStartTime;
             this.internalStartTime = this.internalEndTime || this.internalStartTime;
             this.internalEndTime = tempTime;
@@ -1403,7 +1414,6 @@ export class TkDatePicker {
           newStart = start;
           newEnd = normalizedDate;
           if (this.showTimePicker) {
-            // Initialize end time to current system time if not already set
             if (!this.internalEndTime) {
               this.internalEndTime = this.getDefaultTime();
             }
@@ -1477,7 +1487,6 @@ export class TkDatePicker {
               this.isInvalid = false;
               this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
             } else {
-              // Time is out of bounds, clear input and mark as invalid
               this.inputValue = '';
               this.internalStartTime = null;
               this.internalEndTime = null;
@@ -1501,7 +1510,6 @@ export class TkDatePicker {
 
               // Validate time against minTime/maxTime
               if (!this.isTimeWithinBounds(hour, minute)) {
-                // Time is out of bounds, clear input and mark as invalid
                 this.inputValue = '';
                 this.internalSelectedDates = { start: null, end: null };
                 this.internalStartTime = null;
