@@ -290,6 +290,21 @@ export class TkInput implements ComponentInterface {
     return strength;
   }
 
+  private clampValueByLimit = value => {
+    if (value === null || value === undefined || isNaN(value)) {
+      return null;
+    }
+
+    if (this.min !== null && this.min !== undefined && value < Number(this.min)) {
+      return Number(this.min);
+    }
+
+    if (this.max !== null && this.max !== undefined && value > Number(this.max)) {
+      return Number(this.max);
+    }
+    return value;
+  };
+
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
@@ -401,19 +416,30 @@ export class TkInput implements ComponentInterface {
   };
 
   private handleMinusButtonClick() {
-    if (!this.disabled && (this.min == undefined || Number(this.value) > Number(this.min))) {
-      this.value = Number(this.value) - 1;
-      this.tkChange.emit(this.value);
+    if (!this.disabled) {
+      const currentValue = Number(this.value) || 0;
+      const newValue = this.clampValueByLimit(currentValue - 1);
+      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+        this.value = newValue;
+        this.tkChange.emit(newValue);
+      }
     }
   }
 
   private handlePlusButtonClick() {
-    if (this.value == '' && this.min != undefined) {
-      this.value = this.min;
-      this.tkChange.emit(this.min);
-    } else if (!this.disabled && (this.max == undefined || Number(this.value) < Number(this.max))) {
-      this.value = Number(this.value) + 1;
-      this.tkChange.emit(this.value);
+    if (!this.disabled) {
+      let currentValue;
+      if (this.value === '' || this.value === null || this.value === undefined) {
+        currentValue = !_.isNil(this.min) ? Number(this.min) : 0;
+      } else {
+        currentValue = Number(this.value);
+      }
+
+      const newValue = this.clampValueByLimit(currentValue + 1);
+      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+        this.value = newValue;
+        this.tkChange.emit(newValue);
+      }
     }
   }
 
