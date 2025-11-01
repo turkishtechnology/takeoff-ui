@@ -2,6 +2,7 @@ import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method,
 import classNames from 'classnames';
 import { IStep, IStepClickDetail } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkStepper component for managing a series of steps.
@@ -89,17 +90,17 @@ export class TkStepper implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * The style attribute of content elements
    */
-  @Prop() contentStyle?: any = null;
+  @Prop() contentStyle?: CSSStyleProperties = null;
 
   /**
    * The style attribute of step sign elements
    */
-  @Prop() signStyle?: any = null;
+  @Prop() signStyle?: CSSStyleProperties = null;
 
   /**
    * Emitted when the active step changes.

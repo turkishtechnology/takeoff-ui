@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Element, Fragment, Prop, State, h } from '@stencil/core';
 import classNames from 'classnames';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkCard component description.
@@ -125,12 +126,12 @@ export class TkCard implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * The style attribute of content element
    */
-  @Prop() contentStyle?: any = null;
+  @Prop() contentStyle?: CSSStyleProperties = null;
 
   componentWillLoad() {
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
