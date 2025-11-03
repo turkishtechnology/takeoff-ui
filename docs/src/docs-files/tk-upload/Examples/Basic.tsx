@@ -4,7 +4,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Example = () => {
-  const handleFilesAccepted = e => {
+  const handleFilesChanged = e => {
     createToast({
       header: 'Dosya eklendi',
       message: `${e.detail.length} dosya eklendi`,
@@ -27,10 +27,10 @@ const Example = () => {
     });
   };
 
-  return <TkUpload onTkChange={handleFilesAccepted} onTkUpload={handleUpload}></TkUpload>;
+  return <TkUpload onTkChange={handleFilesChanged} onTkUpload={handleUpload}></TkUpload>;
 };
 const Basic = () => {
-  const reactCode = `const handleFilesAccepted = (e) => {
+  const reactCode = `const handleFilesChanged = (e) => {
   createToast({
     header: "Dosya eklendi",
     message: \`\${e.detail.length} dosya eklendi\`,
@@ -53,7 +53,7 @@ const handleUpload = (e) => {
 };
 return (
   <TkUpload
-    onTkFilesAccepted={handleFilesAccepted}
+    onTkChange={handleFilesChanged}
     onTkUpload={handleUpload}
   ></TkUpload>
 );`;
@@ -62,7 +62,7 @@ return (
 import { TkUpload } from '@takeoff-ui/vue';
 import { createToast } from '@takeoff-ui/core';
 
-const handleFilesAccepted = (e) => {
+const handleFilesChanged = (e) => {
   createToast({
     header: 'Dosya eklendi',
     message: \`\${e.detail.length} dosya eklendi\`,
@@ -91,7 +91,7 @@ const handleFilesRejected = (e) => {
 <template>
   <TkUpload
     multiple
-    @tkFilesAccepted="handleFilesAccepted"
+    @tkChange="handleFilesChanged"
     @tkFilesRejected="handleFilesRejected"
   >
   </TkUpload>

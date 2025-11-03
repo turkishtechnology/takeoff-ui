@@ -3,7 +3,7 @@ import { TkUpload } from '@takeoff-ui/react';
 import { createToast } from '@takeoff-ui/core';
 
 const Upload: React.FC = () => {
-  const handleFilesAccepted = e => {
+  const handleFilesChanged = e => {
     createToast({
       header: 'Dosya eklendi',
       message: `${e.detail.length} dosya eklendi`,
@@ -26,7 +26,7 @@ const Upload: React.FC = () => {
     });
   };
 
-  return <TkUpload onTkChange={handleFilesAccepted} onTkUpload={handleUpload} dragDrop={true} multiple={true}></TkUpload>;
+  return <TkUpload onTkChange={handleFilesChanged} onTkUpload={handleUpload} dragDrop={true} multiple={true}></TkUpload>;
 };
 
 export default Upload;

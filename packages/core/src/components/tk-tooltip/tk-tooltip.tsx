@@ -1,8 +1,12 @@
-import { Component, ComponentInterface, h, Prop, State, Element, Watch, Fragment } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-props';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { updateArrowPosition } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -53,7 +57,7 @@ export class TkTooltip implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.tooltipElement) {
-      this.updateArrowPosition();
+      updateArrowPosition(this.arrowElement);
     }
   }
   /**
@@ -63,14 +67,14 @@ export class TkTooltip implements ComponentInterface {
   @Prop() variant?: 'dark' | 'white' | 'info' | 'success' | 'warning' | 'danger' | 'neutral' = 'neutral';
 
   /**
-   * Sets the icon element of the tooltip.
+   * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
@@ -81,6 +85,7 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
+    addDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
@@ -92,54 +97,28 @@ export class TkTooltip implements ComponentInterface {
       this.cleanup && this.cleanup();
     }
   }
-
+  disconnectedCallback() {
+    removeDialogScrollListener(this.el);
+  }
   private updatePosition() {
     computePosition(this.triggerElement, this.tooltipElement, {
       strategy: 'fixed',
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.tooltipElement.style, {
+      applyStyles(this.tooltipElement, {
         left: `${x}px`,
         top: `${y}px`,
       });
 
       const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
+      applyStyles(this.arrowElement, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      const [side] = placement.split('-');
-      this.updateArrowPosition(side);
+      updateArrowPosition(this.arrowElement, placement);
     });
-  }
-
-  private updateArrowPosition(side?: string) {
-    const arrowElement = this.arrowElement;
-    switch (side) {
-      case 'top':
-        arrowElement.style.bottom = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'bottom':
-        arrowElement.style.top = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderRight = 'none';
-
-        break;
-      case 'left':
-        arrowElement.style.right = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'right':
-        arrowElement.style.left = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderRight = 'none';
-        break;
-    }
   }
 
   private handleMouseEnter = () => {
@@ -151,13 +130,23 @@ export class TkTooltip implements ComponentInterface {
   };
 
   render() {
-    let _icon: HTMLTkIconElement;
     let iconVariant;
 
     if (this.variant == 'dark') iconVariant = 'neutral';
     else iconVariant = this.variant;
 
-    _icon = <tk-icon {...getIconElementProps(this.icon, { class: classNames('tk-tooltip-item-icon'), variant: iconVariant, sign: true, size: 'small' })} />;
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
+    if (this.icon) {
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {
+        variant: iconVariant,
+        sign: true,
+        size: 'small',
+        additionalProps: { class: classNames('tk-tooltip-item-icon') },
+      });
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
+    }
 
     return (
       <div class="tk-tooltip">
@@ -177,11 +166,12 @@ export class TkTooltip implements ComponentInterface {
               <slot name="content" />
             ) : (
               <Fragment>
-                {_icon}
+                {_leftIcon}
                 <div>
                   <div class="tk-tooltip-header">{this.header}</div>
                   <div class="tk-tooltip-description">{this.description}</div>
                 </div>
+                {_rightIcon}
               </Fragment>
             )}
             <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>

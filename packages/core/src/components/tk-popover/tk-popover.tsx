@@ -1,5 +1,10 @@
-import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { updateArrowPosition } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -20,11 +25,16 @@ export class TkPopover implements ComponentInterface {
   private triggerElement: HTMLElement;
   private arrowElement: HTMLElement;
   private cleanup;
-  private dialogRef?: HTMLTkDialogElement;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkPopoverElement;
 
   @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged() {
+    console.log('isOpen', this.isOpen);
+    this.tkChange.emit(this.isOpen);
+  }
 
   /**
    * Controls if popover has custom content.
@@ -47,7 +57,7 @@ export class TkPopover implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.popoverElement) {
-      this.updateArrowPosition();
+      updateArrowPosition(this.arrowElement);
     }
   }
 
@@ -60,25 +70,45 @@ export class TkPopover implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
+
+  /**
+   * Emitted when the open state of the popover changes
+   */
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<boolean>;
+
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  protected clickOutsideHandler = () => {
+    this.isOpen = false;
+  };
+
+  private get isHover() {
+    return this.trigger === 'hover';
+  }
 
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
   }
 
   componentDidLoad() {
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.clickOutsideHandler,
+      disabled: this.isHover,
+    });
+
     this.triggerElement = this.el.querySelector('[slot="trigger"]');
     if (this.trigger === 'hover') {
       this.triggerElement?.addEventListener('mouseenter', () => (this.isOpen = true));
       this.triggerElement?.addEventListener('mouseleave', () => (this.isOpen = false));
     } else {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
-      document.addEventListener('click', this.handleDocumentClick);
     }
 
-    // dialog içerisindek kullanıldığında dialog içerisinde scroll olduğunda panelin kapanması için yapıldı.
-    this.dialogRef = this.el.closest('tk-dialog');
-    this.dialogRef?.querySelector('.tk-dialog-content')?.addEventListener('scroll', this.handleDialogScroll.bind(this));
+    addDialogScrollListener(this.el);
   }
 
   disconnectedCallback() {
@@ -87,14 +117,18 @@ export class TkPopover implements ComponentInterface {
       this.triggerElement?.removeEventListener('mouseleave', () => (this.isOpen = false));
     } else {
       this.triggerElement?.removeEventListener('click', () => (this.isOpen = !this.isOpen));
-      document.removeEventListener('click', this.handleDocumentClick);
     }
     this.cleanup && this.cleanup();
+    removeDialogScrollListener(this.el);
 
-    this.dialogRef?.querySelector('.tk-dialog-content')?.removeEventListener('scroll', this.handleDialogScroll.bind(this));
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   componentDidUpdate() {
+    // Update click outside disabled state based on trigger type
+    this.clickOutsideMixin.updateConfig({ disabled: this.isHover });
+
     if (this.isOpen) {
       const updatePosition = () => {
         if (this.isOpen) {
@@ -124,68 +158,26 @@ export class TkPopover implements ComponentInterface {
     this.isOpen = false;
   }
 
-  // dialog contentindeki scroll'u dinleyip scroll olduğunda panelin kapanması için yapıldı
-  private handleDialogScroll() {
-    if (this.isOpen) {
-      this.isOpen = false;
-    }
-  }
-
   private updatePosition() {
     computePosition(this.triggerElement, this.popoverElement, {
       strategy: 'fixed',
       placement: this.position,
       middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
     }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.popoverElement.style, {
+      applyStyles(this.popoverElement, {
         left: `${x}px`,
         top: `${y}px`,
       });
 
       const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
+      applyStyles(this.arrowElement, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      const [side] = placement.split('-');
-      this.updateArrowPosition(side);
+      updateArrowPosition(this.arrowElement, placement);
     });
   }
-
-  private updateArrowPosition(side?: string) {
-    const arrowElement = this.arrowElement;
-    switch (side) {
-      case 'top':
-        arrowElement.style.bottom = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'bottom':
-        arrowElement.style.top = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderRight = 'none';
-
-        break;
-      case 'left':
-        arrowElement.style.right = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'right':
-        arrowElement.style.left = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderRight = 'none';
-        break;
-    }
-  }
-
-  private handleDocumentClick = (e: MouseEvent) => {
-    const isInnerClicked = e.composedPath().some(item => item === this.el);
-    if (!isInnerClicked) {
-      this.isOpen = false;
-    }
-  };
 
   render() {
     return (

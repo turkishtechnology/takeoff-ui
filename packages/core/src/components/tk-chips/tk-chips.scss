@@ -16,13 +16,13 @@
   }
 
   &.disabled {
-    color: var(--text-sub-base, #cacfd8) !important;
+    color: var(--text-sub-base) !important;
     background-color: var(--frames-light) !important;
 
     &.avatar,
     &.outlined {
-      border: 1px solid var(--border-sub-base, #cacfd8) !important;
-      background-color: var(--static-Light, #fff) !important;
+      border: 1px solid var(--border-sub-base) !important;
+      background-color: var(--static-light) !important;
     }
 
     &:active {
@@ -35,7 +35,7 @@
   }
 
   &.primary {
-    color: var(--primary-base, #c90019);
+    color: var(--primary-base);
 
     &:active {
       box-shadow: var(--primary-focus);
@@ -46,7 +46,7 @@
       background-color: var(--primary-base);
 
       &:hover {
-        background-color: var(--primary-dark, #b70017);
+        background-color: var(--primary-dark);
       }
     }
 
@@ -54,20 +54,20 @@
       border: 1px solid var(--primary-base);
 
       &:hover {
-        background-color: var(--primary-lightest, #fae6e8);
+        background-color: var(--primary-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--primary-light, #eeb0b8);
+      background-color: var(--primary-light);
       color: var(--primary-base);
     }
 
     &.avatar {
-      border: 1px solid var(--primary-base, #c90019);
+      border: 1px solid var(--primary-base);
 
       &:hover {
-        background-color: var(--primary-lightest, #fae6e8);
+        background-color: var(--primary-lightest);
       }
     }
   }
@@ -80,7 +80,7 @@
       color: var(--text-lightest);
 
       &:hover {
-        background-color: var(--secondary-dark, #607083);
+        background-color: var(--secondary-dark);
       }
     }
 
@@ -88,7 +88,7 @@
       border: 1px solid var(--secondary-darkest);
 
       &:hover {
-        background-color: var(--secondary-lightest, #f2f3f5);
+        background-color: var(--secondary-lightest);
       }
     }
 
@@ -98,15 +98,15 @@
 
       &:hover {
         color: var(--secondary-dark);
-        background-color: var(--secondary-light, #dadee3);
+        background-color: var(--secondary-light);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--secondary-darkest, #34404f);
+      border: 1px solid var(--secondary-darkest);
 
       &:hover {
-        background-color: var(--secondary-lightest, #dadee3);
+        background-color: var(--secondary-lightest);
       }
     }
   }
@@ -116,18 +116,19 @@
 
     &.filled {
       background-color: var(--background-darkest);
-      color: var(--text-lightest, #f9fafc);
+      color: var(--text-lightest);
 
       &:hover {
-        background-color: var(--background-dark, #525866);
+        background-color: var(--background-dark);
       }
     }
 
     &.outlined {
       border: 1px solid var(--background-darkest);
+      background-color: var(--static-light);
 
       &:hover {
-        background-color: var(--background-lightest, #f9fafc);
+        background-color: var(--background-lightest);
       }
     }
 
@@ -140,19 +141,19 @@
     }
 
     &.avatar {
-      border: 1px solid var(--background-darkest, #222530);
+      border: 1px solid var(--background-darkest);
 
       &:hover {
-        background-color: var(--background-lightest, #f9fafc);
+        background-color: var(--background-lightest);
       }
     }
   }
 
   &.info {
-    color: var(--states-info-dark, #295bac);
+    color: var(--states-info-dark);
 
     &.filled {
-      color: var(--text-lightest, #f9fafc);
+      color: var(--text-lightest);
       background-color: var(--states-info-dark);
 
       &:hover {
@@ -161,174 +162,174 @@
     }
 
     &.outlined {
-      border: 1px solid var(--states-info-dark, #295bac);
+      border: 1px solid var(--states-info-dark);
 
       &:hover {
-        background-color: var(--states-info-lightest, #d0e1fd);
+        background-color: var(--states-info-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--states-info-lightest, #d0e1fd);
+      background-color: var(--states-info-lightest);
 
       &:hover {
-        color: var(--states-info-darkest, #183462);
+        color: var(--states-info-darkest);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--states-info-dark, #295bac);
+      border: 1px solid var(--states-info-dark);
 
       &:hover {
-        background-color: var(--states-info-lightest, #d0e1fd);
+        background-color: var(--states-info-lightest);
       }
     }
   }
 
   &.success {
-    color: var(--states-success-dark, #188a42);
+    color: var(--states-success-dark);
 
     &.filled {
-      color: var(--text-lightest, #f9fafc);
-      background-color: var(--states-success-dark, #188a42);
+      color: var(--text-lightest);
+      background-color: var(--states-success-dark);
 
       &:hover {
-        background-color: var(--states-success-darkest, #0e4f26);
+        background-color: var(--states-success-darkest);
       }
     }
 
     &.outlined {
-      border: 1px solid var(--states-success-dark, #188a42);
+      border: 1px solid var(--states-success-dark);
 
       &:hover {
-        background-color: var(--states-success-lightest, #caf1d8);
+        background-color: var(--states-success-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--states-success-lightest, #caf1d8);
+      background-color: var(--states-success-lightest);
 
       &:hover {
-        color: var(--states-success-darkest, #0e4f26);
+        color: var(--states-success-darkest);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--states-success-dark, #188a42);
+      border: 1px solid var(--states-success-dark);
 
       &:hover {
-        background-color: var(--states-success-lightest, #caf1d8);
+        background-color: var(--states-success-lightest);
       }
     }
   }
 
   &.danger {
-    color: var(--states-danger-dark, #b32b23);
+    color: var(--states-danger-dark);
 
     &.filled {
-      color: var(--text-lightest, #f9fafc);
-      background-color: var(--states-danger-dark, #b32b23);
+      color: var(--text-lightest);
+      background-color: var(--states-danger-dark);
 
       &:hover {
-        background-color: var(--states-danger-darkest, #661814);
+        background-color: var(--states-danger-darkest);
       }
     }
 
     &.outlined {
-      border: 1px solid var(--states-danger-dark, #b32b23);
+      border: 1px solid var(--states-danger-dark);
 
       &:hover {
-        background-color: var(--states-danger-lightest, #ffd0ce);
+        background-color: var(--states-danger-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--states-danger-lightest, #ffd0ce);
+      background-color: var(--states-danger-lightest);
 
       &:hover {
-        color: var(--states-danger-darkest, #661814);
+        color: var(--states-danger-darkest);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--states-danger-dark, #b32b23);
+      border: 1px solid var(--states-danger-dark);
 
       &:hover {
-        background-color: var(--states-danger-lightest, #ffd0ce);
+        background-color: var(--states-danger-lightest);
       }
     }
   }
 
   &.warning {
-    color: var(--states-warning-dark, #c79807);
+    color: var(--states-warning-dark);
 
     &.filled {
-      background-color: var(--states-warning-dark, #c79807);
-      color: var(--text-lightest, #f9fafc);
+      background-color: var(--states-warning-dark);
+      color: var(--text-lightest);
 
       &:hover {
-        background-color: var(--states-warning-lightest, #f6de95);
+        background-color: var(--states-warning-lightest);
       }
     }
 
     &.outlined {
-      border: 1px solid var(--states-warning-dark, #c79807);
+      border: 1px solid var(--states-warning-dark);
 
       &:hover {
-        background-color: var(--states-warning-lightest, #f6de95);
+        background-color: var(--states-warning-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--states-warning-lightest, #f6de95);
+      background-color: var(--states-warning-lightest);
 
       &:hover {
-        color: var(--states-warning-darkest, #816204);
+        color: var(--states-warning-darkest);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--states-warning-dark, #c79807);
+      border: 1px solid var(--states-warning-dark);
 
       &:hover {
-        background-color: var(--states-warning-lightest, #f6de95);
+        background-color: var(--states-warning-lightest);
       }
     }
   }
 
   &.verified {
-    color: var(--states-verified-dark, #609af8);
+    color: var(--states-verified-dark);
 
     &.filled {
-      color: var(--text-lightest, #f9fafc);
-      background-color: var(--states-verified-dark, #609af8);
+      color: var(--text-lightest);
+      background-color: var(--states-verified-dark);
 
       &:hover {
-        background-color: var(--states-verified-darkest, #3b82f6);
+        background-color: var(--states-verified-darkest);
       }
     }
 
     &.outlined {
-      border: 1px solid var(--states-verified-dark, #609af8);
+      border: 1px solid var(--states-verified-dark);
 
       &:hover {
-        background-color: var(--states-verified-lightest, #d0e1fd);
+        background-color: var(--states-verified-lightest);
       }
     }
 
     &.filledlight {
-      background-color: var(--states-verified-lightest, #d0e1fd);
+      background-color: var(--states-verified-lightest);
 
       &:hover {
-        color: var(--states-verified-darkest, #3b82f6);
+        color: var(--states-verified-darkest);
       }
     }
 
     &.avatar {
-      border: 1px solid var(--states-verified-dark, #609af8);
+      border: 1px solid var(--states-verified-dark);
 
       &:hover {
-        background-color: var(--states-verified-lightest, #d0e1fd);
+        background-color: var(--states-verified-lightest);
       }
     }
   }

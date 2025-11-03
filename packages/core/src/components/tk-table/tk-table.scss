@@ -14,9 +14,10 @@
 
   .table-holder {
     height: 100%;
-    padding: 1px;
     overflow-x: auto;
-    overflow-y: auto;
+    border-radius: var(--radius-m-base);
+    border-style: hidden;
+    box-shadow: 0 0 0 1px var(--border-light);
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -41,17 +42,15 @@
     }
 
     table {
-      display: table;
       width: 100%;
-      table-layout: auto;
       border-collapse: collapse;
-      border-radius: var(--radius-m-base);
-      border-style: hidden;
-      box-shadow: 0 0 0 1px var(--border-light);
 
       thead {
         background: none;
         background-color: none;
+        position: sticky;
+        top: 0;
+        z-index: 100;
 
         tr {
           background: none;
@@ -59,8 +58,6 @@
           border: none;
 
           th {
-            position: sticky;
-            top: 0;
             font-size: var(--desktop-body-s-size);
             color: var(--text-darkest);
             text-align: left;
@@ -91,7 +88,7 @@
 
               &:hover {
                 width: 3px;
-                border-right: 2px solidvar(--primary-base);
+                border-right: 2px solid var(--primary-base);
               }
             }
 
@@ -129,12 +126,12 @@
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
-                gap: var(--table-items-head-base-text-gap);
+
+                &.vertical {
+                  flex-direction: column;
+                }
 
                 i {
-                  font-size: 20px;
-                  width: 20px;
-                  height: 20px;
                   cursor: pointer;
                   flex-shrink: 0;
                 }
@@ -152,14 +149,6 @@
                 width: min-content;
               }
             }
-          }
-
-          th:first-child {
-            border-top-left-radius: var(--radius-m-base);
-          }
-
-          th:last-child {
-            border-top-right-radius: var(--radius-m-base);
           }
         }
 
@@ -180,10 +169,16 @@
 
       tbody {
         tr {
+          &.tk-table-group-header + tr {
+            border-top: 1px solid var(--border-light);
+          }
+          &:last-child {
+            border-bottom: none;
+          }
           background: none;
           background-color: none;
           border: none;
-
+          border-bottom: 1px solid var(--border-light);
           td {
             font-size: var(--desktop-body-s-size);
             color: var(--text-dark);
@@ -192,7 +187,7 @@
             background-color: var(--static-light);
             padding: var(--table-items-body-base-text-v-padding) var(--table-items-head-small-text-h-padding);
             border: none;
-            border-bottom: 1px solid var(--border-light);
+
             vertical-align: middle;
 
             &.non-text {
@@ -221,15 +216,7 @@
             }
           }
 
-          &:last-child td:first-child {
-            border-bottom-left-radius: var(--radius-m-base);
-          }
-
-          &:last-child td:last-child {
-            border-bottom-right-radius: var(--radius-m-base);
-          }
-
-          &:hover td {
+          &:hover td:not(.tk-table-group-header-cell) {
             background-color: var(--background-lightest);
           }
 
@@ -246,6 +233,36 @@
             background-color: var(--background-lightest);
             pointer-events: none;
           }
+
+          &.tk-table-group-header {
+            display: block;
+            border-bottom: none;
+            position: sticky;
+            left: var(--tk-table-sticky-left-offset, 0);
+
+            .tk-table-group-header-cell {
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-dark);
+              border: none;
+
+              .tk-table-group-header-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .tk-table-group-value {
+                  font-size: var(--desktop-body-m-size);
+                  color: var(--text-darkest);
+                }
+
+                .tk-table-group-count {
+                  font-size: var(--desktop-body-s-size);
+                  color: var(--text-base);
+                  font-weight: var(--font-weight-regular);
+                }
+              }
+            }
+          }
         }
 
         &.loading-holder {
@@ -255,10 +272,22 @@
 
       .tk-table-left-sticky {
         position: sticky;
+        left: var(--tk-table-sticky-left-offset, 0);
       }
 
       .tk-table-right-sticky {
         position: sticky;
+        right: var(--tk-table-sticky-right-offset, 0);
+      }
+
+      thead tr th.tk-table-left-sticky {
+        left: var(--tk-table-sticky-left-offset, 0);
+        z-index: 11;
+      }
+
+      thead tr th.tk-table-right-sticky {
+        right: var(--tk-table-sticky-right-offset, 0);
+        z-index: 11;
       }
 
       .tk-table-sticky-shadow-right {
@@ -299,9 +328,31 @@
     }
   }
 
+  &.base table thead tr .icons {
+    gap: 8px;
+
+    i {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   &.small {
-    table thead tr th {
-      padding: var(--table-items-head-small-text-v-padding);
+    table thead tr {
+      .icons {
+        gap: 4px;
+
+        i {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      th {
+        padding: var(--table-items-head-small-text-v-padding);
+      }
     }
 
     table tbody tr td {
@@ -314,9 +365,21 @@
   }
 
   &.xsmall {
-    table thead tr th {
-      padding: var(--table-items-head-xsmall-text-v-padding) var(--table-items-head-xsmall-text-h-padding);
-      font-size: var(--desktop-body-xs-size);
+    table thead tr {
+      .icons {
+        gap: 2px;
+
+        i {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      th {
+        padding: var(--table-items-head-xsmall-text-v-padding) var(--table-items-head-xsmall-text-h-padding);
+        font-size: var(--desktop-body-xs-size);
+      }
     }
 
     table tbody tr td {

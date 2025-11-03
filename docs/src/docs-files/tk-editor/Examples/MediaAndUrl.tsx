@@ -16,7 +16,7 @@ const MediaAndUrl = () => {
     feature === 'link'
       ? `<h3>URL Link Example</h3>
 <p>Select some text and click the link button in the toolbar to create a hyperlink. You can also click an existing link to edit it.</p>
-<p>Here's a sample link to <a href="https://takeoffui.thy.com">Takeoff UI</a>.</p>`
+<p>Here's a sample link to <a href="https://takeoffui.com">Takeoff UI</a>.</p>`
       : `<h3>Image Example</h3>
 <p>Click the image button in the toolbar to insert an image via URL. Images can enhance your content significantly.</p>
 <p>Here's a sample image:</p>

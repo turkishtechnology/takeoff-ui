@@ -10,7 +10,9 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
+| <TkBadge label="expandedRowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any)=>any</code> | null | Provides a function to customize expanded row styles. This function takes row information and returns the style object for the expanded row content. |
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
+| <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
 | <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
@@ -32,6 +34,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | ---- | ----------- |
 | tk-cell-edit | Emitted when a cell is edited. |
 | tk-expanded-rows-change | Emitted when the expanded rows change. |
+| tk-group-by-change | Emitted when the groupBy value changes. Always emitted for both controlled and uncontrolled components. For controlled components, handle this event to update the groupBy prop. |
 | tk-request | Emitted when a request needs to be made to the server. |
 | tk-row-click | Emitted when a row is clicked. |
 | tk-selection-change |  |
@@ -40,18 +43,24 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Description |
 | ---- | ----------- |
-| clearFilters | Clears all filters for server side pagination |
+| clearFilters | Clears all filters or specific column filters |
+| clearGrouping | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
 | clearSorting | Clears all sorting for server side pagination |
 | exportFile | Exports the table data to a file |
 | getFilters | Returns the current filters |
 | getSorting | Returns the current sorting settings |
+| groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
 | serverRequest | Allows tk-request event to be triggered manually |
-| setCurrentPage |  |
+| setCurrentPage | Sets the current page for pagination |
+| setFilters | Sets the current filter settings |
+| setSorting | Sets the current sorting settings |
 
 ### Slots
 
 | Name | Description |
 | ---- | ----------- |
+| body-footer | Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows) |
+| body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows) |
 | empty-data | Set how the table will appear when there is no data |
 
 ### Interfaces
@@ -95,7 +104,7 @@ interface ITableColumn {
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
-  filterType?: 'text' | 'checkbox' | 'radio';
+  filterType?: 'text' | 'checkbox' | 'radio' | 'datepicker';
   /** Defines options for checkbox or radio filter type */
   filterOptions?: IFilterOption[];
   /** Defines the label of the buttons */
@@ -111,6 +120,23 @@ interface ITableColumn {
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string };
+    optionsSearchDatepicker?: {
+      label?: string;
+      placeholder?: string;
+      mode?: 'single' | 'range';
+      dateFormat?: string;
+      timeFormat?: '24' | '12';
+      minDate?: string;
+      maxDate?: string;
+      hourStep?: number;
+      minuteStep?: number;
+      locale?: string;
+      showTimePicker?: boolean;
+      size?: 'small' | 'base' | 'large';
+    };
+  };
+  headerActionsOptions?: {
+    direction?: 'vertical' | 'horizontal';
   };
 }
 ```
@@ -180,23 +206,12 @@ Represents a filter applied to a table
 
 ```typescript
 interface ITableFilter {
-  /** The value of the filter - string for text/radio filter, string array for checkbox filter */
-  value?: string | string[];
+  /** The value of the filter - string for text/radio/datepciker filter, string array for checkbox filter, IDateSelection for datepicker filter */
+  value?: string | string[] | IDateSelection;
   /** The field to which the filter is applied */
   field: string;
-  /** The type of the filter (text, checkbox or radio) */
-  type?: 'text' | 'checkbox' | 'radio';
-}
-```
-
-Defines options for checkbox filter
-
-```typescript
-interface IFilterOption {
-  /** The value of the option */
-  value: string;
-  /** The display label of the option */
-  label?: string;
+  /** The type of the filter (text, checkbox, radio, or datepicker) */
+  type?: 'text' | 'checkbox' | 'radio' | 'datepicker';
 }
 ```
 
@@ -208,6 +223,17 @@ interface ITableSort {
   field: string;
   /** The sort direction */
   order: 'asc' | 'desc';
+}
+```
+
+Defines options for checkbox filter
+
+```typescript
+interface IFilterOption {
+  /** The value of the option */
+  value: string;
+  /** The display label of the option */
+  label?: string;
 }
 ```
 
@@ -227,6 +253,19 @@ interface ITableExportExcelColumn {
   header: string;
   field: string;
   width: number;
+}
+```
+
+Represents a group of table rows with associated metadata
+
+```typescript
+interface ITableGroup {
+  /** The value that this group represents (e.g., "Active", "Completed") */
+  groupValue: any;
+  /** The number of rows in this group */
+  groupCount: number;
+  /** The array of row data objects belonging to this group */
+  rows: any[];
 }
 ```
 

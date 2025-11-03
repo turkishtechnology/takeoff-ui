@@ -8,7 +8,7 @@ export default function Contributors() {
         <h1>Contributors</h1>
         <p style={{ color: 'var(--text-base)' }}>
           This project thrives thanks to the amazing efforts of our contributors. Every feature, fix, and idea is a testament to the power of collaboration. Thank you for helping
-          us grow and improve! <a href="contribution-guide">Click here</a> to contribute.
+          us grow and improve! <a href="docs/CONTRIBUTING">Click here</a> to contribute.
         </p>
         <div className="flex gap-2">
           <TkTooltip header="Harun Demir" description="Frontend Developer" position="top" variant="dark">

@@ -85,11 +85,10 @@ tk-radio {
   }
 }
 
-tk-radio[aria-disabled],
 tk-radio[disabled] {
   .tk-radio-container {
+    cursor: not-allowed;
     color: var(--text-sub-base);
-
     input + .mask {
       border: 2px solid var(--border-light);
       background-color: var(--background-light);
@@ -101,7 +100,7 @@ tk-radio[disabled] {
   }
 }
 
-tk-radio[aria-invalid] {
+tk-radio[invalid] {
   .tk-radio-container {
     .mask {
       border: 2px solid var(--states-danger-base);

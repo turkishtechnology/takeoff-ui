@@ -12,7 +12,7 @@ export default function DesignSystem() {
         <div className="container">
           <div className="row">
             <div className="col col--6">
-              <h1>32+ Component Ready to use</h1>
+              <h1>38 Components Ready to use</h1>
             </div>
             <div className="col col--6">
               <p className={styles.titleDesc}>Easy to create a cohesive, scalable, and unique user interface while ensuring that your project remains efficient throughout.</p>

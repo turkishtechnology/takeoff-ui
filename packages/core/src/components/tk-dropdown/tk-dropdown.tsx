@@ -2,6 +2,9 @@ import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitte
 import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -20,14 +23,13 @@ export class TkDropdown implements ComponentInterface {
   private uniqueId: string;
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
-  private windowClickHandler: (event: MouseEvent) => void;
   private cleanup;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkDropdownElement;
 
   constructor() {
     this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
   }
 
   @State() isOpen: boolean = false;
@@ -95,6 +97,13 @@ export class TkDropdown implements ComponentInterface {
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<any>;
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private clickOutsideHandler = (): void => {
+    this.isOpen = false;
+  };
+
   componentWillLoad() {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
 
@@ -107,20 +116,35 @@ export class TkDropdown implements ComponentInterface {
     }
   }
 
+  componentDidLoad(): void {
+    // Initialize click outside mixin
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.clickOutsideHandler,
+      disabled: this.disabled,
+    });
+
+    addDialogScrollListener(this.el);
+  }
+
   componentDidUpdate() {
+    // Update click outside disabled state based on disabled prop
+    this.clickOutsideMixin.updateConfig({ disabled: this.disabled });
+
     if (this.isOpen) {
       this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
         animationFrame: true,
       });
-      this.bindWindowClickListener();
     } else {
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
   }
 
   disconnectedCallback() {
-    this.unbindWindowClickListener();
+    removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   private updatePosition() {
@@ -129,7 +153,7 @@ export class TkDropdown implements ComponentInterface {
         placement: this.position,
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });
@@ -143,22 +167,6 @@ export class TkDropdown implements ComponentInterface {
 
   private getOptionLabel(item: any): string {
     return typeof item === 'object' ? item[this.optionLabelKey] : item;
-  }
-
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    const isInnerClicked = event.composedPath().some(item => item == this.el);
-    if (!isInnerClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
   }
 
   private handleItemClick(item) {

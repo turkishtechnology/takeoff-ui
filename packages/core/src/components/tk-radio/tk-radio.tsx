@@ -122,7 +122,8 @@ export class TkRadio implements ComponentInterface {
       clickedElement?.getAttribute('name')?.length > 0 &&
       clickedElement?.getAttribute('name') == this.name &&
       clickedElement?.getAttribute('data-tk-radio-id')?.length > 0 &&
-      clickedElement?.getAttribute('data-tk-radio-id') !== this.uniqueId
+      clickedElement?.getAttribute('data-tk-radio-id') !== this.uniqueId &&
+      !clickedElement?.getAttribute('disabled')
     ) {
       this.checked = false;
     }
@@ -142,7 +143,7 @@ export class TkRadio implements ComponentInterface {
     });
 
     return (
-      <Host data-tk-radio-id={this.uniqueId}>
+      <Host data-tk-radio-id={this.uniqueId} invalid={this.invalid} disabled={this.disabled}>
         <label class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
           <input type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
           <div class="mask">

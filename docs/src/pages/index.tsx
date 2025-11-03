@@ -35,7 +35,7 @@ export default function Home() {
                   }}
                   className="flex-nowrap text-[32px]"
                 >
-                  <span>Integrated in 17+ Production Environments </span>
+                  <span>Integrated in 30+ Production Environments </span>
                 </div>
               </div>
             </div>

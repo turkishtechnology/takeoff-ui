@@ -190,7 +190,7 @@ body {
 }
 
 .release-notes .release-item {
-  /*margin-bottom: 48px;*/
+  opacity: 0.2;
 }
 
 .release-notes .release-item .title {

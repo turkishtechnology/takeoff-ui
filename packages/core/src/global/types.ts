@@ -1,0 +1,1 @@
+export type CSSStyleProperties = Partial<{ [K in keyof CSSStyleDeclaration as CSSStyleDeclaration[K] extends string ? K : never]: string }>;

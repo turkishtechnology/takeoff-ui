@@ -78,11 +78,6 @@
       padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
     }
 
-    .tk-phone-input__label-title {
-      font-size: var(--desktop-label-l-size);
-      line-height: var(--desktop-label-l-line-height);
-    }
-
     .tk-phone-input__dropdown-menu {
       top: var(--spacing-12xl);
     }
@@ -102,11 +97,6 @@
       font-size: var(--desktop-label-m-base-size);
       line-height: var(--desktop-label-m-base-line-height);
       padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
-    }
-
-    .tk-phone-input__label-title {
-      font-size: var(--desktop-label-m-base-size);
-      line-height: var(--desktop-label-m-base-line-height);
     }
 
     .tk-phone-input__dropdown-menu {
@@ -130,11 +120,6 @@
       padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
     }
 
-    .tk-phone-input__label-title {
-      font-size: var(--desktop-label-s-size);
-      line-height: var(--desktop-label-s-line-height);
-    }
-
     .tk-phone-input__dropdown-menu {
       top: var(--spacing-8xl);
     }
@@ -146,8 +131,6 @@
   }
 
   &__label {
-    display: flex;
-    align-items: flex-start;
     box-sizing: border-box;
 
     &-title {
@@ -205,6 +188,10 @@
         align-items: center;
         gap: var(--spacing-xs);
         border-right: var(--spacing-px) solid var(--border-light);
+
+        &--no-dial-code {
+          padding-right: var(--input-external-label-large-label-h-padding);
+        }
       }
       &-dial-code {
         padding-right: var(--input-external-label-large-label-h-padding);

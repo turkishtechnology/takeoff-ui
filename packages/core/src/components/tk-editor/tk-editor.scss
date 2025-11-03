@@ -470,6 +470,22 @@
     }
   }
 
+  ul {
+    list-style-type: disc;
+
+    li {
+      display: list-item;
+    }
+  }
+
+  ol {
+    list-style-type: decimal;
+
+    li {
+      display: list-item;
+    }
+  }
+
   h1,
   h2,
   h3,

@@ -2,12 +2,13 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Pr
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
-import { IInputMaskOptions, IMultiIconOptions } from './interfaces';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IInputMaskOptions } from './interfaces';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import _ from 'lodash';
 import { CleaveOptions } from 'cleave.js/options';
-import { getIconElementProps } from '../../utils/icon-props';
 import { IChipOptions } from '../tk-chips/interfaces';
+import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
+import { getNestedValue } from '../../utils/object-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -156,8 +157,12 @@ export class TkInput implements ComponentInterface {
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
   protected valueChanged(newValue, oldValue) {
-    if (_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
-      this.nativeInput.value = newValue;
+    if (!_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
+      if (typeof newValue === 'object' && typeof oldValue === 'object') {
+        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
+      } else {
+        this.nativeInput.value = newValue;
+      }
     }
   }
 
@@ -227,10 +232,6 @@ export class TkInput implements ComponentInterface {
     this.nativeInput?.focus();
   }
 
-  private isMultiIconFormat(): boolean {
-    return this.icon && typeof this.icon === 'object' && ('left' in this.icon || 'right' in this.icon) && !('name' in this.icon);
-  }
-
   private validateMinMax() {
     if (this.mode === 'text' && this.min !== undefined && this.max !== undefined) {
       const numValue = parseInt(this.value as string, 10);
@@ -288,11 +289,21 @@ export class TkInput implements ComponentInterface {
     if (/[^A-Za-z0-9]/.test(password)) strength++;
     return strength;
   }
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
-  }
+
+  private clampValueByLimit = value => {
+    if (value === null || value === undefined || isNaN(value)) {
+      return null;
+    }
+
+    if (this.min !== null && this.min !== undefined && value < Number(this.min)) {
+      return Number(this.min);
+    }
+
+    if (this.max !== null && this.max !== undefined && value > Number(this.max)) {
+      return Number(this.max);
+    }
+    return value;
+  };
 
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
@@ -405,19 +416,30 @@ export class TkInput implements ComponentInterface {
   };
 
   private handleMinusButtonClick() {
-    if (!this.disabled && (this.min == undefined || Number(this.value) > Number(this.min))) {
-      this.value = Number(this.value) - 1;
-      this.tkChange.emit(this.value);
+    if (!this.disabled) {
+      const currentValue = Number(this.value) || 0;
+      const newValue = this.clampValueByLimit(currentValue - 1);
+      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+        this.value = newValue;
+        this.tkChange.emit(newValue);
+      }
     }
   }
 
   private handlePlusButtonClick() {
-    if (this.value == '' && this.min != undefined) {
-      this.value = this.min;
-      this.tkChange.emit(this.min);
-    } else if (!this.disabled && (this.max == undefined || Number(this.value) < Number(this.max))) {
-      this.value = Number(this.value) + 1;
-      this.tkChange.emit(this.value);
+    if (!this.disabled) {
+      let currentValue;
+      if (this.value === '' || this.value === null || this.value === undefined) {
+        currentValue = !_.isNil(this.min) ? Number(this.min) : 0;
+      } else {
+        currentValue = Number(this.value);
+      }
+
+      const newValue = this.clampValueByLimit(currentValue + 1);
+      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+        this.value = newValue;
+        this.tkChange.emit(newValue);
+      }
     }
   }
 
@@ -436,6 +458,16 @@ export class TkInput implements ComponentInterface {
     this.handleFormReset();
     this.tkClearClick.emit();
   }
+
+  private handleClearButtonKeyDown = (e: KeyboardEvent) => {
+    // Make clear button accessible via Space and Enter keys
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleFormReset();
+      this.tkClearClick.emit();
+    }
+  };
 
   private handleInputFocus = () => {
     this.hasFocus = true;
@@ -481,9 +513,10 @@ export class TkInput implements ComponentInterface {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
+        const isRemovable = typeof item === 'object' && item !== null && item.hasOwnProperty('removable') ? item.removable : true;
         const baseProps = {
           ...itemChipOptions,
-          removable: true,
+          removable: isRemovable,
           key: index,
           autoSelfDestroy: false,
           value: item,
@@ -491,7 +524,8 @@ export class TkInput implements ComponentInterface {
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
         };
-        const label = typeof item === 'object' ? this.getNestedValue(item, this.chipLabelKey) : String(item);
+        const label =
+          typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
         return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(item)} {...baseProps}></tk-chips>;
       });
@@ -513,7 +547,7 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}
-        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? this.getNestedValue(this.value, this.chipLabelKey) : this.value}
+        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
@@ -628,26 +662,11 @@ export class TkInput implements ComponentInterface {
     const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
     const prefixClass = classNames('tk-input-prefix-container', this.size);
 
-    // Handle icon rendering based on format
+    // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      if (this.isMultiIconFormat()) {
-        const leftIconConfig = (this.icon as IMultiIconOptions).left;
-        const rightIconConfig = (this.icon as IMultiIconOptions).right;
-        if (leftIconConfig) {
-          _leftIcon = <tk-icon {...getIconElementProps(leftIconConfig)} />;
-        }
-        if (rightIconConfig) {
-          _rightIcon = <tk-icon {...getIconElementProps(rightIconConfig)} />;
-        }
-      } else {
-        if (this.icon) {
-          if (this.iconPosition === 'left') {
-            _leftIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
-          } else {
-            _rightIcon = <tk-icon {...getIconElementProps(this.icon as string | IIconOptions)} />;
-          }
-        }
-      }
+      const { leftIcon, rightIcon } = renderIcons(this.icon, {}, this.iconPosition);
+      _leftIcon = leftIcon;
+      _rightIcon = rightIcon;
     }
 
     let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
@@ -661,7 +680,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class="tk-input" htmlFor={this.uniqueId}>
+        <label class={classNames('tk-input', { 'tk-input-clearable': showClearButton })} htmlFor={this.uniqueId}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
@@ -673,7 +692,17 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {showClearButton && <tk-button variant="neutral" type="text" icon="close" size="small" onClick={e => this.handleClearButtonClick(e)}></tk-button>}
+          {this.clearable && (
+            <tk-button
+              variant="neutral"
+              type="text"
+              icon="close"
+              size="small"
+              onClick={e => this.handleClearButtonClick(e)}
+              onKeyDown={this.handleClearButtonKeyDown}
+              class="tk-input-clear-button"
+            ></tk-button>
+          )}
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}

@@ -10,7 +10,8 @@ import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-props';
+import { getIconElementProps } from '../../utils/icon-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
@@ -22,6 +23,7 @@ import { getIconElementProps } from '../../utils/icon-props';
 })
 export class TkEditor {
   private editorRef?: HTMLDivElement;
+  private isExternalUpdate: boolean = false;
 
   @Element() el: HTMLTkEditorElement;
 
@@ -39,7 +41,6 @@ export class TkEditor {
     link?: boolean;
   } = {};
   @State() private isEmpty: boolean = false;
-  @State() private hasInitialized: boolean = false;
 
   /**
    * The value of the editor
@@ -49,6 +50,7 @@ export class TkEditor {
   @Watch('value')
   valueChanged(newValue: string) {
     if (this.editor && newValue !== this.editor.getHTML()) {
+      this.isExternalUpdate = true;
       this.editor.commands.setContent(newValue);
     }
   }
@@ -86,7 +88,7 @@ export class TkEditor {
   /**
    * The style attribute of tabs item element
    */
-  @Prop() contentStyle?: any = null;
+  @Prop() contentStyle?: CSSStyleProperties = null;
 
   /**
    * Custom extensions
@@ -253,12 +255,12 @@ export class TkEditor {
           this.isEmpty = editor.getText().length === 0;
         },
         onUpdate: ({ editor }) => {
-          if (!this.hasInitialized) {
-            this.hasInitialized = true;
-            if (editor.getText().trim() === '') {
-              return;
-            }
+          if (this.isExternalUpdate) {
+            this.isExternalUpdate = false;
+            this.isEmpty = editor.getText().length === 0;
+            return;
           }
+
           const html = editor.getHTML();
           this.value = html;
           this.tkChange.emit(html);
