@@ -11,6 +11,7 @@ import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, Hea
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
@@ -87,7 +88,7 @@ export class TkEditor {
   /**
    * The style attribute of tabs item element
    */
-  @Prop() contentStyle?: any = null;
+  @Prop() contentStyle?: CSSStyleProperties = null;
 
   /**
    * Custom extensions
