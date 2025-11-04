@@ -211,11 +211,18 @@ export class TkInput implements ComponentInterface {
 
   componentDidLoad(): void {
     this.nativeInput = this.el.querySelector('input');
-
+    if (this.mode === 'counter') {
+      this.nativeInput.value = this.clampValueByLimit(this.value);
+    }
     if (this.mode == 'text' && this.maskOptions) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
         ...this.maskOptions,
       } as CleaveOptions);
+    }
+  }
+  componentDidUpdate(): void {
+    if (this.mode === 'counter') {
+      this.nativeInput.value = this.clampValueByLimit(this.value);
     }
   }
 
@@ -290,16 +297,22 @@ export class TkInput implements ComponentInterface {
     return strength;
   }
 
-  private clampValueByLimit = value => {
+  private clampValueByLimit = (value, operation?: string) => {
     if (value === null || value === undefined || isNaN(value)) {
       return null;
     }
 
-    if (this.min !== null && this.min !== undefined && value < Number(this.min)) {
+    if (this.min !== null && this.min !== undefined && value <= Number(this.min)) {
+      if (operation == '+') {
+        return Number(this.min) + 1;
+      }
       return Number(this.min);
     }
 
-    if (this.max !== null && this.max !== undefined && value > Number(this.max)) {
+    if (this.max !== null && this.max !== undefined && value >= Number(this.max)) {
+      if (operation == '-') {
+        return Number(this.max) - 1;
+      }
       return Number(this.max);
     }
     return value;
@@ -311,6 +324,8 @@ export class TkInput implements ComponentInterface {
       let _value;
       if (this.mode == 'number') {
         _value = input.value ? Number(input.value) : null;
+      } else if (this.mode == 'counter') {
+        _value = this.clampValueByLimit(input.value);
       } else {
         _value = input.value || '';
       }
@@ -418,7 +433,7 @@ export class TkInput implements ComponentInterface {
   private handleMinusButtonClick() {
     if (!this.disabled) {
       const currentValue = Number(this.value) || 0;
-      const newValue = this.clampValueByLimit(currentValue - 1);
+      const newValue = this.clampValueByLimit(currentValue - 1, '-');
       if (newValue !== null && Number(newValue) !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
@@ -435,7 +450,7 @@ export class TkInput implements ComponentInterface {
         currentValue = Number(this.value);
       }
 
-      const newValue = this.clampValueByLimit(currentValue + 1);
+      const newValue = this.clampValueByLimit(currentValue + 1, '+');
       if (newValue !== null && Number(newValue) !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
