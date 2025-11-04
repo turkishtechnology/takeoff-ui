@@ -72,25 +72,40 @@ tk-dropdown {
   }
 
   &.large {
-    .tk-dropdown-item-holder {
-      .tk-dropdown-item {
-        font-size: var(--desktop-body-m-base-size);
+    .tk-dropdown-panel{
+      .tk-dropdown-item-holder {
+        .tk-dropdown-item {
+          font-family: var(--body-m-base-font, Geologica);
+          font-size: var(--desktop-body-m-base-size, 16px);
+          line-height: var(--body-m-base-line-height, 24px);
+          padding: 8px 8px;
+        }
       }
     }
   }
 
   &.base {
-    .tk-dropdown-item-holder {
-      .tk-dropdown-item {
-        font-size: var(--desktop-body-s-size);
+    .tk-dropdown-panel{
+      .tk-dropdown-item-holder {
+        .tk-dropdown-item {
+          font-family: var(--body-s-font, Geologica);
+          font-size: var(--desktop-body-s-size,14px);
+          line-height: var(--body-s-line-height, 20px);
+          padding: 8px 8px;
+        }
       }
     }
   }
 
   &.small {
-    .tk-dropdown-item-holder {
-      .tk-dropdown-item {
-        font-size: var(--desktop-body-xs-size);
+    .tk-dropdown-panel{
+      .tk-dropdown-item-holder {
+        .tk-dropdown-item {
+          font-family: var(--body-xs-font, Geologica);
+          font-size: var(--desktop-body-xs-size,12px);
+          line-height: var(--body-xs-line-height, 18px);
+          padding: 6px 8px;
+        }
       }
     }
   }

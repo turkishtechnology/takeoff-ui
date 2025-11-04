@@ -93,6 +93,14 @@ export class TkDropdown implements ComponentInterface {
     'bottom';
 
   /**
+   * Sets size for the dropdown panel.
+   * @defaultValue base
+   */
+  
+  @Prop() size?: 'large' | 'base' | 'small' = 'base';
+
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<any>;
@@ -223,7 +231,7 @@ export class TkDropdown implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-dropdown-container');
+    const rootClasses = classNames('tk-dropdown-container', this.size);
 
     return (
       <div class={rootClasses} data-tk-dropdown-id={this.uniqueId}>
