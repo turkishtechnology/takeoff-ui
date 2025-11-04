@@ -303,14 +303,14 @@ export class TkInput implements ComponentInterface {
     }
 
     if (this.min !== null && this.min !== undefined && value <= Number(this.min)) {
-      if (operation == '+') {
+      if (operation == 'increment') {
         return Number(this.min) + 1;
       }
       return Number(this.min);
     }
 
     if (this.max !== null && this.max !== undefined && value >= Number(this.max)) {
-      if (operation == '-') {
+      if (operation == 'decrement') {
         return Number(this.max) - 1;
       }
       return Number(this.max);
@@ -433,7 +433,7 @@ export class TkInput implements ComponentInterface {
   private handleMinusButtonClick() {
     if (!this.disabled) {
       const currentValue = Number(this.value) || 0;
-      const newValue = this.clampValueByLimit(currentValue - 1, '-');
+      const newValue = this.clampValueByLimit(currentValue - 1, 'decrement');
       if (newValue !== null && Number(newValue) !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
@@ -450,7 +450,7 @@ export class TkInput implements ComponentInterface {
         currentValue = Number(this.value);
       }
 
-      const newValue = this.clampValueByLimit(currentValue + 1, '+');
+      const newValue = this.clampValueByLimit(currentValue + 1, 'increment');
       if (newValue !== null && Number(newValue) !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
