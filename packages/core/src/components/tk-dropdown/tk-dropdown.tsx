@@ -121,15 +121,15 @@ export class TkDropdown implements ComponentInterface {
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
       handler: this.clickOutsideHandler,
-      disabled: this.disabled,
+      disabled: this.disabled || !this.isOpen,
     });
 
     addDialogScrollListener(this.el);
   }
 
   componentDidUpdate() {
-    // Update click outside disabled state based on disabled prop
-    this.clickOutsideMixin.updateConfig({ disabled: this.disabled });
+    // Update click outside disabled state based on disabled prop and open state
+    this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
       this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {

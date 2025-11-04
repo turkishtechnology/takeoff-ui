@@ -285,7 +285,7 @@ export class TkSelect implements ComponentInterface {
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
       handler: this.clickOutsideHandler,
-      disabled: this.disabled,
+      disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
     addDialogScrollListener(this.el);
@@ -301,6 +301,11 @@ export class TkSelect implements ComponentInterface {
 
   componentDidUpdate() {
     this.nativeInputRef = this.inputRef.querySelector('input');
+
+    // Update click outside mixin configuration based on current state
+    this.clickOutsideMixin?.updateConfig({
+      disabled: this.disabled || this.readonly || !this.isOpen,
+    });
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
