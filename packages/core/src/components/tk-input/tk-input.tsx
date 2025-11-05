@@ -324,8 +324,6 @@ export class TkInput implements ComponentInterface {
       let _value;
       if (this.mode == 'number') {
         _value = input.value ? Number(input.value) : null;
-      } else if (this.mode == 'counter') {
-        _value = this.clampValueByLimit(input.value);
       } else {
         _value = input.value || '';
       }
@@ -353,20 +351,10 @@ export class TkInput implements ComponentInterface {
     }
   };
 
-  private handlePaste = (ev: ClipboardEvent) => {
-    const pasted = ev.clipboardData?.getData('text');
-    if (pasted && (pasted > this.max || pasted < this.min)) {
-      ev.preventDefault();
-    }
-  };
-
   private handleInputKeyUp = (ev: KeyboardEvent) => {
     const newInput = ev.target as HTMLInputElement;
-    const newValue = newInput?.value;
-    if (newValue && newValue < this.min) {
-      this.nativeInput.value = String(this.min);
-    } else if (newValue && newValue > this.max) {
-      this.nativeInput.value = String(this.max);
+    if (this.mode === 'counter' && newInput) {
+      this.nativeInput.value = this.clampValueByLimit(newInput.value);
     }
   };
 
@@ -584,7 +572,6 @@ export class TkInput implements ComponentInterface {
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
-        onPaste={this.handlePaste}
         onKeyUp={this.handleInputKeyUp}
       />
     );
