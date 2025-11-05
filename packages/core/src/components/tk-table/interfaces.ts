@@ -1,3 +1,4 @@
+import { CSSStyleProperties } from '../../global/types';
 import { IDateSelection } from '../tk-datepicker/tk-datepicker';
 
 /**
@@ -35,7 +36,7 @@ export interface ITableColumn {
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
-  style?: any;
+  style?: CSSStyleProperties;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */

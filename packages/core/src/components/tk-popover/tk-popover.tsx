@@ -4,6 +4,7 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 import { updateArrowPosition } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -69,7 +70,7 @@ export class TkPopover implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * Emitted when the open state of the popover changes
@@ -96,7 +97,7 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
       handler: this.clickOutsideHandler,
-      disabled: this.isHover,
+      disabled: this.isHover || !this.isOpen,
     });
 
     this.triggerElement = this.el.querySelector('[slot="trigger"]');
@@ -125,8 +126,8 @@ export class TkPopover implements ComponentInterface {
   }
 
   componentDidUpdate() {
-    // Update click outside disabled state based on trigger type
-    this.clickOutsideMixin.updateConfig({ disabled: this.isHover });
+    // Update click outside disabled state based on trigger type and open state
+    this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
       const updatePosition = () => {
