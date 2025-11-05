@@ -34,6 +34,11 @@ export class TkSelect implements ComponentInterface {
   private cleanup;
   private isItemClickFlag = false;
   private clickOutsideMixin?: ClickOutsideMixin;
+  private get referenceElements(): Element[] {
+    const refArray = [this.el.querySelector(`.tk-input`)];
+    if (this.isOpen) refArray.push(this.el.querySelector(`.tk-select-panel[data-tk-select-id="${this.uniqueId}"]`));
+    return refArray;
+  }
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -283,7 +288,7 @@ export class TkSelect implements ComponentInterface {
     this.nativeInputRef = this.inputRef.querySelector('input');
 
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElements: this.referenceElements,
       handler: this.clickOutsideHandler,
       disabled: this.disabled || this.readonly || !this.isOpen,
     });

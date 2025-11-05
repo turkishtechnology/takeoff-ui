@@ -95,7 +95,7 @@ export class TkPopover implements ComponentInterface {
   componentDidLoad() {
     // Initialize click outside mixin
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElements: [this.el],
       handler: this.clickOutsideHandler,
       disabled: this.isHover || !this.isOpen,
     });

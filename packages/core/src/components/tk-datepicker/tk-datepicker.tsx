@@ -379,7 +379,7 @@ export class TkDatePicker {
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
-        referenceElement: this.el,
+        referenceElements: [this.el],
         handler: this.clickOutsideHandler,
         disabled: this.disabled || !this.isOpen,
       });

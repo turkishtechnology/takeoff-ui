@@ -3,10 +3,10 @@
  */
 export interface ClickOutsideConfig {
   /**
-   * The reference element to check clicks against.
-   * Clicks outside this element will trigger the handler.
+   * The reference element(s) to check clicks against.
+   * Clicks outside these elements will trigger the handler.
    */
-  referenceElement: HTMLElement;
+  referenceElements: Element[];
 
   /**
    * Handler function called when a click outside occurs.
@@ -25,7 +25,7 @@ export interface ClickOutsideConfig {
    * Clicks on these elements won't trigger the handler.
    * @defaultValue []
    */
-  ignoredElements?: HTMLElement[];
+  ignoredElements?: Element[];
 
   /**
    * Whether the click outside functionality is disabled.
@@ -43,7 +43,7 @@ export class ClickOutsideMixin {
   /**
    * Configuration object containing all click outside settings.
    */
-  protected config: Partial<ClickOutsideConfig> = {
+  private config: Partial<ClickOutsideConfig> = {
     useCapture: true,
     ignoredElements: [],
     disabled: false,
@@ -52,15 +52,15 @@ export class ClickOutsideMixin {
   private _isListenerActive: boolean = false;
 
   private checkConfig(): void {
-    if (!this.config.referenceElement) {
-      throw new Error('Reference element must be provided');
+    if (!this.config.referenceElements || (Array.isArray(this.config.referenceElements) && this.config.referenceElements.length === 0)) {
+      throw new Error('Reference element(s) must be provided');
     }
     if (!this.config.handler) {
       throw new Error('Handler must be provided');
     }
   }
 
-  constructor(initialConfig: Partial<ClickOutsideConfig> = {}) {
+  constructor(initialConfig: ClickOutsideConfig) {
     this.updateConfig(initialConfig);
     this.checkConfig();
   }
@@ -88,7 +88,7 @@ export class ClickOutsideMixin {
    * Binds the window click listener.
    * Should be called when the component needs to start listening for outside clicks.
    */
-  protected bindListener(): void {
+  private bindListener(): void {
     if (this.config.disabled || this._isListenerActive) return;
 
     window.addEventListener('click', this._handleWindowClick, this.config.useCapture);
@@ -99,7 +99,7 @@ export class ClickOutsideMixin {
    * Unbinds the window click listener.
    * Should be called when the component no longer needs to listen for outside clicks.
    */
-  protected unbindListener(): void {
+  private unbindListener(): void {
     if (!this._isListenerActive) return;
 
     window.removeEventListener('click', this._handleWindowClick, this.config.useCapture);
@@ -112,8 +112,10 @@ export class ClickOutsideMixin {
   private _handleWindowClick = (event: MouseEvent): void => {
     const composedPath = event.composedPath();
 
-    // Check if click is inside the reference element
-    const isInsideReference = composedPath.some(item => item === this.config.referenceElement);
+    // Check if click is inside any of the reference elements
+    const referenceElements = Array.isArray(this.config.referenceElements) ? this.config.referenceElements : [this.config.referenceElements];
+
+    const isInsideReference = referenceElements.some(refEl => composedPath.some(item => item === refEl));
 
     // Check if click is on any ignored elements
     const isOnIgnoredElement = this.config.ignoredElements?.some(ignoredEl => composedPath.some(item => item === ignoredEl));

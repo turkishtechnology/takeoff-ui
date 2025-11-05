@@ -119,7 +119,7 @@ export class TkDropdown implements ComponentInterface {
   componentDidLoad(): void {
     // Initialize click outside mixin
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElements: [this.el],
       handler: this.clickOutsideHandler,
       disabled: this.disabled || !this.isOpen,
     });
