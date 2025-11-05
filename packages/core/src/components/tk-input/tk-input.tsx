@@ -353,6 +353,23 @@ export class TkInput implements ComponentInterface {
     }
   };
 
+  private handlePaste = (ev: ClipboardEvent) => {
+    const pasted = ev.clipboardData?.getData('text');
+    if (pasted && (pasted > this.max || pasted < this.min)) {
+      ev.preventDefault();
+    }
+  };
+
+  private handleInputKeyUp = (ev: KeyboardEvent) => {
+    const newInput = ev.target as HTMLInputElement;
+    const newValue = newInput?.value;
+    if (newValue && newValue < this.min) {
+      this.nativeInput.value = String(this.min);
+    } else if (newValue && newValue > this.max) {
+      this.nativeInput.value = String(this.max);
+    }
+  };
+
   private handleInputBlur = () => {
     this.hasFocus = false;
     this.validateMinMax();
@@ -567,6 +584,8 @@ export class TkInput implements ComponentInterface {
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
+        onPaste={this.handlePaste}
+        onKeyUp={this.handleInputKeyUp}
       />
     );
   }
