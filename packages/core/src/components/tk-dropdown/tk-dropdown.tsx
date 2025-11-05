@@ -96,9 +96,7 @@ export class TkDropdown implements ComponentInterface {
    * Sets size for the dropdown panel.
    * @defaultValue base
    */
-  
   @Prop() size?: 'large' | 'base' | 'small' = 'base';
-
 
   /**
    * Emitted when the value has changed.
