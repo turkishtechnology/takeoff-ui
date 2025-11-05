@@ -324,8 +324,6 @@ export class TkInput implements ComponentInterface {
       let _value;
       if (this.mode == 'number') {
         _value = input.value ? Number(input.value) : null;
-      } else if (this.mode == 'counter') {
-        _value = this.clampValueByLimit(input.value);
       } else {
         _value = input.value || '';
       }
@@ -350,6 +348,13 @@ export class TkInput implements ComponentInterface {
 
     if (this.mode == 'password' && this.showSafetyStatus) {
       this.passwordStrength = this.calculatePasswordStrength(String(this.value));
+    }
+  };
+
+  private handleInputKeyUp = (ev: KeyboardEvent) => {
+    const newInput = ev.target as HTMLInputElement;
+    if (this.mode === 'counter' && newInput) {
+      this.nativeInput.value = this.clampValueByLimit(newInput.value);
     }
   };
 
@@ -567,6 +572,7 @@ export class TkInput implements ComponentInterface {
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
+        onKeyUp={this.handleInputKeyUp}
       />
     );
   }
