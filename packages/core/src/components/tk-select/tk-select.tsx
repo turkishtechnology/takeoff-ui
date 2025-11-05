@@ -308,8 +308,11 @@ export class TkSelect implements ComponentInterface {
     this.nativeInputRef = this.inputRef.querySelector('input');
 
     // Update click outside mixin configuration based on current state
+    console.log(this.referenceElements, this.uniqueId.slice(-3));
+
     this.clickOutsideMixin?.updateConfig({
       disabled: this.disabled || this.readonly || !this.isOpen,
+      referenceElements: this.referenceElements,
     });
 
     if (this.isOpen) {

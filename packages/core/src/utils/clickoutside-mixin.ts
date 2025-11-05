@@ -66,9 +66,12 @@ export class ClickOutsideMixin {
   }
 
   private evaluateListenerState(): void {
+    console.log(this.config.referenceElements, 'EVAL');
     if (!this.config.disabled && !this._isListenerActive) {
+      console.log(this.config.referenceElements, 'EVAL BIND');
       this.bindListener();
     } else if (this.config.disabled && this._isListenerActive) {
+      console.log(this.config.referenceElements, 'EVAL UNBIND');
       this.unbindListener();
     }
   }
@@ -89,7 +92,9 @@ export class ClickOutsideMixin {
    * Should be called when the component needs to start listening for outside clicks.
    */
   private bindListener(): void {
+    console.log(this.config.referenceElements, 'BIND');
     if (this.config.disabled || this._isListenerActive) return;
+    console.log(this.config.referenceElements, 'BIND - AFTER');
 
     window.addEventListener('click', this._handleWindowClick, this.config.useCapture);
     this._isListenerActive = true;
@@ -100,7 +105,9 @@ export class ClickOutsideMixin {
    * Should be called when the component no longer needs to listen for outside clicks.
    */
   private unbindListener(): void {
+    console.log(this.config.referenceElements, 'UNBIND');
     if (!this._isListenerActive) return;
+    console.log(this.config.referenceElements, 'UNBIND - AFTERCHECK');
 
     window.removeEventListener('click', this._handleWindowClick, this.config.useCapture);
     this._isListenerActive = false;
