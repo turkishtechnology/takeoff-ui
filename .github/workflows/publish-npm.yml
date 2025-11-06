@@ -3,38 +3,38 @@ name: Publish to NPM
 on:
   push:
     tags:
-      - '*.*.*'  # 0.5.2, 1.0.0 gibi semantic version taglerinde tetiklenir
+      - '*.*.*' # 0.5.2, 1.0.0 gibi semantic version taglerinde tetiklenir
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: read
-      id-token: write  # NPM provenance için gerekli
-    
+      id-token: write # NPM provenance için gerekli
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.12.2'
           registry-url: 'https://registry.npmjs.org'
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.8.1
-      
+
       - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      
+
       - name: Setup pnpm cache
         uses: actions/cache@v4
         with:
@@ -42,13 +42,13 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build packages
         run: pnpm run build
-      
+
       - name: Publish to NPM
         run: |
           pnpm publish \
@@ -62,3 +62,17 @@ jobs:
             --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Clean Docusaurus cache
+        run: pnpm run clear:docs
+
+      - name: Build Docusaurus
+        run: pnpm run build:docs
+
+      - name: Deploy Docusaurus
+        working-directory: ./docs/build
+        run: |
+          pnpm install -g vercel
+          vercel --token=$VERCEL_TOKEN --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
