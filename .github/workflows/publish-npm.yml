@@ -75,4 +75,4 @@ jobs:
           pnpm install -g vercel
           vercel --token=$VERCEL_TOKEN --prod
         env: 
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN}}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
