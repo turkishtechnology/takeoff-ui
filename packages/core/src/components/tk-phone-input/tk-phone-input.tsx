@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
@@ -32,6 +33,7 @@ export class TkPhoneInput implements ComponentInterface {
   private searchInput!: HTMLTkInputElement;
   private cleanup;
   private panelRef?: HTMLDivElement;
+  private uniqueId = uuidv4();
 
   /**
    * The list of countries to display in the dropdown.
@@ -409,7 +411,7 @@ export class TkPhoneInput implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
       label = (
-        <label htmlFor="phone-input" class="tk-phone-input__label">
+        <label htmlFor={this.uniqueId} class="tk-phone-input__label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -507,8 +509,8 @@ export class TkPhoneInput implements ComponentInterface {
   private renderPhoneInput() {
     return (
       <input
+        id={this.uniqueId}
         type="tel"
-        id="phone-input"
         class="tk-phone-input__input"
         autoComplete="off"
         placeholder={this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
