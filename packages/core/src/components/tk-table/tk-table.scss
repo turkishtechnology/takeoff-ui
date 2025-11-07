@@ -251,6 +251,7 @@
                 gap: 8px;
 
                 .tk-table-group-value {
+                  text-wrap: nowrap;
                   font-size: var(--desktop-body-m-size);
                   color: var(--text-darkest);
                 }
