@@ -70,9 +70,12 @@ jobs:
         run: pnpm run build:docs
 
       - name: Deploy Docusaurus
-        working-directory: ./docs/build
+        working-directory: ./docs
         run: |
           pnpm install -g vercel
+          echo "Deploying to project: $VERCEL_PROJECT_ID in org: $VERCEL_ORG_ID"
           vercel --token=$VERCEL_TOKEN --prod --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
