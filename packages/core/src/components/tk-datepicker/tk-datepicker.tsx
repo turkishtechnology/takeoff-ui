@@ -32,7 +32,7 @@ export class TkDatePicker {
   private debounceTimer: number;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private cleanup;
   private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
@@ -41,10 +41,6 @@ export class TkDatePicker {
   @Element() el: HTMLTkDatepickerElement;
 
   @AttachInternals() internals: ElementInternals;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-  }
 
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
