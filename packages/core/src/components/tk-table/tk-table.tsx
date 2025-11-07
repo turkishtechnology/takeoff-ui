@@ -601,6 +601,18 @@ export class TkTable implements ComponentInterface {
   }
 
   /**
+   * Applies the current filters to the data for client side pagination
+   */
+  @Method()
+  async runFilters() {
+    if (this.paginationMethod !== 'server') {
+      this.currentPage = 1;
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.generateRenderData(tmpData, 1, true);
+    }
+  }
+
+  /**
    * Groups table data by the specified column field
    * Creates group header rows that display the unique value and count of items in that group.
    * For example, if you have a 'status' column with values 'Open' and 'Closed',
