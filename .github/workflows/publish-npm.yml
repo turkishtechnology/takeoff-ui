@@ -63,12 +63,15 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Deploy Docusaurus to Vercel
-        working-directory: ./docs
+      - name: Build Docusaurus
+        run: pnpm run build:docs
+
+      - name: Deploy to Vercel
         run: |
           pnpm install -g vercel
-          echo "Deploying to project: $VERCEL_PROJECT_ID in org: $VERCEL_ORG_ID"
-          vercel --token=$VERCEL_TOKEN --prod --yes
+          cd docs
+          echo "Deploying pre-built docs to Vercel"
+          vercel deploy --prebuilt --token=$VERCEL_TOKEN --prod
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
