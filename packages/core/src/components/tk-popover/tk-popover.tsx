@@ -32,7 +32,6 @@ export class TkPopover implements ComponentInterface {
   @State() isOpen: boolean = false;
   @Watch('isOpen')
   isOpenChanged() {
-    console.log('isOpen', this.isOpen);
     this.tkChange.emit(this.isOpen);
   }
 
