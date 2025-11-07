@@ -73,6 +73,6 @@ jobs:
         working-directory: ./docs/build
         run: |
           pnpm install -g vercel
-          npx vercel --token=$VERCEL_TOKEN --prod --yes
+          vercel --token=$VERCEL_TOKEN --prod --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
