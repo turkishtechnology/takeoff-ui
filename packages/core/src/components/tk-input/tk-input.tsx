@@ -608,7 +608,7 @@ export class TkInput implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label class="label">
+        <label htmlFor={this.uniqueId} class="label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -690,7 +690,7 @@ export class TkInput implements ComponentInterface {
       _rightIcon = rightIcon;
     }
 
-    let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
+    const showClearButton = this.clearable && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
 
     if (this.el.classList.contains('tk-select-input')) {
       this.readOnly = !this.el.classList.contains('editable-select');
@@ -701,7 +701,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class={classNames('tk-input', { 'tk-input-clearable': showClearButton })} htmlFor={this.uniqueId}>
+        <div class="tk-input">
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
@@ -713,7 +713,7 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {this.clearable && (
+          {showClearButton && (
             <tk-button
               variant="neutral"
               type="text"
@@ -727,7 +727,7 @@ export class TkInput implements ComponentInterface {
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}
-        </label>
+        </div>
         {safetyStatus}
         {this.renderHint()}
       </div>
