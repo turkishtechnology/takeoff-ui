@@ -1,4 +1,5 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
+import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 
 /**
@@ -16,6 +17,7 @@ import classNames from 'classnames';
 export class TkToggle implements ComponentInterface {
   private tabindex?: number;
   private nativeInput?: HTMLInputElement;
+  private uniqueId = uuidv4();
 
   @Element() el: HTMLTkToggleElement;
 
@@ -46,12 +48,6 @@ export class TkToggle implements ComponentInterface {
    * @defaultValue check
    */
   @Prop() icon: string = 'check';
-
-  /**
-   * The ID of the input element.
-   * @defaultValue ''
-   */
-  @Prop() inputId: string = '';
 
   /**
    * The name attribute of the toggle.
@@ -153,7 +149,7 @@ export class TkToggle implements ComponentInterface {
   private renderInput(): HTMLInputElement {
     return (
       <input
-        id={this.inputId}
+        id={this.uniqueId}
         ref={input => (this.nativeInput = input)}
         class="tk-toggle-input"
         type="checkbox"
@@ -179,7 +175,7 @@ export class TkToggle implements ComponentInterface {
 
     return (
       <div class={rootClasses}>
-        <label htmlFor={this.inputId}>
+        <label htmlFor={this.uniqueId}>
           <div class="tk-toggle-input-container">
             {this.renderInput()}
             <span class="tk-toggle-thumb">{this.showIcon && <span class="material-symbols-outlined tk-toggle-thumb-icon">{this.icon}</span>}</span>
