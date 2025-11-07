@@ -43,8 +43,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # - name: Install dependencies
+      #   run: pnpm install --frozen-lockfile
 
       - name: Build packages
         run: pnpm run build
@@ -63,13 +63,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Clean Docusaurus cache
-        run: pnpm run clear:docs
-
-      - name: Build Docusaurus
-        run: pnpm run build:docs
-
-      - name: Deploy Docusaurus
+      - name: Deploy Docusaurus to Vercel
         working-directory: ./docs
         run: |
           pnpm install -g vercel
