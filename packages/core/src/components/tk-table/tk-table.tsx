@@ -710,7 +710,6 @@ export class TkTable implements ComponentInterface {
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
     let _data = [...data];
     this.currentPage = currentPage;
-    this.totalItems = _data?.length;
 
     // Clear grouping when generating render data with new dataset
     if (!this.groupByColumnField) {
@@ -733,6 +732,7 @@ export class TkTable implements ComponentInterface {
       const startIndex = (this.currentPage - 1) * this.rowsPerPage;
       const endIndex = startIndex + this.rowsPerPage;
       this.renderData = _data.slice(startIndex, endIndex);
+      this.totalItems = _data?.length;
     } else {
       this.renderData = _data;
     }
