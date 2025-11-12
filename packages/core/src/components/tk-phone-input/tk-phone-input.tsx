@@ -427,11 +427,11 @@ export class TkPhoneInput implements ComponentInterface {
   private renderCountrySelector() {
     return (
       <div class="tk-phone-input__dropdown">
-        {this.renderDropdownButton()}
+        {this.createDropdownButton()}
         {this.isDropdownOpen && (
           <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
-            {this.renderDropdownSearch()}
-            {this.renderDropdownList()}
+            {this.createDropdownSearch()}
+            {this.createDropdownList()}
           </div>
         )}
       </div>
@@ -441,7 +441,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the dropdown button for selecting a country.
    */
-  private renderDropdownButton() {
+  private createDropdownButton() {
     const selectedClass = classNames('tk-phone-input__dropdown-button-selected', {
       'tk-phone-input__dropdown-button-selected--no-dial-code': !this.selectedCountry.dialCode,
     });
@@ -464,7 +464,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the search input for filtering countries in the dropdown.
    */
-  private renderDropdownSearch() {
+  private createDropdownSearch() {
     return (
       <tk-input
         class="tk-phone-input__dropdown-menu-search"
@@ -483,7 +483,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the dropdown list of countries.
    */
-  private renderDropdownList() {
+  private createDropdownList() {
     return (
       <ul class="tk-phone-input__dropdown-menu-list">
         {this.getFilteredCountries().map(country => (
