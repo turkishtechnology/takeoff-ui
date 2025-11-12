@@ -20,17 +20,13 @@ import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 })
 export class TkDropdown implements ComponentInterface {
   private hasEmptyDataSlot: boolean = false;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
   private cleanup;
   private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkDropdownElement;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-  }
 
   @State() isOpen: boolean = false;
 

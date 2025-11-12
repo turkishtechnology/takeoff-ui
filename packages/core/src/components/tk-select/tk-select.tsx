@@ -28,7 +28,7 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private filterDebounceTimeout;
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
@@ -40,7 +40,6 @@ export class TkSelect implements ComponentInterface {
   @AttachInternals() internals: ElementInternals;
 
   constructor() {
-    this.uniqueId = uuidv4();
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
