@@ -98,20 +98,20 @@ ${docs} \n
     apiContent += `| Name | Type | Default | Description |\n| ---- | ---- | ------- | ----------- |\n`;
     props.forEach(prop => {
       const hasImportedType = prop.complexType?.references && Object.keys(prop.complexType.references).length > 0;
-      
+
       const isCSSStyleProperties = prop.complexType?.original === 'CSSStyleProperties';
-      
+
       let propType;
       if (isCSSStyleProperties) {
         propType = 'CSSStyleProperties';
       } else {
         propType = prop.type;
       }
-      
+
       if (hasImportedType && !isCSSStyleProperties) {
         propType = wrapTypeWithLink(propType, prop.complexType.references, tag);
       }
-      
+
       apiContent += `| <TkBadge label="${prop.name}" variant="primary" size="large" type="filledlight"/> | <code>${
         propType?.indexOf('{') > -1 ? '`' + clearStringObject(propType, tag, prop.name) + '`' : clearStringObject(propType, tag, prop.name)
       }</code> | ${
@@ -151,26 +151,24 @@ ${docs} \n
   const arrKeys = typeLibraryAllKeys.filter(key => key.includes(tag));
   const componentInterfaces = arrKeys.filter(key => {
     const typeData = data.typeLibrary[key];
-    return typeData.path && typeData.path.startsWith(`src/components/${tag}/`) && 
-           typeData.declaration && 
-           typeData.declaration.startsWith('export interface');
+    return typeData.path && typeData.path.startsWith(`src/components/${tag}/`) && typeData.declaration && typeData.declaration.startsWith('export interface');
   });
 
   if (componentInterfaces.length > 0) {
     apiContent += `\n### Interfaces\n\n`;
-    
+
     componentInterfaces.forEach(key => {
       const typeData = data.typeLibrary[key];
       const typeName = key.split('::')[1];
       const slug = createSlug(typeName);
       const declaration = typeData.declaration;
-      
+
       apiContent += `#### <span id="${slug}">${typeName}</span>\n\n`;
-      
+
       if (typeData.docstring) {
         apiContent += typeData.docstring + '\n\n';
       }
-      
+
       apiContent += `\`\`\`typescript\n${declaration.replace('export ', '')}\n\`\`\`\n\n`;
     });
   }

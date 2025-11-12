@@ -5,7 +5,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Mode = () => {
-    const reactCode = `import { TkButton, TkInput } from '@takeoff-ui/react';
+  const reactCode = `import { TkButton, TkInput } from '@takeoff-ui/react';
   import { showPersistentToast, IToast } from '@takeoff-ui/core';
   import React from 'react';
   
@@ -59,7 +59,7 @@ const Mode = () => {
       <div className="basis-3/5">{ExampleForm}</div>
     </div>
   );`;
-  
+
   const vueCode = `<script setup>
   import { TkButton, TkInput } from '@takeoff-ui/vue';
   import { showPersistentToast } from '@takeoff-ui/core';
@@ -113,7 +113,7 @@ const Mode = () => {
       </div>
     </div>
   </template>`;
-  
+
   const angularCode = `import { Component } from '@angular/core';
   import { showPersistentToast } from '@takeoff-ui/core';
   
@@ -183,9 +183,9 @@ const Mode = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  handleMultiplePersistent('top-right', 'info', 'persistent-info');
-};
+    e.preventDefault();
+    handleMultiplePersistent('top-right', 'info', 'persistent-info');
+  };
 
   const ExampleForm = (
     <form onSubmit={handleSubmit}>
@@ -209,11 +209,7 @@ const Mode = () => {
         <TkButton mode="button" label="Button"></TkButton>
       </div>
       <div className="basis-1/5">
-        <TkButton 
-        mode="link" 
-        label="Link" 
-        href="https://github.com/turkishtechnology/takeoff-ui" 
-        target="_blank"></TkButton>
+        <TkButton mode="link" label="Link" href="https://github.com/turkishtechnology/takeoff-ui" target="_blank"></TkButton>
       </div>
       <div className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-gray-300"></div>
       <div className="basis-3/5">{ExampleForm}</div>
