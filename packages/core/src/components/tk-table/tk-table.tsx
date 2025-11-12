@@ -1050,6 +1050,9 @@ export class TkTable implements ComponentInterface {
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
       allCheckbox.value = selectedValues.length === column.filterOptions.length;
+      if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
+        allCheckbox.indeterminate = true;
+      }
       checkboxWrapper.appendChild(allCheckbox);
       allCheckbox.addEventListener('tk-change', (e: any) => {
         const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
@@ -1062,6 +1065,7 @@ export class TkTable implements ComponentInterface {
         } else {
           selectedValues.length = 0;
         }
+        allCheckbox.indeterminate = false;
       });
 
       const divider = document.createElement('tk-divider');
@@ -1077,6 +1081,22 @@ export class TkTable implements ComponentInterface {
         const checkbox = document.createElement('tk-checkbox');
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
+
+        checkbox.addEventListener('tk-change', () => {
+          const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
+          const visibleCheckboxes = allItemCheckboxes.filter(
+            cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
+          );
+          const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
+          const anySelected = visibleCheckboxes.some(cb => cb.value);
+          allCheckbox.value = allSelected;
+
+          if (!allSelected && anySelected) {
+            allCheckbox.indeterminate = true;
+          } else {
+            allCheckbox.indeterminate = false;
+          }
+        });
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
