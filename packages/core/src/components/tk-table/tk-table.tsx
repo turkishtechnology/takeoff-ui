@@ -449,7 +449,7 @@ export class TkTable implements ComponentInterface {
           _columns
             .filter(col => !options.ignoreColumnsFields?.includes(col.field))
             .forEach(col => {
-              rowData[col.field] = getNestedValue(item, col.field) || '';
+              rowData[col.field] = getNestedValue(item, col.field) ?? '';
             });
 
           return rowData;
