@@ -313,7 +313,6 @@ export class TkSelect implements ComponentInterface {
         });
       }
     } else {
-      this.panelRef?.remove();
       this.cleanup && this.cleanup();
     }
   }
@@ -990,10 +989,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private renderDropdown() {
-    if (!this.isOpen) return null;
     return (
-      <div class="tk-select-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
+      <div class={classNames('tk-select-panel', { 'tk-select-panel--hidden': !this.isOpen })} ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
         <div class="dropdown-item-holder">
+          <slot name="select-panel"></slot>
           {this.loading ? (
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (

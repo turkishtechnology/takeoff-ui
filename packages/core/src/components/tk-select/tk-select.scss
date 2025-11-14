@@ -13,6 +13,12 @@ tk-select {
     z-index: 800;
     box-shadow: var(--effect-1-default-sm);
 
+    &--hidden {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .dropdown-item-holder {
       margin: 8px;
       display: flex;
