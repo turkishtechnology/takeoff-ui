@@ -416,7 +416,7 @@ export class TkTable implements ComponentInterface {
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
         body: _data.map(
-          row => this.columns.map(col => getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
+          row => this.columns.map(col => getNestedValue(row, col.field) ?? ''), // Her sütunun değerini dinamik olarak alır
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
@@ -464,7 +464,7 @@ export class TkTable implements ComponentInterface {
       link.click();
     } else if (options.type == 'csv') {
       const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) || '').join(',')).join('\n');
+      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) ?? '').join(',')).join('\n');
       const csvContent = headers + '\n' + rows;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
