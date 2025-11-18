@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
-import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom';
+import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { updateArrowPosition } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
@@ -129,21 +129,11 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
-      const updatePosition = () => {
-        if (this.isOpen) {
-          requestAnimationFrame(() => this.updatePosition());
-        }
-      };
-
-      window.addEventListener('scroll', updatePosition, { passive: true });
-      window.addEventListener('resize', updatePosition, { passive: true });
-
-      this.cleanup = () => {
-        window.removeEventListener('scroll', updatePosition);
-        window.removeEventListener('resize', updatePosition);
-      };
-
-      this.updatePosition();
+      if (this.isOpen) {
+        this.cleanup = autoUpdate(this.triggerElement, this.popoverElement, () => this.updatePosition(), {
+          animationFrame: true,
+        });
+      }
     } else {
       this.cleanup && this.cleanup();
     }
