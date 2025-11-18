@@ -57,7 +57,7 @@ export class TkTooltip implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.tooltipElement) {
-      updateArrowPosition(this.arrowElement);
+      updateArrowPosition(this.arrowElement, this.triggerElement, this.tooltipElement, this.position);
     }
   }
   /**
@@ -117,7 +117,7 @@ export class TkTooltip implements ComponentInterface {
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      updateArrowPosition(this.arrowElement, placement);
+      updateArrowPosition(this.arrowElement, this.triggerElement, this.tooltipElement, placement);
     });
   }
 

@@ -56,7 +56,7 @@ export class TkPopover implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.popoverElement) {
-      updateArrowPosition(this.arrowElement);
+      updateArrowPosition(this.arrowElement, this.triggerElement, this.popoverElement, this.position);
     }
   }
 
@@ -174,7 +174,7 @@ export class TkPopover implements ComponentInterface {
         top: arrowY != null ? `${arrowY}px` : '',
       });
 
-      updateArrowPosition(this.arrowElement, placement);
+      updateArrowPosition(this.arrowElement, this.triggerElement, this.popoverElement, placement);
     });
   }
 
