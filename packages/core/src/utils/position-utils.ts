@@ -19,7 +19,7 @@ export const updateArrowPosition = (arrowElement: HTMLElement, placement?: strin
     case 'top':
       applyStyles(arrowElement, {
         bottom: '-5px',
-        left: '50%',
+        left: 'calc(50% - 4.5px)',
         borderTop: 'none',
         borderLeft: 'none',
       });
@@ -44,7 +44,7 @@ export const updateArrowPosition = (arrowElement: HTMLElement, placement?: strin
     case 'bottom':
       applyStyles(arrowElement, {
         top: '-5px',
-        left: '50%',
+        left: 'calc(50% - 4.5px)',
         borderBottom: 'none',
         borderRight: 'none',
       });
@@ -69,7 +69,7 @@ export const updateArrowPosition = (arrowElement: HTMLElement, placement?: strin
     case 'left':
       applyStyles(arrowElement, {
         right: '-5px',
-        top: '50%',
+        top: 'calc(50% - 4.5px)',
         borderLeft: 'none',
         borderBottom: 'none',
       });
@@ -94,7 +94,7 @@ export const updateArrowPosition = (arrowElement: HTMLElement, placement?: strin
     case 'right':
       applyStyles(arrowElement, {
         left: '-5px',
-        top: '50%',
+        top: 'calc(50% - 4.5px)',
         borderRight: 'none',
         borderTop: 'none',
       });
