@@ -804,6 +804,14 @@ export class TkTable implements ComponentInterface {
     // Finally update the state
     this.isFilterOpen = false;
   }
+  // Checks if all selectable rows are selected
+  private isAllRowsSelected(): boolean {
+    if (!Array.isArray(this.selection)) return false;
+    const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
+    if (selectableRows.length === 0) return false;
+    if (this.selection.length < selectableRows.length) return false;
+    return selectableRows.every(row => this.selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
+  }
 
   private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
     if (!this.isFilterOpen) {
@@ -902,11 +910,13 @@ export class TkTable implements ComponentInterface {
       tmpSelection = tmpSelection.filter(item => item[this.dataKey] !== row[this.dataKey]);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
+      this.refSelectAll.indeterminate = true;
     } else if (isSelect == true && !hasSelect) {
       // seçili değilse ve eklenmek isteniyor ise
       tmpSelection.push(row);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
+      this.refSelectAll.indeterminate = true;
     }
   }
 
@@ -1040,6 +1050,9 @@ export class TkTable implements ComponentInterface {
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
       allCheckbox.value = selectedValues.length === column.filterOptions.length;
+      if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
+        allCheckbox.indeterminate = true;
+      }
       checkboxWrapper.appendChild(allCheckbox);
       allCheckbox.addEventListener('tk-change', (e: any) => {
         const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
@@ -1052,6 +1065,7 @@ export class TkTable implements ComponentInterface {
         } else {
           selectedValues.length = 0;
         }
+        allCheckbox.indeterminate = false;
       });
 
       const divider = document.createElement('tk-divider');
@@ -1067,6 +1081,22 @@ export class TkTable implements ComponentInterface {
         const checkbox = document.createElement('tk-checkbox');
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
+
+        checkbox.addEventListener('tk-change', () => {
+          const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
+          const visibleCheckboxes = allItemCheckboxes.filter(
+            cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
+          );
+          const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
+          const anySelected = visibleCheckboxes.some(cb => cb.value);
+          allCheckbox.value = allSelected;
+
+          if (!allSelected && anySelected) {
+            allCheckbox.indeterminate = true;
+          } else {
+            allCheckbox.indeterminate = false;
+          }
+        });
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
@@ -1831,9 +1861,10 @@ export class TkTable implements ComponentInterface {
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
         >
           <tk-checkbox
-            value={Array.isArray(this.selection) && this.selection.length === this.renderData.length && this.renderData.length > 0}
+            value={this.isAllRowsSelected()}
             disabled={!(this.renderData.length > 0)}
             ref={el => (this.refSelectAll = el)}
+            indeterminate={Array.isArray(this.selection) && this.selection.length > 0 && !this.isAllRowsSelected()}
             onTk-change={e => this.handleSelectAll(e.detail)}
           ></tk-checkbox>
         </th>
