@@ -279,7 +279,7 @@ export class TkDialog implements ComponentInterface {
     const dialogClasses = classNames('tk-dialog', `tk-dialog-${this.variant}`);
     const rootProps = {
       'class': dialogClasses,
-      'style': { ...this.containerStyle },
+      'style': { display: 'flex', flexDirection: 'column', ...this.containerStyle },
       'role': 'dialog',
       'aria-modal': true,
     };
