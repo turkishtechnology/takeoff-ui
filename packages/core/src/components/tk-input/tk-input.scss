@@ -192,6 +192,7 @@ tk-input.tk-table-input {
     .tk-input {
       gap: var(--input-external-label-large-input-gap);
       height: 48px;
+      padding-inline: var(--input-external-label-large-input-h-padding);
 
       i,
       .counter-icon {
@@ -201,7 +202,7 @@ tk-input.tk-table-input {
       }
 
       input {
-        padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+        padding-block: var(--input-external-label-large-input-v-padding);
         font-size: var(--desktop-body-m-base-size);
         line-height: var(--desktop-body-m-base-line-height);
       }
@@ -218,6 +219,7 @@ tk-input.tk-table-input {
     .tk-input {
       gap: var(--input-external-label-base-input-gap);
       height: 40px;
+      padding-inline: var(--input-external-label-base-input-h-padding);
 
       i {
         font-size: var(--input-external-label-base-icon-size);
@@ -226,7 +228,7 @@ tk-input.tk-table-input {
       }
 
       input {
-        padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
+        padding-block: var(--input-external-label-base-input-v-padding);
         font-size: var(--desktop-body-s-size);
         line-height: var(--desktop-body-s-line-height);
       }
@@ -243,6 +245,7 @@ tk-input.tk-table-input {
     .tk-input {
       gap: var(--input-external-label-small-input-gap);
       height: 32px;
+      padding-inline: var(--input-external-label-small-input-h-padding);
 
       i {
         font-size: var(--input-external-label-small-icon-size);
@@ -251,7 +254,7 @@ tk-input.tk-table-input {
       }
 
       input {
-        padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
+        padding-block: var(--input-external-label-small-input-v-padding);
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-body-xs-line-height);
       }
