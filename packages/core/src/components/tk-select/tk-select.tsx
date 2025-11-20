@@ -877,7 +877,7 @@ export class TkSelect implements ComponentInterface {
           children = (
             <Fragment>
               <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
-              <div innerHTML={this.optionHtml(item)}></div>
+              <div class="multiple-option-content" innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
