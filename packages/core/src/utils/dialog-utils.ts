@@ -23,21 +23,20 @@ const handleDialogScroll = (el: HTMLElement) => () => {
 export const addDialogScrollListener = (el: HTMLElement) => {
   const dialog = findDialogHost(el);
   if (!dialog) return;
-  const content = dialog.querySelector('.tk-dialog-content');
-  if (content) {
-    const handler = handleDialogScroll(el);
-    (el as any)._dialogScrollHandler = handler;
-    content.addEventListener('scroll', handler);
-  }
+  const handler = handleDialogScroll(el);
+  (el as any)._dialogScrollHandler = handler;
+
+  const root = dialog.querySelector('.tk-dialog');
+  if (root) root.addEventListener('scroll', handler, { capture: true, passive: true });
 };
 
 export const removeDialogScrollListener = (el: HTMLElement) => {
   const dialog = findDialogHost(el);
   if (!dialog) return;
-  const content = dialog.querySelector('.tk-dialog-content');
   const handler = (el as any)._dialogScrollHandler;
-  if (content && handler) {
-    content.removeEventListener('scroll', handler);
+  const root = dialog.querySelector('.tk-dialog');
+  if (handler && root) {
+    root.removeEventListener('scroll', handler, { capture: true } as any);
     delete (el as any)._dialogScrollHandler;
   }
 };
