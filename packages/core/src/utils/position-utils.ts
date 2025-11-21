@@ -1,119 +1,97 @@
-import { applyStyles, resetBorderStyles } from './style-utils';
+import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 
-/**
- * Updates arrow position based on placement side
- * @param arrowElement - The arrow element to position
- * @param side - The side where the arrow should be positioned
- */
-export const updateArrowPosition = (arrowElement: HTMLElement, placement?: string) => {
-  // Reset all positions and borders
+import type { Placement } from '@floating-ui/dom';
+import { applyStyles } from './style-utils';
+
+export interface FloatingElementOptions {
+  placement: Placement;
+  offset?: number;
+  outSideOffset?: number;
+  arrowSize?: number;
+}
+
+function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement: HTMLElement, options: FloatingElementOptions) {
+  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9 } = options;
+
   applyStyles(arrowElement, {
-    top: '',
-    bottom: '',
-    left: '',
-    right: '',
+    position: 'absolute',
+    width: `${arrowSize}px`,
+    height: `${arrowSize}px`,
+    background: 'inherit',
+    border: `1px solid`,
+    borderColor: `inherit`,
+    transform: 'rotate(45deg)',
+    zIndex: '1300',
   });
-  resetBorderStyles(arrowElement);
 
-  switch (placement) {
-    case 'top':
-      applyStyles(arrowElement, {
-        bottom: '-5px',
-        left: '50%',
-        borderTop: 'none',
-        borderLeft: 'none',
-      });
-      break;
-    case 'top-start':
-      applyStyles(arrowElement, {
-        bottom: '-5px',
-        left: '12px',
-        borderTop: 'none',
-        borderLeft: 'none',
-      });
-      break;
-    case 'top-end':
-      applyStyles(arrowElement, {
-        bottom: '-5px',
-        right: '12px',
-        borderTop: 'none',
-        borderLeft: 'none',
-      });
-      break;
+  return computePosition(triggerElement, floatingElement, {
+    strategy: 'fixed',
+    placement,
+    middleware: [offset(off), flip(), shift(), arrow({ element: arrowElement })],
+  }).then(({ x, y, middlewareData, placement }) => {
+    floatingElement.style.left = `${x}px`;
+    floatingElement.style.top = `${y}px`;
 
-    case 'bottom':
-      applyStyles(arrowElement, {
-        top: '-5px',
-        left: '50%',
-        borderBottom: 'none',
-        borderRight: 'none',
-      });
-      break;
-    case 'bottom-start':
-      applyStyles(arrowElement, {
-        top: '-5px',
-        left: '12px',
-        borderBottom: 'none',
-        borderRight: 'none',
-      });
-      break;
-    case 'bottom-end':
-      applyStyles(arrowElement, {
-        top: '-5px',
-        right: '12px',
-        borderBottom: 'none',
-        borderRight: 'none',
-      });
-      break;
+    const side = placement.split('-')[0];
+    const reverseSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side];
 
-    case 'left':
-      applyStyles(arrowElement, {
-        right: '-5px',
-        top: '50%',
-        borderLeft: 'none',
-        borderBottom: 'none',
+    if (middlewareData.arrow) {
+      const { x: ax, y: ay } = middlewareData.arrow;
+      arrowElement.setAttribute('data-side', side);
+      Object.assign(arrowElement.style, {
+        left: ax != null ? `${ax}px` : '',
+        top: ay != null ? `${ay}px` : '',
+        right: '',
+        bottom: '',
+        [reverseSide]: `-${outSideOffset}px`,
       });
-      break;
-    case 'left-start':
-      applyStyles(arrowElement, {
-        right: '-5px',
-        top: '12px',
-        borderLeft: 'none',
-        borderBottom: 'none',
-      });
-      break;
-    case 'left-end':
-      applyStyles(arrowElement, {
-        right: '-5px',
-        bottom: '12px',
-        borderLeft: 'none',
-        borderBottom: 'none',
-      });
-      break;
+    }
 
-    case 'right':
-      applyStyles(arrowElement, {
-        left: '-5px',
-        top: '50%',
-        borderRight: 'none',
-        borderTop: 'none',
-      });
-      break;
-    case 'right-start':
-      applyStyles(arrowElement, {
-        left: '-5px',
-        top: '12px',
-        borderRight: 'none',
-        borderTop: 'none',
-      });
-      break;
-    case 'right-end':
-      applyStyles(arrowElement, {
-        left: '-5px',
-        bottom: '12px',
-        borderRight: 'none',
-        borderTop: 'none',
-      });
-      break;
-  }
-};
+    switch (side) {
+      case 'top':
+        applyStyles(arrowElement, {
+          borderTop: 'none',
+          borderLeft: 'none',
+        });
+        break;
+      case 'bottom':
+        applyStyles(arrowElement, {
+          borderBottom: 'none',
+          borderRight: 'none',
+        });
+        break;
+
+      case 'left':
+        applyStyles(arrowElement, {
+          borderLeft: 'none',
+          borderBottom: 'none',
+        });
+        break;
+
+      case 'right':
+        applyStyles(arrowElement, {
+          borderRight: 'none',
+          borderTop: 'none',
+        });
+        break;
+    }
+    return placement;
+  });
+}
+
+export function floatingElementAutoUpdate(
+  triggerElement: HTMLElement,
+  floatingElement: HTMLElement,
+  arrowElement: HTMLElement,
+  options: FloatingElementOptions,
+  handlePlacement?: (placement: string) => void,
+) {
+  return autoUpdate(
+    triggerElement,
+    floatingElement,
+    () => {
+      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement && handlePlacement(position));
+    },
+    { animationFrame: true },
+  );
+}

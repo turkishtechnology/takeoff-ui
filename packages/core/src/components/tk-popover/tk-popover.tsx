@@ -1,8 +1,7 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
-import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
-import { updateArrowPosition } from '../../utils/position-utils';
-import { applyStyles } from '../../utils/style-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
+
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { CSSStyleProperties } from '../../global/types';
 
@@ -56,7 +55,7 @@ export class TkPopover implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.popoverElement) {
-      updateArrowPosition(this.arrowElement);
+      this.updatePosition();
     }
   }
 
@@ -129,11 +128,7 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
-      if (this.isOpen) {
-        this.cleanup = autoUpdate(this.triggerElement, this.popoverElement, () => this.updatePosition(), {
-          animationFrame: true,
-        });
-      }
+      this.updatePosition();
     } else {
       this.cleanup && this.cleanup();
     }
@@ -148,24 +143,7 @@ export class TkPopover implements ComponentInterface {
   }
 
   private updatePosition() {
-    computePosition(this.triggerElement, this.popoverElement, {
-      strategy: 'fixed',
-      placement: this.position,
-      middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
-    }).then(({ x, y, middlewareData, placement }) => {
-      applyStyles(this.popoverElement, {
-        left: `${x}px`,
-        top: `${y}px`,
-      });
-
-      const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      applyStyles(this.arrowElement, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-      });
-
-      updateArrowPosition(this.arrowElement, placement);
-    });
+    floatingElementAutoUpdate(this.triggerElement, this.popoverElement, this.arrowElement, { placement: this.position });
   }
 
   render() {
