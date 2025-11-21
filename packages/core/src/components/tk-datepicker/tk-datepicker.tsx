@@ -94,7 +94,7 @@ export class TkDatePicker {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
         // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if ((this.showTimePicker || this.timeOnly) && !this.internalStartTime) {
+        if (this.showTimePicker && !this.internalStartTime) {
           const def = this.getDefaultTime();
           this.internalStartTime = def;
           if (this.mode !== 'range') this.internalEndTime = def;
@@ -626,12 +626,8 @@ export class TkDatePicker {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
         }
       }
-      if (!startTime) {
-        startTime = this.getDefaultTime();
-      }
-
       // For initial load, set AM/PM based on actual time, but respect user changes after that
-      if (this.timeFormat === '12') {
+      if (this.timeFormat === '12' && startTime) {
         // Only set if this is the initial default state, otherwise respect user choice
         if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
           this.internalAmPm = 'PM';
