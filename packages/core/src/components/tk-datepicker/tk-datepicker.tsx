@@ -370,13 +370,13 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
 
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
         referenceElement: this.el,
-        handler: this.clickOutsideHandler,
+        handler: this.closeHandler,
         disabled: this.disabled || !this.isOpen,
       });
     }
@@ -1027,7 +1027,7 @@ export class TkDatePicker {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     if (this.inline) return;
     this.isOpen = false;
   };

@@ -79,7 +79,7 @@ export class TkPopover implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  protected clickOutsideHandler = () => {
+  protected closeHandler = () => {
     this.isOpen = false;
   };
 
@@ -95,7 +95,7 @@ export class TkPopover implements ComponentInterface {
     // Initialize click outside mixin
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
-      handler: this.clickOutsideHandler,
+      handler: this.closeHandler,
       disabled: this.isHover || !this.isOpen,
     });
 
@@ -107,7 +107,7 @@ export class TkPopover implements ComponentInterface {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
     }
 
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   disconnectedCallback() {

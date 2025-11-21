@@ -85,7 +85,9 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, () => {
+      this.isOpen = false;
+    });
   }
 
   componentDidUpdate() {

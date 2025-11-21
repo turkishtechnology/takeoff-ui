@@ -270,7 +270,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -283,11 +283,11 @@ export class TkSelect implements ComponentInterface {
 
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
-      handler: this.clickOutsideHandler,
+      handler: this.closeHandler,
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
 
     if (this.allowCustomValue) {
       this.editable = true;

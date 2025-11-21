@@ -13,21 +13,16 @@ const findDialogHost = (el: HTMLElement): HTMLTkDialogElement | null => {
   }
   return null;
 };
-const handleDialogScroll = (el: HTMLElement) => () => {
-  // Only close if the element has isOpen property
-  if ('isOpen' in el && (el as any).isOpen) {
-    (el as any).isOpen = false;
-  }
-};
 
-export const addDialogScrollListener = (el: HTMLElement) => {
+export const addDialogScrollListener = (el: HTMLElement, handler: () => void) => {
   const dialog = findDialogHost(el);
   if (!dialog) return;
-  const handler = handleDialogScroll(el);
-  (el as any)._dialogScrollHandler = handler;
 
   const root = dialog.querySelector('.tk-dialog');
-  if (root) root.addEventListener('scroll', handler, { capture: true, passive: true });
+  if (!root || (el as any)._dialogScrollHandler) return;
+
+  root.addEventListener('scroll', handler, { capture: true, passive: true });
+  (el as any)._dialogScrollHandler = handler;
 };
 
 export const removeDialogScrollListener = (el: HTMLElement) => {
