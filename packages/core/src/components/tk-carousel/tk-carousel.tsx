@@ -11,6 +11,7 @@ export class TkCarousel implements ComponentInterface {
 
   private slotElement?: HTMLSlotElement;
   private slides: HTMLElement[] = [];
+  private autoplayTimer?: number;
 
   @State() activeSlide: number = 0;
   @State() totalSlides: number = 0;
@@ -26,6 +27,22 @@ export class TkCarousel implements ComponentInterface {
    * @defaultValue true
    */
   @Prop() showArrows: boolean = true;
+
+  /**
+   * Controls whether the carousel should autoplay
+   * @defaultValue false
+   */
+  @Prop() autoplay: boolean = false;
+
+  /**
+   *Controls the interval of the autoplay in milliseconds
+   */
+  @Prop() autoplaySpeed: number = 3000;
+
+  /**
+   *Controls whether it should loop back to the start after reaching the end
+   */
+  @Prop() autoplayLoop: boolean = false;
 
   /**
    * Orientation of the navigation indicators
@@ -61,6 +78,34 @@ export class TkCarousel implements ComponentInterface {
     this.updateSlides();
     this.applySlideClasses();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.slides.length });
+    this.startAutoplay();
+  }
+
+  disconnectedCallback() {
+    this.stopAutoplay();
+  }
+
+  private startAutoplay() {
+    if (!this.autoplay || this.totalSlides <= 1) return;
+    this.stopAutoplay();
+    this.autoplayTimer = window.setInterval(() => {
+      if (this.activeSlide === this.totalSlides - 1) {
+        if (this.autoplayLoop) {
+          this.changeSlide(0);
+        } else {
+          this.stopAutoplay();
+        }
+      } else {
+        this.changeSlide(this.activeSlide + 1);
+      }
+    }, this.autoplaySpeed);
+  }
+
+  private stopAutoplay() {
+    if (this.autoplayTimer) {
+      clearInterval(this.autoplayTimer);
+      this.autoplayTimer = undefined;
+    }
   }
 
   private updateSlides() {
