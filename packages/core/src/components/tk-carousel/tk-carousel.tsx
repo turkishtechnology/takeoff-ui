@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter, Listen } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 
 @Component({
@@ -26,6 +26,18 @@ export class TkCarousel implements ComponentInterface {
    * @defaultValue true
    */
   @Prop() showArrows: boolean = true;
+
+  /**
+   * Orientation of the navigation indicators
+   * @defaultValue 'inside'
+   */
+  @Prop() navigationOrientation: 'inside' | 'outside' = 'inside';
+
+  /**
+   * Position of the navigation indicators
+   * @defaultValue 'distributed'
+   */
+  @Prop() navigationPosition: 'distributed' | 'top' | 'bottom' | 'left' | 'right' = 'distributed';
 
   /**
    * Emitted when right arrow is clicked
@@ -92,17 +104,31 @@ export class TkCarousel implements ComponentInterface {
     this.changeSlide(index);
   };
 
-  private renderPrevButton() {
+  private createPrevButton() {
     if (!this.showArrows || this.activeSlide === 0 || this.slides.length === 0) return null;
-    return <tk-button size="small" class="prev-button" icon="chevron_left" onClick={this.handlePrevClick} />;
+    return (
+      <tk-button
+        size="small"
+        class="prev-button"
+        icon={this.navigationPosition == 'left' || this.navigationPosition == 'right' ? 'keyboard_arrow_up' : 'chevron_left'}
+        onClick={this.handlePrevClick}
+      />
+    );
   }
 
-  private renderNextButton() {
+  private createNextButton() {
     if (!this.showArrows || this.activeSlide === this.slides.length - 1 || this.slides.length === 0) return null;
-    return <tk-button size="small" class="next-button" icon="chevron_right" onClick={this.handleNextClick} />;
+    return (
+      <tk-button
+        size="small"
+        class="next-button"
+        icon={this.navigationPosition == 'left' || this.navigationPosition == 'right' ? 'keyboard_arrow_down' : 'chevron_right'}
+        onClick={this.handleNextClick}
+      />
+    );
   }
 
-  private renderIndicators() {
+  private createIndicators() {
     if (!this.showIndicators || this.slides.length === 0) return null;
     return (
       <div class="tk-carousel-indicators">
@@ -118,20 +144,31 @@ export class TkCarousel implements ComponentInterface {
       </div>
     );
   }
+  private renderNavigationElement() {
+    return (
+      <div class="tk-carousel-navigation">
+        {this.createPrevButton()}
+        {this.createIndicators()}
+        {this.createNextButton()}
+      </div>
+    );
+  }
 
   render() {
-    const rootClasses = classNames('tk-carousel');
+    const rootClasses = classNames('tk-carousel', {
+      [this.navigationOrientation]: true,
+      [this.navigationPosition]: true,
+    });
+
     return (
       <div class={rootClasses}>
-        <div class={'tk-carousel-slider'}>
+        <div class="tk-carousel-slider">
           <div class="tk-carousel-slide-list">
-            <div class={'tk-carousel-slide-track'}>
+            <div class="tk-carousel-slide-track">
               <slot></slot>
             </div>
           </div>
-          {this.renderPrevButton()}
-          {this.renderNextButton()}
-          {this.renderIndicators()}
+          {this.renderNavigationElement()}
         </div>
       </div>
     );

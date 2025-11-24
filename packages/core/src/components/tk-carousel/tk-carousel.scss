@@ -1,10 +1,4 @@
 :host {
-  display: block;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  width: fit-content;
-
   ::slotted(.tk-carousel-slide) {
     display: none;
   }
@@ -13,37 +7,194 @@
   }
 }
 .tk-carousel {
-  .tk-carousel-slide-track {
-    display: flex;
-  }
-  .prev-button {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-  }
-  .next-button {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-  }
-  .tk-carousel-indicators {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
+  display: block;
+  width: 100%;
 
-    .tk-carousel-indicator {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: var(--background-light);
-      &.is-active {
-        background-color: var(--background-dark);
+  .tk-carousel-slider {
+    width: fit-content;
+    position: relative;
+
+    .tk-carousel-slide-track {
+      display: flex;
+    }
+
+    .tk-carousel-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+
+      .tk-carousel-indicators {
+        display: flex;
+        gap: 8px;
+
+        .tk-carousel-indicator {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          cursor: pointer;
+          background-color: var(--background-light);
+
+          &.is-active {
+            background-color: var(--primary-base);
+          }
+        }
+      }
+    }
+  }
+
+  &.inside {
+    &.distributed {
+      .prev-button {
+        position: absolute;
+        top: 50%;
+        left: 24px;
+        transform: translateY(-50%);
+      }
+      .next-button {
+        position: absolute;
+        top: 50%;
+        right: 24px;
+        transform: translateY(-50%);
+      }
+      .tk-carousel-indicators {
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: 16px;
+      }
+    }
+    &.left {
+      .tk-carousel-navigation {
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        left: 24px;
+        transform: translateY(-50%);
+
+        .tk-carousel-indicators {
+          flex-direction: column;
+        }
+      }
+    }
+    &.right {
+      .tk-carousel-navigation {
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        right: 24px;
+        transform: translateY(-50%);
+
+        .tk-carousel-indicators {
+          flex-direction: column;
+        }
+      }
+    }
+    &.top {
+      .tk-carousel-navigation {
+        position: absolute;
+        right: 50%;
+        top: 16px;
+        transform: translateX(50%);
+      }
+    }
+    &.bottom {
+      .tk-carousel-navigation {
+        position: absolute;
+        right: 50%;
+        bottom: 16px;
+        transform: translateX(50%);
+      }
+    }
+  }
+  &.outside {
+    padding-inline: 64px;
+    &.distributed {
+      padding-bottom: 64px;
+      .prev-button {
+        position: absolute;
+        top: 50%;
+        left: -48px;
+        transform: translateY(-50%);
+      }
+      .next-button {
+        position: absolute;
+        top: 50%;
+        right: -48px;
+        transform: translateY(-50%);
+      }
+      .tk-carousel-indicators {
+        position: absolute;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        left: 50%;
+        bottom: -32px;
+
+        .tk-carousel-indicator {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          cursor: pointer;
+          background-color: var(--background-light);
+          &.is-active {
+            background-color: var(--primary-base);
+          }
+        }
+      }
+    }
+    &.left {
+      .tk-carousel-navigation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 16px;
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        left: -72px;
+        transform: translateY(-50%);
+
+        .tk-carousel-indicators {
+          flex-direction: column;
+        }
+      }
+    }
+    &.right {
+      .tk-carousel-navigation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 16px;
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        right: -72px;
+        transform: translateY(-50%);
+
+        .tk-carousel-indicators {
+          flex-direction: column;
+        }
+      }
+    }
+    &.bottom {
+      padding-bottom: 64px;
+      .tk-carousel-navigation {
+        position: absolute;
+        right: 50%;
+        bottom: -48px;
+        transform: translateX(50%);
+      }
+    }
+    &.top {
+      padding-top: 64px;
+      .tk-carousel-navigation {
+        position: absolute;
+        right: 50%;
+        top: -48px;
+        transform: translateX(50%);
       }
     }
   }
