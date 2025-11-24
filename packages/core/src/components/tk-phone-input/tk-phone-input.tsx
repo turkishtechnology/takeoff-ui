@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
@@ -32,6 +33,7 @@ export class TkPhoneInput implements ComponentInterface {
   private searchInput!: HTMLTkInputElement;
   private cleanup;
   private panelRef?: HTMLDivElement;
+  private uniqueId = uuidv4();
 
   /**
    * The list of countries to display in the dropdown.
@@ -409,7 +411,7 @@ export class TkPhoneInput implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
       label = (
-        <label htmlFor="phone-input" class="tk-phone-input__label">
+        <label htmlFor={this.uniqueId} class="tk-phone-input__label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -425,11 +427,11 @@ export class TkPhoneInput implements ComponentInterface {
   private renderCountrySelector() {
     return (
       <div class="tk-phone-input__dropdown">
-        {this.renderDropdownButton()}
+        {this.createDropdownButton()}
         {this.isDropdownOpen && (
           <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
-            {this.renderDropdownSearch()}
-            {this.renderDropdownList()}
+            {this.createDropdownSearch()}
+            {this.createDropdownList()}
           </div>
         )}
       </div>
@@ -439,7 +441,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the dropdown button for selecting a country.
    */
-  private renderDropdownButton() {
+  private createDropdownButton() {
     const selectedClass = classNames('tk-phone-input__dropdown-button-selected', {
       'tk-phone-input__dropdown-button-selected--no-dial-code': !this.selectedCountry.dialCode,
     });
@@ -462,7 +464,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the search input for filtering countries in the dropdown.
    */
-  private renderDropdownSearch() {
+  private createDropdownSearch() {
     return (
       <tk-input
         class="tk-phone-input__dropdown-menu-search"
@@ -481,7 +483,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Create the dropdown list of countries.
    */
-  private renderDropdownList() {
+  private createDropdownList() {
     return (
       <ul class="tk-phone-input__dropdown-menu-list">
         {this.getFilteredCountries().map(country => (
@@ -507,8 +509,8 @@ export class TkPhoneInput implements ComponentInterface {
   private renderPhoneInput() {
     return (
       <input
+        id={this.uniqueId}
         type="tel"
-        id="phone-input"
         class="tk-phone-input__input"
         autoComplete="off"
         placeholder={this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}

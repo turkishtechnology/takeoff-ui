@@ -102,6 +102,11 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Disables the currency field if set to true.
+   */
+  @Prop() currencyDisabled: boolean = false;
+
+  /**
    * The number of decimal places to display in the formatted currency value.
    * Default is 2, which is common for most currencies.
    */
@@ -354,7 +359,7 @@ export class TkCurrencyInput implements ComponentInterface {
     event.stopPropagation();
     event.preventDefault();
 
-    if (!this.disabled && !this.readonly) {
+    if (!this.disabled && !this.readonly && !this.currencyDisabled) {
       this.isDropdownOpen = !this.isDropdownOpen;
     }
   };
@@ -554,7 +559,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderDropdownButton() {
     return (
-      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.disabled}>
+      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
         <div class="tk-currency-input__dropdown-button-selected">
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"

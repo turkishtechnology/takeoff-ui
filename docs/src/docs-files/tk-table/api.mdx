@@ -7,7 +7,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
 | <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>any</code> | null | Provides a function to customize cell styles. This function takes the row and column information and returns the style object for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
-| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>CSSStyleProperties</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
 | <TkBadge label="expandedRowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any)=>any</code> | null | Provides a function to customize expanded row styles. This function takes row information and returns the style object for the expanded row content. |
@@ -50,6 +50,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | getFilters | Returns the current filters |
 | getSorting | Returns the current sorting settings |
 | groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
+| runFilters | Applies the current filters to the data for client side pagination |
 | serverRequest | Allows tk-request event to be triggered manually |
 | setCurrentPage | Sets the current page for pagination |
 | setFilters | Sets the current filter settings |
@@ -64,6 +65,8 @@ import { TkBadge } from "@takeoff-ui/react";
 | empty-data | Set how the table will appear when there is no data |
 
 ### Interfaces
+
+#### <span id="itablecolumn">ITableColumn</span>
 
 Defines the columns for the table
 
@@ -100,7 +103,7 @@ interface ITableColumn {
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
-  style?: any;
+  style?: CSSStyleProperties;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
@@ -141,6 +144,8 @@ interface ITableColumn {
 }
 ```
 
+#### <span id="itablerequest">ITableRequest</span>
+
 It is the return type of the tkRequest event.
 
 ```typescript
@@ -166,6 +171,8 @@ interface ITableRequest {
 }
 ```
 
+#### <span id="itablecelledit">ITableCellEdit</span>
+
 It is the return type of the tkCellEdit event.
 
 ```typescript
@@ -181,7 +188,7 @@ interface ITableCellEdit {
 }
 ```
 
-
+#### <span id="itableexportoptions">ITableExportOptions</span>
 
 ```typescript
 interface ITableExportOptions {
@@ -202,6 +209,8 @@ interface ITableExportOptions {
 }
 ```
 
+#### <span id="itablefilter">ITableFilter</span>
+
 Represents a filter applied to a table
 
 ```typescript
@@ -215,7 +224,7 @@ interface ITableFilter {
 }
 ```
 
-
+#### <span id="itablesort">ITableSort</span>
 
 ```typescript
 interface ITableSort {
@@ -225,6 +234,8 @@ interface ITableSort {
   order: 'asc' | 'desc';
 }
 ```
+
+#### <span id="ifilteroption">IFilterOption</span>
 
 Defines options for checkbox filter
 
@@ -237,7 +248,7 @@ interface IFilterOption {
 }
 ```
 
-
+#### <span id="icustomelement">ICustomElement</span>
 
 ```typescript
 interface ICustomElement {
@@ -246,7 +257,7 @@ interface ICustomElement {
 }
 ```
 
-
+#### <span id="itableexportexcelcolumn">ITableExportExcelColumn</span>
 
 ```typescript
 interface ITableExportExcelColumn {
@@ -255,6 +266,8 @@ interface ITableExportExcelColumn {
   width: number;
 }
 ```
+
+#### <span id="itablegroup">ITableGroup</span>
 
 Represents a group of table rows with associated metadata
 

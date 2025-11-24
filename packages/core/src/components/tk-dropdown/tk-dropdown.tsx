@@ -20,17 +20,13 @@ import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 })
 export class TkDropdown implements ComponentInterface {
   private hasEmptyDataSlot: boolean = false;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
   private cleanup;
   private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el: HTMLTkDropdownElement;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-  }
 
   @State() isOpen: boolean = false;
 
@@ -93,6 +89,12 @@ export class TkDropdown implements ComponentInterface {
     'bottom';
 
   /**
+   * Sets size for the dropdown panel.
+   * @defaultValue base
+   */
+  @Prop() size?: 'large' | 'base' | 'small' = 'base';
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<any>;
@@ -100,7 +102,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -120,16 +122,16 @@ export class TkDropdown implements ComponentInterface {
     // Initialize click outside mixin
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
-      handler: this.clickOutsideHandler,
-      disabled: this.disabled,
+      handler: this.closeHandler,
+      disabled: this.disabled || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   componentDidUpdate() {
-    // Update click outside disabled state based on disabled prop
-    this.clickOutsideMixin.updateConfig({ disabled: this.disabled });
+    // Update click outside disabled state based on disabled prop and open state
+    this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
       this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
@@ -223,7 +225,7 @@ export class TkDropdown implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-dropdown-container');
+    const rootClasses = classNames('tk-dropdown-container', this.size);
 
     return (
       <div class={rootClasses} data-tk-dropdown-id={this.uniqueId}>

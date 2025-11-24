@@ -1,12 +1,12 @@
 :host {
   display: inline-block;
+}
 
-  &.full-width {
+:host(.full-width) {
+  width: 100%;
+
+  .tk-button {
     width: 100%;
-
-    .tk-button {
-      width: 100%;
-    }
   }
 }
 

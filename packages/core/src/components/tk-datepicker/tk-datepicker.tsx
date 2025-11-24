@@ -32,7 +32,7 @@ export class TkDatePicker {
   private debounceTimer: number;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private cleanup;
   private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
@@ -41,10 +41,6 @@ export class TkDatePicker {
   @Element() el: HTMLTkDatepickerElement;
 
   @AttachInternals() internals: ElementInternals;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-  }
 
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
@@ -99,7 +95,13 @@ export class TkDatePicker {
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
-        // Don't initialize time automatically - let user select from panel or type in input
+        // Initialize default time and AM/PM when time UI is shown and no time set yet
+        if (this.showTimePicker && !this.internalStartTime) {
+          const def = this.getDefaultTime();
+          this.internalStartTime = def;
+          if (this.mode !== 'range') this.internalEndTime = def;
+          if (this.timeFormat === '12') this.internalAmPm = def.hour >= 12 ? 'PM' : 'AM';
+        }
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
@@ -429,13 +431,13 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
 
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
         referenceElement: this.el,
-        handler: this.clickOutsideHandler,
+        handler: this.closeHandler,
         disabled: this.disabled || !this.isOpen,
       });
     }
@@ -728,6 +730,13 @@ export class TkDatePicker {
         const parsed = this.parseTimeString(value);
         if (parsed) {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
+        }
+      }
+      // For initial load, set AM/PM based on actual time, but respect user changes after that
+      if (this.timeFormat === '12' && startTime) {
+        // Only set if this is the initial default state, otherwise respect user choice
+        if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
+          this.internalAmPm = 'PM';
         }
       }
 
@@ -1142,7 +1151,7 @@ export class TkDatePicker {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     if (this.inline) return;
     this.isOpen = false;
   };

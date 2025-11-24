@@ -211,11 +211,18 @@ export class TkInput implements ComponentInterface {
 
   componentDidLoad(): void {
     this.nativeInput = this.el.querySelector('input');
-
+    if (this.mode === 'counter') {
+      this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
+    }
     if (this.mode == 'text' && this.maskOptions) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
         ...this.maskOptions,
       } as CleaveOptions);
+    }
+  }
+  componentDidUpdate(): void {
+    if (this.mode === 'counter') {
+      this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
   }
 
@@ -290,26 +297,35 @@ export class TkInput implements ComponentInterface {
     return strength;
   }
 
-  private clampValueByLimit = value => {
+  private clampValueByLimit = (value, operation?: string): number | null => {
     if (value === null || value === undefined || isNaN(value)) {
       return null;
     }
 
-    if (this.min !== null && this.min !== undefined && value < Number(this.min)) {
+    const numValue = Number(value);
+
+    if (this.min !== null && this.min !== undefined && numValue < Number(this.min)) {
+      if (operation === 'increment') {
+        return Number(this.min) + 1;
+      }
       return Number(this.min);
     }
 
-    if (this.max !== null && this.max !== undefined && value > Number(this.max)) {
+    if (this.max !== null && this.max !== undefined && numValue > Number(this.max)) {
+      if (operation === 'decrement') {
+        return Number(this.max) - 1;
+      }
       return Number(this.max);
     }
-    return value;
+    return numValue;
   };
 
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
       let _value;
-      if (this.mode == 'number') {
+
+      if (this.mode == 'number' || this.mode == 'counter') {
         _value = input.value ? Number(input.value) : null;
       } else {
         _value = input.value || '';
@@ -335,6 +351,17 @@ export class TkInput implements ComponentInterface {
 
     if (this.mode == 'password' && this.showSafetyStatus) {
       this.passwordStrength = this.calculatePasswordStrength(String(this.value));
+    }
+  };
+
+  private handleInputKeyUp = (ev: KeyboardEvent) => {
+    const newInput = ev.target as HTMLInputElement;
+    if (this.mode === 'counter' && newInput) {
+      if (newInput.value === '') {
+        this.nativeInput.value = '';
+      } else {
+        this.nativeInput.value = this.clampValueByLimit(Number(newInput.value))?.toString() ?? '';
+      }
     }
   };
 
@@ -418,8 +445,8 @@ export class TkInput implements ComponentInterface {
   private handleMinusButtonClick() {
     if (!this.disabled) {
       const currentValue = Number(this.value) || 0;
-      const newValue = this.clampValueByLimit(currentValue - 1);
-      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+      const newValue = this.clampValueByLimit(currentValue - 1, 'decrement');
+      if (newValue !== null && newValue !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
       }
@@ -428,15 +455,15 @@ export class TkInput implements ComponentInterface {
 
   private handlePlusButtonClick() {
     if (!this.disabled) {
-      let currentValue;
+      let currentValue: number;
       if (this.value === '' || this.value === null || this.value === undefined) {
         currentValue = !_.isNil(this.min) ? Number(this.min) : 0;
       } else {
         currentValue = Number(this.value);
       }
 
-      const newValue = this.clampValueByLimit(currentValue + 1);
-      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+      const newValue = this.clampValueByLimit(currentValue + 1, 'increment');
+      if (newValue !== null && newValue !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
       }
@@ -552,6 +579,7 @@ export class TkInput implements ComponentInterface {
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
+        onKeyUp={this.handleInputKeyUp}
       />
     );
   }
@@ -587,7 +615,7 @@ export class TkInput implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label class="label">
+        <label htmlFor={this.uniqueId} class="label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -669,7 +697,7 @@ export class TkInput implements ComponentInterface {
       _rightIcon = rightIcon;
     }
 
-    let showClearButton = this.clearable && ((this.mode != 'chips' && this.value) || (this.mode == 'chips' && (this.value as [])?.length > 0));
+    const showClearButton = this.clearable && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
 
     if (this.el.classList.contains('tk-select-input')) {
       this.readOnly = !this.el.classList.contains('editable-select');
@@ -680,7 +708,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class={classNames('tk-input', { 'tk-input-clearable': showClearButton })} htmlFor={this.uniqueId}>
+        <div class="tk-input">
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
@@ -692,7 +720,7 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {this.clearable && (
+          {showClearButton && (
             <tk-button
               variant="neutral"
               type="text"
@@ -706,7 +734,7 @@ export class TkInput implements ComponentInterface {
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}
-        </label>
+        </div>
         {safetyStatus}
         {this.renderHint()}
       </div>

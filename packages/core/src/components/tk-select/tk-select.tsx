@@ -28,7 +28,7 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private filterDebounceTimeout;
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
@@ -40,7 +40,6 @@ export class TkSelect implements ComponentInterface {
   @AttachInternals() internals: ElementInternals;
 
   constructor() {
-    this.uniqueId = uuidv4();
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
@@ -271,7 +270,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -284,11 +283,11 @@ export class TkSelect implements ComponentInterface {
 
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
-      handler: this.clickOutsideHandler,
-      disabled: this.disabled,
+      handler: this.closeHandler,
+      disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
 
     if (this.allowCustomValue) {
       this.editable = true;
@@ -301,6 +300,11 @@ export class TkSelect implements ComponentInterface {
 
   componentDidUpdate() {
     this.nativeInputRef = this.inputRef.querySelector('input');
+
+    // Update click outside mixin configuration based on current state
+    this.clickOutsideMixin?.updateConfig({
+      disabled: this.disabled || this.readonly || !this.isOpen,
+    });
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
@@ -873,7 +877,7 @@ export class TkSelect implements ComponentInterface {
           children = (
             <Fragment>
               <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
-              <div innerHTML={this.optionHtml(item)}></div>
+              <div class="multiple-option-content" innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
