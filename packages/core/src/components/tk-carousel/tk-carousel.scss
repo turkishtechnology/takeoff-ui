@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+
+  ::slotted(.tk-carousel-slide) {
+    display: none;
+  }
+  ::slotted(.tk-carousel-slide.is-active) {
+    display: block;
+  }
+}
+.tk-carousel {
+  .tk-carousel-slide-track {
+    display: flex;
+  }
+  .prev-button {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  .next-button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+  .tk-carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+
+    .tk-carousel-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      cursor: pointer;
+      background-color: var(--background-light);
+      &.is-active {
+        background-color: var(--background-dark);
+      }
+    }
+  }
+}
