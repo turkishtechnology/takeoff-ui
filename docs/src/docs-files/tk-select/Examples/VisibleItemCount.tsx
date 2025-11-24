@@ -53,6 +53,8 @@ const selectValue = ref([]);
     { value: '1', label: 'Option 1' },
     { value: '2', label: 'Option 2' },
     { value: '3', label: 'Option 3' },
+    { value: '4', label: 'Option 4' },
+    { value: '5', label: 'Option 5' },
   ]);
 
   const options = [
@@ -75,7 +77,7 @@ const selectValue = ref([]);
         visibleItemCount={3}
         options={options}
         value={value}
-        onTkChange={e => setValue(e.detail.value)}
+        onTkChange={e => setValue(e.detail)}
         hint="Only 3 items will be visible before showing +N others"
       />
     </div>
