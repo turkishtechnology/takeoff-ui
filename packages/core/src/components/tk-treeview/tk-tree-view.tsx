@@ -149,8 +149,8 @@ export class TkTreeView implements ComponentInterface {
       return;
     }
 
-    if (this.mode === 'basic') {
-      if (this.expandAll) {
+    if (this.expandAll) {
+      if (this.mode === 'basic') {
         // Expand all directory nodes
         const traverse = (nodes: ITreeItem[], base: string = '') => {
           nodes.forEach((node, idx) => {
@@ -162,18 +162,18 @@ export class TkTreeView implements ComponentInterface {
           });
         };
         traverse(this.items);
-      }
-    } else if (this.mode === 'stepper') {
-      // Expand the first directory all the way down
-      let level = this.items;
-      let base = '';
-      while (level && level.length > 0) {
-        const idx = level.findIndex(n => n.children && n.children.length > 0);
-        if (idx === -1) break;
-        const path = base ? `${base}-${idx}` : `${idx}`;
-        expanded.add(path);
-        base = path;
-        level = level[idx].children;
+      } else {
+        // Expand the first directory all the way down
+        let level = this.items;
+        let base = '';
+        while (level && level.length > 0) {
+          const idx = level.findIndex(n => n.children && n.children.length > 0);
+          if (idx === -1) break;
+          const path = base ? `${base}-${idx}` : `${idx}`;
+          expanded.add(path);
+          base = path;
+          level = level[idx].children;
+        }
       }
     }
 
