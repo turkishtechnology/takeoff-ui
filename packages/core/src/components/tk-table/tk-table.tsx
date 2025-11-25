@@ -107,13 +107,14 @@ export class TkTable implements ComponentInterface {
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
     if (!_.isEqual(oldValue, newValue)) {
+      const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
         this.currentPage = 1;
         const startIndex = (this.currentPage - 1) * this.rowsPerPage;
         const endIndex = startIndex + this.rowsPerPage;
-        this.renderData = [...newValue]?.slice(startIndex, endIndex) || [];
+        this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
-        this.renderData = newValue?.length > 0 ? [...newValue] : [];
+        this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
       }
 
       // Re-apply grouping if it was previously set

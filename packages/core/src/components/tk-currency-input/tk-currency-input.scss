@@ -202,6 +202,17 @@
       background-color: transparent;
       padding-right: var(--input-external-label-large-label-h-padding);
 
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        color: var(--text-sub-base);
+        pointer-events: none;
+
+        .tk-currency-input__dropdown-button-selected {
+          opacity: 0.6;
+        }
+      }
+
       &-selected {
         display: flex;
         align-items: center;

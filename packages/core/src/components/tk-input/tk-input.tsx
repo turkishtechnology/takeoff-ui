@@ -212,7 +212,7 @@ export class TkInput implements ComponentInterface {
   componentDidLoad(): void {
     this.nativeInput = this.el.querySelector('input');
     if (this.mode === 'counter') {
-      this.nativeInput.value = this.clampValueByLimit(this.value);
+      this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
     if (this.mode == 'text' && this.maskOptions) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
@@ -222,7 +222,7 @@ export class TkInput implements ComponentInterface {
   }
   componentDidUpdate(): void {
     if (this.mode === 'counter') {
-      this.nativeInput.value = this.clampValueByLimit(this.value);
+      this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
   }
 
@@ -297,32 +297,35 @@ export class TkInput implements ComponentInterface {
     return strength;
   }
 
-  private clampValueByLimit = (value, operation?: string) => {
+  private clampValueByLimit = (value, operation?: string): number | null => {
     if (value === null || value === undefined || isNaN(value)) {
       return null;
     }
 
-    if (this.min !== null && this.min !== undefined && value <= Number(this.min)) {
-      if (operation == 'increment') {
+    const numValue = Number(value);
+
+    if (this.min !== null && this.min !== undefined && numValue < Number(this.min)) {
+      if (operation === 'increment') {
         return Number(this.min) + 1;
       }
       return Number(this.min);
     }
 
-    if (this.max !== null && this.max !== undefined && value >= Number(this.max)) {
-      if (operation == 'decrement') {
+    if (this.max !== null && this.max !== undefined && numValue > Number(this.max)) {
+      if (operation === 'decrement') {
         return Number(this.max) - 1;
       }
       return Number(this.max);
     }
-    return value;
+    return numValue;
   };
 
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
       let _value;
-      if (this.mode == 'number') {
+
+      if (this.mode == 'number' || this.mode == 'counter') {
         _value = input.value ? Number(input.value) : null;
       } else {
         _value = input.value || '';
@@ -354,7 +357,11 @@ export class TkInput implements ComponentInterface {
   private handleInputKeyUp = (ev: KeyboardEvent) => {
     const newInput = ev.target as HTMLInputElement;
     if (this.mode === 'counter' && newInput) {
-      this.nativeInput.value = this.clampValueByLimit(newInput.value);
+      if (newInput.value === '') {
+        this.nativeInput.value = '';
+      } else {
+        this.nativeInput.value = this.clampValueByLimit(Number(newInput.value))?.toString() ?? '';
+      }
     }
   };
 
@@ -439,7 +446,7 @@ export class TkInput implements ComponentInterface {
     if (!this.disabled) {
       const currentValue = Number(this.value) || 0;
       const newValue = this.clampValueByLimit(currentValue - 1, 'decrement');
-      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+      if (newValue !== null && newValue !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
       }
@@ -448,7 +455,7 @@ export class TkInput implements ComponentInterface {
 
   private handlePlusButtonClick() {
     if (!this.disabled) {
-      let currentValue;
+      let currentValue: number;
       if (this.value === '' || this.value === null || this.value === undefined) {
         currentValue = !_.isNil(this.min) ? Number(this.min) : 0;
       } else {
@@ -456,7 +463,7 @@ export class TkInput implements ComponentInterface {
       }
 
       const newValue = this.clampValueByLimit(currentValue + 1, 'increment');
-      if (newValue !== null && Number(newValue) !== Number(this.value)) {
+      if (newValue !== null && newValue !== Number(this.value)) {
         this.value = newValue;
         this.tkChange.emit(newValue);
       }
