@@ -73,6 +73,12 @@ export class TkCarousel implements ComponentInterface {
   @Prop() slidesPerView: number = 1;
 
   /**
+   * Controls whether manual navigation should loop back to start/end
+   * @defaultValue false
+   */
+  @Prop() loop: boolean = false;
+
+  /**
    * Emitted when right arrow is clicked
    */
   @Event({ eventName: 'tk-next-slide' })
@@ -140,22 +146,39 @@ export class TkCarousel implements ComponentInterface {
   private updateSlidePosition() {
     if (!this.slideTrack) return;
 
-    const slideWidth = 100 / this.slidesPerView;
-    const gapWidth = 16;
-    const translateValue = this.activeSlide * (slideWidth + gapWidth / this.slidesPerView);
+    const sliderElement = this.el.shadowRoot?.querySelector('.tk-carousel-slider') as HTMLElement;
+    if (!sliderElement) return;
+
+    const containerRect = sliderElement.getBoundingClientRect();
+    const containerSize = this.isVertical ? containerRect.height : containerRect.width;
+
+    const gapSize = 16;
+    const totalGaps = Math.max(0, this.slidesPerView - 1);
+    const totalGapSpace = totalGaps * gapSize;
+    const slideSize = (containerSize - totalGapSpace) / this.slidesPerView;
+
+    const translateValue = this.activeSlide * (slideSize + gapSize);
 
     if (this.isVertical) {
-      this.slideTrack.style.transform = `translateY(-${translateValue}%)`;
+      this.slideTrack.style.transform = `translateY(-${translateValue}px)`;
     } else {
-      this.slideTrack.style.transform = `translateX(-${translateValue}%)`;
+      this.slideTrack.style.transform = `translateX(-${translateValue}px)`;
     }
   }
-
   private changeSlide(index: number) {
     if (!this.totalSlides) return;
     const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
-    if (index < 0) index = 0;
-    if (index > lastStartingView) index = lastStartingView;
+    if (this.loop) {
+      if (index < 0) {
+        index = lastStartingView;
+      } else if (index > lastStartingView) {
+        index = 0;
+      }
+    } else {
+      if (index < 0) index = 0;
+      if (index > lastStartingView) index = lastStartingView;
+    }
+
     this.activeSlide = index;
     this.updateSlidePosition();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.totalSlides });
@@ -196,13 +219,17 @@ export class TkCarousel implements ComponentInterface {
   };
 
   private createPrevButton() {
-    if (!this.showArrows || this.activeSlide === 0 || this.slides.length <= this.slidesPerView) return null;
+    if (!this.showArrows || this.slides.length <= this.slidesPerView) return null;
+    if (!this.loop && this.activeSlide === 0) return null;
+
     return <tk-button size="small" class="prev-button" icon={this.isVertical ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
   }
 
   private createNextButton() {
     const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
-    if (!this.showArrows || this.activeSlide >= lastStartingView || this.slides.length <= this.slidesPerView) return null;
+    if (!this.showArrows || this.slides.length <= this.slidesPerView) return null;
+    if (!this.loop && this.activeSlide >= lastStartingView) return null;
+
     return <tk-button size="small" class="next-button" icon={this.isVertical ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
   }
 
@@ -215,9 +242,9 @@ export class TkCarousel implements ComponentInterface {
         {this.showPlayerButton &&
           this.autoplay &&
           (this.autoplayTimer ? (
-            <tk-icon class="player-button" icon="pause_circle" size="small" onClick={this.stopAutoplay} />
+            <tk-icon class="player-button" icon="pause_circle" onClick={this.stopAutoplay} />
           ) : (
-            <tk-icon class="player-button" icon="play_circle" size="small" onClick={this.startAutoplay} />
+            <tk-icon class="player-button" icon="play_circle" onClick={this.startAutoplay} />
           ))}
         {Array.from({ length: indicatorCount }).map((_, index) => (
           <div
