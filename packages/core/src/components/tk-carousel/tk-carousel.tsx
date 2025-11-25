@@ -70,6 +70,7 @@ export class TkCarousel implements ComponentInterface {
    * @defaultValue 1
    */
   @Prop() slidesPerView: number = 1;
+
   /**
    * Emitted when right arrow is clicked
    */
@@ -130,6 +131,7 @@ export class TkCarousel implements ComponentInterface {
     this.slides = assigned.filter(el => !(el as HTMLElement).hasAttribute('slot')) as HTMLElement[];
     this.slides.forEach((slide, i) => {
       slide.classList.add('tk-carousel-slide');
+      slide.style.borderRadius = '16px';
       slide.dataset.slideIndex = String(i);
     });
     this.totalSlides = this.slides.length;
@@ -144,6 +146,7 @@ export class TkCarousel implements ComponentInterface {
       slide.classList.toggle('is-visible', isVisible);
     });
   }
+
   private changeSlide(index: number) {
     if (!this.totalSlides) return;
     const lastStartingView = this.totalSlides - this.slidesPerView;
@@ -216,6 +219,7 @@ export class TkCarousel implements ComponentInterface {
       </div>
     );
   }
+
   private renderNavigationElement() {
     return (
       <div class="tk-carousel-navigation">
