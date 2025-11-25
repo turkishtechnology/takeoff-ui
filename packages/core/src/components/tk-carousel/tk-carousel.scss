@@ -1,9 +1,16 @@
 :host {
   ::slotted(.tk-carousel-slide) {
+    width: calc(100% / var(--slides-per-view, 1));
     display: none;
   }
-  ::slotted(.tk-carousel-slide.is-active) {
+  ::slotted(.tk-carousel-slide.is-visible) {
     display: block;
+  }
+  .is-vertical {
+    height: calc(100% / var(--slides-per-view, 1));
+    .tk-carousel-slide-track {
+      flex-direction: column;
+    }
   }
 }
 .tk-carousel {

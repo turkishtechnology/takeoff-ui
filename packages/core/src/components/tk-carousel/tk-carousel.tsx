@@ -15,6 +15,7 @@ export class TkCarousel implements ComponentInterface {
   @State() autoplayTimer?: number;
   @State() activeSlide: number = 0;
   @State() totalSlides: number = 0;
+  @State() isVertical: boolean = false;
 
   /**
    * Controls whether the slide indicators are shown
@@ -36,11 +37,13 @@ export class TkCarousel implements ComponentInterface {
 
   /**
    *Controls the interval of the autoplay in milliseconds
+   * @defaultValue 3000
    */
   @Prop() autoplaySpeed: number = 3000;
 
   /**
    *Controls whether it should loop back to the start after reaching the end
+   * @defaultValue false
    */
   @Prop() autoplayLoop: boolean = false;
 
@@ -58,12 +61,20 @@ export class TkCarousel implements ComponentInterface {
 
   /**
    * Controls whether the pause/play button is shown
+   * @defaultValue false
    */
   @Prop() showPlayerButton: boolean = false;
+
+  /**
+   * Number of slides to show per view
+   * @defaultValue 1
+   */
+  @Prop() slidesPerView: number = 1;
   /**
    * Emitted when right arrow is clicked
    */
-  @Event({ eventName: 'tk-next-slide' }) tkNextSlide: EventEmitter<{ slide: number }>;
+  @Event({ eventName: 'tk-next-slide' })
+  tkNextSlide: EventEmitter<{ slide: number }>;
 
   /**
    * Emitted when slide is changed
@@ -83,6 +94,7 @@ export class TkCarousel implements ComponentInterface {
     this.applySlideClasses();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.slides.length });
     this.startAutoplay();
+    this.isVertical = this.navigationPosition === 'left' || this.navigationPosition === 'right';
   }
 
   disconnectedCallback() {
@@ -90,10 +102,11 @@ export class TkCarousel implements ComponentInterface {
   }
 
   private startAutoplay = () => {
-    if (!this.autoplay || this.totalSlides <= 1) return;
+    if (!this.autoplay || this.totalSlides <= this.slidesPerView) return;
     this.stopAutoplay();
     this.autoplayTimer = window.setInterval(() => {
-      if (this.activeSlide === this.totalSlides - 1) {
+      const lastStartingView = this.totalSlides - this.slidesPerView;
+      if (this.activeSlide >= lastStartingView) {
         if (this.autoplayLoop) {
           this.changeSlide(0);
         } else {
@@ -127,13 +140,15 @@ export class TkCarousel implements ComponentInterface {
       const isActive = i === this.activeSlide;
       slide.classList.add('tk-carousel-slide');
       slide.classList.toggle('is-active', isActive);
+      const isVisible = i >= this.activeSlide && i < this.activeSlide + this.slidesPerView;
+      slide.classList.toggle('is-visible', isVisible);
     });
   }
-
   private changeSlide(index: number) {
     if (!this.totalSlides) return;
+    const lastStartingView = this.totalSlides - this.slidesPerView;
     if (index < 0) index = 0;
-    if (index > this.totalSlides - 1) index = this.totalSlides - 1;
+    if (index > lastStartingView) index = lastStartingView;
     this.activeSlide = index;
     this.applySlideClasses();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.totalSlides });
@@ -166,7 +181,7 @@ export class TkCarousel implements ComponentInterface {
   }
 
   private createNextButton() {
-    if (!this.showArrows || this.activeSlide === this.slides.length - 1 || this.slides.length === 0) return null;
+    if (!this.showArrows || this.activeSlide >= this.slides.length - this.slidesPerView || this.slides.length === 0) return null;
     return (
       <tk-button
         size="small"
@@ -179,6 +194,7 @@ export class TkCarousel implements ComponentInterface {
 
   private createIndicators() {
     if (!this.showIndicators || this.slides.length === 0) return null;
+    const indicatorCount = this.totalSlides - this.slidesPerView + 1;
     return (
       <div class="tk-carousel-indicators">
         {this.showPlayerButton &&
@@ -188,7 +204,7 @@ export class TkCarousel implements ComponentInterface {
           ) : (
             <tk-icon class="player-button" icon="play_circle" size="small" variant="white" onClick={this.startAutoplay} />
           ))}
-        {this.slides.map((_, index) => (
+        {Array.from({ length: indicatorCount }).map((_, index) => (
           <div
             class={{
               'tk-carousel-indicator': true,
@@ -214,7 +230,9 @@ export class TkCarousel implements ComponentInterface {
     const rootClasses = classNames('tk-carousel', {
       [this.navigationOrientation]: true,
       [this.navigationPosition]: true,
+      'is-vertical': this.isVertical,
     });
+    this.el.style.setProperty('--slides-per-view', String(this.slidesPerView));
 
     return (
       <div class={rootClasses}>
