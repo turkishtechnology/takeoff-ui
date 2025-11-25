@@ -176,6 +176,12 @@ export class TkSelect implements ComponentInterface {
    * Sets options for all chips rendered in multiple selection mode.
    */
   @Prop() chipOptions: IChipOptions;
+
+  /**
+   * Provides a function to customize the panel top content.
+   */
+  @Prop() panelTopHtml: Function;
+
   /**
    * The list of options to be displayed in the select box.
    */
@@ -998,6 +1004,23 @@ export class TkSelect implements ComponentInterface {
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (
             <Fragment>
+              {this.panelTopHtml && (
+                <div
+                  class="dropdown-item-top"
+                  ref={el => {
+                    if (el) {
+                      const htmlContent = this.panelTopHtml();
+                      if (htmlContent instanceof HTMLElement) {
+                        el.innerHTML = '';
+                        el.appendChild(htmlContent);
+                      } else {
+                        el.innerHTML = htmlContent;
+                      }
+                    }
+                  }}
+                ></div>
+              )}
+
               {this.createSelectAllOption()}
               {this.createOptions()}
             </Fragment>
