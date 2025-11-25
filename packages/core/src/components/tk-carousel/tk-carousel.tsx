@@ -11,6 +11,7 @@ export class TkCarousel implements ComponentInterface {
 
   private slotElement?: HTMLSlotElement;
   private slides: HTMLElement[] = [];
+  private slideTrack?: HTMLElement;
 
   @State() autoplayTimer?: number;
   @State() activeSlide: number = 0;
@@ -39,7 +40,7 @@ export class TkCarousel implements ComponentInterface {
    *Controls the interval of the autoplay in milliseconds
    * @defaultValue 3000
    */
-  @Prop() autoplaySpeed: number = 3000;
+  @Prop() autoplayInterval: number = 3000;
 
   /**
    *Controls whether it should loop back to the start after reaching the end
@@ -48,10 +49,10 @@ export class TkCarousel implements ComponentInterface {
   @Prop() autoplayLoop: boolean = false;
 
   /**
-   * Orientation of the navigation indicators
+   * Placement of the navigation indicators
    * @defaultValue 'inside'
    */
-  @Prop() navigationOrientation: 'inside' | 'outside' = 'inside';
+  @Prop() navigationPlacement: 'inside' | 'outside' = 'inside';
 
   /**
    * Position of the navigation indicators
@@ -91,15 +92,19 @@ export class TkCarousel implements ComponentInterface {
     if (!this.slotElement) {
       this.slotElement = this.el.shadowRoot?.querySelector('slot') as HTMLSlotElement | undefined;
     }
+    this.slideTrack = this.el.shadowRoot?.querySelector('.tk-carousel-slide-track') as HTMLElement | undefined;
+    this.el.tabIndex = 0;
     this.updateSlides();
-    this.applySlideClasses();
+    this.updateSlidePosition();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.slides.length });
     this.startAutoplay();
     this.isVertical = this.navigationPosition === 'left' || this.navigationPosition === 'right';
+    this.el.addEventListener('keydown', this.handleKeyDown);
   }
 
   disconnectedCallback() {
     this.stopAutoplay();
+    this.el.removeEventListener('keydown', this.handleKeyDown);
   }
 
   private startAutoplay = () => {
@@ -116,7 +121,7 @@ export class TkCarousel implements ComponentInterface {
       } else {
         this.changeSlide(this.activeSlide + 1);
       }
-    }, this.autoplaySpeed);
+    }, this.autoplayInterval);
   };
 
   private stopAutoplay = () => {
@@ -129,31 +134,30 @@ export class TkCarousel implements ComponentInterface {
   private updateSlides() {
     const assigned = this.slotElement?.assignedElements() || [];
     this.slides = assigned.filter(el => !(el as HTMLElement).hasAttribute('slot')) as HTMLElement[];
-    this.slides.forEach((slide, i) => {
-      slide.classList.add('tk-carousel-slide');
-      slide.style.borderRadius = '16px';
-      slide.dataset.slideIndex = String(i);
-    });
     this.totalSlides = this.slides.length;
   }
 
-  private applySlideClasses() {
-    this.slides.forEach((slide, i) => {
-      const isActive = i === this.activeSlide;
-      slide.classList.add('tk-carousel-slide');
-      slide.classList.toggle('is-active', isActive);
-      const isVisible = i >= this.activeSlide && i < this.activeSlide + this.slidesPerView;
-      slide.classList.toggle('is-visible', isVisible);
-    });
+  private updateSlidePosition() {
+    if (!this.slideTrack) return;
+
+    const slideWidth = 100 / this.slidesPerView;
+    const gapWidth = 16;
+    const translateValue = this.activeSlide * (slideWidth + gapWidth / this.slidesPerView);
+
+    if (this.isVertical) {
+      this.slideTrack.style.transform = `translateY(-${translateValue}%)`;
+    } else {
+      this.slideTrack.style.transform = `translateX(-${translateValue}%)`;
+    }
   }
 
   private changeSlide(index: number) {
     if (!this.totalSlides) return;
-    const lastStartingView = this.totalSlides - this.slidesPerView;
+    const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
     if (index < 0) index = 0;
     if (index > lastStartingView) index = lastStartingView;
     this.activeSlide = index;
-    this.applySlideClasses();
+    this.updateSlidePosition();
     this.tkSlideChange.emit({ slide: this.activeSlide, totalSlides: this.totalSlides });
   }
 
@@ -171,41 +175,49 @@ export class TkCarousel implements ComponentInterface {
     this.changeSlide(index);
   };
 
+  private handleKeyDown = (ev: KeyboardEvent) => {
+    if (this.isVertical) {
+      if (ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        this.handlePrevClick();
+      } else if (ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        this.handleNextClick();
+      }
+    } else {
+      if (ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        this.handlePrevClick();
+      } else if (ev.key === 'ArrowRight') {
+        ev.preventDefault();
+        this.handleNextClick();
+      }
+    }
+  };
+
   private createPrevButton() {
-    if (!this.showArrows || this.activeSlide === 0 || this.slides.length === 0) return null;
-    return (
-      <tk-button
-        size="small"
-        class="prev-button"
-        icon={this.navigationPosition == 'left' || this.navigationPosition == 'right' ? 'keyboard_arrow_up' : 'chevron_left'}
-        onClick={this.handlePrevClick}
-      />
-    );
+    if (!this.showArrows || this.activeSlide === 0 || this.slides.length <= this.slidesPerView) return null;
+    return <tk-button size="small" class="prev-button" icon={this.isVertical ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
   }
 
   private createNextButton() {
-    if (!this.showArrows || this.activeSlide >= this.slides.length - this.slidesPerView || this.slides.length === 0) return null;
-    return (
-      <tk-button
-        size="small"
-        class="next-button"
-        icon={this.navigationPosition == 'left' || this.navigationPosition == 'right' ? 'keyboard_arrow_down' : 'chevron_right'}
-        onClick={this.handleNextClick}
-      />
-    );
+    const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
+    if (!this.showArrows || this.activeSlide >= lastStartingView || this.slides.length <= this.slidesPerView) return null;
+    return <tk-button size="small" class="next-button" icon={this.isVertical ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
   }
 
   private createIndicators() {
-    if (!this.showIndicators || this.slides.length === 0) return null;
-    const indicatorCount = this.totalSlides - this.slidesPerView + 1;
+    if (!this.showIndicators || this.slides.length <= this.slidesPerView) return null;
+    const indicatorCount = Math.max(1, this.totalSlides - this.slidesPerView + 1);
+
     return (
       <div class="tk-carousel-indicators">
         {this.showPlayerButton &&
           this.autoplay &&
           (this.autoplayTimer ? (
-            <tk-icon class="player-button" icon="pause_circle" size="small" variant="white" onClick={this.stopAutoplay} />
+            <tk-icon class="player-button" icon="pause_circle" size="small" onClick={this.stopAutoplay} />
           ) : (
-            <tk-icon class="player-button" icon="play_circle" size="small" variant="white" onClick={this.startAutoplay} />
+            <tk-icon class="player-button" icon="play_circle" size="small" onClick={this.startAutoplay} />
           ))}
         {Array.from({ length: indicatorCount }).map((_, index) => (
           <div
@@ -232,22 +244,30 @@ export class TkCarousel implements ComponentInterface {
 
   render() {
     const rootClasses = classNames('tk-carousel', {
-      [this.navigationOrientation]: true,
+      [this.navigationPlacement]: true,
       [this.navigationPosition]: true,
       'is-vertical': this.isVertical,
     });
+
+    const sliderClasses = classNames('tk-carousel-slider', {
+      'is-vertical': this.isVertical,
+    });
+
     this.el.style.setProperty('--slides-per-view', String(this.slidesPerView));
 
     return (
       <div class={rootClasses}>
-        <div class="tk-carousel-slider">
-          <div class="tk-carousel-slide-list">
-            <div class="tk-carousel-slide-track">
-              <slot></slot>
-            </div>
+        <div class={sliderClasses}>
+          <div class="tk-carousel-slide-track">
+            <slot
+              onSlotchange={() => {
+                this.updateSlides();
+                this.updateSlidePosition();
+              }}
+            ></slot>
           </div>
-          {this.renderNavigationElement()}
         </div>
+        {this.renderNavigationElement()}
       </div>
     );
   }
