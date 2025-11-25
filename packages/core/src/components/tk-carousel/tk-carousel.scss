@@ -27,6 +27,7 @@
       .tk-carousel-indicators {
         display: flex;
         gap: 8px;
+        align-items: center;
 
         .tk-carousel-indicator {
           width: 6px;
@@ -38,6 +39,9 @@
           &.is-active {
             background-color: var(--primary-base);
           }
+        }
+        .player-button {
+          cursor: pointer;
         }
       }
     }

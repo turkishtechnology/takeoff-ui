@@ -11,8 +11,8 @@ export class TkCarousel implements ComponentInterface {
 
   private slotElement?: HTMLSlotElement;
   private slides: HTMLElement[] = [];
-  private autoplayTimer?: number;
 
+  @State() autoplayTimer?: number;
   @State() activeSlide: number = 0;
   @State() totalSlides: number = 0;
 
@@ -57,6 +57,10 @@ export class TkCarousel implements ComponentInterface {
   @Prop() navigationPosition: 'distributed' | 'top' | 'bottom' | 'left' | 'right' = 'distributed';
 
   /**
+   * Controls whether the pause/play button is shown
+   */
+  @Prop() showPlayerButton: boolean = false;
+  /**
    * Emitted when right arrow is clicked
    */
   @Event({ eventName: 'tk-next-slide' }) tkNextSlide: EventEmitter<{ slide: number }>;
@@ -85,7 +89,7 @@ export class TkCarousel implements ComponentInterface {
     this.stopAutoplay();
   }
 
-  private startAutoplay() {
+  private startAutoplay = () => {
     if (!this.autoplay || this.totalSlides <= 1) return;
     this.stopAutoplay();
     this.autoplayTimer = window.setInterval(() => {
@@ -99,14 +103,14 @@ export class TkCarousel implements ComponentInterface {
         this.changeSlide(this.activeSlide + 1);
       }
     }, this.autoplaySpeed);
-  }
+  };
 
-  private stopAutoplay() {
+  private stopAutoplay = () => {
     if (this.autoplayTimer) {
       clearInterval(this.autoplayTimer);
       this.autoplayTimer = undefined;
     }
-  }
+  };
 
   private updateSlides() {
     const assigned = this.slotElement?.assignedElements() || [];
@@ -177,6 +181,13 @@ export class TkCarousel implements ComponentInterface {
     if (!this.showIndicators || this.slides.length === 0) return null;
     return (
       <div class="tk-carousel-indicators">
+        {this.showPlayerButton &&
+          this.autoplay &&
+          (this.autoplayTimer ? (
+            <tk-icon class="player-button" icon="pause_circle" size="small" variant="white" onClick={this.stopAutoplay} />
+          ) : (
+            <tk-icon class="player-button" icon="play_circle" size="small" variant="white" onClick={this.startAutoplay} />
+          ))}
         {this.slides.map((_, index) => (
           <div
             class={{
