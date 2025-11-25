@@ -14,7 +14,7 @@ const findDialogHost = (el: HTMLElement): HTMLTkDialogElement | null => {
   return null;
 };
 
-export const addDialogScrollListener = (el: HTMLElement, handler: () => void) => {
+export const addDialogScrollListener = (el: HTMLElement, handler: (e) => void) => {
   const dialog = findDialogHost(el);
   if (!dialog) return;
 
