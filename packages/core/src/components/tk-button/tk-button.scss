@@ -1,5 +1,6 @@
 :host {
   display: inline-block;
+  // height: 100%;
 }
 
 :host(.full-width) {
@@ -91,7 +92,7 @@
 }
 
 @mixin button-size($height, $font-size, $radius, $v-padding, $h-padding, $gap, $icon-size, $icon-only-padding) {
-  height: $height;
+  min-height: $height;
   font-size: $font-size;
   border-radius: $radius;
   padding: $v-padding $h-padding;
@@ -123,6 +124,8 @@
   align-items: center;
   justify-content: center;
   outline: none;
+  overflow: hidden;
+  height: 100%;
 
   &.underline span {
     text-decoration: underline;
