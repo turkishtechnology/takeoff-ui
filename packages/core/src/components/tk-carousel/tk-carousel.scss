@@ -37,7 +37,7 @@
       }
     }
 
-    &.is-vertical .tk-carousel-slide-track {
+    &.vertical .tk-carousel-slide-track {
       flex-direction: column;
       width: 100%;
 
@@ -65,14 +65,14 @@
         height: 8px;
         border-radius: 50%;
         cursor: pointer;
-        background-color: var(--background-light);
+        background-color: var(--secondary-sub-base);
         transition: all 0.3s ease;
 
         &:hover {
           background-color: var(--primary-light);
         }
 
-        &.is-active {
+        &.active {
           background-color: var(--primary-base);
           width: 24px;
           border-radius: 4px;
@@ -126,6 +126,11 @@
 
         .tk-carousel-indicators {
           flex-direction: column;
+          .active {
+            height: 24px;
+            width: 8px;
+            border-radius: 4px;
+          }
         }
       }
     }
@@ -141,6 +146,12 @@
 
         .tk-carousel-indicators {
           flex-direction: column;
+
+          .active {
+            height: 24px;
+            width: 8px;
+            border-radius: 4px;
+          }
         }
       }
     }
@@ -170,7 +181,7 @@
         z-index: 10;
       }
 
-      &.is-vertical {
+      &.vertical {
         .prev-button,
         .next-button {
           top: auto;
@@ -197,7 +208,7 @@
             width: 8px;
             height: 8px;
 
-            &.is-active {
+            &.active {
               height: 24px;
               width: 8px;
               border-radius: 4px;
@@ -213,17 +224,17 @@
       margin-bottom: 64px;
       .tk-carousel-navigation {
         position: absolute;
-        bottom: 16px;
+        bottom: -48px;
         left: 50%;
         transform: translateX(-50%);
       }
     }
 
     &.top {
-      margin-bottom: 64px;
+      margin-top: 64px;
       .tk-carousel-navigation {
         position: absolute;
-        top: 16px;
+        top: -48px;
         left: 50%;
         transform: translateX(-50%);
       }
@@ -231,12 +242,12 @@
 
     &.left {
       margin-left: 64px;
-      &.is-vertical {
+      &.vertical {
         .tk-carousel-indicator {
           width: 8px;
           height: 8px;
 
-          &.is-active {
+          &.active {
             height: 24px;
             width: 8px;
             border-radius: 4px;
@@ -258,12 +269,12 @@
 
     &.right {
       margin-right: 64px;
-      &.is-vertical {
+      &.vertical {
         .tk-carousel-indicator {
           width: 8px;
           height: 8px;
 
-          &.is-active {
+          &.active {
             height: 24px;
             width: 8px;
             border-radius: 4px;
@@ -285,6 +296,7 @@
 
     &.distributed {
       margin-bottom: 36px;
+      margin-inline: 64px;
       .prev-button,
       .next-button {
         position: absolute;
@@ -293,11 +305,11 @@
       }
 
       .prev-button {
-        left: 16px;
+        left: -48px;
       }
 
       .next-button {
-        right: 16px;
+        right: -48px;
       }
 
       .tk-carousel-indicators {
