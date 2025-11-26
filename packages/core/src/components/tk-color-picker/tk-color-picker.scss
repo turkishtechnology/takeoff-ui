@@ -4,358 +4,561 @@
 
 .tk-color-picker {
   display: inline-block;
+  position: relative;
+  width: 100%;
 
-  &.tk-color-picker-slider-overlay {
-    position: relative;
-  }
   &.tk-color-picker-inline {
-    width: 20px;
-    height: 20px;
+    width: auto;
+    display: flex;
+  }
+
+  &.tk-color-picker-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.tk-color-picker-trigger-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--external-label-base-div-gap, 4px);
+  width: 100%;
+
+  &.tk-color-picker-trigger-wrapper-compact,
+  &.tk-color-picker-trigger-wrapper-item {
+    width: auto;
+  }
+
+  .tk-color-picker-label {
+    display: flex;
+    align-items: center;
+    padding: var(--external-label-base-label-v-padding, 0) var(--external-label-base-label-h-padding, 8px);
+
+    .tk-color-picker-label-text {
+      font-family: var(--label-m-base-font, 'Geologica', sans-serif);
+      font-size: var(--desktop-label-m-base-size, 14px);
+      font-weight: 400;
+      line-height: var(--desktop-label-m-base-line-height, 20px);
+      color: var(--text-darkest, #222530);
+    }
+
+    .tk-color-picker-required {
+      font-family: var(--label-s-font, 'Geologica', sans-serif);
+      font-size: var(--desktop-label-s-size, 12px);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height, 18px);
+      color: var(--states-danger-base, #ff3d32);
+    }
   }
 
   .tk-color-picker-trigger {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    cursor: pointer;
-    border: 1px solid var(--border-light, #E1E4EA);
-    border-radius: var(--external-label-base-text-area-radius, 8px);
+    justify-content: space-between;
+    gap: var(--external-label-base-input-gap, 4px);
     padding: var(--external-label-base-input-v-padding, 10px) var(--external-label-base-input-h-padding, 10px);
     background: var(--static-light, #ffffff);
-    gap: var(--external-label-base-input-gap, 4px);
+    border: 1px solid var(--border-light, #e1e4ea);
+    border-radius: var(--external-label-base-text-area-radius, 8px);
+    cursor: pointer;
+    height: 40px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, background-color 0.2s;
+    outline: none;
 
-    .tk-color-picker-color-preview {
-      width: 24px;
-      height: 24px;
-      border: 1px solid var(--border-light, #E1E4EA);
-      border-radius: 4px;
-      overflow: hidden;
-      .tk-color-picker-color-preview-inner {
-        width: 100%;
-        height: 100%;
-      }
+    &:hover:not(.tk-color-picker-trigger-disabled) {
+      background-color: var(--background-lightest, #f9fafc);
     }
 
-    .tk-color-picker-trigger-text {
-      span {
-        font-size: 14px;
-        color: var(--text-darkest, #222530);
-      }
-    }
-  }
-
-  .tk-color-picker-panel {
-    position: absolute;
-    z-index: 1001;
-    width: 280px;
-    background: var(--static-light, #ffffff);
-    border: 1px solid var(--border-light, #E1E4EA);
-    border-radius: 16px;
-    box-shadow:
-      0px 2px 2px -1px rgba(82, 88, 102, 0.08),
-      0px 6px 12px -2px rgba(82, 88, 102, 0.08),
-      0px 8px 20px 0px rgba(82, 88, 102, 0.08);
-    transform-origin: center top;
-
-    &.tk-color-picker-panel-inline {
-      position: relative;
+    &:focus-visible {
+      border-color: var(--states-info-base, #3b82f6);
     }
 
-    .tk-color-picker-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 12px;
-      border-bottom: 1px solid var(--border-light, #E1E4EA);
+    &.tk-color-picker-trigger-focused {
+      border-color: var(--states-info-base, #3b82f6);
+    }
 
-      .tk-color-picker-panel-header-title {
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 24px;
-        color: var(--text-darkest, #222530);
-      }
+    &.tk-color-picker-trigger-disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      background-color: var(--background-lightest, #f9fafc);
+      pointer-events: none;
+    }
 
-      .tk-color-picker-panel-close {
-        width: 32px;
-        height: 32px;
+    &.tk-color-picker-trigger-input {
+      cursor: default;
+
+      .tk-color-picker-trigger-chevron {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 6px;
-        border: none;
-        border-radius: 8px;
-        background: transparent;
         cursor: pointer;
-        transition: background-color 0.2s;
+      }
+    }
 
-        &:hover {
-          background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
+    &.tk-color-picker-trigger-compact {
+      width: auto;
+      padding: 8px;
+      gap: 4px;
+
+      .tk-color-picker-color-preview {
+        margin: 0;
+      }
+    }
+
+    &.tk-color-picker-trigger-item {
+      width: auto;
+      padding: 8px;
+      gap: 6px;
+      height: auto;
+
+      .tk-color-picker-color-preview-square {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        .tk-color-picker-color-preview-inner {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .tk-color-picker-value-text {
+        font-family: var(--body-s-font, 'Geologica', sans-serif);
+        font-size: var(--desktop-body-s-size, 14px);
+        font-weight: 400;
+        line-height: var(--desktop-body-s-line-height, 20px);
+        color: var(--text-dark, #525866);
+        white-space: nowrap;
+      }
+    }
+
+    .tk-color-picker-input-content {
+      display: flex;
+      align-items: center;
+      gap: var(--external-label-base-input-gap, 4px);
+      flex: 1;
+      min-width: 0;
+
+      .tk-color-picker-color-preview-wrapper {
+        display: flex;
+        align-items: center;
+        padding-right: 8px;
+        border-right: 1px solid var(--border-light, #e1e4ea);
+        flex-shrink: 0;
+      }
+
+      .tk-color-picker-color-preview {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        .tk-color-picker-color-preview-inner {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .tk-color-picker-trigger-input-field {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        background: transparent;
+        font-family: var(--body-s-font, 'Geologica', sans-serif);
+        font-size: var(--desktop-body-s-size, 14px);
+        font-weight: 400;
+        line-height: var(--desktop-body-s-line-height, 20px);
+        color: var(--text-darkest, #222530);
+        outline: none;
+        padding: 0;
+        height: 20px;
+
+        &:disabled {
+          cursor: not-allowed;
+          color: var(--text-light, #99a0ae);
+        }
+
+        &::placeholder {
+          color: var(--text-light, #99a0ae);
+        }
+      }
+
+      .tk-color-picker-value-text {
+        font-family: var(--body-s-font, 'Geologica', sans-serif);
+        font-size: var(--desktop-body-s-size, 14px);
+        font-weight: 400;
+        line-height: var(--desktop-body-s-line-height, 20px);
+        color: var(--text-darkest, #222530);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    > .tk-color-picker-color-preview-wrapper {
+      display: flex;
+      align-items: center;
+      padding-right: 8px;
+      border-right: 1px solid var(--border-light, #e1e4ea);
+      flex-shrink: 0;
+
+      .tk-color-picker-color-preview {
+        width: 20px;
+        height: 20px;
+        border: 1px solid var(--border-light, #e1e4ea);
+        border-radius: 50%;
+        overflow: hidden;
+
+        .tk-color-picker-color-preview-inner {
+          width: 100%;
+          height: 100%;
         }
       }
     }
 
-    .tk-color-picker-panel-body {
-      padding: 8px;
+    .tk-color-picker-trigger-icon {
+      flex-shrink: 0;
+    }
+  }
+}
 
-      .tk-color-picker-saturation-container {
-        position: relative;
-        width: 264px;
-        height: 264px;
-        border-radius: 8px;
-        border: 1px solid var(--border-light);
-        overflow: hidden;
-        cursor: crosshair;
+.tk-color-picker-panel {
+  position: absolute;
+  z-index: 1000;
+  background: var(--static-light, #ffffff);
+  border: 1px solid var(--border-light, #e1e4ea);
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(82, 88, 102, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 4px;
 
-        .tk-color-picker-saturation {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0) 100%),
-                      linear-gradient(to right, #fff 0%, rgb(255 255 255 / 0) 100%);
-        }
-        .tk-color-picker-saturation-pointer {
-          position: absolute;
-          width: 14px;
-          height: 14px;
-          border-radius: 50%;
-          border: 2px solid white;
-          box-shadow: 0 0 0 1px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(0,0,0,0.2);
-          transform: translate(-50%, -50%);
-          pointer-events: none;
-        }
-      }
+  width: 280px;
 
-      .tk-color-picker-controls {
+  &.tk-color-picker-panel-inline {
+    position: relative;
+    z-index: 1;
+    box-shadow: none;
+    margin-top: 0;
+  }
+
+  &.tk-color-picker-panel-horizontal {
+    width: 400px;
+  }
+}
+
+.tk-color-picker-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+
+  .tk-color-picker-title {
+    font-family: var(--body-m-base-font, 'Geologica', sans-serif);
+    font-size: var(--body-m-base-size, 16px);
+    font-weight: 400;
+    line-height: var(--body-m-base-line-height, 24px);
+    color: var(--text-darkest, #222530);
+  }
+
+  &.tk-color-picker-panel-header-basic {
+    background: var(--static-light, #ffffff);
+  }
+
+  &.tk-color-picker-panel-header-divided {
+    background: var(--static-light, #ffffff);
+    border-bottom: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+  }
+
+  &.tk-color-picker-panel-header-light {
+    background: var(--background-lightest, #f9fafc);
+    border-bottom: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+  }
+
+  &.tk-color-picker-panel-header-dark {
+    background: var(--background-darkest, #222530);
+
+    .tk-color-picker-title {
+      color: var(--text-lightest, #f9fafc);
+    }
+
+    .tk-color-picker-close {
+      color: var(--icon-base, #717784);
+    }
+  }
+
+  &.tk-color-picker-panel-header-primary {
+    background: var(--primary-base, #c90019);
+
+    .tk-color-picker-title {
+      color: var(--text-lightest, #f9fafc);
+    }
+
+    .tk-color-picker-close {
+      color: var(--primary-lightest, #ffeaec);
+    }
+  }
+}
+
+.tk-color-picker-panel-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tk-color-picker-body-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .tk-color-picker-saturation-container {
+    width: 100%;
+    height: 264px;
+  }
+
+  .tk-color-picker-controls-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .tk-color-picker-eyedropper-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      .tk-color-picker-sliders {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        margin-top: 16px;
-
-        .tk-color-picker-sliders {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-
-          .tk-color-picker-eyedropper {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border-sub-base);
-            background: var(--static-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-
-            &:hover {
-              background: var(--states-hover-light);
-            }
-          }
-
-          .tk-color-picker-slider-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-
-            .tk-color-picker-slider {
-              position: relative;
-              height: 12px;
-              cursor: pointer;
-
-              .tk-color-picker-slider-overlay {
-                  position: absolute;
-                  top: 0;
-                  bottom: 0;
-                  border-radius: 24px;
-                  border: 1px solid rgba(0, 0, 0, 0.08);
-              }
-
-              &.tk-color-picker-hue {
-                background: linear-gradient(
-                  to right,
-                  #ff0000 0%,
-                  #ffff00 17%,
-                  #00ff00 33%,
-                  #00ffff 50%,
-                  #0000ff 67%,
-                  #ff00ff 83%,
-                  #ff0000 100%
-                );
-              }
-
-              .tk-color-picker-slider-thumb {
-                position: absolute;
-                width: 16px;
-                height: 16px;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                border-radius: 50%;
-                background: white;
-                border: 1px solid var(--border-light, #E1E4EA);
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-                pointer-events: none;
-              }
-            }
-          }
-
-          .tk-color-picker-preview {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border-light, #E1E4EA);
-            overflow: hidden;
-            position: relative;
-
-            .tk-color-picker-preview-color {
-              position: absolute;
-              inset: 0;
-            }
-          }
-        }
-
-        .tk-color-picker-inputs {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-
-          .tk-color-picker-format-select {
-            position: relative;
-            .tk-color-picker-format-input {
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              height: 32px;
-              padding: 6px 8px;
-              background: var(--static-light, #ffffff);
-              border: 1px solid var(--border-light, #E1E4EA);
-              border-radius: 8px;
-              font-size: 12px;
-              line-height: 18px;
-              color: var(--text-darkest, #222530);
-              cursor: pointer;
-
-              .tk-color-picker-format-arrow {
-                width: 20px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              }
-            }
-          }
-
-          .tk-color-picker-input-group {
-            display: flex;
-            gap: 4px;
-            flex: 1;
-          }
-
-          .tk-color-picker-alpha-input {
-            width: 56px;
-
-            .tk-color-picker-alpha-input-field {
-              width: 100%;
-              height: 32px;
-              padding: 6px 20px 6px 8px;
-              background: var(--static-light, #ffffff);
-              border: 1px solid var(--border-light, #E1E4EA);
-              border-radius: 8px;
-              font-size: 12px;
-              line-height: 18px;
-              color: var(--text-darkest, #222530);
-              text-align: center;
-
-              &:focus {
-                outline: none;
-                border-color: var(--primary-base, #C90019);
-              }
-            }
-
-            .tk-color-picker-alpha-arrows {
-              position: absolute;
-              right: 0;
-              top: 0;
-              height: 100%;
-              display: flex;
-              flex-direction: column;
-
-              button {
-                width: 16px;
-                height: 16px;
-                background: var(--static-light, #ffffff);
-                border: 1px solid var(--border-light, #E1E4EA);
-                cursor: pointer;
-
-                &:first-child {
-                  border-radius: 0 8px 0 0;
-                  border-bottom: none;
-                }
-                &:last-child {
-                  border-radius: 0 0 8px 0;
-                }
-                &:hover {
-                  background: var(--states-hover-light, rgba(0, 0, 0, 0.04));
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .tk-color-picker-presets {
-        padding: 8px;
-
-        .tk-color-picker-presets-grid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-          padding: 2px;
-
-          .tk-color-picker-preset {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: transform 0.1s;
-
-            &:hover {
-              transform: scale(1.1);
-            }
-          }
-        }
-      }
-    }
-
-    .tk-color-picker-panel-footer {
-      display: flex;
-      justify-content: flex-end;
-      padding: 8px;
-      border-top: 1px solid var(--border-light, #E1E4EA);
-
-      .tk-color-picker-footer-actions {
-        display: flex;
         gap: 8px;
-
-        tk-button {
-          &.tk-color-picker-cancel {
-            background: var(--static-light, #ffffff);
-            border: 1px solid var(--border-sub-base, #CACFD8);
-            color: var(--text-darkest, #222530);
-
-            &:hover {
-              background: var(--states-hover-light, rgba(0,0,0,0.04));
-            }
-          }
-          &.tk-color-picker-apply {
-            background: var(--primary-base, #C90019);
-            color: var(--static-white, #ffffff);
-
-            &:hover {
-              background: var(--primary-dark, #A00015);
-            }
-          }
-        }
       }
     }
+  }
+}
+
+.tk-color-picker-body-horizontal {
+  display: flex;
+  gap: 8px;
+  height: 264px;
+
+  .tk-color-picker-controls-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 32px;
+    align-items: center;
+
+    .tk-color-picker-sliders-vertical-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .tk-color-picker-saturation-wrapper {
+    flex: 1;
+    height: 100%;
+
+    .tk-color-picker-saturation-container {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.tk-color-picker-saturation-container {
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #e1e4ea);
+  overflow: hidden;
+  cursor: crosshair;
+
+  .tk-color-picker-saturation-white {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+  }
+
+  .tk-color-picker-saturation-black {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+  }
+
+  .tk-color-picker-saturation-pointer {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+}
+
+
+.tk-color-picker-preview-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #e1e4ea);
+  flex-shrink: 0;
+}
+
+.tk-color-picker-slider {
+  position: relative;
+  height: 12px;
+  border-radius: 24px;
+  cursor: pointer;
+  width: 100%;
+  border: 1px solid var(--overlay-black-xlightest, rgba(0, 0, 0, 0.08));
+
+  &.tk-color-picker-hue {
+    background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 67%, #f0f 83%, red 100%);
+  }
+
+  &.tk-color-picker-slider-vertical {
+    width: 12px;
+    height: 100%;
+
+    &.tk-color-picker-hue {
+      background: linear-gradient(to bottom, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 67%, #f0f 83%, red 100%);
+    }
+  }
+
+  .tk-color-picker-alpha-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+      linear-gradient(-45deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+  }
+
+  .tk-color-picker-alpha-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+  }
+
+  .tk-color-picker-slider-thumb {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    padding: 4px;
+    border-radius: 50%;
+    border: 1px solid var(--border-light, #E1E4EA);
+    background: var(--static-white, #FFF);
+    box-shadow: 0 0 20px 3px var(--shadow-black-alpha-light, rgba(82, 88, 102, 0.04));
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .tk-color-picker-slider-thumb-inner {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue-600, #326FD1);
+    }
+  }
+}
+
+.tk-color-picker-inputs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .tk-color-picker-format-select {
+    width: 65px;
+    flex-shrink: 0;
+  }
+
+  .tk-color-picker-input-fields {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    min-width: 0;
+
+    tk-input {
+      width: 100%;
+    }
+
+    .tk-color-picker-rgb-inputs {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      gap: 4px;
+
+      .tk-color-picker-rgb-input {
+        flex: 1;
+        min-width: 38px;
+      }
+    }
+
+    .tk-color-picker-hex-input {
+      flex: 1;
+    }
+
+    .tk-color-picker-alpha-input {
+      width: 56px;
+      flex: 0 0 56px;
+    }
+  }
+}
+
+.tk-color-picker-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px;
+
+  .tk-color-picker-preset {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+}
+
+.tk-color-picker-panel-footer {
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--card-footer-base-gap, 8px);
+
+  ::slotted([slot='footer-actions']) {
+    display: flex;
+    align-items: center;
+    gap: var(--card-footer-base-gap, 8px);
+  }
+
+  &.tk-color-picker-panel-footer-basic {
+    background: var(--static-light, #ffffff);
+  }
+
+  &.tk-color-picker-panel-footer-divided {
+    background: var(--static-light, #ffffff);
+    border-top: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
+  }
+
+  &.tk-color-picker-panel-footer-light {
+    background: var(--background-lightest, #f9fafc);
+    border-top: var(--spacing-px, 1px) solid var(--border-light, #e1e4ea);
   }
 }
