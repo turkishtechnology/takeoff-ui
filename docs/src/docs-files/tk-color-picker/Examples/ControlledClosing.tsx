@@ -16,19 +16,10 @@ const ControlledClosing = () => {
 
   const demo = (
     <div className="flex justify-center items-center">
-      <TkColorPicker
-        ref={pickerRef}
-        label="Select Color"
-        value={color}
-        preventDismiss
-        showCloseButton={false}
-        onTkChange={e => setColor(e.detail)}
-      >
+      <TkColorPicker ref={pickerRef} label="Select Color" value={color} preventDismiss showCloseButton={false} onTkChange={e => setColor(e.detail)}>
         <div slot="footer-actions">
-          <TkButton label='Cancel' variant="secondary" size="small" onTkClick={handleCancel}>
-          </TkButton>
-          <TkButton label='Apply' variant="primary" size="small" onTkClick={handleApply}>
-          </TkButton>
+          <TkButton label="Cancel" variant="secondary" size="small" onTkClick={handleCancel}></TkButton>
+          <TkButton label="Apply" variant="primary" size="small" onTkClick={handleApply}></TkButton>
         </div>
       </TkColorPicker>
     </div>

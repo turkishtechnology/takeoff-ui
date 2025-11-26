@@ -7,12 +7,7 @@ const Basic = () => {
 
   const demo = (
     <div className="flex justify-center items-center">
-      <TkColorPicker
-        label="Select Color"
-        showAsterisk
-        value={color}
-        onTkChange={e => setColor(e.detail)}
-      />
+      <TkColorPicker label="Select Color" showAsterisk value={color} onTkChange={e => setColor(e.detail)} />
     </div>
   );
 

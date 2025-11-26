@@ -63,12 +63,7 @@ const color = ref('#C90019');
         ))}
       </TkRadioGroup>
       <div className="flex justify-center items-center min-h-[80px]">
-        <TkColorPicker
-          label={triggerType === 'input' ? 'Color' : undefined}
-          triggerType={triggerType}
-          value={color}
-          onTkChange={e => setColor(e.detail)}
-        />
+        <TkColorPicker label={triggerType === 'input' ? 'Color' : undefined} triggerType={triggerType} value={color} onTkChange={e => setColor(e.detail)} />
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ const color = ref('#326FD1');
           onTkInput={e => setColor(e.detail)}
         >
           <div slot="footer-actions">
-            <TkButton label='Apply' variant="primary" size="small" />
+            <TkButton label="Apply" variant="primary" size="small" />
           </div>
         </TkColorPicker>
       </div>

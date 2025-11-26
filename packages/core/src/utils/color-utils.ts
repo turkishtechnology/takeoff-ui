@@ -1,29 +1,50 @@
 export interface HSLA {
-  h: number;    // 0–360
-  s: number;    // 0–1
-  l: number;    // 0–1
-  a: number;    // 0–1
+  h: number; // 0–360
+  s: number; // 0–1
+  l: number; // 0–1
+  a: number; // 0–1
 }
 
 export interface HSVA {
-  h: number;    // 0–360
-  s: number;    // 0–100
-  v: number;    // 0–100
-  a: number;    // 0–1
+  h: number; // 0–360
+  s: number; // 0–100
+  v: number; // 0–100
+  a: number; // 0–1
 }
 
 export function hslToRgb(h: number, s: number, l: number) {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const hh = h / 60;
   const x = c * (1 - Math.abs((hh % 2) - 1));
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
 
-  if (hh >= 0 && hh < 1) { r = c; g = x; b = 0; }
-  else if (hh < 2) { r = x; g = c; b = 0; }
-  else if (hh < 3) { r = 0; g = c; b = x; }
-  else if (hh < 4) { r = 0; g = x; b = c; }
-  else if (hh < 5) { r = x; g = 0; b = c; }
-  else { r = c; g = 0; b = x; }
+  if (hh >= 0 && hh < 1) {
+    r = c;
+    g = x;
+    b = 0;
+  } else if (hh < 2) {
+    r = x;
+    g = c;
+    b = 0;
+  } else if (hh < 3) {
+    r = 0;
+    g = c;
+    b = x;
+  } else if (hh < 4) {
+    r = 0;
+    g = x;
+    b = c;
+  } else if (hh < 5) {
+    r = x;
+    g = 0;
+    b = c;
+  } else {
+    r = c;
+    g = 0;
+    b = x;
+  }
 
   const m = l - c / 2;
   return {
@@ -47,9 +68,15 @@ export function rgbToHsla(r: number, g: number, b: number, a: number): HSLA {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
     h = h * 60;
   }
@@ -61,7 +88,9 @@ export function hslaToHex(hsla: HSLA): string {
   const { r, g, b } = hslToRgb(hsla.h, hsla.s, hsla.l);
   // Only include alpha if it's not 1
   if (hsla.a < 1) {
-    const aa = Math.round(hsla.a * 255).toString(16).padStart(2, '0');
+    const aa = Math.round(hsla.a * 255)
+      .toString(16)
+      .padStart(2, '0');
     return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}${aa}`;
   }
   return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
@@ -88,7 +117,9 @@ export function parseColor(input: string): HSLA {
   // Hex
   if (input.startsWith('#')) {
     const hex = input.slice(1);
-    let r = 0, g = 0, b = 0;
+    let r = 0,
+      g = 0,
+      b = 0;
     if (hex.length === 3) {
       r = parseInt(hex[0] + hex[0], 16);
       g = parseInt(hex[1] + hex[1], 16);
@@ -173,7 +204,9 @@ export function hsvaToRgb(h: number, s: number, v: number): { r: number; g: numb
   s = s / 100;
   v = v / 100;
 
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
 
   const i = Math.floor(h * 6);
   const f = h * 6 - i;
@@ -182,12 +215,36 @@ export function hsvaToRgb(h: number, s: number, v: number): { r: number; g: numb
   const t = v * (1 - (1 - f) * s);
 
   switch (i % 6) {
-    case 0: r = v; g = t; b = p; break;
-    case 1: r = q; g = v; b = p; break;
-    case 2: r = p; g = v; b = t; break;
-    case 3: r = p; g = q; b = v; break;
-    case 4: r = t; g = p; b = v; break;
-    case 5: r = v; g = p; b = q; break;
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
   }
 
   return {
@@ -200,7 +257,9 @@ export function hsvaToRgb(h: number, s: number, v: number): { r: number; g: numb
 export function hsvaToHex(hsva: HSVA): string {
   const { r, g, b } = hsvaToRgb(hsva.h, hsva.s, hsva.v);
   if (hsva.a < 1) {
-    const aa = Math.round(hsva.a * 255).toString(16).padStart(2, '0');
+    const aa = Math.round(hsva.a * 255)
+      .toString(16)
+      .padStart(2, '0');
     return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}${aa}`;
   }
   return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
@@ -227,7 +286,10 @@ export function parseColorToHsva(input: string): HSVA {
   // Hex
   if (input.startsWith('#')) {
     const hex = input.slice(1);
-    let r = 0, g = 0, b = 0, a = 1;
+    let r = 0,
+      g = 0,
+      b = 0,
+      a = 1;
     if (hex.length === 3) {
       r = parseInt(hex[0] + hex[0], 16);
       g = parseInt(hex[1] + hex[1], 16);
@@ -275,4 +337,3 @@ export function parseColorToHsva(input: string): HSVA {
 
   return { h: 0, s: 0, v: 0, a: 1 };
 }
-

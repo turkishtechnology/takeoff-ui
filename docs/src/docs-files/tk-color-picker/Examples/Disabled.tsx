@@ -5,16 +5,8 @@ import FeatureDemo from '../../../components/FeatureDemo';
 const Disabled = () => {
   const demo = (
     <div className="flex flex-col sm:flex-row gap-6 justify-center items-start">
-      <TkColorPicker
-        label="Disabled Picker"
-        value="#717784"
-        disabled
-      />
-      <TkColorPicker
-        label="Required Field"
-        value="#326FD1"
-        showAsterisk
-      />
+      <TkColorPicker label="Disabled Picker" value="#717784" disabled />
+      <TkColorPicker label="Required Field" value="#326FD1" showAsterisk />
     </div>
   );
 
@@ -64,5 +56,3 @@ const Disabled = () => {
 };
 
 export default Disabled;
-
-

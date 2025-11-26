@@ -1,16 +1,4 @@
-import {
-  Component,
-  h,
-  Prop,
-  State,
-  Event,
-  EventEmitter,
-  Element,
-  Watch,
-  Method,
-  Fragment,
-  ComponentInterface,
-} from '@stencil/core';
+import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import classNames from 'classnames';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from '../../utils/color-utils';
@@ -129,10 +117,7 @@ export class TkColorPicker implements ComponentInterface {
   /**
    * Array of preset color values
    */
-  @Prop() presets: string[] = [
-    '#326FD1', '#C79807', '#A45E3C', '#119C8D', '#EDBBA3', '#ABC9FB',
-    '#D0E1FD', '#FF6259', '#717784', '#85B2F9', '#EAD6FD'
-  ];
+  @Prop() presets: string[] = ['#326FD1', '#C79807', '#A45E3C', '#119C8D', '#EDBBA3', '#ABC9FB', '#D0E1FD', '#FF6259', '#717784', '#85B2F9', '#EAD6FD'];
 
   /**
    * Shows/hides the alpha slider
@@ -221,9 +206,7 @@ export class TkColorPicker implements ComponentInterface {
 
   componentWillLoad() {
     this.internalHSVA = parseColorToHsva(this.value || '#000000');
-    this.currentFormat = (this.defaultFormat === 'hex' || this.defaultFormat === 'rgba')
-      ? this.defaultFormat
-      : 'hex';
+    this.currentFormat = this.defaultFormat === 'hex' || this.defaultFormat === 'rgba' ? this.defaultFormat : 'hex';
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
     this.hasHeaderActionsSlot = !!this.el.querySelector(':scope > [slot="header-actions"]');
     this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
@@ -233,12 +216,7 @@ export class TkColorPicker implements ComponentInterface {
   componentDidUpdate() {
     if (this.isOpen && this.triggerRef && this.panelRef) {
       if (!this.cleanupAuto) {
-        this.cleanupAuto = autoUpdate(
-          this.triggerRef,
-          this.panelRef,
-          () => this.updatePanelPosition(),
-          { elementResize: false }
-        );
+        this.cleanupAuto = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePanelPosition(), { elementResize: false });
       }
     } else {
       if (this.cleanupAuto) {
@@ -368,11 +346,7 @@ export class TkColorPicker implements ComponentInterface {
 
   private updatePanelPosition() {
     if (!this.triggerRef || !this.panelRef) return;
-    computePosition(
-      this.triggerRef,
-      this.panelRef,
-      { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }
-    ).then(({ x, y }) => {
+    computePosition(this.triggerRef, this.panelRef, { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }).then(({ x, y }) => {
       Object.assign(this.panelRef!.style, {
         left: `${x}px`,
         top: `${y}px`,
@@ -395,13 +369,13 @@ export class TkColorPicker implements ComponentInterface {
 
     this.updateColor({
       s: Math.round(x * 100),
-      v: Math.round((1 - y) * 100)
+      v: Math.round((1 - y) * 100),
     });
   };
 
   private handleSaturationMouseDown = (e: MouseEvent) => {
     this.saturationAreaRef = e.currentTarget as HTMLElement;
-    this.startDragging((ev) => {
+    this.startDragging(ev => {
       this.handleSaturationPointer(ev);
       this.emitInput();
     }, e);
@@ -544,25 +518,11 @@ export class TkColorPicker implements ComponentInterface {
   }
 
   private createEyedropperButton() {
-    return (
-      <tk-button
-        variant="neutral"
-        type="outlined"
-        size="small"
-        icon="colorize"
-        onTk-click={this.handleEyeDropper}
-        disabled={this.disabled}
-      />
-    );
+    return <tk-button variant="neutral" type="outlined" size="small" icon="colorize" onTk-click={this.handleEyeDropper} disabled={this.disabled} />;
   }
 
   private createColorPreview() {
-    return (
-      <div
-        class="tk-color-picker-preview-box"
-        style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }}
-      />
-    );
+    return <div class="tk-color-picker-preview-box" style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }} />;
   }
 
   private handleTriggerFocus = () => {
@@ -657,7 +617,7 @@ export class TkColorPicker implements ComponentInterface {
   private createInputTrigger(colorCss: string, displayValue: string) {
     const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-input', {
       'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen
+      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
     });
 
     return (
@@ -679,10 +639,7 @@ export class TkColorPicker implements ComponentInterface {
           <div class="tk-color-picker-input-content">
             <div class="tk-color-picker-color-preview-wrapper">
               <div class="tk-color-picker-color-preview">
-                <div
-                  class="tk-color-picker-color-preview-inner"
-                  style={{ backgroundColor: colorCss }}
-                />
+                <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
               </div>
             </div>
             <input
@@ -697,13 +654,8 @@ export class TkColorPicker implements ComponentInterface {
               onKeyDown={this.handleTriggerInputKeyDown}
             />
           </div>
-          <div
-            class="tk-color-picker-trigger-chevron"
-            onClick={this.handleTriggerChevronClick}
-            tabIndex={this.disabled ? -1 : 0}
-            onKeyDown={this.handleTriggerKeyDown}
-          >
-            <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="large" class="tk-color-picker-trigger-icon" color='var(--icon-base)' />
+          <div class="tk-color-picker-trigger-chevron" onClick={this.handleTriggerChevronClick} tabIndex={this.disabled ? -1 : 0} onKeyDown={this.handleTriggerKeyDown}>
+            <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="large" class="tk-color-picker-trigger-icon" color="var(--icon-base)" />
           </div>
         </div>
       </div>
@@ -713,7 +665,7 @@ export class TkColorPicker implements ComponentInterface {
   private createInputCompactTrigger(colorCss: string) {
     const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-compact', {
       'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen
+      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
     });
 
     return (
@@ -733,13 +685,10 @@ export class TkColorPicker implements ComponentInterface {
         >
           <div class="tk-color-picker-color-preview-wrapper">
             <div class="tk-color-picker-color-preview">
-              <div
-                class="tk-color-picker-color-preview-inner"
-                style={{ backgroundColor: colorCss }}
-              />
+              <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
             </div>
           </div>
-          <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="xlarge" class="tk-color-picker-trigger-icon" color='var(--icon-base)' />
+          <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="xlarge" class="tk-color-picker-trigger-icon" color="var(--icon-base)" />
         </div>
       </div>
     );
@@ -748,7 +697,7 @@ export class TkColorPicker implements ComponentInterface {
   private createItemTrigger(colorCss: string) {
     const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-item', {
       'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen
+      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
     });
 
     return (
@@ -767,10 +716,7 @@ export class TkColorPicker implements ComponentInterface {
           aria-disabled={this.disabled}
         >
           <div class="tk-color-picker-color-preview-square">
-            <div
-              class="tk-color-picker-color-preview-inner"
-              style={{ backgroundColor: colorCss }}
-            />
+            <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
           </div>
           <span class="tk-color-picker-value-text">{colorCss}</span>
         </div>
@@ -782,11 +728,7 @@ export class TkColorPicker implements ComponentInterface {
     const { h: hue, s, v } = this.internalHSVA;
 
     return (
-      <div
-        class="tk-color-picker-saturation-container"
-        style={{ backgroundColor: `hsl(${hue}, 100%, 50%)` }}
-        onMouseDown={this.handleSaturationMouseDown}
-      >
+      <div class="tk-color-picker-saturation-container" style={{ backgroundColor: `hsl(${hue}, 100%, 50%)` }} onMouseDown={this.handleSaturationMouseDown}>
         <div class="tk-color-picker-saturation-white" />
         <div class="tk-color-picker-saturation-black" />
         <div
@@ -803,35 +745,21 @@ export class TkColorPicker implements ComponentInterface {
   private createSliders() {
     const isHorizontalLayout = this.orientation === 'horizontal';
     const sliderClass = classNames('tk-color-picker-slider', {
-      'tk-color-picker-slider-vertical': isHorizontalLayout
+      'tk-color-picker-slider-vertical': isHorizontalLayout,
     });
 
     const huePercent = (this.internalHSVA.h / 360) * 100;
 
     return (
       <div class={classNames('tk-color-picker-sliders', { 'tk-color-picker-sliders-vertical-layout': isHorizontalLayout })}>
-        <div
-          class={`${sliderClass} tk-color-picker-hue`}
-          ref={el => (this.hueSliderRef = el as HTMLElement)}
-          onMouseDown={this.handleHueMouseDown}
-        >
-          <div
-            class="tk-color-picker-slider-thumb"
-            style={isHorizontalLayout
-              ? { top: `${huePercent}%`, left: '50%' }
-              : { left: `${huePercent}%`, top: '50%' }
-            }
-          >
+        <div class={`${sliderClass} tk-color-picker-hue`} ref={el => (this.hueSliderRef = el as HTMLElement)} onMouseDown={this.handleHueMouseDown}>
+          <div class="tk-color-picker-slider-thumb" style={isHorizontalLayout ? { top: `${huePercent}%`, left: '50%' } : { left: `${huePercent}%`, top: '50%' }}>
             <div class="tk-color-picker-slider-thumb-inner" />
           </div>
         </div>
 
         {this.showAlphaSlider && (
-          <div
-            class={sliderClass}
-            ref={el => (this.alphaSliderRef = el as HTMLElement)}
-            onMouseDown={this.handleAlphaMouseDown}
-          >
+          <div class={sliderClass} ref={el => (this.alphaSliderRef = el as HTMLElement)} onMouseDown={this.handleAlphaMouseDown}>
             <div class="tk-color-picker-alpha-bg" />
             <div
               class="tk-color-picker-alpha-overlay"
@@ -839,10 +767,7 @@ export class TkColorPicker implements ComponentInterface {
             />
             <div
               class="tk-color-picker-slider-thumb"
-              style={isHorizontalLayout
-                ? { top: `${this.internalHSVA.a * 100}%`, left: '50%' }
-                : { left: `${this.internalHSVA.a * 100}%`, top: '50%' }
-              }
+              style={isHorizontalLayout ? { top: `${this.internalHSVA.a * 100}%`, left: '50%' } : { left: `${this.internalHSVA.a * 100}%`, top: '50%' }}
             >
               <div class="tk-color-picker-slider-thumb-inner" />
             </div>
@@ -945,11 +870,7 @@ export class TkColorPicker implements ComponentInterface {
     return (
       <div class="tk-color-picker-presets">
         {this.presets.map(color => (
-          <div
-            class="tk-color-picker-preset"
-            style={{ backgroundColor: color }}
-            onClick={() => this.handlePresetSelect(color)}
-          />
+          <div class="tk-color-picker-preset" style={{ backgroundColor: color }} onClick={() => this.handlePresetSelect(color)} />
         ))}
       </div>
     );
@@ -961,10 +882,7 @@ export class TkColorPicker implements ComponentInterface {
     }
 
     if (this.hasFooterActionsSlot) {
-      const footerClasses = classNames(
-        'tk-color-picker-panel-footer',
-        `tk-color-picker-panel-footer-${this.footerType}`
-      );
+      const footerClasses = classNames('tk-color-picker-panel-footer', `tk-color-picker-panel-footer-${this.footerType}`);
       return (
         <div class={footerClasses}>
           <slot name="footer-actions" />
@@ -981,10 +899,7 @@ export class TkColorPicker implements ComponentInterface {
       return <slot name="header" />;
     }
 
-    const headerClasses = classNames(
-      'tk-color-picker-panel-header',
-      `tk-color-picker-panel-header-${this.headerType}`
-    );
+    const headerClasses = classNames('tk-color-picker-panel-header', `tk-color-picker-panel-header-${this.headerType}`);
 
     return (
       <div class={headerClasses}>
@@ -992,16 +907,8 @@ export class TkColorPicker implements ComponentInterface {
         {this.hasHeaderActionsSlot ? (
           <slot name="header-actions" />
         ) : (
-          !this.inline && this.showCloseButton && (
-            <tk-button
-              class="tk-color-picker-close"
-              variant="neutral"
-              type="text"
-              size="small"
-              icon="close"
-              onClick={this.handleCloseClick}
-            />
-          )
+          !this.inline &&
+          this.showCloseButton && <tk-button class="tk-color-picker-close" variant="neutral" type="text" size="small" icon="close" onClick={this.handleCloseClick} />
         )}
       </div>
     );
@@ -1016,9 +923,7 @@ export class TkColorPicker implements ComponentInterface {
             {this.createSliders()}
             {this.createEyedropperButton()}
           </div>
-          <div class="tk-color-picker-saturation-wrapper">
-            {this.createSaturation()}
-          </div>
+          <div class="tk-color-picker-saturation-wrapper">{this.createSaturation()}</div>
         </div>
       );
     }
@@ -1045,11 +950,7 @@ export class TkColorPicker implements ComponentInterface {
     });
 
     return (
-      <div
-        class={panelCls}
-        ref={el => (this.panelRef = el as HTMLDivElement)}
-        data-tk-id={this.uniqueId}
-      >
+      <div class={panelCls} ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-id={this.uniqueId}>
         {this.createPanelHeader()}
         <div class="tk-color-picker-panel-body">
           {this.createPanelBody()}

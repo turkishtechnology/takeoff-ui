@@ -7,12 +7,7 @@ const Inline = () => {
 
   const demo = (
     <div className="flex justify-center items-center">
-      <TkColorPicker
-        inline
-        value={color}
-        panelTitle="Theme Color"
-        onTkInput={e => setColor(e.detail)}
-      />
+      <TkColorPicker inline value={color} panelTitle="Theme Color" onTkInput={e => setColor(e.detail)} />
     </div>
   );
 
@@ -51,5 +46,3 @@ const color = ref('#119C8D');
 };
 
 export default Inline;
-
-

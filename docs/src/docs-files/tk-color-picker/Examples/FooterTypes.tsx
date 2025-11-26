@@ -130,8 +130,8 @@ handleCancel() {
           onTkInput={e => setColor(e.detail)}
         >
           <div slot="footer-actions">
-            <TkButton label='Cancel' variant="secondary" size="small" onTkClick={handleCancel} />
-            <TkButton label='Apply' variant="primary" size="small" onTkClick={handleApply} />
+            <TkButton label="Cancel" variant="secondary" size="small" onTkClick={handleCancel} />
+            <TkButton label="Apply" variant="primary" size="small" onTkClick={handleApply} />
           </div>
         </TkColorPicker>
       </div>
