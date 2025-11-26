@@ -81,12 +81,12 @@ export class TkCarousel implements ComponentInterface {
   /**
    * Emitted when slide is changed
    */
-  @Event({ eventName: 'tk-slide' }) tkChange: EventEmitter<{ slide: number; totalSlides: number }>;
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<{ slide: number }>;
 
   /**
    * Emitted when left arrow is clicked
    */
-  @Event({ eventName: 'tk-pre' }) tkPrev: EventEmitter<{ slide: number }>;
+  @Event({ eventName: 'tk-prev' }) tkPrev: EventEmitter<{ slide: number }>;
 
   componentDidLoad() {
     if (!this.slotElement) {
@@ -174,7 +174,7 @@ export class TkCarousel implements ComponentInterface {
 
     this.activeSlide = index;
     this.updateSlidePosition();
-    this.tkChange.emit({ slide: this.activeSlide, totalSlides: this.totalSlides });
+    this.tkChange.emit({ slide: this.activeSlide });
   }
 
   private handlePrevClick = () => {
