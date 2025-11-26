@@ -67,7 +67,7 @@ export class TkColorPicker implements ComponentInterface {
   @State() isTriggerInputFocused: boolean = false;
 
   /**
-   * The current color value (supports HEX, RGB, HSL formats)
+   * The current color value (supports HEX and RGB formats)
    */
   @Prop({ mutable: true }) value: string = '';
   @Watch('value')
@@ -371,7 +371,7 @@ export class TkColorPicker implements ComponentInterface {
     computePosition(
       this.triggerRef,
       this.panelRef,
-      { placement: 'bottom-start', middleware: [offset(4), flip(), shift({ padding: 5 })] }
+      { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }
     ).then(({ x, y }) => {
       Object.assign(this.panelRef!.style, {
         left: `${x}px`,
