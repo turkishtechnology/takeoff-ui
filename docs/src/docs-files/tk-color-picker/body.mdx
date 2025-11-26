@@ -1,7 +1,66 @@
 import Basic from "./Examples/Basic";
+import TriggerTypes from "./Examples/TriggerTypes";
+import Inline from "./Examples/Inline";
+import Orientation from "./Examples/Orientation";
+import Disabled from "./Examples/Disabled";
+import Visibility from "./Examples/Visibility";
+import HeaderTypes from "./Examples/HeaderTypes";
+import FooterTypes from "./Examples/FooterTypes";
+import ControlledClosing from "./Examples/ControlledClosing";
 
 ## Basic
 
-The basic usage of divider.
+The default `TkColorPicker` renders with a trigger input that displays the selected color. Clicking the trigger opens a panel where users can select colors using the saturation area, hue slider, and direct value inputs.
 
 <Basic />
+
+## Trigger Types
+
+The `triggerType` prop allows you to choose between three different trigger styles:
+- `input`: Full input with an editable text field, circular color preview, and dropdown chevron. Users can type color values directly.
+- `input-compact`: Compact trigger showing only the circular color preview and chevron - ideal for tight spaces.
+- `item`: Item style with a square color preview and text display - no dropdown chevron.
+
+<TriggerTypes />
+
+## Inline Mode
+
+Set `inline` to display the color picker panel directly without a trigger element. This is ideal for settings pages, theme builders, or anywhere the color picker should always be visible.
+
+<Inline />
+
+## Header Types
+
+The `headerType` prop allows you to customize the header appearance. Available options are `basic`, `divided`, `light`, `dark`, and `primary`. Each type provides a distinct visual style to match your application's design language.
+
+<HeaderTypes />
+
+## Footer Types
+
+The footer is slot-based and only renders when you provide content via `footer` or `footer-actions` slots. Use the `footerType` prop to style the footer container with `basic`, `divided`, or `light` variants. Use the `apply()` and `cancel()` methods to handle user actions programmatically.
+
+<FooterTypes />
+
+## Controlled Closing
+
+Use `preventDismiss` and `showCloseButton` props to control how the panel can be closed. When `preventDismiss` is `true`, clicking outside the panel won't close it - users must use the provided action buttons. Set `showCloseButton` to `false` to hide the header close icon, forcing users to interact with footer actions.
+
+<ControlledClosing />
+
+## Orientation
+
+The component supports two panel layouts via the `orientation` prop. The default `vertical` layout places the saturation area above the controls, while `horizontal` arranges them side by side for a more compact footprint.
+
+<Orientation />
+
+## States
+
+The `disabled` prop prevents user interaction, while the `required` prop adds a visual indicator for required form fields. These states integrate seamlessly with form validation workflows.
+
+<Disabled />
+
+## Feature Visibility
+
+Toggle individual features to customize the picker interface. Use `showAlphaSlider` for transparency support, `showPresets` for quick-access color swatches, and `showFormatSelector` to allow switching between HEX and RGBA formats.
+
+<Visibility />
