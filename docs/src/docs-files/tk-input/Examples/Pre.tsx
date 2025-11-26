@@ -26,7 +26,7 @@ const Pre = () => {
 
   const demo = (
     <div className="flex gap-2 max-w-[300px]">
-      <TkInput label="Prepend Text" value={value} pre='TK' onTkChange={e => setValue(e.detail)} />  
+      <TkInput label="Prefix Text" value={value} pre='TK' onTkChange={e => setValue(e.detail)} />  
     </div>
   );
 
