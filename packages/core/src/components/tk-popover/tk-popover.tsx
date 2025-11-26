@@ -78,7 +78,11 @@ export class TkPopover implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  protected closeHandler = () => {
+
+  private closeHandler = (e: Event): void => {
+    if (e.composedPath().includes(this.el)) {
+      return;
+    }
     this.isOpen = false;
   };
 
