@@ -157,13 +157,31 @@ export class TkInput implements ComponentInterface {
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
   protected valueChanged(newValue, oldValue) {
-    if (!_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
-      if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
-      } else {
-        this.nativeInput.value = newValue;
+    if (_.isEqual(newValue, oldValue) || this.mode === 'chips') return;
+    if (!this.nativeInput) return;
+
+    const next = typeof newValue === 'object' && newValue !== null ? getNestedValue(newValue, this.chipLabelKey) : (newValue ?? '');
+
+    const isMaskedText = this.mode === 'text' && !!this.maskOptions && !!this.cleaveInstance;
+
+    if (isMaskedText) {
+      const currentFormatted = this.cleaveInstance.getFormattedValue();
+      const incomingFormatted = String(next);
+
+      // If Cleave.js already has this formatted value, skip setRawValue (internal update from handleInput)
+      if (currentFormatted === incomingFormatted) {
+        return;
       }
+
+      // External prop change - update Cleave.js
+      const incomingRaw = this.toCleaveRaw(incomingFormatted);
+      this.cleaveInstance.setRawValue(incomingRaw);
+      return;
     }
+
+    // For counter mode, DOM updates are handled in componentDidUpdate()
+    // For other modes (text, password, number), the controlled input's value attribute automatically updates the DOM
+    // No manual DOM manipulation is performed, thus preventing the "1 character" bug
   }
 
   /**
@@ -209,23 +227,37 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  componentDidLoad(): void {
-    this.nativeInput = this.el.querySelector('input');
+  componentDidLoad() {
+    if (!this.nativeInput) this.nativeInput = this.el.querySelector('input') as HTMLInputElement;
     if (this.mode === 'counter') {
       this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
-    if (this.mode == 'text' && this.maskOptions) {
+    if (this.mode === 'text' && this.maskOptions) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
-        ...this.maskOptions,
+        ...(this.maskOptions as any),
+        onValueChanged: (e: any) => {
+          const formatted = e.target.value; // Cleave-updated DOM value
+
+          // emit only when actually changed
+          if (formatted !== this.value) {
+            this.value = formatted;
+            this.tkChange.emit(formatted);
+          }
+        },
       } as CleaveOptions);
     }
   }
   componentDidUpdate(): void {
+    // Keep value within min/max bounds on every update in counter mode
     if (this.mode === 'counter') {
       this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
   }
-
+  disconnectedCallback() {
+    // Clean up Cleave.js instance when component is removed from DOM (memory leak prevention)
+    this.cleaveInstance?.destroy();
+    this.cleaveInstance = undefined as any;
+  }
   formResetCallback() {
     this.handleFormReset();
   }
@@ -320,6 +352,18 @@ export class TkInput implements ComponentInterface {
     return numValue;
   };
 
+  // Strip delimiter characters from programmatically incoming values (e.g., "12-34" → "1234")
+  // This prevents double formatting errors (e.g., prevents "12-34" from becoming "12--34")
+  private toCleaveRaw(v: string) {
+    const opts: any = this.maskOptions || {};
+    const dels: string[] = Array.isArray(opts.delimiters) ? opts.delimiters : typeof opts.delimiter === 'string' && opts.delimiter.length ? [opts.delimiter] : [];
+
+    if (!dels.length) return v;
+
+    // Remove delimiter characters using regex
+    const escaped = dels.map(d => d.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    return v.replace(new RegExp(escaped, 'g'), '');
+  }
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
@@ -331,18 +375,18 @@ export class TkInput implements ComponentInterface {
         _value = input.value || '';
       }
 
-      // masklı kullanımlar için value'yu formatlama yapılıyor.
+      // Special handling for masked inputs
       if (this.maskOptions && this.cleaveInstance) {
-        // If letterOnly option is enabled, filter out non-letters
-        if (this.maskOptions.letterOnly) {
-          _value = _value.replace(/[^a-zA-Z]/g, '');
-          input.value = _value;
+        const rawValue = this.cleaveInstance.getRawValue();
+        const formattedValue = this.cleaveInstance.getFormattedValue();
+
+        // Check if the formatted value actually changed
+        if (formattedValue !== this.value) {
+          this.value = formattedValue;
+          this.tkChange.emit(formattedValue);
         }
-
-        this.cleaveInstance?.setRawValue(_value);
-        _value = this.cleaveInstance?.getFormattedValue();
+        return;
       }
-
       if (!_.isEqual(this.value, _value)) {
         this.value = _value;
         this.tkChange.emit(_value);
@@ -378,51 +422,6 @@ export class TkInput implements ComponentInterface {
 
   // for add chip
   private handleInputKeyDown = (e: KeyboardEvent) => {
-    // --- Cleave.js maske ayırıcı karakterlerinin silinmesi için genel çözüm ---
-    if (this.maskOptions && this.cleaveInstance && this.mode == 'text' && (e.key === 'Backspace' || e.key === 'Delete')) {
-      const input = this.nativeInput;
-      const value = input.value;
-      const selectionStart = input.selectionStart;
-      const selectionEnd = input.selectionEnd;
-
-      // Sadece imleç varsa (seçili alan yoksa) işle
-      if (selectionStart === selectionEnd) {
-        let charToCheck, posToRemove;
-        if (e.key === 'Backspace' && selectionStart > 0) {
-          charToCheck = value[selectionStart - 1];
-          posToRemove = selectionStart - 1;
-        } else if (e.key === 'Delete' && selectionStart < value.length) {
-          charToCheck = value[selectionStart];
-          posToRemove = selectionStart;
-        }
-
-        // Eğer karakter bir ayırıcı ise (rakam/harf değilse)
-        if (charToCheck && /[^a-zA-Z0-9]/.test(charToCheck)) {
-          e.preventDefault();
-          // Ayırıcıyı ve öncesindeki (Backspace) veya sonrasındaki (Delete) karakteri sil
-          let newValue;
-          let newCaretPos;
-          if (e.key === 'Backspace') {
-            // Ayırıcının öncesindeki karakteri sil
-            newValue = value.slice(0, posToRemove - 1) + value.slice(posToRemove);
-            newCaretPos = posToRemove - 1;
-          } else {
-            // Ayırıcının sonrasındaki karakteri sil
-            newValue = value.slice(0, posToRemove) + value.slice(posToRemove + 1);
-            newCaretPos = posToRemove;
-          }
-          this.cleaveInstance.setRawValue(newValue);
-          this.value = this.cleaveInstance.getFormattedValue();
-          this.tkChange.emit(this.value);
-
-          // DOM güncellendikten sonra imleç pozisyonunu ayarla
-          setTimeout(() => {
-            input.setSelectionRange(newCaretPos, newCaretPos);
-          }, 0);
-          return; // Daha fazla işlem yapma
-        }
-      }
-    }
     if (
       e.key == 'Enter' &&
       this.nativeInput.value.trim() &&
@@ -560,6 +559,10 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderInput(): HTMLInputElement {
+    const isMaskedText = this.mode === 'text' && !!this.maskOptions;
+
+    const computedValue = this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value;
+
     return (
       <input
         id={this.uniqueId}
@@ -574,8 +577,10 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly}
         tabindex={this.tabindex}
-        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
-        onInput={this.handleInput}
+        // CRITICAL: In masked inputs, value attribute must be undefined (Cleave.js manages the DOM)
+        // In other modes, value attribute is used as a controlled input
+        value={isMaskedText ? undefined : (computedValue as any)}
+        onInput={isMaskedText ? undefined : this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
