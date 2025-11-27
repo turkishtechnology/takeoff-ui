@@ -726,9 +726,10 @@ export class TkInput implements ComponentInterface {
               type="text"
               icon="close"
               size="small"
-              onClick={e => this.handleClearButtonClick(e)}
+              onTk-click={e => this.handleClearButtonClick(e)}
               onKeyDown={this.handleClearButtonKeyDown}
               class="tk-input-clear-button"
+              disabled={this.disabled || this.readOnly}
             ></tk-button>
           )}
           {_rightIcon}
