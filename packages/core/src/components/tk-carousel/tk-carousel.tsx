@@ -235,18 +235,14 @@ export class TkCarousel implements ComponentInterface {
         {this.showPlayerButton &&
           this.autoplay &&
           (this.autoplayTimer ? (
-            <tk-icon class="player-button" variant="white" size="large" icon="pause_circle" onClick={this.stopAutoplay} />
+            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="pause_circle" onClick={this.stopAutoplay} />
           ) : (
-            <tk-icon class="player-button" variant="white" size="large" icon="play_circle" onClick={this.startAutoplay} />
+            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="play_circle" onClick={this.startAutoplay} />
           ))}
         {Array.from({ length: indicatorCount }).map((_, index) => (
-          <div
-            class={{
-              'tk-carousel-indicator': true,
-              'active': index === this.activeSlide,
-            }}
-            onClick={() => this.handleIndicatorClick(index)}
-          />
+          <div class="tk-carousel-indicator" onClick={() => this.handleIndicatorClick(index)}>
+            <div class={classNames('tk-carousel-indicator-dot', { active: index === this.activeSlide })}></div>
+          </div>
         ))}
       </div>
     );
@@ -264,13 +260,12 @@ export class TkCarousel implements ComponentInterface {
 
   render() {
     const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.isVertical });
-    const sliderClasses = classNames('tk-carousel-slider', { vertical: this.isVertical });
 
     this.el.style.setProperty('--slides-per-view', String(this.slidesPerView));
 
     return (
       <div class={rootClasses}>
-        <div class={sliderClasses}>
+        <div class="tk-carousel-slider">
           <div class="tk-carousel-slide-track">
             <slot
               onSlotchange={() => {
