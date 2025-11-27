@@ -377,7 +377,6 @@ export class TkInput implements ComponentInterface {
 
       // Special handling for masked inputs
       if (this.maskOptions && this.cleaveInstance) {
-        const rawValue = this.cleaveInstance.getRawValue();
         const formattedValue = this.cleaveInstance.getFormattedValue();
 
         // Check if the formatted value actually changed
