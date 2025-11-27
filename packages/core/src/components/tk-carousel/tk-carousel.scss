@@ -1,54 +1,56 @@
 :host {
   display: block;
-  width: 100%;
+  position: relative;
   height: 100%;
 }
 
 .tk-carousel {
   position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+}
 
+.tk-carousel-overlay {
+  overflow: hidden;
+
+  .tk-carousel-items-container {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.3s ease;
+
+    ::slotted(*) {
+      flex: 0 0 calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
+      min-width: 0;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.tk-carousel {
   &.vertical {
-    .tk-carousel-slide-track {
+    height: 100%;
+
+    .tk-carousel-overlay {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .tk-carousel-items-container {
       flex-direction: column;
       width: 100%;
-
-      ::slotted(*) {
-        flex: 0 0 calc((100% - (var(--slides-per-view, 1) - 1) * 16px) / var(--slides-per-view, 1));
-        width: 100%;
-        min-height: 0;
-      }
-    }
-  }
-
-  .tk-carousel-slider {
-    flex: 1;
-    overflow: hidden;
-
-    .tk-carousel-slide-track {
-      display: flex;
-      gap: 16px;
       height: 100%;
-      transition: transform 0.3s ease;
 
       ::slotted(*) {
-        flex: 0 0 calc((100% - (var(--slides-per-view, 1) - 1) * 16px) / var(--slides-per-view, 1));
-        min-width: 0;
-        height: 100%;
-        object-fit: cover;
+        max-height: calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
       }
+    }
 
-      ::slotted(img) {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+    .tk-carousel-navigation {
+      flex-direction: column;
+      .tk-carousel-indicators {
+        flex-direction: column;
       }
     }
   }
-
   .tk-carousel-navigation {
     display: flex;
     align-items: center;
@@ -56,36 +58,37 @@
     position: absolute;
     gap: 20px;
     z-index: 10;
+  }
 
-    .tk-carousel-indicators {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      .tk-carousel-indicator {
-        padding: 4px;
-        cursor: pointer;
+  .tk-carousel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 2px;
 
-        .tk-carousel-indicator-dot {
-          width: 6px;
-          height: 6px;
-          background-color: var(--background-light);
-          border-radius: 50%;
-          transition: all 0.3s ease;
+    .tk-carousel-indicator {
+      padding: 4px;
+      cursor: pointer;
 
-          &:hover {
-            background-color: var(--primary-light);
-          }
+      .tk-carousel-indicator-dot {
+        width: 6px;
+        height: 6px;
+        background-color: var(--background-light);
+        border-radius: 50%;
+        transition: all 0.3s ease;
 
-          &.active {
-            background-color: var(--primary-base);
-            width: 8px;
-            height: 8px;
-          }
+        &:hover {
+          background-color: var(--primary-light);
+        }
+
+        &.active {
+          background-color: var(--primary-base);
+          width: 8px;
+          height: 8px;
         }
       }
-      .player-button {
-        cursor: pointer;
-      }
+    }
+    .player-button {
+      cursor: pointer;
     }
   }
 
@@ -119,11 +122,6 @@
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
@@ -132,17 +130,13 @@
         right: 16px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
     &.distributed {
       .prev-button,
       .next-button {
+        position: absolute;
         top: 50%;
         transform: translateY(-50%);
       }
@@ -156,6 +150,7 @@
       }
 
       .tk-carousel-indicators {
+        position: absolute;
         bottom: 16px;
         left: 50%;
         transform: translateX(-50%);
@@ -165,65 +160,46 @@
 
   &.outside {
     &.bottom {
-      margin-bottom: 64px;
-      height: calc(100% - 64px);
+      padding-bottom: 48px;
 
       .tk-carousel-navigation {
-        bottom: -48px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
       }
     }
 
     &.top {
-      margin-top: 64px;
-      height: calc(100% - 64px);
+      padding-top: 48px;
 
       .tk-carousel-navigation {
-        top: -48px;
+        top: 0px;
         left: 50%;
         transform: translateX(-50%);
       }
     }
 
     &.left {
-      margin-left: 64px;
-
+      padding-left: 48px;
       .tk-carousel-navigation {
-        left: -48px;
+        left: 0px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
     &.right {
-      margin-right: 64px;
-
+      padding-right: 48px;
       .tk-carousel-navigation {
-        right: -48px;
+        right: 0px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
     &.distributed {
-      margin-bottom: 36px;
-      margin-inline: 64px;
-      height: calc(100% - 36px);
+      padding: 0 48px 32px;
 
-      .tk-carousel-navigation {
-        position: static;
-      }
       .prev-button,
       .next-button {
         position: absolute;
@@ -232,16 +208,16 @@
       }
 
       .prev-button {
-        left: -48px;
+        left: -0px;
       }
 
       .next-button {
-        right: -48px;
+        right: 0px;
       }
 
       .tk-carousel-indicators {
         position: absolute;
-        bottom: -24px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
       }
