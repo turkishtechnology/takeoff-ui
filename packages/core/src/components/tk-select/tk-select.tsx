@@ -35,6 +35,7 @@ export class TkSelect implements ComponentInterface {
   private isItemClickFlag = false;
   private clickOutsideMixin?: ClickOutsideMixin;
   private innerOptions = [];
+  private refSelectAll: HTMLTkCheckboxElement;
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -326,6 +327,9 @@ export class TkSelect implements ComponentInterface {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
           animationFrame: true,
         });
+        if (this.value?.length > 0 && !this.isAllSelected(this.value)) {
+          this.refSelectAll.indeterminate = true;
+        }
       }
     } else {
       this.panelRef?.remove();
@@ -549,6 +553,9 @@ export class TkSelect implements ComponentInterface {
       // Apply visible item count logic for display
       const displayValue = this.getDisplayValueForMultiple(this.selectedItem);
       this.inputRef.value = displayValue;
+      if (currentValue.length > 0 && !this.isAllSelected(currentValue)) {
+        this.refSelectAll.indeterminate = true;
+      }
       return;
     }
 
@@ -927,7 +934,13 @@ export class TkSelect implements ComponentInterface {
             onClick={() => this.handleSelectAllClick()}
             data-option-index="-1"
           >
-            <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+            <tk-checkbox
+              ref={el => (this.refSelectAll = el)}
+              indeterminate={!this.isAllSelected() && this.selectedItem?.length > 0}
+              value={checking}
+              onTk-change={e => e.stopPropagation()}
+              onClick={e => e.preventDefault()}
+            ></tk-checkbox>
             <div>{this.selectAllLabel}</div>
           </div>
           <tk-divider my={1} style={{ margin: '4px' }} />
