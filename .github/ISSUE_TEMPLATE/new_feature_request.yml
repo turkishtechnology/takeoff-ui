@@ -29,6 +29,8 @@ body:
         - tk-breadcrumb
         - tk-button
         - tk-card
+        - tk-chart
+        - tk-org-chart
         - tk-checkbox
         - tk-chips
         - tk-currency-input
@@ -40,10 +42,13 @@ body:
         - tk-editor
         - tk-icon
         - tk-input
+        - tk-phone-input
         - tk-pagination
+        - tk-popover
         - tk-radio
         - tk-rating
         - tk-select
+        - tk-slider
         - tk-spinner
         - tk-stepper
         - tk-table
@@ -51,11 +56,13 @@ body:
         - tk-textarea
         - tk-timeline
         - tk-toggle
+        - tk-toggle-button
         - tk-tooltip
+        - tk-tree-view
         - tk-upload
       default: 0
     validations:
-      required: true
+      required: false
   - type: textarea
     id: context
     attributes:
