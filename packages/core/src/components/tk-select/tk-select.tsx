@@ -34,6 +34,7 @@ export class TkSelect implements ComponentInterface {
   private cleanup;
   private isItemClickFlag = false;
   private clickOutsideMixin?: ClickOutsideMixin;
+  private innerOptions = [];
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -254,6 +255,11 @@ export class TkSelect implements ComponentInterface {
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+    if (this.isGrouped()) {
+      this.innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
+    } else {
+      this.innerOptions = this.options;
+    }
 
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
@@ -408,7 +414,7 @@ export class TkSelect implements ComponentInterface {
 
   private isAllSelected(valueArr?: any[]): boolean {
     const arr = Array.isArray(valueArr) ? valueArr : Array.isArray(this.value) ? this.value : [];
-    const optionValues = this.options.map(opt => this.getOptionValue(opt));
+    const optionValues = this.innerOptions.map(opt => this.getOptionValue(opt));
     return optionValues.length > 0 && optionValues.every(val => this.isOptionSelected(arr, val));
   }
 
@@ -440,11 +446,9 @@ export class TkSelect implements ComponentInterface {
 
     // When allowCustomValue is true, prioritize predefined options over custom values
     if (this.allowCustomValue) {
-      const innerOptions = this.isGrouped ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
-
       // Separate predefined options from custom values
       const predefinedItems = selectedItems.filter(item => {
-        return innerOptions.some(opt => {
+        return this.innerOptions.some(opt => {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
@@ -454,7 +458,7 @@ export class TkSelect implements ComponentInterface {
       });
 
       const customItems = selectedItems.filter(item => {
-        return !innerOptions.some(opt => {
+        return !this.innerOptions.some(opt => {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
@@ -522,13 +526,6 @@ export class TkSelect implements ComponentInterface {
 
   private setValue() {
     if (!this.inputRef) return;
-    let innerOptions = [];
-
-    if (this.isGrouped()) {
-      innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
-    } else {
-      innerOptions = this.options;
-    }
 
     // Handle multiple selection case
     if (this.multiple) {
@@ -539,9 +536,9 @@ export class TkSelect implements ComponentInterface {
         .map(val => {
           let found;
           if (this.optionValueKey) {
-            found = innerOptions.find(opt => this.getOptionValue(opt) === val);
+            found = this.innerOptions.find(opt => this.getOptionValue(opt) === val);
           } else {
-            found = innerOptions.find(opt => _.isEqual(opt, val));
+            found = this.innerOptions.find(opt => _.isEqual(opt, val));
           }
           if (found !== undefined) return found;
           if (this.allowCustomValue) return val;
@@ -563,15 +560,15 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Find the selected item based on value type
-    if (typeof this.value !== 'object' && innerOptions?.every(item => typeof item !== 'object')) {
+    if (typeof this.value !== 'object' && this.innerOptions?.every(item => typeof item !== 'object')) {
       // Handle primitive values
-      this.selectedItem = innerOptions?.find(item => item === this.value);
+      this.selectedItem = this.innerOptions?.find(item => item === this.value);
     } else if (this.optionValueKey?.length > 0) {
       // Handle object values with optionValueKey
-      this.selectedItem = innerOptions?.find(item => this.getOptionValue(item) === this.value);
+      this.selectedItem = this.innerOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = innerOptions?.find(item => _.isEqual(item, this.value));
+      this.selectedItem = this.innerOptions?.find(item => _.isEqual(item, this.value));
     }
 
     // Set input value based on selection state
@@ -624,7 +621,7 @@ export class TkSelect implements ComponentInterface {
         this.tkSelectAll.emit(false);
       } else {
         //optionsdaki değerleri almak için
-        const optionValues = this.options.map(opt => this.getOptionValue(opt));
+        const optionValues = this.innerOptions.map(opt => this.getOptionValue(opt));
         // allowcustom trueyken optionsda olmayan valueların eklenmesi için
         const customValues = Array.isArray(this.value) ? this.value?.filter(val => !this.isOptionSelected(optionValues, val)) : [];
         // Select all (optionValue + custom values)
