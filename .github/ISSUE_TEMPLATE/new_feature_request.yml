@@ -22,6 +22,7 @@ body:
       label: Affected component
       description: Which takeoff-ui component is affected?
       options:
+        - N/A (New Component)
         - tk-accordion
         - tk-alert
         - tk-avatar
