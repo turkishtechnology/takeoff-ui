@@ -49,7 +49,7 @@ export class TkTable implements ComponentInterface {
   @State() sortOrder: 'asc' | 'desc';
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
-  @State() renderData: any[] = [];
+  @State() renderData: Record<PropertyKey, unknown>[] = [];
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -488,7 +488,7 @@ export class TkTable implements ComponentInterface {
   @Method()
   async clearFilters(columns?: string[]) {
     if (!this.filters?.length) return;
-    if (!!columns?.length) {
+    if (columns?.length) {
       // Clear filters for specific columns
       this.filters = this.filters.filter(filter => !columns.includes(filter.field));
     } else {
@@ -709,7 +709,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
-    let _data = [...data];
+    const _data = [...data];
     this.currentPage = currentPage;
 
     // Clear grouping when generating render data with new dataset
@@ -744,7 +744,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
-    let newExpandedRows = this.expandedRows;
+    const newExpandedRows = this.expandedRows;
 
     const findIndex = newExpandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]);
     if (findIndex > -1) {
@@ -1392,7 +1392,7 @@ export class TkTable implements ComponentInterface {
     // Reset offsets
     this.stickyOffsets = { left: {}, right: {} };
 
-    let measuredWidths: { [key: string]: number } = {};
+    const measuredWidths: { [key: string]: number } = {};
     let shouldUseMeasuredWidths = false;
 
     // Try to measure from DOM if available
@@ -1607,7 +1607,7 @@ export class TkTable implements ComponentInterface {
     return rows;
   }
 
-  private createDataRow(row: any, index: number) {
+  private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
     let styleRowObject;
 
     if (typeof this.rowStyle == 'function') {
@@ -1679,18 +1679,18 @@ export class TkTable implements ComponentInterface {
               );
             } else if (typeof col?.html == 'function') {
               // Reuse cached custom cell elements whenever possible
-              let usedElement: any = null;
-              let computedElement: any = null;
+              let usedElement = null;
+              let computedElement = null;
 
               const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
               const cached = this.customCellCache.get(cacheKey);
               if (cached) {
                 usedElement = cached;
               } else {
-                computedElement = col?.html(row, index) as any;
+                computedElement = col?.html(row, index);
               }
 
-              const effectiveElement: any = usedElement ?? computedElement;
+              const effectiveElement = usedElement ?? computedElement;
               if (typeof effectiveElement == 'string') {
                 return (
                   <td
@@ -2039,182 +2039,12 @@ export class TkTable implements ComponentInterface {
       this.customCellElements = [];
     }
 
-    if (this.renderData?.length > 0) {
+    if (this.renderData.length > 0) {
       return (
         <tbody>
           <slot name="body-header"></slot>
 
-          {this.groupByColumnField
-            ? this.createGroupedRows()
-            : this.renderData?.map((row, index) => {
-                let styleRowObject;
-
-                if (typeof this.rowStyle == 'function') {
-                  const stylesRow = this.rowStyle(row, index);
-                  if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
-                }
-
-                let isRowDisabled = false;
-                if (this.selectionRowDisabled) {
-                  isRowDisabled = this.selectionRowDisabled(row);
-                }
-
-                let selectionTd;
-                if (this.selectionMode === 'checkbox') {
-                  selectionTd = (
-                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                      <tk-checkbox
-                        value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
-                        disabled={isRowDisabled}
-                        onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
-                      ></tk-checkbox>
-                    </td>
-                  );
-                } else if (this.selectionMode === 'radio') {
-                  selectionTd = (
-                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                      <tk-radio
-                        value={row}
-                        name="selection"
-                        checked={_.isEqual(this.selection, row)}
-                        disabled={isRowDisabled}
-                        onTk-change={() => this.handleRadioSelectChange(row)}
-                      ></tk-radio>
-                    </td>
-                  );
-                }
-
-                const isSelected =
-                  this.selectionMode === 'checkbox'
-                    ? _.some(this.selection, itemValue => _.isEqual(itemValue, row))
-                    : this.selectionMode === 'radio'
-                      ? _.isEqual(this.selection, row)
-                      : false;
-
-                return (
-                  <Fragment>
-                    <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
-                      {selectionTd}
-                      {this.columns.map(col => {
-                        let tdExpanderButtonRef!: HTMLTkButtonElement;
-                        let styleCellObject;
-
-                        const leftColumns = this.columns.filter(c => c.fixed === 'left');
-                        const rightColumns = this.columns.filter(c => c.fixed === 'right');
-                        const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
-                        const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
-
-                        if (typeof this.cellStyle == 'function') {
-                          const stylesCell = this.cellStyle(row, col);
-                          if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
-                        }
-
-                        if (col.expander) {
-                          return (
-                            <td
-                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
-                            >
-                              <tk-button
-                                ref={el => (tdExpanderButtonRef = el)}
-                                variant="info"
-                                icon="keyboard_arrow_down"
-                                iconPosition="right"
-                                type="text"
-                                size="small"
-                                onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                              ></tk-button>
-                            </td>
-                          );
-                        } else if (typeof col?.html == 'function') {
-                          // Reuse cached custom cell elements whenever possible
-                          let usedElement: any = null;
-                          let computedElement: any = null;
-
-                          const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
-                          const cached = this.customCellCache.get(cacheKey);
-                          if (cached) {
-                            usedElement = cached;
-                          } else {
-                            computedElement = col?.html(row, index) as any;
-                          }
-
-                          const effectiveElement: any = usedElement ?? computedElement;
-                          if (typeof effectiveElement == 'string') {
-                            return (
-                              <td
-                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                                innerHTML={effectiveElement}
-                                style={{
-                                  ...this.getStickyColumnStyle(col, index),
-                                  ...styleRowObject,
-                                  ...styleCellObject,
-                                }}
-                              ></td>
-                            );
-                          } else if (typeof effectiveElement == 'object') {
-                            // Update cache if we computed a new element in this render
-                            if (!usedElement) {
-                              this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
-                            }
-                            return (
-                              <td
-                                ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
-                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                                style={{
-                                  ...this.getStickyColumnStyle(col, index),
-                                  ...styleRowObject,
-                                  ...styleCellObject,
-                                }}
-                              />
-                            );
-                          }
-                        } else if (col.editable) {
-                          let editableInputRef: HTMLInputElement;
-                          return (
-                            <td
-                              class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{
-                                ...this.getStickyColumnStyle(col, index),
-                                ...styleRowObject,
-                                ...styleCellObject,
-                              }}
-                            >
-                              <input
-                                ref={el => (editableInputRef = el)}
-                                value={getNestedValue(row, col.field)}
-                                type="text"
-                                onKeyDown={e => handleInputKeydown(e, this.el)}
-                                onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
-                              ></input>
-                            </td>
-                          );
-                        } else {
-                          return (
-                            <td
-                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{
-                                ...this.getStickyColumnStyle(col, index),
-                                ...styleRowObject,
-                                ...styleCellObject,
-                              }}
-                            >
-                              {getNestedValue(row, col.field)}
-                            </td>
-                          );
-                        }
-                      })}
-                    </tr>
-                    {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
-                      <tr>
-                        <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}}>
-                          <slot name={`expand-content-${row[this.dataKey]}`} />
-                        </td>
-                      </tr>
-                    )}
-                  </Fragment>
-                );
-              })}
+          {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
 
           <slot name="body-footer"></slot>
         </tbody>
