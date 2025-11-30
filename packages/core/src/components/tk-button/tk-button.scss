@@ -1,6 +1,5 @@
 :host {
   display: inline-block;
-  // height: 100%;
 }
 
 :host(.full-width) {
@@ -118,7 +117,6 @@
 .tk-button {
   font-family: var(--desktop-body-m-base-font, sans-serif);
   font-weight: 400;
-  line-height: var(--desktop-body-m-base-line-height);
   transition: all 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
   display: inline-flex;
   align-items: center;
