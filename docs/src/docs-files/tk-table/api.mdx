@@ -7,10 +7,12 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
 | <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>any</code> | null | Provides a function to customize cell styles. This function takes the row and column information and returns the style object for a specific cell. |
 | <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
-| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>CSSStyleProperties</code> | null | The style attribute of container element |
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
 | <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
+| <TkBadge label="expandedRowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any)=>any</code> | null | Provides a function to customize expanded row styles. This function takes row information and returns the style object for the expanded row content. |
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
+| <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
 | <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
@@ -32,6 +34,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | ---- | ----------- |
 | tk-cell-edit | Emitted when a cell is edited. |
 | tk-expanded-rows-change | Emitted when the expanded rows change. |
+| tk-group-by-change | Emitted when the groupBy value changes. Always emitted for both controlled and uncontrolled components. For controlled components, handle this event to update the groupBy prop. |
 | tk-request | Emitted when a request needs to be made to the server. |
 | tk-row-click | Emitted when a row is clicked. |
 | tk-selection-change |  |
@@ -40,21 +43,30 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Description |
 | ---- | ----------- |
-| clearFilters | Clears all filters for server side pagination |
+| clearFilters | Clears all filters or specific column filters |
+| clearGrouping | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
 | clearSorting | Clears all sorting for server side pagination |
 | exportFile | Exports the table data to a file |
 | getFilters | Returns the current filters |
 | getSorting | Returns the current sorting settings |
+| groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
+| runFilters | Applies the current filters to the data for client side pagination |
 | serverRequest | Allows tk-request event to be triggered manually |
-| setCurrentPage |  |
+| setCurrentPage | Sets the current page for pagination |
+| setFilters | Sets the current filter settings |
+| setSorting | Sets the current sorting settings |
 
 ### Slots
 
 | Name | Description |
 | ---- | ----------- |
+| body-footer | Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows) |
+| body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows) |
 | empty-data | Set how the table will appear when there is no data |
 
 ### Interfaces
+
+#### <span id="itablecolumn">ITableColumn</span>
 
 Defines the columns for the table
 
@@ -91,7 +103,7 @@ interface ITableColumn {
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
-  style?: any;
+  style?: CSSStyleProperties;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
@@ -132,6 +144,8 @@ interface ITableColumn {
 }
 ```
 
+#### <span id="itablerequest">ITableRequest</span>
+
 It is the return type of the tkRequest event.
 
 ```typescript
@@ -157,6 +171,8 @@ interface ITableRequest {
 }
 ```
 
+#### <span id="itablecelledit">ITableCellEdit</span>
+
 It is the return type of the tkCellEdit event.
 
 ```typescript
@@ -172,7 +188,7 @@ interface ITableCellEdit {
 }
 ```
 
-
+#### <span id="itableexportoptions">ITableExportOptions</span>
 
 ```typescript
 interface ITableExportOptions {
@@ -193,6 +209,8 @@ interface ITableExportOptions {
 }
 ```
 
+#### <span id="itablefilter">ITableFilter</span>
+
 Represents a filter applied to a table
 
 ```typescript
@@ -206,6 +224,19 @@ interface ITableFilter {
 }
 ```
 
+#### <span id="itablesort">ITableSort</span>
+
+```typescript
+interface ITableSort {
+  /** The field name being sorted */
+  field: string;
+  /** The sort direction */
+  order: 'asc' | 'desc';
+}
+```
+
+#### <span id="ifilteroption">IFilterOption</span>
+
 Defines options for checkbox filter
 
 ```typescript
@@ -217,18 +248,7 @@ interface IFilterOption {
 }
 ```
 
-
-
-```typescript
-interface ITableSort {
-  /** The field name being sorted */
-  field: string;
-  /** The sort direction */
-  order: 'asc' | 'desc';
-}
-```
-
-
+#### <span id="icustomelement">ICustomElement</span>
 
 ```typescript
 interface ICustomElement {
@@ -237,13 +257,28 @@ interface ICustomElement {
 }
 ```
 
-
+#### <span id="itableexportexcelcolumn">ITableExportExcelColumn</span>
 
 ```typescript
 interface ITableExportExcelColumn {
   header: string;
   field: string;
   width: number;
+}
+```
+
+#### <span id="itablegroup">ITableGroup</span>
+
+Represents a group of table rows with associated metadata
+
+```typescript
+interface ITableGroup {
+  /** The value that this group represents (e.g., "Active", "Completed") */
+  groupValue: any;
+  /** The number of rows in this group */
+  groupCount: number;
+  /** The array of row data objects belonging to this group */
+  rows: any[];
 }
 ```
 

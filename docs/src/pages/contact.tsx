@@ -20,18 +20,9 @@ export default function Contact() {
         <section className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-10">
             <div>
-              <h2>Our Microsoft Teams Link</h2>
+              <h2>Team Email</h2>
               <p>
-                <a
-                  href="https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fchannel%2F19%3A0nXc9kArhdOj5OZMqW1vEKb27I_eifVafanAKKhGYjI1%40thread.tacv2%2FGeneral%3FgroupId%3D5a0cad67-57e7-4b91-b45e-8b6a3d0d1514%26tenantId%3D745a1b8b-9958-4d1e-ac1c-f741f0ff4eba&type=channel&deeplinkId=0c9c3d4c-fed2-495a-a476-97fb6eb5ae08&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click here to open Microsoft Teams
-                </a>
-              </p>
-              <p>
-                Or email us at <a href="mailto:takeoffui@thy.com">takeoffui@thy.com</a>
+                <a href="mailto:takeoffui@thy.com">takeoffui@thy.com</a>
               </p>
             </div>
             <div>

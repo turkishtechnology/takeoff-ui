@@ -10,86 +10,163 @@
   }
 }
 
+@mixin tk-button-disabled {
+  &:disabled,
+  &[disabled] {
+    @content;
+  }
+}
+
+@mixin button-variant-filled($bg-color, $hover-color, $focus-bg, $focus-shadow, $disabled-bg, $text-color: var(--text-lightest), $icon-color: var(--icon-lightest)) {
+  background-color: $bg-color;
+  color: $text-color;
+
+  .tk-button-icon {
+    color: $icon-color;
+  }
+
+  &:hover {
+    background-color: $hover-color;
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    background-color: $focus-bg;
+    box-shadow: $focus-shadow;
+  }
+
+  @include tk-button-disabled {
+    background-color: $disabled-bg;
+  }
+}
+
+@mixin button-variant-outlined($color, $border-color, $hover-bg, $focus-bg, $focus-shadow, $disabled-color, $disabled-border) {
+  background-color: transparent;
+  color: $color;
+  border: 1px solid $border-color;
+
+  &:hover {
+    background-color: $hover-bg;
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    background-color: $focus-bg;
+    box-shadow: $focus-shadow;
+  }
+
+  @include tk-button-disabled {
+    color: $disabled-color;
+    border-color: $disabled-border;
+  }
+}
+
+@mixin button-variant-text($color, $hover-bg, $focus-bg, $focus-shadow, $disabled-color) {
+  background-color: transparent;
+  color: $color;
+
+  &:hover {
+    background-color: $hover-bg;
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    background-color: $focus-bg;
+    box-shadow: $focus-shadow;
+  }
+
+  @include tk-button-disabled {
+    background-color: transparent;
+    color: $disabled-color;
+  }
+}
+
+@mixin button-variant-link($color, $hover-color) {
+  color: $color;
+
+  &:hover {
+    color: $hover-color;
+    cursor: pointer;
+  }
+}
+
+@mixin button-size($height, $font-size, $radius, $v-padding, $h-padding, $gap, $icon-size, $icon-only-padding) {
+  min-height: $height;
+  font-size: $font-size;
+  border-radius: $radius;
+  padding: $v-padding $h-padding;
+  gap: $gap;
+
+  &.rounded {
+    height: unset;
+    border-radius: 100%;
+  }
+
+  i {
+    font-size: $icon-size;
+    width: $icon-size;
+    height: $icon-size;
+    line-height: unset;
+  }
+
+  &.icon-only {
+    padding: $icon-only-padding;
+  }
+}
+
 .tk-button {
-  font-family: 'Geologica', sans-serif;
+  font-family: var(--desktop-body-m-base-font, sans-serif);
   font-weight: 400;
-  line-height: var(--desktop-body-m-base-line-height);
   transition: all 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   outline: none;
+  overflow: hidden;
+  height: 100%;
+
+  &.underline span {
+    text-decoration: underline;
+  }
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   &.primary {
     border: 0px;
     color: var(--static-white);
 
     &.filled {
-      background-color: var(--primary-base);
-
-      &:hover {
-        background-color: var(--primary-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--primary-base);
-        box-shadow: var(--primary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--frames-sub-base);
-      }
+      @include button-variant-filled(var(--primary-base), var(--primary-darkest), var(--primary-base), var(--primary-focus), var(--frames-sub-base));
     }
 
     &.outlined {
-      background-color: transparent;
-      color: var(--primary-base);
-      border: 1px solid var(--primary-base);
-
-      &:hover {
-        background-color: var(--primary-lightest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--overlay-white-lightest);
-        box-shadow: var(--primary-focus);
-      }
-
-      &:disabled {
-        color: var(--text-sub-base);
-        border: 1px solid var(--border-sub-base);
-      }
+      @include button-variant-outlined(
+        var(--primary-base),
+        var(--primary-base),
+        var(--primary-lightest),
+        var(--overlay-white-lightest),
+        var(--primary-focus),
+        var(--text-sub-base),
+        var(--border-sub-base)
+      );
     }
 
     &.text {
-      background-color: transparent;
-      color: var(--primary-base);
-
-      &:hover {
-        background-color: var(--primary-lightest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--primary-lightest);
-        box-shadow: var(--primary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--text-sub-base);
-      }
+      @include button-variant-text(var(--primary-base), var(--primary-lightest), var(--primary-lightest), var(--primary-focus), var(--text-sub-base));
     }
 
     &.link {
-      color: var(--primary-base);
-
-      &:hover {
-        color: var(--primary-dark);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--primary-base), var(--primary-dark));
     }
   }
 
@@ -98,72 +175,31 @@
     color: var(--text-lightest);
 
     &.filled {
-      background-color: var(--secondary-darkest);
+      @include button-variant-filled(var(--secondary-darkest), var(--secondary-dark), var(--secondary-darkest), var(--secondary-focus), var(--frames-sub-base));
 
-      &:hover {
-        background-color: var(--secondary-dark);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--secondary-darkest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--frames-sub-base);
+      @include tk-button-disabled {
         color: var(--text-lightest);
       }
     }
 
     &.outlined {
-      background-color: transparent;
-      color: var(--secondary-base);
-      border: 1px solid var(--secondary-base);
-
-      &:hover {
-        background-color: var(--secondary-lightest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--overlay-white-lightest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        color: var(--text-sub-base);
-        border-color: var(--border-sub-base);
-      }
+      @include button-variant-outlined(
+        var(--secondary-base),
+        var(--secondary-base),
+        var(--secondary-lightest),
+        var(--overlay-white-lightest),
+        var(--secondary-focus),
+        var(--text-sub-base),
+        var(--border-sub-base)
+      );
     }
 
     &.text {
-      background-color: transparent;
-      color: var(--secondary-base);
-
-      &:hover {
-        background-color: var(--secondary-lightest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--secondary-lightest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--text-sub-base);
-      }
+      @include button-variant-text(var(--secondary-base), var(--secondary-lightest), var(--secondary-lightest), var(--secondary-focus), var(--text-sub-base));
     }
 
     &.link {
-      color: var(--secondary-dark);
-
-      &:hover {
-        color: var(--secondary-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--secondary-dark), var(--secondary-darkest));
     }
   }
 
@@ -172,25 +208,7 @@
     color: var(--text-lightest);
 
     &.filled {
-      background-color: var(--frames-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
-      &:hover {
-        background-color: var(--frames-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--frames-base);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--frames-sub-base);
-      }
+      @include button-variant-filled(var(--frames-base), var(--frames-darkest), var(--frames-base), var(--secondary-focus), var(--frames-sub-base));
     }
 
     &.outlined {
@@ -204,17 +222,17 @@
 
       &:hover {
         background-color: var(--frames-lightest);
-        border: 1px solid var(--border-base);
+        border-color: var(--border-base);
         cursor: pointer;
       }
 
       &:focus-visible {
         background-color: var(--overlay-white-lightest);
-        border: 1px solid var(--border-base);
+        border-color: var(--border-base);
         box-shadow: var(--secondary-focus);
       }
 
-      &:disabled {
+      @include tk-button-disabled {
         color: var(--text-sub-base);
         border-color: var(--border-sub-base);
 
@@ -242,7 +260,7 @@
         box-shadow: var(--secondary-focus);
       }
 
-      &:disabled {
+      @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-sub-base);
 
@@ -253,12 +271,7 @@
     }
 
     &.link {
-      color: var(--text-dark);
-
-      &:hover {
-        color: var(--text-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--text-dark), var(--text-darkest));
     }
   }
 
@@ -267,75 +280,27 @@
     color: var(--text-lightest);
 
     &.filled {
-      background-color: var(--states-info-dark);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
-      &:hover {
-        background-color: var(--states-info-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-info-base);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--states-info-sub-base);
-      }
+      @include button-variant-filled(var(--states-info-dark), var(--states-info-darkest), var(--states-info-base), var(--secondary-focus), var(--states-info-sub-base));
     }
 
     &.outlined {
-      background-color: transparent;
-      color: var(--states-info-dark);
-      border: 1px solid var(--states-info-dark);
-
-      &:hover {
-        background-color: var(--states-info-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--overlay-white-lightest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        color: var(--states-info-light);
-        border: 1px solid var(--states-info-light);
-      }
+      @include button-variant-outlined(
+        var(--states-info-dark),
+        var(--states-info-dark),
+        var(--states-info-light),
+        var(--overlay-white-lightest),
+        var(--secondary-focus),
+        var(--states-info-light),
+        var(--states-info-light)
+      );
     }
 
     &.text {
-      background-color: transparent;
-      color: var(--states-info-dark);
-
-      &:hover {
-        background-color: var(--states-info-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-info-light);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--states-info-light);
-      }
+      @include button-variant-text(var(--states-info-dark), var(--states-info-light), var(--states-info-light), var(--secondary-focus), var(--states-info-light));
     }
 
     &.link {
-      color: var(--states-info-dark);
-
-      &:hover {
-        color: var(--states-info-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--states-info-dark), var(--states-info-darkest));
     }
   }
 
@@ -344,75 +309,27 @@
     color: var(--text-lightest);
 
     &.filled {
-      background-color: var(--states-success-dark);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
-      &:hover {
-        background-color: var(--states-success-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-success-dark);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--states-success-sub-base);
-      }
+      @include button-variant-filled(var(--states-success-dark), var(--states-success-darkest), var(--states-success-dark), var(--secondary-focus), var(--states-success-sub-base));
     }
 
     &.outlined {
-      background-color: transparent;
-      color: var(--states-success-dark);
-      border: 1px solid var(--states-success-dark);
-
-      &:hover {
-        background-color: var(--states-success-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--overlay-white-lightest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        color: var(--states-success-light);
-        border: 1px solid var(--states-success-light);
-      }
+      @include button-variant-outlined(
+        var(--states-success-dark),
+        var(--states-success-dark),
+        var(--states-success-light),
+        var(--overlay-white-lightest),
+        var(--secondary-focus),
+        var(--states-success-light),
+        var(--states-success-light)
+      );
     }
 
     &.text {
-      background-color: transparent;
-      color: var(--states-success-dark);
-
-      &:hover {
-        background-color: var(--states-success-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-success-light);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--states-success-light);
-      }
+      @include button-variant-text(var(--states-success-dark), var(--states-success-light), var(--states-success-light), var(--secondary-focus), var(--states-success-light));
     }
 
     &.link {
-      color: var(--states-success-dark);
-
-      &:hover {
-        color: var(--states-success-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--states-success-dark), var(--states-success-darkest));
     }
   }
 
@@ -421,74 +338,34 @@
     color: var(--states-danger-dark);
 
     &.filled {
-      background-color: var(--states-danger-dark);
-      color: var(--text-lightest);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
-      &:hover {
-        background-color: var(--states-danger-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-danger-dark);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--states-danger-light);
-      }
+      @include button-variant-filled(
+        var(--states-danger-dark),
+        var(--states-danger-darkest),
+        var(--states-danger-dark),
+        var(--secondary-focus),
+        var(--states-danger-light),
+        var(--text-lightest)
+      );
     }
 
     &.outlined {
-      background-color: transparent;
-      border: 1px solid var(--states-danger-dark);
-
-      &:hover {
-        background-color: var(--states-danger-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--overlay-white-lightest);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        color: var(--states-danger-light);
-        border: 1px solid var(--states-danger-light);
-      }
+      @include button-variant-outlined(
+        var(--states-danger-dark),
+        var(--states-danger-dark),
+        var(--states-danger-light),
+        var(--overlay-white-lightest),
+        var(--secondary-focus),
+        var(--states-danger-light),
+        var(--states-danger-light)
+      );
     }
 
     &.text {
-      background-color: transparent;
-
-      &:hover {
-        background-color: var(--states-danger-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-danger-light);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--states-danger-light);
-      }
+      @include button-variant-text(var(--states-danger-dark), var(--states-danger-light), var(--states-danger-light), var(--secondary-focus), var(--states-danger-light));
     }
 
     &.link {
-      color: var(--states-danger-dark);
-
-      &:hover {
-        color: var(--states-danger-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--states-danger-dark), var(--states-danger-darkest));
     }
   }
 
@@ -497,26 +374,14 @@
     color: var(--states-warning-dark);
 
     &.filled {
-      background-color: var(--states-warning-dark);
-      color: var(--text-lightest);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
-      &:hover {
-        background-color: var(--states-warning-darkest);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-warning-dark);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: var(--states-warning-sub-base);
-      }
+      @include button-variant-filled(
+        var(--states-warning-dark),
+        var(--states-warning-darkest),
+        var(--states-warning-dark),
+        var(--secondary-focus),
+        var(--states-warning-sub-base),
+        var(--text-lightest)
+      );
     }
 
     &.outlined {
@@ -533,44 +398,23 @@
         box-shadow: var(--secondary-focus);
       }
 
-      &:disabled {
+      @include tk-button-disabled {
         color: var(--states-warning-light);
-        border: 1px solid var(--states-warning-light);
+        border-color: var(--states-warning-light);
       }
     }
 
     &.text {
-      background-color: transparent;
-
-      &:hover {
-        background-color: var(--states-warning-light);
-        cursor: pointer;
-      }
-
-      &:focus-visible {
-        background-color: var(--states-warning-light);
-        box-shadow: var(--secondary-focus);
-      }
-
-      &:disabled {
-        background-color: transparent;
-        color: var(--states-warning-light);
-      }
+      @include button-variant-text(var(--states-warning-dark), var(--states-warning-light), var(--states-warning-light), var(--secondary-focus), var(--states-warning-light));
     }
 
     &.link {
-      color: var(--states-warning-dark);
-
-      &:hover {
-        color: var(--states-warning-darkest);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--states-warning-dark), var(--states-warning-darkest));
     }
   }
 
   &.white {
     border: 0px;
-    box-shadow: var(--secondary-focus);
 
     &.filled {
       background-color: var(--static-light);
@@ -586,12 +430,12 @@
       }
 
       &:focus-visible {
-        background-color: var(--static-light);
+        box-shadow: var(--secondary-focus);
       }
 
-      &:disabled {
+      @include tk-button-disabled {
         background-color: var(--static-light);
-        color: var(--text-lightest);
+        color: var(--overlay-white-light);
       }
     }
 
@@ -609,7 +453,7 @@
         background-color: var(--overlay-white-lightest);
       }
 
-      &:disabled {
+      @include tk-button-disabled {
         color: var(--text-sub-base);
         border-color: var(--border-sub-base);
       }
@@ -628,89 +472,58 @@
     }
 
     &.link {
-      color: var(--text-lightest);
-
-      &:hover {
-        color: var(--text-light);
-        cursor: pointer;
-      }
+      @include button-variant-link(var(--text-lightest), var(--text-light));
     }
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    pointer-events: none;
   }
 
   &.small {
-    height: 32px;
-    font-size: var(--desktop-body-xs-size);
-    border-radius: var(--button-sizes-small-radius);
-    padding: var(--button-sizes-small-v-padding) var(--button-sizes-small-h-padding);
-    gap: var(--button-sizes-small-gap);
+    @include button-size(
+      32px,
+      var(--desktop-body-xs-size),
+      var(--button-sizes-small-radius),
+      var(--button-sizes-small-v-padding),
+      var(--button-sizes-small-h-padding),
+      var(--button-sizes-small-gap),
+      var(--button-sizes-small-icon-size),
+      var(--sizes-small-full-padding, 6px)
+    );
 
     &.rounded {
-      height: unset;
-      border-radius: 100%;
       padding: var(--fab-button-sizes-small-v-padding) var(--fab-button-sizes-small-h-padding);
-    }
-
-    i {
-      font-size: var(--button-sizes-small-icon-size);
-      width: var(--button-sizes-small-icon-size);
-      height: var(--button-sizes-small-icon-size);
-      line-height: unset;
-    }
-    &.icon-only {
-      padding: var(--sizes-small-full-padding, 6px);
     }
   }
 
   &.base {
-    height: 40px;
-    font-size: var(--desktop-body-s-size);
-    border-radius: var(--button-sizes-base-radius);
-    padding: var(--button-sizes-base-v-padding) var(--button-sizes-base-h-padding);
-    gap: var(--button-sizes-base-gap);
+    @include button-size(
+      40px,
+      var(--desktop-body-s-size),
+      var(--button-sizes-base-radius),
+      var(--button-sizes-base-v-padding),
+      var(--button-sizes-base-h-padding),
+      var(--button-sizes-base-gap),
+      var(--button-sizes-base-icon-size),
+      var(--sizes-base-full-padding, 8px)
+    );
 
     &.rounded {
-      height: unset;
-      border-radius: 100%;
       padding: var(--fab-button-sizes-base-v-padding) var(--fab-button-sizes-base-h-padding);
-    }
-
-    i {
-      font-size: var(--button-sizes-base-icon-size);
-      width: var(--button-sizes-base-icon-size);
-      height: var(--button-sizes-base-icon-size);
-      line-height: unset;
-    }
-    &.icon-only {
-      padding: var(--sizes-base-full-padding, 8px);
     }
   }
 
   &.large {
-    height: 48px;
-    font-size: var(--desktop-body-m-base-size);
-    border-radius: var(--button-sizes-large-radius);
-    padding: var(--button-sizes-large-v-padding) var(--button-sizes-large-h-padding);
-    gap: var(--button-sizes-large-gap);
+    @include button-size(
+      48px,
+      var(--desktop-body-m-base-size),
+      var(--button-sizes-large-radius),
+      var(--button-sizes-large-v-padding),
+      var(--button-sizes-large-h-padding),
+      var(--button-sizes-large-gap),
+      var(--button-sizes-large-icon-size),
+      var(--sizes-large-full-padding, 12px)
+    );
 
     &.rounded {
-      height: unset;
-      border-radius: 100%;
       padding: var(--fab-button-sizes-large-v-padding) var(--fab-button-sizes-large-h-padding);
-    }
-
-    i {
-      font-size: var(--button-sizes-large-icon-size);
-      width: var(--button-sizes-large-icon-size);
-      height: var(--button-sizes-large-icon-size);
-      line-height: unset;
-    }
-    &.icon-only {
-      padding: var(--sizes-large-full-padding, 12px);
     }
   }
 
@@ -723,7 +536,7 @@
       text-decoration: underline;
     }
 
-    &:disabled {
+    @include tk-button-disabled {
       color: var(--text-sub-base);
     }
 
@@ -756,11 +569,5 @@
         height: var(--link-button-sizes-large-icon-size);
       }
     }
-  }
-
-  i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }

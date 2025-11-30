@@ -22,6 +22,9 @@ jobs:
               repo: context.repo.repo,
               pull_number: prNumber
             });
+            if (pr.labels.length === 1 && pr.labels[0].name =='core team') {
+              core.setFailed("PR must include at least one label other than 'core team'.");
+            }
             if (pr.labels.length === 0) {
               core.setFailed("PR must include at least one label before merging.");
             }

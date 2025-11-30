@@ -49,6 +49,10 @@ tk-select {
           gap: 8px;
         }
 
+        .multiple-option-content {
+          flex: 1;
+        }
+
         &:hover {
           cursor: pointer;
           background: var(--background-lightest);

@@ -6,6 +6,9 @@ import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { getNestedValue } from '../../utils/object-utils';
+import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 /**
  * TkSelect component description.
@@ -25,20 +28,18 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private filterDebounceTimeout;
-  private windowClickHandler: (event: MouseEvent) => void;
   private boundRunFilterForMultiple: (event: Event) => void;
   private cleanup;
   private isItemClickFlag = false;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @Element() el!: HTMLTkSelectElement;
 
   @AttachInternals() internals: ElementInternals;
 
   constructor() {
-    this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
@@ -140,6 +141,11 @@ export class TkSelect implements ComponentInterface {
   @Prop() multiple: boolean;
 
   /**
+   * The number of items to show in the collapsed select before listing `+N others`.
+   */
+  @Prop() visibleItemCount: number;
+
+  /**
    * The name of the control, which is submitted with the form data.
    */
   @Prop() name: string;
@@ -170,6 +176,12 @@ export class TkSelect implements ComponentInterface {
    * Sets options for all chips rendered in multiple selection mode.
    */
   @Prop() chipOptions: IChipOptions;
+
+  /**
+   * Provides a function to customize the panel top content.
+   */
+  @Prop() panelTopHtml: Function;
+
   /**
    * The list of options to be displayed in the select box.
    */
@@ -261,6 +273,16 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private closeHandler = (e: Event): void => {
+    if (e.composedPath().includes(this.el)) {
+      return;
+    }
+    this.isOpen = false;
+  };
+
   componentDidLoad(): void {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
@@ -268,7 +290,13 @@ export class TkSelect implements ComponentInterface {
 
     this.nativeInputRef = this.inputRef.querySelector('input');
 
-    addDialogScrollListener(this.el);
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.closeHandler,
+      disabled: this.disabled || this.readonly || !this.isOpen,
+    });
+
+    addDialogScrollListener(this.el, this.closeHandler);
 
     if (this.allowCustomValue) {
       this.editable = true;
@@ -282,17 +310,20 @@ export class TkSelect implements ComponentInterface {
   componentDidUpdate() {
     this.nativeInputRef = this.inputRef.querySelector('input');
 
+    // Update click outside mixin configuration based on current state
+    this.clickOutsideMixin?.updateConfig({
+      disabled: this.disabled || this.readonly || !this.isOpen,
+    });
+
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
           animationFrame: true,
         });
       }
-      this.bindWindowClickListener();
     } else {
       this.panelRef?.remove();
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
   }
 
@@ -302,8 +333,10 @@ export class TkSelect implements ComponentInterface {
 
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   formResetCallback() {
@@ -318,7 +351,17 @@ export class TkSelect implements ComponentInterface {
     if (!text) {
       return [...this.options];
     }
-    return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+
+    if (this.isGrouped()) {
+      return options
+        .map(group => ({
+          ...group,
+          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option => this.getOptionLabel(option).toLowerCase().includes(text.toLowerCase())),
+        }))
+        .filter(group => group[this.groupOptionsKey].length > 0);
+    } else {
+      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+    }
   }
 
   private updatePosition() {
@@ -336,11 +379,11 @@ export class TkSelect implements ComponentInterface {
           size({
             apply({ rects, elements }) {
               if (dropdownWidthMode === 'match-parent') {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: `${rects.reference.width}px`,
                 });
               } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
-                Object.assign(elements.floating.style, {
+                applyStyles(elements.floating, {
                   width: dropdownWidthMode,
                 });
               }
@@ -348,7 +391,7 @@ export class TkSelect implements ComponentInterface {
           }),
         ],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });
@@ -370,13 +413,18 @@ export class TkSelect implements ComponentInterface {
   }
 
   private getOptionLabel(item: any): string {
-    return typeof item === 'object' ? this.getNestedValue(item, this.optionLabelKey) : item;
+    if (typeof item === 'object' && item !== null) {
+      const label = getNestedValue(item, this.optionLabelKey);
+
+      return label != null ? String(label) : '';
+    }
+    return item != null ? String(item) : '';
   }
 
   private getOptionValue(item: any): any {
-    if (typeof item === 'object') {
+    if (typeof item === 'object' && item !== null) {
       if (this.optionValueKey?.length > 0) {
-        return this.getNestedValue(item, this.optionValueKey);
+        return getNestedValue(item, this.optionValueKey);
       } else {
         return item;
       }
@@ -385,34 +433,84 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private async setRenderOptions(value) {
-    if (this.isGrouped()) {
-      this.renderOptions = this.options
-        .map(group => ({
-          ...group,
-          [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option =>
-            this.getOptionLabel(option)
-              .toLowerCase()
-              .includes(value?.toLowerCase() || ''),
-          ),
-        }))
-        .filter(group => group[this.groupOptionsKey].length > 0);
-    } else {
-      this.renderOptions = await this.filter(value, this.options);
+  private getDisplayValueForMultiple(selectedItems: any[]): any[] {
+    if (!this.visibleItemCount || selectedItems.length <= this.visibleItemCount) {
+      return selectedItems;
     }
+
+    // When allowCustomValue is true, prioritize predefined options over custom values
+    if (this.allowCustomValue) {
+      const innerOptions = this.isGrouped ? this.options.flatMap(group => group[this.groupOptionsKey]) : this.options;
+
+      // Separate predefined options from custom values
+      const predefinedItems = selectedItems.filter(item => {
+        return innerOptions.some(opt => {
+          if (this.optionValueKey) {
+            return this.getOptionValue(opt) === this.getOptionValue(item);
+          } else {
+            return _.isEqual(opt, item);
+          }
+        });
+      });
+
+      const customItems = selectedItems.filter(item => {
+        return !innerOptions.some(opt => {
+          if (this.optionValueKey) {
+            return this.getOptionValue(opt) === this.getOptionValue(item);
+          } else {
+            return _.isEqual(opt, item);
+          }
+        });
+      });
+
+      // Take predefined items first, then custom items if there's room
+      const visibleItems = [...predefinedItems.slice(0, this.visibleItemCount), ...customItems.slice(0, Math.max(0, this.visibleItemCount - predefinedItems.length))];
+
+      if (selectedItems.length > this.visibleItemCount) {
+        const remainingCount = selectedItems.length - this.visibleItemCount;
+        const othersIndicator = {
+          __isOthersIndicator: true,
+          label: `+${remainingCount}`,
+          removable: false,
+        };
+        return [...visibleItems, othersIndicator];
+      }
+
+      return visibleItems;
+    }
+
+    // Original logic for when allowCustomValue is false
+    const visibleItems = selectedItems.slice(0, this.visibleItemCount);
+    const remainingCount = selectedItems.length - this.visibleItemCount;
+    const othersIndicator = {
+      __isOthersIndicator: true,
+      label: `+${remainingCount}`,
+      removable: false,
+    };
+
+    return [...visibleItems, othersIndicator];
+  }
+
+  private async setRenderOptions(value) {
+    this.renderOptions = await this.filter(value, this.options);
   }
 
   private getSelectedItem() {
     if (this.renderOptions?.length > 0) {
-      if (typeof this.value != 'object' && this.renderOptions?.every(item => typeof item != 'object')) {
+      let searchOptions = this.renderOptions;
+      if (this.isGrouped()) {
+        searchOptions = this.renderOptions.flatMap(group => group[this.groupOptionsKey] || []);
+      }
+
+      if (typeof this.value != 'object' && searchOptions?.every(item => typeof item != 'object')) {
         // value ve her bir option object değilse. Yani bu primitive tiplerle çalışan bir selectbox ise
 
-        return this.renderOptions.find(item => item == this.value);
-      } else if (this.renderOptions?.every(item => typeof item === 'object')) {
+        return searchOptions.find(item => item == this.value);
+      } else if (searchOptions?.every(item => typeof item === 'object')) {
         if (this.optionValueKey?.length > 0) {
-          return this.renderOptions.find(item => this.getOptionValue(item) == this.value);
+          return searchOptions.find(item => this.getOptionValue(item) == this.value);
         } else {
-          return this.renderOptions.find(item => _.isEqual(item, this.value));
+          return searchOptions.find(item => _.isEqual(item, this.value));
         }
       } else {
         return null;
@@ -450,7 +548,10 @@ export class TkSelect implements ComponentInterface {
           return null;
         })
         .filter(val => val !== null && val !== undefined);
-      this.inputRef.value = this.selectedItem;
+
+      // Apply visible item count logic for display
+      const displayValue = this.getDisplayValueForMultiple(this.selectedItem);
+      this.inputRef.value = displayValue;
       return;
     }
 
@@ -462,29 +563,41 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Find the selected item based on value type
-    if (typeof this.value !== 'object' && innerOptions.every(item => typeof item !== 'object')) {
+    if (typeof this.value !== 'object' && innerOptions?.every(item => typeof item !== 'object')) {
       // Handle primitive values
-      this.selectedItem = innerOptions.find(item => item === this.value);
+      this.selectedItem = innerOptions?.find(item => item === this.value);
     } else if (this.optionValueKey?.length > 0) {
       // Handle object values with optionValueKey
-      this.selectedItem = innerOptions.find(item => this.getOptionValue(item) === this.value);
+      this.selectedItem = innerOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = innerOptions.find(item => _.isEqual(item, this.value));
+      this.selectedItem = innerOptions?.find(item => _.isEqual(item, this.value));
     }
 
     // Set input value based on selection state
     if (this.selectedItem) {
-      this.inputRef.value = this.selectedItem;
+      if (this.multiple) {
+        this.inputRef.value = this.selectedItem;
+      } else {
+        const label = this.getOptionLabel(this.selectedItem);
+        this.inputRef.value = label;
+      }
     } else {
-      this.inputRef.value = null;
+      if (this.filter) {
+        this.selectedItem = this.getSelectedItem();
+        if (this.selectedItem) {
+          if (this.multiple) {
+            this.inputRef.value = this.selectedItem;
+          } else {
+            this.inputRef.value = this.getOptionLabel(this.selectedItem);
+          }
+        } else {
+          this.inputRef.value = null;
+        }
+      } else {
+        this.inputRef.value = null;
+      }
     }
-  }
-
-  private getNestedValue(obj, path) {
-    return path.split('.').reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
   }
 
   private scrollItem(item: HTMLDivElement) {
@@ -494,28 +607,9 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
   private handleFormReset() {
     this.value = null;
     this.tkChange.emit(null);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
-    const tkInputEl = this.el.querySelector('.tk-input');
-    const tkSelectPanelEl = this.el.querySelector('.tk-select-panel');
-    const isInnerClicked = event.composedPath().some(item => item === tkInputEl || item === tkSelectPanelEl);
-
-    if (!isInnerClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
   }
 
   private async handleSelectAllClick() {
@@ -553,7 +647,7 @@ export class TkSelect implements ComponentInterface {
     if (this.readonly) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
-      let tmpValue = Array.isArray(this.value) ? [...this.value] : [];
+      const tmpValue = Array.isArray(this.value) ? [...this.value] : [];
 
       const tmpItem = this.getOptionValue(item);
 
@@ -586,7 +680,48 @@ export class TkSelect implements ComponentInterface {
       if (value == null) {
         this.value = [];
       } else {
-        const resolvedValues = (Array.isArray(value) ? value : [value]).map(val => {
+        const incomingChips = Array.isArray(value) ? value : [value];
+
+        // Filter out the "others" indicator
+        const validChips = incomingChips.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
+
+        // When visibleItemCount is active and we have reordered display, we need to handle removals carefully
+        if (this.visibleItemCount && this.selectedItem && this.selectedItem.length > this.visibleItemCount) {
+          // Get the current display value (what the user sees)
+          const currentDisplayValue = this.getDisplayValueForMultiple(this.selectedItem);
+          const currentValidDisplayChips = currentDisplayValue.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
+
+          // Find which chip was removed by comparing the arrays
+          const removedChip = currentValidDisplayChips.find(
+            displayChip =>
+              !validChips.some(validChip => {
+                if (this.optionValueKey && typeof displayChip === 'object' && typeof validChip === 'object') {
+                  return this.getOptionValue(displayChip) === this.getOptionValue(validChip);
+                }
+                return _.isEqual(displayChip, validChip);
+              }),
+          );
+
+          if (removedChip) {
+            // Remove the chip from the actual value array (not the display array)
+            const currentValue = Array.isArray(this.value) ? [...this.value] : [];
+            const removedValue = this.optionValueKey && typeof removedChip === 'object' ? this.getOptionValue(removedChip) : removedChip;
+
+            const updatedValue = currentValue.filter(val => {
+              if (this.optionValueKey && typeof removedChip === 'object') {
+                return val !== removedValue;
+              }
+              return !_.isEqual(val, removedValue);
+            });
+
+            this.value = updatedValue;
+            this.tkChange.emit(this.value);
+            return;
+          }
+        }
+
+        // Normal case: no visibleItemCount or no reordering needed
+        const resolvedValues = validChips.map(val => {
           if (typeof val === 'object' && val !== null && this.optionValueKey) {
             return this.getOptionValue(val);
           }
@@ -620,7 +755,6 @@ export class TkSelect implements ComponentInterface {
     if (!this.isOpen && !this.disabled) {
       this.hasFocus = true;
       this.isOpen = true;
-      this.bindWindowClickListener();
     }
   }
 
@@ -642,6 +776,7 @@ export class TkSelect implements ComponentInterface {
           (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
       ) {
         this.value = null;
+        this.inputRef.value = null;
         this.tkChange.emit(null);
         this.renderOptions = await this.filter(null, this.options);
       } else {
@@ -652,14 +787,14 @@ export class TkSelect implements ComponentInterface {
 
   private async handleInputKeydown(e) {
     // Prevent default behavior for accessibility keys
-    if (['ArrowDown', 'ArrowUp', 'Enter', ' ', 'Escape'].includes(e.key)) {
+    if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(e.key)) {
       e.preventDefault();
     }
 
     // Handle keyboard shortcuts when dropdown is closed
     if (!this.isOpen) {
-      if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        // Space, Enter, Arrow Up/Down: Open dropdown
+      if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        // Enter, Arrow Up/Down: Open dropdown
         if (!this.disabled && !this.readonly) {
           this.hasFocus = true;
           this.isOpen = true;
@@ -716,7 +851,7 @@ export class TkSelect implements ComponentInterface {
         return;
       }
 
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === 'Enter') {
         const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
         if (this.multiple && this.editable && this.allowCustomValue) {
           this.nativeInputRef.dispatchEvent(new InputEvent('input', { bubbles: true }));
@@ -745,13 +880,13 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      let checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      const checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
             <Fragment>
               <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
-              <div innerHTML={this.optionHtml(item)}></div>
+              <div class="multiple-option-content" innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
@@ -872,6 +1007,23 @@ export class TkSelect implements ComponentInterface {
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (
             <Fragment>
+              {this.panelTopHtml && (
+                <div
+                  class="dropdown-item-top"
+                  ref={el => {
+                    if (el) {
+                      const htmlContent = this.panelTopHtml();
+                      if (htmlContent instanceof HTMLElement) {
+                        el.innerHTML = '';
+                        el.appendChild(htmlContent);
+                      } else {
+                        el.innerHTML = htmlContent;
+                      }
+                    }
+                  }}
+                ></div>
+              )}
+
               {this.createSelectAllOption()}
               {this.createOptions()}
             </Fragment>

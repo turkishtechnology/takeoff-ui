@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class TkRadio implements ComponentInterface {
   private parentEl: HTMLTkRadioGroupElement;
-  private uniqueId: string;
+  private uniqueId = uuidv4();
   private windowClickHandler: (event: MouseEvent) => void;
 
   @Element() el: HTMLTkRadioElement;
@@ -24,7 +24,6 @@ export class TkRadio implements ComponentInterface {
   @AttachInternals() internals: ElementInternals;
 
   constructor() {
-    this.uniqueId = uuidv4();
     // radio group ile birlikte kullanımlarda diğer radio ya tıklandığı durumda kendini false yapmaya ihtiyaç olmadığı için bu işlemi radio group tarafında yapıldığı için outside click eventi atanmasına gerek yoktur.
     if (!this.el.closest('tk-radio-group')) {
       this.windowClickHandler = this.handleWindowClick.bind(this);
@@ -144,8 +143,8 @@ export class TkRadio implements ComponentInterface {
 
     return (
       <Host data-tk-radio-id={this.uniqueId} invalid={this.invalid} disabled={this.disabled}>
-        <label class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
-          <input type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
+        <label htmlFor={this.uniqueId} class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+          <input id={this.uniqueId} type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
           <div class="mask">
             <div></div>
           </div>

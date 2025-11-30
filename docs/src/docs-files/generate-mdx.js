@@ -31,11 +31,32 @@ function clearStringObject(value, tag, propName) {
     .replaceAll('{', '{ ');
 }
 
+// Function to create a slug from type name for anchor links
+function createSlug(typeName) {
+  return typeName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+// Function to wrap custom types with anchor links
+function wrapTypeWithLink(propType, references, tag) {
+  if (!references || Object.keys(references).length === 0) {
+    return propType;
+  }
+
+  let result = propType;
+  Object.keys(references).forEach(refName => {
+    const refData = references[refName];
+    if (refData.path && refData.path.startsWith(`src/components/${tag}/`)) {
+      const slug = createSlug(refName);
+      result = result.replace(new RegExp(`\\b${refName}\\b`, 'g'), `[${refName}](#${slug})`);
+    }
+  });
+  return result;
+}
+
 // Function to generate MDX content
 function generateMdx(component) {
   const { tag, docs, docsTags, props, events, methods, slots } = component;
 
-  // Start MDX head content
   const reactImportCode = docsTags.find(item => item.name == 'react')?.text;
   const vueImportCode = docsTags.find(item => item.name == 'vue')?.text;
   const angularImportCode = docsTags.find(item => item.name == 'angular')?.text;
@@ -76,8 +97,23 @@ ${docs} \n
     apiContent += `### Props\n\n`;
     apiContent += `| Name | Type | Default | Description |\n| ---- | ---- | ------- | ----------- |\n`;
     props.forEach(prop => {
+      const hasImportedType = prop.complexType?.references && Object.keys(prop.complexType.references).length > 0;
+
+      const isCSSStyleProperties = prop.complexType?.original === 'CSSStyleProperties';
+
+      let propType;
+      if (isCSSStyleProperties) {
+        propType = 'CSSStyleProperties';
+      } else {
+        propType = prop.type;
+      }
+
+      if (hasImportedType && !isCSSStyleProperties) {
+        propType = wrapTypeWithLink(propType, prop.complexType.references, tag);
+      }
+
       apiContent += `| <TkBadge label="${prop.name}" variant="primary" size="large" type="filledlight"/> | <code>${
-        prop.type?.indexOf('{') > -1 ? '`' + clearStringObject(prop.type, tag, prop.name) + '`' : clearStringObject(prop.type, tag, prop.name)
+        propType?.indexOf('{') > -1 ? '`' + clearStringObject(propType, tag, prop.name) + '`' : clearStringObject(propType, tag, prop.name)
       }</code> | ${
         prop.default?.indexOf('{') > -1 ? '`' + clearStringObject(prop.default, tag) + '`' || 'null' : clearStringObject(prop.default) || 'null'
       } | ${clearString(prop.docs)} |\n`;
@@ -111,18 +147,43 @@ ${docs} \n
     });
   }
 
-  // Add İnterfaces
+  // Add Interfaces
   const arrKeys = typeLibraryAllKeys.filter(key => key.includes(tag));
-  if (arrKeys.length > 0) {
+  const componentInterfaces = arrKeys.filter(key => {
+    const typeData = data.typeLibrary[key];
+    return typeData.path && typeData.path.startsWith(`src/components/${tag}/`) && typeData.declaration && typeData.declaration.startsWith('export interface');
+  });
+
+  if (componentInterfaces.length > 0) {
     apiContent += `\n### Interfaces\n\n`;
+
+    componentInterfaces.forEach(key => {
+      const typeData = data.typeLibrary[key];
+      const typeName = key.split('::')[1];
+      const slug = createSlug(typeName);
+      const declaration = typeData.declaration;
+
+      apiContent += `#### <span id="${slug}">${typeName}</span>\n\n`;
+
+      if (typeData.docstring) {
+        apiContent += typeData.docstring + '\n\n';
+      }
+
+      apiContent += `\`\`\`typescript\n${declaration.replace('export ', '')}\n\`\`\`\n\n`;
+    });
   }
 
-  arrKeys.forEach(key => {
-    apiContent += data.typeLibrary[key].docstring + '\n\n';
-    apiContent += `\`\`\`typescript
-${data.typeLibrary[key].declaration?.replace('export ', '')}
-\`\`\`\n\n`;
+  const externalInterfaces = arrKeys.filter(key => {
+    const typeData = data.typeLibrary[key];
+    return !typeData.path || !typeData.path.startsWith(`src/components/${tag}/`);
   });
+
+  if (externalInterfaces.length > 0) {
+    externalInterfaces.forEach(key => {
+      apiContent += data.typeLibrary[key].docstring + '\n\n';
+      apiContent += `\`\`\`typescript\n${data.typeLibrary[key].declaration?.replace('export ', '')}\n\`\`\`\n\n`;
+    });
+  }
 
   return { head: headContent, api: apiContent };
 }

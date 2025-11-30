@@ -1,9 +1,10 @@
 import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch } from '@stencil/core';
-import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { CSSStyleProperties } from '../../global/types';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -54,7 +55,7 @@ export class TkTooltip implements ComponentInterface {
   @Watch('position')
   positionChanged() {
     if (this.tooltipElement) {
-      this.updateArrowPosition();
+      this.updatePosition();
     }
   }
   /**
@@ -71,7 +72,7 @@ export class TkTooltip implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
@@ -82,14 +83,14 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, () => {
+      this.isOpen = false;
+    });
   }
 
   componentDidUpdate() {
     if (this.isOpen) {
-      this.cleanup = autoUpdate(this.triggerElement, this.tooltipElement, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      this.updatePosition();
     } else {
       this.cleanup && this.cleanup();
     }
@@ -98,52 +99,7 @@ export class TkTooltip implements ComponentInterface {
     removeDialogScrollListener(this.el);
   }
   private updatePosition() {
-    computePosition(this.triggerElement, this.tooltipElement, {
-      strategy: 'fixed',
-      placement: this.position,
-      middleware: [offset(8), flip(), shift(), arrow({ element: this.arrowElement })],
-    }).then(({ x, y, middlewareData, placement }) => {
-      Object.assign(this.tooltipElement.style, {
-        left: `${x}px`,
-        top: `${y}px`,
-      });
-
-      const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      Object.assign(this.arrowElement.style, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-      });
-
-      const [side] = placement.split('-');
-      this.updateArrowPosition(side);
-    });
-  }
-
-  private updateArrowPosition(side?: string) {
-    const arrowElement = this.arrowElement;
-    switch (side) {
-      case 'top':
-        arrowElement.style.bottom = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'bottom':
-        arrowElement.style.top = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderRight = 'none';
-
-        break;
-      case 'left':
-        arrowElement.style.right = '-5px';
-        arrowElement.style.borderBottom = 'none';
-        arrowElement.style.borderLeft = 'none';
-        break;
-      case 'right':
-        arrowElement.style.left = '-5px';
-        arrowElement.style.borderTop = 'none';
-        arrowElement.style.borderRight = 'none';
-        break;
-    }
+    floatingElementAutoUpdate(this.triggerElement, this.tooltipElement, this.arrowElement, { placement: this.position });
   }
 
   private handleMouseEnter = () => {

@@ -2,6 +2,7 @@ import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInter
 import classNames from 'classnames';
 import { IIconOptions } from '../../components';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkTabs component description.
@@ -102,17 +103,17 @@ export class TkTabs implements ComponentInterface {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * The style attribute of headers container element
    */
-  @Prop() headerContainerStyle?: any = null;
+  @Prop() headerContainerStyle?: CSSStyleProperties = null;
 
   /**
    * The style attribute of tabs item element
    */
-  @Prop() contentStyle?: any = null;
+  @Prop() contentStyle?: CSSStyleProperties = null;
 
   /**
    * Triggered when a tab is clicked. Returns the clicked tab index.

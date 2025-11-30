@@ -6,6 +6,7 @@ import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/d
 import { getIconElementProps } from '../../utils/icon-utils';
 import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -99,6 +100,11 @@ export class TkCurrencyInput implements ComponentInterface {
    * Displays a red asterisk (*) next to the label for visual emphasis.
    */
   @Prop() showAsterisk: boolean = false;
+
+  /**
+   * Disables the currency field if set to true.
+   */
+  @Prop() currencyDisabled: boolean = false;
 
   /**
    * The number of decimal places to display in the formatted currency value.
@@ -244,7 +250,7 @@ export class TkCurrencyInput implements ComponentInterface {
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ y }) => {
-        Object.assign(this.dropdownEl.style, {
+        applyStyles(this.dropdownEl, {
           top: `${y}px`,
         });
       });
@@ -353,7 +359,7 @@ export class TkCurrencyInput implements ComponentInterface {
     event.stopPropagation();
     event.preventDefault();
 
-    if (!this.disabled && !this.readonly) {
+    if (!this.disabled && !this.readonly && !this.currencyDisabled) {
       this.isDropdownOpen = !this.isDropdownOpen;
     }
   };
@@ -553,7 +559,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderDropdownButton() {
     return (
-      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.disabled}>
+      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
         <div class="tk-currency-input__dropdown-button-selected">
           <img
             src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"

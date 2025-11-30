@@ -72,6 +72,12 @@ export class TkTreeView implements ComponentInterface {
   @Prop() showBadge: boolean = true;
 
   /**
+   * Show/hide badges with zero count. Default is true.
+   * When false, badges with 0 count will be hidden (works for both selected count and children count).
+   */
+  @Prop() showZeroCountBadges: boolean = true;
+
+  /**
    * Badge customization options for children count display.
    */
   @Prop() badgeOptions?: IBadgeOptions;
@@ -149,8 +155,8 @@ export class TkTreeView implements ComponentInterface {
       return;
     }
 
-    if (this.mode === 'basic') {
-      if (this.expandAll) {
+    if (this.expandAll) {
+      if (this.mode === 'basic') {
         // Expand all directory nodes
         const traverse = (nodes: ITreeItem[], base: string = '') => {
           nodes.forEach((node, idx) => {
@@ -162,18 +168,18 @@ export class TkTreeView implements ComponentInterface {
           });
         };
         traverse(this.items);
-      }
-    } else if (this.mode === 'stepper') {
-      // Expand the first directory all the way down
-      let level = this.items;
-      let base = '';
-      while (level && level.length > 0) {
-        const idx = level.findIndex(n => n.children && n.children.length > 0);
-        if (idx === -1) break;
-        const path = base ? `${base}-${idx}` : `${idx}`;
-        expanded.add(path);
-        base = path;
-        level = level[idx].children;
+      } else {
+        // Expand the first directory all the way down
+        let level = this.items;
+        let base = '';
+        while (level && level.length > 0) {
+          const idx = level.findIndex(n => n.children && n.children.length > 0);
+          if (idx === -1) break;
+          const path = base ? `${base}-${idx}` : `${idx}`;
+          expanded.add(path);
+          base = path;
+          level = level[idx].children;
+        }
       }
     }
 
@@ -446,17 +452,23 @@ export class TkTreeView implements ComponentInterface {
           {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
           <div class={classNames('tk-tree-view', 'text-container', this.size)}>
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
-            {isDirectory && this.showBadge && (
-              <tk-badge
-                count={this.selectable ? selectedCount : item.children?.length}
-                size={this.size}
-                type={this.badgeOptions?.type ?? 'filledlight'}
-                variant={this.badgeOptions?.variant ?? 'neutral'}
-                rounded={this.badgeOptions?.rounded ?? true}
-                icon={this.badgeOptions?.icon}
-                iconPosition={this.badgeOptions?.iconPosition}
-              />
-            )}
+            {(() => {
+              const badgeCount = this.selectable ? selectedCount : item.children?.length;
+              const shouldShowBadge = isDirectory && this.showBadge && (this.showZeroCountBadges || badgeCount > 0);
+              return (
+                shouldShowBadge && (
+                  <tk-badge
+                    count={badgeCount}
+                    size={this.size}
+                    type={this.badgeOptions?.type ?? 'filledlight'}
+                    variant={this.badgeOptions?.variant ?? 'neutral'}
+                    rounded={this.badgeOptions?.rounded ?? true}
+                    icon={this.badgeOptions?.icon}
+                    iconPosition={this.badgeOptions?.iconPosition}
+                  />
+                )
+              );
+            })()}
           </div>
           {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
             <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} size={this.size} />

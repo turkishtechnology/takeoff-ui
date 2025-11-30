@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { applyStyles } from '../../utils/style-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 export interface IDateSelection {
   start: string;
@@ -30,20 +32,15 @@ export class TkDatePicker {
   private debounceTimer: number;
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
-  private uniqueId: string;
-  private windowClickHandler: (event: MouseEvent) => void;
+  private uniqueId = uuidv4();
   private cleanup;
   private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
   private weeksLength: number = 0;
+  private clickOutsideMixin?: ClickOutsideMixin;
   @Element() el: HTMLTkDatepickerElement;
 
   @AttachInternals() internals: ElementInternals;
-
-  constructor() {
-    this.uniqueId = uuidv4();
-    this.windowClickHandler = this.handleWindowClick.bind(this);
-  }
 
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
@@ -97,7 +94,7 @@ export class TkDatePicker {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
         // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if ((this.showTimePicker || this.timeOnly) && !this.internalStartTime) {
+        if (this.showTimePicker && !this.internalStartTime) {
           const def = this.getDefaultTime();
           this.internalStartTime = def;
           if (this.mode !== 'range') this.internalEndTime = def;
@@ -373,7 +370,16 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
+
+    // Initialize click outside mixin only if not inline mode
+    if (!this.inline) {
+      this.clickOutsideMixin = new ClickOutsideMixin({
+        referenceElement: this.el,
+        handler: this.closeHandler,
+        disabled: this.disabled || !this.isOpen,
+      });
+    }
 
     if (this.inline && this.showTimePicker) {
       requestAnimationFrame(() => {
@@ -384,23 +390,28 @@ export class TkDatePicker {
   }
 
   componentDidUpdate() {
+    // Update click outside mixin configuration based on current state
+    this.clickOutsideMixin?.updateConfig({
+      disabled: this.disabled || this.inline || !this.isOpen,
+    });
+
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
           animationFrame: true,
         });
       }
-      this.bindWindowClickListener();
     } else {
       this.cleanup && this.cleanup();
-      this.unbindWindowClickListener();
     }
   }
 
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
-    this.unbindWindowClickListener();
     removeDialogScrollListener(this.el);
+
+    // Call mixin's disconnectedCallback for cleanup
+    this.clickOutsideMixin?.disconnectedCallback();
   }
 
   formResetCallback() {
@@ -535,6 +546,10 @@ export class TkDatePicker {
     let hour = now.getHours();
     let minute = now.getMinutes();
 
+    // Align hour to the configured hourStep (floor to nearest step)
+    const hourStep = Math.max(1, this.hourStep || 1);
+    hour = Math.floor(hour / hourStep) * hourStep;
+
     // Align minutes to the configured step (floor to nearest step)
     const step = Math.max(1, this.minuteStep || 1);
     minute = Math.floor(minute / step) * step;
@@ -611,12 +626,8 @@ export class TkDatePicker {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
         }
       }
-      if (!startTime) {
-        startTime = this.getDefaultTime();
-      }
-
       // For initial load, set AM/PM based on actual time, but respect user changes after that
-      if (this.timeFormat === '12') {
+      if (this.timeFormat === '12' && startTime) {
         // Only set if this is the initial default state, otherwise respect user choice
         if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
           this.internalAmPm = 'PM';
@@ -736,7 +747,7 @@ export class TkDatePicker {
         placement: 'bottom-start',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        Object.assign(this.panelRef.style, {
+        applyStyles(this.panelRef, {
           left: `${x}px`,
           top: `${y}px`,
         });
@@ -1009,30 +1020,13 @@ export class TkDatePicker {
     this.inputValue = this.formatInputValue();
   }
 
-  private bindWindowClickListener() {
-    window.addEventListener('click', this.windowClickHandler);
-  }
-
-  private unbindWindowClickListener() {
-    window.removeEventListener('click', this.windowClickHandler);
-  }
-
-  private handleWindowClick(event: MouseEvent) {
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private closeHandler = (): void => {
     if (this.inline) return;
-    const clickedElement = event.target as any;
-
-    const clickedDatepickerId = clickedElement?.el?.shadowRoot.querySelector('.tk-datepicker-panel')?.getAttribute('data-tk-datepicker-id');
-    const isOutsideClicked = !(
-      this.el.contains(clickedElement) ||
-      clickedDatepickerId === this.uniqueId ||
-      event.composedPath().some(item => item == this.inputRef) ||
-      event.composedPath().some(item => item == this.el)
-    );
-    if (isOutsideClicked) {
-      this.isOpen = false;
-      this.unbindWindowClickListener();
-    }
-  }
+    this.isOpen = false;
+  };
 
   private getTimeStateToModify(): { time: { hour: number; minute: number }; type: 'start' | 'end' } | null {
     // Allow time changes if any time UI is active: showTimePicker or timeOnly mode
@@ -1059,11 +1053,15 @@ export class TkDatePicker {
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
       let displayHour = targetTimeState.time.hour % 12;
       displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const nextIdx = Math.min(idx + this.hourStep, hoursList.length - 1);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
+
+      const idx = hoursList.indexOf(closestHour);
+      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
       const newDisplayHour = hoursList[nextIdx];
 
       // Convert back to 24-hour format
@@ -1078,9 +1076,15 @@ export class TkDatePicker {
         this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
       }
     } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour + this.hourStep;
-      hour = Math.min(hour, 23);
+      // 24h mode - move to next hour in step list
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
+
+      const idx = hoursList.indexOf(closestHour);
+      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
+      const hour = hoursList[nextIdx];
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1100,11 +1104,15 @@ export class TkDatePicker {
     this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
-      const hoursList = Array.from({ length: 12 }, (_, i) => i + 1);
+      const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
       let displayHour = targetTimeState.time.hour % 12;
       displayHour = displayHour === 0 ? 12 : displayHour;
-      const idx = hoursList.indexOf(displayHour);
-      const prevIdx = Math.max(idx - this.hourStep, 0);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
+
+      const idx = hoursList.indexOf(closestHour);
+      const prevIdx = Math.max(idx - 1, 0);
       const newDisplayHour = hoursList[prevIdx];
 
       // Convert back to 24-hour format
@@ -1119,9 +1127,15 @@ export class TkDatePicker {
         this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
       }
     } else {
-      // 24h mode clamp
-      let hour = targetTimeState.time.hour - this.hourStep;
-      hour = Math.max(hour, 0);
+      // 24h mode - move to previous hour in step list
+      const hoursList = Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
+
+      // Find closest hour in step list
+      const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
+
+      const idx = hoursList.indexOf(closestHour);
+      const prevIdx = Math.max(idx - 1, 0);
+      const hour = hoursList[prevIdx];
 
       if (targetTimeState.type === 'start') {
         this.internalStartTime = { ...targetTimeState.time, hour: hour };
@@ -1154,8 +1168,14 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    let minute = targetTimeState.time.minute + this.minuteStep;
-    minute = Math.min(minute, 59);
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest minute in step list
+    const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
+
+    const idx = minutesList.indexOf(closestMinute);
+    const nextIdx = Math.min(idx + 1, minutesList.length - 1);
+    const minute = minutesList[nextIdx];
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1169,8 +1189,14 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    let minute = targetTimeState.time.minute - this.minuteStep;
-    minute = Math.max(minute, 0);
+    const minutesList = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest minute in step list
+    const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
+
+    const idx = minutesList.indexOf(closestMinute);
+    const prevIdx = Math.max(idx - 1, 0);
+    const minute = minutesList[prevIdx];
 
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, minute: minute };
@@ -1684,11 +1710,21 @@ export class TkDatePicker {
     }
     const displayMinute = currentTime.minute;
 
-    const currentHour = displayHour;
-    const currentMinute = displayMinute;
-
-    const hours = this.timeFormat === '12' ? Array.from({ length: 12 }, (_, i) => i + 1) : Array.from({ length: 24 }, (_, i) => i);
+    const hours =
+      this.timeFormat === '12'
+        ? Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1)
+        : Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
     const minutes = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
+
+    // Find closest hour in the hours array
+    const findClosestInArray = (value: number, arr: number[]): number => {
+      if (arr.includes(value)) return value;
+      // Find the closest value in the array
+      return arr.reduce((prev, curr) => (Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev));
+    };
+
+    const currentHour = findClosestInArray(displayHour, hours);
+    const currentMinute = findClosestInArray(displayMinute, minutes);
 
     const sliceRange = (options: number[], selected: number): (number | null)[] => {
       const idx = options.indexOf(selected);

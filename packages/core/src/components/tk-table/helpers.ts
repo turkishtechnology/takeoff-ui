@@ -1,3 +1,4 @@
+import { getNestedValue } from '../../utils/object-utils';
 import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
 import { parse, isWithinInterval } from 'date-fns';
 
@@ -178,9 +179,3 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
   return sortAndFilterData;
 };
 // #endregion
-
-export const getNestedValue = (row, path) => {
-  return path.split('.').reduce((acc, key) => {
-    return acc && acc[key] !== undefined ? acc[key] : undefined;
-  }, row);
-};

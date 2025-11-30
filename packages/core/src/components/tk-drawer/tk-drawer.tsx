@@ -1,5 +1,6 @@
 import { Component, Prop, h, State, Watch, Element, Event, EventEmitter, Method } from '@stencil/core';
 import classNames from 'classnames';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The `TkDrawer` is a container component displayed as an overlay. It supports various features such as different header and footer types, multiple variants, and flexible positioning, making it suitable for a wide range of use cases.
@@ -67,7 +68,7 @@ export class TkDrawer {
   /**
    * The style attribute of container element
    */
-  @Prop() containerStyle?: any = null;
+  @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
    * Prevents the drawer from being dismissed by clicking outside
