@@ -35,7 +35,6 @@ export class TkSelect implements ComponentInterface {
   private isItemClickFlag = false;
   private clickOutsideMixin?: ClickOutsideMixin;
   private innerOptions = [];
-  private refSelectAll: HTMLTkCheckboxElement;
 
   @Element() el!: HTMLTkSelectElement;
 
@@ -256,11 +255,7 @@ export class TkSelect implements ComponentInterface {
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
-    if (this.isGrouped()) {
-      this.innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
-    } else {
-      this.innerOptions = this.options;
-    }
+    this.setInnerOptions();
 
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
@@ -327,9 +322,7 @@ export class TkSelect implements ComponentInterface {
         this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
           animationFrame: true,
         });
-        if (this.value?.length > 0 && !this.isAllSelected(this.value)) {
-          this.refSelectAll.indeterminate = true;
-        }
+        this.setInnerOptions();
       }
     } else {
       this.panelRef?.remove();
@@ -339,6 +332,14 @@ export class TkSelect implements ComponentInterface {
 
   private isGrouped(): boolean {
     return this.options?.length > 0 && this.options[0]?.[this.groupOptionsKey];
+  }
+
+  private setInnerOptions(): void {
+    if (this.isGrouped()) {
+      this.innerOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
+    } else {
+      this.innerOptions = this.options;
+    }
   }
 
   disconnectedCallback() {
@@ -531,6 +532,8 @@ export class TkSelect implements ComponentInterface {
   private setValue() {
     if (!this.inputRef) return;
 
+    this.setInnerOptions();
+
     // Handle multiple selection case
     if (this.multiple) {
       // Ensure value is always an array
@@ -553,9 +556,6 @@ export class TkSelect implements ComponentInterface {
       // Apply visible item count logic for display
       const displayValue = this.getDisplayValueForMultiple(this.selectedItem);
       this.inputRef.value = displayValue;
-      if (currentValue.length > 0 && !this.isAllSelected(currentValue)) {
-        this.refSelectAll.indeterminate = true;
-      }
       return;
     }
 
@@ -925,6 +925,7 @@ export class TkSelect implements ComponentInterface {
 
   private createSelectAllOption() {
     if (this.selectAll && this.multiple) {
+      const isIndeterminate = !this.isAllSelected() && this.value?.length > 0;
       const checking = this.isAllSelected();
       return (
         <div>
@@ -935,9 +936,8 @@ export class TkSelect implements ComponentInterface {
             data-option-index="-1"
           >
             <tk-checkbox
-              ref={el => (this.refSelectAll = el)}
-              indeterminate={!this.isAllSelected() && this.selectedItem?.length > 0}
-              value={checking}
+              indeterminate={isIndeterminate}
+              value={isIndeterminate ? null : checking}
               onTk-change={e => e.stopPropagation()}
               onClick={e => e.preventDefault()}
             ></tk-checkbox>
