@@ -271,7 +271,14 @@ export class TkCarousel implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.orientation === 'vertical' });
+    const rootClasses = classNames(
+      'tk-carousel',
+      this.navigationPlacement,
+      this.navigationPosition,
+      { vertical: this.orientation === 'vertical' },
+      { 'show-arrows': this.showArrows },
+      { 'show-indicators': this.showIndicators },
+    );
 
     this.el.style.setProperty('--items-per-view', String(this.itemsPerView));
 
