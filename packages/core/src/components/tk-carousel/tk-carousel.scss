@@ -1,3 +1,6 @@
+:host {
+  flex: 1;
+}
 .tk-carousel-overlay {
   overflow: hidden;
 
@@ -27,6 +30,10 @@
       flex-direction: column;
       width: 100%;
       height: 100%;
+
+      ::slotted(*) {
+        max-height: calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
+      }
     }
   }
 
