@@ -1,48 +1,38 @@
 :host {
-  display: block;
-  width: 100%;
-  height: 100%;
+  flex: 1;
+}
+.tk-carousel-overlay {
+  overflow: hidden;
+
+  .tk-carousel-items-container {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.3s ease;
+
+    ::slotted(*) {
+      flex: 0 0 calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
+      min-width: 0;
+      object-fit: cover;
+    }
+  }
 }
 
 .tk-carousel {
   position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  &.vertical {
+    height: 100%;
 
-  .tk-carousel-slider {
-    flex: 1;
-    overflow: hidden;
-
-    .tk-carousel-slide-track {
-      display: flex;
-      gap: 16px;
+    .tk-carousel-overlay {
       height: 100%;
-      transition: transform 0.3s ease;
-
-      ::slotted(*) {
-        flex: 0 0 calc((100% - (var(--slides-per-view, 1) - 1) * 16px) / var(--slides-per-view, 1));
-        min-width: 0;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      ::slotted(img) {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
     }
 
-    &.vertical .tk-carousel-slide-track {
+    .tk-carousel-items-container {
       flex-direction: column;
       width: 100%;
+      height: 100%;
 
       ::slotted(*) {
-        flex: 0 0 calc((100% - (var(--slides-per-view, 1) - 1) * 16px) / var(--slides-per-view, 1));
-        width: 100%;
-        min-height: 0;
+        max-height: calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
       }
     }
   }
@@ -51,19 +41,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
     gap: 20px;
+    z-index: 10;
 
-    .tk-carousel-indicators {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    &.vertical-navigation {
+      flex-direction: column;
+      .tk-carousel-indicators {
+        flex-direction: column;
+      }
+    }
+  }
 
-      .tk-carousel-indicator {
-        width: 8px;
-        height: 8px;
+  .tk-carousel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    .tk-carousel-indicator {
+      padding: 4px;
+      cursor: pointer;
+
+      .tk-carousel-indicator-dot {
+        width: 6px;
+        height: 6px;
+        background-color: var(--background-light);
         border-radius: 50%;
-        cursor: pointer;
-        background-color: var(--secondary-sub-base);
         transition: all 0.3s ease;
 
         &:hover {
@@ -72,14 +75,13 @@
 
         &.active {
           background-color: var(--primary-base);
-          width: 24px;
-          border-radius: 4px;
+          width: 8px;
+          height: 8px;
         }
       }
-
-      .player-button {
-        cursor: pointer;
-      }
+    }
+    .player-button {
+      cursor: pointer;
     }
   }
 
@@ -89,68 +91,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
   }
 
   &.inside {
     &.bottom {
       .tk-carousel-navigation {
-        position: absolute;
         bottom: 16px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
       }
     }
 
     &.top {
       .tk-carousel-navigation {
-        position: absolute;
         top: 16px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
       }
     }
 
     &.left {
       .tk-carousel-navigation {
-        position: absolute;
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-        z-index: 10;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-          .active {
-            height: 24px;
-            width: 8px;
-            border-radius: 4px;
-          }
-        }
       }
     }
 
     &.right {
       .tk-carousel-navigation {
-        position: absolute;
         right: 16px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-        z-index: 10;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-
-          .active {
-            height: 24px;
-            width: 8px;
-            border-radius: 4px;
-          }
-        }
       }
     }
 
@@ -160,7 +132,6 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 10;
       }
 
       .prev-button {
@@ -176,128 +147,52 @@
         bottom: 16px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
-      }
-
-      &.vertical {
-        .prev-button,
-        .next-button {
-          top: auto;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-
-        .prev-button {
-          top: 16px;
-        }
-
-        .next-button {
-          bottom: 16px;
-        }
-
-        .tk-carousel-indicators {
-          bottom: auto;
-          left: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          flex-direction: column;
-
-          .tk-carousel-indicator {
-            width: 8px;
-            height: 8px;
-
-            &.active {
-              height: 24px;
-              width: 8px;
-              border-radius: 4px;
-            }
-          }
-        }
       }
     }
   }
 
   &.outside {
     &.bottom {
-      margin-bottom: 64px;
-      height: calc(100% - 64px);
+      padding-bottom: 48px;
+
       .tk-carousel-navigation {
-        position: absolute;
-        bottom: -48px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
       }
     }
 
     &.top {
-      margin-top: 64px;
-      height: calc(100% - 64px);
+      padding-top: 48px;
+
       .tk-carousel-navigation {
-        position: absolute;
-        top: -48px;
+        top: 0px;
         left: 50%;
         transform: translateX(-50%);
       }
     }
 
     &.left {
-      margin-left: 64px;
-      &.vertical {
-        .tk-carousel-indicator {
-          width: 8px;
-          height: 8px;
-
-          &.active {
-            height: 24px;
-            width: 8px;
-            border-radius: 4px;
-          }
-        }
-      }
+      padding-left: 48px;
       .tk-carousel-navigation {
-        position: absolute;
-        left: -48px;
+        left: 0px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
     &.right {
-      margin-right: 64px;
-      &.vertical {
-        .tk-carousel-indicator {
-          width: 8px;
-          height: 8px;
-
-          &.active {
-            height: 24px;
-            width: 8px;
-            border-radius: 4px;
-          }
-        }
-      }
+      padding-right: 48px;
       .tk-carousel-navigation {
-        position: absolute;
-        right: -48px;
+        right: 0px;
         top: 50%;
         transform: translateY(-50%);
-        flex-direction: column;
-
-        .tk-carousel-indicators {
-          flex-direction: column;
-        }
       }
     }
 
     &.distributed {
-      margin-bottom: 36px;
-      margin-inline: 64px;
-      height: calc(100% - 36px);
+      padding: 0 48px 32px;
+
       .prev-button,
       .next-button {
         position: absolute;
@@ -306,16 +201,16 @@
       }
 
       .prev-button {
-        left: -48px;
+        left: -0px;
       }
 
       .next-button {
-        right: -48px;
+        right: 0px;
       }
 
       .tk-carousel-indicators {
         position: absolute;
-        bottom: -24px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
       }

@@ -10,16 +10,15 @@ export class TkCarousel implements ComponentInterface {
   @Element() el: HTMLTkCarouselElement;
 
   private slotElement?: HTMLSlotElement;
-  private slides: HTMLElement[] = [];
-  private slideTrack?: HTMLElement;
+  private items: HTMLElement[] = [];
+  private itemsContainer?: HTMLElement;
 
   @State() autoplayTimer?: number;
-  @State() activeSlide: number = 0;
-  @State() totalSlides: number = 0;
-  @State() isVertical: boolean = false;
+  @State() activeIndex: number = 0;
+  @State() totalItems: number = 0;
 
   /**
-   * Controls whether the slide indicators are shown
+   * Controls whether the carousel indicators are shown
    * @defaultValue true
    */
   @Prop() showIndicators: boolean = true;
@@ -64,40 +63,39 @@ export class TkCarousel implements ComponentInterface {
    * Controls whether the pause/play button is shown
    * @defaultValue false
    */
-  @Prop() showPlayerButton: boolean = false;
+  @Prop() showPlayerToggleButton: boolean = false;
 
   /**
-   * Number of slides to show per view
+   * Number of items to show per view
    * @defaultValue 1
    */
-  @Prop() slidesPerView: number = 1;
+  @Prop() itemsPerView: number = 1;
 
   /**
-   * Emitted when right arrow is clicked
+   * Orientation of the carousel
+   * @defaultValue 'horizontal'
    */
-  @Event({ eventName: 'tk-next' })
-  tkNext: EventEmitter<{ slide: number }>;
+  @Prop() orientation: 'horizontal' | 'vertical' = 'horizontal';
 
   /**
-   * Emitted when slide is changed
+   * Height of the carousel when orientation is vertical
+   * @defaultValue '300px'
    */
-  @Event({ eventName: 'tk-slide' }) tkChange: EventEmitter<{ slide: number; totalSlides: number }>;
+  @Prop() verticalViewHeight: string = '300px';
 
   /**
-   * Emitted when left arrow is clicked
+   * Emitted when item is changed
    */
-  @Event({ eventName: 'tk-pre' }) tkPrev: EventEmitter<{ slide: number }>;
+  @Event({ eventName: 'tk-item-change' }) tkItemChange: EventEmitter<{ index: number }>;
 
   componentDidLoad() {
     if (!this.slotElement) {
       this.slotElement = this.el.shadowRoot?.querySelector('slot') as HTMLSlotElement | undefined;
     }
-    this.slideTrack = this.el.shadowRoot?.querySelector('.tk-carousel-slide-track') as HTMLElement | undefined;
+    this.itemsContainer = this.el.shadowRoot?.querySelector('.tk-carousel-items-container') as HTMLElement | undefined;
     this.el.tabIndex = 0;
-    this.updateSlides();
-    this.updateSlidePosition();
+    this.updateItemPosition();
     this.startAutoplay();
-    this.isVertical = this.navigationPosition === 'left' || this.navigationPosition === 'right';
     this.el.addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -107,18 +105,18 @@ export class TkCarousel implements ComponentInterface {
   }
 
   private startAutoplay = () => {
-    if (!this.autoplay || this.totalSlides <= this.slidesPerView) return;
+    if (!this.autoplay || this.totalItems <= this.itemsPerView) return;
     this.stopAutoplay();
     this.autoplayTimer = window.setInterval(() => {
-      const lastStartingView = this.totalSlides - this.slidesPerView;
-      if (this.activeSlide >= lastStartingView) {
+      const lastStartingItem = this.totalItems - this.itemsPerView;
+      if (this.activeIndex >= lastStartingItem) {
         if (this.circular) {
-          this.changeSlide(0);
+          this.changeItem(0);
         } else {
           this.stopAutoplay();
         }
       } else {
-        this.changeSlide(this.activeSlide + 1);
+        this.changeItem(this.activeIndex + 1);
       }
     }, this.autoplayDelay);
   };
@@ -130,69 +128,77 @@ export class TkCarousel implements ComponentInterface {
     }
   };
 
-  private updateSlides() {
+  private updateItems() {
     const assigned = this.slotElement?.assignedElements() || [];
-    this.slides = assigned.filter(el => !(el as HTMLElement).hasAttribute('slot')) as HTMLElement[];
-    this.totalSlides = this.slides.length;
+    this.items = assigned.filter(el => !(el as HTMLElement).hasAttribute('slot')) as HTMLElement[];
+    this.totalItems = this.items.length;
   }
 
-  private updateSlidePosition() {
-    if (!this.slideTrack) return;
+  private updateItemPosition() {
+    if (!this.itemsContainer) return;
 
-    const sliderElement = this.el.shadowRoot?.querySelector('.tk-carousel-slider') as HTMLElement;
-    if (!sliderElement) return;
-
-    const containerRect = sliderElement.getBoundingClientRect();
-    const containerSize = this.isVertical ? containerRect.height : containerRect.width;
-
+    const itemsContainerElement = this.el.shadowRoot?.querySelector('.tk-carousel-overlay') as HTMLElement;
+    if (!itemsContainerElement) return;
     const gapSize = 16;
-    const totalGaps = Math.max(0, this.slidesPerView - 1);
+
+    const totalGaps = Math.max(0, this.itemsPerView - 1);
     const totalGapSpace = totalGaps * gapSize;
-    const slideSize = (containerSize - totalGapSpace) / this.slidesPerView;
+    let containerSize;
 
-    const translateValue = this.activeSlide * (slideSize + gapSize);
-
-    if (this.isVertical) {
-      this.slideTrack.style.transform = `translateY(-${translateValue}px)`;
+    if (this.orientation === 'horizontal') {
+      containerSize = itemsContainerElement.getBoundingClientRect().width;
+    } else if (this.el.parentElement.style.height) {
+      containerSize = Number.parseFloat(this.el.parentElement.style.height);
     } else {
-      this.slideTrack.style.transform = `translateX(-${translateValue}px)`;
+      this.el.style.height = String(this.verticalViewHeight);
+      containerSize = Number.parseFloat(this.verticalViewHeight);
+    }
+
+    const itemSize = (containerSize - totalGapSpace) / this.itemsPerView;
+
+    const translateValue = this.activeIndex * (itemSize + gapSize);
+
+    if (this.orientation === 'vertical') {
+      this.itemsContainer.style.transform = `translateY(-${translateValue}px)`;
+    } else {
+      this.itemsContainer.style.transform = `translateX(-${translateValue}px)`;
     }
   }
-  private changeSlide(index: number) {
-    if (!this.totalSlides) return;
-    const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
+  private changeItem(index: number) {
+    if (!this.totalItems) return;
+    const lastStartingItem = Math.max(0, this.totalItems - this.itemsPerView);
     if (this.circular) {
       if (index < 0) {
-        index = lastStartingView;
-      } else if (index > lastStartingView) {
+        index = lastStartingItem;
+      } else if (index > lastStartingItem) {
         index = 0;
       }
     } else {
       if (index < 0) index = 0;
-      if (index > lastStartingView) index = lastStartingView;
+      if (index > lastStartingItem) index = lastStartingItem;
     }
 
-    this.activeSlide = index;
-    this.updateSlidePosition();
-    this.tkChange.emit({ slide: this.activeSlide, totalSlides: this.totalSlides });
+    this.activeIndex = index;
+    this.updateItemPosition();
+    this.tkItemChange.emit({ index: this.activeIndex });
   }
 
   private handlePrevClick = () => {
-    this.changeSlide(this.activeSlide - 1);
-    this.tkPrev.emit({ slide: this.activeSlide });
+    this.changeItem(this.activeIndex - 1);
+    this.tkItemChange.emit({ index: this.activeIndex });
   };
 
   private handleNextClick = () => {
-    this.changeSlide(this.activeSlide + 1);
-    this.tkNext.emit({ slide: this.activeSlide });
+    this.changeItem(this.activeIndex + 1);
+    this.tkItemChange.emit({ index: this.activeIndex });
   };
 
   private handleIndicatorClick = (index: number) => {
-    this.changeSlide(index);
+    this.changeItem(index);
   };
 
   private handleKeyDown = (ev: KeyboardEvent) => {
-    if (this.isVertical) {
+    if (this.orientation === 'vertical') {
       if (ev.key === 'ArrowUp') {
         ev.preventDefault();
         this.handlePrevClick();
@@ -212,41 +218,37 @@ export class TkCarousel implements ComponentInterface {
   };
 
   private createPrevButton() {
-    if (!this.showArrows || this.slides.length <= this.slidesPerView) return null;
-    if (!this.circular && this.activeSlide === 0) return null;
+    if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
+    if (!this.circular && this.activeIndex === 0) return null;
 
-    return <tk-button size="small" class="prev-button" icon={this.isVertical ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
+    return <tk-button size="small" class="prev-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
   }
 
   private createNextButton() {
-    const lastStartingView = Math.max(0, this.totalSlides - this.slidesPerView);
-    if (!this.showArrows || this.slides.length <= this.slidesPerView) return null;
-    if (!this.circular && this.activeSlide >= lastStartingView) return null;
+    const lastStartingItem = Math.max(0, this.totalItems - this.itemsPerView);
+    if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
+    if (!this.circular && this.activeIndex >= lastStartingItem) return null;
 
-    return <tk-button size="small" class="next-button" icon={this.isVertical ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
+    return <tk-button size="small" class="next-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
   }
 
   private createIndicators() {
-    if (!this.showIndicators || this.slides.length <= this.slidesPerView) return null;
-    const indicatorCount = Math.max(1, this.totalSlides - this.slidesPerView + 1);
+    if (!this.showIndicators || this.items.length <= this.itemsPerView) return null;
+    const indicatorCount = Math.max(1, this.totalItems - this.itemsPerView + 1);
 
     return (
       <div class="tk-carousel-indicators">
-        {this.showPlayerButton &&
+        {this.showPlayerToggleButton &&
           this.autoplay &&
           (this.autoplayTimer ? (
-            <tk-icon class="player-button" variant="white" size="large" icon="pause_circle" onClick={this.stopAutoplay} />
+            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="pause_circle" onClick={this.stopAutoplay} />
           ) : (
-            <tk-icon class="player-button" variant="white" size="large" icon="play_circle" onClick={this.startAutoplay} />
+            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="play_circle" onClick={this.startAutoplay} />
           ))}
         {Array.from({ length: indicatorCount }).map((_, index) => (
-          <div
-            class={{
-              'tk-carousel-indicator': true,
-              'active': index === this.activeSlide,
-            }}
-            onClick={() => this.handleIndicatorClick(index)}
-          />
+          <div class="tk-carousel-indicator" onClick={() => this.handleIndicatorClick(index)}>
+            <div class={classNames('tk-carousel-indicator-dot', { active: index === this.activeIndex })}></div>
+          </div>
         ))}
       </div>
     );
@@ -254,7 +256,13 @@ export class TkCarousel implements ComponentInterface {
 
   private renderNavigationElement() {
     return (
-      <div class="tk-carousel-navigation">
+      <div
+        class={classNames(
+          'tk-carousel-navigation-holder',
+          { 'tk-carousel-navigation': this.navigationPosition !== 'distributed' },
+          { 'vertical-navigation': this.navigationPosition === 'left' || this.navigationPosition === 'right' },
+        )}
+      >
         {this.createPrevButton()}
         {this.createIndicators()}
         {this.createNextButton()}
@@ -263,19 +271,18 @@ export class TkCarousel implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.isVertical });
-    const sliderClasses = classNames('tk-carousel-slider', { vertical: this.isVertical });
+    const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.orientation === 'vertical' });
 
-    this.el.style.setProperty('--slides-per-view', String(this.slidesPerView));
+    this.el.style.setProperty('--items-per-view', String(this.itemsPerView));
 
     return (
       <div class={rootClasses}>
-        <div class={sliderClasses}>
-          <div class="tk-carousel-slide-track">
+        <div class="tk-carousel-overlay">
+          <div class="tk-carousel-items-container">
             <slot
               onSlotchange={() => {
-                this.updateSlides();
-                this.updateSlidePosition();
+                this.updateItems();
+                this.updateItemPosition();
               }}
             ></slot>
           </div>
