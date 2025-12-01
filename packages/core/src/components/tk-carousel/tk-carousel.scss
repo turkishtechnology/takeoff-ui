@@ -1,13 +1,3 @@
-:host {
-  display: block;
-  position: relative;
-  height: 100%;
-}
-
-.tk-carousel {
-  position: relative;
-}
-
 .tk-carousel-overlay {
   overflow: hidden;
 
@@ -19,38 +9,27 @@
     ::slotted(*) {
       flex: 0 0 calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
       min-width: 0;
-      height: 100%;
       object-fit: cover;
     }
   }
 }
 
 .tk-carousel {
+  position: relative;
   &.vertical {
     height: 100%;
 
     .tk-carousel-overlay {
       height: 100%;
-      overflow: hidden;
     }
 
     .tk-carousel-items-container {
       flex-direction: column;
       width: 100%;
       height: 100%;
-
-      ::slotted(*) {
-        max-height: calc((100% - (var(--items-per-view, 1) - 1) * 16px) / var(--items-per-view, 1));
-      }
-    }
-
-    .tk-carousel-navigation {
-      flex-direction: column;
-      .tk-carousel-indicators {
-        flex-direction: column;
-      }
     }
   }
+
   .tk-carousel-navigation {
     display: flex;
     align-items: center;
@@ -58,6 +37,13 @@
     position: absolute;
     gap: 20px;
     z-index: 10;
+
+    &.vertical-navigation {
+      flex-direction: column;
+      .tk-carousel-indicators {
+        flex-direction: column;
+      }
+    }
   }
 
   .tk-carousel-indicators {

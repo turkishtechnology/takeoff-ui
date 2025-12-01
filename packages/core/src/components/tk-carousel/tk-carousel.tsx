@@ -16,7 +16,6 @@ export class TkCarousel implements ComponentInterface {
   @State() autoplayTimer?: number;
   @State() activeIndex: number = 0;
   @State() totalItems: number = 0;
-  @State() vertical: boolean = false;
 
   /**
    * Controls whether the carousel indicators are shown
@@ -73,6 +72,18 @@ export class TkCarousel implements ComponentInterface {
   @Prop() itemsPerView: number = 1;
 
   /**
+   * Orientation of the carousel
+   * @defaultValue 'horizontal'
+   */
+  @Prop() orientation: 'horizontal' | 'vertical' = 'horizontal';
+
+  /**
+   * Height of the carousel when orientation is vertical
+   * @defaultValue '300px'
+   */
+  @Prop() verticalViewHeight: string = '300px';
+
+  /**
    * Emitted when item is changed
    */
   @Event({ eventName: 'tk-item-change' }) tkItemChange: EventEmitter<{ index: number }>;
@@ -83,10 +94,8 @@ export class TkCarousel implements ComponentInterface {
     }
     this.itemsContainer = this.el.shadowRoot?.querySelector('.tk-carousel-items-container') as HTMLElement | undefined;
     this.el.tabIndex = 0;
-    this.updateItems();
     this.updateItemPosition();
     this.startAutoplay();
-    this.vertical = this.navigationPosition === 'left' || this.navigationPosition === 'right';
     this.el.addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -130,18 +139,26 @@ export class TkCarousel implements ComponentInterface {
 
     const itemsContainerElement = this.el.shadowRoot?.querySelector('.tk-carousel-overlay') as HTMLElement;
     if (!itemsContainerElement) return;
-
-    const containerRect = itemsContainerElement.getBoundingClientRect();
-    const containerSize = this.vertical ? containerRect.height : containerRect.width;
-
     const gapSize = 16;
+
     const totalGaps = Math.max(0, this.itemsPerView - 1);
     const totalGapSpace = totalGaps * gapSize;
+    let containerSize;
+
+    if (this.orientation === 'horizontal') {
+      containerSize = itemsContainerElement.getBoundingClientRect().width;
+    } else if (this.el.parentElement.style.height) {
+      containerSize = Number.parseFloat(this.el.parentElement.style.height);
+    } else {
+      this.el.style.height = String(this.verticalViewHeight);
+      containerSize = Number.parseFloat(this.verticalViewHeight);
+    }
+
     const itemSize = (containerSize - totalGapSpace) / this.itemsPerView;
 
     const translateValue = this.activeIndex * (itemSize + gapSize);
 
-    if (this.vertical) {
+    if (this.orientation === 'vertical') {
       this.itemsContainer.style.transform = `translateY(-${translateValue}px)`;
     } else {
       this.itemsContainer.style.transform = `translateX(-${translateValue}px)`;
@@ -181,7 +198,7 @@ export class TkCarousel implements ComponentInterface {
   };
 
   private handleKeyDown = (ev: KeyboardEvent) => {
-    if (this.vertical) {
+    if (this.orientation === 'vertical') {
       if (ev.key === 'ArrowUp') {
         ev.preventDefault();
         this.handlePrevClick();
@@ -204,7 +221,7 @@ export class TkCarousel implements ComponentInterface {
     if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
     if (!this.circular && this.activeIndex === 0) return null;
 
-    return <tk-button size="small" class="prev-button" icon={this.vertical ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
+    return <tk-button size="small" class="prev-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
   }
 
   private createNextButton() {
@@ -212,7 +229,7 @@ export class TkCarousel implements ComponentInterface {
     if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
     if (!this.circular && this.activeIndex >= lastStartingItem) return null;
 
-    return <tk-button size="small" class="next-button" icon={this.vertical ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
+    return <tk-button size="small" class="next-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
   }
 
   private createIndicators() {
@@ -239,7 +256,13 @@ export class TkCarousel implements ComponentInterface {
 
   private renderNavigationElement() {
     return (
-      <div class={classNames('tk-carousel-navigation-holder', { 'tk-carousel-navigation': this.navigationPosition !== 'distributed' })}>
+      <div
+        class={classNames(
+          'tk-carousel-navigation-holder',
+          { 'tk-carousel-navigation': this.navigationPosition !== 'distributed' },
+          { 'vertical-navigation': this.navigationPosition === 'left' || this.navigationPosition === 'right' },
+        )}
+      >
         {this.createPrevButton()}
         {this.createIndicators()}
         {this.createNextButton()}
@@ -248,7 +271,7 @@ export class TkCarousel implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.vertical });
+    const rootClasses = classNames('tk-carousel', this.navigationPlacement, this.navigationPosition, { vertical: this.orientation === 'vertical' });
 
     this.el.style.setProperty('--items-per-view', String(this.itemsPerView));
 
