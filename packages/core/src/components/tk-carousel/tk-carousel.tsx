@@ -95,6 +95,7 @@ export class TkCarousel implements ComponentInterface {
     this.itemsContainer = this.el.shadowRoot?.querySelector('.tk-carousel-items-container') as HTMLElement | undefined;
     this.el.tabIndex = 0;
     this.updateItemPosition();
+    this.updateItems();
     this.startAutoplay();
     this.el.addEventListener('keydown', this.handleKeyDown);
   }
