@@ -1,6 +1,13 @@
 import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 
+/**
+ * The `TkCarousel` is a content slider component with various options.
+ * @react `import { TkCarousel } from '@takeoff-ui/react'`
+ * @vue `import { TkCarousel } from '@takeoff-ui/vue'`
+ * @angular `import { TkCarousel } from '@takeoff-ui/angular'`
+ */
+
 @Component({
   tag: 'tk-carousel',
   styleUrl: 'tk-carousel.scss',
