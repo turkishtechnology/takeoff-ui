@@ -148,8 +148,6 @@ export class TkCarousel implements ComponentInterface {
 
     if (this.orientation === 'horizontal') {
       containerSize = itemsContainerElement.getBoundingClientRect().width;
-    } else if (this.el.parentElement.getBoundingClientRect().height) {
-      containerSize = Number.parseFloat(this.el.parentElement.getBoundingClientRect().height);
     } else {
       this.el.style.height = String(this.verticalViewHeight);
       containerSize = Number.parseFloat(this.verticalViewHeight);
