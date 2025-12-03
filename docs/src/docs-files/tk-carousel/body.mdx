@@ -1,0 +1,66 @@
+import Basic from './Examples/Basic';
+import SlidesPerView from './Examples/SlidesPerView';
+import Circular from './Examples/Circular';
+import Autoplay from './Examples/Autoplay';
+import PlayerButton from './Examples/PlayerButton';
+import NavigationPlacement from './Examples/NavigationPlacement';
+import ShowIndicatorAndArrows from './Examples/ShowIndicatorAndArrows';
+import Vertical from './Examples/Vertical';
+
+## Basic
+
+A simple `TkCarousel` is created by giving content as children.
+
+<Basic />
+
+## Items Per View
+
+You can set the number of slides visible at once using the `itemsPerView`
+property.
+
+<SlidesPerView />
+
+## Circular
+
+You can enable or disable circular scrolling by setting the `circular` property.
+By default, it is set to `true`.
+
+<Circular />
+
+## Autoplay
+
+You can enable autoplay functionality by setting the `autoplay` property to
+`true`. Circular will be enabled automatically when autoplay is activated. Delay
+between slides can be customized using the `autoplayDelay` property, which
+defaults to `3000` milliseconds.
+
+<Autoplay />
+
+## Navigation Placement and Position
+
+You can customize the placement and the position of the navigation arrows using
+the `navigationPlacement` and `navigationPosition` properties.
+
+<NavigationPlacement />
+
+## Player Button
+
+You can show or hide the play/pause button using the `howPlayerToggleButton`
+property. By default, it is set to `false`.
+
+<PlayerButton />
+
+## Show Indicator and Arrows
+
+You can enable or disable the indicator and navigation arrows using the
+`showIndicator` and `showArrows` properties. By default, both are set to `true`.
+
+<ShowIndicatorAndArrows />
+
+## Vertical
+
+You can set the orientation of the carousel using the `orientation` property. It
+can be either `horizontal` or `vertical`. When set to `vertical`, you should also
+specify the height of the carousel using the `verticalViewHeight` property.
+
+<Vertical />
