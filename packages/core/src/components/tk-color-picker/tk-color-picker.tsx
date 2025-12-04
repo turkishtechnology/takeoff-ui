@@ -2,6 +2,7 @@ import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method,
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import classNames from 'classnames';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from '../../utils/color-utils';
+import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 declare global {
   interface Window {
@@ -42,6 +43,7 @@ export class TkColorPicker implements ComponentInterface {
   private hueSliderRef?: HTMLElement;
   private alphaSliderRef?: HTMLElement;
   private pendingValue: HSVA | null = null;
+  private clickOutsideMixin?: ClickOutsideMixin;
 
   @State() isOpen: boolean = false;
   @State() internalHSVA: HSVA = { h: 0, s: 0, v: 0, a: 1 };
@@ -167,10 +169,8 @@ export class TkColorPicker implements ComponentInterface {
   isOpenChanged(newVal: boolean) {
     if (newVal) {
       this.tkOpen.emit();
-      this.bindWindowClick();
     } else {
       this.tkClose.emit();
-      this.unbindWindowClick();
     }
   }
 
@@ -211,9 +211,17 @@ export class TkColorPicker implements ComponentInterface {
     this.hasHeaderActionsSlot = !!this.el.querySelector(':scope > [slot="header-actions"]');
     this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
     this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+
+    this.clickOutsideMixin = new ClickOutsideMixin({
+      referenceElement: this.el,
+      handler: this.handleClickOutside,
+      disabled: !this.isOpen || this.inline || this.preventDismiss,
+    });
   }
 
   componentDidUpdate() {
+    this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.inline || this.preventDismiss });
+
     if (this.isOpen && this.triggerRef && this.panelRef) {
       if (!this.cleanupAuto) {
         this.cleanupAuto = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePanelPosition(), { elementResize: false });
@@ -227,7 +235,8 @@ export class TkColorPicker implements ComponentInterface {
   }
 
   disconnectedCallback() {
-    this.unbindWindowClick();
+    this.clickOutsideMixin?.disconnectedCallback();
+
     if (this.cleanupAuto) {
       this.cleanupAuto();
       this.cleanupAuto = undefined;
@@ -317,21 +326,8 @@ export class TkColorPicker implements ComponentInterface {
     this.stopDragging();
   };
 
-  private bindWindowClick() {
-    window.addEventListener('click', this.handleWindowClick);
-  }
-
-  private unbindWindowClick() {
-    window.removeEventListener('click', this.handleWindowClick);
-  }
-
-  private handleWindowClick = (e: MouseEvent) => {
-    if (this.preventDismiss) return;
-
-    const path = e.composedPath();
-    if (!path.includes(this.el)) {
-      this.handleApply();
-    }
+  private handleClickOutside = (_: MouseEvent) => {
+    this.handleApply();
   };
 
   private handleTriggerClick = (e: MouseEvent) => {
