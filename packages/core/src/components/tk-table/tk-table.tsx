@@ -1625,6 +1625,7 @@ export class TkTable implements ComponentInterface {
       selectionTd = (
         <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
           <tk-checkbox
+            id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
             value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
@@ -1634,7 +1635,14 @@ export class TkTable implements ComponentInterface {
     } else if (this.selectionMode === 'radio') {
       selectionTd = (
         <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-          <tk-radio value={row} name="selection" checked={_.isEqual(this.selection, row)} disabled={isRowDisabled} onTk-change={() => this.handleRadioSelectChange(row)}></tk-radio>
+          <tk-radio
+            id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
+            value={row}
+            name={this.el.id ? `${this.el.id}-selection` : 'selection'}
+            checked={_.isEqual(this.selection, row)}
+            disabled={isRowDisabled}
+            onTk-change={() => this.handleRadioSelectChange(row)}
+          ></tk-radio>
         </td>
       );
     }
@@ -1862,6 +1870,7 @@ export class TkTable implements ComponentInterface {
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
         >
           <tk-checkbox
+            id={this.el.id ? `${this.el.id}-checkbox-all` : undefined}
             value={this.isAllRowsSelected()}
             disabled={!(this.renderData.length > 0)}
             ref={el => (this.refSelectAll = el)}
