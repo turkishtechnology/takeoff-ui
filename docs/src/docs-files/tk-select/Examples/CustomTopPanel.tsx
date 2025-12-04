@@ -1,7 +1,6 @@
 import { TkSelect, TkButton, TkIcon } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useState } from 'react';
-import { dividerClasses } from '@mui/material';
 
 const CustomTopPanel = () => {
   const reactCode = `<TkSelect
@@ -18,7 +17,31 @@ const CustomTopPanel = () => {
             </div>\`;
   }}
   value={value}
+  optionValueKey="value"
   onTkChange={(e) => setValue(e.detail)}
+/>
+<TkSelect
+  label="Button in Panel Header"
+  options={[
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' },
+    { value: 'other', label: 'Other' },
+  ]}
+  panelTopHtml={() => {
+    const div: HTMLDivElement = document.createElement('div');
+    const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
+    tkButton.label = 'Set Male';
+    tkButton.addEventListener('tk-click', () => {
+      setSecondValue('male');
+    });
+    div.style.justifySelf = 'center';
+    div.style.padding = '2px';
+    div.appendChild(tkButton);
+    return div;
+  }}
+  value={secondValue}
+  optionValueKey="value"
+  onTkChange={e => setSecondValue(e.detail)}
 />`;
 
   const vueCode = `<TkSelect
@@ -35,14 +58,38 @@ const CustomTopPanel = () => {
             </div>\`;
   }"
   v-model="value"
+/>
+<TkSelect
+  label="Button in Panel Header"
+  :options.prop={[
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' },
+    { value: 'other', label: 'Other' },
+  ]}
+  :panelTopHtml.prop="() => {
+    const div: HTMLDivElement = document.createElement('div');
+    const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
+    tkButton.label = 'Set Male';
+    tkButton.addEventListener('tk-click', () => {
+      setSecondValue('male');
+    });
+    div.style.justifySelf = 'center';
+    div.style.padding = '2px';
+    div.appendChild(tkButton);
+    return div;
+  }"
+  v-model="secondValue"
+  optionValueKey="value"
+
 />`;
 
   const [value, setValue] = useState();
+  const [secondValue, setSecondValue] = useState<string | undefined>();
 
   const demo = (
     <div className="max-w-[215px]">
       <TkSelect
-        label="Select With Top Panel"
+        label="String in Panel Header"
         options={[
           { value: 'female', label: 'Female' },
           { value: 'male', label: 'Male' },
@@ -55,7 +102,31 @@ const CustomTopPanel = () => {
             </div>`;
         }}
         value={value}
+        optionValueKey="value"
         onTkChange={e => setValue(e.detail)}
+      />
+      <TkSelect
+        label="Button in Panel Header"
+        options={[
+          { value: 'female', label: 'Female' },
+          { value: 'male', label: 'Male' },
+          { value: 'other', label: 'Other' },
+        ]}
+        panelTopHtml={() => {
+          const div: HTMLDivElement = document.createElement('div');
+          const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
+          tkButton.label = 'Set Male';
+          tkButton.addEventListener('tk-click', () => {
+            setSecondValue('male');
+          });
+          div.style.justifySelf = 'center';
+          div.style.padding = '2px';
+          div.appendChild(tkButton);
+          return div;
+        }}
+        value={secondValue}
+        optionValueKey="value"
+        onTkChange={e => setSecondValue(e.detail)}
       />
     </div>
   );
