@@ -4,11 +4,11 @@
 
 .tk-avatar-container {
   position: relative;
-}
 
-:has(.tk-avatar-badge) {
-  .tk-avatar {
-    box-shadow: var(--effect-1-default-sm);
+  &:has(.tk-avatar-badge) {
+    .tk-avatar {
+      box-shadow: var(--effect-1-default-sm);
+    }
   }
 }
 
@@ -21,6 +21,13 @@
   border-radius: 8px;
   flex-shrink: 0;
   gap: 10px;
+  box-shadow: var(--effect-1-default-sm);
+  user-select: none;
+  -webkit-user-drag: none;
+
+  &.tk-avatar-hide-shadow {
+    box-shadow: none;
+  }
 
   .tk-avatar-label {
     font-family: var(--desktop-title-h5-font, Geologica);
@@ -41,10 +48,6 @@
 
   &.tk-avatar-rounded {
     border-radius: var(--radius-full);
-
-    .tk-avatar-image {
-      border-radius: var(--radius-full);
-    }
   }
 }
 
@@ -53,6 +56,13 @@
   height: 100%;
   vertical-align: bottom;
   object-fit: cover;
+  object-position: center;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  border-radius: inherit;
 }
 
 .tk-avatar-xlarge {
