@@ -1,17 +1,39 @@
+/**
+ * Represents a color in HSLA (Hue, Saturation, Lightness, Alpha) format.
+ */
 export interface HSLA {
+  /** Hue value (0-360 degrees on the color wheel) */
   h: number; // 0–360
+  /** Saturation value (0-1, where 0 is grayscale and 1 is full saturation) */
   s: number; // 0–1
+  /** Lightness value (0-1, where 0 is black and 1 is white) */
   l: number; // 0–1
+  /** Alpha/opacity value (0-1, where 0 is transparent and 1 is opaque) */
   a: number; // 0–1
 }
 
+/**
+ * Represents a color in HSVA (Hue, Saturation, Value, Alpha) format.
+ * This format is commonly used in color pickers for intuitive color selection.
+ */
 export interface HSVA {
+  /** Hue value (0-360 degrees on the color wheel) */
   h: number; // 0–360
+  /** Saturation value (0-100 percentage) */
   s: number; // 0–100
+  /** Value/Brightness value (0-100 percentage) */
   v: number; // 0–100
+  /** Alpha/opacity value (0-1, where 0 is transparent and 1 is opaque) */
   a: number; // 0–1
 }
 
+/**
+ * Converts HSL (Hue, Saturation, Lightness) color values to RGB format.
+ * @param h - Hue value (0-360)
+ * @param s - Saturation value (0-1)
+ * @param l - Lightness value (0-1)
+ * @returns Object containing r, g, b values (0-255)
+ */
 export function hslToRgb(h: number, s: number, l: number) {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const hh = h / 60;
@@ -54,6 +76,14 @@ export function hslToRgb(h: number, s: number, l: number) {
   };
 }
 
+/**
+ * Converts RGB color values to HSLA format.
+ * @param r - Red value (0-255)
+ * @param g - Green value (0-255)
+ * @param b - Blue value (0-255)
+ * @param a - Alpha/opacity value (0-1)
+ * @returns HSLA color object
+ */
 export function rgbToHsla(r: number, g: number, b: number, a: number): HSLA {
   r /= 255;
   g /= 255;
@@ -84,6 +114,11 @@ export function rgbToHsla(r: number, g: number, b: number, a: number): HSLA {
   return { h, s, l, a };
 }
 
+/**
+ * Converts HSLA color to hexadecimal format.
+ * @param hsla - HSLA color object
+ * @returns Hex color string (e.g., '#ff0000' or '#ff000080' with alpha)
+ */
 export function hslaToHex(hsla: HSLA): string {
   const { r, g, b } = hslToRgb(hsla.h, hsla.s, hsla.l);
   // Only include alpha if it's not 1
@@ -96,6 +131,12 @@ export function hslaToHex(hsla: HSLA): string {
   return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/**
+ * Converts HSLA color to CSS color string in the specified format.
+ * @param hsla - HSLA color object
+ * @param format - Output format ('hex' or 'rgba')
+ * @returns CSS color string
+ */
 export function hslaToCss(hsla: HSLA, format: string): string {
   const { h, s, l, a } = hsla;
   switch (format) {
@@ -110,6 +151,11 @@ export function hslaToCss(hsla: HSLA, format: string): string {
   }
 }
 
+/**
+ * Parses a color string (hex, rgb, rgba, hsl, hsla) and converts it to HSLA format.
+ * @param input - Color string in any supported format
+ * @returns HSLA color object
+ */
 export function parseColor(input: string): HSLA {
   if (!input) return { h: 0, s: 0, l: 0, a: 1 };
   input = input.trim();
@@ -151,7 +197,6 @@ export function parseColor(input: string): HSLA {
     }
   }
 
-  // hsl(a) - kept for backward compatibility (input only, no output)
   if (input.startsWith('hsl')) {
     const parts = input.match(/hsla?\(([^)]+)\)/);
     if (parts) {
@@ -169,6 +214,15 @@ export function parseColor(input: string): HSLA {
 
 // ============ HSVA Conversion Functions ============
 
+/**
+ * Converts RGB color values to HSVA format.
+ * HSVA is commonly used in color pickers for more intuitive color selection.
+ * @param r - Red value (0-255)
+ * @param g - Green value (0-255)
+ * @param b - Blue value (0-255)
+ * @param a - Alpha/opacity value (0-1), defaults to 1
+ * @returns HSVA color object
+ */
 export function rgbToHsva(r: number, g: number, b: number, a: number = 1): HSVA {
   r /= 255;
   g /= 255;
@@ -199,6 +253,13 @@ export function rgbToHsva(r: number, g: number, b: number, a: number = 1): HSVA 
   return { h, s, v, a };
 }
 
+/**
+ * Converts HSVA color values to RGB format.
+ * @param h - Hue value (0-360)
+ * @param s - Saturation value (0-100)
+ * @param v - Value/Brightness value (0-100)
+ * @returns Object containing r, g, b values (0-255)
+ */
 export function hsvaToRgb(h: number, s: number, v: number): { r: number; g: number; b: number } {
   h = h / 360;
   s = s / 100;
@@ -254,6 +315,11 @@ export function hsvaToRgb(h: number, s: number, v: number): { r: number; g: numb
   };
 }
 
+/**
+ * Converts HSVA color to hexadecimal format.
+ * @param hsva - HSVA color object
+ * @returns Hex color string (e.g., '#ff0000' or '#ff000080' with alpha)
+ */
 export function hsvaToHex(hsva: HSVA): string {
   const { r, g, b } = hsvaToRgb(hsva.h, hsva.s, hsva.v);
   if (hsva.a < 1) {
@@ -265,6 +331,12 @@ export function hsvaToHex(hsva: HSVA): string {
   return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/**
+ * Converts HSVA color to CSS color string in the specified format.
+ * @param hsva - HSVA color object
+ * @param format - Output format ('hex' or 'rgba')
+ * @returns CSS color string
+ */
 export function hsvaToCss(hsva: HSVA, format: string): string {
   const { h, s, v, a } = hsva;
   switch (format) {
@@ -279,6 +351,12 @@ export function hsvaToCss(hsva: HSVA, format: string): string {
   }
 }
 
+/**
+ * Parses a color string (hex, rgb, rgba, hsl, hsla) and converts it to HSVA format.
+ * This is the main parsing function used by the color picker component.
+ * @param input - Color string in any supported format
+ * @returns HSVA color object
+ */
 export function parseColorToHsva(input: string): HSVA {
   if (!input) return { h: 0, s: 0, v: 0, a: 1 };
   input = input.trim();

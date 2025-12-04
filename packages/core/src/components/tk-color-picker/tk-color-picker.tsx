@@ -1,6 +1,7 @@
 import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from '../../utils/color-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
@@ -31,7 +32,7 @@ declare global {
 export class TkColorPicker implements ComponentInterface {
   @Element() el: HTMLTkColorPickerElement;
 
-  private uniqueId = crypto.randomUUID();
+  private uniqueId = uuidv4();
   private triggerRef?: HTMLElement;
   private triggerInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
@@ -111,10 +112,10 @@ export class TkColorPicker implements ComponentInterface {
   @Prop() orientation: 'vertical' | 'horizontal' = 'vertical';
 
   /**
-   * Default color format for display and output
+   * Color format for display and output
    * @defaultValue 'hex'
    */
-  @Prop() defaultFormat: 'hex' | 'rgba' = 'hex';
+  @Prop() format: 'hex' | 'rgba' = 'hex';
 
   /**
    * Array of preset color values
@@ -206,7 +207,7 @@ export class TkColorPicker implements ComponentInterface {
 
   componentWillLoad() {
     this.internalHSVA = parseColorToHsva(this.value || '#000000');
-    this.currentFormat = this.defaultFormat === 'hex' || this.defaultFormat === 'rgba' ? this.defaultFormat : 'hex';
+    this.currentFormat = this.format === 'hex' || this.format === 'rgba' ? this.format : 'hex';
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
     this.hasHeaderActionsSlot = !!this.el.querySelector(':scope > [slot="header-actions"]');
     this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
@@ -513,14 +514,6 @@ export class TkColorPicker implements ComponentInterface {
     this.tkInput.emit(css);
   }
 
-  private createEyedropperButton() {
-    return <tk-button variant="neutral" type="outlined" size="small" icon="colorize" onTk-click={this.handleEyeDropper} disabled={this.disabled} />;
-  }
-
-  private createColorPreview() {
-    return <div class="tk-color-picker-preview-box" style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }} />;
-  }
-
   private handleTriggerFocus = () => {
     this.isTriggerFocused = true;
   };
@@ -591,6 +584,14 @@ export class TkColorPicker implements ComponentInterface {
     }
     this.isOpen = !this.isOpen;
   };
+
+  private createEyedropperButton() {
+    return <tk-button variant="neutral" type="outlined" size="small" icon="colorize" onTk-click={this.handleEyeDropper} disabled={this.disabled} />;
+  }
+
+  private createColorPreview() {
+    return <div class="tk-color-picker-preview-box" style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }} />;
+  }
 
   private renderTrigger() {
     if (this.inline) return null;
