@@ -14,6 +14,16 @@ const Example = () => {
       header: 'Input Filter',
       searchable: true,
       sortable: true,
+      filterElements: {
+        searchInput: {
+          placeholder: 'Filter',
+          label: 'Search',
+          clearable: true,
+          icon: 'search',
+          iconPosition: 'right',
+          hint: 'Please enter',
+        },
+      },
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
       filter: (value: string, row: any) =>
         row.name
@@ -135,6 +145,16 @@ const FilterAndSort = () => {
           .toString()
           .toLowerCase()
           .indexOf(value.toString().toLowerCase() as string) > -1,
+      filterElements: {
+        searchInput: {
+          placeholder: 'Filter',
+          label: 'Search',
+          clearable: true,
+          icon: 'search',
+          iconPosition: 'right',
+          hint: 'Please enter',
+        },
+      },
     },
     {
       field: 'status',
@@ -254,6 +274,16 @@ const column = [
         .toString()
         .toLowerCase()
         .indexOf(value.toString().toLowerCase()) > -1,
+    filterElements: {
+      searchInput: {
+        placeholder: 'Filter',
+        label: 'Search',
+        clearable: true,
+        icon: 'search',
+        iconPosition: 'right',
+        hint: 'Please enter',
+      },
+    },
   },
   {
     field: 'status',

@@ -118,7 +118,19 @@ interface ITableColumn {
   };
   filterElements?: {
     icon?: string;
-    searchInput?: { placeholder?: string };
+    searchInput?: {
+      placeholder?: string;
+      label?: string;
+      maskOptions?: IInputMaskOptions;
+      disabled?: boolean;
+      invalid?: boolean;
+      clearable?: boolean;
+      error?: string;
+      hint?: string;
+      icon?: string | IIconOptions | IMultiIconOptions;
+      iconPosition?: 'left' | 'right';
+      size?: 'large' | 'base' | 'small';
+    };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };

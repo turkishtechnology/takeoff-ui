@@ -1,5 +1,7 @@
+import { IInputMaskOptions } from '../tk-input/interfaces';
 import { CSSStyleProperties } from '../../global/types';
 import { IDateSelection } from '../tk-datepicker/tk-datepicker';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
  * Defines the columns for the table
@@ -51,7 +53,19 @@ export interface ITableColumn {
   };
   filterElements?: {
     icon?: string;
-    searchInput?: { placeholder?: string };
+    searchInput?: {
+      placeholder?: string;
+      label?: string;
+      maskOptions?: IInputMaskOptions;
+      disabled?: boolean;
+      invalid?: boolean;
+      clearable?: boolean;
+      error?: string;
+      hint?: string;
+      icon?: string | IIconOptions | IMultiIconOptions;
+      iconPosition?: 'left' | 'right';
+      size?: 'large' | 'base' | 'small';
+    };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
