@@ -260,31 +260,6 @@ export class TkSelect implements ComponentInterface {
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
   }
 
-  componentDidRender(): void {
-    // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
-    // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
-    if (this.readonly) {
-      const nativeInput = this.inputRef?.querySelector('input');
-      if (nativeInput) {
-        nativeInput.setAttribute('readonly', 'true');
-      }
-    }
-    if (this.multiple && this.editable) {
-      this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
-      this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
-    }
-  }
-
-  /**
-   * Click outside handler implementation - called by the mixin
-   */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
-    this.isOpen = false;
-  };
-
   componentDidLoad(): void {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
@@ -309,6 +284,21 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  componentDidRender(): void {
+    // multiple durumda chips li input çalıştığı için ve tk-input value olarak chips leri geri döndürdüğü için
+    // tk-input'un içindeki inputa yazılan değerlerin filtering için çalışabilmesini sağlamak için yapılmıştır.
+    if (this.readonly) {
+      const nativeInput = this.inputRef?.querySelector('input');
+      if (nativeInput) {
+        nativeInput.setAttribute('readonly', 'true');
+      }
+    }
+    if (this.multiple && this.editable) {
+      this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
+      this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
+    }
+  }
+
   componentDidUpdate() {
     this.nativeInputRef = this.inputRef.querySelector('input');
 
@@ -330,18 +320,6 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private isGrouped(): boolean {
-    return this.options?.length > 0 && this.options[0]?.[this.groupOptionsKey];
-  }
-
-  private setFlatOptions(): void {
-    if (this.isGrouped()) {
-      this.flatOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
-    } else {
-      this.flatOptions = this.options;
-    }
-  }
-
   disconnectedCallback() {
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     removeDialogScrollListener(this.el);
@@ -352,6 +330,28 @@ export class TkSelect implements ComponentInterface {
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  /**
+   * Click outside handler implementation - called by the mixin
+   */
+  private closeHandler = (e: Event): void => {
+    if (e.composedPath().includes(this.el)) {
+      return;
+    }
+    this.isOpen = false;
+  };
+
+  private isGrouped(): boolean {
+    return this.options?.length > 0 && this.options[0]?.[this.groupOptionsKey];
+  }
+
+  private setFlatOptions(): void {
+    if (this.isGrouped()) {
+      this.flatOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
+    } else {
+      this.flatOptions = this.options;
+    }
   }
 
   private async runFilterForMultiple() {
