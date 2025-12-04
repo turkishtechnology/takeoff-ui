@@ -1036,14 +1036,22 @@ export class TkTable implements ComponentInterface {
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
               wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
-              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
           const visibleCheckboxes = Array.from(checkboxWrappers).filter(wrapper => {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)');
             return checkbox && (wrapper as HTMLElement).style.display !== 'none';
           });
-          allCheckbox.style.display = visibleCheckboxes.length === 0 ? 'none' : '';
+
+          if (visibleCheckboxes.length === 0) {
+            checkboxWrapper.style.display = 'none';
+            divider.style.display = 'none';
+            optionsSearchInput.hint = column?.filterElements?.optionsSearchInput?.emptyMessage || 'No results found';
+          } else {
+            checkboxWrapper.style.display = 'block';
+            divider.style.display = 'block';
+            optionsSearchInput.hint = null;
+          }
         });
         filterContainer.appendChild(optionsSearchInput);
       }

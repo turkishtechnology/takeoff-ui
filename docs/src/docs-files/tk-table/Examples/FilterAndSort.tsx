@@ -33,7 +33,7 @@ const Example = () => {
       ],
       filterElements: {
         icon: 'filter_list',
-        optionsSearchInput: { show: true, placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
       },
     },
     {
@@ -148,7 +148,7 @@ const FilterAndSort = () => {
       ],
       filterElements: {
         icon: 'filter_list',
-        optionsSearchInput: { show: true, placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
       },
     },
     {
@@ -267,7 +267,7 @@ const column = [
     ],
     filterElements: {
       icon: 'filter_list',
-      optionsSearchInput: { show: true, placeholder: 'Filter' },
+      optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
     },
   },
   {
