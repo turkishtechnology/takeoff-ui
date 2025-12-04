@@ -41,28 +41,19 @@ export class TkTreeView implements ComponentInterface {
    */
   @Prop() items: ITreeItem[] = [];
   @Watch('items')
-  handleItemsChange() {
-    // Skip if in controlled mode
-    if (this.isControlled()) {
-      return;
-    }
-    if (this.expandAll) {
-      this.initializeExpandedPaths();
-    }
+  itemsChanged() {
+    this.initializeExpandedPaths();
   }
+
   /**
    * Tree view mode: 'basic' or 'stepper'.
    */
   @Prop() mode: 'basic' | 'stepper' = 'basic';
   @Watch('mode')
-  handleModeChange() {
-    // Skip if in controlled mode
-    if (this.isControlled()) {
-      return;
-    }
-    // Re-initialize expansion based on new mode
+  modeChanged() {
     this.initializeExpandedPaths();
   }
+
   /**
    * Tree view type: 'basic', 'divided', or 'light'.
    */
@@ -132,16 +123,8 @@ export class TkTreeView implements ComponentInterface {
    */
   @Prop() expandAll: boolean = false;
   @Watch('expandAll')
-  handleExpandAllChange(newValue: boolean, oldValue: boolean) {
-    // Skip if in controlled mode
-    if (this.isControlled()) {
-      return;
-    }
-    // Skip if in stepper mode (expandAll doesn't make sense for stepper)
-    if (this.mode === 'stepper') {
-      return;
-    }
-    if (newValue !== oldValue && newValue) {
+  expandAllChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
       this.initializeExpandedPaths();
     }
   }
@@ -163,7 +146,7 @@ export class TkTreeView implements ComponentInterface {
    */
   @Prop({ mutable: true }) expandedKeys?: string[];
   @Watch('expandedKeys')
-  handleExpandedKeysChange(newValue: string[]) {
+  expandedKeysChanged(newValue: string[]) {
     if (Array.isArray(newValue)) {
       this.expandedPaths = this.expandKeysWithAncestors(newValue);
 
@@ -206,6 +189,10 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-expand-change' }) tkExpandChange: EventEmitter<string[]>;
 
+  componentWillLoad() {
+    this.initializeExpandedPaths();
+  }
+
   /**
    * Check if the component is in controlled mode.
    * Controlled mode is when the parent component manages expansion state via expandedKeys prop.
@@ -213,15 +200,6 @@ export class TkTreeView implements ComponentInterface {
    */
   private isControlled(): boolean {
     return Array.isArray(this.expandedKeys);
-  }
-
-  componentWillLoad() {
-    // If expandedKeys is provided, use it; otherwise initialize based on mode/expandAll
-    if (this.isControlled()) {
-      this.expandedPaths = this.expandKeysWithAncestors(this.expandedKeys);
-    } else {
-      this.initializeExpandedPaths();
-    }
   }
 
   /**
@@ -290,42 +268,44 @@ export class TkTreeView implements ComponentInterface {
    * Initialize expanded paths based on mode and expandAll configuration
    */
   private initializeExpandedPaths() {
+    if (!this.items || this.items.length === 0) {
+      this.expandedPaths = new Set<string>();
+      return;
+    }
+
     // Skip initialization if expandedKeys is being used for control
     if (this.isControlled()) {
+      this.expandedPaths = this.expandKeysWithAncestors(this.expandedKeys);
       return;
     }
+
+    if (!this.expandAll) return;
 
     const expanded = new Set<string>();
-    if (!this.items || this.items.length === 0) {
-      this.expandedPaths = expanded;
-      return;
-    }
 
-    if (this.expandAll) {
-      if (this.mode === 'basic') {
-        // Expand all directory nodes
-        const traverse = (nodes: ITreeItem[], base: string = '') => {
-          nodes.forEach((node, idx) => {
-            const path = base ? `${base}-${idx}` : `${idx}`;
-            if (node.children && node.children.length > 0) {
-              expanded.add(path);
-              traverse(node.children, path);
-            }
-          });
-        };
-        traverse(this.items);
-      } else {
-        // Expand the first directory all the way down
-        let level = this.items;
-        let base = '';
-        while (level && level.length > 0) {
-          const idx = level.findIndex(n => n.children && n.children.length > 0);
-          if (idx === -1) break;
+    if (this.mode === 'basic') {
+      // Expand all directory nodes
+      const traverse = (nodes: ITreeItem[], base: string = '') => {
+        nodes.forEach((node, idx) => {
           const path = base ? `${base}-${idx}` : `${idx}`;
-          expanded.add(path);
-          base = path;
-          level = level[idx].children;
-        }
+          if (node.children && node.children.length > 0) {
+            expanded.add(path);
+            traverse(node.children, path);
+          }
+        });
+      };
+      traverse(this.items);
+    } else if (this.mode === 'stepper') {
+      // Expand the first directory all the way down
+      let level = this.items;
+      let base = '';
+      while (level && level.length > 0) {
+        const idx = level.findIndex(n => n.children && n.children.length > 0);
+        if (idx === -1) break;
+        const path = base ? `${base}-${idx}` : `${idx}`;
+        expanded.add(path);
+        base = path;
+        level = level[idx].children;
       }
     }
 
