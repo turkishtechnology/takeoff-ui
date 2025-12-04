@@ -131,6 +131,9 @@ function Components() {
         <Link to="tree-view" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
           Tree View
         </Link>
+        <Link to="color-picker" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
+          Color Picker
+        </Link>
       </div>
     </TkCard>
   );
