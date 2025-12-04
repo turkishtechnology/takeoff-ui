@@ -70,7 +70,7 @@ export class TkCarousel implements ComponentInterface {
    * Controls whether the pause/play button is shown
    * @defaultValue false
    */
-  @Prop() showPlayerToggleButton: boolean = false;
+  @Prop() showPlayerButton: boolean = false;
 
   /**
    * Number of items to show per view
@@ -93,7 +93,7 @@ export class TkCarousel implements ComponentInterface {
   /**
    * Emitted when item is changed
    */
-  @Event({ eventName: 'tk-item-change' }) tkItemChange: EventEmitter<{ index: number }>;
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<number>;
 
   componentDidLoad() {
     if (!this.slotElement) {
@@ -186,38 +186,38 @@ export class TkCarousel implements ComponentInterface {
 
     this.activeIndex = index;
     this.updateItemPosition();
-    this.tkItemChange.emit({ index: this.activeIndex });
+    this.tkChange.emit(this.activeIndex);
   }
 
   private handlePrevClick = () => {
     this.changeItem(this.activeIndex - 1);
-    this.tkItemChange.emit({ index: this.activeIndex });
+    this.tkChange.emit(this.activeIndex);
   };
 
   private handleNextClick = () => {
     this.changeItem(this.activeIndex + 1);
-    this.tkItemChange.emit({ index: this.activeIndex });
+    this.tkChange.emit(this.activeIndex);
   };
 
   private handleIndicatorClick = (index: number) => {
     this.changeItem(index);
   };
 
-  private handleKeyDown = (ev: KeyboardEvent) => {
+  private handleKeyDown = (e: KeyboardEvent) => {
     if (this.orientation === 'vertical') {
-      if (ev.key === 'ArrowUp') {
-        ev.preventDefault();
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
         this.handlePrevClick();
-      } else if (ev.key === 'ArrowDown') {
-        ev.preventDefault();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
         this.handleNextClick();
       }
     } else {
-      if (ev.key === 'ArrowLeft') {
-        ev.preventDefault();
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         this.handlePrevClick();
-      } else if (ev.key === 'ArrowRight') {
-        ev.preventDefault();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
         this.handleNextClick();
       }
     }
@@ -227,7 +227,7 @@ export class TkCarousel implements ComponentInterface {
     if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
     if (!this.circular && this.activeIndex === 0) return null;
 
-    return <tk-button size="small" class="prev-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'} onClick={this.handlePrevClick} />;
+    return <tk-button size="small" class="prev-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'} onTk-click={this.handlePrevClick} />;
   }
 
   private createNextButton() {
@@ -235,7 +235,17 @@ export class TkCarousel implements ComponentInterface {
     if (!this.showArrows || this.items.length <= this.itemsPerView) return null;
     if (!this.circular && this.activeIndex >= lastStartingItem) return null;
 
-    return <tk-button size="small" class="next-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'} onClick={this.handleNextClick} />;
+    return <tk-button size="small" class="next-button" icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'} onTk-click={this.handleNextClick} />;
+  }
+
+  private createPlayerButtons() {
+    if (!this.showPlayerButton || !this.autoplay) return null;
+    const iconProps = {
+      color: 'var(--background-light)',
+      icon: this.autoplayTimer ? 'pause_circle' : 'play_circle',
+      onClick: this.autoplayTimer ? this.stopAutoplay : this.startAutoplay,
+    };
+    return <tk-icon class="player-button" size="small" {...iconProps}></tk-icon>;
   }
 
   private createIndicators() {
@@ -244,13 +254,7 @@ export class TkCarousel implements ComponentInterface {
 
     return (
       <div class="tk-carousel-indicators">
-        {this.showPlayerToggleButton &&
-          this.autoplay &&
-          (this.autoplayTimer ? (
-            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="pause_circle" onClick={this.stopAutoplay} />
-          ) : (
-            <tk-icon class="player-button" color="var(--background-light)" size="small" icon="play_circle" onClick={this.startAutoplay} />
-          ))}
+        {this.createPlayerButtons()}
         {Array.from({ length: indicatorCount }).map((_, index) => (
           <div class="tk-carousel-indicator" onClick={() => this.handleIndicatorClick(index)}>
             <div class={classNames('tk-carousel-indicator-dot', { active: index === this.activeIndex })}></div>
