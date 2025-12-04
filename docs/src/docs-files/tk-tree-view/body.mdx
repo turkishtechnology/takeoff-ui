@@ -1,21 +1,15 @@
-import Basic from './examples/Basic';
-import Stepper from './examples/Stepper';
+import Mode from './examples/Mode';
 import Type from './examples/Type';
 import Size from './examples/Size';
 import Selectable from './examples/Selectable';
 import Controllable from './examples/Controllable';
+import ExpandAll from './examples/ExpandAll';
 
-## Basic
+## Mode
 
-The basic mode displays tree items in a traditional hierarchical structure with expandable/collapsible nodes.
+The mode prop controls the display mode of the tree view. It can be set to `basic` or `stepper`.
 
-<Basic />
-
-## Stepper Mode
-
-The stepper mode displays tree items in a step-by-step column layout, ideal for navigation and drill-down interfaces.
-
-<Stepper />
+<Mode />
 
 ## Selectable
 
@@ -34,6 +28,12 @@ The `type` prop controls the style type of the tree view. It can be set to `basi
 The `size` prop controls the size of the tree view. It can be set to `base`, `small`, or `large`.
 
 <Size />
+
+## expandAll
+
+The `expandAll` prop controls the initial expansion state of tree nodes.
+
+<ExpandAll />
 
 ## Controllable
 

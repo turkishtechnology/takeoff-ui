@@ -184,6 +184,7 @@ tk-dialog {
     padding: var(--dialog-body-base-v-padding) var(--dialog-body-base-h-padding);
     align-self: stretch;
     overflow-y: auto;
+    flex: 1;
 
     &::-webkit-scrollbar {
       width: 6px;

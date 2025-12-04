@@ -76,7 +76,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/takeoff-og.jpg',
     navbar: {
       // title: "Takeoff UI",
       logo: {
@@ -94,7 +94,7 @@ const config: Config = {
         // { to: "/blog", label: "Blog", position: "left" },
         {
           to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
-          label: 'v0.4.1',
+          label: 'v0.6.0',
           position: 'right',
         },
         {

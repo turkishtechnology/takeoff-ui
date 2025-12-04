@@ -1,4 +1,7 @@
+import { IInputMaskOptions } from '../tk-input/interfaces';
+import { CSSStyleProperties } from '../../global/types';
 import { IDateSelection } from '../tk-datepicker/tk-datepicker';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
  * Defines the columns for the table
@@ -35,7 +38,7 @@ export interface ITableColumn {
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
-  style?: any;
+  style?: CSSStyleProperties;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
   /** Defines the filter type for this column (text, checkbox or radio) */
@@ -50,11 +53,23 @@ export interface ITableColumn {
   };
   filterElements?: {
     icon?: string;
-    searchInput?: { placeholder?: string };
+    searchInput?: {
+      placeholder?: string;
+      label?: string;
+      maskOptions?: IInputMaskOptions;
+      disabled?: boolean;
+      invalid?: boolean;
+      clearable?: boolean;
+      error?: string;
+      hint?: string;
+      icon?: string | IIconOptions | IMultiIconOptions;
+      iconPosition?: 'left' | 'right';
+      size?: 'large' | 'base' | 'small';
+    };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
-    optionsSearchInput?: { show?: boolean; placeholder?: string };
+    optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
     optionsSearchDatepicker?: {
       label?: string;
       placeholder?: string;
@@ -161,4 +176,16 @@ export interface ITableExportExcelColumn {
   header: string;
   field: string;
   width: number;
+}
+
+/**
+ * Represents a group of table rows with associated metadata
+ */
+export interface ITableGroup {
+  /** The value that this group represents (e.g., "Active", "Completed") */
+  groupValue: any;
+  /** The number of rows in this group */
+  groupCount: number;
+  /** The array of row data objects belonging to this group */
+  rows: any[];
 }

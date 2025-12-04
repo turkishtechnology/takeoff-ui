@@ -186,7 +186,7 @@ export class TkTextarea implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label class="label">
+        <label htmlFor={this.uniqueId} class="label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -233,7 +233,7 @@ export class TkTextarea implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
         {this.renderLabel()}
-        <label class="tk-textarea" htmlFor={this.uniqueId}>
+        <div class="tk-textarea">
           <textarea
             id={this.uniqueId}
             ref={el => (this.nativeInput = el)}
@@ -251,7 +251,7 @@ export class TkTextarea implements ComponentInterface {
             value={this.value}
           />
           {counter}
-        </label>
+        </div>
         {this.renderHintError()}
       </div>
     );

@@ -10,7 +10,9 @@ import Loading from './Examples/Loading';
 import GroupedOptions from './Examples/GroupedOptions';
 import ChipOptions from './Examples/ChipOptions';
 import Icon from './Examples/Icon';
-import SelectAll from "./Examples/SelectAll"
+import SelectAll from './Examples/SelectAll';
+import VisibleItemCount from './Examples/VisibleItemCount';
+import PanelHeader from './Examples/PanelHeader'
 import { TkAlert } from '@takeoff-ui/react';
 
 ## Basic
@@ -19,7 +21,8 @@ import { TkAlert } from '@takeoff-ui/react';
 
 ## Filter
 
-You can perform filtering either server-side or client-side using the filter emit.
+You can perform filtering either server-side or client-side using the filter
+emit.
 
 <Filter />
 
@@ -35,13 +38,20 @@ You can provide a template as an HTML string using the optionHtml prop.
 
 <CustomItem />
 
+## Panel Header
+
+You can customize top of the select panel using `panelTopHtml` prop.
+
+<PanelHeader />
+
 ## Multiple Select
 
 <Multiple />
 
 ## Size
 
-The "size" prop can be used with one of the sizes "small", "base", and "large". The default value is "base".
+The "size" prop can be used with one of the sizes "small", "base", and "large".
+The default value is "base".
 
 <Size />
 
@@ -52,6 +62,7 @@ The "size" prop can be used with one of the sizes "small", "base", and "large". 
 ## Select All
 
 You can add `selectAll` option and edit the label via `selectAllLabel`.
+
 <TkAlert
   header="Note"
   variant="info"
@@ -59,7 +70,21 @@ You can add `selectAll` option and edit the label via `selectAllLabel`.
   filledlight
 />
 <br />
-<SelectAll/>
+<SelectAll />
+
+## Visible Item Count
+
+Controls how many selected items are displayed before showing "+N others" in
+multiple selection mode.
+
+<TkAlert
+  header="Note"
+  variant="info"
+  message="This feature works in conjunction with the `multiple` prop set to `true`."
+  filledlight
+/>
+<br />
+<VisibleItemCount />
 
 ## OptionValueKey
 
@@ -81,7 +106,8 @@ This example clears the input of the select.
 
 ## Grouped Options
 
-Display options under section headers using `groupNameKey` and `groupOptionsKey`.
+Display options under section headers using `groupNameKey` and
+`groupOptionsKey`.
 
 <GroupedOptions />
 

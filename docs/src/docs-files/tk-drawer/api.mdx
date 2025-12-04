@@ -4,7 +4,7 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | The style attribute of container element |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>CSSStyleProperties</code> | null | The style attribute of container element |
 | <TkBadge label="footerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | The mode of the footer |
 | <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Text to display in the drawer header |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "divided", "light", "primary"</code> | 'basic' | The type of the header |
@@ -28,10 +28,10 @@ import { TkBadge } from "@takeoff-ui/react";
 
 ### Methods
 
-| Name | Description |
-| ---- | ----------- |
-| close | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
-| show | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| close | <code>close() =\> Promise\<void\></code> | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
+| show | <code>show() =\> Promise\<void\></code> | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop |
 
 ### Slots
 

@@ -169,6 +169,9 @@
 
       tbody {
         tr {
+          &.tk-table-group-header + tr {
+            border-top: 1px solid var(--border-light);
+          }
           &:last-child {
             border-bottom: none;
           }
@@ -213,7 +216,7 @@
             }
           }
 
-          &:hover td {
+          &:hover td:not(.tk-table-group-header-cell) {
             background-color: var(--background-lightest);
           }
 
@@ -229,6 +232,37 @@
             color: var(--text-sub-base);
             background-color: var(--background-lightest);
             pointer-events: none;
+          }
+
+          &.tk-table-group-header {
+            display: block;
+            border-bottom: none;
+            position: sticky;
+            left: var(--tk-table-sticky-left-offset, 0);
+
+            .tk-table-group-header-cell {
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-dark);
+              border: none;
+
+              .tk-table-group-header-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .tk-table-group-value {
+                  text-wrap: nowrap;
+                  font-size: var(--desktop-body-m-size);
+                  color: var(--text-darkest);
+                }
+
+                .tk-table-group-count {
+                  font-size: var(--desktop-body-s-size);
+                  color: var(--text-base);
+                  font-weight: var(--font-weight-regular);
+                }
+              }
+            }
           }
         }
 

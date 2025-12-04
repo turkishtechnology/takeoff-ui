@@ -1,48 +1,97 @@
-import { applyStyles, resetBorderStyles } from './style-utils';
+import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
 
-/**
- * Updates arrow position based on placement side
- * @param arrowElement - The arrow element to position
- * @param side - The side where the arrow should be positioned
- */
-export const updateArrowPosition = (arrowElement: HTMLElement, side?: string) => {
-  // Reset all positions and borders
+import type { Placement } from '@floating-ui/dom';
+import { applyStyles } from './style-utils';
+
+export interface FloatingElementOptions {
+  placement: Placement;
+  offset?: number;
+  outSideOffset?: number;
+  arrowSize?: number;
+}
+
+function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement: HTMLElement, options: FloatingElementOptions) {
+  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9 } = options;
+
   applyStyles(arrowElement, {
-    top: '',
-    bottom: '',
-    left: '',
-    right: '',
+    position: 'absolute',
+    width: `${arrowSize}px`,
+    height: `${arrowSize}px`,
+    background: 'inherit',
+    border: `1px solid`,
+    borderColor: `inherit`,
+    transform: 'rotate(45deg)',
+    zIndex: '1300',
   });
-  resetBorderStyles(arrowElement);
 
-  switch (side) {
-    case 'top':
-      applyStyles(arrowElement, {
-        bottom: '-5px',
-        borderTop: 'none',
-        borderLeft: 'none',
+  return computePosition(triggerElement, floatingElement, {
+    strategy: 'fixed',
+    placement,
+    middleware: [offset(off), flip(), shift(), arrow({ element: arrowElement })],
+  }).then(({ x, y, middlewareData, placement }) => {
+    floatingElement.style.left = `${x}px`;
+    floatingElement.style.top = `${y}px`;
+
+    const side = placement.split('-')[0];
+    const reverseSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side];
+
+    if (middlewareData.arrow) {
+      const { x: ax, y: ay } = middlewareData.arrow;
+      arrowElement.setAttribute('data-side', side);
+      Object.assign(arrowElement.style, {
+        left: ax != null ? `${ax}px` : '',
+        top: ay != null ? `${ay}px` : '',
+        right: '',
+        bottom: '',
+        [reverseSide]: `-${outSideOffset}px`,
       });
-      break;
-    case 'bottom':
-      applyStyles(arrowElement, {
-        top: '-5px',
-        borderBottom: 'none',
-        borderRight: 'none',
-      });
-      break;
-    case 'left':
-      applyStyles(arrowElement, {
-        right: '-5px',
-        borderLeft: 'none',
-        borderTop: 'none',
-      });
-      break;
-    case 'right':
-      applyStyles(arrowElement, {
-        left: '-5px',
-        borderRight: 'none',
-        borderBottom: 'none',
-      });
-      break;
-  }
-};
+    }
+
+    switch (side) {
+      case 'top':
+        applyStyles(arrowElement, {
+          borderTop: 'none',
+          borderLeft: 'none',
+        });
+        break;
+      case 'bottom':
+        applyStyles(arrowElement, {
+          borderBottom: 'none',
+          borderRight: 'none',
+        });
+        break;
+
+      case 'left':
+        applyStyles(arrowElement, {
+          borderLeft: 'none',
+          borderBottom: 'none',
+        });
+        break;
+
+      case 'right':
+        applyStyles(arrowElement, {
+          borderRight: 'none',
+          borderTop: 'none',
+        });
+        break;
+    }
+    return placement;
+  });
+}
+
+export function floatingElementAutoUpdate(
+  triggerElement: HTMLElement,
+  floatingElement: HTMLElement,
+  arrowElement: HTMLElement,
+  options: FloatingElementOptions,
+  handlePlacement?: (placement: string) => void,
+) {
+  return autoUpdate(
+    triggerElement,
+    floatingElement,
+    () => {
+      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement && handlePlacement(position));
+    },
+    { animationFrame: true },
+  );
+}
