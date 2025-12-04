@@ -1,8 +1,8 @@
-import { TkSelect, TkButton, TkIcon } from '@takeoff-ui/react';
+import { TkSelect } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useState } from 'react';
 
-const CustomTopPanel = () => {
+const PanelHeader = () => {
   const reactCode = `<TkSelect
   label="Select With Top Panel"
   options={[
@@ -134,4 +134,4 @@ const CustomTopPanel = () => {
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };
 
-export default CustomTopPanel;
+export default PanelHeader;
