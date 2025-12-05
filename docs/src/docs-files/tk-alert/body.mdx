@@ -6,6 +6,16 @@ import Toaster from './Examples/Toaster';
 import PersistentToaster from './Examples/PersistentToaster';
 import Alignment from './Examples/Alignment';
 import Content from './Examples/CustomContent';
+import Playground from '../../components/Playground';
+import alertConfigData from './alertPlaygroundConfig.json';
+import { TkAlert } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[alertConfigData]}
+  componentMap={{ TkAlert: TkAlert }}
+/>
 
 ## Variant
 
