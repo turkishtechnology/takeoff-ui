@@ -152,8 +152,8 @@ export class TkRadio implements ComponentInterface {
             <slot name="content" />
           ) : (
             <div class="tk-radio-text-holder">
-              <div class="tk-radio-label">{this.label}</div>
-              <div class="tk-radio-description">{this.description}</div>
+              {this.label && <div class="tk-radio-label">{this.label}</div>}
+              {this.description && <div class="tk-radio-description">{this.description}</div>}
             </div>
           )}
         </label>

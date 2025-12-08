@@ -30,25 +30,6 @@ tk-radio-group {
 
     &.spread {
       width: 100%;
-
-      tk-radio {
-        flex: 1;
-      }
-    }
-
-    &.card {
-      tk-radio {
-        border-radius: var(--radius-m-base);
-        border: 1px solid var(--border-light);
-
-        &:hover {
-          background-color: var(--background-lightest);
-        }
-
-        .tk-radio-container {
-          padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
-        }
-      }
     }
   }
 

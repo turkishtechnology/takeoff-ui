@@ -5,6 +5,7 @@ import { getIconElementProps } from '../../../utils/icon-utils';
 @Component({
   tag: 'tk-radio-group',
   styleUrl: 'tk-radio-group.scss',
+  shadow: true,
   formAssociated: true,
 })
 export class TkRadioGroup implements ComponentInterface {
@@ -81,20 +82,6 @@ export class TkRadioGroup implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
 
-  componentWillLoad() {
-    this.slottedItems = this.el.querySelectorAll('tk-radio');
-    if (this.slottedItems.length > 0) {
-      this.slottedItems.forEach(item => {
-        item.addEventListener('tk-change', e => {
-          e.stopPropagation();
-          this.handleChange(e);
-        });
-        item.checked = this.value == item.value;
-        item.invalid = this.invalid;
-      });
-    }
-  }
-
   formResetCallback() {
     this.handleFormReset();
   }
@@ -117,6 +104,24 @@ export class TkRadioGroup implements ComponentInterface {
     this.value = e.detail;
     this.tkChange.emit(this.value);
     this.updateTkRadio();
+  }
+
+  handleSlotChange() {
+    this.slottedItems = this.el.querySelectorAll('tk-radio');
+    if (this.slottedItems.length > 0) {
+      this.slottedItems.forEach(item => {
+        item.addEventListener('tk-change', e => {
+          e.stopPropagation();
+          this.handleChange(e);
+        });
+        item.checked = this.value == item.value;
+        item.invalid = this.invalid;
+        if (this.spread) {
+          item.style.flex = '1';
+        }
+        item.setAttribute('data-type', this.type);
+      });
+    }
   }
 
   private renderError() {
@@ -154,7 +159,9 @@ export class TkRadioGroup implements ComponentInterface {
     return (
       <div class={rootClasses} aria-invalid={this.invalid}>
         {_label}
-        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>{this.slottedItems.length > 0 ? <slot /> : ''}</div>
+        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>
+          <slot onSlotchange={this.handleSlotChange.bind(this)} />
+        </div>
         {this.error && this.renderError()}
       </div>
     );
