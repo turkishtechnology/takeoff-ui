@@ -151,6 +151,9 @@ export class TkInput implements ComponentInterface {
    */
   @Prop() step: string;
 
+  /**
+   * A function that determines whether a chip is disabled.
+   */
   @Prop() chipDisabled: Function;
 
   /**
@@ -543,7 +546,14 @@ export class TkInput implements ComponentInterface {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
-        const isRemovable = typeof item === 'object' && item !== null && item.hasOwnProperty('removable') ? item.removable : this.chipDisabled?.(item) ? false : true;
+        let isRemovable;
+        if (this.chipDisabled?.(item)) {
+          isRemovable = false;
+        } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
+          isRemovable = item.removable;
+        } else {
+          isRemovable = true;
+        }
         const baseProps = {
           ...itemChipOptions,
           removable: isRemovable,
