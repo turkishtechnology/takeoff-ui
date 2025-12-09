@@ -625,8 +625,11 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleFormReset() {
-    const disabledItems = Array.isArray(this.value) ? this.value.filter(item => this.optionDisabled?.(item)) : null;
-    this.value = disabledItems;
+    if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.optionDisabled(item));
+    } else {
+      this.value = null;
+    }
     this.tkChange.emit(this.value);
   }
 
@@ -889,8 +892,11 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleInputClearClick() {
-    const disabledItems = Array.isArray(this.value) ? this.value.filter(item => this.optionDisabled?.(item)) : null;
-    this.value = disabledItems;
+    if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.optionDisabled(item));
+    } else {
+      this.value = null;
+    }
     this.tkChange.emit(this.value);
     this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
   }

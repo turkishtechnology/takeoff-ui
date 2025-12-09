@@ -377,8 +377,11 @@ export class TkInput implements ComponentInterface {
   };
 
   private handleFormReset() {
-    this.value = Array.isArray(this.value) ? this.value.filter(item => this.chipDisabled?.(item)) : null;
-
+    if (this.mode === 'chips' && this.chipDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.chipDisabled(item));
+    } else {
+      this.value = null;
+    }
     this.tkChange.emit(this.value);
   }
 
