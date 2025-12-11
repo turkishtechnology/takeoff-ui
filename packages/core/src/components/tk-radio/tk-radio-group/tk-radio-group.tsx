@@ -78,6 +78,11 @@ export class TkRadioGroup implements ComponentInterface {
   @Prop() error: string;
 
   /**
+   * The name attribute for the input element.
+   */
+  @Prop() name: string;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
@@ -114,12 +119,15 @@ export class TkRadioGroup implements ComponentInterface {
           e.stopPropagation();
           this.handleChange(e);
         });
+
         item.checked = this.value == item.value;
         item.invalid = this.invalid;
-        if (this.spread) {
-          item.style.flex = '1';
-        }
+        if (this.spread) item.style.flex = '1';
         item.setAttribute('data-type', this.type);
+
+        // radio componentlerinde name yoksa ve radi group componentinde name var ise
+        // group'a verilen name radio componentlerine setlenmesi için yazılmıştır.
+        if (!item.name && this.name) item.name = this.name;
       });
     }
   }
