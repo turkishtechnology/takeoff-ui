@@ -168,6 +168,20 @@ export class TkTable implements ComponentInterface {
   @Prop() paginationType: 'outlined' | 'text' | 'grouped' = 'outlined';
 
   /**
+   * Template string for current page report in pagination.
+   * Available placeholders: {currentPage}, {totalPages}
+   * @defaultValue 'page: {currentPage} of {totalPages}'
+   */
+  @Prop() pageReportTemplate: string = 'page: {currentPage} of {totalPages}';
+
+  /**
+   * Template string for items report in pagination.
+   * Available placeholders: {startItem}, {endItem}, {totalItems}
+   * @defaultValue 'item: {startItem}-{endItem} of {totalItems}'
+   */
+  @Prop() itemsReportTemplate: string = 'item: {startItem}-{endItem} of {totalItems}';
+
+  /**
    * Displays a loading indicator while data is being fetched or processed.
    */
   @Prop() loading: boolean;
@@ -2139,6 +2153,8 @@ export class TkTable implements ComponentInterface {
           rowsPerPage={this.rowsPerPage}
           rowsPerPageOptions={this.rowsPerPageOptions}
           currentPage={this.currentPage}
+          pageReportTemplate={this.pageReportTemplate}
+          itemsReportTemplate={this.itemsReportTemplate}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.rowsPerPage = e.detail;

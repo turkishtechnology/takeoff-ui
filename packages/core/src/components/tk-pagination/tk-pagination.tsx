@@ -61,6 +61,20 @@ export class TkPagination implements ComponentInterface {
   @Prop() mode: 'compact' | 'compact-expanded';
 
   /**
+   * Template string for current page report in pagination.
+   * Available placeholders: {currentPage}, {totalPages}
+   * @defaultValue 'page: {currentPage} of {totalPages}'
+   */
+  @Prop() pageReportTemplate: string = 'page: {currentPage} of {totalPages}';
+
+  /**
+   * Template string for items report in pagination.
+   * Available placeholders: {startItem}, {endItem}, {totalItems}
+   * @defaultValue 'item: {startItem}-{endItem} of {totalItems}'
+   */
+  @Prop() itemsReportTemplate: string = 'item: {startItem}-{endItem} of {totalItems}';
+
+  /**
    * The current page of the pagination.
    * @defaultValue 1
    */
@@ -210,6 +224,24 @@ export class TkPagination implements ComponentInterface {
     this.inputValue = value.replace(/[^0-9]/g, '');
   }
 
+  private formatTemplate(template: string, values: Record<string, number>): string {
+    return template.replace(/\{(\w+)\}/g, (match, key) => {
+      return values[key]?.toString() || match;
+    });
+  }
+
+  private getTemplateValues() {
+    const startItem = (this.internalCurrentPage - 1) * this.rowsPerPage + 1;
+    const endItem = Math.min(this.internalCurrentPage * this.rowsPerPage, this.totalItems);
+    return {
+      currentPage: this.internalCurrentPage,
+      totalPages: this.getTotalPages(),
+      startItem,
+      endItem,
+      totalItems: this.totalItems,
+    };
+  }
+
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
@@ -230,25 +262,19 @@ export class TkPagination implements ComponentInterface {
 
   private renderTag(totalPages: number) {
     if (this.mode !== 'compact') {
-      const startItem = (this.internalCurrentPage - 1) * this.rowsPerPage + 1;
-      const endItem = Math.min(this.internalCurrentPage * this.rowsPerPage, this.totalItems);
       let tagContent: HTMLElement;
+      const templateValues = this.getTemplateValues();
 
       if (this.mode === 'compact-expanded') {
-        tagContent = (
-          <span class="tk-pagination-tag-label">
-            {startItem}-{endItem} of {this.totalItems}
-          </span>
-        );
+        const itemsText = this.formatTemplate(this.itemsReportTemplate, templateValues);
+        tagContent = <span class="tk-pagination-tag-label">{itemsText}</span>;
       } else {
+        const pageText = this.formatTemplate(this.pageReportTemplate, templateValues);
+        const itemsText = this.formatTemplate(this.itemsReportTemplate, templateValues);
         tagContent = totalPages > 0 && (
           <Fragment>
-            <span class="tk-pagination-tag-label">
-              page: {this.internalCurrentPage} of {totalPages}
-            </span>
-            <span class="tk-pagination-tag-label">
-              item: {startItem}-{endItem} of {this.totalItems}
-            </span>
+            <span class="tk-pagination-tag-label">{pageText}</span>
+            <span class="tk-pagination-tag-label">{itemsText}</span>
           </Fragment>
         );
       }
@@ -267,6 +293,8 @@ export class TkPagination implements ComponentInterface {
     let content: HTMLElement;
 
     if (this.mode === 'compact') {
+      const templateValues = this.getTemplateValues();
+      const compactLabel = this.formatTemplate(this.pageReportTemplate, templateValues);
       content = (
         <Fragment>
           <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
@@ -280,7 +308,7 @@ export class TkPagination implements ComponentInterface {
             min={1}
             max={totalPages}
           />
-          <span class="tk-pagination-current-label">/ {totalPages} pages</span>
+          <span class="tk-pagination-current-label">{compactLabel}</span>
           <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
             <tk-icon {...getIconElementProps('chevron_right', { class: 'tk-pagination-cell-icon', variant: null })} />
           </button>
