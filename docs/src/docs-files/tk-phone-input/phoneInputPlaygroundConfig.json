@@ -1,0 +1,72 @@
+{
+  "name": "TkPhoneInput",
+  "componentName": "TkPhoneInput",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Phone Number"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "defaultCountry",
+      "label": "Default Country",
+      "type": "text",
+      "defaultValue": "TR"
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
