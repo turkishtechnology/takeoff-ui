@@ -4,7 +4,16 @@ import Variants from "./Examples/Variants";
 import WithImages from "./Examples/WithImages";
 import WithBadges from "./Examples/WithBadges";
 import AvatarGroupDemo from "./Examples/AvatarGroupDemo";
-import {TkAlert} from "@takeoff-ui/react"
+import {TkAlert, TkAvatar} from "@takeoff-ui/react"
+import Playground from '../../components/Playground';
+import avatarConfigData from './avatarPlaygroundConfig.json';
+
+### Playground
+
+<Playground
+  configs={[avatarConfigData]}
+  componentMap={{ TkAvatar: TkAvatar }}
+/>
 
 ## Basic
 
