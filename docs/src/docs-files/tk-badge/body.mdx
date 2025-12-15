@@ -4,7 +4,16 @@ import Size from "./Examples/Size";
 import Icon from "./Examples/Icon";
 import Count from "./Examples/Count";
 import Floating from "./Examples/Floating";
-import { TkAlert } from "@takeoff-ui/react"
+import { TkAlert, TkBadge } from "@takeoff-ui/react"
+import Playground from '../../components/Playground';
+import badgeConfigData from './badgePlaygroundConfig.json';
+
+### Playground
+
+<Playground
+  configs={[badgeConfigData]}
+  componentMap={{ TkBadge: TkBadge }}
+/>
 
 ## Variant
 
