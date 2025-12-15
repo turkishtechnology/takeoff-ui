@@ -1,0 +1,53 @@
+{
+  "name": "TkPagination",
+  "componentName": "TkPagination",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "outlined",
+      "options": [
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Text", "value": "text" },
+        { "label": "Grouped", "value": "grouped" }
+      ]
+    },
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "",
+      "options": [
+        { "label": "Default", "value": "" },
+        { "label": "Compact", "value": "compact" },
+        { "label": "Compact Expanded", "value": "compact-expanded" }
+      ]
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "totalItems",
+      "label": "Total Items",
+      "type": "text",
+      "defaultValue": 100
+    },
+    {
+      "key": "rowsPerPage",
+      "label": "Rows Per Page",
+      "type": "text",
+      "defaultValue": 10
+    },
+    {
+      "key": "currentPage",
+      "label": "Current Page",
+      "type": "text",
+      "defaultValue": 1
+    }
+  ]
+}
