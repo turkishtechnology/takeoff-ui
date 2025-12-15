@@ -1,0 +1,76 @@
+{
+  "name": "TkChips",
+  "componentName": "TkChips",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Verified", "value": "verified" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "filled",
+      "options": [
+        { "label": "Filled", "value": "filled" },
+        { "label": "Filled Light", "value": "filledlight" },
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Avatar", "value": "avatar" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Chip Label"
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "removable",
+      "label": "Removable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "autoSelfDestroy",
+      "label": "Auto Self Destroy",
+      "type": "checkbox",
+      "defaultValue": true
+    }
+  ]
+}

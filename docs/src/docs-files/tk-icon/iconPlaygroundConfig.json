@@ -1,0 +1,91 @@
+{
+  "name": "TkIcon",
+  "componentName": "TkIcon",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "icon",
+      "label": "Icon Name",
+      "type": "text",
+      "defaultValue": "home"
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "White", "value": "white" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XX-Large", "value": "xxlarge" },
+        { "label": "X-Large", "value": "xlarge" },
+        { "label": "Large", "value": "large" },
+        { "label": "Medium", "value": "medium" },
+        { "label": "Base", "value": "base" },
+        { "label": "Small", "value": "small" },
+        { "label": "X-Small", "value": "xsmall" }
+      ]
+    },
+    {
+      "key": "iconType",
+      "label": "Icon Type",
+      "type": "select",
+      "defaultValue": "outlined",
+      "options": [
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Rounded", "value": "rounded" },
+        { "label": "Sharp", "value": "sharp" }
+      ]
+    },
+    {
+      "key": "sign",
+      "label": "Sign",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "fill",
+      "label": "Fill",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "iconColor",
+      "label": "Icon Color",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "borderColor",
+      "label": "Border Color",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "backgroundColor",
+      "label": "Background Color",
+      "type": "text",
+      "defaultValue": ""
+    }
+  ]
+}
