@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { formatTemplate, getTemplateValues } from '../../utils/pagination-utils';
 
 /**
  * TkPagination component description.
@@ -224,24 +225,6 @@ export class TkPagination implements ComponentInterface {
     this.inputValue = value.replace(/[^0-9]/g, '');
   }
 
-  private formatTemplate(template: string, values: Record<string, number>): string {
-    return template.replace(/\{(\w+)\}/g, (match, key) => {
-      return values[key]?.toString() || match;
-    });
-  }
-
-  private getTemplateValues() {
-    const startItem = (this.internalCurrentPage - 1) * this.rowsPerPage + 1;
-    const endItem = Math.min(this.internalCurrentPage * this.rowsPerPage, this.totalItems);
-    return {
-      currentPage: this.internalCurrentPage,
-      totalPages: this.getTotalPages(),
-      startItem,
-      endItem,
-      totalItems: this.totalItems,
-    };
-  }
-
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
@@ -263,14 +246,14 @@ export class TkPagination implements ComponentInterface {
   private renderTag(totalPages: number) {
     if (this.mode !== 'compact') {
       let tagContent: HTMLElement;
-      const templateValues = this.getTemplateValues();
+      const templateValues = getTemplateValues(this.internalCurrentPage, this.rowsPerPage, this.totalItems, totalPages);
 
       if (this.mode === 'compact-expanded') {
-        const itemsText = this.formatTemplate(this.itemsReportTemplate, templateValues);
+        const itemsText = formatTemplate(this.itemsReportTemplate, templateValues);
         tagContent = <span class="tk-pagination-tag-label">{itemsText}</span>;
       } else {
-        const pageText = this.formatTemplate(this.pageReportTemplate, templateValues);
-        const itemsText = this.formatTemplate(this.itemsReportTemplate, templateValues);
+        const pageText = formatTemplate(this.pageReportTemplate, templateValues);
+        const itemsText = formatTemplate(this.itemsReportTemplate, templateValues);
         tagContent = totalPages > 0 && (
           <Fragment>
             <span class="tk-pagination-tag-label">{pageText}</span>
@@ -293,8 +276,8 @@ export class TkPagination implements ComponentInterface {
     let content: HTMLElement;
 
     if (this.mode === 'compact') {
-      const templateValues = this.getTemplateValues();
-      const compactLabel = this.formatTemplate(this.pageReportTemplate, templateValues);
+      const templateValues = getTemplateValues(this.internalCurrentPage, this.rowsPerPage, this.totalItems, totalPages);
+      const compactLabel = formatTemplate(this.pageReportTemplate, templateValues);
       content = (
         <Fragment>
           <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
