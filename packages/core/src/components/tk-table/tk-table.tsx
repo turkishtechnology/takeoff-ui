@@ -13,6 +13,7 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -790,6 +791,7 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
+    removeDialogScrollListener(this.elFilterPanelElement);
     // First cleanup the floating UI
     if (this.cleanupFilterPanel) {
       this.cleanupFilterPanel();
@@ -1004,6 +1006,8 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
+    // Callback to handle scroll events
+    addDialogScrollListener(this.el, this.closeFilterPanel.bind(this));
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
