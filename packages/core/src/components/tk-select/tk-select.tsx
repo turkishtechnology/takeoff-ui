@@ -47,6 +47,11 @@ export class TkSelect implements ComponentInterface {
   @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged(newValue: boolean) {
+    if (newValue) this.tkOnOpen.emit();
+    else this.tkOnClose.emit();
+  }
 
   /**
    * The key to use for option group names.
@@ -257,6 +262,16 @@ export class TkSelect implements ComponentInterface {
    * Emitted when the selectAll option is changed
    */
   @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<boolean>;
+
+  /**
+   * Emitted when the select is opened
+   */
+  @Event({ eventName: 'tk-on-open' }) tkOnOpen!: EventEmitter<void>;
+
+  /**
+   * Emitted when the select is closed
+   */
+  @Event({ eventName: 'tk-on-close' }) tkOnClose!: EventEmitter<void>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
