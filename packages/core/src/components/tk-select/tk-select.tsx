@@ -49,8 +49,8 @@ export class TkSelect implements ComponentInterface {
   @State() isOpen: boolean = false;
   @Watch('isOpen')
   isOpenChanged(newValue: boolean) {
-    if (newValue) this.tkOnOpen.emit();
-    else this.tkOnClose.emit();
+    if (newValue) this.tkOpen.emit();
+    else this.tkClose.emit();
   }
 
   /**
@@ -266,12 +266,12 @@ export class TkSelect implements ComponentInterface {
   /**
    * Emitted when the select is opened
    */
-  @Event({ eventName: 'tk-on-open' }) tkOnOpen!: EventEmitter<void>;
+  @Event({ eventName: 'tk-open' }) tkOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the select is closed
    */
-  @Event({ eventName: 'tk-on-close' }) tkOnClose!: EventEmitter<void>;
+  @Event({ eventName: 'tk-close' }) tkClose!: EventEmitter<void>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
