@@ -1006,8 +1006,12 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
-    // Callback to handle scroll events
-    addDialogScrollListener(this.el, this.closeFilterPanel.bind(this));
+    addDialogScrollListener(this.el, e => {
+      if (e.composedPath().includes(this.el)) {
+        return;
+      }
+      this.closeFilterPanel();
+    });
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
