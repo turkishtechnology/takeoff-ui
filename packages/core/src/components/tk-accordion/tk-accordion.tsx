@@ -1,8 +1,10 @@
 import { Component, h, Element, Prop, ComponentInterface, Watch, Event, EventEmitter, State } from '@stencil/core';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 
+export type AccordionItemIndex = string | number;
+
 export interface IAccordionItemSelect {
-  index: string | number;
+  index: AccordionItemIndex;
   active: boolean;
 }
 
@@ -21,13 +23,13 @@ export interface IAccordionItemSelect {
 export class TkAccordion implements ComponentInterface {
   @Element() el: HTMLTkAccordionElement;
 
-  @State() private internalActiveIndex: (string | number)[] = [];
+  @State() private internalActiveIndex: AccordionItemIndex[] = [];
 
   /**
    * Currently active panel indexes. Can be a single value or an array.
    * When allowMultiple is false, only the last value in the array will be used.
    */
-  @Prop({ mutable: true }) activeIndex?: string | number | string[] | number[];
+  @Prop() activeIndex?: AccordionItemIndex | AccordionItemIndex[];
   @Watch('activeIndex')
   activeIndexChanged() {
     const normalized = this.normalizeActiveIndex();
@@ -79,32 +81,41 @@ export class TkAccordion implements ComponentInterface {
   @Event() tkAccordionItemSelected: EventEmitter<IAccordionItemSelect>;
 
   componentDidLoad() {
-    this.internalActiveIndex = this.normalizeActiveIndex();
-    this.updateItems();
+    this.initInternalActiveIndex();
+    requestAnimationFrame(() => this.updateItems());
   }
 
-  private normalizeActiveIndex(): (string | number)[] {
+  private initInternalActiveIndex() {
+    // if prop activeIndex is set, use it
+    if (this.activeIndex || this.activeIndex === 0) return (this.internalActiveIndex = this.normalizeActiveIndex());
+    // else if accordion items have active prop, use them
+    this.accordionItems.forEach((item, index) => {
+      if (item.active) this.internalActiveIndex = [...this.internalActiveIndex, this.getItemKey(item, index)];
+    });
+  }
+
+  private normalizeActiveIndex(): AccordionItemIndex[] {
     if (this.activeIndex === undefined || this.activeIndex === null) return [];
     if (Array.isArray(this.activeIndex)) {
       if (!this.allowMultiple) {
         const lastItem = this.activeIndex[this.activeIndex.length - 1];
         return lastItem !== undefined ? [lastItem] : [];
       }
-      return this.activeIndex as (string | number)[];
+      return this.activeIndex as AccordionItemIndex[];
     }
-    return [this.activeIndex as string | number];
+    return [this.activeIndex];
   }
 
-  private isIndexActive(index: string | number): boolean {
+  private isIndexActive(index: AccordionItemIndex): boolean {
     return this.internalActiveIndex.map(String).includes(String(index));
   }
 
-  private toggleItem(index: string | number) {
+  private toggleItem(index: AccordionItemIndex) {
     const isActive = this.isIndexActive(index);
     if (this.allowMultiple) {
       const currentActive = [...this.internalActiveIndex];
       const newActive = isActive ? currentActive.filter(i => String(i) !== String(index)) : [...currentActive, index];
-      this.internalActiveIndex = newActive as (string | number)[];
+      this.internalActiveIndex = newActive as AccordionItemIndex[];
     } else {
       this.internalActiveIndex = isActive ? [] : [index];
     }
@@ -115,11 +126,17 @@ export class TkAccordion implements ComponentInterface {
     this.updateItems();
   }
 
-  private updateItems() {
-    const items = Array.from(this.el.querySelectorAll('tk-accordion-item')).filter(child => child.parentElement === this.el);
+  private get accordionItems() {
+    return Array.from(this.el.querySelectorAll('tk-accordion-item')).filter(child => child.parentElement === this.el);
+  }
 
-    items.forEach((item, index) => {
-      const itemKey = item.getAttribute('item-key') !== null ? item.getAttribute('item-key') : String(index);
+  private getItemKey(accordionItem: HTMLTkAccordionItemElement, index: number) {
+    return accordionItem.getAttribute('item-key') ?? String(index);
+  }
+
+  private updateItems() {
+    this.accordionItems.forEach((item, index) => {
+      const itemKey = this.getItemKey(item, index);
       item.active = this.isIndexActive(itemKey);
       item.toggleItem = () => this.toggleItem(itemKey);
     });
