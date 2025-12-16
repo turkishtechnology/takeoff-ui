@@ -47,7 +47,17 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
 
     switch (control.type) {
       case 'text':
-        return (
+        return control.tooltip ? (
+          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
+            <TkInput
+              slot="trigger"
+              value={String(value || '')}
+              onTkChange={e => {
+                handlePropChange(control.key, (e.target as HTMLInputElement).value);
+              }}
+            />
+          </TkTooltip>
+        ) : (
           <TkInput
             value={String(value || '')}
             onTkChange={e => {
@@ -56,9 +66,10 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
           />
         );
       case 'select':
-        return (
-          <>
+        return control.tooltip ? (
+          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
             <TkSelect
+              slot="trigger"
               value={control.options?.find(opt => String(opt.value) === String(value)) || ''}
               onTkChange={e => {
                 const selectedOption = control.options?.find(opt => String(opt.value) === e.detail.value);
@@ -66,7 +77,16 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
               }}
               options={control.options}
             />
-          </>
+          </TkTooltip>
+        ) : (
+          <TkSelect
+            value={control.options?.find(opt => String(opt.value) === String(value)) || ''}
+            onTkChange={e => {
+              const selectedOption = control.options?.find(opt => String(opt.value) === e.detail.value);
+              handlePropChange(control.key, selectedOption?.value || '');
+            }}
+            options={control.options}
+          />
         );
       case 'checkbox':
         return control.tooltip ? (
