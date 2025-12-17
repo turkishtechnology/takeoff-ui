@@ -333,7 +333,7 @@ export class TkTable implements ComponentInterface {
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
 
     if (slotEmptyData) {
-      if (this.loading || this.data?.length > 0) {
+      if (this.loading || this.renderData?.length > 0) {
         hideElement(slotEmptyData);
       } else {
         showElement(slotEmptyData);
