@@ -47,27 +47,25 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
 
     switch (control.type) {
       case 'text':
-        return control.tooltip ? (
-          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
-            <TkInput
-              slot="trigger"
-              value={String(value || '')}
-              onTkChange={e => {
-                handlePropChange(control.key, (e.target as HTMLInputElement).value);
-              }}
-            />
-          </TkTooltip>
-        ) : (
-          <TkInput
-            value={String(value || '')}
-            onTkChange={e => {
-              handlePropChange(control.key, (e.target as HTMLInputElement).value);
-            }}
-          />
-        );
+        const commonProps = {
+          value: String(value || ''),
+          onTkChange: e => {
+            handlePropChange(control.key, e.detail);
+          },
+        };
+
+        if (control.tooltip) {
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <TkInput slot="trigger" {...commonProps} />
+            </TkTooltip>
+          );
+        } else {
+          return <TkInput {...commonProps} />;
+        }
       case 'select':
         return control.tooltip ? (
-          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
+          <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
             <TkSelect
               slot="trigger"
               value={control.options?.find(opt => String(opt.value) === String(value)) || ''}
