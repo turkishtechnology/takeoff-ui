@@ -48,11 +48,6 @@ export class TkAccordionItem implements ComponentInterface {
   @Prop() header?: string;
 
   /**
-   * Toggle's the accordion item.
-   */
-  @Prop() toggleItem: () => void;
-
-  /**
    * Sets size for the component.
    * @defaultValue 'base'
    */
@@ -117,7 +112,7 @@ export class TkAccordionItem implements ComponentInterface {
     return (
       <Host>
         <div class={rootClasses}>
-          <div class="header" onClick={this.toggleItem}>
+          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
             {this.arrowPosition === 'left' && this.createIcon()}
             {icon}
             <span class="title">{this.createHeader()}</span>
