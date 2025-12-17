@@ -44,6 +44,18 @@
       ]
     },
     {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
       "key": "range",
       "label": "Range",
       "type": "checkbox",
@@ -72,18 +84,6 @@
       "label": "Show Asterisk",
       "type": "checkbox",
       "defaultValue": false
-    },
-    {
-      "key": "hint",
-      "label": "Hint",
-      "type": "text",
-      "defaultValue": ""
-    },
-    {
-      "key": "error",
-      "label": "Error",
-      "type": "text",
-      "defaultValue": ""
     }
   ]
 }
