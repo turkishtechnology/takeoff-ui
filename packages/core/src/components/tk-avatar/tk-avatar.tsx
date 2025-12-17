@@ -59,6 +59,12 @@ export class TkAvatar implements ComponentInterface {
   @Prop() rounded?: boolean = false;
 
   /**
+   * Whether to hide the shadow effect on the avatar
+   * @defaultValue false
+   */
+  @Prop() hideShadow?: boolean = false;
+
+  /**
    * Appearance of the avatar
    * @defaultValue 'primary'
    */
@@ -86,6 +92,7 @@ export class TkAvatar implements ComponentInterface {
     const containerClasses = classNames('tk-avatar-container', `tk-avatar-${this.size}`);
     const rootClasses = classNames('tk-avatar', `tk-avatar-${this.variant}`, `tk-avatar-${this.background}`, {
       'tk-avatar-rounded': this.rounded,
+      'tk-avatar-hide-shadow': this.hideShadow,
     });
     return (
       <div class={containerClasses} part={`avatar ${this.size}`}>

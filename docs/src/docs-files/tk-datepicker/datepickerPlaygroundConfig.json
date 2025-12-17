@@ -1,0 +1,144 @@
+{
+  "name": "TkDatepicker",
+  "componentName": "TkDatepicker",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "single",
+      "options": [
+        { "label": "Single", "value": "single" },
+        { "label": "Range", "value": "range" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Select Date"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "yyyy-mm-dd"
+    },
+    {
+      "key": "dateFormat",
+      "label": "Date Format",
+      "type": "text",
+      "defaultValue": "yyyy-MM-dd"
+    },
+    {
+      "key": "minDate",
+      "label": "Min Date",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "maxDate",
+      "label": "Max Date",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" },
+        { "label": "Primary", "value": "primary" },
+        { "label": "Dark", "value": "dark" }
+      ]
+    },
+    {
+      "key": "footerType",
+      "label": "Footer Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" }
+      ]
+    },
+    {
+      "key": "iconPosition",
+      "label": "Icon Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
+      "key": "timeFormat",
+      "label": "Time Format",
+      "type": "select",
+      "defaultValue": "24",
+      "options": [
+        { "label": "12 Hour", "value": "12" },
+        { "label": "24 Hour", "value": "24" }
+      ]
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "clearable",
+      "label": "Clearable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "inline",
+      "label": "Inline",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showTimePicker",
+      "label": "Show Time Picker",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "timeOnly",
+      "label": "Time Only",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

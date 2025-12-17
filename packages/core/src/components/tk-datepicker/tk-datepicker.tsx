@@ -94,7 +94,7 @@ export class TkDatePicker {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
         // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if ((this.showTimePicker || this.timeOnly) && !this.internalStartTime) {
+        if (this.showTimePicker && !this.internalStartTime) {
           const def = this.getDefaultTime();
           this.internalStartTime = def;
           if (this.mode !== 'range') this.internalEndTime = def;
@@ -370,13 +370,13 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
 
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
         referenceElement: this.el,
-        handler: this.clickOutsideHandler,
+        handler: this.closeHandler,
         disabled: this.disabled || !this.isOpen,
       });
     }
@@ -626,12 +626,8 @@ export class TkDatePicker {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
         }
       }
-      if (!startTime) {
-        startTime = this.getDefaultTime();
-      }
-
       // For initial load, set AM/PM based on actual time, but respect user changes after that
-      if (this.timeFormat === '12') {
+      if (this.timeFormat === '12' && startTime) {
         // Only set if this is the initial default state, otherwise respect user choice
         if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
           this.internalAmPm = 'PM';
@@ -1027,7 +1023,7 @@ export class TkDatePicker {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (): void => {
     if (this.inline) return;
     this.isOpen = false;
   };
@@ -1326,6 +1322,7 @@ export class TkDatePicker {
     this.remeasureCalendarOnNextFrame();
     this.tkChange.emit(emitValue);
     this.inputValue = this.formatInputValue();
+    this.isInvalid = false;
   };
 
   private handleInputKeyDown = (event: KeyboardEvent) => {
@@ -1355,7 +1352,7 @@ export class TkDatePicker {
     }
   };
 
-  private handleInputBlur = () => {
+  private handleInputInput = () => {
     if (this.disableMask || this.mode === 'range') return;
 
     clearTimeout(this.debounceTimer);
@@ -1396,7 +1393,6 @@ export class TkDatePicker {
             this.tkChange.emit(formattedValue);
           } else {
             this.isInvalid = true;
-            this.tkChange.emit(undefined);
           }
         }
       } else {
@@ -1930,7 +1926,7 @@ export class TkDatePicker {
         maskOptions={maskOptionsToPass}
         onTk-change={this.handleInputChange}
         onTk-clear-click={this.handleInputClearClick}
-        onTk-blur={this.handleInputBlur}
+        onInput={this.handleInputInput}
         onKeyDown={this.handleInputKeyDown}
         onClick={this.handleInputClick}
         aria-expanded={!!this.isOpen}

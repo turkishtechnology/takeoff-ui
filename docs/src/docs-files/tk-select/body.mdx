@@ -12,7 +12,28 @@ import ChipOptions from './Examples/ChipOptions';
 import Icon from './Examples/Icon';
 import SelectAll from './Examples/SelectAll';
 import VisibleItemCount from './Examples/VisibleItemCount';
+import PanelHeader from './Examples/PanelHeader'
+import OptionDisabled from './Examples/OptionDisabled';
 import { TkAlert } from '@takeoff-ui/react';
+import Playground from '../../components/Playground/Playground';
+import selectPlaygroundConfig from './selectPlaygroundConfig.json';
+import { TkSelect } from '@takeoff-ui/react';
+
+export const TkSelectWithOptions = (props) => {
+  const options = [
+    { label: "Option 1", value: "opt1" },
+    { label: "Option 2", value: "opt2" },
+    { label: "Option 3", value: "opt3" }
+  ];
+  return <TkSelect options={options} {...props} />;
+};
+
+### Playground
+
+<Playground 
+  configs={[selectPlaygroundConfig]} 
+  componentMap={{ TkSelect: TkSelectWithOptions }} 
+/>
 
 ## Basic
 
@@ -36,6 +57,12 @@ You can use `loading` prop for waiting the response from the server-side.
 You can provide a template as an HTML string using the optionHtml prop.
 
 <CustomItem />
+
+## Panel Header
+
+You can customize top of the select panel using `panelTopHtml` prop.
+
+<PanelHeader />
 
 ## Multiple Select
 
@@ -109,3 +136,9 @@ Display options under section headers using `groupNameKey` and
 Sets options for all chips rendered in `multiple` selection mode.
 
 <ChipOptions />
+
+## Option Disabled
+
+Sets disabled state for specific options using `optionDisabled` prop.
+
+<OptionDisabled />

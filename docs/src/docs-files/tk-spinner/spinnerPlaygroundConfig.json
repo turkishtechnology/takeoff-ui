@@ -1,0 +1,51 @@
+{
+  "name": "TkSpinner",
+  "componentName": "TkSpinner",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "rounded",
+      "options": [
+        { "label": "Rounded", "value": "rounded" },
+        { "label": "Dots", "value": "dots" },
+        { "label": "Lines", "value": "lines" },
+        { "label": "Pulse", "value": "pulse" },
+        { "label": "Three Dots", "value": "three-dots" },
+        { "label": "Loader", "value": "loader" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XX-Small", "value": "xxsmall" },
+        { "label": "X-Small", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" },
+        { "label": "X-Large", "value": "xlarge" }
+      ]
+    },
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "vertical",
+      "options": [
+        { "label": "Vertical", "value": "vertical" },
+        { "label": "Horizontal", "value": "horizontal" }
+      ]
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Loading..."
+    }
+  ]
+}

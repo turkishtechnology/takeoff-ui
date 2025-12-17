@@ -136,6 +136,10 @@
   padding: 20px 0 0;
 }
 
+tk-slider {
+  width: 100%;
+}
+
 /* Syntax highlighting styles */
 .syntax-tag {
   color: #e06c75;

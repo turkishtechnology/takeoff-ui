@@ -49,7 +49,7 @@ export class TkTable implements ComponentInterface {
   @State() sortOrder: 'asc' | 'desc';
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
-  @State() renderData: any[] = [];
+  @State() renderData: Record<PropertyKey, unknown>[] = [];
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -107,13 +107,14 @@ export class TkTable implements ComponentInterface {
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
     if (!_.isEqual(oldValue, newValue)) {
+      const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
         this.currentPage = 1;
         const startIndex = (this.currentPage - 1) * this.rowsPerPage;
         const endIndex = startIndex + this.rowsPerPage;
-        this.renderData = [...newValue]?.slice(startIndex, endIndex) || [];
+        this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
-        this.renderData = newValue?.length > 0 ? [...newValue] : [];
+        this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
       }
 
       // Re-apply grouping if it was previously set
@@ -487,7 +488,7 @@ export class TkTable implements ComponentInterface {
   @Method()
   async clearFilters(columns?: string[]) {
     if (!this.filters?.length) return;
-    if (!!columns?.length) {
+    if (columns?.length) {
       // Clear filters for specific columns
       this.filters = this.filters.filter(filter => !columns.includes(filter.field));
     } else {
@@ -708,7 +709,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
-    let _data = [...data];
+    const _data = [...data];
     this.currentPage = currentPage;
 
     // Clear grouping when generating render data with new dataset
@@ -743,7 +744,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
-    let newExpandedRows = this.expandedRows;
+    const newExpandedRows = this.expandedRows;
 
     const findIndex = newExpandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]);
     if (findIndex > -1) {
@@ -803,6 +804,14 @@ export class TkTable implements ComponentInterface {
 
     // Finally update the state
     this.isFilterOpen = false;
+  }
+  // Checks if all selectable rows are selected
+  private isAllRowsSelected(): boolean {
+    if (!Array.isArray(this.selection)) return false;
+    const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
+    if (selectableRows.length === 0) return false;
+    if (this.selection.length < selectableRows.length) return false;
+    return selectableRows.every(row => this.selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
   }
 
   private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
@@ -902,11 +911,13 @@ export class TkTable implements ComponentInterface {
       tmpSelection = tmpSelection.filter(item => item[this.dataKey] !== row[this.dataKey]);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
+      this.refSelectAll.indeterminate = true;
     } else if (isSelect == true && !hasSelect) {
       // seçili değilse ve eklenmek isteniyor ise
       tmpSelection.push(row);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
+      this.refSelectAll.indeterminate = true;
     }
   }
 
@@ -1025,14 +1036,22 @@ export class TkTable implements ComponentInterface {
             if (checkbox) {
               const label = checkbox.label.toLowerCase();
               wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
-              checkbox.style.display = label.includes(searchText) ? 'block' : 'none';
             }
           });
           const visibleCheckboxes = Array.from(checkboxWrappers).filter(wrapper => {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)');
             return checkbox && (wrapper as HTMLElement).style.display !== 'none';
           });
-          allCheckbox.style.display = visibleCheckboxes.length === 0 ? 'none' : '';
+
+          if (visibleCheckboxes.length === 0) {
+            checkboxWrapper.style.display = 'none';
+            divider.style.display = 'none';
+            optionsSearchInput.hint = column?.filterElements?.optionsSearchInput?.emptyMessage || 'No results found';
+          } else {
+            checkboxWrapper.style.display = 'block';
+            divider.style.display = 'block';
+            optionsSearchInput.hint = null;
+          }
         });
         filterContainer.appendChild(optionsSearchInput);
       }
@@ -1040,6 +1059,9 @@ export class TkTable implements ComponentInterface {
       allCheckbox.classList.add('select-all');
       allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
       allCheckbox.value = selectedValues.length === column.filterOptions.length;
+      if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
+        allCheckbox.indeterminate = true;
+      }
       checkboxWrapper.appendChild(allCheckbox);
       allCheckbox.addEventListener('tk-change', (e: any) => {
         const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
@@ -1052,6 +1074,7 @@ export class TkTable implements ComponentInterface {
         } else {
           selectedValues.length = 0;
         }
+        allCheckbox.indeterminate = false;
       });
 
       const divider = document.createElement('tk-divider');
@@ -1067,6 +1090,22 @@ export class TkTable implements ComponentInterface {
         const checkbox = document.createElement('tk-checkbox');
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
+
+        checkbox.addEventListener('tk-change', () => {
+          const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
+          const visibleCheckboxes = allItemCheckboxes.filter(
+            cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
+          );
+          const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
+          const anySelected = visibleCheckboxes.some(cb => cb.value);
+          allCheckbox.value = allSelected;
+
+          if (!allSelected && anySelected) {
+            allCheckbox.indeterminate = true;
+          } else {
+            allCheckbox.indeterminate = false;
+          }
+        });
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
@@ -1150,7 +1189,18 @@ export class TkTable implements ComponentInterface {
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
-      input.placeholder = column?.filterElements?.searchInput?.placeholder || 'Search';
+      input.placeholder = column.filterElements.searchInput.placeholder || 'Search';
+      input.label = column.filterElements.searchInput.label;
+      input.maskOptions = column.filterElements.searchInput.maskOptions;
+      input.disabled = column.filterElements.searchInput.disabled || false;
+      input.invalid = column.filterElements.searchInput.invalid || false;
+      input.clearable = column.filterElements.searchInput.clearable || false;
+      input.error = column.filterElements.searchInput.error;
+      input.hint = column.filterElements.searchInput.hint;
+      input.icon = column.filterElements.searchInput.icon;
+      input.iconPosition = column.filterElements.searchInput.iconPosition;
+      input.size = column.filterElements.searchInput.size || 'base';
+
       input.setFocus();
       input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
       input.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -1361,7 +1411,7 @@ export class TkTable implements ComponentInterface {
     // Reset offsets
     this.stickyOffsets = { left: {}, right: {} };
 
-    let measuredWidths: { [key: string]: number } = {};
+    const measuredWidths: { [key: string]: number } = {};
     let shouldUseMeasuredWidths = false;
 
     // Try to measure from DOM if available
@@ -1576,7 +1626,7 @@ export class TkTable implements ComponentInterface {
     return rows;
   }
 
-  private createDataRow(row: any, index: number) {
+  private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
     let styleRowObject;
 
     if (typeof this.rowStyle == 'function') {
@@ -1594,6 +1644,7 @@ export class TkTable implements ComponentInterface {
       selectionTd = (
         <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
           <tk-checkbox
+            id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
             value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
@@ -1603,7 +1654,14 @@ export class TkTable implements ComponentInterface {
     } else if (this.selectionMode === 'radio') {
       selectionTd = (
         <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-          <tk-radio value={row} name="selection" checked={_.isEqual(this.selection, row)} disabled={isRowDisabled} onTk-change={() => this.handleRadioSelectChange(row)}></tk-radio>
+          <tk-radio
+            id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
+            value={row}
+            name={this.el.id ? `${this.el.id}-selection` : 'selection'}
+            checked={_.isEqual(this.selection, row)}
+            disabled={isRowDisabled}
+            onTk-change={() => this.handleRadioSelectChange(row)}
+          ></tk-radio>
         </td>
       );
     }
@@ -1648,18 +1706,18 @@ export class TkTable implements ComponentInterface {
               );
             } else if (typeof col?.html == 'function') {
               // Reuse cached custom cell elements whenever possible
-              let usedElement: any = null;
-              let computedElement: any = null;
+              let usedElement = null;
+              let computedElement = null;
 
               const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
               const cached = this.customCellCache.get(cacheKey);
               if (cached) {
                 usedElement = cached;
               } else {
-                computedElement = col?.html(row, index) as any;
+                computedElement = col?.html(row, index);
               }
 
-              const effectiveElement: any = usedElement ?? computedElement;
+              const effectiveElement = usedElement ?? computedElement;
               if (typeof effectiveElement == 'string') {
                 return (
                   <td
@@ -1831,9 +1889,11 @@ export class TkTable implements ComponentInterface {
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
         >
           <tk-checkbox
-            value={Array.isArray(this.selection) && this.selection.length === this.renderData.length && this.renderData.length > 0}
+            id={this.el.id ? `${this.el.id}-checkbox-all` : undefined}
+            value={this.isAllRowsSelected()}
             disabled={!(this.renderData.length > 0)}
             ref={el => (this.refSelectAll = el)}
+            indeterminate={Array.isArray(this.selection) && this.selection.length > 0 && !this.isAllRowsSelected()}
             onTk-change={e => this.handleSelectAll(e.detail)}
           ></tk-checkbox>
         </th>
@@ -2007,182 +2067,12 @@ export class TkTable implements ComponentInterface {
       this.customCellElements = [];
     }
 
-    if (this.renderData?.length > 0) {
+    if (this.renderData.length > 0) {
       return (
         <tbody>
           <slot name="body-header"></slot>
 
-          {this.groupByColumnField
-            ? this.createGroupedRows()
-            : this.renderData?.map((row, index) => {
-                let styleRowObject;
-
-                if (typeof this.rowStyle == 'function') {
-                  const stylesRow = this.rowStyle(row, index);
-                  if (stylesRow !== undefined) styleRowObject = { ...stylesRow };
-                }
-
-                let isRowDisabled = false;
-                if (this.selectionRowDisabled) {
-                  isRowDisabled = this.selectionRowDisabled(row);
-                }
-
-                let selectionTd;
-                if (this.selectionMode === 'checkbox') {
-                  selectionTd = (
-                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                      <tk-checkbox
-                        value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
-                        disabled={isRowDisabled}
-                        onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
-                      ></tk-checkbox>
-                    </td>
-                  );
-                } else if (this.selectionMode === 'radio') {
-                  selectionTd = (
-                    <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
-                      <tk-radio
-                        value={row}
-                        name="selection"
-                        checked={_.isEqual(this.selection, row)}
-                        disabled={isRowDisabled}
-                        onTk-change={() => this.handleRadioSelectChange(row)}
-                      ></tk-radio>
-                    </td>
-                  );
-                }
-
-                const isSelected =
-                  this.selectionMode === 'checkbox'
-                    ? _.some(this.selection, itemValue => _.isEqual(itemValue, row))
-                    : this.selectionMode === 'radio'
-                      ? _.isEqual(this.selection, row)
-                      : false;
-
-                return (
-                  <Fragment>
-                    <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled}>
-                      {selectionTd}
-                      {this.columns.map(col => {
-                        let tdExpanderButtonRef!: HTMLTkButtonElement;
-                        let styleCellObject;
-
-                        const leftColumns = this.columns.filter(c => c.fixed === 'left');
-                        const rightColumns = this.columns.filter(c => c.fixed === 'right');
-                        const isFirstLeft = col.fixed === 'left' && leftColumns[0]?.field === col.field;
-                        const isLastRight = col.fixed === 'right' && rightColumns[rightColumns.length - 1]?.field === col.field;
-
-                        if (typeof this.cellStyle == 'function') {
-                          const stylesCell = this.cellStyle(row, col);
-                          if (stylesCell !== undefined) styleCellObject = { ...stylesCell };
-                        }
-
-                        if (col.expander) {
-                          return (
-                            <td
-                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
-                            >
-                              <tk-button
-                                ref={el => (tdExpanderButtonRef = el)}
-                                variant="info"
-                                icon="keyboard_arrow_down"
-                                iconPosition="right"
-                                type="text"
-                                size="small"
-                                onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                              ></tk-button>
-                            </td>
-                          );
-                        } else if (typeof col?.html == 'function') {
-                          // Reuse cached custom cell elements whenever possible
-                          let usedElement: any = null;
-                          let computedElement: any = null;
-
-                          const cacheKey = `${row?.[this.dataKey] ?? index}::${col.field}`;
-                          const cached = this.customCellCache.get(cacheKey);
-                          if (cached) {
-                            usedElement = cached;
-                          } else {
-                            computedElement = col?.html(row, index) as any;
-                          }
-
-                          const effectiveElement: any = usedElement ?? computedElement;
-                          if (typeof effectiveElement == 'string') {
-                            return (
-                              <td
-                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                                innerHTML={effectiveElement}
-                                style={{
-                                  ...this.getStickyColumnStyle(col, index),
-                                  ...styleRowObject,
-                                  ...styleCellObject,
-                                }}
-                              ></td>
-                            );
-                          } else if (typeof effectiveElement == 'object') {
-                            // Update cache if we computed a new element in this render
-                            if (!usedElement) {
-                              this.customCellCache.set(cacheKey, effectiveElement as HTMLElement);
-                            }
-                            return (
-                              <td
-                                ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
-                                class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                                style={{
-                                  ...this.getStickyColumnStyle(col, index),
-                                  ...styleRowObject,
-                                  ...styleCellObject,
-                                }}
-                              />
-                            );
-                          }
-                        } else if (col.editable) {
-                          let editableInputRef: HTMLInputElement;
-                          return (
-                            <td
-                              class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{
-                                ...this.getStickyColumnStyle(col, index),
-                                ...styleRowObject,
-                                ...styleCellObject,
-                              }}
-                            >
-                              <input
-                                ref={el => (editableInputRef = el)}
-                                value={getNestedValue(row, col.field)}
-                                type="text"
-                                onKeyDown={e => handleInputKeydown(e, this.el)}
-                                onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
-                              ></input>
-                            </td>
-                          );
-                        } else {
-                          return (
-                            <td
-                              class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                              style={{
-                                ...this.getStickyColumnStyle(col, index),
-                                ...styleRowObject,
-                                ...styleCellObject,
-                              }}
-                            >
-                              {getNestedValue(row, col.field)}
-                            </td>
-                          );
-                        }
-                      })}
-                    </tr>
-                    {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
-                      <tr>
-                        <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}}>
-                          <slot name={`expand-content-${row[this.dataKey]}`} />
-                        </td>
-                      </tr>
-                    )}
-                  </Fragment>
-                );
-              })}
+          {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
 
           <slot name="body-footer"></slot>
         </tbody>

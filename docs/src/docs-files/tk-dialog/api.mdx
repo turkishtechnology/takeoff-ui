@@ -28,10 +28,10 @@ import { TkBadge } from "@takeoff-ui/react";
 
 ### Methods
 
-| Name | Description |
-| ---- | ----------- |
-| close | Requests to close the dialog by emitting a tk-close event. Note: This method only emits an event. The dialog will only close if the parent component listens for this event and updates the 'visible' prop to false. |
-| open | Requests to open the dialog by emitting a tk-open event. Note: This method only emits an event. The dialog will only open if the parent component listens for this event and updates the 'visible' prop to true. |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| close | <code>close() =\> Promise\<void\></code> | Requests to close the dialog by emitting a tk-close event. Note: This method only emits an event. The dialog will only close if the parent component listens for this event and updates the 'visible' prop to false. |
+| open | <code>open() =\> Promise\<void\></code> | Requests to open the dialog by emitting a tk-open event. Note: This method only emits an event. The dialog will only open if the parent component listens for this event and updates the 'visible' prop to true. |
 
 ### Slots
 

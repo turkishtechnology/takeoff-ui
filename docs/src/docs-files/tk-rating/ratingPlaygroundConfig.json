@@ -1,0 +1,49 @@
+{
+  "name": "TkRating",
+  "componentName": "TkRating",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "star",
+      "options": [
+        { "label": "Star", "value": "star" },
+        { "label": "Heart", "value": "heart" },
+        { "label": "Dot", "value": "dot" },
+        { "label": "Number", "value": "number" }
+      ]
+    },
+    {
+      "key": "maxRating",
+      "label": "Max Rating",
+      "type": "text",
+      "defaultValue": 5
+    },
+    {
+      "key": "value",
+      "label": "Value",
+      "type": "number",
+      "defaultValue": 0
+    },
+    {
+      "key": "showRatingValue",
+      "label": "Show Rating Value",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

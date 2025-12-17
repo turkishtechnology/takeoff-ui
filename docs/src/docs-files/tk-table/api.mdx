@@ -41,20 +41,20 @@ import { TkBadge } from "@takeoff-ui/react";
 
 ### Methods
 
-| Name | Description |
-| ---- | ----------- |
-| clearFilters | Clears all filters or specific column filters |
-| clearGrouping | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
-| clearSorting | Clears all sorting for server side pagination |
-| exportFile | Exports the table data to a file |
-| getFilters | Returns the current filters |
-| getSorting | Returns the current sorting settings |
-| groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
-| runFilters | Applies the current filters to the data for client side pagination |
-| serverRequest | Allows tk-request event to be triggered manually |
-| setCurrentPage | Sets the current page for pagination |
-| setFilters | Sets the current filter settings |
-| setSorting | Sets the current sorting settings |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| clearFilters | <code>clearFilters(columns?: string[]) =\> Promise\<void\></code> | Clears all filters or specific column filters |
+| clearGrouping | <code>clearGrouping() =\> Promise\<void\></code> | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
+| clearSorting | <code>clearSorting() =\> Promise\<void\></code> | Clears all sorting for server side pagination |
+| exportFile | <code>exportFile(options: ITableExportOptions) =\> Promise\<void\></code> | Exports the table data to a file |
+| getFilters | <code>getFilters() =\> Promise\<ITableFilter[]\></code> | Returns the current filters |
+| getSorting | <code>getSorting() =\> Promise\<ITableSort[] \| \{ field: string; order: "desc" \| "asc"; \}\></code> | Returns the current sorting settings |
+| groupByColumn | <code>groupByColumn(columnField: string) =\> Promise\<void\></code> | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
+| runFilters | <code>runFilters() =\> Promise\<void\></code> | Applies the current filters to the data for client side pagination |
+| serverRequest | <code>serverRequest() =\> Promise\<void\></code> | Allows tk-request event to be triggered manually |
+| setCurrentPage | <code>setCurrentPage(page: number) =\> Promise\<void\></code> | Sets the current page for pagination |
+| setFilters | <code>setFilters(filters: ITableFilter[]) =\> Promise\<void\></code> | Sets the current filter settings |
+| setSorting | <code>setSorting(sorts: ITableSort[] \| \{ field: string; order: "asc" \| "desc"; \}) =\> Promise\<void\></code> | Sets the current sorting settings |
 
 ### Slots
 
@@ -118,11 +118,23 @@ interface ITableColumn {
   };
   filterElements?: {
     icon?: string;
-    searchInput?: { placeholder?: string };
+    searchInput?: {
+      placeholder?: string;
+      label?: string;
+      maskOptions?: IInputMaskOptions;
+      disabled?: boolean;
+      invalid?: boolean;
+      clearable?: boolean;
+      error?: string;
+      hint?: string;
+      icon?: string | IIconOptions | IMultiIconOptions;
+      iconPosition?: 'left' | 'right';
+      size?: 'large' | 'base' | 'small';
+    };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
-    optionsSearchInput?: { show?: boolean; placeholder?: string };
+    optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
     optionsSearchDatepicker?: {
       label?: string;
       placeholder?: string;

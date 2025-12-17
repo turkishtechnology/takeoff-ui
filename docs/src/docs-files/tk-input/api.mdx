@@ -4,6 +4,7 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
+| <TkBadge label="chipDisabled" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null | A function that determines whether a chip is disabled. |
 | <TkBadge label="chipLabelKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | 'label' | The key to use for option labels |
 | <TkBadge label="chipOptions" variant="primary" size="large" type="filledlight"/> | <code>IChipOptions</code> | null | Sets options for all chips rendered in chips mode. |
 | <TkBadge label="clearable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input can be cleared |
@@ -39,9 +40,9 @@ import { TkBadge } from "@takeoff-ui/react";
 
 ### Methods
 
-| Name | Description |
-| ---- | ----------- |
-| setFocus | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| setFocus | <code>setFocus() =\> Promise\<void\></code> | Sets focus on the specified `tk-input`. Use this method instead of the global `input.focus()`. |
 
 ### Interfaces
 

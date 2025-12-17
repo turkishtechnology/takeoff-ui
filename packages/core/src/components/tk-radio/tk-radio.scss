@@ -116,3 +116,16 @@ tk-radio[invalid] {
     }
   }
 }
+
+tk-radio[data-type='card'] {
+  border-radius: var(--radius-m-base);
+  border: 1px solid var(--border-light);
+
+  &:hover {
+    background-color: var(--background-lightest);
+  }
+
+  .tk-radio-container {
+    padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
+  }
+}

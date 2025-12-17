@@ -61,7 +61,7 @@ function generateMdx(component) {
   const vueImportCode = docsTags.find(item => item.name == 'vue')?.text;
   const angularImportCode = docsTags.find(item => item.name == 'angular')?.text;
 
-  let headContent = `import Tabs from "@theme/Tabs";
+  const headContent = `import Tabs from "@theme/Tabs";
 import CodeBlock from '@theme/CodeBlock'
 import TabItem from "@theme/TabItem";\n
 ${docs} \n
@@ -132,9 +132,10 @@ ${docs} \n
   // Add Methods Table
   if (methods && methods.length) {
     apiContent += `\n### Methods\n\n`;
-    apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
+    apiContent += `| Name | Type | Description |\n| ---- | ---- | ----------- |\n`;
     methods.forEach(method => {
-      apiContent += `| ${method.name} | ${clearString(method.docs)} |\n`;
+      const type = method.signature.replaceAll('<', '\\<').replaceAll('>', '\\>').replaceAll(',', '\\,').replaceAll('{', '\\{').replaceAll('}', '\\}').replaceAll('|', '\\|');
+      apiContent += `| ${method.name} | <code>${type}</code> | ${clearString(method.docs)} |\n`;
     });
   }
 

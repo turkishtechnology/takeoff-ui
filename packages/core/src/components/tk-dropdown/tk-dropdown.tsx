@@ -102,7 +102,10 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private clickOutsideHandler = (): void => {
+  private closeHandler = (e: Event): void => {
+    if (e.composedPath().includes(this.el)) {
+      return;
+    }
     this.isOpen = false;
   };
 
@@ -122,11 +125,11 @@ export class TkDropdown implements ComponentInterface {
     // Initialize click outside mixin
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
-      handler: this.clickOutsideHandler,
+      handler: this.closeHandler,
       disabled: this.disabled || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el);
+    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   componentDidUpdate() {
