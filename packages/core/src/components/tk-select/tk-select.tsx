@@ -299,7 +299,7 @@ export class TkSelect implements ComponentInterface {
       this.editable = true;
     }
 
-    if (this.value) {
+    if (this.value !== undefined && this.value !== null) {
       this.setValue();
     }
   }
@@ -590,7 +590,11 @@ export class TkSelect implements ComponentInterface {
     // Handle single selection case
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
-      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
+      if (this.value !== undefined && this.value !== null) {
+        this.inputRef.value = this.getOptionLabel(this.value);
+      } else {
+        this.inputRef.value = null;
+      }
       return;
     }
 
@@ -607,7 +611,7 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Set input value based on selection state
-    if (this.selectedItem) {
+    if (this.selectedItem !== null && this.selectedItem !== undefined) {
       if (this.multiple) {
         this.inputRef.value = this.selectedItem;
       } else {
