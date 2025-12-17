@@ -47,6 +47,11 @@ export class TkSelect implements ComponentInterface {
   @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged(newValue: boolean) {
+    if (newValue) this.tkOpen.emit();
+    else this.tkClose.emit();
+  }
 
   /**
    * The key to use for option group names.
@@ -226,6 +231,11 @@ export class TkSelect implements ComponentInterface {
   @Prop() selectAllLabel: string = 'All';
 
   /**
+   * A function to determine whether an option should be disabled.
+   */
+  @Prop() optionDisabled: Function;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: any | any[];
@@ -253,6 +263,16 @@ export class TkSelect implements ComponentInterface {
    */
   @Event({ eventName: 'tk-select-all' }) tkSelectAll!: EventEmitter<boolean>;
 
+  /**
+   * Emitted when the select is opened
+   */
+  @Event({ eventName: 'tk-open' }) tkOpen!: EventEmitter<void>;
+
+  /**
+   * Emitted when the select is closed
+   */
+  @Event({ eventName: 'tk-close' }) tkClose!: EventEmitter<void>;
+
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
     this.setFlatOptions();
@@ -279,7 +299,7 @@ export class TkSelect implements ComponentInterface {
       this.editable = true;
     }
 
-    if (this.value) {
+    if (this.value !== undefined && this.value !== null) {
       this.setValue();
     }
   }
@@ -417,9 +437,17 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  //edited to omit disabled options from select all check
   private isAllSelected(valueArr?: any[]): boolean {
-    const arr = Array.isArray(valueArr) ? valueArr : Array.isArray(this.value) ? this.value : [];
-    const optionValues = this.flatOptions.map(opt => this.getOptionValue(opt));
+    let arr;
+    if (Array.isArray(valueArr)) {
+      arr = valueArr;
+    } else if (Array.isArray(this.value?.filter?.(item => !this.optionDisabled?.(item)))) {
+      arr = this.value;
+    } else {
+      arr = [];
+    }
+    const optionValues = this.flatOptions.filter(item => !this.optionDisabled?.(item)).map(opt => this.getOptionValue(opt));
     return optionValues.length > 0 && optionValues.every(val => this.isOptionSelected(arr, val));
   }
 
@@ -562,7 +590,11 @@ export class TkSelect implements ComponentInterface {
     // Handle single selection case
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
-      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
+      if (this.value !== undefined && this.value !== null) {
+        this.inputRef.value = this.getOptionLabel(this.value);
+      } else {
+        this.inputRef.value = null;
+      }
       return;
     }
 
@@ -579,7 +611,7 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Set input value based on selection state
-    if (this.selectedItem) {
+    if (this.selectedItem !== null && this.selectedItem !== undefined) {
       if (this.multiple) {
         this.inputRef.value = this.selectedItem;
       } else {
@@ -612,8 +644,12 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleFormReset() {
-    this.value = null;
-    this.tkChange.emit(null);
+    if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.optionDisabled(item));
+    } else {
+      this.value = null;
+    }
+    this.tkChange.emit(this.value);
   }
 
   private async handleSelectAllClick() {
@@ -624,11 +660,11 @@ export class TkSelect implements ComponentInterface {
       const checking = this.isAllSelected();
       if (checking) {
         // Deselect all
-        tmpValue = [];
+        tmpValue = this.value.filter(item => this.optionDisabled?.(item));
         this.tkSelectAll.emit(false);
       } else {
         //optionsdaki değerleri almak için
-        const optionValues = this.flatOptions.map(opt => this.getOptionValue(opt));
+        const optionValues = this.flatOptions.filter(item => !this.optionDisabled?.(item)).map(opt => this.getOptionValue(opt));
         // allowcustom trueyken optionsda olmayan valueların eklenmesi için
         const customValues = Array.isArray(this.value) ? this.value?.filter(val => !this.isOptionSelected(optionValues, val)) : [];
         // Select all (optionValue + custom values)
@@ -648,7 +684,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleItemClick(item) {
-    if (this.readonly) return;
+    if (this.readonly || this.optionDisabled?.(item)) return;
     this.isItemClickFlag = true;
     if (this.multiple) {
       const tmpValue = Array.isArray(this.value) ? [...this.value] : [];
@@ -875,8 +911,12 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleInputClearClick() {
-    this.value = null;
-    this.tkChange.emit(null);
+    if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.optionDisabled(item));
+    } else {
+      this.value = null;
+    }
+    this.tkChange.emit(this.value);
     this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
   }
 
@@ -908,10 +948,11 @@ export class TkSelect implements ComponentInterface {
           itemProps = { innerHTML: this.getOptionLabel(item) };
         }
       }
+      const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
 
       return (
         <div
-          class={classNames('dropdown-item', { multiple: this.multiple })}
+          class={classNames('dropdown-item', { multiple: this.multiple }, { disabled: isDisabled })}
           data-option-index={startIndex + index}
           data-selected={this.multiple && checking ? 'true' : this.value == item ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
@@ -994,6 +1035,7 @@ export class TkSelect implements ComponentInterface {
         disabled={this.disabled}
         clearable={this.clearable}
         chipOptions={this.chipOptions}
+        chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
         aria-expanded={!!this.isOpen}
         onClick={() => this.handleInputClick()}

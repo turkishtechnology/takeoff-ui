@@ -50,7 +50,7 @@ const AvatarGroupDemo = () => {
 </tk-avatar-group>`;
 
   const demo = (
-    <div className="flex flex-col gap-4 overflow-auto">
+    <div className="flex flex-col items-center gap-4 overflow-auto">
       <TkAvatarGroup>
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-1.png')} variant="primary" background="solid" rounded />
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-2.png')} variant="light" background="solid" rounded />

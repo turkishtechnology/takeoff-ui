@@ -1322,6 +1322,7 @@ export class TkDatePicker {
     this.remeasureCalendarOnNextFrame();
     this.tkChange.emit(emitValue);
     this.inputValue = this.formatInputValue();
+    this.isInvalid = false;
   };
 
   private handleInputKeyDown = (event: KeyboardEvent) => {
@@ -1351,7 +1352,7 @@ export class TkDatePicker {
     }
   };
 
-  private handleInputBlur = () => {
+  private handleInputInput = () => {
     if (this.disableMask || this.mode === 'range') return;
 
     clearTimeout(this.debounceTimer);
@@ -1392,7 +1393,6 @@ export class TkDatePicker {
             this.tkChange.emit(formattedValue);
           } else {
             this.isInvalid = true;
-            this.tkChange.emit(undefined);
           }
         }
       } else {
@@ -1926,7 +1926,7 @@ export class TkDatePicker {
         maskOptions={maskOptionsToPass}
         onTk-change={this.handleInputChange}
         onTk-clear-click={this.handleInputClearClick}
-        onTk-blur={this.handleInputBlur}
+        onInput={this.handleInputInput}
         onKeyDown={this.handleInputKeyDown}
         onClick={this.handleInputClick}
         aria-expanded={!!this.isOpen}
