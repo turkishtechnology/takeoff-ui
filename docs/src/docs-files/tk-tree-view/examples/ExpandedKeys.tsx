@@ -4,15 +4,19 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const sampleData = [
   {
+    key: 'root-directory',
     label: 'Root Directory',
     children: [
       {
+        key: 'second-directory',
         label: 'Second Directory',
         children: [
           {
+            key: 'third-directory',
             label: 'Third Directory',
             children: [
               {
+                key: 'fourth-directory',
                 label: 'Fourth Directory',
               },
             ],
@@ -22,28 +26,35 @@ const sampleData = [
     ],
   },
   {
+    key: 'documents',
     label: 'Documents',
     children: [
       {
+        key: 'projects',
         label: 'Projects',
         children: [
           {
+            key: 'project-1',
             label: 'Project 1',
           },
           {
+            key: 'project-2',
             label: 'Project 2',
           },
         ],
       },
       {
+        key: 'reports',
         label: 'Reports',
       },
     ],
   },
   {
+    key: 'images',
     label: 'Images',
     children: [
       {
+        key: 'vacation-photos',
         label: 'Vacation Photos',
       },
     ],
@@ -51,7 +62,7 @@ const sampleData = [
 ];
 
 const TreeViewControllable = () => {
-  const [expandedKeys, setExpandedKeys] = useState<string[]>(['0-0-0-0', '1']);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>(['third-directory', 'projects']);
   const [reactCode, setReactCode] = useState('');
   const [vueCode, setVueCode] = useState('');
 
@@ -59,15 +70,19 @@ const TreeViewControllable = () => {
     setReactCode(`
 const treeData = [
   {
+    key: "root-directory",
     label: 'Root Directory',
     children: [
       {
+        key: "second-directory",
         label: 'Second Directory',
         children: [
           {
+            key: "third-directory",
             label: 'Third Directory',
             children: [
               {
+                key: "fourth-directory",
                 label: 'Fourth Directory'
               }
             ]
@@ -77,27 +92,32 @@ const treeData = [
     ]
   },
   {
+    key: "documents",
     label: 'Documents',
     children: [
       {
+        key: "projects",
         label: 'Projects',
         children: [
           {
+            key: "project-1",
             label: 'Project 1'
           },
           {
+            key: "project-2",
             label: 'Project 2'
           }
         ]
       },
       {
+        key: "reports",
         label: 'Reports'
       }
     ]
   }
 ];
 
-const [expandedKeys, setExpandedKeys] = useState(['0-0-0', '1']);
+const [expandedKeys, setExpandedKeys] = useState(['reports', 'project-2']);
 
 <TkTreeView
   mode="basic"
@@ -106,7 +126,7 @@ const [expandedKeys, setExpandedKeys] = useState(['0-0-0', '1']);
   items={treeData}
   branchIcon="folder"
   leafIcon="insert_drive_file"
-  expandedKeys={expandedKeys}
+  :expanded-keys="expandedKeys"
   onTkExpandChange={(e) => setExpandedKeys(e.detail)}
   onTkItemClick={(e) => console.log('Clicked item:', e.detail)}
 />
@@ -117,15 +137,19 @@ import { ref } from 'vue';
 
 const treeData = [
   {
+    key: "root-directory",
     label: 'Root Directory',
     children: [
       {
+        key: "second-directory",
         label: 'Second Directory',
         children: [
           {
+            key: "third-directory",
             label: 'Third Directory',
             children: [
               {
+                key: "fourth-directory",
                 label: 'Fourth Directory'
               }
             ]
@@ -135,27 +159,32 @@ const treeData = [
     ]
   },
   {
+    key: "documents",
     label: 'Documents',
     children: [
       {
+        key: "projects",
         label: 'Projects',
         children: [
           {
+            key: "project-1",
             label: 'Project 1'
           },
           {
+            key: "project-2",
             label: 'Project 2'
           }
         ]
       },
       {
+        key: "reports",
         label: 'Reports'
       }
     ]
   }
 ];
 
-const expandedKeys = ref(['0-0-0', '1']);
+const expandedKeys = ref(['reports', 'project-2']);
 </script>
 
 <template>
@@ -166,7 +195,7 @@ const expandedKeys = ref(['0-0-0', '1']);
     :items="treeData"
     branch-icon="folder"
     leaf-icon="insert_drive_file"
-    :expanded-keys="expandedKeys"
+    :expanded-keys="${expandedKeys}"
     @tk-expand-change="(e) => expandedKeys = e.detail"
     @tk-item-click="(e) => console.log('Clicked item:', e.detail)"
   />
@@ -179,15 +208,15 @@ const expandedKeys = ref(['0-0-0', '1']);
   };
 
   const expandBothRoots = () => {
-    setExpandedKeys(['0', '1']);
+    setExpandedKeys(['reports', 'project-2']);
   };
 
   const expandFirstDeep = () => {
-    setExpandedKeys(['0-0-0-0']);
+    setExpandedKeys(['reports', 'project-2']);
   };
 
   const collapseFirstRoot = () => {
-    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('0')));
+    setExpandedKeys(expandedKeys.filter(key => !key.startsWith('reports')));
   };
 
   const collapseToRoots = () => {
@@ -199,45 +228,12 @@ const expandedKeys = ref(['0-0-0', '1']);
   const demo = (
     <div className="w-full">
       <div style={{ marginBottom: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '8px' }}>
-        <div style={{ marginBottom: '8px', fontWeight: 'bold', fontSize: '14px' }}>Controlled Mode Buttons:</div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
-          <button
-            onClick={expandBothRoots}
-            style={{ padding: '6px 12px', cursor: 'pointer', background: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px' }}
-          >
-            Expand Both Roots
-          </button>
-          <button
-            onClick={expandFirstDeep}
-            style={{ padding: '6px 12px', cursor: 'pointer', background: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px' }}
-          >
-            Expand First Deep
-          </button>
-          <button
-            onClick={collapseToRoots}
-            style={{ padding: '6px 12px', cursor: 'pointer', background: '#FF9800', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px' }}
-          >
-            Collapse To Roots
-          </button>
-          <button
-            onClick={collapseFirstRoot}
-            style={{ padding: '6px 12px', cursor: 'pointer', background: '#f44336', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px' }}
-          >
-            Collapse First Root
-          </button>
-          <button
-            onClick={collapseAll}
-            style={{ padding: '6px 12px', cursor: 'pointer', background: '#f44336', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px' }}
-          >
-            Collapse All
-          </button>
-        </div>
         <div style={{ fontSize: '12px', color: '#666' }}>
           <strong>Current Expanded Keys:</strong> {JSON.stringify(expandedKeys)}
         </div>
       </div>
       <TkTreeView
-        mode="basic"
+        mode="stepper"
         type="light"
         size="base"
         items={sampleData}

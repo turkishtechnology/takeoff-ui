@@ -6,21 +6,6 @@ import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 /**
  * The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
  * Uses array-based data structure for better performance and easier data management.
- *
- * ## Controlled vs Uncontrolled Mode
- *
- * **Uncontrolled Mode** (default):
- * - Component manages its own expansion state internally
- * - Use `expandAll` prop to control initial expansion
- * - The component automatically handles node expand/collapse
- *
- * **Controlled Mode** (when `expandedKeys` is provided):
- * - Parent component fully controls which nodes are expanded via `expandedKeys` prop
- * - `expandAll` prop is ignored
- * - Must listen to `tk-expand-change` and update `expandedKeys`.
- * - Parent has complete control over expansion state
- * - Invalid paths in `expandedKeys` are logged as errors and ignored.
- *
  * @react `import { TkTreeView } from '@takeoff-ui/react'`
  * @vue `import { TkTreeView } from '@takeoff-ui/vue'`
  * @angular `import { TkTreeView } from '@takeoff-ui/angular'`
@@ -112,14 +97,18 @@ export class TkTreeView implements ComponentInterface {
 
   /**
    * Selection strategy for checkboxes:
-   * - 'all': selecting a node selects the node itself and all descendants
-   * - 'leaf': selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
+   * <br />
+   * **all:** selecting a node selects the node itself and all descendants
+   * <br />
+   * **leaf:** selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
    */
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
 
   /**
    * If true, expands all nodes in basic mode.
-   * Note: This prop is ignored when expandedKeys is provided (controlled mode).
+   * <br />
+   * **Note:** This prop is ignored when expandedKeys is provided.
+   *
    */
   @Prop() expandAll: boolean = false;
   @Watch('expandAll')
@@ -130,35 +119,12 @@ export class TkTreeView implements ComponentInterface {
   }
 
   /**
-   * Array of keys that should be expanded. Use this for controlled expansion state.
+   * Array of keys that should be expanded.
    *
-   * **Usage:**
-   * - Provide an array of item keys: `["atakan", "mehmet", "4"]`
-   * - Each key is searched in the tree and expanded along with all its ancestors
-   *
-   * **Example:**
-   * ```
-   * expandedKeys={["4", "13"]}
-   * // For key "4": automatically finds and expands all ancestors: "1" → "1-3" → "1-3-4"
-   * // For key "13": automatically finds and expands all ancestors: "10" → "10-12" → "10-12-13"
-   * ```
-   *
-   * **Note:**
-   * - Keys can contain any characters including hyphens (e.g., "my-folder-name")
-   * - Only provide keys, not paths - the component finds the full path automatically
-   * - Each key must be unique in the tree structure
-   *
-   * **Controlled Mode:**
-   * - When this prop is provided (any array, including empty []), the component enters controlled mode
-   * - Parent component must manage expansion state and update this prop
-   * - `expandAll` prop will be ignored
-   * - Use with `tk-expand-change` event for two-way binding
-   *
-   * **Additional Notes:**
-   * - Parent paths are automatically included for all provided keys
-   * - Pass `[]` (empty array) to collapse all nodes in controlled mode
-   * - Do not pass this prop (or pass `undefined`) for uncontrolled mode
-   * - Invalid keys will be logged as errors and ignored
+   * <br /> **Usage:**
+   * Provide an array of item keys: `["atakan", "mehmet", "4"]`
+   * <br />
+   * Each key must be unique in the tree structure
    */
   @Prop({ mutable: true }) expandedKeys?: string[];
   @Watch('expandedKeys')
@@ -168,8 +134,11 @@ export class TkTreeView implements ComponentInterface {
       const indexPaths: string[] = [];
       const invalidKeys: string[] = [];
 
-      newValue.forEach(key => {
+      newValue.forEach((key, index) => {
         // Find the index path for this key
+        if (this.mode === 'stepper' && index !== 0) {
+          return;
+        }
         const indexPath = this.findIndexPath(key);
 
         if (indexPath) {
@@ -364,8 +333,11 @@ export class TkTreeView implements ComponentInterface {
       const indexPaths: string[] = [];
       const invalidKeys: string[] = [];
 
-      this.expandedKeys.forEach(key => {
+      this.expandedKeys.forEach((key, index) => {
         // Find the index path for this key
+        if (this.mode === 'stepper' && index !== 0) {
+          return;
+        }
         const indexPath = this.findIndexPath(key);
 
         if (indexPath) {
