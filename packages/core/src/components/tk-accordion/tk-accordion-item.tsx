@@ -1,7 +1,8 @@
-import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, type EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
+import type { AccordionItemIndex } from './types';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -29,11 +30,17 @@ export class TkAccordionItem implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() active: boolean = false;
+  @Watch('active')
+  activeChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
+      this.tkActiveChange.emit(newValue);
+    }
+  }
 
   /**
    * Optional key for the accordion item.
    */
-  @Prop({ attribute: 'item-key', reflect: true }) itemKey?: string;
+  @Prop({ attribute: 'item-key', reflect: true }) itemKey?: AccordionItemIndex;
 
   /**
    * Header text to display.
@@ -55,6 +62,11 @@ export class TkAccordionItem implements ComponentInterface {
    * Icon for accordion component.
    */
   @Prop() icon?: string | IIconOptions;
+
+  /**
+   * Emitted when an active index is changed
+   */
+  @Event({ eventName: 'tk-active-change' }) tkActiveChange: EventEmitter<boolean>;
 
   componentWillLoad(): void {
     this.parentEl = this.el.closest('tk-accordion');
