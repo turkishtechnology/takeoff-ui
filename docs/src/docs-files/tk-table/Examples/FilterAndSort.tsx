@@ -140,7 +140,7 @@ const FilterAndSort = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
       filterElements: {
         searchInput: {
           placeholder: 'Filter',
@@ -269,7 +269,7 @@ const column = [
       row.name
         .toString()
         .toLowerCase()
-        .indexOf(value.toString().toLowerCase()) > -1,
+        .indexOf(value?.toString().toLowerCase()) > -1,
     filterElements: {
       searchInput: {
         placeholder: 'Filter',

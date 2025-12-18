@@ -20,7 +20,7 @@ const Localization = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
     },
     {
       field: 'category',
@@ -32,7 +32,7 @@ const Localization = () => {
         row.category
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
     },
     {
       field: 'quantity',
