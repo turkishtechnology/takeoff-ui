@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, h, Element, State, Host } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, type EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
@@ -28,22 +28,23 @@ export class TkAccordionItem implements ComponentInterface {
    * Sets if the accordion is active.
    * @defaultValue false
    */
-  @Prop() active: boolean = false;
+  @Prop() active: boolean;
+  @Watch('active')
+  activeChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
+      this.tkActiveChange.emit(newValue);
+    }
+  }
 
   /**
    * Optional key for the accordion item.
    */
-  @Prop({ attribute: 'item-key', reflect: true }) itemKey?: string;
+  @Prop({ attribute: 'item-key', reflect: true }) itemKey?: string | number;
 
   /**
    * Header text to display.
    */
   @Prop() header?: string;
-
-  /**
-   * Toggle's the accordion item.
-   */
-  @Prop() toggleItem: () => void;
 
   /**
    * Sets size for the component.
@@ -55,6 +56,11 @@ export class TkAccordionItem implements ComponentInterface {
    * Icon for accordion component.
    */
   @Prop() icon?: string | IIconOptions;
+
+  /**
+   * Emitted when an active index is changed
+   */
+  @Event({ eventName: 'tk-active-change' }) tkActiveChange: EventEmitter<boolean>;
 
   componentWillLoad(): void {
     this.parentEl = this.el.closest('tk-accordion');
@@ -105,7 +111,7 @@ export class TkAccordionItem implements ComponentInterface {
     return (
       <Host>
         <div class={rootClasses}>
-          <div class="header" onClick={this.toggleItem}>
+          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
             {this.arrowPosition === 'left' && this.createIcon()}
             {icon}
             <span class="title">{this.createHeader()}</span>
