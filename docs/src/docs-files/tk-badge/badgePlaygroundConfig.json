@@ -53,7 +53,8 @@
       "options": [
         { "label": "Left", "value": "left" },
         { "label": "Right", "value": "right" }
-      ]
+      ],
+      "tooltip": "This feature works only when the `icon` prop is defined."
     },
     {
       "key": "label",
@@ -65,7 +66,8 @@
       "key": "count",
       "label": "Count",
       "type": "text",
-      "defaultValue": ""
+      "defaultValue": "",
+      "tooltip": "This prop accepts numeric values."
     },
     {
       "key": "icon",

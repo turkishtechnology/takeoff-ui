@@ -55,6 +55,13 @@
       "defaultValue": "No options available"
     },
     {
+      "key": "visibleItemCount",
+      "label": "Visible Item Count",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "This feature works only when the `multiple` prop is enabled. Accepts numeric values."
+    },
+    {
       "key": "disabled",
       "label": "Disabled",
       "type": "checkbox",
@@ -104,9 +111,10 @@
     },
     {
       "key": "selectAll",
-      "label": "Select All (Multiple only)",
+      "label": "Select All",
       "type": "checkbox",
-      "defaultValue": false
+      "defaultValue": false,
+      "tooltip": "This feature works only when the `multiple` prop is enabled."
     }
   ]
 }

@@ -24,8 +24,8 @@
     {
       "key": "value",
       "label": "Value",
-      "type": "number",
-      "defaultValue": 0
+      "type": "text",
+      "defaultValue": 2
     },
     {
       "key": "showRatingValue",
