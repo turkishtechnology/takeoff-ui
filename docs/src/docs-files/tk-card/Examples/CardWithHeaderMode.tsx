@@ -1,79 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import { TkCard, TkCheckbox, TkRadio, TkRadioGroup } from '@takeoff-ui/react';
+import React from 'react';
+import { TkCard } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const CardWithHeaderMode = () => {
-  const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
-  const [showAvatar, setShowAvatar] = useState(false);
-  const [showMenuButton, setShowMenuButton] = useState(false);
-  const [codeSampleReact, setCodeSampleReact] = useState('');
-  const [codeSampleVue, setCodeSampleVue] = useState('');
-  const [codeSampleAngular, setCodeSampleAngular] = useState('');
+  const reactCode = `<TkCard header="Basic Header" headerType="basic">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
 
-  const headerTypes = [
-    { label: 'Basic', value: 'basic' },
-    { label: 'Divided', value: 'divided' },
-    { label: 'Light', value: 'light' },
-    { label: 'Dark', value: 'dark' },
-    { label: 'Primary', value: 'primary' },
-  ];
+<TkCard header="Divided Header" headerType="divided">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
 
-  const handleHeaderTypeChange = event => {
-    setHeaderType(event.detail);
-  };
+<TkCard header="Light Header" headerType="light">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
 
-  useEffect(() => {
-    const attributesList = [
-      `header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"`,
-      `subheader="Interactive Example"`,
-      `headerType="${headerType}"`,
-      showAvatar ? 'showAvatar' : '',
-      showMenuButton ? 'showMenuButton' : '',
-    ].filter(Boolean);
-    const attributes = attributesList.join('\n  ');
+<TkCard header="Dark Header" headerType="dark">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
 
-    const newCodeSample = `<TkCard
- ${attributes}
->
-    <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
+<TkCard header="Primary Header" headerType="primary">
+  <p>This card demonstrates different header options.</p>
 </TkCard>`;
 
-    const angularCodeSample = `<tk-card
-  ${attributes}
->
-  <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
-</tk-card>`;
+  const vueCode = `<TkCard header="Basic Header" headerType="basic">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
 
-    setCodeSampleReact(newCodeSample);
-    setCodeSampleVue(newCodeSample);
-    setCodeSampleAngular(angularCodeSample);
-  }, [headerType, showAvatar, showMenuButton]);
+<TkCard header="Divided Header" headerType="divided">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
+
+<TkCard header="Light Header" headerType="light">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
+
+<TkCard header="Dark Header" headerType="dark">
+  <p>This card demonstrates different header options.</p>
+</TkCard>
+
+<TkCard header="Primary Header" headerType="primary">
+  <p>This card demonstrates different header options.</p>
+</TkCard>`;
+
+  const angularCode = `Ï<tk-card header="Basic Header" headerType="basic">
+  <p>This card demonstrates different header options.</p>
+</tk-card>
+
+<tk-card header="Divided Header" headerType="divided">
+  <p>This card demonstrates different header options.</p>
+</tk-card>
+
+<tk-card header="Light Header" headerType="light">
+  <p>This card demonstrates different header options.</p>
+</tk-card>
+
+<tk-card header="Dark Header" headerType="dark">
+  <p>This card demonstrates different header options.</p>
+</tk-card>
+
+<tk-card header="Primary Header" headerType="primary">
+  <p>This card demonstrates different header options.</p>
+</tk-card>`;
 
   const demo = (
     <>
-      <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup label="Options" value={headerType} onTkChange={handleHeaderTypeChange}>
-          {headerTypes.map((radio, index) => {
-            return <TkRadio label={radio.label} key={index} value={radio.value} />;
-          })}
-        </TkRadioGroup>
+      <div>
+        <h3>Basic Header</h3>
+        <TkCard header="Basic Header" headerType="basic">
+          <p>This card demonstrates different header options.</p>
+        </TkCard>
       </div>
-      <div className="mb-4 flex gap-2 flex-wrap w-full">
-        <TkCheckbox name="showAvatar" value={showAvatar} onTkChange={() => setShowAvatar(prevState => !prevState)} label="Avatar" />
-        <TkCheckbox name="showMenuButton" value={showMenuButton} onTkChange={() => setShowMenuButton(prevState => !prevState)} label="Menu Button" />
+      <br />
+      <div>
+        <h3>Divided Header</h3>
+        <TkCard header="Divided Header" headerType="divided">
+          <p>This card demonstrates different header options.</p>
+        </TkCard>
       </div>
-      <TkCard
-        header={`${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header`}
-        subheader="Interactive Example"
-        headerType={headerType as any}
-        showAvatar={showAvatar}
-        showMenuButton={showMenuButton}
-      >
-        <p>This card demonstrates different header options. Use the controls above to change the header type and toggle avatar and menu button visibility.</p>
-      </TkCard>
+      <br />
+      <div>
+        <h3>Light Header</h3>
+        <TkCard header="Light Header" headerType="light">
+          <p>This card demonstrates different header options.</p>
+        </TkCard>
+      </div>
+      <br />
+      <div>
+        <h3>Dark Header</h3>
+        <TkCard header="Dark Header" headerType="dark">
+          <p>This card demonstrates different header options.</p>
+        </TkCard>
+      </div>
+      <br />
+      <div>
+        <h3>Primary Header</h3>
+        <TkCard header="Primary Header" headerType="primary">
+          <p>This card demonstrates different header options.</p>
+        </TkCard>
+      </div>
     </>
   );
 
-  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={codeSampleAngular}></FeatureDemo>;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 export default CardWithHeaderMode;
