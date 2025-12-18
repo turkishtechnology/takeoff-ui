@@ -12,7 +12,16 @@ import TimePicker from "./Examples/TimePicker";
 import TimeRange from "./Examples/TimeRange";
 import TimeOnly from "./Examples/TimeOnly";
 import {TkAlert} from "@takeoff-ui/react"
+import Playground from '../../components/Playground';
+import datepickerConfigData from './datepickerPlaygroundConfig.json';
+import { TkDatepicker } from '@takeoff-ui/react';
 
+### Playground
+
+<Playground
+  configs={[datepickerConfigData]}
+  componentMap={{ TkDatepicker: TkDatepicker }}
+/>
 
 ## Basic
 

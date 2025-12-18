@@ -47,35 +47,59 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
 
     switch (control.type) {
       case 'text':
-        return (
-          <TkInput
-            value={String(value || '')}
-            onTkChange={e => {
-              handlePropChange(control.key, (e.target as HTMLInputElement).value);
-            }}
-          />
-        );
+        const commonPropsforInput = {
+          value: String(value || ''),
+          onTkChange: e => {
+            handlePropChange(control.key, e.detail);
+          },
+        };
+
+        if (control.tooltip) {
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <TkInput slot="trigger" {...commonPropsforInput} />
+            </TkTooltip>
+          );
+        } else {
+          return <TkInput {...commonPropsforInput} />;
+        }
+
       case 'select':
-        return (
-          <>
-            <TkSelect
-              value={control.options?.find(opt => String(opt.value) === String(value)) || ''}
-              onTkChange={e => {
-                const selectedOption = control.options?.find(opt => String(opt.value) === e.detail.value);
-                handlePropChange(control.key, selectedOption?.value || '');
-              }}
-              options={control.options}
-            />
-          </>
-        );
+        const commonPropsforSelect = {
+          value: control.options?.find(opt => String(opt.value) === String(value)) || '',
+          onTkChange: e => {
+            const selectedOption = control.options?.find(opt => String(opt.value) === e.detail.value);
+            handlePropChange(control.key, selectedOption?.value || '');
+          },
+          options: control.options,
+        };
+
+        if (control.tooltip) {
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <TkSelect slot="trigger" {...commonPropsforSelect} />
+            </TkTooltip>
+          );
+        } else {
+          return <TkSelect {...commonPropsforSelect} />;
+        }
+
       case 'checkbox':
-        return control.tooltip ? (
-          <TkTooltip description={typeof control.tooltip === 'string' ? control.tooltip : null}>
-            <TkCheckbox value={Boolean(value)} onTkChange={e => handlePropChange(control.key, (e.target as HTMLInputElement).value)} label={control.label} slot="trigger" />
-          </TkTooltip>
-        ) : (
-          <TkCheckbox value={Boolean(value)} onTkChange={e => handlePropChange(control.key, (e.target as HTMLInputElement).value)} label={control.label} />
-        );
+        const commonPropsforCheckbox = {
+          value: Boolean(value),
+          onTkChange: e => handlePropChange(control.key, e.detail),
+          label: control.label,
+        };
+
+        if (control.tooltip) {
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <TkCheckbox slot="trigger" {...commonPropsforCheckbox} />
+            </TkTooltip>
+          );
+        } else {
+          return <TkCheckbox {...commonPropsforCheckbox} />;
+        }
 
       default:
         return null;

@@ -3,8 +3,18 @@ import Sizes from "./Examples/Sizes";
 import Variants from "./Examples/Variants";
 import WithImages from "./Examples/WithImages";
 import WithBadges from "./Examples/WithBadges";
+import WithShadow from "./Examples/WithShadow";
 import AvatarGroupDemo from "./Examples/AvatarGroupDemo";
-import {TkAlert} from "@takeoff-ui/react"
+import {TkAlert, TkAvatar} from "@takeoff-ui/react"
+import Playground from '../../components/Playground';
+import avatarConfigData from './avatarPlaygroundConfig.json';
+
+### Playground
+
+<Playground
+  configs={[avatarConfigData]}
+  componentMap={{ TkAvatar: TkAvatar }}
+/>
 
 ## Basic
 
@@ -37,6 +47,14 @@ Displays how to use images inside the `TkAvatar` component.
 Illustrates adding badges to avatars using the `badge` and `badgeStatus` properties.
 
 <WithBadges />
+
+## Shadow
+
+Avatars have shadow effect by default. Use `hideShadow` property to remove the shadow effect.
+
+<TkAlert header="Note" variant="info" message="When badge is present, shadow is always applied regardless of hideShadow property." filledlight />
+<br/>
+<WithShadow />
 
 ## Avatar Group
 

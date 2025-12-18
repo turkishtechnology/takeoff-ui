@@ -13,6 +13,7 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -333,7 +334,7 @@ export class TkTable implements ComponentInterface {
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
 
     if (slotEmptyData) {
-      if (this.loading || this.data?.length > 0) {
+      if (this.loading || this.renderData?.length > 0) {
         hideElement(slotEmptyData);
       } else {
         showElement(slotEmptyData);
@@ -417,7 +418,7 @@ export class TkTable implements ComponentInterface {
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
         body: _data.map(
-          row => this.columns.map(col => getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
+          row => this.columns.map(col => getNestedValue(row, col.field) ?? ''), // Her sütunun değerini dinamik olarak alır
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
@@ -450,7 +451,7 @@ export class TkTable implements ComponentInterface {
           _columns
             .filter(col => !options.ignoreColumnsFields?.includes(col.field))
             .forEach(col => {
-              rowData[col.field] = getNestedValue(item, col.field) || '';
+              rowData[col.field] = getNestedValue(item, col.field) ?? '';
             });
 
           return rowData;
@@ -465,7 +466,7 @@ export class TkTable implements ComponentInterface {
       link.click();
     } else if (options.type == 'csv') {
       const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) || '').join(',')).join('\n');
+      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) ?? '').join(',')).join('\n');
       const csvContent = headers + '\n' + rows;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -790,6 +791,7 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
+    removeDialogScrollListener(this.elFilterPanelElement);
     // First cleanup the floating UI
     if (this.cleanupFilterPanel) {
       this.cleanupFilterPanel();
@@ -1004,6 +1006,12 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
+    addDialogScrollListener(this.el, e => {
+      if (e.composedPath().includes(this.el)) {
+        return;
+      }
+      this.closeFilterPanel();
+    });
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');

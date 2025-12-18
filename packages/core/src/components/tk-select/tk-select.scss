@@ -58,6 +58,17 @@ tk-select {
           flex: 1;
         }
 
+        &[data-selected='true'] {
+          cursor: pointer;
+          background: var(--states-info-lightest);
+          border: 1px solid var(--states-info-light);
+        }
+        &.disabled {
+          cursor: not-allowed;
+          background: var(--background-lightest);
+          border: 1px solid var(--border-light);
+          color: var(--text-sub-base);
+        }
         &:hover {
           cursor: pointer;
           background: var(--background-lightest);
@@ -65,11 +76,6 @@ tk-select {
         &[data-active='true'] {
           cursor: pointer;
           border: 1px solid var(--states-info-base);
-        }
-        &[data-selected='true'] {
-          cursor: pointer;
-          background: var(--states-info-lightest);
-          border: 1px solid var(--states-info-light);
         }
       }
     }

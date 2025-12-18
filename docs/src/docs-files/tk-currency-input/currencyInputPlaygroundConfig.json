@@ -1,0 +1,96 @@
+{
+  "name": "TkCurrencyInput",
+  "componentName": "TkCurrencyInput",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "Enter amount"
+    },
+    {
+      "key": "defaultCurrency",
+      "label": "Default Currency",
+      "type": "text",
+      "defaultValue": "TRY"
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Amount"
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "decimalSeparator",
+      "label": "Decimal Separator",
+      "type": "text",
+      "defaultValue": null
+    },
+    {
+      "key": "thousandsSeparator",
+      "label": "Thousands Separator",
+      "type": "text",
+      "defaultValue": null
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "currencyDisabled",
+      "label": "Currency Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "allowNegative",
+      "label": "Allow Negative",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

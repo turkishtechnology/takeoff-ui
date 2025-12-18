@@ -1,0 +1,120 @@
+{
+  "name": "TkSelect",
+  "componentName": "TkSelect",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Select Option"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "Choose..."
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "dropdownWidthMode",
+      "label": "Dropdown Width Mode",
+      "type": "select",
+      "defaultValue": "match-parent",
+      "options": [
+        { "label": "Match Parent", "value": "match-parent" },
+        { "label": "Auto", "value": "auto" }
+      ]
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "emptyMessage",
+      "label": "Empty Message",
+      "type": "text",
+      "defaultValue": "No options available"
+    },
+    {
+      "key": "visibleItemCount",
+      "label": "Visible Item Count",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "This feature works only when the `multiple` prop is enabled. Accepts numeric values."
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "clearable",
+      "label": "Clearable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "multiple",
+      "label": "Multiple",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "allowCustomValue",
+      "label": "Allow Custom Value",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "selectAll",
+      "label": "Select All",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "This feature works only when the `multiple` prop is enabled."
+    }
+  ]
+}

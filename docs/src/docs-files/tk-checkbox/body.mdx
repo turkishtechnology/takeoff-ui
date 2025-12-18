@@ -3,6 +3,16 @@ import State from "./Examples/State";
 import Type from "./Examples/Type"
 import Description from "./Examples/Description"
 import ContentSlot from "./Examples/ContentSlot"
+import Playground from '../../components/Playground';
+import checkboxConfigData from './checkboxPlaygroundConfig.json';
+import { TkCheckbox } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[checkboxConfigData]}
+  componentMap={{ TkCheckbox: TkCheckbox }}
+/>
 
 ## Basic
 

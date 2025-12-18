@@ -1,0 +1,77 @@
+{
+  "name": "TkAvatar",
+  "componentName": "TkAvatar",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XSmall", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" },
+        { "label": "XLarge", "value": "xlarge" }
+      ]
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Light", "value": "light" },
+        { "label": "Success", "value": "success" },
+        { "label": "Info", "value": "info" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" }
+      ],
+      "tooltip": "This feature works only when the `background` prop set to `solid`."
+    },
+    {
+      "key": "background",
+      "label": "Background",
+      "type": "select",
+      "defaultValue": "brand",
+      "options": [
+        { "label": "Brand", "value": "brand" },
+        { "label": "Solid", "value": "solid" }
+      ]
+    },
+    {
+      "key": "badgeStatus",
+      "label": "Badge Status",
+      "type": "select",
+      "defaultValue": "success",
+      "options": [
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Info", "value": "info" },
+        { "label": "Danger", "value": "danger" }
+      ],
+      "tooltip": "This feature works only when the `badge` prop is enabled."
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "TK"
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "badge",
+      "label": "Badge",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "This feature works only when the `rounded` prop is enabled."
+    }
+  ]
+}
