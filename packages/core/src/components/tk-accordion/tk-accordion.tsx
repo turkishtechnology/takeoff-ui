@@ -92,7 +92,7 @@ export class TkAccordion implements ComponentInterface {
    * Emitted when an accordion item is selected
    * @deprecated
    */
-  @Event({ eventName: 'tk-accordion-item-selected' }) tkAccordionItemSelected: EventEmitter<Omit<IAccordionItemSelect, 'itemKey'>>;
+  @Event({ eventName: 'tk-accordion-item-selected' }) tkAccordionItemSelected: EventEmitter<IAccordionItemSelect>;
 
   componentDidLoad() {
     this.validateItemKeylessActiveIndex();
