@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#datepicker-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -38,28 +38,28 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="timeOnly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables time-only mode. In this mode, no date selection is required and the input shows a time mask. When enabled, the panel renders only the time picker and `tk-change` emits a time string (e.g. HH:mm or hh:mm a). |
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>IDateSelection, string</code> | null | The value representing the selected date(s) |
 
-### Events
+### Events {#datepicker-events}
 
 | Name | Description |
 | ---- | ----------- |
 | tk-change | Emitted on date selection changes |
 | tk-input-change | Emitted on input value changes |
 
-### Methods
+### Methods {#datepicker-methods}
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | closePanel | <code>closePanel() =\> Promise\<void\></code> | Closes the datepicker panel if it is open. |
 | setToday | <code>setToday() =\> Promise\<void\></code> | Sets the date to today |
 
-### Slots
+### Slots {#datepicker-slots}
 
 | Name | Description |
 | ---- | ----------- |
 | footer | Custom footer template. |
 | footer-actions | Custom actions template to default footer. |
 
-### Interfaces
+### Interfaces {#datepicker-interfaces}
 
 #### <span id="idateselection">IDateSelection</span>
 
