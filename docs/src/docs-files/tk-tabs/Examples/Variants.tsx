@@ -1,87 +1,181 @@
-import React, { useState, useEffect } from 'react';
-import { TkTabs, TkTabsItem, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
+import React from 'react';
+import { TkTabs, TkTabsItem } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
-const Type = () => {
-  const [variant, setVariant] = useState<'primary' | 'info'>('primary');
-  const [codeSampleReact, setCodeSampleReact] = useState('');
-  const [codeSampleVue, setCodeSampleVue] = useState('');
-  const variants = [
-    { label: 'Primary', value: 'primary' },
-    { label: 'Info', value: 'info' },
-  ];
-  const handleHeaderTypeChange = event => {
-    setVariant(event.detail);
-  };
-  useEffect(() => {
-    const attributesList = [`variant="${variant}"`].filter(Boolean);
-    const attributes = attributesList.join('\n  ');
+const Variant = () => {
+  const reactCode = `<TkTabs variant="primary">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>
 
-    const reactCode = `<TkTabs ${attributes}>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-</TkTabs>`;
+  <TkTabs variant="info">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>
 
-    const vueCode = `<TkTabs ${attributes}>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
-  </TkTabsItem>
-</TkTabs>`;
-    setCodeSampleReact(reactCode);
-    setCodeSampleVue(vueCode);
-  }, [variant]);
+  <TkTabs variant="neutral">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>`;
+
+  const vueCode = `<TkTabs variant="primary">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>
+
+  <TkTabs variant="info">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>
+
+  <TkTabs variant="neutral">
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </TkTabsItem>
+    <TkTabsItem label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </TkTabsItem>
+  </TkTabs>`;
+
+  const angularCode = `<tk-tabs variant="primary">
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </tk-tabs-item>
+  </tk-tabs>
+
+  <tk-tabs variant="info">
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </tk-tabs-item>
+  </tk-tabs>
+
+  <tk-tabs variant="neutral">
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Adipisicing aliqua nulla cupidatat proident.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Culpa aliqua nisi elit velit nostrud id quis.</p>
+    </tk-tabs-item>
+    <tk-tabs-item label="Tab label" icon="flight">
+      <p>Pariatur elit ad culpa quis.</p>
+    </tk-tabs-item>
+  </tk-tabs>`;
 
   const demo = (
     <>
-      <div className="overflow-auto mb-4">
-        <TkRadioGroup value={variant} onTkChange={handleHeaderTypeChange}>
-          {variants.map((radio, index) => {
-            return <TkRadio label={radio.label} key={index} value={radio.value} />;
-          })}
-        </TkRadioGroup>
+      <div>
+        <h3>Primary</h3>
+        <TkTabs
+          variant="primary"
+          contentStyle={{
+            color: 'var(--text-dark)',
+            fontSize: 'var(--desktop-body-s-size)',
+          }}
+        >
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Adipisicing aliqua nulla cupidatat proident.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Culpa aliqua nisi elit velit nostrud id quis.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Pariatur elit ad culpa quis.</p>
+          </TkTabsItem>
+        </TkTabs>
       </div>
-      <TkTabs
-        variant={variant}
-        contentStyle={{
-          color: 'var(--text-dark)',
-          fontSize: 'var(--desktop-body-s-size)',
-        }}
-      >
-        <TkTabsItem label="Tab label" icon="flight">
-          <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
-            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 1
-          </p>
-        </TkTabsItem>
-        <TkTabsItem label="Tab label" icon="flight">
-          <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
-            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 2
-          </p>
-        </TkTabsItem>
-        <TkTabsItem label="Tab label" icon="flight">
-          <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
-            nobis, culpa ratione quam perferendis esse, cupiditate nequequas! 3
-          </p>
-        </TkTabsItem>
-      </TkTabs>
+      <div>
+        <h3>Info</h3>
+        <TkTabs
+          variant="info"
+          contentStyle={{
+            color: 'var(--text-dark)',
+            fontSize: 'var(--desktop-body-s-size)',
+          }}
+        >
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Adipisicing aliqua nulla cupidatat proident.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Culpa aliqua nisi elit velit nostrud id quis.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Pariatur elit ad culpa quis.</p>
+          </TkTabsItem>
+        </TkTabs>
+      </div>
+      <div>
+        <h3>Neutral</h3>
+        <TkTabs
+          variant="neutral"
+          contentStyle={{
+            color: 'var(--text-dark)',
+            fontSize: 'var(--desktop-body-s-size)',
+          }}
+        >
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Adipisicing aliqua nulla cupidatat proident.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Culpa aliqua nisi elit velit nostrud id quis.</p>
+          </TkTabsItem>
+          <TkTabsItem label="Tab label" icon="flight">
+            <p className="m-0">Pariatur elit ad culpa quis.</p>
+          </TkTabsItem>
+        </TkTabs>
+      </div>
     </>
   );
 
-  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={''}></FeatureDemo>;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
-export default Type;
+export default Variant;

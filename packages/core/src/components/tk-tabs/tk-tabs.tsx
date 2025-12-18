@@ -5,7 +5,7 @@ import { getIconElementProps } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
- * TkTabs component description.
+ * TkTabs is a navigation component that displays menu items as tab headers.
  * @react `import { TkTabs, TkTabsItem } from '@takeoff-ui/react'`
  * @vue `import { TkTabs, TkTabsItem } from '@takeoff-ui/vue'`
  * @angular `import { TkTabs, TkTabsItem } from '@takeoff-ui/angular'`
