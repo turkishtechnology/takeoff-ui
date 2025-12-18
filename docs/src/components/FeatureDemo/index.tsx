@@ -8,7 +8,6 @@ const FeatureDemo = ({ demo, reactCode, vueCode, angularCode, cssCode = '', data
   return (
     <>
       <div
-        className="p-3 rounded-sm"
         style={{
           border: '1px solid var(--border-light)',
           background: 'var(--background-lightest)',

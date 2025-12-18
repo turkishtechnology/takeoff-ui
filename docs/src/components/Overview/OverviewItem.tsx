@@ -1,7 +1,15 @@
 import { TkCard, TkButton, TkBadge } from '@takeoff-ui/react';
 import { useColorMode } from '@docusaurus/theme-common';
 
-const OverviewItem = ({ title, href, Svg, SvgDark, isNew }) => {
+type OverviewItemProps = {
+  title: string;
+  href: string;
+  Svg: string;
+  SvgDark: string;
+  isNew?: boolean;
+};
+
+const OverviewItem = ({ title, href, Svg, SvgDark, isNew = false }: OverviewItemProps) => {
   const { colorMode } = useColorMode();
 
   return (
