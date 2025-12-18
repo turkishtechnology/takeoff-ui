@@ -1993,8 +1993,6 @@ export class TkTable implements ComponentInterface {
             }
 
             // generate head sort and search icons
-
-            // generate head sort and search icons
             const sortIndex = this.sorts.findIndex(s => s.field === col.field);
             const sortObj = this.sorts.find(s => s.field === col.field);
             const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
@@ -2022,6 +2020,11 @@ export class TkTable implements ComponentInterface {
               />
             );
 
+            const currentFilter = this.filters.find(item => item.field == col.field);
+            const hasFilter =
+              currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
+            const noSortAndFilter = !this.sortOrder && !sortObj?.order && !hasFilter;
+
             if (col.searchable) {
               _searchIcon = (
                 <tk-icon
@@ -2041,9 +2044,6 @@ export class TkTable implements ComponentInterface {
                 currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
               if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
-                if (col.showIconsOnHover) {
-                  _headerStructure = <tk-badge dot>{_headerStructure}</tk-badge>;
-                }
               }
             }
 
@@ -2064,7 +2064,7 @@ export class TkTable implements ComponentInterface {
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
-                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
+                    <div class={classNames('icons', { 'show-icon-on-hover': noSortAndFilter && col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
                       {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
