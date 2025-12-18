@@ -86,18 +86,13 @@ export class TkAccordion implements ComponentInterface {
   /**
    * Emitted when an active index is changed
    */
-  @Event() tkActiveIndexChange: EventEmitter<ActiveIndex>;
-
-  /**
-   * Emitted when an accordion item is selected
-   */
-  @Event() tkItemToggle: EventEmitter<IAccordionItemSelect>;
+  @Event({ eventName: 'tk-active-index-change' }) tkActiveIndexChange: EventEmitter<ActiveIndex>;
 
   /**
    * Emitted when an accordion item is selected
    * @deprecated
    */
-  @Event() tkAccordionItemSelected: EventEmitter<Omit<IAccordionItemSelect, 'itemKey'>>;
+  @Event({ eventName: 'tk-accordion-item-selected' }) tkAccordionItemSelected: EventEmitter<Omit<IAccordionItemSelect, 'itemKey'>>;
 
   componentDidLoad() {
     this.validateItemKeylessActiveIndex();
@@ -191,11 +186,6 @@ export class TkAccordion implements ComponentInterface {
       this.internalActiveIndex = this.internalActiveIndex.filter(activeIndex => activeIndex !== itemKey);
     }
 
-    this.tkItemToggle.emit({
-      index,
-      itemKey,
-      active,
-    });
     this.tkAccordionItemSelected.emit({
       index: itemKey,
       active,
