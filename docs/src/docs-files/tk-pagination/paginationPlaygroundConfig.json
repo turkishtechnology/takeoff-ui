@@ -26,12 +26,6 @@
       ]
     },
     {
-      "key": "rounded",
-      "label": "Rounded",
-      "type": "checkbox",
-      "defaultValue": false
-    },
-    {
       "key": "totalItems",
       "label": "Total Items",
       "type": "text",
@@ -48,6 +42,12 @@
       "label": "Current Page",
       "type": "text",
       "defaultValue": 1
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }

@@ -28,7 +28,8 @@
         { "label": "Info", "value": "info" },
         { "label": "Warning", "value": "warning" },
         { "label": "Danger", "value": "danger" }
-      ]
+      ],
+      "tooltip": "This feature works only when the `background` prop set to `solid`."
     },
     {
       "key": "background",
@@ -50,7 +51,8 @@
         { "label": "Warning", "value": "warning" },
         { "label": "Info", "value": "info" },
         { "label": "Danger", "value": "danger" }
-      ]
+      ],
+      "tooltip": "This feature works only when the `badge` prop is enabled."
     },
     {
       "key": "label",
@@ -68,7 +70,8 @@
       "key": "badge",
       "label": "Badge",
       "type": "checkbox",
-      "defaultValue": false
+      "defaultValue": false,
+      "tooltip": "This feature works only when the `rounded` prop is enabled."
     }
   ]
 }

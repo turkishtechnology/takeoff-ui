@@ -4,7 +4,7 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/> | <code>number, number[], string, string[]</code> | null | Currently active panel indexes. Can be a single value or an array. When allowMultiple is false, only the last value in the array will be used. |
+| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/> | <code>(string, number)[], number, string</code> | null | Currently active panel indexes. Can be a single value or an array. When allowMultiple is false, only the last value in the array will be used. Has priority over AccordionItem's active prop. To prevent conflicts, avoid using both simultaneously. |
 | <TkBadge label="allowMultiple" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Allows multiple accordion items to be expanded simultaneously. |
 | <TkBadge label="arrowPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code> | 'right' | Sets the position of opening and closing chevrons. |
 | <TkBadge label="collapseIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | 'keyboard_arrow_up' | Sets the collapse icon |
@@ -16,7 +16,8 @@ import { TkBadge } from "@takeoff-ui/react";
 
 | Name | Description |
 | ---- | ----------- |
-| tkAccordionItemSelected | Emitted when an accordion item is selected |
+| tk-accordion-item-selected | Emitted when an accordion item is selected |
+| tk-active-index-change | Emitted when an active index is changed |
 
 ### Slots
 
@@ -31,6 +32,7 @@ import { TkBadge } from "@takeoff-ui/react";
 ```typescript
 interface IAccordionItemSelect {
   index: string | number;
+  itemKey: string | number;
   active: boolean;
 }
 ```

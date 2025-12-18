@@ -1,0 +1,89 @@
+{
+  "name": "TkCard",
+  "componentName": "TkCard",
+  "hasChildren": true,
+  "defaultChildren": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>",
+  "props": [
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Primary", "value": "primary" }
+      ]
+    },
+    {
+      "key": "footerType",
+      "label": "Footer Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" }
+      ]
+    },
+    {
+      "key": "headerPosition",
+      "label": "Header Position",
+      "type": "select",
+      "defaultValue": "top",
+      "options": [
+        { "label": "Top", "value": "top" },
+        { "label": "Bottom", "value": "bottom" }
+      ]
+    },
+    {
+      "key": "header",
+      "label": "Header",
+      "type": "text",
+      "defaultValue": "Card Header"
+    },
+    {
+      "key": "subheader",
+      "label": "Subheader",
+      "type": "text",
+      "defaultValue": "Card Subheader"
+    },
+    {
+      "key": "image",
+      "label": "Image URL",
+      "type": "text"
+    },
+    {
+      "key": "hideHeader",
+      "label": "Hide Header",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showMenuButton",
+      "label": "Show Menu Button",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAvatar",
+      "label": "Show Avatar",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "horizontal",
+      "label": "Horizontal",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "enableHoverShadow",
+      "label": "Enable Hover Shadow",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
