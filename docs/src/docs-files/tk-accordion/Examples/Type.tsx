@@ -19,7 +19,7 @@ const Styles = () => {
 </TkAccordion>
 
 <TkAccordion type="divided">
-  <TkAccordionItem size="base">
+  <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
