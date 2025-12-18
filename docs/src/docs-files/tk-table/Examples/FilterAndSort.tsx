@@ -25,11 +25,7 @@ const Example = () => {
         },
       },
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
-      filter: (value: string, row: any) =>
-        row.name
-          .toString()
-          .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+      filter: (value: string, row: any) => row.name.toString().toLowerCase().indexOf(value?.toString().toLowerCase()) > -1,
     },
     {
       field: 'status',

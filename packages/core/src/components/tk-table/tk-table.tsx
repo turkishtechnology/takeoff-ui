@@ -821,6 +821,7 @@ export class TkTable implements ComponentInterface {
     // Finally update the state
     this.isFilterOpen = false;
   }
+
   // Checks if all selectable rows are selected
   private isAllRowsSelected(): boolean {
     if (!Array.isArray(this.selection)) return false;
@@ -843,15 +844,14 @@ export class TkTable implements ComponentInterface {
   private handleInputFilterApply(columnField) {
     // if (refSearchInput.value.toString().length > 0) {
     const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+    const value = searchInput.value ?? '';
 
     // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
     // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
-    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (filterIndex > -1) {
-      this.filters[filterIndex].value = searchInput.value.toString();
-    } else {
-      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
-    }
+    const filter = this.filters.find(filter => filter.field == columnField);
+
+    if (filter) filter.value = value.toString();
+    else this.filters.push({ field: columnField, value } as ITableFilter);
 
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
