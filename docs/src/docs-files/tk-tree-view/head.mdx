@@ -3,7 +3,21 @@ import CodeBlock from '@theme/CodeBlock'
 import TabItem from "@theme/TabItem";
 
 The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
-Uses array-based data structure for better performance and easier data management. 
+Uses array-based data structure for better performance and easier data management.
+
+## Controlled vs Uncontrolled Mode
+
+**Uncontrolled Mode** (default):
+- Component manages its own expansion state internally
+- Use `expandAll` prop to control initial expansion
+- The component automatically handles node expand/collapse
+
+**Controlled Mode** (when `expandedKeys` is provided):
+- Parent component fully controls which nodes are expanded via `expandedKeys` prop
+- `expandAll` prop is ignored
+- Must listen to `tk-expand-change` and update `expandedKeys`.
+- Parent has complete control over expansion state
+- Invalid paths in `expandedKeys` are logged as errors and ignored. 
 
 <Tabs>
   <TabItem value="react" label="React" default>

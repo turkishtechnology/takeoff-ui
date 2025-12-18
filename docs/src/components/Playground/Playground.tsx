@@ -62,7 +62,7 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
           );
         } else {
           return <TkInput {...commonPropsforInput} />;
-        };
+        }
 
       case 'select':
         const commonPropsforSelect = {
@@ -81,25 +81,25 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
             </TkTooltip>
           );
         } else {
-          return <TkSelect {...commonPropsforSelect} />
-        };
-        
+          return <TkSelect {...commonPropsforSelect} />;
+        }
+
       case 'checkbox':
         const commonPropsforCheckbox = {
           value: Boolean(value),
           onTkChange: e => handlePropChange(control.key, e.detail),
-          label: control.label
-        }
+          label: control.label,
+        };
 
         if (control.tooltip) {
-        return (
-          <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
-            <TkCheckbox slot="trigger" {...commonPropsforCheckbox}/>
-          </TkTooltip>
-        );
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <TkCheckbox slot="trigger" {...commonPropsforCheckbox} />
+            </TkTooltip>
+          );
         } else {
-          return <TkCheckbox {...commonPropsforCheckbox} />
-        };
+          return <TkCheckbox {...commonPropsforCheckbox} />;
+        }
 
       default:
         return null;
