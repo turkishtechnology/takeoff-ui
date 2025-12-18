@@ -24,6 +24,13 @@ export class TkAccordion implements ComponentInterface {
     // Exit early if the active index hasn't changed
     if (isEqual(newValue, oldValue)) return;
     this.updateActiveIndex();
+
+    this.getAccordionItems().forEach((item, index) => {
+      const itemKey = this.getItemKey(item, index);
+
+      const isActive = newValue.some(activeIndex => activeIndex === itemKey);
+      item.active = isActive;
+    });
   }
 
   /**
@@ -93,6 +100,10 @@ export class TkAccordion implements ComponentInterface {
   @Event() tkAccordionItemSelected: EventEmitter<Omit<IAccordionItemSelect, 'itemKey'>>;
 
   componentDidLoad() {
+    this.validateItemKeylessActiveIndex();
+    this.validateActiveProps();
+    this.validateControlType();
+    this.validateKeyType();
     this.initInternalActiveIndex();
     this.initEventListeners();
   }
@@ -104,8 +115,6 @@ export class TkAccordion implements ComponentInterface {
     this.getAccordionItems().forEach((item, index) => {
       if (item.active) this.internalActiveIndex = [...this.internalActiveIndex, this.getItemKey(item, index)];
     });
-
-    this.updateActiveIndex();
   }
 
   private initEventListeners() {
@@ -113,15 +122,51 @@ export class TkAccordion implements ComponentInterface {
       const itemKey = this.getItemKey(item, index);
 
       // listen to active change
-      item.addEventListener('tk-active-change', e => {
+      item.addEventListener('tk-active-change', (e: CustomEvent) => {
         this.handleItemActiveChange(itemKey, index, e.detail);
         item.active = e.detail;
+
+        if (!this.allowMultiple && e.detail) {
+          this.getAccordionItems()
+            .filter(child => child !== item)
+            .forEach(otherItem => {
+              otherItem.active = false;
+            });
+        }
       });
     });
   }
 
+  private validateActiveProps() {
+    const activeCount = this.getAccordionItems().reduce((count, item) => (item.active ? count + 1 : count), 0);
+    if (activeCount > 1 && !this.allowMultiple) {
+      console.error('TkAccordion: Multiple accordion items are set to active while allowMultiple is false. This may lead to unexpected behavior.');
+    }
+  }
+
+  private validateControlType() {
+    const hasActiveIndex = this.activeIndex || this.activeIndex === 0;
+    const hasActiveAccordionItems = this.getAccordionItems().some(item => item.active !== undefined);
+    if (hasActiveIndex && hasActiveAccordionItems) console.error('Accordion cannot have both activeIndex and active accordion items');
+  }
+
+  private validateKeyType() {
+    const type = typeof (this.getAccordionItems().find(item => item.itemKey !== undefined)?.itemKey ?? 0);
+    const allItemsHaveSameType = this.getAccordionItems().every(item => item.itemKey === undefined || typeof item.itemKey === type);
+    const activeIndexHasSameType = Array.isArray(this.activeIndex) ? this.activeIndex.every(item => typeof item === type) : typeof this.activeIndex === type;
+    if (!allItemsHaveSameType || !activeIndexHasSameType) console.error('Accordion item keys must be of the same type');
+  }
+
+  private validateItemKeylessActiveIndex() {
+    const hasKeylessItems = this.getAccordionItems().every(item => item.itemKey === undefined);
+    const activeIndexType = Array.isArray(this.activeIndex) ? this.activeIndex.map(item => typeof item) : [typeof this.activeIndex];
+    if (hasKeylessItems && activeIndexType.some(type => type !== 'number')) {
+      console.error('TkAccordion: When using keyless accordion items, activeIndex must be of type number or number array.');
+    }
+  }
+
   private normalizeActiveIndex(): AccordionItemIndex[] {
-    if (!this.activeIndex) return [];
+    if (!this.activeIndex && this.activeIndex !== 0) return [];
     if (!Array.isArray(this.activeIndex)) return [this.activeIndex];
     if (this.allowMultiple) return this.activeIndex;
     const lastItem = this.activeIndex.at(-1);
@@ -138,7 +183,13 @@ export class TkAccordion implements ComponentInterface {
   }
 
   private handleItemActiveChange(itemKey: AccordionItemIndex, index: AccordionItemIndex, active: boolean): void {
-    this.internalActiveIndex = active ? [...this.internalActiveIndex, itemKey] : this.internalActiveIndex.filter(activeIndex => String(activeIndex) !== String(itemKey));
+    if (active && !this.internalActiveIndex.includes(itemKey)) {
+      this.internalActiveIndex = [...this.internalActiveIndex, itemKey];
+    }
+
+    if (!active && this.internalActiveIndex.includes(itemKey)) {
+      this.internalActiveIndex = this.internalActiveIndex.filter(activeIndex => activeIndex !== itemKey);
+    }
 
     this.tkItemToggle.emit({
       index,
@@ -156,7 +207,7 @@ export class TkAccordion implements ComponentInterface {
   }
 
   private getItemKey(accordionItem: HTMLTkAccordionItemElement, index: number): AccordionItemIndex {
-    return accordionItem.getAttribute('item-key') ?? String(index);
+    return accordionItem.itemKey ?? index;
   }
 
   render() {

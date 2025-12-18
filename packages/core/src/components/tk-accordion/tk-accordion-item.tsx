@@ -29,7 +29,7 @@ export class TkAccordionItem implements ComponentInterface {
    * Sets if the accordion is active.
    * @defaultValue false
    */
-  @Prop() active: boolean = false;
+  @Prop() active: boolean;
   @Watch('active')
   activeChanged(newValue: boolean, oldValue: boolean) {
     if (newValue !== oldValue) {
