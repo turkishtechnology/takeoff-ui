@@ -33,8 +33,8 @@ const WithShadow = () => {
       <div className="flex justify-center gap-4 flex-wrap items-center">
         <TkAvatar label="JS" hideShadow={hideShadow} />
         <TkAvatar label="AD" rounded hideShadow={hideShadow} />
-        <TkAvatar image={useBaseUrl("/img/docs/tk-avatar/user-1.png")} hideShadow={hideShadow} />
-        <TkAvatar image={useBaseUrl("/img/docs/tk-avatar/user-2.png")} rounded hideShadow={hideShadow} />
+        <TkAvatar image={useBaseUrl('/img/docs/tk-avatar/user-1.png')} hideShadow={hideShadow} />
+        <TkAvatar image={useBaseUrl('/img/docs/tk-avatar/user-2.png')} rounded hideShadow={hideShadow} />
         <TkAvatar label="AD" rounded badge hideShadow={hideShadow} />
       </div>
     </div>

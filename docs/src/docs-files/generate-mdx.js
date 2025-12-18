@@ -9,12 +9,7 @@ const data = JSON.parse(fs.readFileSync(docsJson, 'utf8'));
 const typeLibraryAllKeys = Object.keys(data.typeLibrary);
 
 function clearString(value) {
-  return value
-    ?.replaceAll('|', ',')
-    .replaceAll('\n', ' ')
-    .replaceAll('\r', ' ')
-    .replaceAll('{', '&#123;')
-    .replaceAll('}', '&#125;');
+  return value?.replaceAll('|', ',').replaceAll('\n', ' ').replaceAll('\r', ' ').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 }
 
 function clearStringObject(value, tag, propName) {
