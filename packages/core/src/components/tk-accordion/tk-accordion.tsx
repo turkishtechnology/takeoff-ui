@@ -1,7 +1,7 @@
 import { Component, h, Element, Prop, ComponentInterface, Watch, Event, type EventEmitter, State } from '@stencil/core';
 import { isEqual } from 'lodash';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import type { AccordionItemIndex, ActiveIndex, IAccordionItemSelect } from './types';
+import type { IAccordionItemSelect } from './types';
 
 /**
  * The TkAccordion component is a user interface element that organizes content under headers, allowing users to expand and collapse sections by clicking on each header. It is particularly useful for improving layout and readability on pages with extensive information.
@@ -18,9 +18,9 @@ import type { AccordionItemIndex, ActiveIndex, IAccordionItemSelect } from './ty
 export class TkAccordion implements ComponentInterface {
   @Element() el: HTMLTkAccordionElement;
 
-  @State() private internalActiveIndex: AccordionItemIndex[] = [];
+  @State() private internalActiveIndex: (string | number)[] = [];
   @Watch('internalActiveIndex')
-  internalActiveIndexChanged(newValue: AccordionItemIndex[], oldValue: AccordionItemIndex[]): void {
+  internalActiveIndexChanged(newValue: (string | number)[], oldValue: (string | number)[]): void {
     // Exit early if the active index hasn't changed
     if (isEqual(newValue, oldValue)) return;
     this.updateActiveIndex();
@@ -38,7 +38,7 @@ export class TkAccordion implements ComponentInterface {
    * When allowMultiple is false, only the last value in the array will be used.
    * Has priority over AccordionItem's active prop. To prevent conflicts, avoid using both simultaneously.
    */
-  @Prop() activeIndex?: ActiveIndex;
+  @Prop() activeIndex?: string | number | (string | number)[];
   @Watch('activeIndex')
   activeIndexChanged(): void {
     const normalized = this.normalizeActiveIndex();
@@ -86,7 +86,7 @@ export class TkAccordion implements ComponentInterface {
   /**
    * Emitted when an active index is changed
    */
-  @Event({ eventName: 'tk-active-index-change' }) tkActiveIndexChange: EventEmitter<ActiveIndex>;
+  @Event({ eventName: 'tk-active-index-change' }) tkActiveIndexChange: EventEmitter<string | number | (string | number)[]>;
 
   /**
    * Emitted when an accordion item is selected
@@ -118,7 +118,7 @@ export class TkAccordion implements ComponentInterface {
 
       // listen to active change
       item.addEventListener('tk-active-change', (e: CustomEvent) => {
-        this.handleItemActiveChange(itemKey, index, e.detail);
+        this.handleItemActiveChange(itemKey, e.detail);
         item.active = e.detail;
 
         if (!this.allowMultiple && e.detail) {
@@ -160,15 +160,15 @@ export class TkAccordion implements ComponentInterface {
     }
   }
 
-  private normalizeActiveIndex(): AccordionItemIndex[] {
+  private normalizeActiveIndex(): (string | number)[] {
     if (!this.activeIndex && this.activeIndex !== 0) return [];
     if (!Array.isArray(this.activeIndex)) return [this.activeIndex];
-    if (this.allowMultiple) return this.activeIndex;
-    const lastItem = this.activeIndex.at(-1);
+    if (this.allowMultiple) return this.activeIndex as (string | number)[];
+    const lastItem = (this.activeIndex as (string | number)[]).at(-1);
     return lastItem ? [lastItem] : [];
   }
 
-  private getActiveIndex(): ActiveIndex {
+  private getActiveIndex(): string | number | (string | number)[] {
     return this.allowMultiple ? this.internalActiveIndex : this.internalActiveIndex[this.internalActiveIndex.length - 1];
   }
 
@@ -177,7 +177,7 @@ export class TkAccordion implements ComponentInterface {
     if (!isEqual(activeIndex, this.activeIndex)) this.tkActiveIndexChange.emit(activeIndex);
   }
 
-  private handleItemActiveChange(itemKey: AccordionItemIndex, index: AccordionItemIndex, active: boolean): void {
+  private handleItemActiveChange(itemKey: string | number, active: boolean): void {
     if (active && !this.internalActiveIndex.includes(itemKey)) {
       this.internalActiveIndex = [...this.internalActiveIndex, itemKey];
     }
@@ -196,7 +196,7 @@ export class TkAccordion implements ComponentInterface {
     return Array.from(this.el.querySelectorAll('tk-accordion-item')).filter(child => child.parentElement === this.el);
   }
 
-  private getItemKey(accordionItem: HTMLTkAccordionItemElement, index: number): AccordionItemIndex {
+  private getItemKey(accordionItem: HTMLTkAccordionItemElement, index: number): string | number {
     return accordionItem.itemKey ?? index;
   }
 

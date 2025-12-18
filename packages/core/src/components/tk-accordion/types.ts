@@ -1,9 +1,5 @@
-export type AccordionItemIndex = string | number;
-
-export type ActiveIndex = AccordionItemIndex | AccordionItemIndex[];
-
 export interface IAccordionItemSelect {
-  index: AccordionItemIndex;
-  itemKey: AccordionItemIndex;
+  index: string | number;
+  itemKey: string | number;
   active: boolean;
 }
