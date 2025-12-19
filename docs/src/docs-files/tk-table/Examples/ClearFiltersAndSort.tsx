@@ -22,7 +22,7 @@ const Example = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
     },
     {
       field: 'category',
@@ -84,7 +84,7 @@ const ClearFiltersAndSort = () => {
       sortable: true,
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
       filter: (value: string, row: any) =>
-        row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase() as string) > -1,
+        row.name.toString().toLowerCase().indexOf(value?.toString().toLowerCase() as string) > -1,
     },
     {
       field: "category",
@@ -149,7 +149,7 @@ const column = [
     sortable: true,
     sorter: (a, b) => (a.name > b.name ? 1 : -1),
     filter: (value, row) =>
-      row.name.toString().toLowerCase().indexOf(value.toString().toLowerCase()) > -1,
+      row.name.toString().toLowerCase().indexOf(value?.toString().toLowerCase()) > -1,
   },
   {
     field: "category",
