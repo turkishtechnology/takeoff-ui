@@ -713,10 +713,10 @@ export class TkInput implements ComponentInterface {
       _rightIcon = rightIcon;
     }
 
-    const showClearButton = this.clearable && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
+    const showClearButton = this.clearable && !this.readonly && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
 
     if (this.el.classList.contains('tk-select-input')) {
-      this.readOnly = !this.el.classList.contains('editable-select');
+      this.readOnly = this.el.classList.contains('readonly-select');
     } else {
       this.readOnly = this.readonly;
     }
@@ -745,7 +745,7 @@ export class TkInput implements ComponentInterface {
               onTk-click={e => this.handleClearButtonClick(e)}
               onKeyDown={this.handleClearButtonKeyDown}
               class="tk-input-clear-button"
-              disabled={this.disabled || this.readOnly}
+              disabled={this.disabled}
             ></tk-button>
           )}
           {_rightIcon}

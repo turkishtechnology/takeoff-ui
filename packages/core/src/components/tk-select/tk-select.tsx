@@ -792,7 +792,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private handleInputClick() {
-    if (!this.isOpen && !this.disabled) {
+    if (!this.isOpen && !this.disabled && !this.readonly) {
       this.hasFocus = true;
       this.isOpen = true;
     }
@@ -1017,6 +1017,7 @@ export class TkSelect implements ComponentInterface {
         ref={el => (this.inputRef = el as HTMLTkInputElement)}
         class={classNames('tk-select-input', {
           'editable-select': this.editable,
+          'readonly-select': this.readonly,
           'tk-table-input': this.el.classList.contains('tk-table-select'),
           'multiple-select': this.multiple,
           'allow-custom-value-select': this.allowCustomValue,
