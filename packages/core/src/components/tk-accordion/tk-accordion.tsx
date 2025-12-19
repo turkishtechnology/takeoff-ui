@@ -105,7 +105,7 @@ export class TkAccordion implements ComponentInterface {
 
   private initInternalActiveIndex() {
     // if prop activeIndex is set, use it
-    if (this.activeIndex || this.activeIndex === 0) return (this.internalActiveIndex = this.normalizeActiveIndex());
+    if (this.hasActiveIndex()) return (this.internalActiveIndex = this.normalizeActiveIndex());
     // else if accordion items have active prop, use them
     this.getAccordionItems().forEach((item, index) => {
       if (item.active) this.internalActiveIndex = [...this.internalActiveIndex, this.getItemKey(item, index)];
@@ -132,6 +132,7 @@ export class TkAccordion implements ComponentInterface {
     });
   }
 
+  // Validation Logic
   private validateActiveProps() {
     const activeCount = this.getAccordionItems().reduce((count, item) => (item.active ? count + 1 : count), 0);
     if (activeCount > 1 && !this.allowMultiple) {
@@ -140,24 +141,29 @@ export class TkAccordion implements ComponentInterface {
   }
 
   private validateControlType() {
-    const hasActiveIndex = this.activeIndex || this.activeIndex === 0;
     const hasActiveAccordionItems = this.getAccordionItems().some(item => item.active !== undefined);
-    if (hasActiveIndex && hasActiveAccordionItems) console.error('Accordion cannot have both activeIndex and active accordion items');
+    if (this.hasActiveIndex() && hasActiveAccordionItems) console.error('TkAccordion: Accordion cannot have both activeIndex and active accordion items');
   }
 
   private validateKeyType() {
     const type = typeof (this.getAccordionItems().find(item => item.itemKey !== undefined)?.itemKey ?? 0);
     const allItemsHaveSameType = this.getAccordionItems().every(item => item.itemKey === undefined || typeof item.itemKey === type);
-    const activeIndexHasSameType = Array.isArray(this.activeIndex) ? this.activeIndex.every(item => typeof item === type) : typeof this.activeIndex === type;
-    if (!allItemsHaveSameType || !activeIndexHasSameType) console.error('Accordion item keys must be of the same type');
+    let activeIndexHasSameType = true;
+    if (this.hasActiveIndex()) activeIndexHasSameType = Array.isArray(this.activeIndex) ? this.activeIndex.every(item => typeof item === type) : typeof this.activeIndex === type;
+    if (!allItemsHaveSameType || !activeIndexHasSameType) console.error('TkAccordion: Accordion item keys must be of the same type');
   }
 
   private validateItemKeylessActiveIndex() {
+    if (!this.hasActiveIndex()) return;
     const hasKeylessItems = this.getAccordionItems().every(item => item.itemKey === undefined);
     const activeIndexType = Array.isArray(this.activeIndex) ? this.activeIndex.map(item => typeof item) : [typeof this.activeIndex];
     if (hasKeylessItems && activeIndexType.some(type => type !== 'number')) {
       console.error('TkAccordion: When using keyless accordion items, activeIndex must be of type number or number array.');
     }
+  }
+
+  private hasActiveIndex() {
+    return this.activeIndex || this.activeIndex === 0;
   }
 
   private normalizeActiveIndex(): (string | number)[] {
