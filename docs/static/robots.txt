@@ -1,3 +1,5 @@
+# Algolia-Crawler-Verif: 248C30A630C4AD50
+
 # Robots.txt for Takeoff UI Documentation
 # https://www.takeoffui.com
 

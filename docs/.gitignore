@@ -1,1 +1,7 @@
 .vercel
+
+# Environment variables (keep secrets out of git)
+.env
+.env.local
+.env.algolia
+.env*.local
