@@ -4,6 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import dotenv from 'dotenv';
 import tailwindPlugin from './plugins/tailwind.config.cjs';
 
+dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 const config: Config = {
@@ -93,6 +94,10 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
+          type: 'search',
+          position: 'right',
+        },
+        {
           to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
           label: 'v0.7.0',
           position: 'right',
@@ -173,6 +178,33 @@ const config: Config = {
           block: { start: 'after-start', end: 'after-end' },
         },
       ],
+    },
+
+    // Algolia DocSearch Configuration
+    // Get your credentials by applying at: https://docsearch.algolia.com/apply
+    // NOTE: Currently using Docusaurus demo credentials for UI testing
+    // Replace with your own credentials after DocSearch approval
+    algolia: {
+      // The application ID provided by Algolia
+      // TODO: Replace with your own appId after DocSearch approval
+      appId: process.env.ALGOLIA_APP_ID || 'X1Z85QJPUV',
+
+      // Public API key: it is safe to commit it
+      // TODO: Replace with your own apiKey after DocSearch approval
+      apiKey: process.env.ALGOLIA_SEARCH_API_KEY || 'bf7211c161e8205da2f933a02534105a',
+
+      // The index name provided by Algolia
+      // TODO: Replace with your own indexName after DocSearch approval
+      indexName: process.env.ALGOLIA_INDEX_NAME || 'docusaurus-2',
+
+      // Optional: Enable contextual search (search within current section)
+      contextualSearch: true,
+
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+
+      // Optional: whether the insights feature is enabled or not on Docsearch
+      insights: false,
     },
   } satisfies Preset.ThemeConfig,
 };
