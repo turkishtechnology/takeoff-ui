@@ -12,6 +12,12 @@ export const getNestedValue = (obj: any, path: string): any => {
   if (!obj || !path) return undefined;
 
   return path.split('.').reduce((acc, key) => {
-    return acc && acc[key] !== undefined ? acc[key] : undefined;
+    if (acc && acc[key] !== undefined && acc[key] !== null) {
+      if (typeof acc[key] === 'boolean') {
+        return acc[key].toString();
+      } else return acc[key];
+    } else {
+      return undefined;
+    }
   }, obj);
 };
