@@ -254,7 +254,14 @@ docsData.components.forEach(component => {
   }
 });
 
-const staticMdxFiles = ['../../docs/Coding-Standards.mdx', '../../docs/CONTRIBUTING.mdx', '../../docs/Tailwind.mdx', '../../docs/Installation.mdx', '../../docs/Introduction.mdx'];
+const staticMdxFiles = [
+  '../../docs/Coding-Standards.mdx',
+  '../../docs/CONTRIBUTING.mdx',
+  '../../docs/Tailwind.mdx',
+  '../../docs/Installation.mdx',
+  '../../docs/Introduction.mdx',
+  '../../docs/Security.mdx',
+];
 
 console.log('\nProcessing static MDX files:');
 
