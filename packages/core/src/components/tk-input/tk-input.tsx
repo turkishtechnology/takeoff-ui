@@ -27,6 +27,7 @@ export class TkInput implements ComponentInterface {
   private uniqueId = uuidv4();
   private cleaveInstance: Cleave;
   private readOnly: boolean = false;
+  private editable: boolean = true;
 
   @Element() el!: HTMLTkInputElement;
 
@@ -113,11 +114,13 @@ export class TkInput implements ComponentInterface {
 
   /**
    * If `true`, the user cannot modify the value.
+   * @defaultValue false
    */
   @Prop() readonly: boolean = false;
 
   /**
    * Sets size for the component.
+   * @defaultValue base
    */
   @Prop() size: 'large' | 'base' | 'small' = 'base';
 
@@ -588,7 +591,7 @@ export class TkInput implements ComponentInterface {
         max={this.max}
         step={this.step}
         placeholder={this.placeholder || ''}
-        readOnly={this.readOnly}
+        readOnly={this.readOnly || !this.editable}
         tabindex={this.tabindex}
         value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
@@ -717,6 +720,8 @@ export class TkInput implements ComponentInterface {
 
     if (this.el.classList.contains('tk-select-input')) {
       this.readOnly = this.el.classList.contains('readonly-select');
+      // readOnly hides clear button and makes input readOnly(disables input), editable only impacts input readOnly
+      this.editable = this.el.classList.contains('editable-select');
     } else {
       this.readOnly = this.readonly;
     }
