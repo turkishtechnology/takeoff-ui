@@ -2023,7 +2023,10 @@ export class TkTable implements ComponentInterface {
             const currentFilter = this.filters.find(item => item.field == col.field);
             const hasFilter =
               currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
-            const noSortAndFilter = !this.sortOrder && !sortObj?.order && !hasFilter;
+            const singleSorted = this.sortField === col.field && this.sortOrder;
+            const multiSorted = !!sortObj?.order;
+            const isSorted = this.multiSort ? multiSorted : singleSorted;
+            const noSortAndFilter = !isSorted && !hasFilter;
 
             if (col.searchable) {
               _searchIcon = (
@@ -2038,10 +2041,6 @@ export class TkTable implements ComponentInterface {
               );
 
               // filtrelenmiş ise badge ile göster
-
-              const currentFilter = this.filters.find(item => item.field == col.field);
-              const hasFilter =
-                currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
               if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
               }
