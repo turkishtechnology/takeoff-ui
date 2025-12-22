@@ -788,6 +788,10 @@ export class TkSelect implements ComponentInterface {
       } else {
         await this.setRenderOptions(value);
       }
+      if (value === '') {
+        this.value = null;
+        this.tkChange.emit(null);
+      }
     }
   }
 
