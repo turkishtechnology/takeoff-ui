@@ -788,10 +788,6 @@ export class TkSelect implements ComponentInterface {
       } else {
         await this.setRenderOptions(value);
       }
-      if (value === '') {
-        this.value = null;
-        this.tkChange.emit(null);
-      }
     }
   }
 
@@ -809,7 +805,11 @@ export class TkSelect implements ComponentInterface {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
 
-      if (!inputValue) return;
+      if (!inputValue || inputValue === '') {
+        this.value = null;
+        this.tkChange.emit(null);
+        return;
+      }
 
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
