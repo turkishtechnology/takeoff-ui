@@ -105,15 +105,17 @@ export class TkDrawer {
    */
   @Prop() footerType: 'basic' | 'divided' | 'light' = 'basic';
 
-  /**
-   * Emitted when the drawer is closed
-   */
-  @Event({ eventName: 'tk-drawer-close' }) tkDrawerClose: EventEmitter<void>;
-
+  // TODO: Deprecate old method and apply tk-open naming convention
   /**
    * Emitted when the drawer is opened
    */
-  @Event({ eventName: 'tk-drawer-open' }) tkDrawerOpen: EventEmitter<void>;
+  @Event({ eventName: 'tk-drawer-open', bubbles: false }) tkDrawerOpen: EventEmitter<void>;
+
+  // TODO: Deprecate old method and apply tk-close naming convention
+  /**
+   * Emitted when the drawer is closed
+   */
+  @Event({ eventName: 'tk-drawer-close', bubbles: false }) tkDrawerClose: EventEmitter<void>;
 
   /**
    * Emitted when the drawer starts to enter
