@@ -805,11 +805,11 @@ export class TkSelect implements ComponentInterface {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
 
-      if (!inputValue || inputValue === '') {
+      if (inputValue === '') {
         this.value = null;
         this.tkChange.emit(null);
-        return;
       }
+      if (!inputValue) return;
 
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
