@@ -4,8 +4,6 @@ on:
     pull_request:
         branches:
             - develop
-            - main
-
 jobs:
     check:
         runs-on: ubuntu-latest
@@ -13,14 +11,24 @@ jobs:
             - uses: actions/checkout@v4
 
             - name: Check for changeset
+              env:
+                  PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
               run: |
-                  PR_LABELS="${{ toJson(github.event.pull_request.labels.*.name) }}"
-
-                  SKIP_LABELS=("skip-changelog" "test" "wontfix" "question" "invalid" "documentation" "help wanted" "duplicate" "config")
+                  SKIP_LABELS=(
+                    "skip-changelog"
+                    "test"
+                    "wontfix"
+                    "question"
+                    "invalid"
+                    "documentation"
+                    "help wanted"
+                    "duplicate"
+                    "config"
+                  )
 
                   SKIP=false
                   for label in "${SKIP_LABELS[@]}"; do
-                    if echo "$PR_LABELS" | grep -q "\"$label\""; then
+                    if echo "${PR_LABELS}" | jq -e --arg label "$label" 'index($label) != null' > /dev/null 2>&1; then
                       echo "ℹ️  PR has '$label' label - changeset not required"
                       SKIP=true
                       break
@@ -31,7 +39,9 @@ jobs:
                     exit 0
                   fi
 
-                  if [ -z "$(ls -A .changeset/*.md 2>/dev/null | grep -v README.md)" ]; then
+                  CHANGESET_FILES=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' -type f 2>/dev/null | wc -l)
+
+                  if [ "$CHANGESET_FILES" -eq 0 ]; then
                     echo "❌ No changeset found!"
                     echo ""
                     echo "This PR requires a changeset."
@@ -41,5 +51,5 @@ jobs:
                     echo ""
                     exit 1
                   else
-                    echo "✅ Changeset found"
+                    echo "✅ Changeset found ($CHANGESET_FILES file(s))"
                   fi
