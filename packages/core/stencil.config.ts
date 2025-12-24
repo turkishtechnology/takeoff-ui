@@ -20,6 +20,7 @@ const vueComponentModels: ComponentModelConfig[] = [
       'tk-editor',
       'tk-upload',
       'tk-tree-view',
+      'tk-toggle-button-group',
     ],
     event: 'tk-change',
     targetAttr: 'value',
