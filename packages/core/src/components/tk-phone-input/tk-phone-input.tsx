@@ -1,13 +1,12 @@
 import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { applyStyles } from '../../utils/style-utils';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -203,8 +202,10 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      this.cleanup = autoUpdate(this.el.querySelector('.tk-phone-input__wrapper'), this.el, () => this.updatePosition(), {
-        animationFrame: true,
+      const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLTkInputElement;
+      floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
+        placement: 'bottom-start',
+        shift: { padding: 5 },
       });
     } else {
       this.panelRef?.remove();
@@ -252,22 +253,6 @@ export class TkPhoneInput implements ComponentInterface {
     }
 
     return maskedValue;
-  }
-
-  private updatePosition() {
-    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper');
-
-    if (tkInputRootEl && this.panelRef) {
-      computePosition(tkInputRootEl, this.panelRef, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ y }) => {
-        applyStyles(this.panelRef, {
-          top: `${y}px`,
-        });
-      });
-    }
   }
 
   /**

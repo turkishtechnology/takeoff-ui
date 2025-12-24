@@ -8,26 +8,31 @@ export interface FloatingElementOptions {
   offset?: number;
   outSideOffset?: number;
   arrowSize?: number;
+  shift?: any;
 }
 
-function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement: HTMLElement, options: FloatingElementOptions) {
-  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9 } = options;
+function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, options?: FloatingElementOptions, arrowElement?: HTMLElement) {
+  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9, shift: shiftOptions } = options || {};
 
-  applyStyles(arrowElement, {
-    position: 'absolute',
-    width: `${arrowSize}px`,
-    height: `${arrowSize}px`,
-    background: 'inherit',
-    border: `1px solid`,
-    borderColor: `inherit`,
-    transform: 'rotate(45deg)',
-    zIndex: '1300',
-  });
+  if (arrowElement) {
+    applyStyles(arrowElement, {
+      position: 'absolute',
+      width: `${arrowSize}px`,
+      height: `${arrowSize}px`,
+      background: 'inherit',
+      border: '1px solid',
+      borderColor: 'inherit',
+      transform: 'rotate(45deg)',
+      zIndex: '1300',
+    });
+  }
+
+  const middleware = [offset(off), flip(), ...(shiftOptions ? [shift(shiftOptions)] : []), ...(arrowElement ? [arrow({ element: arrowElement })] : [])];
 
   return computePosition(triggerElement, floatingElement, {
     strategy: 'fixed',
     placement,
-    middleware: [offset(off), flip(), shift(), arrow({ element: arrowElement })],
+    middleware,
   }).then(({ x, y, middlewareData, placement }) => {
     floatingElement.style.left = `${x}px`;
     floatingElement.style.top = `${y}px`;
@@ -35,9 +40,9 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     const side = placement.split('-')[0];
     const reverseSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side];
 
-    if (middlewareData.arrow) {
+    if (arrowElement && middlewareData.arrow) {
       const { x: ax, y: ay } = middlewareData.arrow;
-      arrowElement.setAttribute('data-side', side);
+      arrowElement.dataset.side = side;
       Object.assign(arrowElement.style, {
         left: ax != null ? `${ax}px` : '',
         top: ay != null ? `${ay}px` : '',
@@ -45,36 +50,17 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
         bottom: '',
         [reverseSide]: `-${outSideOffset}px`,
       });
+
+      const borderStyles = {
+        top: { borderTop: 'none', borderLeft: 'none' },
+        bottom: { borderBottom: 'none', borderRight: 'none' },
+        left: { borderLeft: 'none', borderBottom: 'none' },
+        right: { borderRight: 'none', borderTop: 'none' },
+      };
+
+      applyStyles(arrowElement, borderStyles[side]);
     }
 
-    switch (side) {
-      case 'top':
-        applyStyles(arrowElement, {
-          borderTop: 'none',
-          borderLeft: 'none',
-        });
-        break;
-      case 'bottom':
-        applyStyles(arrowElement, {
-          borderBottom: 'none',
-          borderRight: 'none',
-        });
-        break;
-
-      case 'left':
-        applyStyles(arrowElement, {
-          borderLeft: 'none',
-          borderBottom: 'none',
-        });
-        break;
-
-      case 'right':
-        applyStyles(arrowElement, {
-          borderRight: 'none',
-          borderTop: 'none',
-        });
-        break;
-    }
     return placement;
   });
 }
@@ -82,15 +68,15 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
 export function floatingElementAutoUpdate(
   triggerElement: HTMLElement,
   floatingElement: HTMLElement,
-  arrowElement: HTMLElement,
-  options: FloatingElementOptions,
+  arrowElement?: HTMLElement,
+  options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
   return autoUpdate(
     triggerElement,
     floatingElement,
     () => {
-      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement && handlePlacement(position));
+      positionFloatingElement(triggerElement, floatingElement, options, arrowElement).then(position => handlePlacement?.(position));
     },
     { animationFrame: true },
   );

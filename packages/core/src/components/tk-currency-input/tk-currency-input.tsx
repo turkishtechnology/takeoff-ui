@@ -1,13 +1,12 @@
 import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { getIconElementProps } from '../../utils/icon-utils';
 import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
-import { applyStyles } from '../../utils/style-utils';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -210,8 +209,10 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      this.cleanup = autoUpdate(this.el.querySelector('.tk-currency-input__wrapper'), this.el, () => this.updatePosition(), {
-        animationFrame: true,
+      const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
+      floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
+        placement: 'bottom-start',
+        shift: { padding: 5 },
       });
     } else {
       this.dropdownEl?.remove();
@@ -242,22 +243,6 @@ export class TkCurrencyInput implements ComponentInterface {
     this.selectedCurrency = currency || currencies[0];
     this.currentNumericValue = this.value || 0;
     this.updateDisplayValue();
-  }
-
-  private updatePosition() {
-    const tkCurrenInputRootEl = this.el.querySelector('.tk-currency-input__wrapper');
-
-    if (tkCurrenInputRootEl && this.dropdownEl) {
-      computePosition(tkCurrenInputRootEl, this.dropdownEl, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ y }) => {
-        applyStyles(this.dropdownEl, {
-          top: `${y}px`,
-        });
-      });
-    }
   }
 
   private updateDisplayValue() {
