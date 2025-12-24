@@ -1,0 +1,14 @@
+# Algolia-Crawler-Verif: 248C30A630C4AD50
+
+# Robots.txt for Takeoff UI Documentation
+# https://www.takeoffui.com
+
+User-agent: *
+Allow: /
+
+# Algolia DocSearch Crawler
+User-agent: Algoliabot
+Allow: /
+
+# Sitemap
+Sitemap: https://www.takeoffui.com/sitemap.xml

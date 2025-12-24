@@ -17,10 +17,6 @@ export class TkSpinner {
 
   @Element() el: HTMLTkSpinnerElement;
 
-  constructor() {
-    this.isButton = this.el.closest('button')?.classList.contains('tk-button');
-  }
-
   /**
    * Controls the orientation of the spinner component.
    * @defaultValue 'horizontal'
@@ -43,6 +39,10 @@ export class TkSpinner {
    * Sets the label of the spinner component.
    */
   @Prop() label: string;
+
+  componentWillLoad() {
+    this.isButton = this.el.closest('button')?.classList.contains('tk-button');
+  }
 
   private renderSpinner() {
     switch (this.type) {

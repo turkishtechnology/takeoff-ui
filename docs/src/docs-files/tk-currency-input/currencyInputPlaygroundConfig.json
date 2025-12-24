@@ -15,12 +15,6 @@
       ]
     },
     {
-      "key": "value",
-      "label": "Value",
-      "type": "number",
-      "defaultValue": 0
-    },
-    {
       "key": "placeholder",
       "label": "Placeholder",
       "type": "text",

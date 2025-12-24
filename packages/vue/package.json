@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/vue",
-  "version": "0.6.1",
+  "version": "0.7.2",
   "description": "Vue components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.com",
@@ -21,7 +21,7 @@
   "publishConfig": {
     "access": "public",
     "dependencies": {
-      "@takeoff-ui/core": "^0.6.1"
+      "@takeoff-ui/core": "^0.7.2"
     }
   },
   "scripts": {

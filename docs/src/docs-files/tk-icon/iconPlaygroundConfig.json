@@ -52,18 +52,6 @@
       ]
     },
     {
-      "key": "sign",
-      "label": "Sign",
-      "type": "checkbox",
-      "defaultValue": false
-    },
-    {
-      "key": "fill",
-      "label": "Fill",
-      "type": "checkbox",
-      "defaultValue": false
-    },
-    {
       "key": "color",
       "label": "Color",
       "type": "text",
@@ -86,6 +74,18 @@
       "label": "Background Color",
       "type": "text",
       "defaultValue": ""
+    },
+    {
+      "key": "sign",
+      "label": "Sign",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "fill",
+      "label": "Fill",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }

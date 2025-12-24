@@ -7,7 +7,7 @@
       "key": "variant",
       "label": "Variant",
       "type": "select",
-      "defaultValue": "neutral",
+      "defaultValue": "success",
       "options": [
         { "label": "Neutral", "value": "neutral" },
         { "label": "Success", "value": "success" },
@@ -49,7 +49,8 @@
         { "label": "Base", "value": "base" },
         { "label": "Large", "value": "large" },
         { "label": "XLarge", "value": "xlarge" }
-      ]
+      ],
+      "tooltip": "This feature works only when the `icon` prop is defined."
     },
     {
       "key": "header",

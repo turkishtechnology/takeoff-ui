@@ -9,6 +9,7 @@ import Chips from "./Examples/Chips";
 import LabelTooltip from "./Examples/LabelTooltip";
 import Icon from "./Examples/Icon";
 import Pre from "./Examples/Pre";
+import { TkAlert } from '@takeoff-ui/react';
 
 ## Basic
 
@@ -57,6 +58,13 @@ This example illustrates the disabled, readonly, and invalid states of the input
 This example clears the input.
 
 <Clearable />
+
+<TkAlert
+  header="Caveat"
+  variant="warning"
+  message="Clearable button is hidden when readonly."
+  filledlight
+/>
 
 ## Chips Mode
 

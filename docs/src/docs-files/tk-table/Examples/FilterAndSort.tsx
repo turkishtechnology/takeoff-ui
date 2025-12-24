@@ -25,11 +25,7 @@ const Example = () => {
         },
       },
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
-      filter: (value: string, row: any) =>
-        row.name
-          .toString()
-          .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+      filter: (value: string, row: any) => row.name.toString().toLowerCase().indexOf(value?.toString().toLowerCase()) > -1,
     },
     {
       field: 'status',
@@ -144,7 +140,7 @@ const FilterAndSort = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
       filterElements: {
         searchInput: {
           placeholder: 'Filter',
@@ -273,7 +269,7 @@ const column = [
       row.name
         .toString()
         .toLowerCase()
-        .indexOf(value.toString().toLowerCase()) > -1,
+        .indexOf(value?.toString().toLowerCase()) > -1,
     filterElements: {
       searchInput: {
         placeholder: 'Filter',

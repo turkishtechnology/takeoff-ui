@@ -9,7 +9,7 @@ const data = JSON.parse(fs.readFileSync(docsJson, 'utf8'));
 const typeLibraryAllKeys = Object.keys(data.typeLibrary);
 
 function clearString(value) {
-  return value?.replaceAll('|', ',').replaceAll('\n', ' ').replaceAll('\r', ' ');
+  return value?.replaceAll('|', ',').replaceAll('\n', ' ').replaceAll('\r', ' ').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 }
 
 function clearStringObject(value, tag, propName) {
@@ -53,6 +53,13 @@ function wrapTypeWithLink(propType, references, tag) {
   return result;
 }
 
+// Function to generate a unique heading ID from tag name and section
+function generateHeadingId(tag, section) {
+  // Remove 'tk-' prefix and convert to lowercase, then add section suffix
+  const cleanTag = tag.replace(/^tk-/, '');
+  return `${cleanTag}-${section}`;
+}
+
 // Function to generate MDX content
 function generateMdx(component) {
   const { tag, docs, docsTags, props, events, methods, slots } = component;
@@ -94,7 +101,7 @@ ${docs} \n
 
   // Add Props Table
   if (props && props.length) {
-    apiContent += `### Props\n\n`;
+    apiContent += `### Props {#${generateHeadingId(tag, 'props')}}\n\n`;
     apiContent += `| Name | Type | Default | Description |\n| ---- | ---- | ------- | ----------- |\n`;
     props.forEach(prop => {
       const hasImportedType = prop.complexType?.references && Object.keys(prop.complexType.references).length > 0;
@@ -122,7 +129,7 @@ ${docs} \n
 
   // Add Events Table
   if (events && events.length) {
-    apiContent += `\n### Events\n\n`;
+    apiContent += `\n### Events {#${generateHeadingId(tag, 'events')}}\n\n`;
     apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
     events.forEach(event => {
       apiContent += `| ${event.event} | ${clearString(event.docs)} |\n`;
@@ -131,7 +138,7 @@ ${docs} \n
 
   // Add Methods Table
   if (methods && methods.length) {
-    apiContent += `\n### Methods\n\n`;
+    apiContent += `\n### Methods {#${generateHeadingId(tag, 'methods')}}\n\n`;
     apiContent += `| Name | Type | Description |\n| ---- | ---- | ----------- |\n`;
     methods.forEach(method => {
       const type = method.signature.replaceAll('<', '\\<').replaceAll('>', '\\>').replaceAll(',', '\\,').replaceAll('{', '\\{').replaceAll('}', '\\}').replaceAll('|', '\\|');
@@ -141,7 +148,7 @@ ${docs} \n
 
   // Add Slots Table
   if (slots && slots.length) {
-    apiContent += `\n### Slots\n\n`;
+    apiContent += `\n### Slots {#${generateHeadingId(tag, 'slots')}}\n\n`;
     apiContent += `| Name | Description |\n| ---- | ----------- |\n`;
     slots.forEach(slot => {
       apiContent += `| ${slot.name} | ${clearString(slot.docs)} |\n`;
@@ -156,7 +163,7 @@ ${docs} \n
   });
 
   if (componentInterfaces.length > 0) {
-    apiContent += `\n### Interfaces\n\n`;
+    apiContent += `\n### Interfaces {#${generateHeadingId(tag, 'interfaces')}}\n\n`;
 
     componentInterfaces.forEach(key => {
       const typeData = data.typeLibrary[key];

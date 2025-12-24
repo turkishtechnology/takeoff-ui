@@ -266,12 +266,12 @@ export class TkSelect implements ComponentInterface {
   /**
    * Emitted when the select is opened
    */
-  @Event({ eventName: 'tk-open' }) tkOpen!: EventEmitter<void>;
+  @Event({ eventName: 'tk-open', bubbles: false }) tkOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the select is closed
    */
-  @Event({ eventName: 'tk-close' }) tkClose!: EventEmitter<void>;
+  @Event({ eventName: 'tk-close', bubbles: false }) tkClose!: EventEmitter<void>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
@@ -299,7 +299,7 @@ export class TkSelect implements ComponentInterface {
       this.editable = true;
     }
 
-    if (this.value) {
+    if (this.value !== undefined && this.value !== null) {
       this.setValue();
     }
   }
@@ -590,7 +590,11 @@ export class TkSelect implements ComponentInterface {
     // Handle single selection case
     if (this.editable && this.allowCustomValue) {
       // For editable with custom values, show the value directly
-      this.inputRef.value = this.value ? this.getOptionLabel(this.value) : null;
+      if (this.value !== undefined && this.value !== null) {
+        this.inputRef.value = this.getOptionLabel(this.value);
+      } else {
+        this.inputRef.value = null;
+      }
       return;
     }
 
@@ -607,7 +611,7 @@ export class TkSelect implements ComponentInterface {
     }
 
     // Set input value based on selection state
-    if (this.selectedItem) {
+    if (this.selectedItem !== null && this.selectedItem !== undefined) {
       if (this.multiple) {
         this.inputRef.value = this.selectedItem;
       } else {
@@ -784,11 +788,15 @@ export class TkSelect implements ComponentInterface {
       } else {
         await this.setRenderOptions(value);
       }
+      if (value === '') {
+        this.value = null;
+        this.tkChange.emit(null);
+      }
     }
   }
 
   private handleInputClick() {
-    if (!this.isOpen && !this.disabled) {
+    if (!this.isOpen && !this.disabled && !this.readonly) {
       this.hasFocus = true;
       this.isOpen = true;
     }
@@ -1013,6 +1021,7 @@ export class TkSelect implements ComponentInterface {
         ref={el => (this.inputRef = el as HTMLTkInputElement)}
         class={classNames('tk-select-input', {
           'editable-select': this.editable,
+          'readonly-select': this.readonly,
           'tk-table-input': this.el.classList.contains('tk-table-select'),
           'multiple-select': this.multiple,
           'allow-custom-value-select': this.allowCustomValue,

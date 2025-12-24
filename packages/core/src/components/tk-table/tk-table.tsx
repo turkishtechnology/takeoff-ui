@@ -13,6 +13,7 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -166,6 +167,20 @@ export class TkTable implements ComponentInterface {
    * @defaultValue 'outlined'
    */
   @Prop() paginationType: 'outlined' | 'text' | 'grouped' = 'outlined';
+
+  /**
+   * Template string for current page report in pagination.
+   * Available placeholders: {currentPage}, {totalPages}
+   * @defaultValue 'page: {currentPage} of {totalPages}'
+   */
+  @Prop() pageReportTemplate: string = 'page: {currentPage} of {totalPages}';
+
+  /**
+   * Template string for items report in pagination.
+   * Available placeholders: {startItem}, {endItem}, {totalItems}
+   * @defaultValue 'item: {startItem}-{endItem} of {totalItems}'
+   */
+  @Prop() itemsReportTemplate: string = 'item: {startItem}-{endItem} of {totalItems}';
 
   /**
    * Displays a loading indicator while data is being fetched or processed.
@@ -333,7 +348,7 @@ export class TkTable implements ComponentInterface {
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
 
     if (slotEmptyData) {
-      if (this.loading || this.data?.length > 0) {
+      if (this.loading || this.renderData?.length > 0) {
         hideElement(slotEmptyData);
       } else {
         showElement(slotEmptyData);
@@ -417,7 +432,7 @@ export class TkTable implements ComponentInterface {
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
         body: _data.map(
-          row => this.columns.map(col => getNestedValue(row, col.field) || ''), // Her sütunun değerini dinamik olarak alır
+          row => this.columns.map(col => getNestedValue(row, col.field) ?? ''), // Her sütunun değerini dinamik olarak alır
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
@@ -450,7 +465,7 @@ export class TkTable implements ComponentInterface {
           _columns
             .filter(col => !options.ignoreColumnsFields?.includes(col.field))
             .forEach(col => {
-              rowData[col.field] = getNestedValue(item, col.field) || '';
+              rowData[col.field] = getNestedValue(item, col.field) ?? '';
             });
 
           return rowData;
@@ -465,7 +480,7 @@ export class TkTable implements ComponentInterface {
       link.click();
     } else if (options.type == 'csv') {
       const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) || '').join(',')).join('\n');
+      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) ?? '').join(',')).join('\n');
       const csvContent = headers + '\n' + rows;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -790,6 +805,7 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
+    removeDialogScrollListener(this.elFilterPanelElement);
     // First cleanup the floating UI
     if (this.cleanupFilterPanel) {
       this.cleanupFilterPanel();
@@ -805,6 +821,7 @@ export class TkTable implements ComponentInterface {
     // Finally update the state
     this.isFilterOpen = false;
   }
+
   // Checks if all selectable rows are selected
   private isAllRowsSelected(): boolean {
     if (!Array.isArray(this.selection)) return false;
@@ -827,15 +844,14 @@ export class TkTable implements ComponentInterface {
   private handleInputFilterApply(columnField) {
     // if (refSearchInput.value.toString().length > 0) {
     const searchInput: HTMLTkInputElement = document.querySelector('body > .tk-table-filter-panel > tk-input');
+    const value = searchInput.value ?? '';
 
     // Bu field da mevcutta bir filtre uygulanmış ise mevcutu değiştirmek için yazıldı.
     // filtre yoksa yeni filtre olarak filters'a eklenmesi sağlandı
-    const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
-    if (filterIndex > -1) {
-      this.filters[filterIndex].value = searchInput.value.toString();
-    } else {
-      this.filters.push({ field: columnField, value: searchInput.value } as ITableFilter);
-    }
+    const filter = this.filters.find(filter => filter.field == columnField);
+
+    if (filter) filter.value = value.toString();
+    else this.filters.push({ field: columnField, value } as ITableFilter);
 
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
@@ -1004,6 +1020,12 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
+    addDialogScrollListener(this.el, e => {
+      if (e.composedPath().includes(this.el)) {
+        return;
+      }
+      this.closeFilterPanel();
+    });
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
@@ -1971,8 +1993,6 @@ export class TkTable implements ComponentInterface {
             }
 
             // generate head sort and search icons
-
-            // generate head sort and search icons
             const sortIndex = this.sorts.findIndex(s => s.field === col.field);
             const sortObj = this.sorts.find(s => s.field === col.field);
             const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
@@ -2000,6 +2020,11 @@ export class TkTable implements ComponentInterface {
               />
             );
 
+            const currentFilter = this.filters.find(item => item.field == col.field);
+            const hasFilter =
+              currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
+            const noSortAndFilter = !this.sortOrder && !sortObj?.order && !hasFilter;
+
             if (col.searchable) {
               _searchIcon = (
                 <tk-icon
@@ -2019,9 +2044,6 @@ export class TkTable implements ComponentInterface {
                 currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
               if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
-                if (col.showIconsOnHover) {
-                  _headerStructure = <tk-badge dot>{_headerStructure}</tk-badge>;
-                }
               }
             }
 
@@ -2042,7 +2064,7 @@ export class TkTable implements ComponentInterface {
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
-                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
+                    <div class={classNames('icons', { 'show-icon-on-hover': noSortAndFilter && col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
                       {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
@@ -2139,6 +2161,8 @@ export class TkTable implements ComponentInterface {
           rowsPerPage={this.rowsPerPage}
           rowsPerPageOptions={this.rowsPerPageOptions}
           currentPage={this.currentPage}
+          pageReportTemplate={this.pageReportTemplate}
+          itemsReportTemplate={this.itemsReportTemplate}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.rowsPerPage = e.detail;

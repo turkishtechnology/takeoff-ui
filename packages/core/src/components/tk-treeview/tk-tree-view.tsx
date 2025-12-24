@@ -26,21 +26,19 @@ export class TkTreeView implements ComponentInterface {
    */
   @Prop() items: ITreeItem[] = [];
   @Watch('items')
-  handleItemsChange() {
-    if (this.expandAll) {
-      this.initializeExpandedPaths();
-    }
+  itemsChanged() {
+    this.initializeExpandedPaths();
   }
+
   /**
    * Tree view mode: 'basic' or 'stepper'.
    */
   @Prop() mode: 'basic' | 'stepper' = 'basic';
   @Watch('mode')
-  handleModeChange() {
-    if (this.expandAll) {
-      this.initializeExpandedPaths();
-    }
+  modeChanged() {
+    this.initializeExpandedPaths();
   }
+
   /**
    * Tree view type: 'basic', 'divided', or 'light'.
    */
@@ -99,19 +97,85 @@ export class TkTreeView implements ComponentInterface {
 
   /**
    * Selection strategy for checkboxes:
-   * - 'all': selecting a node selects the node itself and all descendants
-   * - 'leaf': selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
+   * <br />
+   * **all:** selecting a node selects the node itself and all descendants
+   * <br />
+   * **leaf:** selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
    */
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
 
   /**
-   * If true, expands all nodes.
+   * If true, expands all nodes in basic mode.
+   * <br />
+   * **Note:** This prop is ignored when expandedKeys is provided.
+   *
    */
   @Prop() expandAll: boolean = false;
   @Watch('expandAll')
-  handleExpandAllChange(newValue: boolean, oldValue: boolean) {
-    if (newValue !== oldValue && newValue) {
+  expandAllChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
       this.initializeExpandedPaths();
+    }
+  }
+
+  /**
+   * Array of keys that should be expanded.
+   *
+   * <br /> **Usage:**
+   * Provide an array of item keys: `["atakan", "mehmet", "4"]`
+   * <br />
+   * Each key must be unique in the tree structure
+   */
+  @Prop({ mutable: true }) expandedKeys?: string[];
+  @Watch('expandedKeys')
+  expandedKeysChanged(newValue: string[]) {
+    if (Array.isArray(newValue)) {
+      // For each value, find its index path in the tree
+      const indexPaths: string[] = [];
+      const invalidKeys: string[] = [];
+
+      newValue.forEach((key, index) => {
+        // Find the index path for this key
+        if (this.mode === 'stepper' && index !== 0) {
+          return;
+        }
+        const indexPath = this.findIndexPath(key);
+
+        if (indexPath) {
+          indexPaths.push(indexPath);
+        } else {
+          invalidKeys.push(key);
+        }
+      });
+
+      // Log invalid keys
+      if (invalidKeys.length > 0) {
+        console.error('Invalid keys given to expandedKeys prop:', invalidKeys);
+      }
+
+      this.expandedPaths = this.expandKeysWithAncestors(indexPaths);
+
+      // In controlled mode, clear selection if the selected node is no longer expanded
+      if (this.selectedPath !== null) {
+        // Check if the selected path or any of its ancestors is collapsed
+        const selectedPathParts = this.selectedPath.split('-');
+        let isSelectedPathVisible = true;
+
+        // Check each ancestor up to and including the selected path
+        for (let i = 1; i <= selectedPathParts.length; i++) {
+          const ancestorPath = selectedPathParts.slice(0, i).join('-');
+          // For directories, they need to be expanded to show their children
+          if (i < selectedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
+            isSelectedPathVisible = false;
+            break;
+          }
+        }
+
+        // Clear selection if not visible
+        if (!isSelectedPathVisible) {
+          this.selectedPath = null;
+        }
+      }
     }
   }
 
@@ -125,8 +189,118 @@ export class TkTreeView implements ComponentInterface {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string[]>;
 
+  /**
+   * Event emitted when the expanded paths change in controlled mode.
+   * Emits an array of keys (e.g., ["4", "13"]) representing the expanded items.
+   * Only the keys of expanded items are emitted, not full paths.
+   */
+  @Event({ eventName: 'tk-expand-change' }) tkExpandChange: EventEmitter<string[]>;
+
   componentWillLoad() {
     this.initializeExpandedPaths();
+  }
+
+  /**
+   * Check if the component is in controlled mode.
+   * Controlled mode is when the parent component manages expansion state via expandedKeys prop.
+   * We use Array.isArray() instead of checking undefined to handle edge cases like null.
+   */
+  private isControlled(): boolean {
+    return Array.isArray(this.expandedKeys);
+  }
+
+  /**
+   * Find the full index-based path to a given key by searching the tree recursively
+   * Example: key "4" -> "0-1-0" (index path from root to target)
+   * Returns null if the key is not found
+   */
+  private findIndexPath(targetKey: string, items: ITreeItem[] = this.items, currentPath: number[] = []): string | null {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const newPath = [...currentPath, i];
+
+      if (item.key === targetKey) {
+        return newPath.join('-');
+      }
+
+      if (item.children && item.children.length > 0) {
+        const found = this.findIndexPath(targetKey, item.children, newPath);
+        if (found) {
+          return found;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Convert an index-based path to its corresponding key (last item in path)
+   * Example: "0-1-2" -> "4" (returns only the key of the last item, not the full path)
+   * Returns null if the path is invalid
+   */
+  private indexPathToKey(indexPath: string): string | null {
+    const indices = indexPath.split('-').map(Number);
+    let currentLevel = this.items;
+
+    // Navigate to the target item
+    for (let i = 0; i < indices.length; i++) {
+      const index = indices[i];
+
+      if (!currentLevel || index < 0 || index >= currentLevel.length) {
+        return null;
+      }
+
+      const item = currentLevel[index];
+
+      // If this is the last index, return its key
+      if (i === indices.length - 1) {
+        return item.key || null;
+      }
+
+      // Otherwise, navigate to children
+      currentLevel = item.children;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the deepest (longest) paths from a set of expanded paths
+   * Example: Set(["0", "0-1", "0-1-2", "3"]) -> ["0-1-2", "3"]
+   * Returns only the paths with maximum depth in each branch
+   */
+  private getDeepestPaths(paths: Set<string>): string[] {
+    const allPaths = Array.from(paths);
+
+    // Find paths that don't have any child path in the set
+    return allPaths.filter(path => {
+      // A path is deepest if no other path starts with it followed by a hyphen
+      return !allPaths.some(otherPath => otherPath.startsWith(path + '-'));
+    });
+  }
+
+  /**
+   * Expand keys and automatically include all ancestor paths
+   * Example: ["0-1-2"] -> Set(["0", "0-1", "0-1-2"])
+   * Note: Expects index-based paths. Validation should be done before calling this method.
+   */
+  private expandKeysWithAncestors(keys: string[]): Set<string> {
+    const expandedSet = new Set<string>();
+
+    keys.forEach(key => {
+      // Add the key itself
+      expandedSet.add(key);
+
+      // Add all ancestor paths
+      const parts = key.split('-');
+      for (let i = 1; i < parts.length; i++) {
+        const ancestorPath = parts.slice(0, i).join('-');
+        expandedSet.add(ancestorPath);
+      }
+    });
+
+    return expandedSet;
   }
   /**
    * Collect all descendant paths recursively
@@ -149,37 +323,66 @@ export class TkTreeView implements ComponentInterface {
    * Initialize expanded paths based on mode and expandAll configuration
    */
   private initializeExpandedPaths() {
-    const expanded = new Set<string>();
     if (!this.items || this.items.length === 0) {
-      this.expandedPaths = expanded;
+      this.expandedPaths = new Set<string>();
       return;
     }
 
-    if (this.expandAll) {
-      if (this.mode === 'basic') {
-        // Expand all directory nodes
-        const traverse = (nodes: ITreeItem[], base: string = '') => {
-          nodes.forEach((node, idx) => {
-            const path = base ? `${base}-${idx}` : `${idx}`;
-            if (node.children && node.children.length > 0) {
-              expanded.add(path);
-              traverse(node.children, path);
-            }
-          });
-        };
-        traverse(this.items);
-      } else {
-        // Expand the first directory all the way down
-        let level = this.items;
-        let base = '';
-        while (level && level.length > 0) {
-          const idx = level.findIndex(n => n.children && n.children.length > 0);
-          if (idx === -1) break;
-          const path = base ? `${base}-${idx}` : `${idx}`;
-          expanded.add(path);
-          base = path;
-          level = level[idx].children;
+    // Skip initialization if expandedKeys is being used for control
+    if (this.isControlled()) {
+      const indexPaths: string[] = [];
+      const invalidKeys: string[] = [];
+
+      this.expandedKeys.forEach((key, index) => {
+        // Find the index path for this key
+        if (this.mode === 'stepper' && index !== 0) {
+          return;
         }
+        const indexPath = this.findIndexPath(key);
+
+        if (indexPath) {
+          indexPaths.push(indexPath);
+        } else {
+          invalidKeys.push(key);
+        }
+      });
+
+      if (invalidKeys.length > 0) {
+        console.error('Invalid keys given to expandedKeys prop:', invalidKeys);
+      }
+
+      this.expandedPaths = this.expandKeysWithAncestors(indexPaths);
+
+      return;
+    }
+
+    if (!this.expandAll) return;
+
+    const expanded = new Set<string>();
+
+    if (this.mode === 'basic') {
+      // Expand all directory nodes
+      const traverse = (nodes: ITreeItem[], base: string = '') => {
+        nodes.forEach((node, idx) => {
+          const path = base ? `${base}-${idx}` : `${idx}`;
+          if (node.children && node.children.length > 0) {
+            expanded.add(path);
+            traverse(node.children, path);
+          }
+        });
+      };
+      traverse(this.items);
+    } else if (this.mode === 'stepper') {
+      // Expand the first directory all the way down
+      let level = this.items;
+      let base = '';
+      while (level && level.length > 0) {
+        const idx = level.findIndex(n => n.children && n.children.length > 0);
+        if (idx === -1) break;
+        const path = base ? `${base}-${idx}` : `${idx}`;
+        expanded.add(path);
+        base = path;
+        level = level[idx].children;
       }
     }
 
@@ -229,29 +432,77 @@ export class TkTreeView implements ComponentInterface {
 
       if (isExpanded) {
         // Stepper: Close self and descendants
-        this.expandedPaths.delete(pathStr);
-        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (!this.isControlled()) {
+          this.expandedPaths.delete(pathStr);
+          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        }
         if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
           this.selectedPath = null;
         }
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.delete(pathStr);
+          descendants.forEach(descPath => newPaths.delete(descPath));
+
+          const deepestPaths = this.getDeepestPaths(newPaths);
+          const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
+
+          this.tkExpandChange.emit(keyPaths);
+        }
       } else {
         // Stepper: Open path to this item
-        this.expandedPaths = new Set(ancestors);
+        if (!this.isControlled()) {
+          this.expandedPaths = new Set(ancestors);
+        }
         this.handleSelect(pathStr, item);
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const ancestorSet = new Set(ancestors);
+          const deepestPaths = this.getDeepestPaths(ancestorSet);
+          const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
+
+          this.tkExpandChange.emit(keyPaths);
+        }
         return;
       }
     } else {
       if (this.expandedPaths.has(pathStr)) {
         // Basic: Close self and descendants
-        this.expandedPaths.delete(pathStr);
-        descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        if (!this.isControlled()) {
+          this.expandedPaths.delete(pathStr);
+          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+        }
         if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
           this.selectedPath = null;
         }
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.delete(pathStr);
+          descendants.forEach(descPath => newPaths.delete(descPath));
+
+          const deepestPaths = this.getDeepestPaths(newPaths);
+          const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
+
+          this.tkExpandChange.emit(keyPaths);
+        }
       } else {
         // Basic: Open only self
-        this.expandedPaths.add(pathStr);
+        if (!this.isControlled()) {
+          this.expandedPaths.add(pathStr);
+        }
         this.handleSelect(pathStr, item);
+        // Emit new state for controlled mode
+        if (this.isControlled()) {
+          const newPaths = new Set(this.expandedPaths);
+          newPaths.add(pathStr);
+
+          const deepestPaths = this.getDeepestPaths(newPaths);
+          const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
+
+          this.tkExpandChange.emit(keyPaths);
+        }
       }
     }
   };
@@ -394,7 +645,15 @@ export class TkTreeView implements ComponentInterface {
             ancestors.push(parentParts.slice(0, i).join('-'));
           }
         }
-        this.expandedPaths = new Set(ancestors);
+        if (this.isControlled()) {
+          const ancestorSet = new Set(ancestors);
+          const deepestPaths = this.getDeepestPaths(ancestorSet);
+          const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
+
+          this.tkExpandChange.emit(keyPaths);
+        } else {
+          this.expandedPaths = new Set(ancestors);
+        }
       }
       this.handleSelect(pathStr, item);
     }

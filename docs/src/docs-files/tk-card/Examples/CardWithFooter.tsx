@@ -1,92 +1,117 @@
-import React, { useEffect, useState } from 'react';
-import { TkCard, TkButton, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
+import React from 'react';
+import { TkCard, TkButton } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const CardWithFooter = () => {
-  const [codeSampleReact, setCodeSampleReact] = useState('');
-  const [codeSampleVue, setCodeSampleVue] = useState('');
-  const [codeSampleAngular, setCodeSampleAngular] = useState('');
+  const reactCode = `<TkCard header="Card with Footer" footerType="basic">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
+</TkCard>
 
-  const [footerType, setFooterType] = useState<'basic' | 'divided' | 'light'>('divided');
-  const footerTypes = [
-    { label: 'Basic', value: 'basic' },
-    { label: 'Divided', value: 'divided' },
-    { label: 'Light', value: 'light' },
-  ];
+<TkCard header="Card with Footer" footerType="divided">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
+</TkCard>
 
-  const handleFooterTypeChange = event => {
-    setFooterType(event.detail);
-  };
-
-  useEffect(() => {
-    const attributesList = [`header="${footerType.charAt(0).toUpperCase() + footerType.slice(1)} Footer"`, `subheader="Interactive Example"`, `footerType="${footerType}"`].filter(
-      Boolean,
-    );
-    const attributes = attributesList.join('\n  ');
-
-    const newCodeSampleReact = `import { TkCard, TkButton } from "@takeoff-ui/react";
-
-<TkCard
- ${attributes}
->
-    <p>
-        This card demonstrates the use of a footer with action buttons.
-    </p>
-    <div slot="footer-actions">
-        <TkButton label="Submit" variant="primary"/>
-        <TkButton label="Cancel" variant="secondary" type="text"/>
-    </div>
+<TkCard header="Card with Footer" footerType="light">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
 </TkCard>`;
 
-    const newCodeSampleVue = `<TkCard
-  ${attributes}
->
-    <p>
-        This card demonstrates the use of a footer with action buttons.
-    </p>
-    <div slot="footer-actions">
-        <TkButton variant="primary">Submit</TkButton>
-        <TkButton variant="secondary" type="text">Cancel</TkButton>
-    </div>
-</TkCard>
-`;
-
-    const newCodeSampleAngular = `<tk-card
-  ${attributes}
->
-  <p>
-      This card demonstrates the use of a footer with action buttons.
-  </p>
+  const vueCode = `<TkCard header="Card with Footer" footerType="basic">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
   <div slot="footer-actions">
-    <tk-button label="Submit" variant="primary" />
-    <tk-button label="Cancel" variant="secondary" type="text" />
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
+</TkCard>
+
+<TkCard header="Card with Footer" footerType="divided">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
+</TkCard>
+
+<TkCard header="Card with Footer" footerType="light">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
+</TkCard>`;
+
+  const angularCode = `<tk-card header="Card with Footer" footerType="basic">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
+    <tk-button label="Submit" variant="primary"></tk-button>
+  </div>
+</tk-card>
+
+<tk-card header="Card with Footer" footerType="divided">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
+    <tk-button label="Submit" variant="primary"></tk-button>
+  </div>
+</tk-card>
+
+<tk-card header="Card with Footer" footerType="light">
+  <p>This card demonstrates the use of a footer with action buttons.</p>
+  <div slot="footer-actions">
+    <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
+    <tk-button label="Submit" variant="primary"></tk-button>
   </div>
 </tk-card>`;
 
-    setCodeSampleReact(newCodeSampleReact);
-    setCodeSampleVue(newCodeSampleVue);
-    setCodeSampleAngular(newCodeSampleAngular);
-  }, [footerType]);
-
   const demo = (
     <>
-      <div style={{ overflow: 'overlay' }} className="mb-4">
-        <TkRadioGroup label="Options" value={footerType} onTkChange={handleFooterTypeChange}>
-          {footerTypes.map((radio, index) => {
-            return <TkRadio label={radio.label} key={index} value={radio.value} />;
-          })}
-        </TkRadioGroup>
+      <div>
+        <h3>Basic Footer</h3>
+        <TkCard header="Card with Footer" footerType="basic">
+          <p>This card demonstrates the use of a footer with action buttons.</p>
+          <div slot="footer-actions">
+            <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+            <TkButton label="Submit" variant="primary"></TkButton>
+          </div>
+        </TkCard>
       </div>
-      <TkCard header="Card with Footer" footerType={footerType}>
-        <p>This card demonstrates the use of a footer with action buttons.</p>
-        <div slot="footer-actions">
-          <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
-          <TkButton label="Submit" variant="primary"></TkButton>
-        </div>
-      </TkCard>
+      <br />
+      <div>
+        <h3>Divided Footer</h3>
+        <TkCard header="Card with Footer" footerType="divided">
+          <p>This card demonstrates the use of a footer with action buttons.</p>
+          <div slot="footer-actions">
+            <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+            <TkButton label="Submit" variant="primary"></TkButton>
+          </div>
+        </TkCard>
+      </div>
+      <br />
+      <div>
+        <h3>Light Footer</h3>
+        <TkCard header="Card with Footer" footerType="light">
+          <p>This card demonstrates the use of a footer with action buttons.</p>
+          <div slot="footer-actions">
+            <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+            <TkButton label="Submit" variant="primary"></TkButton>
+          </div>
+        </TkCard>
+      </div>
     </>
   );
 
-  return <FeatureDemo demo={demo} reactCode={codeSampleReact} vueCode={codeSampleVue} angularCode={codeSampleAngular}></FeatureDemo>;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 export default CardWithFooter;

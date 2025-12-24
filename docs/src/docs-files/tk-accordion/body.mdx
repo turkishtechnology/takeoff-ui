@@ -1,12 +1,41 @@
 import Type from "./Examples/Type";
+import AllowMultiple from "./Examples/AllowMultiple"
+import ActiveIndex from "./Examples/ActiveIndex"
+import ItemActive from "./Examples/ItemActive"
+import Icon from "./Examples/Icon"
 import Position from "./Examples/Position";
-import Icons from "./Examples/Icons"
+import ExpandCollapseIcons from "./Examples/ExpandCollapseIcons"
+import Size from "./Examples/Size"
 
 ## Type
 
 Establishes 2 different accordion styles `grouped`, `divided` via `type` property.
 
 <Type />
+
+## Allow Multiple
+
+Allows multiple accordion items to be expanded simultaneously.
+
+<AllowMultiple/ >
+
+## Active Index
+
+Tab to expand initially can be defined with the `activeIndex` property.
+
+<ActiveIndex />
+
+## Item Active
+
+Tab to expand initially can be defined with the `active` property in accordion item component.
+
+<ItemActive />
+
+## Custom Icon
+
+The `icon` property on `AccordionItem` allows for icon customization.
+
+<Icon />
 
 ## Arrow Position
 
@@ -18,4 +47,10 @@ Provides 2 positions for opening and closing arrows `left`, `right` via `arrowPo
 
 Provides different icon options for expand and collapse `expandIcon` and `collapseIcon` properties.
 
-<Icons />
+<ExpandCollapseIcons />
+
+## Size
+
+The `size` property on `AccordionItem` controls the size of the panel.
+
+<Size/ >
