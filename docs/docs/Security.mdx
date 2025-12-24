@@ -1,0 +1,42 @@
+---
+sidebar_position: 6
+title: Security
+---
+
+# Security
+
+If security scanners (npm audit, Snyk, etc.) report vulnerabilities in takeoff-ui sub-dependencies, you can use npm/yarn/pnpm overrides:
+
+### 1. Excluding Unnecessary Dependencies
+
+If a vulnerable package is pulled in but not used:
+
+```json
+"overrides": {
+  "@takeoff-ui/core": {
+    "package-name": {
+      "dompurify": "false"
+    }
+  }
+}
+```
+
+### 2. Upgrading to Safer Versions
+
+If a package needs a specific version:
+
+```json
+"overrides": {
+  "@takeoff-ui/core": {
+    "package-name": "x.y.z"
+  }
+}
+```
+
+## Contact the Team
+
+For other questions regarding security, please contact us:
+
+[takeoffui@thy.com](mailto:takeoffui@thy.com)
+
+Thank you for helping us build a high-quality, secure component library!
