@@ -1,0 +1,45 @@
+name: Changeset Check
+
+on:
+    pull_request:
+        branches:
+            - develop
+            - main
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Check for changeset
+              run: |
+                  PR_LABELS="${{ toJson(github.event.pull_request.labels.*.name) }}"
+
+                  SKIP_LABELS=("skip-changelog" "test" "wontfix" "question" "invalid" "documentation" "help wanted" "duplicate" "config")
+
+                  SKIP=false
+                  for label in "${SKIP_LABELS[@]}"; do
+                    if echo "$PR_LABELS" | grep -q "\"$label\""; then
+                      echo "ℹ️  PR has '$label' label - changeset not required"
+                      SKIP=true
+                      break
+                    fi
+                  done
+
+                  if [ "$SKIP" = true ]; then
+                    exit 0
+                  fi
+
+                  if [ -z "$(ls -A .changeset/*.md 2>/dev/null | grep -v README.md)" ]; then
+                    echo "❌ No changeset found!"
+                    echo ""
+                    echo "This PR requires a changeset."
+                    echo ""
+                    echo "To add a changeset, run:"
+                    echo "  pnpm changeset add"
+                    echo ""
+                    exit 1
+                  else
+                    echo "✅ Changeset found"
+                  fi

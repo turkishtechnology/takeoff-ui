@@ -50,18 +50,12 @@ jobs:
         run: pnpm run build
 
       - name: Publish to NPM
-        run: |
-          pnpm publish \
-            --filter=@takeoff-ui/core \
-            --filter=@takeoff-ui/react \
-            --filter=@takeoff-ui/vue \
-            --filter=@takeoff-ui/angular \
-            --filter=@takeoff-ui/tailwind \
-            --access public \
-            --no-git-checks \
-            --provenance
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish --access public --provenance --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Install Vercel CLI
         run: pnpm install -g vercel
