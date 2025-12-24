@@ -1029,6 +1029,7 @@ export class TkTable implements ComponentInterface {
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
+    this.elFilterPanelElement.classList.add(`${field}-filter-panel`);
 
     // Find the column configuration for this field
     const column = this.columns.find(col => col.field === field);
@@ -2023,7 +2024,11 @@ export class TkTable implements ComponentInterface {
             const currentFilter = this.filters.find(item => item.field == col.field);
             const hasFilter =
               currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
-            const noSortAndFilter = !this.sortOrder && !sortObj?.order && !hasFilter;
+            const filterPanelOpen = this.elFilterPanelElement?.classList.contains(`${col.field}-filter-panel`);
+            const singleSorted = this.sortField === col.field && this.sortOrder;
+            const multiSorted = !!sortObj?.order;
+            const isSorted = this.multiSort ? multiSorted : singleSorted;
+            const noSortAndFilter = !isSorted && !hasFilter;
 
             if (col.searchable) {
               _searchIcon = (
@@ -2038,10 +2043,6 @@ export class TkTable implements ComponentInterface {
               );
 
               // filtrelenmiş ise badge ile göster
-
-              const currentFilter = this.filters.find(item => item.field == col.field);
-              const hasFilter =
-                currentFilter && ((Array.isArray(currentFilter.value) && currentFilter.value.length > 0) || (!Array.isArray(currentFilter.value) && currentFilter.value !== ''));
               if (hasFilter) {
                 _searchIcon = <tk-badge dot>{_searchIcon}</tk-badge>;
               }
@@ -2064,7 +2065,7 @@ export class TkTable implements ComponentInterface {
                 <div class="tk-table-head-cell">
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
-                    <div class={classNames('icons', { 'show-icon-on-hover': noSortAndFilter && col.showIconsOnHover && !this.elFilterPanelElement }, buttonDirection)}>
+                    <div class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && noSortAndFilter && !filterPanelOpen }, buttonDirection)}>
                       {col.sortable && _sortIcon}
                       {_searchIcon}
                     </div>
