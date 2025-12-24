@@ -7,6 +7,7 @@ import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -166,6 +167,12 @@ export class TkPhoneInput implements ComponentInterface {
    */
   connectedCallback(): void {
     document.addEventListener('click', this.handleClickOutside);
+    addDialogScrollListener(this.el, e => {
+      if (e.composedPath().includes(this.el)) {
+        return;
+      }
+      this.panelRef?.remove();
+    });
   }
 
   /**
@@ -173,6 +180,7 @@ export class TkPhoneInput implements ComponentInterface {
    */
   disconnectedCallback(): void {
     document.removeEventListener('click', this.handleClickOutside);
+    removeDialogScrollListener(this.el);
   }
 
   /**
