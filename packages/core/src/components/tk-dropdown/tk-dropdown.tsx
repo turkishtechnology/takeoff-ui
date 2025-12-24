@@ -1,10 +1,9 @@
 import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, h } from '@stencil/core';
-import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
-import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -137,8 +136,10 @@ export class TkDropdown implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
-      this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
-        animationFrame: true,
+      floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
+        placement: this.position,
+        shift: { padding: 5 },
+        offset: 4,
       });
     } else {
       this.cleanup && this.cleanup();
@@ -150,20 +151,6 @@ export class TkDropdown implements ComponentInterface {
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
-  }
-
-  private updatePosition() {
-    if (this.triggerRef && this.panelRef) {
-      computePosition(this.triggerRef, this.panelRef, {
-        placement: this.position,
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        applyStyles(this.panelRef, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
   }
 
   private isGrouped(): boolean {

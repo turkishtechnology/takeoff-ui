@@ -1,13 +1,12 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
-import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 export interface IDateSelection {
   start: string;
@@ -397,8 +396,10 @@ export class TkDatePicker {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
-        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
-          animationFrame: true,
+        floatingElementAutoUpdate(this.inputRef, this.panelRef, undefined, {
+          placement: 'bottom-start',
+          shift: { padding: 5 },
+          offset: 4,
         });
       }
     } else {
@@ -738,21 +739,6 @@ export class TkDatePicker {
     }
 
     this.inputValue = this.formatInputValue();
-  }
-
-  private updatePosition() {
-    if (this.inputRef && this.panelRef) {
-      computePosition(this.inputRef?.querySelector('.tk-input'), this.panelRef, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        applyStyles(this.panelRef, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
   }
 
   private measureCalendarTableHeight(): number {

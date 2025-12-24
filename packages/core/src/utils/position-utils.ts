@@ -1,4 +1,4 @@
-import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
+import { computePosition, offset, flip, shift, arrow, autoUpdate, size } from '@floating-ui/dom';
 
 import type { Placement } from '@floating-ui/dom';
 import { applyStyles } from './style-utils';
@@ -9,10 +9,11 @@ export interface FloatingElementOptions {
   outSideOffset?: number;
   arrowSize?: number;
   shift?: any;
+  size?: any;
 }
 
 function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, options?: FloatingElementOptions, arrowElement?: HTMLElement) {
-  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9, shift: shiftOptions } = options || {};
+  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9, shift: shiftOptions, size: sizeOptions } = options || {};
 
   if (arrowElement) {
     applyStyles(arrowElement, {
@@ -27,7 +28,13 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     });
   }
 
-  const middleware = [offset(off), flip(), ...(shiftOptions ? [shift(shiftOptions)] : []), ...(arrowElement ? [arrow({ element: arrowElement })] : [])];
+  const middleware = [
+    offset(off),
+    flip(),
+    ...(shiftOptions ? [shift(shiftOptions)] : []),
+    ...(sizeOptions ? [size(sizeOptions)] : []),
+    ...(arrowElement ? [arrow({ element: arrowElement })] : []),
+  ];
 
   return computePosition(triggerElement, floatingElement, {
     strategy: 'fixed',

@@ -6,14 +6,14 @@ import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
-import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
+import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -359,7 +359,11 @@ export class TkTable implements ComponentInterface {
   componentDidUpdate() {
     if (this.isFilterOpen) {
       if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition());
+        floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
+          placement: 'bottom',
+          shift: { padding: 5 },
+          offset: 4,
+        });
       }
     } else {
       this.closeFilterPanel();
@@ -783,24 +787,6 @@ export class TkTable implements ComponentInterface {
       element?.element?.remove();
     });
     this.customCellElements = [];
-  }
-
-  private updatePosition() {
-    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
-        strategy: 'fixed',
-        placement: 'bottom',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        // Ensure the element still exists before updating its position
-        if (this.elFilterPanelElement) {
-          applyStyles(this.elFilterPanelElement, {
-            left: `${x}px`,
-            top: `${y}px`,
-          });
-        }
-      });
-    }
   }
 
   // Add a new method to safely close the filter panel

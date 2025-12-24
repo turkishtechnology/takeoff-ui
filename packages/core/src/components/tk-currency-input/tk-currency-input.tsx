@@ -213,6 +213,7 @@ export class TkCurrencyInput implements ComponentInterface {
       floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
         placement: 'bottom-start',
         shift: { padding: 5 },
+        offset: 4,
       });
     } else {
       this.dropdownEl?.remove();

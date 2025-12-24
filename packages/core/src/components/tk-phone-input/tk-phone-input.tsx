@@ -206,6 +206,7 @@ export class TkPhoneInput implements ComponentInterface {
       floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
         placement: 'bottom-start',
         shift: { padding: 5 },
+        offset: 4,
       });
     } else {
       this.panelRef?.remove();
