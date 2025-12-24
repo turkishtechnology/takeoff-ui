@@ -266,12 +266,12 @@ export class TkSelect implements ComponentInterface {
   /**
    * Emitted when the select is opened
    */
-  @Event({ eventName: 'tk-open' }) tkOpen!: EventEmitter<void>;
+  @Event({ eventName: 'tk-open', bubbles: false }) tkOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the select is closed
    */
-  @Event({ eventName: 'tk-close' }) tkClose!: EventEmitter<void>;
+  @Event({ eventName: 'tk-close', bubbles: false }) tkClose!: EventEmitter<void>;
 
   componentWillLoad(): void {
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
