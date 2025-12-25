@@ -330,7 +330,7 @@ export class TkEditor {
       strike: this.editor.isActive('strike'),
       bulletList: this.editor.isActive('bulletList'),
       orderedList: this.editor.isActive('orderedList'),
-      textAlign: this.editor.getAttributes('textAlign').textAlign as any,
+      textAlign: this.editor.getAttributes('textAlign').textAlign as 'left' | 'center' | 'right' | 'justify',
       link: this.editor.isActive('link'),
     };
   }
