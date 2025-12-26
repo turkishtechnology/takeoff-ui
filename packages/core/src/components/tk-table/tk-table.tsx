@@ -1212,17 +1212,18 @@ export class TkTable implements ComponentInterface {
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
-      input.placeholder = column.filterElements.searchInput.placeholder || 'Search';
-      input.label = column.filterElements.searchInput.label;
-      input.maskOptions = column.filterElements.searchInput.maskOptions;
-      input.disabled = column.filterElements.searchInput.disabled || false;
-      input.invalid = column.filterElements.searchInput.invalid || false;
-      input.clearable = column.filterElements.searchInput.clearable || false;
-      input.error = column.filterElements.searchInput.error;
-      input.hint = column.filterElements.searchInput.hint;
-      input.icon = column.filterElements.searchInput.icon;
-      input.iconPosition = column.filterElements.searchInput.iconPosition;
-      input.size = column.filterElements.searchInput.size || 'base';
+      const searchInputConfig = column?.filterElements?.searchInput ?? {};
+      input.placeholder = searchInputConfig?.placeholder || 'Search';
+      input.label = searchInputConfig?.label;
+      input.maskOptions = searchInputConfig?.maskOptions;
+      input.disabled = !!searchInputConfig?.disabled;
+      input.invalid = !!searchInputConfig?.invalid;
+      input.clearable = !!searchInputConfig?.clearable;
+      input.error = searchInputConfig?.error;
+      input.hint = searchInputConfig?.hint;
+      input.icon = searchInputConfig?.icon;
+      input.iconPosition = searchInputConfig?.iconPosition;
+      input.size = searchInputConfig?.size || 'base';
 
       input.setFocus();
       input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
