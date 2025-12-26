@@ -1203,7 +1203,10 @@ export class TkTable implements ComponentInterface {
         showTimePicker: false,
         size: 'base',
       };
-      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const currentValue = currentFilter?.value || null;
+
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker, value: currentValue });
       datepicker.addEventListener('tk-change', (e: Event) => {
         datepicker.value = (e as CustomEvent).detail;
       });
