@@ -30,7 +30,6 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private customCellElements: ICustomElement[] = [];
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private cleanupFilterPanel;
@@ -325,14 +324,6 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    if (!this.loading) {
-      this.customCellElements?.forEach(element => {
-        element?.ref?.replaceChildren(element.element);
-      });
-    } else {
-      this.clearCustomElements();
-    }
-
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
@@ -776,13 +767,6 @@ export class TkTable implements ComponentInterface {
 
     // After state change, recalc shadows on next frame
     requestAnimationFrame(() => this.refreshStickyShadows());
-  }
-
-  private clearCustomElements() {
-    this.customCellElements?.forEach(element => {
-      element?.element?.remove();
-    });
-    this.customCellElements = [];
   }
 
   private updatePosition() {
@@ -1761,7 +1745,7 @@ export class TkTable implements ComponentInterface {
                 }
                 return (
                   <td
-                    ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
+                    ref={el => el.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
@@ -2084,11 +2068,7 @@ export class TkTable implements ComponentInterface {
 
   private createBody() {
     if (!this.isResizing && !this.isSelectionUpdating) {
-      this.clearCustomElements();
       this.customCellCache.clear();
-    } else {
-      // When resizing or only selection changes, keep cache and just reset mount refs
-      this.customCellElements = [];
     }
 
     if (this.renderData.length > 0) {
