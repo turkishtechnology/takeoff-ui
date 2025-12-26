@@ -1391,6 +1391,13 @@ export class TkTable implements ComponentInterface {
 
   private handleMouseDown = (e: MouseEvent, columnIndex: number) => {
     e.preventDefault();
+
+    const column = this.columns[columnIndex];
+    // If column has a fixed width, don't allow resizing
+    if (column?.width) {
+      return;
+    }
+
     this.isResizing = true;
     this.resizeColumnIndex = columnIndex;
     this.startX = e.clientX;
@@ -1398,7 +1405,6 @@ export class TkTable implements ComponentInterface {
     const th = (e.target as HTMLElement).closest('th') as HTMLTableCellElement;
     if (!th) return;
 
-    const column = this.columns[columnIndex];
     const currentStateWidth = this.columnWidths[column?.field];
 
     // Use helper function to calculate starting width
@@ -1415,16 +1421,33 @@ export class TkTable implements ComponentInterface {
 
     // Use helper function to calculate new width
     const newWidth = calculateNewColumnWidth(this.startX, e.clientX, this.startWidth);
-
+    const delta = e.clientX - this.startX;
     const column = this.columns[this.resizeColumnIndex];
+
+    // Minimum width is 50px
+    if (newWidth === 50) {
+      return;
+    }
+
     if (column) {
       this.columnWidths = {
         ...this.columnWidths,
         [column.field]: `${newWidth}px`,
       };
 
-      // Force re-render
-      this.columnWidths = { ...this.columnWidths };
+      // Update both table and holder
+      const tableElement = this.el.shadowRoot?.querySelector('table') as HTMLTableElement;
+      const tableHolder = this.el.shadowRoot?.querySelector('.table-holder') as HTMLElement;
+
+      if (tableElement && tableHolder) {
+        const newTableWidth = tableElement.offsetWidth + delta;
+        tableElement.style.width = `${newTableWidth}px`;
+        tableHolder.style.width = `${newTableWidth}px`;
+
+        // Update startX and startWidth for next move calculation
+        this.startX = e.clientX;
+        this.startWidth = newWidth;
+      }
     }
   };
 
