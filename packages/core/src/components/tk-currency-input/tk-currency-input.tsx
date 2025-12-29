@@ -367,39 +367,63 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   };
 
-  private calculateNewCursorPosition(oldValue: string, newValue: string, oldCursorPosition: number, removedCharsBeforeCursor: number): number {
-    // Use custom thousands separator if provided, otherwise fall back to currency default
-    const thousandsSeparator = this.getThousandsSeparator();
+  private calculateNewCursorPosition(inputValue: string, formattedValue: string, oldCursorPosition: number): number {
+    const decimalSeparator = this.getDecimalSeparator();
 
-    let adjustedPosition = oldCursorPosition - removedCharsBeforeCursor;
+    // Find decimal separator positions
+    const inputDecimalIndex = inputValue.indexOf(decimalSeparator);
+    const formattedDecimalIndex = formattedValue.indexOf(decimalSeparator);
 
-    let oldSeparatorsBeforeCursor = 0;
-    for (let i = 0; i < Math.min(adjustedPosition, oldValue.length); i++) {
-      if (oldValue[i] === thousandsSeparator) {
-        oldSeparatorsBeforeCursor++;
-      }
-    }
+    // If no decimal separator in formatted value (precision 0), treat end as decimal point
+    const targetDecimalIndex = formattedDecimalIndex === -1 ? formattedValue.length : formattedDecimalIndex;
 
-    let newSeparatorsBeforeCursor = 0;
-    let digitCount = 0;
-    let targetDigitPosition = adjustedPosition - oldSeparatorsBeforeCursor;
+    // If no decimal separator in input, treat end as decimal point
+    const sourceDecimalIndex = inputDecimalIndex === -1 ? inputValue.length : inputDecimalIndex;
 
-    for (let i = 0; i < newValue.length; i++) {
-      if (newValue[i] === thousandsSeparator) {
-        newSeparatorsBeforeCursor++;
-      } else if (newValue[i] >= '0' && newValue[i] <= '9') {
-        digitCount++;
-        if (digitCount >= targetDigitPosition) {
-          return i + 1;
-        }
-      } else if (newValue[i] === this.getDecimalSeparator()) {
-        if (digitCount >= targetDigitPosition) {
-          return i + 1;
+    // Helper to count digits in a range
+    const countDigits = (str: string, start: number, end: number) => {
+      let count = 0;
+      for (let i = Math.min(start, end); i < Math.max(start, end); i++) {
+        if (str[i] >= '0' && str[i] <= '9') {
+          count++;
         }
       }
-    }
+      return count;
+    };
 
-    return Math.min(adjustedPosition + (newSeparatorsBeforeCursor - oldSeparatorsBeforeCursor), newValue.length);
+    // Calculate logical distance (number of digits) from decimal separator
+    const isCursorAfterDecimal = oldCursorPosition > sourceDecimalIndex;
+    const logicalDist = countDigits(inputValue, oldCursorPosition, sourceDecimalIndex);
+
+    // Traverse formatted value to find new position
+    let currentDist = 0;
+
+    if (isCursorAfterDecimal) {
+      // Moving right from decimal separator
+      for (let i = targetDecimalIndex + 1; i < formattedValue.length; i++) {
+        if (currentDist >= logicalDist) {
+          return i;
+        }
+        if (formattedValue[i] >= '0' && formattedValue[i] <= '9') {
+          currentDist++;
+        }
+      }
+      return formattedValue.length;
+    } else {
+      // Moving left from decimal separator
+      for (let i = targetDecimalIndex - 1; i >= 0; i--) {
+        if (formattedValue[i] >= '0' && formattedValue[i] <= '9') {
+          currentDist++;
+        }
+        if (currentDist > logicalDist) {
+          // Use > because we want to be *after* the digit that completes the count
+          return i + 1;
+        }
+      }
+      // If we run out of digits, go to start, but respect negative sign
+      const hasNegative = formattedValue.startsWith('-');
+      return hasNegative ? 1 : 0;
+    }
   }
 
   private handleInput = (event: Event) => {
@@ -411,30 +435,57 @@ export class TkCurrencyInput implements ComponentInterface {
     const decimalSeparator = this.getDecimalSeparator();
     const thousandsSeparator = this.getThousandsSeparator();
 
+    // Check if decimal separator was deleted
+    if (this.displayValue.includes(decimalSeparator) && !inputValue.includes(decimalSeparator)) {
+      const expectedValueWithoutSeparator = this.displayValue.replace(decimalSeparator, '');
+      if (inputValue === expectedValueWithoutSeparator) {
+        target.value = this.displayValue;
+        const commaIndex = this.displayValue.indexOf(decimalSeparator);
+        target.setSelectionRange(commaIndex, commaIndex);
+        return;
+      }
+    }
+
     // Allow negative sign if allowNegative is true
     const negativePattern = this.allowNegative ? '\\-' : '';
     const allowedChars = new RegExp(`[0-9\\${decimalSeparator}\\${thousandsSeparator}${negativePattern}]`);
 
     let filteredValue = '';
-    let removedCharsBeforeCursor = 0;
     let hasNegativeSign = false;
 
-    for (let i = 0; i < inputValue.length; i++) {
-      const char = inputValue[i];
+    const parts = inputValue.split(decimalSeparator);
+    if (parts.length > 2) {
+      const firstSeparatorIndex = inputValue.indexOf(decimalSeparator);
+      const newIntegerPart = inputValue.substring(0, firstSeparatorIndex);
+      const displayParts = this.displayValue.split(decimalSeparator);
+      const oldDecimalPart = displayParts.length > 1 ? displayParts[1] : '';
+      filteredValue = newIntegerPart + decimalSeparator + oldDecimalPart;
+    } else {
+      for (let i = 0; i < inputValue.length; i++) {
+        const char = inputValue[i];
 
-      // Handle negative sign - only allow it at the beginning
-      if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
-        filteredValue += char;
-        hasNegativeSign = true;
-      } else if (char === '-' && this.allowNegative && hasNegativeSign) {
-        // Remove duplicate negative signs
-        if (i < cursorPosition) {
-          removedCharsBeforeCursor++;
+        // Handle negative sign - only allow it at the beginning
+        if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
+          filteredValue += char;
+          hasNegativeSign = true;
+        } else if (char === '-' && this.allowNegative && hasNegativeSign) {
+          // Remove duplicate negative signs
+        } else if (allowedChars.test(char) && char !== '-') {
+          filteredValue += char;
         }
-      } else if (allowedChars.test(char) && char !== '-') {
-        filteredValue += char;
-      } else if (i < cursorPosition) {
-        removedCharsBeforeCursor++;
+      }
+    }
+
+    // Truncate decimal digits if they exceed precision
+    if (this.precision >= 0) {
+      const parts = filteredValue.split(decimalSeparator);
+      if (parts.length > 1) {
+        const integerPart = parts[0];
+        const decimalPart = parts[1];
+
+        if (decimalPart.length > this.precision) {
+          filteredValue = integerPart + decimalSeparator + decimalPart.substring(0, this.precision);
+        }
       }
     }
 
@@ -448,7 +499,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
     target.value = formattedValue;
 
-    const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition, removedCharsBeforeCursor);
+    const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition);
 
     requestAnimationFrame(() => {
       target.setSelectionRange(newCursorPosition, newCursorPosition);
@@ -461,6 +512,14 @@ export class TkCurrencyInput implements ComponentInterface {
     } as CurrencyInputChangeEvent;
 
     this.tkChange.emit(eventData);
+  };
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    const decimalSeparator = this.getDecimalSeparator();
+
+    if (event.key === '.' && decimalSeparator !== '.') {
+      event.preventDefault();
+    }
   };
 
   private handleFocus = () => {
@@ -540,6 +599,7 @@ export class TkCurrencyInput implements ComponentInterface {
         readonly={this.readonly}
         name={this.name}
         onInput={this.handleInput}
+        onKeyDown={this.handleKeyDown}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
       />
