@@ -51,6 +51,10 @@ export class TkTable implements ComponentInterface {
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
   @State() renderData: Record<PropertyKey, unknown>[] = [];
+  @Watch('renderData')
+  renderDataChanged(newValue: Record<PropertyKey, unknown>[], oldValue: Record<PropertyKey, unknown>[]) {
+    if (!_.isEqual(oldValue, newValue)) this.tkVisibleDataChange.emit(newValue);
+  }
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -269,6 +273,11 @@ export class TkTable implements ComponentInterface {
    * @param groupBy The new groupBy field name (null if grouping is cleared)
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
+
+  /**
+   * Emitted when the visible data changes.
+   */
+  @Event({ eventName: 'tk-visible-data-change' }) tkVisibleDataChange: EventEmitter<Record<PropertyKey, unknown>[]>;
 
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
