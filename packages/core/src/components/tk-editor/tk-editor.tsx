@@ -1,6 +1,7 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
 import Placeholder from '@tiptap/extension-placeholder';
+import CharacterCount from '@tiptap/extension-character-count';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
@@ -41,6 +42,7 @@ export class TkEditor {
     link?: boolean;
   } = {};
   @State() private isEmpty: boolean = false;
+  @State() private charCount: number = 0;
 
   /**
    * The value of the editor
@@ -86,9 +88,32 @@ export class TkEditor {
   @Prop() hideToolbar: boolean = false;
 
   /**
+   * Limits the number of characters.
+   * @default 140
+   */
+  @Prop() maxLength?: number = 140;
+
+  /**
+   * Whether to show the character counter
+   * @default false
+   */
+  @Prop() showCounter?: boolean = false;
+
+  /**
+   * Whether the editor is resizable
+   * @default false
+   */
+  @Prop() resizable?: boolean = false;
+
+  /**
    * The style attribute of tabs item element
    */
   @Prop() contentStyle?: CSSStyleProperties = null;
+
+  @State() private editorHeight: number = 0;
+  private isResizing: boolean = false;
+  private resizeStartY: number = 0;
+  private resizeStartHeight: number = 0;
 
   /**
    * Custom extensions
@@ -237,6 +262,10 @@ export class TkEditor {
       );
     }
 
+    if (this.showCounter) {
+      defaultExtensions.push(CharacterCount.configure({ limit: this.maxLength }));
+    }
+
     return [...defaultExtensions, ...userExtensions];
   }
 
@@ -253,11 +282,17 @@ export class TkEditor {
         editable: !this.disabled && !this.readonly,
         onCreate: ({ editor }) => {
           this.isEmpty = editor.getText().length === 0;
+          if (this.showCounter) {
+            this.charCount = editor.storage.characterCount.characters();
+          }
         },
         onUpdate: ({ editor }) => {
           if (this.isExternalUpdate) {
             this.isExternalUpdate = false;
             this.isEmpty = editor.getText().length === 0;
+            if (this.showCounter) {
+              this.charCount = editor.storage.characterCount.characters();
+            }
             return;
           }
 
@@ -266,6 +301,9 @@ export class TkEditor {
           this.tkChange.emit(html);
           this.updateSelectionState();
           this.isEmpty = editor.getText().length === 0;
+          if (this.showCounter) {
+            this.charCount = editor.storage.characterCount.characters();
+          }
         },
         onFocus: () => {
           this.isFocused = true;
@@ -292,7 +330,7 @@ export class TkEditor {
       strike: this.editor.isActive('strike'),
       bulletList: this.editor.isActive('bulletList'),
       orderedList: this.editor.isActive('orderedList'),
-      textAlign: this.editor.getAttributes('textAlign').textAlign as any,
+      textAlign: this.editor.getAttributes('textAlign').textAlign as 'left' | 'center' | 'right' | 'justify',
       link: this.editor.isActive('link'),
     };
   }
@@ -431,6 +469,31 @@ export class TkEditor {
     }
   };
 
+  private handleResizeMouseDown = (e: MouseEvent) => {
+    if (!this.resizable || this.disabled || this.readonly) return;
+    e.preventDefault(); // Prevent text selection
+    this.isResizing = true;
+    this.resizeStartY = e.clientY;
+    const content = this.el.querySelector('.tk-editor-content') as HTMLElement;
+    this.resizeStartHeight = content.offsetHeight;
+
+    document.addEventListener('mousemove', this.handleResizeMouseMove);
+    document.addEventListener('mouseup', this.handleResizeMouseUp);
+  };
+
+  private handleResizeMouseMove = (e: MouseEvent) => {
+    if (!this.isResizing) return;
+    const deltaY = e.clientY - this.resizeStartY;
+    const newHeight = Math.max(120, this.resizeStartHeight + deltaY); // Min height 120px
+    this.editorHeight = newHeight;
+  };
+
+  private handleResizeMouseUp = () => {
+    this.isResizing = false;
+    document.removeEventListener('mousemove', this.handleResizeMouseMove);
+    document.removeEventListener('mouseup', this.handleResizeMouseUp);
+  };
+
   private createToolbarButton(button: TkEditorCustomButton) {
     const isCustomButton = !TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS];
     const iconContent = TOOLBAR_ICONS[button.icon as keyof typeof TOOLBAR_ICONS] || button.icon;
@@ -492,8 +555,33 @@ export class TkEditor {
     return hint;
   }
 
+  private renderFooter(): HTMLDivElement | null {
+    if (this.showCounter || this.resizable) {
+      return (
+        <div class="tk-editor-footer">
+          {this.showCounter && (
+            <div class={classNames('tk-editor-counter', { 'tk-editor-counter-maxed': this.charCount === this.maxLength })}>
+              {this.charCount}/{this.maxLength}
+            </div>
+          )}
+          {this.resizable && (
+            <div class="tk-editor-resize-icon" onMouseDown={this.handleResizeMouseDown}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+                <path d="M2.18564e-05 5.89256H5.89258V0L2.18564e-05 5.89256Z" fill="var(--icon-light)"/>
+              </svg>
+            </div>
+          )}
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
-    const contentStyle = this.contentStyle;
+    const contentStyle = {
+      ...this.contentStyle,
+      ...(this.editorHeight > 0 ? { height: `${this.editorHeight}px`, minHeight: 'unset' } : {}),
+    };
     const labelElement = this.label && (
       <label class="tk-editor-label">
         {this.label}
@@ -519,6 +607,7 @@ export class TkEditor {
             data-placeholder={this.placeholder}
             style={contentStyle}
           />
+          {this.renderFooter()}
         </div>
         {this.renderHint()}
       </div>
