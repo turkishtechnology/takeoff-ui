@@ -567,7 +567,7 @@ export class TkEditor {
           {this.resizable && (
             <div class="tk-editor-resize-icon" onMouseDown={this.handleResizeMouseDown}>
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-                <path d="M2.18564e-05 5.89256H5.89258V0L2.18564e-05 5.89256Z" fill="var(--icon-light)"/>
+                <path d="M2.18564e-05 5.89256H5.89258V0L2.18564e-05 5.89256Z" fill="var(--icon-light)" />
               </svg>
             </div>
           )}

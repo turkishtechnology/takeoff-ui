@@ -25,15 +25,10 @@ const Counter = () => {
   const demo = (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex gap-4">
-        <TkCheckbox label="Show Counter" value={showCounter} onTkChange={(e) => setShowCounter(e.detail)} />
-        <TkCheckbox label="Resizable" value={resizable} onTkChange={(e) => setResizable(e.detail)} />
+        <TkCheckbox label="Show Counter" value={showCounter} onTkChange={e => setShowCounter(e.detail)} />
+        <TkCheckbox label="Resizable" value={resizable} onTkChange={e => setResizable(e.detail)} />
       </div>
-      <TkEditor 
-        placeholder="Type something..." 
-        showCounter={showCounter} 
-        resizable={resizable} 
-        maxLength={280} 
-      />
+      <TkEditor placeholder="Type something..." showCounter={showCounter} resizable={resizable} maxLength={280} />
     </div>
   );
 
