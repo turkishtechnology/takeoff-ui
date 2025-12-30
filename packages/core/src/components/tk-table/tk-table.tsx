@@ -1757,7 +1757,7 @@ export class TkTable implements ComponentInterface {
                 }
                 return (
                   <td
-                    ref={el => el.replaceChildren(effectiveElement)}
+                    ref={el => el?.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
