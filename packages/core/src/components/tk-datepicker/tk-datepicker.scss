@@ -110,6 +110,12 @@
         font-weight: 400;
         line-height: var(--desktop-body-s-line-height);
         cursor: pointer;
+
+        &.disabled {
+          pointer-events: none;
+          user-select: none;
+          color: var(--text-sub-base);
+        }
       }
     }
 
@@ -223,6 +229,7 @@
   }
 
   &.disabled,
+  &.readonly,
   &.adjacent-month {
     pointer-events: none;
     user-select: none;
@@ -529,6 +536,12 @@
     min-height: 40px;
     line-height: 40px;
     flex: 0 0 40px;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    color: var(--text-sub-base);
   }
 }
 
