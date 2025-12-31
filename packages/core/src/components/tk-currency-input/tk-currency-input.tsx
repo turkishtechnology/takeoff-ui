@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { getIconElementProps } from '../../utils/icon-utils';
-import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
+import type { Seperator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { applyStyles } from '../../utils/style-utils';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
@@ -33,6 +33,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
+  private validSeperators: Seperator[] = [',', '.', ' '] as const;
 
   /**
    * The currently selected currency object.
@@ -129,14 +130,14 @@ export class TkCurrencyInput implements ComponentInterface {
    * If provided, this will override the currency's default decimal separator.
    * Example: "." for USD style, "," for EUR style
    */
-  @Prop() decimalSeparator?: string;
+  @Prop() decimalSeparator?: Seperator;
 
   /**
    * Custom thousands separator to use for formatting.
    * If provided, this will override the currency's default thousands separator.
    * Example: "," for USD style, "." for EUR style, " " for some European styles
    */
-  @Prop() thousandsSeparator?: string;
+  @Prop() thousandsSeparator?: Seperator;
 
   @Watch('defaultCurrency')
   defaultCurrencyChanged() {
@@ -203,6 +204,8 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
+    this.validateSeperators();
+    this.validateSeperatorTypes();
   }
 
   /**
@@ -273,15 +276,34 @@ export class TkCurrencyInput implements ComponentInterface {
   /**
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
-  private getDecimalSeparator(): string {
+  private getDecimalSeparator(): Seperator {
     return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
   }
 
   /**
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
-  private getThousandsSeparator(): string {
+  private getThousandsSeparator(): Seperator {
     return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
+  }
+
+  /**
+   * Validators
+   */
+  private validateSeperators(): void {
+    if (!this.validSeperators.includes(this.getDecimalSeparator())) {
+      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeperators);
+    }
+
+    if (!this.validSeperators.includes(this.getThousandsSeparator())) {
+      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeperators);
+    }
+  }
+
+  private validateSeperatorTypes(): void {
+    if (this.getDecimalSeparator() === this.getThousandsSeparator()) {
+      console.error('TkCurrencyInput: decimalSeparator and thousandsSeparator cannot be the same.');
+    }
   }
 
   private formatCurrency(amount: number): string {
@@ -291,7 +313,7 @@ export class TkCurrencyInput implements ComponentInterface {
     const decimalSeparator = this.getDecimalSeparator();
     const thousandsSeparator = this.getThousandsSeparator();
 
-    const isNegative = amount < 0;
+    const isNegative = amount < 0 || Object.is(amount, -0);
     const absoluteAmount = Math.abs(amount);
 
     // Format the number with the specified precision
@@ -327,8 +349,16 @@ export class TkCurrencyInput implements ComponentInterface {
     // Remove negative sign temporarily for processing
     let cleanValue = formattedValue.replace('-', '');
 
-    // Remove thousands separators and replace decimal separator with dot
-    cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '').replace(decimalSeparator, '.');
+    // Remove thousands separators
+    if (thousandsSeparator) {
+      cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '');
+    }
+
+    // Handle decimal separator: split by separator, keep first part as integer, join rest as decimal
+    const parts = cleanValue.split(decimalSeparator);
+    if (parts.length > 1) {
+      cleanValue = parts[0] + '.' + parts.slice(1).join('');
+    }
 
     // Remove non-numeric characters except decimal point
     cleanValue = cleanValue.replace(/[^0-9.]/g, '');
@@ -394,6 +424,10 @@ export class TkCurrencyInput implements ComponentInterface {
     // Calculate logical distance (number of digits) from decimal separator
     const isCursorAfterDecimal = oldCursorPosition > sourceDecimalIndex;
     const logicalDist = countDigits(inputValue, oldCursorPosition, sourceDecimalIndex);
+
+    if (logicalDist === 0) {
+      return isCursorAfterDecimal ? targetDecimalIndex + 1 : targetDecimalIndex;
+    }
 
     // Traverse formatted value to find new position
     let currentDist = 0;
@@ -501,9 +535,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
     const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition);
 
-    requestAnimationFrame(() => {
-      target.setSelectionRange(newCursorPosition, newCursorPosition);
-    });
+    target.setSelectionRange(newCursorPosition, newCursorPosition);
 
     const eventData = {
       value: numericValue,
