@@ -4,7 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "allowedNonPeerDependencies": [
-    "@takeoff-ui/core"
-  ]
+  "allowedNonPeerDependencies": ["@takeoff-ui/core"]
 }
