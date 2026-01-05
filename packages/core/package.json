@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/core",
-  "version": "0.7.3",
+  "version": "0.7.5",
   "description": "Core components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.com",
@@ -45,6 +45,7 @@
     "@stencil/react-output-target": "0.8.0",
     "@stencil/vue-output-target": "0.8.9",
     "@tiptap/core": "^2.11.0",
+    "@tiptap/extension-character-count": "^2.27.1",
     "@tiptap/extension-font-family": "^2.1.12",
     "@tiptap/extension-image": "^2.11.0",
     "@tiptap/extension-link": "^2.11.0",

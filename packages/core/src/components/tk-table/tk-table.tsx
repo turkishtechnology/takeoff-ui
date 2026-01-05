@@ -30,7 +30,6 @@ import { floatingElementAutoUpdate } from '../../utils/position-utils';
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private customCellElements: ICustomElement[] = [];
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private elFilterPanelElement: HTMLElement;
@@ -51,6 +50,10 @@ export class TkTable implements ComponentInterface {
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
   @State() renderData: Record<PropertyKey, unknown>[] = [];
+  @Watch('renderData')
+  renderDataChanged(newValue: Record<PropertyKey, unknown>[], oldValue: Record<PropertyKey, unknown>[]) {
+    if (!_.isEqual(oldValue, newValue)) this.tkVisibleDataChange.emit(newValue);
+  }
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -270,6 +273,11 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
 
+  /**
+   * Emitted when the visible data changes.
+   */
+  @Event({ eventName: 'tk-visible-data-change' }) tkVisibleDataChange: EventEmitter<Record<PropertyKey, unknown>[]>;
+
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -325,14 +333,6 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    if (!this.loading) {
-      this.customCellElements?.forEach(element => {
-        element?.ref?.replaceChildren(element.element);
-      });
-    } else {
-      this.clearCustomElements();
-    }
-
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
@@ -1197,7 +1197,10 @@ export class TkTable implements ComponentInterface {
         showTimePicker: false,
         size: 'base',
       };
-      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const currentValue = currentFilter?.value || null;
+
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker, value: currentValue });
       datepicker.addEventListener('tk-change', (e: Event) => {
         datepicker.value = (e as CustomEvent).detail;
       });
@@ -1206,17 +1209,18 @@ export class TkTable implements ComponentInterface {
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
-      input.placeholder = column.filterElements.searchInput.placeholder || 'Search';
-      input.label = column.filterElements.searchInput.label;
-      input.maskOptions = column.filterElements.searchInput.maskOptions;
-      input.disabled = column.filterElements.searchInput.disabled || false;
-      input.invalid = column.filterElements.searchInput.invalid || false;
-      input.clearable = column.filterElements.searchInput.clearable || false;
-      input.error = column.filterElements.searchInput.error;
-      input.hint = column.filterElements.searchInput.hint;
-      input.icon = column.filterElements.searchInput.icon;
-      input.iconPosition = column.filterElements.searchInput.iconPosition;
-      input.size = column.filterElements.searchInput.size || 'base';
+      const searchInputConfig = column?.filterElements?.searchInput ?? {};
+      input.placeholder = searchInputConfig?.placeholder || 'Search';
+      input.label = searchInputConfig?.label;
+      input.maskOptions = searchInputConfig?.maskOptions;
+      input.disabled = !!searchInputConfig?.disabled;
+      input.invalid = !!searchInputConfig?.invalid;
+      input.clearable = !!searchInputConfig?.clearable;
+      input.error = searchInputConfig?.error;
+      input.hint = searchInputConfig?.hint;
+      input.icon = searchInputConfig?.icon;
+      input.iconPosition = searchInputConfig?.iconPosition;
+      input.size = searchInputConfig?.size || 'base';
 
       input.setFocus();
       input.value = (this.filters?.find(item => item.field == field)?.value as string) || '';
@@ -1754,7 +1758,7 @@ export class TkTable implements ComponentInterface {
                 }
                 return (
                   <td
-                    ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
+                    ref={el => el?.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
@@ -2077,11 +2081,7 @@ export class TkTable implements ComponentInterface {
 
   private createBody() {
     if (!this.isResizing && !this.isSelectionUpdating) {
-      this.clearCustomElements();
       this.customCellCache.clear();
-    } else {
-      // When resizing or only selection changes, keep cache and just reset mount refs
-      this.customCellElements = [];
     }
 
     if (this.renderData.length > 0) {
