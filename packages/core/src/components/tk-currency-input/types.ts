@@ -6,8 +6,8 @@ export interface ICurrency {
   code: string;
   symbol: string;
   name: string;
-  decimalSeparator: Seperator;
-  thousandsSeparator: Seperator;
+  decimalSeparator: Separator;
+  thousandsSeparator: Separator;
 }
 
 /**
@@ -23,4 +23,4 @@ export interface CurrencyInputChangeEvent {
 /**
  * The decimal/thousands separators for the currency input.
  */
-export type Seperator = ',' | '.' | ' ';
+export type Separator = ',' | '.' | ' ';

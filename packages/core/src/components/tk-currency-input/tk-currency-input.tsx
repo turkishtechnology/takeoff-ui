@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { getIconElementProps } from '../../utils/icon-utils';
-import type { Seperator, ICurrency, CurrencyInputChangeEvent } from './types';
+import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { applyStyles } from '../../utils/style-utils';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
@@ -33,7 +33,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
-  private validSeperators: Seperator[] = [',', '.', ' '] as const;
+  private validSeparators: Separator[] = [',', '.', ' '] as const;
 
   /**
    * The currently selected currency object.
@@ -130,14 +130,14 @@ export class TkCurrencyInput implements ComponentInterface {
    * If provided, this will override the currency's default decimal separator.
    * Example: "." for USD style, "," for EUR style
    */
-  @Prop() decimalSeparator?: Seperator;
+  @Prop() decimalSeparator?: Separator;
 
   /**
    * Custom thousands separator to use for formatting.
    * If provided, this will override the currency's default thousands separator.
    * Example: "," for USD style, "." for EUR style, " " for some European styles
    */
-  @Prop() thousandsSeparator?: Seperator;
+  @Prop() thousandsSeparator?: Separator;
 
   @Watch('defaultCurrency')
   defaultCurrencyChanged() {
@@ -204,8 +204,8 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
-    this.validateSeperators();
-    this.validateSeperatorTypes();
+    this.validateSeparators();
+    this.validateSeparatorTypes();
   }
 
   /**
@@ -276,31 +276,31 @@ export class TkCurrencyInput implements ComponentInterface {
   /**
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
-  private getDecimalSeparator(): Seperator {
+  private getDecimalSeparator(): Separator {
     return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
   }
 
   /**
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
-  private getThousandsSeparator(): Seperator {
+  private getThousandsSeparator(): Separator {
     return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
   }
 
   /**
    * Validators
    */
-  private validateSeperators(): void {
-    if (!this.validSeperators.includes(this.getDecimalSeparator())) {
-      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeperators);
+  private validateSeparators(): void {
+    if (!this.validSeparators.includes(this.getDecimalSeparator())) {
+      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeparators);
     }
 
-    if (!this.validSeperators.includes(this.getThousandsSeparator())) {
-      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeperators);
+    if (!this.validSeparators.includes(this.getThousandsSeparator())) {
+      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeparators);
     }
   }
 
-  private validateSeperatorTypes(): void {
+  private validateSeparatorTypes(): void {
     if (this.getDecimalSeparator() === this.getThousandsSeparator()) {
       console.error('TkCurrencyInput: decimalSeparator and thousandsSeparator cannot be the same.');
     }
