@@ -791,13 +791,6 @@ export class TkTable implements ComponentInterface {
     requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
-  private clearCustomElements() {
-    this.customCellElements?.forEach(element => {
-      element?.element?.remove();
-    });
-    this.customCellElements = [];
-  }
-
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
     removeDialogScrollListener(this.elFilterPanelElement);
