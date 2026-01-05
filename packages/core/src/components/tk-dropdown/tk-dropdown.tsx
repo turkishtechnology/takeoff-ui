@@ -136,21 +136,34 @@ export class TkDropdown implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
-      floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
-        placement: this.position,
-        shift: { padding: 5 },
-        offset: 4,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
+  }
+
+  private updatePosition() {
+    this.cleanup = floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
+      placement: this.position,
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   private isGrouped(): boolean {

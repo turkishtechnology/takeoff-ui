@@ -396,18 +396,23 @@ export class TkDatePicker {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
-        floatingElementAutoUpdate(this.inputRef, this.panelRef, undefined, {
-          placement: 'bottom-start',
-          shift: { padding: 5 },
-          offset: 4,
-        });
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePosition();
       }
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when datepicker closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
     removeDialogScrollListener(this.el);
 
@@ -464,6 +469,14 @@ export class TkDatePicker {
     if (this.isOpen) {
       this.isOpen = false;
     }
+  }
+
+  private updatePosition() {
+    this.cleanup = floatingElementAutoUpdate(this.inputRef, this.panelRef, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   private updateTimeBasedOnAmPm(newAmPm: 'AM' | 'PM') {

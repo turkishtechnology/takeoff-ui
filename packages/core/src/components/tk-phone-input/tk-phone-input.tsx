@@ -178,6 +178,10 @@ export class TkPhoneInput implements ComponentInterface {
    * Remove event listeners when the component is disconnected from the DOM.
    */
   disconnectedCallback(): void {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     document.removeEventListener('click', this.handleClickOutside);
     removeDialogScrollListener(this.el);
   }
@@ -202,20 +206,29 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLTkInputElement;
-      floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
-        placement: 'bottom-start',
-        shift: { padding: 5 },
-        offset: 4,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.panelRef?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  private updatePosition() {
+    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLTkInputElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   /**

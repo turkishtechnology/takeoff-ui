@@ -209,15 +209,15 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
-      floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
-        placement: 'bottom-start',
-        shift: { padding: 5 },
-        offset: 4,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.dropdownEl?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
@@ -227,8 +227,21 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     document.removeEventListener('click', this.closeDropdown);
     removeDialogScrollListener(this.el);
+  }
+
+  private updatePosition() {
+    const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   /**

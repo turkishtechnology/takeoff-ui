@@ -120,7 +120,10 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.triggerElement?.removeEventListener('click', () => (this.isOpen = !this.isOpen));
     }
-    this.cleanup && this.cleanup();
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
@@ -132,9 +135,14 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
       this.updatePosition();
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when popover closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
 
@@ -147,7 +155,7 @@ export class TkPopover implements ComponentInterface {
   }
 
   private updatePosition() {
-    floatingElementAutoUpdate(this.triggerElement, this.popoverElement, this.arrowElement, { placement: this.position });
+    this.cleanup = floatingElementAutoUpdate(this.triggerElement, this.popoverElement, this.arrowElement, { placement: this.position });
   }
 
   render() {

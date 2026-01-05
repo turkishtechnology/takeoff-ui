@@ -33,7 +33,6 @@ export class TkTable implements ComponentInterface {
   private customCellElements: ICustomElement[] = [];
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
-  private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
   private isResizing: boolean = false;
   private resizeColumnIndex: number = -1;
@@ -41,6 +40,7 @@ export class TkTable implements ComponentInterface {
   private startWidth: number = 0;
   private customCellCache: Map<string, HTMLElement> = new Map();
   private isSelectionUpdating: boolean = false;
+  private cleanup;
 
   @Element() el: HTMLTkTableElement;
 
@@ -359,23 +359,24 @@ export class TkTable implements ComponentInterface {
   componentDidUpdate() {
     if (this.isFilterOpen) {
       if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-        floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
-          placement: 'bottom',
-          shift: { padding: 5 },
-          offset: 4,
-        });
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePanelPosition();
       }
     } else {
+      // Remove floating UI listeners when filter closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.closeFilterPanel();
     }
   }
 
   disconnectedCallback(): void {
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
-
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.elActiveSearchIcon = null;
     this.elFilterPanelElement = null;
     this.isFilterOpen = false;
@@ -721,6 +722,14 @@ export class TkTable implements ComponentInterface {
     this.totalItems = flatRenderData.length;
   }
 
+  private updatePanelPosition() {
+    this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
+      placement: 'bottom',
+      shift: { padding: 5 },
+      offset: 4,
+    });
+  }
+
   private clearGroupingInternal() {
     this.groupByColumnField = null;
     this.groupedData = [];
@@ -792,11 +801,10 @@ export class TkTable implements ComponentInterface {
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
     removeDialogScrollListener(this.elFilterPanelElement);
-    // First cleanup the floating UI
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
+    // Clean up floating UI listeners before removing element
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
 
     // Then remove the element from DOM
     if (this.elFilterPanelElement) {
