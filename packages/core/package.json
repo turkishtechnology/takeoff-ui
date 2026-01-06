@@ -63,8 +63,8 @@
     "exceljs": "^4.4.0",
     "filesize": "^10.1.6",
     "json-server": "^1.0.0-beta.2",
-    "jspdf": "^3.0.2",
-    "jspdf-autotable": "^5.0.2",
+    "jspdf": "^4.0.0",
+    "jspdf-autotable": "^5.0.7",
     "lodash": "^4.17.21",
     "mime": "^4.0.6",
     "uuid": "^11.0.5"
