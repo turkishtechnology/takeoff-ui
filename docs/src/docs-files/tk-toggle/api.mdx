@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#toggle-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -15,14 +15,14 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | The current state of the toggle. |
 | <TkBadge label="variant" variant="primary" size="large" type="filledlight"/> | <code>"info", "success"</code> | 'info' | The type of the toggle. |
 
-### Events
+### Events {#toggle-events}
 
 | Name | Description |
 | ---- | ----------- |
 | tk-change | Event emitted when the toggle value changes. |
 
-### Methods
+### Methods {#toggle-methods}
 
-| Name | Description |
-| ---- | ----------- |
-| getInputElement | Returns the native `<input>` element used under the hood. |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| getInputElement | <code>getInputElement() =\> Promise\<HTMLInputElement\></code> | Returns the native `<input>` element used under the hood. |

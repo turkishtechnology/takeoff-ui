@@ -2,6 +2,7 @@ import { TkAvatar } from '@takeoff-ui/react';
 import React from 'react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+
 const WithImages = () => {
   const reactCode = `<TkAvatar image="https://via.placeholder.com/40" background="solid" variant="primary" rounded />
 <TkAvatar image="https://via.placeholder.com/40" background="solid" variant="light" rounded />
@@ -48,7 +49,7 @@ const WithImages = () => {
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-4.png')} background="solid" variant="info" rounded />
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-5.png')} background="solid" variant="danger" rounded />
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex justify-center gap-2 flex-wrap">
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-1.png')} background="solid" variant="primary" />
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-2.png')} background="solid" variant="light" />
         <TkAvatar image={useBaseUrl('img/docs/tk-avatar/user-3.png')} background="solid" variant="success" />

@@ -4,6 +4,7 @@ import HeaderType from './Examples/HeaderType';
 import Selection from './Examples/Selection';
 import FilterAndSort from './Examples/FilterAndSort';
 import Pagination from './Examples/Pagination';
+import Localization from './Examples/Localization';
 import ServerSide from './Examples/ServerSide';
 import CustomCell from './Examples/CustomCell';
 import RowCellStyle from './Examples/RowCellStyle';
@@ -96,6 +97,13 @@ This example demonstrates how to clear all filters and sorting settings programm
 Client side pagination
 
 <Pagination />
+
+## Localization
+
+Customize pagination labels for different locales using `pageReportTemplate` and `itemsReportTemplate` props.
+Available placeholders: `{currentPage}`, `{totalPages}`, `{startItem}`, `{endItem}`, `{totalItems}`.
+
+<Localization />
 
 ## Server Side
 

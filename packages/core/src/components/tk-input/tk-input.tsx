@@ -27,6 +27,7 @@ export class TkInput implements ComponentInterface {
   private uniqueId = uuidv4();
   private cleaveInstance: Cleave;
   private readOnly: boolean = false;
+  private editable: boolean = true;
 
   @Element() el!: HTMLTkInputElement;
 
@@ -113,11 +114,13 @@ export class TkInput implements ComponentInterface {
 
   /**
    * If `true`, the user cannot modify the value.
+   * @defaultValue false
    */
   @Prop() readonly: boolean = false;
 
   /**
    * Sets size for the component.
+   * @defaultValue base
    */
   @Prop() size: 'large' | 'base' | 'small' = 'base';
 
@@ -150,6 +153,11 @@ export class TkInput implements ComponentInterface {
    * Sets step for decimal value with mode number
    */
   @Prop() step: string;
+
+  /**
+   * A function that determines whether a chip is disabled.
+   */
+  @Prop() chipDisabled: Function;
 
   /**
    * The value of the input.
@@ -372,8 +380,12 @@ export class TkInput implements ComponentInterface {
   };
 
   private handleFormReset() {
-    this.value = null;
-    this.tkChange.emit(null);
+    if (this.mode === 'chips' && this.chipDisabled && Array.isArray(this.value)) {
+      this.value = this.value.filter(item => this.chipDisabled(item));
+    } else {
+      this.value = null;
+    }
+    this.tkChange.emit(this.value);
   }
 
   // for add chip
@@ -540,7 +552,14 @@ export class TkInput implements ComponentInterface {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
-        const isRemovable = typeof item === 'object' && item !== null && item.hasOwnProperty('removable') ? item.removable : true;
+        let isRemovable;
+        if (this.chipDisabled?.(item)) {
+          isRemovable = false;
+        } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
+          isRemovable = item.removable;
+        } else {
+          isRemovable = true;
+        }
         const baseProps = {
           ...itemChipOptions,
           removable: isRemovable,
@@ -572,7 +591,7 @@ export class TkInput implements ComponentInterface {
         max={this.max}
         step={this.step}
         placeholder={this.placeholder || ''}
-        readOnly={this.readOnly}
+        readOnly={this.readOnly || !this.editable}
         tabindex={this.tabindex}
         value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
@@ -697,10 +716,12 @@ export class TkInput implements ComponentInterface {
       _rightIcon = rightIcon;
     }
 
-    const showClearButton = this.clearable && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
+    const showClearButton = this.clearable && !this.readonly && ((this.mode !== 'chips' && this.value) || (this.mode === 'chips' && (this.value as [])?.length > 0));
 
     if (this.el.classList.contains('tk-select-input')) {
-      this.readOnly = !this.el.classList.contains('editable-select');
+      this.readOnly = this.el.classList.contains('readonly-select');
+      // readOnly hides clear button and makes input readOnly(disables input), editable only impacts input readOnly
+      this.editable = this.el.classList.contains('editable-select');
     } else {
       this.readOnly = this.readonly;
     }
@@ -729,7 +750,7 @@ export class TkInput implements ComponentInterface {
               onTk-click={e => this.handleClearButtonClick(e)}
               onKeyDown={this.handleClearButtonKeyDown}
               class="tk-input-clear-button"
-              disabled={this.disabled || this.readOnly}
+              disabled={this.disabled}
             ></tk-button>
           )}
           {_rightIcon}

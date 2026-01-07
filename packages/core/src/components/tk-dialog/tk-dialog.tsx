@@ -116,14 +116,14 @@ export class TkDialog implements ComponentInterface {
   @Prop() preventDismiss: boolean = false;
 
   /**
-   * Event emitted when the dialog is closed
-   */
-  @Event({ eventName: 'tk-close' }) tkClose: EventEmitter<void>;
-
-  /**
    * Event emitted when the dialog is opened
    */
-  @Event({ eventName: 'tk-open' }) tkOpen: EventEmitter<void>;
+  @Event({ eventName: 'tk-open', bubbles: false }) tkOpen: EventEmitter<void>;
+
+  /**
+   * Event emitted when the dialog is closed
+   */
+  @Event({ eventName: 'tk-close', bubbles: false }) tkClose: EventEmitter<void>;
 
   /**
    * Event emitted when the dialog visibility changes

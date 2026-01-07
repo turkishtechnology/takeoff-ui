@@ -14,12 +14,18 @@ const Example = () => {
       header: 'Input Filter',
       searchable: true,
       sortable: true,
+      filterElements: {
+        searchInput: {
+          placeholder: 'Filter',
+          label: 'Search',
+          clearable: true,
+          icon: 'search',
+          iconPosition: 'right',
+          hint: 'Please enter',
+        },
+      },
       sorter: (a: any, b: any) => (a.name > b.name ? 1 : -1),
-      filter: (value: string, row: any) =>
-        row.name
-          .toString()
-          .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+      filter: (value: string, row: any) => row.name.toString().toLowerCase().indexOf(value?.toString().toLowerCase()) > -1,
     },
     {
       field: 'status',
@@ -33,7 +39,7 @@ const Example = () => {
       ],
       filterElements: {
         icon: 'filter_list',
-        optionsSearchInput: { show: true, placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
       },
     },
     {
@@ -134,7 +140,17 @@ const FilterAndSort = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase() as string) > -1,
+      filterElements: {
+        searchInput: {
+          placeholder: 'Filter',
+          label: 'Search',
+          clearable: true,
+          icon: 'search',
+          iconPosition: 'right',
+          hint: 'Please enter',
+        },
+      },
     },
     {
       field: 'status',
@@ -148,7 +164,7 @@ const FilterAndSort = () => {
       ],
       filterElements: {
         icon: 'filter_list',
-        optionsSearchInput: { show: true, placeholder: 'Filter' },
+        optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
       },
     },
     {
@@ -253,7 +269,17 @@ const column = [
       row.name
         .toString()
         .toLowerCase()
-        .indexOf(value.toString().toLowerCase()) > -1,
+        .indexOf(value?.toString().toLowerCase()) > -1,
+    filterElements: {
+      searchInput: {
+        placeholder: 'Filter',
+        label: 'Search',
+        clearable: true,
+        icon: 'search',
+        iconPosition: 'right',
+        hint: 'Please enter',
+      },
+    },
   },
   {
     field: 'status',
@@ -267,7 +293,7 @@ const column = [
     ],
     filterElements: {
       icon: 'filter_list',
-      optionsSearchInput: { show: true, placeholder: 'Filter' },
+      optionsSearchInput: { show: true, placeholder: 'Filter', emptyMessage: 'No results found' },
     },
   },
   {

@@ -1,10 +1,12 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../../utils/icon-utils';
+import * as _ from 'lodash';
 
 @Component({
   tag: 'tk-radio-group',
   styleUrl: 'tk-radio-group.scss',
+  shadow: true,
   formAssociated: true,
 })
 export class TkRadioGroup implements ComponentInterface {
@@ -77,23 +79,14 @@ export class TkRadioGroup implements ComponentInterface {
   @Prop() error: string;
 
   /**
+   * The name attribute for the input element.
+   */
+  @Prop() name: string;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
-
-  componentWillLoad() {
-    this.slottedItems = this.el.querySelectorAll('tk-radio');
-    if (this.slottedItems.length > 0) {
-      this.slottedItems.forEach(item => {
-        item.addEventListener('tk-change', e => {
-          e.stopPropagation();
-          this.handleChange(e);
-        });
-        item.checked = this.value == item.value;
-        item.invalid = this.invalid;
-      });
-    }
-  }
 
   formResetCallback() {
     this.handleFormReset();
@@ -102,7 +95,7 @@ export class TkRadioGroup implements ComponentInterface {
   private updateTkRadio() {
     if (this.slottedItems.length > 0) {
       this.slottedItems.forEach(item => {
-        item.checked = this.value == item.value;
+        item.checked = _.isEqual(this.value, item.value);
       });
     }
   }
@@ -117,6 +110,27 @@ export class TkRadioGroup implements ComponentInterface {
     this.value = e.detail;
     this.tkChange.emit(this.value);
     this.updateTkRadio();
+  }
+
+  handleSlotChange() {
+    this.slottedItems = this.el.querySelectorAll('tk-radio');
+    if (this.slottedItems.length > 0) {
+      this.slottedItems.forEach(item => {
+        item.addEventListener('tk-change', e => {
+          e.stopPropagation();
+          this.handleChange(e);
+        });
+
+        item.checked = _.isEqual(this.value, item.value);
+        item.invalid = this.invalid;
+        if (this.spread) item.style.flex = '1';
+        item.setAttribute('data-type', this.type);
+
+        // radio componentlerinde name yoksa ve radi group componentinde name var ise
+        // group'a verilen name radio componentlerine setlenmesi için yazılmıştır.
+        if (!item.name && this.name) item.name = this.name;
+      });
+    }
   }
 
   private renderError() {
@@ -154,7 +168,9 @@ export class TkRadioGroup implements ComponentInterface {
     return (
       <div class={rootClasses} aria-invalid={this.invalid}>
         {_label}
-        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>{this.slottedItems.length > 0 ? <slot /> : ''}</div>
+        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>
+          <slot onSlotchange={this.handleSlotChange.bind(this)} />
+        </div>
         {this.error && this.renderError()}
       </div>
     );

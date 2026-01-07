@@ -3,90 +3,90 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Styles = () => {
-  const reactCode = `<TkAccordion allow-multiple="false" type="grouped">
-  <TkAccordionItem icon="flight">
+  const reactCode = `<TkAccordion type="grouped">
+  <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="flight">
+  <TkAccordionItem>
     <span slot="header">Panel 2 Title</span>
     <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="travel">
+  <TkAccordionItem>
     <span slot="header">Panel 3 Title</span>
     <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>
 
-<TkAccordion allow-multiple="true" type="divided">
-  <TkAccordionItem size="base" icon="flight">
+<TkAccordion type="divided">
+  <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="flight">
+  <TkAccordionItem>
     <span slot="header">Panel 2 Title</span>
     <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="travel">
+  <TkAccordionItem>
     <span slot="header">Panel 3 Title</span>
     <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>`;
 
-  const vueCode = `<TkAccordion allow-multiple="false" type="grouped">
-  <TkAccordionItem icon="flight">
+  const vueCode = `<TkAccordion type="grouped">
+  <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="flight">
+  <TkAccordionItem>
     <span slot="header">Panel 2 Title</span>
     <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="travel">
+  <TkAccordionItem>
     <span slot="header">Panel 3 Title</span>
     <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>
-<TkAccordion allow-multiple="true" type="divided">
-  <TkAccordionItem size="base" icon="flight">
+<TkAccordion type="divided">
+  <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="flight">
+  <TkAccordionItem>
     <span slot="header">Panel 2 Title</span>
     <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
-  <TkAccordionItem icon="travel">
+  <TkAccordionItem>
     <span slot="header">Panel 3 Title</span>
     <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>`;
 
-  const angularCode = `<tk-accordion allow-multiple="false" type="grouped">
-    <tk-accordion-item icon="flight">
+  const angularCode = `<tk-accordion type="grouped">
+    <tk-accordion-item>
       <span slot="header">Panel 1 Title</span>
       <div slot="content">Panel 1 Content</div>
     </tk-accordion-item>
-    <tk-accordion-item icon="flight">
+    <tk-accordion-item>
       <span slot="header">Panel 2 Title</span>
       <div slot="content">Panel 2 Content</div>
     </tk-accordion-item>
-    <tk-accordion-item icon="travel">
+    <tk-accordion-item>
       <span slot="header">Panel 3 Title</span>
       <div slot="content">Panel 3 Content</div>
     </tk-accordion-item>
   </tk-accordion>
   
-  <tk-accordion allow-multiple="true" type="divided">
-    <tk-accordion-item size="base" icon="flight">
+  <tk-accordion type="divided">
+    <tk-accordion-item>
       <span slot="header">Panel 1 Title</span>
       <div slot="content">Panel 1 Content</div>
     </tk-accordion-item>
-    <tk-accordion-item icon="flight">
+    <tk-accordion-item>
       <span slot="header">Panel 2 Title</span>
       <div slot="content">Panel 2 Content</div>
     </tk-accordion-item>
-    <tk-accordion-item icon="travel">
+    <tk-accordion-item>
       <span slot="header">Panel 3 Title</span>
       <div slot="content">Panel 3 Content</div>
     </tk-accordion-item>
@@ -96,16 +96,16 @@ const Styles = () => {
     <>
       <div className="container">
         <div>Grouped</div>
-        <TkAccordion allow-multiple="false" type="grouped">
-          <TkAccordionItem icon="flight">
+        <TkAccordion type="grouped">
+          <TkAccordionItem>
             <span slot="header">Panel 1 Title</span>
             <div slot="content">Panel 1 Content</div>
           </TkAccordionItem>
-          <TkAccordionItem icon="flight">
+          <TkAccordionItem>
             <span slot="header">Panel 2 Title</span>
             <div slot="content">Panel 2 Content</div>
           </TkAccordionItem>
-          <TkAccordionItem icon="travel">
+          <TkAccordionItem>
             <span slot="header">Panel 3 Title</span>
             <div slot="content">Panel 3 Content</div>
           </TkAccordionItem>
@@ -115,16 +115,16 @@ const Styles = () => {
 
       <div className="container">
         <div>Divided</div>
-        <TkAccordion allow-multiple="true" type="divided">
-          <TkAccordionItem size="base" icon="flight">
+        <TkAccordion type="divided">
+          <TkAccordionItem>
             <span slot="header">Panel 1 Title</span>
             <div slot="content">Panel 1 Content</div>
           </TkAccordionItem>
-          <TkAccordionItem icon="flight">
+          <TkAccordionItem>
             <span slot="header">Panel 2 Title</span>
             <div slot="content">Panel 2 Content</div>
           </TkAccordionItem>
-          <TkAccordionItem icon="travel">
+          <TkAccordionItem>
             <span slot="header">Panel 3 Title</span>
             <div slot="content">Panel 3 Content</div>
           </TkAccordionItem>

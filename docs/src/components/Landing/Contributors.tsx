@@ -29,6 +29,9 @@ export default function Contributors() {
           <TkTooltip header="İbrahim Agah Gürer" description="Frontend Developer" position="top" variant="dark">
             <TkAvatar image="" size="xlarge" rounded slot="trigger" />
           </TkTooltip>
+          <TkTooltip header="Atakan Erhan Bayil" description="Frontend Developer" position="top" variant="dark">
+            <TkAvatar image="img/contributors/atakan-bayil.JPG" size="xlarge" rounded slot="trigger" />
+          </TkTooltip>
         </div>
       </div>
     </section>

@@ -1,0 +1,59 @@
+{
+  "name": "TkCheckbox",
+  "componentName": "TkCheckbox",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "default",
+      "options": [
+        { "label": "Default", "value": "default" },
+        { "label": "Card", "value": "card" }
+      ]
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Checkbox Label"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "name",
+      "label": "Name",
+      "type": "text",
+      "defaultValue": "checkbox-name"
+    },
+    {
+      "key": "value",
+      "label": "Checked",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "indeterminate",
+      "label": "Indeterminate",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

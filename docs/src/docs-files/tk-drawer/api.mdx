@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#drawer-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -16,7 +16,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="preventDismiss" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Prevents the drawer from being dismissed by clicking outside |
 | <TkBadge label="unblockScroll" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether to unblock scrolling when the drawer is open |
 
-### Events
+### Events {#drawer-events}
 
 | Name | Description |
 | ---- | ----------- |
@@ -26,14 +26,14 @@ import { TkBadge } from "@takeoff-ui/react";
 | tk-drawer-leave | Emitted when the drawer starts to leave |
 | tk-drawer-open | Emitted when the drawer is opened |
 
-### Methods
+### Methods {#drawer-methods}
 
-| Name | Description |
-| ---- | ----------- |
-| close | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
-| show | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| close | <code>close() =\> Promise\<void\></code> | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
+| show | <code>show() =\> Promise\<void\></code> | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop |
 
-### Slots
+### Slots {#drawer-slots}
 
 | Name | Description |
 | ---- | ----------- |

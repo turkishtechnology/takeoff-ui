@@ -25,8 +25,8 @@ const Variants = () => {
 <tk-avatar background="solid" variant="danger" label="DG" />`;
 
   const demo = (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify*center gap-2 flex-wrap">
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex gap-2 flex-wrap">
         <TkAvatar background="solid" variant="primary" rounded />
         <TkAvatar background="solid" variant="light" rounded />
         <TkAvatar background="solid" variant="success" rounded />

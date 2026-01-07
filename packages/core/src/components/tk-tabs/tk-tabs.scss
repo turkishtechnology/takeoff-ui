@@ -461,11 +461,6 @@
     }
   }
 
-  &.tk-tab-header-disabled {
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
   .tab-panel {
     display: block;
 
@@ -505,6 +500,13 @@
         }
       }
     }
+  }
+
+  .tab-header.tk-tab-header-disabled {
+    color: var(--text-sub-base) !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   &.tk-tabs-horizontal {

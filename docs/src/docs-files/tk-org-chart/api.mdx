@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#org-chart-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -9,17 +9,17 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | null | Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties. |
 | <TkBadge label="options" variant="primary" size="large" type="filledlight"/> | <code>any</code> | null | Chart options for d3-org-chart customization |
 
-### Events
+### Events {#org-chart-events}
 
 | Name | Description |
 | ---- | ----------- |
 | tk-node-click | Node click event |
 
-### Methods
+### Methods {#org-chart-methods}
 
-| Name | Description |
-| ---- | ----------- |
-| addNode | Add node to organizational chart |
-| fit | Fit chart to screen |
-| getOrgChart | Get the chart instance |
-| refresh | Refresh the chart |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| addNode | <code>addNode(node: any) =\> Promise\<void\></code> | Add node to organizational chart |
+| fit | <code>fit() =\> Promise\<void\></code> | Fit chart to screen |
+| getOrgChart | <code>getOrgChart() =\> Promise\<any\></code> | Get the chart instance |
+| refresh | <code>refresh() =\> Promise\<void\></code> | Refresh the chart |

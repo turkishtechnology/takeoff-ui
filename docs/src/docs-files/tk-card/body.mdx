@@ -3,6 +3,26 @@ import CardWithContent from "./Examples/CardWithContent";
 import CardWithHeaderMode from "./Examples/CardWithHeaderMode";
 import CardWithImage from "./Examples/CardWithImage";
 import CardWithFooter from "./Examples/CardWithFooter";
+import Playground from '../../components/Playground';
+import cardConfigData from './cardPlaygroundConfig.json';
+import { TkCard } from '@takeoff-ui/react';
+
+export const TkCardWithContent = (props) => {
+  return (
+    <TkCard {...props}>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </TkCard>
+  );
+};
+
+### Playground
+
+<Playground
+  configs={[cardConfigData]}
+  componentMap={{ TkCard: TkCardWithContent }}
+/>
 
 ## Basic
 

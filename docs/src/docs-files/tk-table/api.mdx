@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#table-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -14,8 +14,10 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
 | <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
 | <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
+| <TkBadge label="itemsReportTemplate" variant="primary" size="large" type="filledlight"/> | <code>string</code> | `'item: { startItem}-{ endItem}of{ totalItems}'` | Template string for items report in pagination. Available placeholders: &#123;startItem&#125;, &#123;endItem&#125;, &#123;totalItems&#125; |
 | <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
 | <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
+| <TkBadge label="pageReportTemplate" variant="primary" size="large" type="filledlight"/> | <code>string</code> | `'page: { currentPage}of{ totalPages}'` | Template string for current page report in pagination. Available placeholders: &#123;currentPage&#125;, &#123;totalPages&#125; |
 | <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
 | <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
 | <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>any</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns the style object for a specific  row. |
@@ -28,7 +30,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="striped" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables or disables alternating row background colors for easier readability. |
 | <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Number of total items. |
 
-### Events
+### Events {#table-events}
 
 | Name | Description |
 | ---- | ----------- |
@@ -38,25 +40,26 @@ import { TkBadge } from "@takeoff-ui/react";
 | tk-request | Emitted when a request needs to be made to the server. |
 | tk-row-click | Emitted when a row is clicked. |
 | tk-selection-change |  |
+| tk-visible-data-change | Emitted when the visible data changes. |
 
-### Methods
+### Methods {#table-methods}
 
-| Name | Description |
-| ---- | ----------- |
-| clearFilters | Clears all filters or specific column filters |
-| clearGrouping | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
-| clearSorting | Clears all sorting for server side pagination |
-| exportFile | Exports the table data to a file |
-| getFilters | Returns the current filters |
-| getSorting | Returns the current sorting settings |
-| groupByColumn | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
-| runFilters | Applies the current filters to the data for client side pagination |
-| serverRequest | Allows tk-request event to be triggered manually |
-| setCurrentPage | Sets the current page for pagination |
-| setFilters | Sets the current filter settings |
-| setSorting | Sets the current sorting settings |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| clearFilters | <code>clearFilters(columns?: string[]) =\> Promise\<void\></code> | Clears all filters or specific column filters |
+| clearGrouping | <code>clearGrouping() =\> Promise\<void\></code> | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
+| clearSorting | <code>clearSorting() =\> Promise\<void\></code> | Clears all sorting for server side pagination |
+| exportFile | <code>exportFile(options: ITableExportOptions) =\> Promise\<void\></code> | Exports the table data to a file |
+| getFilters | <code>getFilters() =\> Promise\<ITableFilter[]\></code> | Returns the current filters |
+| getSorting | <code>getSorting() =\> Promise\<ITableSort[] \| \{ field: string; order: "desc" \| "asc"; \}\></code> | Returns the current sorting settings |
+| groupByColumn | <code>groupByColumn(columnField: string) =\> Promise\<void\></code> | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
+| runFilters | <code>runFilters() =\> Promise\<void\></code> | Applies the current filters to the data for client side pagination |
+| serverRequest | <code>serverRequest() =\> Promise\<void\></code> | Allows tk-request event to be triggered manually |
+| setCurrentPage | <code>setCurrentPage(page: number) =\> Promise\<void\></code> | Sets the current page for pagination |
+| setFilters | <code>setFilters(filters: ITableFilter[]) =\> Promise\<void\></code> | Sets the current filter settings |
+| setSorting | <code>setSorting(sorts: ITableSort[] \| \{ field: string; order: "asc" \| "desc"; \}) =\> Promise\<void\></code> | Sets the current sorting settings |
 
-### Slots
+### Slots {#table-slots}
 
 | Name | Description |
 | ---- | ----------- |
@@ -64,7 +67,7 @@ import { TkBadge } from "@takeoff-ui/react";
 | body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows) |
 | empty-data | Set how the table will appear when there is no data |
 
-### Interfaces
+### Interfaces {#table-interfaces}
 
 #### <span id="itablecolumn">ITableColumn</span>
 
@@ -118,11 +121,23 @@ interface ITableColumn {
   };
   filterElements?: {
     icon?: string;
-    searchInput?: { placeholder?: string };
+    searchInput?: {
+      placeholder?: string;
+      label?: string;
+      maskOptions?: IInputMaskOptions;
+      disabled?: boolean;
+      invalid?: boolean;
+      clearable?: boolean;
+      error?: string;
+      hint?: string;
+      icon?: string | IIconOptions | IMultiIconOptions;
+      iconPosition?: 'left' | 'right';
+      size?: 'large' | 'base' | 'small';
+    };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
     selectAllCheckbox?: { label?: string };
-    optionsSearchInput?: { show?: boolean; placeholder?: string };
+    optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
     optionsSearchDatepicker?: {
       label?: string;
       placeholder?: string;

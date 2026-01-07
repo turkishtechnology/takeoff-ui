@@ -20,6 +20,7 @@ const vueComponentModels: ComponentModelConfig[] = [
       'tk-editor',
       'tk-upload',
       'tk-tree-view',
+      'tk-toggle-button-group',
     ],
     event: 'tk-change',
     targetAttr: 'value',
@@ -94,7 +95,10 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
+      copy: [
+        { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
+        { src: 'global/images', dest: 'assets/images' },
+      ],
     },
     {
       type: 'dist-custom-elements',
@@ -111,7 +115,10 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null, // disable service workers
-      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' }],
+      copy: [
+        { src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' },
+        { src: 'global/images', dest: 'build/assets/images' },
+      ],
     },
   ],
   testing: {

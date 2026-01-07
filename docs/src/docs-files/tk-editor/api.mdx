@@ -1,6 +1,6 @@
 import { TkBadge } from "@takeoff-ui/react"; 
 
-### Props
+### Props {#editor-props}
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -13,13 +13,16 @@ import { TkBadge } from "@takeoff-ui/react";
 | <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
 | <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the editor is in an invalid state |
 | <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The label for the toggle |
+| <TkBadge label="maxLength" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 140 | Limits the number of characters. |
 | <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The placeholder text when editor is empty |
 | <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the editor is readonly |
+| <TkBadge label="resizable" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether the editor is resizable |
 | <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="showCounter" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether to show the character counter |
 | <TkBadge label="toolbar" variant="primary" size="large" type="filledlight"/> | <code>(TkEditorDefaultButton, TkEditorCustomButton)[][]</code> | null | Toolbar configuration |
 | <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' | The value of the editor |
 
-### Events
+### Events {#editor-events}
 
 | Name | Description |
 | ---- | ----------- |
@@ -27,15 +30,15 @@ import { TkBadge } from "@takeoff-ui/react";
 | tkBlur | Emitted when editor loses focus |
 | tkFocus | Emitted when editor gets focus |
 
-### Methods
+### Methods {#editor-methods}
 
-| Name | Description |
-| ---- | ----------- |
-| getContent | Gets the current content of the editor |
-| getEditor | Returns the Tiptap Editor instance |
-| setContent | Sets the content of the editor |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| getContent | <code>getContent(format?: "json" \| "html" \| "text") =\> Promise\<JSONContent \| string\></code> | Gets the current content of the editor |
+| getEditor | <code>getEditor() =\> Promise\<Editor\></code> | Returns the Tiptap Editor instance |
+| setContent | <code>setContent(content: string) =\> Promise\<void\></code> | Sets the content of the editor |
 
-### Interfaces
+### Interfaces {#editor-interfaces}
 
 #### <span id="tkeditorcustombutton">TkEditorCustomButton</span>
 

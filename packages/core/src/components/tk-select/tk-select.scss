@@ -19,25 +19,30 @@ tk-select {
       flex-direction: column;
       gap: 6px;
 
-      .dropdown-group-label {
+      .dropdown-group {
         display: flex;
-        align-items: center;
-        gap: 16px;
-        color: var(--text-dark);
-        font-size: var(--desktop-body-xs-size);
-        padding: 0px 8px;
+        flex-direction: column;
+        gap: 6px;
 
-        label {
-          white-space: nowrap;
-        }
+        .dropdown-group-label {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          color: var(--text-dark);
+          font-size: var(--desktop-body-xs-size);
+          padding: 0px 8px;
 
-        .line {
-          width: 100%;
-          height: 1px;
-          background-color: var(--background-light);
+          label {
+            white-space: nowrap;
+          }
+
+          .line {
+            width: 100%;
+            height: 1px;
+            background-color: var(--background-light);
+          }
         }
       }
-
       .dropdown-item {
         color: var(--text-darkest);
         border-radius: 8px;
@@ -53,6 +58,17 @@ tk-select {
           flex: 1;
         }
 
+        &[data-selected='true'] {
+          cursor: pointer;
+          background: var(--states-info-lightest);
+          border: 1px solid var(--states-info-light);
+        }
+        &.disabled {
+          cursor: not-allowed;
+          background: var(--background-lightest);
+          border: 1px solid var(--border-light);
+          color: var(--text-sub-base);
+        }
         &:hover {
           cursor: pointer;
           background: var(--background-lightest);
@@ -60,11 +76,6 @@ tk-select {
         &[data-active='true'] {
           cursor: pointer;
           border: 1px solid var(--states-info-base);
-        }
-        &[data-selected='true'] {
-          cursor: pointer;
-          background: var(--states-info-lightest);
-          border: 1px solid var(--states-info-light);
         }
       }
     }

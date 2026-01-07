@@ -24,7 +24,7 @@ const Example = () => {
     },
   ];
 
-  const [size, setSize] = useState('small');
+  const [size, setSize] = useState<'xsmall' | 'small' | 'base'>('small');
 
   return (
     <div className="p-2">

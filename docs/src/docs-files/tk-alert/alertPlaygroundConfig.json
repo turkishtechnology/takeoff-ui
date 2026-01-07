@@ -1,0 +1,80 @@
+{
+  "name": "TkAlert",
+  "componentName": "TkAlert",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "success",
+      "options": [
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Info", "value": "info" },
+        { "label": "Danger", "value": "danger" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "filled",
+      "options": [
+        { "label": "Filled", "value": "filled" },
+        { "label": "Filled Light", "value": "filledlight" },
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Gradient", "value": "gradient" }
+      ]
+    },
+    {
+      "key": "alignItems",
+      "label": "Align Items",
+      "type": "select",
+      "defaultValue": "center",
+      "options": [
+        { "label": "Start", "value": "start" },
+        { "label": "Center", "value": "center" },
+        { "label": "End", "value": "end" }
+      ]
+    },
+    {
+      "key": "iconSize",
+      "label": "Icon Size",
+      "type": "select",
+      "defaultValue": "large",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" },
+        { "label": "XLarge", "value": "xlarge" }
+      ],
+      "tooltip": "This feature works only when the `icon` prop is defined."
+    },
+    {
+      "key": "header",
+      "label": "Header",
+      "type": "text",
+      "defaultValue": "Alert Header"
+    },
+    {
+      "key": "message",
+      "label": "Message",
+      "type": "text",
+      "defaultValue": "This is an alert message."
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "removable",
+      "label": "Removable",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

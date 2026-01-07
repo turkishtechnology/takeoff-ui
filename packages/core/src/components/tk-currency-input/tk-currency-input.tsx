@@ -7,6 +7,7 @@ import { getIconElementProps } from '../../utils/icon-utils';
 import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { applyStyles } from '../../utils/style-utils';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -220,10 +221,12 @@ export class TkCurrencyInput implements ComponentInterface {
 
   connectedCallback() {
     document.addEventListener('click', this.closeDropdown);
+    addDialogScrollListener(this.el, this.closeDropdown);
   }
 
   disconnectedCallback() {
     document.removeEventListener('click', this.closeDropdown);
+    removeDialogScrollListener(this.el);
   }
 
   /**
@@ -337,7 +340,7 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   private closeDropdown = (event: Event) => {
-    if (!this.isDropdownOpen) {
+    if (event.composedPath().includes(this.el) || !this.isDropdownOpen) {
       return;
     }
 

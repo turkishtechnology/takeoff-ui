@@ -1,0 +1,91 @@
+{
+  "name": "TkBadge",
+  "componentName": "TkBadge",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Verified", "value": "verified" },
+        { "label": "Purple", "value": "purple" },
+        { "label": "Cyan", "value": "cyan" },
+        { "label": "Business", "value": "business" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "filled",
+      "options": [
+        { "label": "Filled", "value": "filled" },
+        { "label": "Filled Light", "value": "filledlight" },
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Text", "value": "text" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "iconPosition",
+      "label": "Icon Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ],
+      "tooltip": "This feature works only when the `icon` prop is defined."
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Badge"
+    },
+    {
+      "key": "count",
+      "label": "Count",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "This prop accepts numeric values."
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "dot",
+      "label": "Dot",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

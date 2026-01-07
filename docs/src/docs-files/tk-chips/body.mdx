@@ -2,6 +2,16 @@ import Variant from "./Examples/Variant";
 import Type from "./Examples/Type";
 import Size from "./Examples/Size";
 import Icon from "./Examples/Icon";
+import Playground from '../../components/Playground';
+import chipsConfigData from './chipsPlaygroundConfig.json';
+import { TkChips } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[chipsConfigData]}
+  componentMap={{ TkChips: TkChips }}
+/>
 
 ## Variant
 
