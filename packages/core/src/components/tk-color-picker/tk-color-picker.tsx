@@ -33,8 +33,7 @@ export class TkColorPicker implements ComponentInterface {
   @Element() el: HTMLTkColorPickerElement;
 
   private uniqueId = uuidv4();
-  private triggerRef?: HTMLElement;
-  private triggerInputRef?: HTMLInputElement;
+  private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
   private cleanupAuto?: () => void;
   private isDragging = false;
@@ -47,13 +46,20 @@ export class TkColorPicker implements ComponentInterface {
   private clickOutsideMixin?: ClickOutsideMixin;
 
   @State() isOpen: boolean = false;
+  @Watch('isOpen')
+  isOpenChanged(newVal: boolean) {
+    if (newVal) {
+      this.tkOpen.emit();
+    } else {
+      this.tkClose.emit();
+    }
+  }
   @State() internalHSVA: HSVA = { h: 0, s: 0, v: 0, a: 1 };
   @State() currentFormat: 'hex' | 'rgba' = 'hex';
   @State() hasHeaderSlot: boolean = false;
   @State() hasHeaderActionsSlot: boolean = false;
   @State() hasFooterSlot: boolean = false;
   @State() hasFooterActionsSlot: boolean = false;
-  @State() isTriggerFocused: boolean = false;
   @State() triggerInputValue: string = '';
   @State() isTriggerInputFocused: boolean = false;
 
@@ -85,19 +91,48 @@ export class TkColorPicker implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
-   * The type of trigger to display
-   * - 'input': Full input with editable text field, circular color preview, and chevron
-   * - 'input-compact': Compact trigger with only circular color preview and chevron
-   * - 'item': Item style with square color preview and text, no chevron
-   * @defaultValue 'input'
+   * If `true`, the user cannot modify the value.
+   * @defaultValue false
    */
-  @Prop() triggerType: 'input' | 'input-compact' | 'item' = 'input';
+  @Prop() readonly: boolean = false;
+
+  /**
+   * The name of the control, which is submitted with the form data.
+   */
+  @Prop() name: string;
+
+  /**
+   * Indicates whether the input is in an invalid state
+   * @defaultValue false
+   */
+  @Prop() invalid: boolean = false;
+
+  /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error: string;
+
+  /**
+   * Provided a hint or additional information about the input.
+   */
+  @Prop() hint: string;
+
+  /**
+   * Placeholder text displayed when the input is empty.
+   */
+  @Prop() placeholder?: string | null;
 
   /**
    * Disables the color picker
    * @defaultValue false
    */
   @Prop() disabled: boolean = false;
+
+  /**
+   * Sets size for the component.
+   * @defaultValue base
+   */
+  @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
    * Displays the picker inline without trigger
@@ -166,15 +201,6 @@ export class TkColorPicker implements ComponentInterface {
    */
   @Prop() showCloseButton: boolean = true;
 
-  @Watch('isOpen')
-  isOpenChanged(newVal: boolean) {
-    if (newVal) {
-      this.tkOpen.emit();
-    } else {
-      this.tkClose.emit();
-    }
-  }
-
   /**
    * Emitted when the color value changes (during interaction)
    */
@@ -223,9 +249,9 @@ export class TkColorPicker implements ComponentInterface {
   componentDidUpdate() {
     this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.inline || this.preventDismiss });
 
-    if (this.isOpen && this.triggerRef && this.panelRef) {
+    if (this.isOpen && this.inputRef && this.panelRef) {
       if (!this.cleanupAuto) {
-        this.cleanupAuto = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePanelPosition(), { elementResize: false });
+        this.cleanupAuto = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePanelPosition(), { elementResize: false });
       }
     } else {
       if (this.cleanupAuto) {
@@ -337,18 +363,20 @@ export class TkColorPicker implements ComponentInterface {
 
     if (!this.isOpen) {
       this.pendingValue = { ...this.internalHSVA };
+      this.isOpen = true;
     }
-    this.isOpen = !this.isOpen;
   };
 
   private updatePanelPosition() {
-    if (!this.triggerRef || !this.panelRef) return;
-    computePosition(this.triggerRef, this.panelRef, { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }).then(({ x, y }) => {
-      Object.assign(this.panelRef!.style, {
-        left: `${x}px`,
-        top: `${y}px`,
-      });
-    });
+    if (!this.inputRef || !this.panelRef) return;
+    computePosition(this.inputRef.querySelector('.tk-input'), this.panelRef, { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }).then(
+      ({ x, y }) => {
+        Object.assign(this.panelRef!.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      },
+    );
   }
 
   /**
@@ -514,31 +542,14 @@ export class TkColorPicker implements ComponentInterface {
     this.tkInput.emit(css);
   }
 
-  private handleTriggerFocus = () => {
-    this.isTriggerFocused = true;
-  };
-
-  private handleTriggerBlur = () => {
-    this.isTriggerFocused = false;
-  };
-
-  private handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      this.handleTriggerClick(e as unknown as MouseEvent);
-    }
-  };
-
   private handleTriggerInputFocus = () => {
     this.isTriggerInputFocused = true;
-    this.isTriggerFocused = true;
     const colorCss = hsvaToCss(this.internalHSVA, this.currentFormat);
     this.triggerInputValue = colorCss;
   };
 
   private handleTriggerInputBlur = () => {
     this.isTriggerInputFocused = false;
-    this.isTriggerFocused = false;
     // Apply the typed value on blur
     this.applyTriggerInputValue();
   };
@@ -552,13 +563,11 @@ export class TkColorPicker implements ComponentInterface {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.applyTriggerInputValue();
-      this.triggerInputRef?.blur();
     } else if (e.key === 'Escape') {
       e.preventDefault();
       // Reset to current color value
       const colorCss = hsvaToCss(this.internalHSVA, this.currentFormat);
       this.triggerInputValue = colorCss;
-      this.triggerInputRef?.blur();
     }
   };
 
@@ -575,16 +584,6 @@ export class TkColorPicker implements ComponentInterface {
     }
   }
 
-  private handleTriggerChevronClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    if (this.disabled || this.inline) return;
-
-    if (!this.isOpen) {
-      this.pendingValue = { ...this.internalHSVA };
-    }
-    this.isOpen = !this.isOpen;
-  };
-
   private createEyedropperButton() {
     return <tk-button variant="neutral" type="outlined" size="small" icon="colorize" onTk-click={this.handleEyeDropper} disabled={this.disabled} />;
   }
@@ -599,125 +598,44 @@ export class TkColorPicker implements ComponentInterface {
     const colorCss = hsvaToCss(this.internalHSVA, this.currentFormat);
     const displayValue = this.isTriggerInputFocused ? this.triggerInputValue : colorCss;
 
-    // Render based on trigger type
-    switch (this.triggerType) {
-      case 'input-compact':
-        return this.createInputCompactTrigger(colorCss);
-      case 'item':
-        return this.createItemTrigger(colorCss);
-      case 'input':
-      default:
-        return this.createInputTrigger(colorCss, displayValue);
-    }
+    return this.createInputTrigger(colorCss, displayValue);
   }
 
   private createInputTrigger(colorCss: string, displayValue: string) {
-    const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-input', {
-      'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
-    });
-
     return (
-      <div class="tk-color-picker-trigger-wrapper">
-        {this.label && (
-          <div class="tk-color-picker-label">
-            <span class="tk-color-picker-label-text">{this.label}</span>
-            {this.showAsterisk && <span class="tk-color-picker-required">*</span>}
-          </div>
-        )}
-        <div
-          class={triggerClasses}
-          ref={el => (this.triggerRef = el as HTMLElement)}
-          role="combobox"
-          aria-expanded={this.isOpen}
-          aria-haspopup="dialog"
-          aria-disabled={this.disabled}
-        >
-          <div class="tk-color-picker-input-content">
-            <div class="tk-color-picker-color-preview-wrapper">
-              <div class="tk-color-picker-color-preview">
-                <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
-              </div>
-            </div>
-            <input
-              type="text"
-              class="tk-color-picker-trigger-input-field"
-              ref={el => (this.triggerInputRef = el as HTMLInputElement)}
-              value={displayValue}
-              disabled={this.disabled}
-              onFocus={this.handleTriggerInputFocus}
-              onBlur={this.handleTriggerInputBlur}
-              onInput={this.handleTriggerInputChange}
-              onKeyDown={this.handleTriggerInputKeyDown}
-            />
-          </div>
-          <div class="tk-color-picker-trigger-chevron" onClick={this.handleTriggerChevronClick} tabIndex={this.disabled ? -1 : 0} onKeyDown={this.handleTriggerKeyDown}>
-            <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="large" class="tk-color-picker-trigger-icon" color="var(--icon-base)" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private createInputCompactTrigger(colorCss: string) {
-    const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-compact', {
-      'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
-    });
-
-    return (
-      <div class="tk-color-picker-trigger-wrapper tk-color-picker-trigger-wrapper-compact">
-        <div
-          class={triggerClasses}
-          ref={el => (this.triggerRef = el as HTMLElement)}
-          onClick={this.handleTriggerClick}
-          onFocus={this.handleTriggerFocus}
-          onBlur={this.handleTriggerBlur}
-          onKeyDown={this.handleTriggerKeyDown}
-          tabIndex={this.disabled ? -1 : 0}
-          role="combobox"
-          aria-expanded={this.isOpen}
-          aria-haspopup="dialog"
-          aria-disabled={this.disabled}
-        >
-          <div class="tk-color-picker-color-preview-wrapper">
-            <div class="tk-color-picker-color-preview">
-              <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
-            </div>
-          </div>
-          <tk-icon icon={this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'} size="xlarge" class="tk-color-picker-trigger-icon" color="var(--icon-base)" />
-        </div>
-      </div>
-    );
-  }
-
-  private createItemTrigger(colorCss: string) {
-    const triggerClasses = classNames('tk-color-picker-trigger', 'tk-color-picker-trigger-item', {
-      'tk-color-picker-trigger-disabled': this.disabled,
-      'tk-color-picker-trigger-focused': this.isTriggerFocused || this.isOpen,
-    });
-
-    return (
-      <div class="tk-color-picker-trigger-wrapper tk-color-picker-trigger-wrapper-item">
-        <div
-          class={triggerClasses}
-          ref={el => (this.triggerRef = el as HTMLElement)}
-          onClick={this.handleTriggerClick}
-          onFocus={this.handleTriggerFocus}
-          onBlur={this.handleTriggerBlur}
-          onKeyDown={this.handleTriggerKeyDown}
-          tabIndex={this.disabled ? -1 : 0}
-          role="combobox"
-          aria-expanded={this.isOpen}
-          aria-haspopup="dialog"
-          aria-disabled={this.disabled}
-        >
-          <div class="tk-color-picker-color-preview-square">
-            <div class="tk-color-picker-color-preview-inner" style={{ backgroundColor: colorCss }} />
-          </div>
-          <span class="tk-color-picker-value-text">{colorCss}</span>
-        </div>
-      </div>
+      <tk-input
+        ref={el => (this.inputRef = el as HTMLTkInputElement)}
+        class={classNames('tk-color-picker-input', {
+          'editable-color-picker': true,
+        })}
+        label={this.label}
+        readonly={this.readonly}
+        disabled={this.disabled}
+        invalid={this.invalid}
+        error={this.error}
+        hint={this.hint}
+        showAsterisk={this.showAsterisk}
+        name={this.name}
+        size={this.size}
+        placeholder={this.value?.length > 0 ? '' : this.placeholder}
+        icon={{
+          left: {
+            name: 'circle',
+            color: colorCss,
+            style: 'outlined',
+            fill: true,
+          },
+          right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down',
+        }}
+        value={displayValue}
+        aria-describedby="dropdown"
+        aria-expanded={this.isOpen}
+        onClick={this.handleTriggerClick}
+        onTk-focus={this.handleTriggerInputFocus}
+        onTk-blur={this.handleTriggerInputBlur}
+        onTk-change={this.handleTriggerInputChange}
+        onKeyDown={this.handleTriggerInputKeyDown}
+      ></tk-input>
     );
   }
 
