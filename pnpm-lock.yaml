@@ -365,6 +365,9 @@ importers:
       chart.js:
         specifier: ^4.4.9
         version: 4.5.1
+      chartjs-chart-venn:
+        specifier: ^4.3.7
+        version: 4.3.7(chart.js@4.5.1)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -4145,6 +4148,9 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
+  '@upsetjs/venn.js@2.0.0':
+    resolution: {integrity: sha512-WbBhLrooyePuQ1VZxrJjtLvTc4NVfpOyKx0sKqioq9bX1C1m7Jgykkn8gLrtwumBioXIqam8DLxp88Adbue6Hw==}
+
   '@vercel/build-utils@10.5.1':
     resolution: {integrity: sha512-BtqwEmU1AoITpd0KxYrdQOwyKZL8RKba+bWxI8mr3gXPQZWRAE9ok1zF0AXfvMGCstYPHBPNolZGDSfWmY2jqg==}
 
@@ -4831,6 +4837,11 @@ packages:
   chart.js@4.5.1:
     resolution: {integrity: sha512-GIjfiT9dbmHRiYi6Nl2yFCq7kkwdkp1W/lp2J99rX0yo9tgJGn3lKQATztIjb5tVtevcBtIdICNWqlq5+E8/Pw==}
     engines: {pnpm: '>=8'}
+
+  chartjs-chart-venn@4.3.7:
+    resolution: {integrity: sha512-8nJMlaZ4i41RzlJL+3dEreD+M9/c3t4EwH1TXK3BpE3ZqusbVsdlJyq38xeZ2njSYSeE8r5ECgFegOdUoiCIvA==}
+    peerDependencies:
+      chart.js: ^4.1.0
 
   cheerio-select@2.1.0:
     resolution: {integrity: sha512-9v9kG0LvzrlcungtnJtpGNxY+fzECQKhK4EGJX2vByejiMX84MFNQw4UxPJl3bFbTMw+Dfs37XaIkCwTZfLh4g==}
@@ -16187,6 +16198,11 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
+  '@upsetjs/venn.js@2.0.0':
+    optionalDependencies:
+      d3-selection: 3.0.0
+      d3-transition: 3.0.1(d3-selection@3.0.0)
+
   '@vercel/build-utils@10.5.1': {}
 
   '@vercel/error-utils@2.0.3': {}
@@ -17147,6 +17163,11 @@ snapshots:
   chart.js@4.5.1:
     dependencies:
       '@kurkle/color': 0.3.4
+
+  chartjs-chart-venn@4.3.7(chart.js@4.5.1):
+    dependencies:
+      '@upsetjs/venn.js': 2.0.0
+      chart.js: 4.5.1
 
   cheerio-select@2.1.0:
     dependencies:
