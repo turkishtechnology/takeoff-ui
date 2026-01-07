@@ -7,8 +7,10 @@ import { TkButton } from '@takeoff-ui/react';
 
 # Takeoff UI Design System
 
-Takeoff UI is a comprehensive design system providing framework-agnostic web components developed with [Stencil.js](https://stenciljs.com/). The system is managed as a monorepo using [Turborepo](https://turbo.build/), enabling fast, incremental builds and consistent workflows across multiple packages.
-
+Takeoff UI is a comprehensive design system providing framework-agnostic web
+components developed with [Stencil.js](https://stenciljs.com/). The system is
+managed as a monorepo using [Turborepo](https://turbo.build/), enabling fast,
+incremental builds and consistent workflows across multiple packages.
 
 ## Technical Architecture
 
@@ -29,7 +31,8 @@ packages/
 └── tailwind/   # Tailwind CSS plugin package
 ```
 
-The root contains a `turbo.json` file that defines build, dev, lint, test and publish pipelines across all packages.
+The root contains a `turbo.json` file that defines build, dev, lint, test and
+publish pipelines across all packages.
 
 ### Core Package Architecture
 
@@ -48,10 +51,10 @@ We use Stencil’s output targets to generate framework-specific bindings:
 ```typescript
 vueOutputTarget({
   componentCorePackage: '@takeoff-ui/core',
-  proxiesFile:      '../vue/lib/components.ts',
-  componentModels:  vueComponentModels,
-  includePolyfills: true
-})
+  proxiesFile: '../vue/lib/components.ts',
+  componentModels: vueComponentModels,
+  includePolyfills: true,
+});
 ```
 
 - Supports two-way binding via `v-model`
@@ -61,9 +64,9 @@ vueOutputTarget({
 
 ```typescript
 reactOutputTarget({
-  outDir:               '../react/lib/components/stencil-generated/',
-  stencilPackageName:   '@takeoff-ui/core'
-})
+  outDir: '../react/lib/components/stencil-generated/',
+  stencilPackageName: '@takeoff-ui/core',
+});
 ```
 
 - JSX support
@@ -75,11 +78,13 @@ reactOutputTarget({
 ```typescript
 angularOutputTarget({
   componentCorePackage: '@takeoff-ui/core',
-  outputType:           'component',
-  directivesProxyFile:  '../angular/projects/library/src/lib/stencil-generated/components.ts',
-  directivesArrayFile:  '../angular/projects/library/src/lib/stencil-generated/index.ts',
-  valueAccessorConfigs: angularValueAccessorBindings
-})
+  outputType: 'component',
+  directivesProxyFile:
+    '../angular/projects/library/src/lib/stencil-generated/components.ts',
+  directivesArrayFile:
+    '../angular/projects/library/src/lib/stencil-generated/index.ts',
+  valueAccessorConfigs: angularValueAccessorBindings,
+});
 ```
 
 - FormControl integration
@@ -102,10 +107,10 @@ tk-component/
 
 ## Build Configuration
 
-- **Stencil.js** for component compilation  
-- **SASS** for style processing  
-- **Turborepo** for orchestrating builds and caching  
-- Custom output targets for Vue, React, and Angular  
-- Documentation generation via our docs pipeline  
+- **Stencil.js** for component compilation
+- **SASS** for style processing
+- **Turborepo** for orchestrating builds and caching
+- Custom output targets for Vue, React, and Angular
+- Documentation generation via our docs pipeline
 
 Refer to the Installation Guide for setup and usage details.

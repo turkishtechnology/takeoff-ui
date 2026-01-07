@@ -5,13 +5,18 @@
 [![npm version](https://img.shields.io/npm/v/@takeoff-ui/react.svg)](https://www.npmjs.com/package/@takeoff-ui/react)
 [![npm downloads](https://img.shields.io/npm/dm/@takeoff-ui/react.svg)](https://www.npmjs.com/package/@takeoff-ui/react)
 
-React bindings for the Takeoff UI Design System. This package exposes React components that wrap the framework‑agnostic web components in `@takeoff-ui/core` (built with Stencil.js), giving you a smooth React developer experience.
+React bindings for the Takeoff UI Design System. This package exposes React
+components that wrap the framework‑agnostic web components in `@takeoff-ui/core`
+(built with Stencil.js), giving you a smooth React developer experience.
 
 ## Documentation
 
-- Full docs: [Introduction](https://takeoff-ui-blond.vercel.app/docs/Introduction)
-- Getting started: [Installation Guide](https://takeoff-ui-blond.vercel.app/docs/Installation)
-- Component APIs and examples: [Components Overview](https://takeoff-ui-blond.vercel.app/docs/Components/Overview)  
+- Full docs:
+  [Introduction](https://takeoff-ui-blond.vercel.app/docs/Introduction)
+- Getting started:
+  [Installation Guide](https://takeoff-ui-blond.vercel.app/docs/Installation)
+- Component APIs and examples:
+  [Components Overview](https://takeoff-ui-blond.vercel.app/docs/Components/Overview)
 
 ## Installation
 
@@ -25,14 +30,14 @@ yarn add @takeoff-ui/react
 
 ## Quick Start
 
-1) Import the global styles from the core package (once at app startup):
+1. Import the global styles from the core package (once at app startup):
 
 ```ts
 // e.g. src/main.tsx or src/index.tsx
 import '@takeoff-ui/core/dist/core/core.css';
 ```
 
-2) Import and use React components:
+2. Import and use React components:
 
 ```tsx
 // App.tsx
@@ -48,7 +53,7 @@ export default function App() {
 
       <TkInput
         value={value}
-        onTkChange={(ev) => {
+        onTkChange={ev => {
           // Stencil events emit CustomEvent with detail payload
           const next = (ev as CustomEvent<any>).detail?.value ?? '';
           setValue(next);
@@ -62,14 +67,17 @@ export default function App() {
 
 ## Features
 
-- React wrappers for all Takeoff UI components (e.g., `TkButton`, `TkInput`, `TkDialog`, ...)
+- React wrappers for all Takeoff UI components (e.g., `TkButton`, `TkInput`,
+  `TkDialog`, ...)
 - Full TypeScript support and JSX props
 - Event handlers mapped to React-style props (e.g., `onTkChange`)
 - Works with Create React App, Vite, Next.js, and other React setups
 
 ## Contributing
 
-We welcome contributions! Please read the guide for details on issues, PRs, and coding standards.
+We welcome contributions! Please read the guide for details on issues, PRs, and
+coding standards.
+
 - [Contribution guide](https://takeoff-ui-blond.vercel.app/docs/CONTRIBUTING)
 
 ## License
