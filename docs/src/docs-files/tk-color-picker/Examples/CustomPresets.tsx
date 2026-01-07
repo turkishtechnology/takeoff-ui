@@ -5,28 +5,11 @@ import FeatureDemo from '../../../components/FeatureDemo';
 const CustomPresets = () => {
   const [color, setColor] = useState('#E63946');
 
-  const customPresets = [
-    '#E63946',
-    '#F1FAEE',
-    '#A8DADC',
-    '#457B9D',
-    '#1D3557',
-    '#F4A261',
-    '#2A9D8F',
-    '#E9C46A',
-    '#264653',
-    '#E76F51',
-  ];
+  const customPresets = ['#E63946', '#F1FAEE', '#A8DADC', '#457B9D', '#1D3557', '#F4A261', '#2A9D8F', '#E9C46A', '#264653', '#E76F51'];
 
   const demo = (
     <div className="flex justify-center items-center">
-      <TkColorPicker
-        label="Brand Colors"
-        presets={customPresets}
-        value={color}
-        inline
-        onTkChange={e => setColor(e.detail)}
-      />
+      <TkColorPicker label="Brand Colors" presets={customPresets} value={color} inline onTkChange={e => setColor(e.detail)} />
     </div>
   );
 
