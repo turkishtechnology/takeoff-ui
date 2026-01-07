@@ -220,7 +220,7 @@ export class TkUpload implements ComponentInterface {
   private handleProcessFiles(files: FileList) {
     const rejectedFiles: { reason: string; file: File | FileList }[] = [];
     const isFileCountRejected = this.maxFileCount && this.value.length + files.length > this.maxFileCount;
-
+    const acceptedFiles: File[] = [];
     // Validate file count
     if (isFileCountRejected) {
       rejectedFiles.push({
@@ -250,12 +250,13 @@ export class TkUpload implements ComponentInterface {
         // If valid, add to accepted files
         if (this.multiple) this.value.push(file);
         else this.value = [file];
+        acceptedFiles.push(file);
       });
     }
 
     // Update state and emit events
     this.errorMessages = rejectedFiles.map(item => (item.file instanceof File ? `${item.file.name}: ${item.reason}` : item.reason));
-    if (!isFileCountRejected && this.value.length > 0) {
+    if (!isFileCountRejected && this.value.length > 0 && acceptedFiles.length > 0) {
       this.tkChange.emit(this.value);
       if (this.autoUpload) this.handleUploadButtonClick();
     }
