@@ -2,7 +2,7 @@ import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method,
 import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from '../../utils/color-utils';
+import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from './color-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 
 declare global {
