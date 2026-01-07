@@ -256,7 +256,7 @@ export class TkUpload implements ComponentInterface {
 
     // Update state and emit events
     this.errorMessages = rejectedFiles.map(item => (item.file instanceof File ? `${item.file.name}: ${item.reason}` : item.reason));
-    if (!isFileCountRejected && this.value.length > 0 && acceptedFiles.length > 0) {
+    if (!isFileCountRejected && acceptedFiles.length > 0) {
       this.tkChange.emit(this.value);
       if (this.autoUpload) this.handleUploadButtonClick();
     }
