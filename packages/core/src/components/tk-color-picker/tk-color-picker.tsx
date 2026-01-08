@@ -207,11 +207,6 @@ export class TkColorPicker implements ComponentInterface {
   @Prop() showCloseButton: boolean = true;
 
   /**
-   * Emitted when the color value changes (during interaction)
-   */
-  @Event({ eventName: 'tk-input' }) tkInput: EventEmitter<string>;
-
-  /**
    * Emitted when the color is applied/confirmed
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<string>;
@@ -407,7 +402,6 @@ export class TkColorPicker implements ComponentInterface {
     this.saturationAreaRef = e.currentTarget as HTMLElement;
     this.startDragging(ev => {
       this.handleSaturationPointer(ev);
-      this.emitInput();
     }, e);
   };
 
@@ -424,7 +418,6 @@ export class TkColorPicker implements ComponentInterface {
     }
 
     this.updateColor({ h: percent * 360 });
-    this.emitInput();
   };
 
   private handleHueMouseDown = (e: MouseEvent) => {
@@ -445,7 +438,6 @@ export class TkColorPicker implements ComponentInterface {
     }
 
     this.updateColor({ a: percent });
-    this.emitInput();
   };
 
   private handleAlphaMouseDown = (e: MouseEvent) => {
@@ -471,7 +463,6 @@ export class TkColorPicker implements ComponentInterface {
       newHsva.h = this.internalHSVA.h;
     }
     this.internalHSVA = newHsva;
-    this.emitInput();
   };
 
   private handleInputBlur = (type: 'hex' | 'r' | 'g' | 'b' | 'a') => {
@@ -487,11 +478,9 @@ export class TkColorPicker implements ComponentInterface {
         newHsva.h = this.internalHSVA.h;
       }
       this.internalHSVA = newHsva;
-      this.emitInput();
     } else if (type === 'a') {
       const a = Math.max(0, Math.min(100, Number(val))) / 100;
       this.updateColor({ a });
-      this.emitInput();
     } else {
       this.handleRgbChange(type as 'r' | 'g' | 'b', val);
     }
@@ -499,7 +488,6 @@ export class TkColorPicker implements ComponentInterface {
 
   private handlePresetSelect(color: string) {
     this.internalHSVA = parseColorToHsva(color);
-    this.emitInput();
   }
 
   private handleEyeDropper = async () => {
@@ -509,7 +497,6 @@ export class TkColorPicker implements ComponentInterface {
       const eyeDropper = new window.EyeDropper();
       const result = await eyeDropper.open();
       this.internalHSVA = parseColorToHsva(result.sRGBHex);
-      this.emitInput();
     } catch {
       // User canceled or browser does not support
     }
@@ -541,11 +528,6 @@ export class TkColorPicker implements ComponentInterface {
   private handleCloseClick = () => {
     this.handleCancel();
   };
-
-  private emitInput() {
-    const css = hsvaToCss(this.internalHSVA, this.currentFormat);
-    this.tkInput.emit(css);
-  }
 
   private handleTriggerInputFocus = () => {
     this.isTriggerInputFocused = true;
