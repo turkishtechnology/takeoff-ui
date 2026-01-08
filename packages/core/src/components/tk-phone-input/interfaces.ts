@@ -11,6 +11,8 @@ export interface ICountry {
   dialCode?: string;
   /** The phone number mask pattern where 9 represents a digit */
   mask?: string;
+  /** The placeholder text for the phone number input */
+  placeholder?: string;
 }
 
 /**

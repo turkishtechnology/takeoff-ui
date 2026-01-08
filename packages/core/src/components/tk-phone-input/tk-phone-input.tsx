@@ -311,6 +311,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: this.selectedCountry.mask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -355,6 +356,7 @@ export class TkPhoneInput implements ComponentInterface {
           id: this.selectedCountry.id,
           label: this.selectedCountry.label,
           dialCode: this.selectedCountry.dialCode,
+          placeholder: this.selectedCountry.placeholder,
         },
       };
       this.tkChange.emit(this.value);
@@ -379,6 +381,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: currentMask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -403,6 +406,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: this.selectedCountry.mask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -520,7 +524,7 @@ export class TkPhoneInput implements ComponentInterface {
         type="tel"
         class="tk-phone-input__input"
         autoComplete="off"
-        placeholder={this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
+        placeholder={this.selectedCountry?.placeholder || this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
         value={this.inputValue}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
