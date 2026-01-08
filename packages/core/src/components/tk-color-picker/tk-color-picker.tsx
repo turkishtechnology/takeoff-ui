@@ -159,6 +159,7 @@ export class TkColorPicker implements ComponentInterface {
 
   /**
    * Controls whether the header is shown
+   * @defaultValue false
    */
   @Prop() showHeader: boolean = false;
 
@@ -202,7 +203,7 @@ export class TkColorPicker implements ComponentInterface {
   /**
    * Controls whether the close button is shown in the header.
    * Set to false when using footer actions for controlled closing.
-   * @defaultValue true
+   * @defaultValue false
    */
   @Prop() showCloseButton: boolean = false;
 
