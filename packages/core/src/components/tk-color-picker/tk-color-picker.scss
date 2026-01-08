@@ -78,10 +78,6 @@
     .tk-color-picker-title {
       color: var(--text-lightest, #f9fafc);
     }
-
-    .tk-color-picker-close {
-      color: var(--icon-base, #717784);
-    }
   }
 
   &.tk-color-picker-panel-header-primary {
@@ -89,10 +85,6 @@
 
     .tk-color-picker-title {
       color: var(--text-lightest, #f9fafc);
-    }
-
-    .tk-color-picker-close {
-      color: var(--primary-lightest, #ffeaec);
     }
   }
 }

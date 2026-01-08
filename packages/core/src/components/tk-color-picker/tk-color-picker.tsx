@@ -82,7 +82,7 @@ export class TkColorPicker implements ComponentInterface {
    * Title displayed in the panel header
    * @defaultValue 'Color Picker'
    */
-  @Prop() panelTitle: string = 'Color Picker';
+  @Prop() header: string;
 
   /**
    * Displays a red asterisk (*) next to the label for visual emphasis.
@@ -156,6 +156,11 @@ export class TkColorPicker implements ComponentInterface {
    * Array of preset color values
    */
   @Prop() presets: string[] = ['#326FD1', '#C79807', '#A45E3C', '#119C8D', '#EDBBA3', '#ABC9FB', '#D0E1FD', '#FF6259', '#717784', '#85B2F9', '#EAD6FD'];
+
+  /**
+   * Controls whether the header is shown
+   */
+  @Prop() showHeader: boolean = false;
 
   /**
    * Shows/hides the alpha slider
@@ -764,23 +769,24 @@ export class TkColorPicker implements ComponentInterface {
   }
 
   private createPanelHeader() {
+    if (!this.showHeader) return null;
+
     if (this.hasHeaderSlot) {
       return <slot name="header" />;
+    } else {
+      const headerClasses = classNames('tk-color-picker-panel-header', `tk-color-picker-panel-header-${this.headerType}`);
+
+      return (
+        <div class={headerClasses}>
+          <span class="tk-color-picker-title">{this.header}</span>
+          {this.hasHeaderActionsSlot ? (
+            <slot name="header-actions" />
+          ) : (
+            !this.inline && this.showCloseButton && <tk-button variant="neutral" type="text" size="small" icon="close" onClick={this.handleCloseClick} />
+          )}
+        </div>
+      );
     }
-
-    const headerClasses = classNames('tk-color-picker-panel-header', `tk-color-picker-panel-header-${this.headerType}`);
-
-    return (
-      <div class={headerClasses}>
-        <span class="tk-color-picker-title">{this.panelTitle}</span>
-        {this.hasHeaderActionsSlot ? (
-          <slot name="header-actions" />
-        ) : (
-          !this.inline &&
-          this.showCloseButton && <tk-button class="tk-color-picker-close" variant="neutral" type="text" size="small" icon="close" onClick={this.handleCloseClick} />
-        )}
-      </div>
-    );
   }
 
   private createPanelBody() {
