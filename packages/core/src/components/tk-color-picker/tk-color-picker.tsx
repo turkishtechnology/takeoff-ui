@@ -806,9 +806,6 @@ export class TkColorPicker implements ComponentInterface {
     return (
       <tk-input
         ref={el => (this.inputRef = el as HTMLTkInputElement)}
-        class={classNames('tk-color-picker-input', {
-          'editable-color-picker': true,
-        })}
         label={this.label}
         readonly={this.readonly}
         disabled={this.disabled}

@@ -3,7 +3,6 @@ import { TkColorPicker, TkCheckbox } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const Visibility = () => {
-  const [color, setColor] = useState('#326FD1');
   const [showAlphaSlider, setShowAlphaSlider] = useState(true);
   const [showPresets, setShowPresets] = useState(true);
   const [showFormatSelector, setShowFormatSelector] = useState(true);
@@ -36,36 +35,18 @@ const Visibility = () => {
     }
 
     const propsStr = props.length > 0 ? '\n  ' + props.join('\n  ') : '';
-    const vuePropsStr = vueProps.length > 0 ? '\n    ' + vueProps.join('\n    ') : '';
+    const vuePropsStr = vueProps.length > 0 ? '\n  ' + vueProps.join('\n  ') : '';
     const angularPropsStr = angularProps.length > 0 ? '\n  ' + angularProps.join('\n  ') : '';
 
-    const reactCode = `const [color, setColor] = useState('#326FD1');
-
-<TkColorPicker
-  inline${propsStr}
-  value={color}
-  onTkInput={(e) => setColor(e.detail)}
+    const reactCode = `<TkColorPicker
+  inline ${propsStr}
 />`;
 
-    const vueCode = `<script setup>
-import { TkColorPicker } from '@takeoff-ui/vue';
-import { ref } from 'vue';
+    const vueCode = `<TkColorPicker 
+  inline ${vuePropsStr} 
+/>`;
 
-const color = ref('#326FD1');
-</script>
-
-<template>
-  <TkColorPicker
-    inline${vuePropsStr}
-    v-model="color"
-  />
-</template>`;
-
-    const angularCode = `<tk-color-picker
-  inline${angularPropsStr}
-  [value]="color"
-  (tkInput)="onColorInput($event)">
-</tk-color-picker>`;
+    const angularCode = ``;
 
     setCodeSampleReact(reactCode);
     setCodeSampleVue(vueCode);
@@ -80,15 +61,7 @@ const color = ref('#326FD1');
         <TkCheckbox label="Format Selector" value={showFormatSelector} onTkChange={e => setShowFormatSelector(e.detail)} />
       </div>
       <div className="flex justify-center items-center">
-        <TkColorPicker
-          inline
-          showAlphaSlider={showAlphaSlider}
-          showPresets={showPresets}
-          showFormatSelector={showFormatSelector}
-          presets={presetColors}
-          value={color}
-          onTkInput={e => setColor(e.detail)}
-        />
+        <TkColorPicker inline showAlphaSlider={showAlphaSlider} showPresets={showPresets} showFormatSelector={showFormatSelector} presets={presetColors} />
       </div>
     </div>
   );
