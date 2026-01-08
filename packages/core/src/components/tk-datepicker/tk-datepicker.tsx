@@ -477,7 +477,8 @@ export class TkDatePicker {
   }
 
   private updatePosition() {
-    this.cleanup = floatingElementAutoUpdate(this.inputRef, this.panelRef, undefined, {
+    const inputEl = this.inputRef!.querySelector('.tk-input') as HTMLElement;
+    this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
       placement: 'bottom-start',
       shift: { padding: 5 },
       offset: 4,
