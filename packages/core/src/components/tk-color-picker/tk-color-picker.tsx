@@ -332,6 +332,35 @@ export class TkColorPicker implements ComponentInterface {
     document.removeEventListener('mouseup', this.handleDocumentMouseUp);
   }
 
+  private updatePosition() {
+    const inputEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
+    this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
+      placement: 'bottom-end',
+      shift: { padding: 5 },
+      offset: 4,
+    });
+  }
+
+  /**
+   * Updates internal HSVA state with partial values
+   */
+  private updateColor(partial: Partial<HSVA>) {
+    this.internalHSVA = { ...this.internalHSVA, ...partial };
+  }
+
+  private applyTriggerInputValue() {
+    if (!this.triggerInputValue) return;
+
+    const parsed = parseColorToHsva(this.triggerInputValue);
+    // Check if parsed successfully (not all zeros unless input was black)
+    if (parsed.h !== 0 || parsed.s !== 0 || parsed.v !== 0 || this.triggerInputValue.toLowerCase().includes('000')) {
+      this.internalHSVA = parsed;
+      const newValue = hsvaToCss(this.internalHSVA, this.currentFormat);
+      this.value = newValue;
+      this.tkChange.emit(newValue);
+    }
+  }
+
   private handleDocumentMouseMove = (e: MouseEvent) => {
     if (this.isDragging && this.currentDragHandler) {
       e.preventDefault();
@@ -356,22 +385,6 @@ export class TkColorPicker implements ComponentInterface {
       this.isOpen = true;
     }
   };
-
-  private updatePosition() {
-    const inputEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
-    this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
-      placement: 'bottom-end',
-      shift: { padding: 5 },
-      offset: 4,
-    });
-  }
-
-  /**
-   * Updates internal HSVA state with partial values
-   */
-  private updateColor(partial: Partial<HSVA>) {
-    this.internalHSVA = { ...this.internalHSVA, ...partial };
-  }
 
   private handleSaturationPointer = (e: MouseEvent) => {
     if (!this.saturationAreaRef) return;
@@ -545,19 +558,6 @@ export class TkColorPicker implements ComponentInterface {
       this.triggerInputValue = colorCss;
     }
   };
-
-  private applyTriggerInputValue() {
-    if (!this.triggerInputValue) return;
-
-    const parsed = parseColorToHsva(this.triggerInputValue);
-    // Check if parsed successfully (not all zeros unless input was black)
-    if (parsed.h !== 0 || parsed.s !== 0 || parsed.v !== 0 || this.triggerInputValue.toLowerCase().includes('000')) {
-      this.internalHSVA = parsed;
-      const newValue = hsvaToCss(this.internalHSVA, this.currentFormat);
-      this.value = newValue;
-      this.tkChange.emit(newValue);
-    }
-  }
 
   private createEyedropperButton() {
     return <tk-button variant="neutral" type="outlined" size="small" icon="colorize" onTk-click={this.handleEyeDropper} disabled={this.disabled} />;
