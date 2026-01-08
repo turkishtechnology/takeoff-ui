@@ -774,29 +774,36 @@ export class TkColorPicker implements ComponentInterface {
   private createPanelBody() {
     if (this.orientation === 'horizontal') {
       return (
-        <div class="tk-color-picker-body-horizontal">
-          <div class="tk-color-picker-controls-side">
-            {this.createColorPreview()}
-            {this.createSliders()}
-            {this.createEyedropperButton()}
+        <Fragment>
+          <div class="tk-color-picker-body-horizontal">
+            <div class="tk-color-picker-controls-side">
+              {this.createColorPreview()}
+              {this.createSliders()}
+              {this.createEyedropperButton()}
+            </div>
+            <div class="tk-color-picker-saturation-wrapper">{this.createSaturation()}</div>
           </div>
-          <div class="tk-color-picker-saturation-wrapper">{this.createSaturation()}</div>
-        </div>
+          {this.createInputs()}
+          {this.createPresets()}
+        </Fragment>
       );
     }
 
     return (
-      <div class="tk-color-picker-body-vertical">
-        {this.createSaturation()}
-        <div class="tk-color-picker-controls-bottom">
-          <div class="tk-color-picker-eyedropper-row">
-            {this.createEyedropperButton()}
-            {this.createSliders()}
-            {this.createColorPreview()}
+      <Fragment>
+        <div class="tk-color-picker-body-vertical">
+          {this.createSaturation()}
+          <div class="tk-color-picker-controls-bottom">
+            <div class="tk-color-picker-eyedropper-row">
+              {this.createEyedropperButton()}
+              {this.createSliders()}
+              {this.createColorPreview()}
+            </div>
+            {this.createInputs()}
           </div>
-          {this.createInputs()}
         </div>
-      </div>
+        {this.createPresets()}
+      </Fragment>
     );
   }
 
@@ -852,10 +859,7 @@ export class TkColorPicker implements ComponentInterface {
     return (
       <div class={panelCls} ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-id={this.uniqueId}>
         {this.createPanelHeader()}
-        <div class="tk-color-picker-panel-body">
-          {this.createPanelBody()}
-          {this.createPresets()}
-        </div>
+        <div class="tk-color-picker-panel-body">{this.createPanelBody()}</div>
         {this.createFooter()}
       </div>
     );
