@@ -1,9 +1,9 @@
 import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from './color-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 declare global {
   interface Window {
@@ -35,7 +35,7 @@ export class TkColorPicker implements ComponentInterface {
   private uniqueId = uuidv4();
   private inputRef?: HTMLTkInputElement;
   private panelRef?: HTMLDivElement;
-  private cleanupAuto?: () => void;
+  private cleanup;
   private isDragging = false;
   private currentDragHandler?: (e: MouseEvent) => void;
   private tempInputVal: string | null = null;
@@ -250,24 +250,24 @@ export class TkColorPicker implements ComponentInterface {
     this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.inline || this.preventDismiss });
 
     if (this.isOpen && this.inputRef && this.panelRef) {
-      if (!this.cleanupAuto) {
-        this.cleanupAuto = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePanelPosition(), { elementResize: false });
-      }
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
-      if (this.cleanupAuto) {
-        this.cleanupAuto();
-        this.cleanupAuto = undefined;
-      }
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
 
   disconnectedCallback() {
     this.clickOutsideMixin?.disconnectedCallback();
 
-    if (this.cleanupAuto) {
-      this.cleanupAuto();
-      this.cleanupAuto = undefined;
-    }
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.stopDragging();
   }
 
@@ -357,16 +357,13 @@ export class TkColorPicker implements ComponentInterface {
     }
   };
 
-  private updatePanelPosition() {
-    if (!this.inputRef || !this.panelRef) return;
-    computePosition(this.inputRef.querySelector('.tk-input'), this.panelRef, { placement: 'bottom-end', middleware: [offset(4), flip(), shift({ padding: 5 })] }).then(
-      ({ x, y }) => {
-        Object.assign(this.panelRef!.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      },
-    );
+  private updatePosition() {
+    const inputEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
+    this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
+      placement: 'bottom-end',
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   /**
