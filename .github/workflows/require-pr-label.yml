@@ -9,7 +9,7 @@ jobs:
   check-labels:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: read   
+      pull-requests: read
     steps:
       - name: Validate labels
         id: validate

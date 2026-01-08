@@ -1,24 +1,24 @@
-import { TkBadge } from "@takeoff-ui/react"; 
+import { TkBadge } from '@takeoff-ui/react';
 
 ### Props {#accordion-item-props}
 
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| <TkBadge label="active" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Sets if the accordion is active. |
-| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Header text to display. |
-| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | null | Icon for accordion component. |
-| <TkBadge label="itemKey" variant="primary" size="large" type="filledlight"/> | <code>number, string</code> | null | Optional key for the accordion item. |
-| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large"</code> | 'base' | Sets size for the component. |
+| Name                                                                         | Type                              | Default | Description                          |
+| ---------------------------------------------------------------------------- | --------------------------------- | ------- | ------------------------------------ |
+| <TkBadge label="active" variant="primary" size="large" type="filledlight"/>  | <code>boolean</code>              | null    | Sets if the accordion is active.     |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/>  | <code>string</code>               | null    | Header text to display.              |
+| <TkBadge label="icon" variant="primary" size="large" type="filledlight"/>    | <code>IIconOptions, string</code> | null    | Icon for accordion component.        |
+| <TkBadge label="itemKey" variant="primary" size="large" type="filledlight"/> | <code>number, string</code>       | null    | Optional key for the accordion item. |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/>    | <code>"base", "large"</code>      | 'base'  | Sets size for the component.         |
 
 ### Events {#accordion-item-events}
 
-| Name | Description |
-| ---- | ----------- |
+| Name             | Description                             |
+| ---------------- | --------------------------------------- |
 | tk-active-change | Emitted when an active index is changed |
 
 ### Slots {#accordion-item-slots}
 
-| Name | Description |
-| ---- | ----------- |
-| content | Custom content template. |
-| header | Custom header template that overrides the header prop if provided. |
+| Name    | Description                                                        |
+| ------- | ------------------------------------------------------------------ |
+| content | Custom content template.                                           |
+| header  | Custom header template that overrides the header prop if provided. |

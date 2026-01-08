@@ -38,7 +38,7 @@ changelog:
     - title: "Documentation 📚"
       labels:
         - documentation
-        
+
     - title: "Breaking Changes 💥"
-      labels: 
+      labels:
         - breaking changes

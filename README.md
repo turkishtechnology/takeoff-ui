@@ -1,6 +1,9 @@
 # Takeoff UI
 
-Takeoff UI is a comprehensive design system providing framework-agnostic web components developed with [Stencil.js](https://stenciljs.com/). The project leverages Turborepo for quick builds, smooth workflows, and easy collaboration across packages.
+Takeoff UI is a comprehensive design system providing framework-agnostic web
+components developed with [Stencil.js](https://stenciljs.com/). The project
+leverages Turborepo for quick builds, smooth workflows, and easy collaboration
+across packages.
 
 ![Takeoff UI Hero](docs/static/img/takeoff-og.jpg)
 
@@ -11,17 +14,18 @@ https://takeoff-ui.thy.com/docs
 
 ## Contributing
 
-See our [Contributing Guide](CONTRIBUTING.md) for details on issues, PRs, code style, and more.
+See our [Contributing Guide](CONTRIBUTING.md) for details on issues, PRs, code
+style, and more.
 
 ## Packages
 
-| Package                    | Description                            |
-| -------------------------- | -------------------------------------- |
-| `@takeoff-ui/core`         | Core Stencil.js web components         |
-| `@takeoff-ui/react`        | React bindings                         |
-| `@takeoff-ui/vue`          | Vue bindings                           |
-| `@takeoff-ui/angular`      | Angular bindings                       |
-| `@takeoff-ui/tailwind`     | Tailwind CSS plugin for the design system |
+| Package                | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `@takeoff-ui/core`     | Core Stencil.js web components            |
+| `@takeoff-ui/react`    | React bindings                            |
+| `@takeoff-ui/vue`      | Vue bindings                              |
+| `@takeoff-ui/angular`  | Angular bindings                          |
+| `@takeoff-ui/tailwind` | Tailwind CSS plugin for the design system |
 
 ## Contributors
 

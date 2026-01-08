@@ -1,7 +1,7 @@
-name: 'New Feature request'
+name: "New Feature request"
 description: Create a feature request
-title: 'feat: '
-labels: ['new feature']
+title: "feat: "
+labels: ["new feature"]
 body:
   - type: markdown
     attributes:
@@ -12,8 +12,8 @@ body:
     attributes:
       label: Feature description
       description: Tell us about your feature request
-      placeholder: 'I need this feature because...'
-      value: 'Describe your feature request...'
+      placeholder: "I need this feature because..."
+      value: "Describe your feature request..."
     validations:
       required: true
   - type: dropdown
@@ -69,7 +69,7 @@ body:
       label: Additional Context
       description: Add any other context about the feature here.
       placeholder: ex. screenshots, forum links, etc.
-      value: 'Additional details here...'
+      value: "Additional details here..."
     validations:
       required: false
   - type: checkboxes
