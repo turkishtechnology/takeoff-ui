@@ -544,8 +544,9 @@ export class TkColorPicker implements ComponentInterface {
 
   private handleTriggerInputFocus = () => {
     this.isTriggerInputFocused = true;
-    const colorCss = hsvaToCss(this.internalHSVA, this.currentFormat);
-    this.triggerInputValue = colorCss;
+    // Only set triggerInputValue if there's an actual value
+    // If value is empty, keep triggerInputValue empty so user can type from scratch
+    this.triggerInputValue = this.value || '';
   };
 
   private handleTriggerInputBlur = () => {
@@ -554,8 +555,8 @@ export class TkColorPicker implements ComponentInterface {
     this.applyTriggerInputValue();
   };
 
-  private handleTriggerInputChange = (e: Event) => {
-    const input = e.target as HTMLInputElement;
+  private handleTriggerInputChange = (e: CustomEvent) => {
+    const input = e.detail;
     this.triggerInputValue = input.value;
   };
 
@@ -590,53 +591,6 @@ export class TkColorPicker implements ComponentInterface {
 
   private createColorPreview() {
     return <div class="tk-color-picker-preview-box" style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }} />;
-  }
-
-  private renderTrigger() {
-    if (this.inline) return null;
-
-    const colorCss = hsvaToCss(this.internalHSVA, this.currentFormat);
-    const displayValue = this.isTriggerInputFocused ? this.triggerInputValue : colorCss;
-
-    return this.createInputTrigger(colorCss, displayValue);
-  }
-
-  private createInputTrigger(colorCss: string, displayValue: string) {
-    return (
-      <tk-input
-        ref={el => (this.inputRef = el as HTMLTkInputElement)}
-        class={classNames('tk-color-picker-input', {
-          'editable-color-picker': true,
-        })}
-        label={this.label}
-        readonly={this.readonly}
-        disabled={this.disabled}
-        invalid={this.invalid}
-        error={this.error}
-        hint={this.hint}
-        showAsterisk={this.showAsterisk}
-        name={this.name}
-        size={this.size}
-        placeholder={this.value?.length > 0 ? '' : this.placeholder}
-        icon={{
-          left: {
-            name: 'circle',
-            color: colorCss,
-            style: 'outlined',
-            fill: true,
-          },
-          right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down',
-        }}
-        value={displayValue}
-        aria-describedby="dropdown"
-        aria-expanded={this.isOpen}
-        onClick={this.handleTriggerClick}
-        onTk-focus={this.handleTriggerInputFocus}
-        onTk-blur={this.handleTriggerInputBlur}
-        onTk-change={this.handleTriggerInputChange}
-        onKeyDown={this.handleTriggerInputKeyDown}
-      ></tk-input>
-    );
   }
 
   private createSaturation() {
@@ -858,6 +812,49 @@ export class TkColorPicker implements ComponentInterface {
     );
   }
 
+  private renderInput() {
+    if (this.inline) return null;
+
+    const displayValue = this.isTriggerInputFocused ? this.triggerInputValue : this.value;
+    const iconColor = this.value || '#000000';
+
+    return (
+      <tk-input
+        ref={el => (this.inputRef = el as HTMLTkInputElement)}
+        class={classNames('tk-color-picker-input', {
+          'editable-color-picker': true,
+        })}
+        label={this.label}
+        readonly={this.readonly}
+        disabled={this.disabled}
+        invalid={this.invalid}
+        error={this.error}
+        hint={this.hint}
+        showAsterisk={this.showAsterisk}
+        name={this.name}
+        size={this.size}
+        placeholder={this.placeholder}
+        icon={{
+          left: {
+            name: 'circle',
+            color: iconColor,
+            style: 'outlined',
+            fill: true,
+          },
+          right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down',
+        }}
+        value={displayValue}
+        aria-describedby="dropdown"
+        aria-expanded={this.isOpen}
+        onClick={this.handleTriggerClick}
+        onTk-focus={this.handleTriggerInputFocus}
+        onTk-blur={this.handleTriggerInputBlur}
+        onTk-change={this.handleTriggerInputChange}
+        onKeyDown={this.handleTriggerInputKeyDown}
+      ></tk-input>
+    );
+  }
+
   private renderPanel() {
     const panelCls = classNames('tk-color-picker-panel', {
       'tk-color-picker-panel-inline': this.inline,
@@ -885,7 +882,7 @@ export class TkColorPicker implements ComponentInterface {
 
     return (
       <div class={rootClasses}>
-        {this.renderTrigger()}
+        {this.renderInput()}
         {(this.isOpen || this.inline) && this.renderPanel()}
       </div>
     );
