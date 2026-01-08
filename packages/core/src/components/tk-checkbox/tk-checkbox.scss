@@ -7,8 +7,8 @@ tk-checkbox {
     border-radius: var(--radius-m-base);
     border: 1px solid var(--border-light);
     background: var(--static-Light);
-    gap: var(--card-radio-container-gap);
-    padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
+    gap: var(--card-switcher-container-gap);
+    padding: var(--card-switcher-container-v-padding) var(--card-switcher-container-h-padding);
 
     &:hover {
       background-color: var(--background-lightest);
