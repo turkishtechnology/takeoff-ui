@@ -1,7 +1,7 @@
 import Basic from "./Examples/Basic";
 import Inline from "./Examples/Inline";
 import Orientation from "./Examples/Orientation";
-import Disabled from "./Examples/Disabled";
+import States from "./Examples/States";
 import Visibility from "./Examples/Visibility";
 import HeaderTypes from "./Examples/HeaderTypes";
 import FooterTypes from "./Examples/FooterTypes";
@@ -44,12 +44,6 @@ The component supports two panel layouts via the `orientation` prop. The default
 
 <Orientation />
 
-## States
-
-The `disabled` prop prevents user interaction, while the `required` prop adds a visual indicator for required form fields. These states integrate seamlessly with form validation workflows.
-
-<Disabled />
-
 ## Custom Presets
 
 The `presets` prop accepts an array of color strings to display as quick-select swatches. Use this to provide brand colors, theme palettes, or frequently used colors for your users.
@@ -61,3 +55,7 @@ The `presets` prop accepts an array of color strings to display as quick-select 
 Toggle individual features to customize the picker interface. Use `showAlphaSlider` for transparency support, `showPresets` for quick-access color swatches, and `showFormatSelector` to allow switching between HEX and RGBA formats.
 
 <Visibility />
+
+## States
+
+<States />

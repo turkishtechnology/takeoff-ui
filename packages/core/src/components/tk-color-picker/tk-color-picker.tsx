@@ -291,16 +291,6 @@ export class TkColorPicker implements ComponentInterface {
   }
 
   /**
-   * Sets the color value programmatically
-   * @param color - Color string in any supported format
-   */
-  @Method()
-  async setValue(color: string) {
-    this.value = color;
-    this.internalHSVA = parseColorToHsva(color);
-  }
-
-  /**
    * Gets the current color value in the specified format
    * @param format - Output format (defaults to current format)
    */
