@@ -19,8 +19,8 @@
 }
 
 .tk-color-picker-panel {
-  position: absolute;
-  z-index: 1000;
+  position: fixed;
+  z-index: 800;
   background: var(--static-light, #ffffff);
   border: 1px solid var(--border-light, #e1e4ea);
   border-radius: 16px;
