@@ -3,7 +3,6 @@ import { TkColorPicker, TkButton, TkRadio, TkRadioGroup } from '@takeoff-ui/reac
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const HeaderTypes = () => {
-  const [color, setColor] = useState('#326FD1');
   const [headerType, setHeaderType] = useState<'basic' | 'divided' | 'light' | 'dark' | 'primary'>('basic');
   const [codeSampleReact, setCodeSampleReact] = useState('');
   const [codeSampleVue, setCodeSampleVue] = useState('');
@@ -22,14 +21,11 @@ const HeaderTypes = () => {
   };
 
   useEffect(() => {
-    const reactCode = `const [color, setColor] = useState('#326FD1');
-
-<TkColorPicker
+    const reactCode = `<TkColorPicker
   inline
+  showHeader
   headerType="${headerType}"
-  value={color}
-  panelTitle="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
-  onTkInput={(e) => setColor(e.detail)}
+  header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
 >
   <div slot="footer-actions">
     <TkButton label='Apply' variant="primary" size="small" />
@@ -38,17 +34,14 @@ const HeaderTypes = () => {
 
     const vueCode = `<script setup>
 import { TkColorPicker, TkButton } from '@takeoff-ui/vue';
-import { ref } from 'vue';
-
-const color = ref('#326FD1');
 </script>
 
 <template>
   <TkColorPicker
     inline
+    showheader
     headerType="${headerType}"
-    v-model="color"
-    panelTitle="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
+    header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
   >
     <div slot="footer-actions">
       <TkButton label='Apply' variant="primary" size="small" />
@@ -57,11 +50,11 @@ const color = ref('#326FD1');
 </template>`;
 
     const angularCode = `<tk-color-picker
-  inline
-  headerType="${headerType}"
-  [value]="color"
-  panelTitle="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
-  (tkInput)="onColorInput($event)">
+    inline
+    showHeader
+    headerType="${headerType}"
+    header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
+  >
   <div slot="footer-actions">
     <tk-button label='Apply' variant="primary" size="small"></tk-button>
   </div>
@@ -80,13 +73,7 @@ const color = ref('#326FD1');
         ))}
       </TkRadioGroup>
       <div className="flex justify-center">
-        <TkColorPicker
-          inline
-          headerType={headerType}
-          value={color}
-          panelTitle={`${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header`}
-          onTkInput={e => setColor(e.detail)}
-        >
+        <TkColorPicker inline showHeader headerType={headerType} header={`${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header`}>
           <div slot="footer-actions">
             <TkButton label="Apply" variant="primary" size="small" />
           </div>

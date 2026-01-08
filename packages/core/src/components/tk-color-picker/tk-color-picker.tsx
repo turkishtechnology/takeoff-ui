@@ -204,7 +204,7 @@ export class TkColorPicker implements ComponentInterface {
    * Set to false when using footer actions for controlled closing.
    * @defaultValue true
    */
-  @Prop() showCloseButton: boolean = true;
+  @Prop() showCloseButton: boolean = false;
 
   /**
    * Emitted when the color is applied/confirmed
