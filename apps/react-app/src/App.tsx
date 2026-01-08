@@ -43,6 +43,7 @@ import OrgChart from './components/OrgChart';
 import Tabs from './components/Tabs';
 import TreeView from './components/TreeView';
 import Upload from './components/Upload';
+import ColorPicker from './components/ColorPicker';
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
         <Route path="components/currency-input" element={<CurrencyInput />} />
         <Route path="components/tree-view" element={<TreeView />} />
         <Route path="components/upload" element={<Upload />} />
+        <Route path="components/color-picker" element={<ColorPicker />} />
       </Routes>
     </Layout>
   );

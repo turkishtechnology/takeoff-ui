@@ -1,0 +1,59 @@
+import { TkBadge } from "@takeoff-ui/react"; 
+
+### Props {#color-picker-props}
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Disables the color picker |
+| <TkBadge label="error" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | This is the error message that will be displayed. |
+| <TkBadge label="footerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "divided", "light"</code> | 'basic' | The type of the footer styling |
+| <TkBadge label="format" variant="primary" size="large" type="filledlight"/> | <code>"hex", "rgba"</code> | 'hex' | Color format for display and output |
+| <TkBadge label="header" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Title displayed in the panel header |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "divided", "light", "primary"</code> | 'basic' | The type of the header styling |
+| <TkBadge label="hint" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Provided a hint or additional information about the input. |
+| <TkBadge label="inline" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays the picker inline without trigger |
+| <TkBadge label="invalid" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Indicates whether the input is in an invalid state |
+| <TkBadge label="label" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Label text displayed above the trigger input |
+| <TkBadge label="name" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | The name of the control, which is submitted with the form data. |
+| <TkBadge label="orientation" variant="primary" size="large" type="filledlight"/> | <code>"horizontal", "vertical"</code> | 'vertical' | Panel layout orientation |
+| <TkBadge label="placeholder" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Placeholder text displayed when the input is empty. |
+| <TkBadge label="presets" variant="primary" size="large" type="filledlight"/> | <code>string[]</code> | ['#326FD1', '#C79807', '#A45E3C', '#119C8D', '#EDBBA3', '#ABC9FB', '#D0E1FD', '#FF6259', '#717784', '#85B2F9', '#EAD6FD'] | Array of preset color values |
+| <TkBadge label="preventDismiss" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Prevents the panel from being dismissed by clicking outside. Use with footer actions (Apply/Cancel buttons) for controlled closing. |
+| <TkBadge label="readonly" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | If `true`, the user cannot modify the value. |
+| <TkBadge label="showAlphaSlider" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Shows/hides the alpha slider |
+| <TkBadge label="showAsterisk" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Displays a red asterisk (*) next to the label for visual emphasis. |
+| <TkBadge label="showCloseButton" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the close button is shown in the header. Set to false when using footer actions for controlled closing. |
+| <TkBadge label="showFormatSelector" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Shows/hides the format selector |
+| <TkBadge label="showHeader" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Controls whether the header is shown |
+| <TkBadge label="showPresets" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | true | Shows/hides the preset colors section |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "large", "small"</code> | 'base' | Sets size for the component. |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' | The current color value (supports HEX and RGB formats) |
+
+### Events {#color-picker-events}
+
+| Name | Description |
+| ---- | ----------- |
+| tk-apply | Emitted when the apply button is clicked |
+| tk-cancel | Emitted when the cancel button is clicked |
+| tk-change | Emitted when the color is applied/confirmed |
+| tk-close | Emitted when the panel closes |
+| tk-open | Emitted when the panel opens |
+
+### Methods {#color-picker-methods}
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| apply | <code>apply() =\> Promise\<void\></code> | Applies the current color selection and closes the panel Use this method in custom footer actions |
+| cancel | <code>cancel() =\> Promise\<void\></code> | Cancels the color selection, reverts to previous value, and closes the panel Use this method in custom footer actions |
+| close | <code>close() =\> Promise\<void\></code> | Closes the color picker panel |
+| getValue | <code>getValue(format?: "hex" \| "rgba") =\> Promise\<string\></code> | Gets the current color value in the specified format |
+| open | <code>open() =\> Promise\<void\></code> | Opens the color picker panel |
+
+### Slots {#color-picker-slots}
+
+| Name | Description |
+| ---- | ----------- |
+| footer | Custom footer template (replaces default footer container). |
+| footer-actions | Custom actions template for footer layout with styled container. |
+| header | Custom header template (replaces default header completely). |
+| header-actions | Custom actions template for header (replaces close button). |
