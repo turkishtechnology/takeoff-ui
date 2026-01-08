@@ -6,14 +6,14 @@ import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
-import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
+import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -32,7 +32,6 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 export class TkTable implements ComponentInterface {
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
-  private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
   private isResizing: boolean = false;
   private resizeColumnIndex: number = -1;
@@ -40,6 +39,7 @@ export class TkTable implements ComponentInterface {
   private startWidth: number = 0;
   private customCellCache: Map<string, HTMLElement> = new Map();
   private isSelectionUpdating: boolean = false;
+  private cleanup;
 
   @Element() el: HTMLTkTableElement;
 
@@ -359,19 +359,24 @@ export class TkTable implements ComponentInterface {
   componentDidUpdate() {
     if (this.isFilterOpen) {
       if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition());
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePanelPosition();
       }
     } else {
+      // Remove floating UI listeners when filter closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.closeFilterPanel();
     }
   }
 
   disconnectedCallback(): void {
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
-
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.elActiveSearchIcon = null;
     this.elFilterPanelElement = null;
     this.isFilterOpen = false;
@@ -717,6 +722,14 @@ export class TkTable implements ComponentInterface {
     this.totalItems = flatRenderData.length;
   }
 
+  private updatePanelPosition() {
+    this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
+      placement: 'bottom',
+      shift: { padding: 5 },
+      offset: 4,
+    });
+  }
+
   private clearGroupingInternal() {
     this.groupByColumnField = null;
     this.groupedData = [];
@@ -778,32 +791,13 @@ export class TkTable implements ComponentInterface {
     requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
-  private updatePosition() {
-    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
-        strategy: 'fixed',
-        placement: 'bottom',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        // Ensure the element still exists before updating its position
-        if (this.elFilterPanelElement) {
-          applyStyles(this.elFilterPanelElement, {
-            left: `${x}px`,
-            top: `${y}px`,
-          });
-        }
-      });
-    }
-  }
-
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
     removeDialogScrollListener(this.elFilterPanelElement);
-    // First cleanup the floating UI
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
+    // Clean up floating UI listeners before removing element
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
 
     // Then remove the element from DOM
     if (this.elFilterPanelElement) {

@@ -90,16 +90,27 @@ export class TkTooltip implements ComponentInterface {
 
   componentDidUpdate() {
     if (this.isOpen) {
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
       this.updatePosition();
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when tooltip closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
+
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     removeDialogScrollListener(this.el);
   }
+
   private updatePosition() {
-    floatingElementAutoUpdate(this.triggerElement, this.tooltipElement, this.arrowElement, { placement: this.position });
+    this.cleanup = floatingElementAutoUpdate(this.triggerElement, this.tooltipElement, this.arrowElement, { placement: this.position });
   }
 
   private handleMouseEnter = () => {

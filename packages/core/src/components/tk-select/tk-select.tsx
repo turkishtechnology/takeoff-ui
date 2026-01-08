@@ -1,7 +1,6 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
@@ -9,6 +8,7 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkSelect component description.
@@ -329,18 +329,25 @@ export class TkSelect implements ComponentInterface {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
-        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
-          animationFrame: true,
-        });
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePosition();
         this.setFlatOptions();
       }
     } else {
+      // Remove floating UI listeners when select closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.panelRef?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     removeDialogScrollListener(this.el);
 
@@ -350,6 +357,29 @@ export class TkSelect implements ComponentInterface {
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  private updatePosition() {
+    const dropdownWidthMode = this.dropdownWidthMode;
+    const tkInputRootEl = this.inputRef.querySelector('.tk-input') as HTMLTkInputElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+      size: {
+        apply({ rects, elements }) {
+          if (dropdownWidthMode === 'match-parent') {
+            applyStyles(elements.floating, {
+              width: `${rects.reference.width}px`,
+            });
+          } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
+            applyStyles(elements.floating, {
+              width: dropdownWidthMode,
+            });
+          }
+        },
+      },
+    });
   }
 
   /**
@@ -395,40 +425,6 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private updatePosition() {
-    const tkInputRootEl = this.inputRef.querySelector('.tk-input');
-    const dropdownWidthMode = this.dropdownWidthMode;
-
-    if (tkInputRootEl && this.panelRef) {
-      computePosition(tkInputRootEl, this.panelRef, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [
-          offset(4),
-          flip(),
-          shift({ padding: 5 }),
-          size({
-            apply({ rects, elements }) {
-              if (dropdownWidthMode === 'match-parent') {
-                applyStyles(elements.floating, {
-                  width: `${rects.reference.width}px`,
-                });
-              } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
-                applyStyles(elements.floating, {
-                  width: dropdownWidthMode,
-                });
-              }
-            },
-          }),
-        ],
-      }).then(({ x, y }) => {
-        applyStyles(this.panelRef, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
-  }
   private isOptionSelected(valueArr: any[], optionValue: any): boolean {
     if (typeof optionValue === 'object' && !Array.isArray(optionValue) && optionValue !== null) {
       return valueArr.some(v => _.isEqual(v, optionValue));

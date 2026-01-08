@@ -199,9 +199,9 @@
     }
 
     &-menu {
-      position: absolute;
+      position: fixed;
       left: var(--spacing-none);
-      z-index: 10;
+      z-index: 800;
       background: var(--static-light);
       border: var(--spacing-px) solid var(--border-light);
       border-radius: var(--button-sizes-large-radius);
