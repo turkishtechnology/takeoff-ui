@@ -34,8 +34,6 @@
     /* Title/H5-24 */
     font-style: normal;
     font-weight: 400;
-    line-height: var(--desktop-title-h5-line-height, 30px);
-    /* 125% */
   }
 
   > svg {
@@ -67,12 +65,14 @@
 
 .tk-avatar-xlarge {
   .tk-avatar {
-    width: var(--spacing-16xl);
-    height: var(--spacing-16xl);
+    width: 96px;
+    height: 96px;
     border: 2px solid var(--static-light);
+    border-radius: 12px;
 
     .tk-avatar-label {
-      font-size: var(--desktop-title-h5-size, 24px);
+      font-size: 37.565px;
+      line-height: 37.565px;
     }
 
     > svg {
@@ -88,12 +88,13 @@
 
 .tk-avatar-large {
   .tk-avatar {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     border: 2px solid var(--static-light);
 
     .tk-avatar-label {
-      font-size: var(--desktop-title-h6-size, 20px);
+      font-size: var(--desktop-title-h5-size);
+      line-height: var(--desktop-title-h5-line-height);
     }
 
     > svg {
@@ -109,11 +110,13 @@
 
 .tk-avatar-base {
   .tk-avatar {
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--static-light);
 
     .tk-avatar-label {
-      font-size: var(--desktop-body-m-base-size, 16px);
+      font-size: var(--desktop-title-h6-size);
+      line-height: var(--desktop-title-h6-line-height);
     }
 
     > svg {
@@ -129,11 +132,12 @@
 
 .tk-avatar-small {
   .tk-avatar {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
 
     .tk-avatar-label {
-      font-size: var(--desktop-body-xs-size, 12px);
+      font-size: var(--desktop-body-m-base-size);
+      line-height: var(--desktop-body-m-base-line-height);
     }
 
     > svg {
@@ -149,16 +153,16 @@
 
 .tk-avatar-xsmall {
   .tk-avatar {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 
     &:not(.tk-avatar-rounded) {
       border-radius: 4px;
     }
 
-    .tk-avatar-label {
-      font-size: var(--desktop-body-2xs-size, 11px);
-      line-height: var(--line-height-xxs-normal, 16px);
+    .tk-avatar-label { 
+      font-size: var(--desktop-body-xs-size);
+      line-height: var(--desktop-body-xs-line-height);
       /* 145.455% */
     }
 
@@ -227,7 +231,7 @@
   }
 
   &.tk-avatar-warning {
-    background: var(--states-warning-light);
+    background: var(--states-warning-sub-base);
 
     .tk-avatar-label {
       color: var(--states-warning-darkest);
