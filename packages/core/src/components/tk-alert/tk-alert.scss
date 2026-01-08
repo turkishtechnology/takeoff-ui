@@ -50,14 +50,15 @@
   }
 
   &.success {
-    border-color: var(--states-success-base);
-
+    border-color: var(--states-success-sub-base);
+    
     &.filled {
       background-color: var(--states-success-base);
+      border-color: var(--states-success-base);
     }
 
     &.filledlight {
-      background-color: var(--states-success-light);
+      background-color: var(--states-success-lightest);
     }
 
     &.outlined {
@@ -70,10 +71,11 @@
   }
 
   &.info {
-    border-color: var(--states-info-base);
-
+    border-color: var(--states-info-sub-base);
+    
     &.filled {
       background-color: var(--states-info-base);
+      border-color: var(--states-info-base);
     }
 
     &.filledlight {
@@ -90,10 +92,11 @@
   }
 
   &.danger {
-    border-color: var(--states-danger-base);
-
+    border-color: var(--states-danger-sub-base);
+    
     &.filled {
       background-color: var(--states-danger-base);
+      border-color: var(--states-danger-base);
     }
 
     &.filledlight {
@@ -110,10 +113,11 @@
   }
 
   &.warning {
-    border-color: var(--states-warning-base);
-
+    border-color: var(--states-warning-sub-base);
+    
     &.filled {
       background-color: var(--states-warning-base);
+      border-color: var(--states-warning-base);
     }
 
     &.filledlight {
