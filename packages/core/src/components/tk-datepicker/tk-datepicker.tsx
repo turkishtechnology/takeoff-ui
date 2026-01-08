@@ -152,6 +152,11 @@ export class TkDatePicker {
   @Prop() invalid: boolean = false;
 
   /**
+   * Whether the datepicker is read-only
+   */
+  @Prop() readonly: boolean = false;
+
+  /**
    * Indicates whether the input of datepicker can be cleared
    * @defaultValue false
    */
@@ -377,7 +382,7 @@ export class TkDatePicker {
       this.clickOutsideMixin = new ClickOutsideMixin({
         referenceElement: this.el,
         handler: this.closeHandler,
-        disabled: this.disabled || !this.isOpen,
+        disabled: this.disabled || this.readonly || !this.isOpen,
       });
     }
 
@@ -392,7 +397,7 @@ export class TkDatePicker {
   componentDidUpdate() {
     // Update click outside mixin configuration based on current state
     this.clickOutsideMixin?.updateConfig({
-      disabled: this.disabled || this.inline || !this.isOpen,
+      disabled: this.disabled || this.readonly || this.inline || !this.isOpen,
     });
 
     if (this.isOpen) {
@@ -1207,6 +1212,7 @@ export class TkDatePicker {
   };
 
   private handleMinuteClick = (min: number) => {
+    if (this.disabled || this.readonly) return;
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
@@ -1220,6 +1226,7 @@ export class TkDatePicker {
 
   private handleAmPmToggle = (event: CustomEvent) => {
     // Prevent inner toggle group's tk-change from leaking outside and overwriting consumer value
+    if (this.disabled || this.readonly) return;
     event.stopPropagation();
     if (this.timeFormat !== '12') return;
 
@@ -1230,7 +1237,7 @@ export class TkDatePicker {
   };
 
   private handleInputClick = (e: MouseEvent) => {
-    if (this.disabled) {
+    if (this.disabled || this.readonly) {
       e.preventDefault();
       return;
     }
@@ -1240,7 +1247,7 @@ export class TkDatePicker {
   };
 
   private handleDateClick = (date: Date) => {
-    if (this.isDateDisabled(date)) return;
+    if (this.disabled || this.readonly || this.isDateDisabled(date)) return;
 
     const normalizedDate = this.normalizeDate(date);
     let emitValue: string | IDateSelection;
@@ -1482,7 +1489,8 @@ export class TkDatePicker {
           'range-start': isSelectedStart && this.mode === 'range',
           'range-end': isSelectedEnd && this.mode === 'range',
           'today': isToday && !isSelected && !isInRange,
-          'disabled': isDisabled,
+          'disabled': isDisabled || this.disabled,
+          'readonly': this.readonly,
           'adjacent-month': isAdjacentMonth,
         })}
         onClick={() => !isDisabled && this.handleDateClick(date)}
@@ -1636,6 +1644,7 @@ export class TkDatePicker {
               icon={{ name: 'keyboard_double_arrow_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
+              disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1643,13 +1652,14 @@ export class TkDatePicker {
               icon={{ name: 'chevron_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
+              disabled={this.readonly || this.disabled}
             ></tk-button>
           </div>
           <div class="tk-datepicker-select-container">
-            <div class="tk-datepicker-select-month" onClick={e => this.handleViewChange(e, 'months')}>
+            <div class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'months')}>
               {monthName}
             </div>
-            <div class="tk-datepicker-select-year" onClick={e => this.handleViewChange(e, 'years')}>
+            <div class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'years')}>
               {year}
             </div>
           </div>
@@ -1659,6 +1669,7 @@ export class TkDatePicker {
               icon={{ name: 'chevron_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
+              disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1666,6 +1677,7 @@ export class TkDatePicker {
               icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
               onTk-click={() => this.handleYearChange(1)}
               type="text"
+              disabled={this.readonly || this.disabled}
             ></tk-button>
           </div>
         </div>
@@ -1733,7 +1745,7 @@ export class TkDatePicker {
         return optIndex >= 0 && optIndex < options.length ? options[optIndex] : null;
       });
     };
-
+    const isDisabled = this.disabled || this.readonly;
     const visibleHours = sliceRange(hours, currentHour);
     const visibleMinutes = sliceRange(minutes, currentMinute);
 
@@ -1758,6 +1770,7 @@ export class TkDatePicker {
                 value="AM"
                 label="AM"
                 size="small"
+                disabled={isDisabled}
               />
               <tk-toggle-button
                 key="PM"
@@ -1766,6 +1779,7 @@ export class TkDatePicker {
                 value="PM"
                 label="PM"
                 size="small"
+                disabled={isDisabled}
               />
             </tk-toggle-button-group>
           )}
@@ -1793,7 +1807,7 @@ export class TkDatePicker {
                   color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
                 }}
                 onTk-click={this.handleDecreaseHour}
-                disabled={isMinHour}
+                disabled={isMinHour || isDisabled}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
@@ -1804,15 +1818,25 @@ export class TkDatePicker {
             </div>
             {visibleHours.map(hour =>
               hour === null ? (
-                <div class="tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty"></div>
+                <div class={classNames('tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty', { disabled: isDisabled })}></div>
               ) : (
                 <div
                   class={classNames('tk-datepicker-timepicker-value', {
                     'selected': hour === currentHour,
                     'tk-datepicker-timepicker-value-dark': this.headerType === 'dark',
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
+                    'disabled': isDisabled,
                   })}
-                  onClick={() => this.handleHourClick(this.timeFormat === '12' ? (hour === 12 ? 0 : hour) + (this.internalAmPm === 'PM' ? 12 : 0) : hour)}
+                  onClick={() => {
+                    if (isDisabled) {
+                      return;
+                    } else if (this.timeFormat === '12') {
+                      const hour24 = (hour === 12 ? 0 : hour) + (this.internalAmPm === 'PM' ? 12 : 0);
+                      this.handleHourClick(hour24);
+                    } else {
+                      this.handleHourClick(hour);
+                    }
+                  }}
                 >
                   {hour.toString().padStart(2, '0')}
                 </div>
@@ -1834,7 +1858,7 @@ export class TkDatePicker {
                   color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
                 }}
                 onTk-click={this.handleIncreaseHour}
-                disabled={isMaxHour}
+                disabled={isMaxHour || isDisabled}
               ></tk-button>
             </div>
           </div>
@@ -1849,7 +1873,7 @@ export class TkDatePicker {
                   color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
                 }}
                 onTk-click={this.handleDecreaseMinute}
-                disabled={isMinMinute}
+                disabled={isMinMinute || isDisabled}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
@@ -1860,13 +1884,14 @@ export class TkDatePicker {
             </div>
             {visibleMinutes.map(m =>
               m === null ? (
-                <div class="tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty"></div>
+                <div class={classNames('tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty', { disabled: isDisabled })}></div>
               ) : (
                 <div
                   class={classNames('tk-datepicker-timepicker-value', {
                     'selected': m === currentMinute,
                     'tk-datepicker-timepicker-value-dark': this.headerType === 'dark',
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
+                    'disabled': isDisabled,
                   })}
                   onClick={() => this.handleMinuteClick(m)}
                 >
@@ -1890,7 +1915,7 @@ export class TkDatePicker {
                   color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
                 }}
                 onTk-click={this.handleIncreaseMinute}
-                disabled={isMaxMinute}
+                disabled={isMaxMinute || isDisabled}
               ></tk-button>
             </div>
           </div>
@@ -1920,6 +1945,7 @@ export class TkDatePicker {
         clearable={this.clearable}
         disabled={this.disabled}
         invalid={this.invalid || this.isInvalid}
+        readonly={this.readonly}
         error={this.error}
         placeholder={this.placeholder || (this.timeOnly ? this.getOnlyTimeFormat() : this.showTimePicker ? this.getFullDateTimeFormat() : this.dateFormat).toUpperCase()}
         value={displayValue}

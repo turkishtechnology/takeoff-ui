@@ -6,6 +6,8 @@ import CustomHeight from "./Examples/CustomHeight";
 import GetContent from "./Examples/GetContent";
 import MediaAndUrl from "./Examples/MediaAndUrl";
 import Placeholder from "./Examples/Placeholder";
+import Counter from "./Examples/Counter";
+import { TkAlert } from '@takeoff-ui/react';
 
 ## Default
 
@@ -36,6 +38,18 @@ Customize the toolbar by providing your own configuration and extensions. This e
 Shows how the placeholder is displayed only when the editor is empty.
 
 <Placeholder />
+
+## Counter
+
+Control character limits and display a character counter using the `showCounter` and `maxLength` properties.
+
+<TkAlert
+  variant="info"
+  message="The character counter feature is designed to work in conjunction with the maxLength property. While maxLength has a default value of 140, it is only active when showCounter is enabled."
+/>
+<br/>
+
+<Counter />
 
 ## Media&URL Handling
 

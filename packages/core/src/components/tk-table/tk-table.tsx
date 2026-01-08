@@ -30,7 +30,6 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private customCellElements: ICustomElement[] = [];
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private cleanupFilterPanel;
@@ -51,6 +50,10 @@ export class TkTable implements ComponentInterface {
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
   @State() renderData: Record<PropertyKey, unknown>[] = [];
+  @Watch('renderData')
+  renderDataChanged(newValue: Record<PropertyKey, unknown>[], oldValue: Record<PropertyKey, unknown>[]) {
+    if (!_.isEqual(oldValue, newValue)) this.tkVisibleDataChange.emit(newValue);
+  }
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -270,6 +273,11 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
 
+  /**
+   * Emitted when the visible data changes.
+   */
+  @Event({ eventName: 'tk-visible-data-change' }) tkVisibleDataChange: EventEmitter<Record<PropertyKey, unknown>[]>;
+
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -325,14 +333,6 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    if (!this.loading) {
-      this.customCellElements?.forEach(element => {
-        element?.ref?.replaceChildren(element.element);
-      });
-    } else {
-      this.clearCustomElements();
-    }
-
     this.customHeaderElements?.forEach(element => {
       element?.ref?.replaceChildren(element.element);
     });
@@ -778,13 +778,6 @@ export class TkTable implements ComponentInterface {
     requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
-  private clearCustomElements() {
-    this.customCellElements?.forEach(element => {
-      element?.element?.remove();
-    });
-    this.customCellElements = [];
-  }
-
   private updatePosition() {
     if (this.elActiveSearchIcon && this.elFilterPanelElement) {
       computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
@@ -1203,7 +1196,10 @@ export class TkTable implements ComponentInterface {
         showTimePicker: false,
         size: 'base',
       };
-      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker });
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const currentValue = currentFilter?.value || null;
+
+      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker, value: currentValue });
       datepicker.addEventListener('tk-change', (e: Event) => {
         datepicker.value = (e as CustomEvent).detail;
       });
@@ -1784,7 +1780,7 @@ export class TkTable implements ComponentInterface {
                 }
                 return (
                   <td
-                    ref={el => this.customCellElements.push({ ref: el as HTMLElement, element: effectiveElement })}
+                    ref={el => el?.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
@@ -2107,11 +2103,7 @@ export class TkTable implements ComponentInterface {
 
   private createBody() {
     if (!this.isResizing && !this.isSelectionUpdating) {
-      this.clearCustomElements();
       this.customCellCache.clear();
-    } else {
-      // When resizing or only selection changes, keep cache and just reset mount refs
-      this.customCellElements = [];
     }
 
     if (this.renderData.length > 0) {

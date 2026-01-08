@@ -372,6 +372,39 @@
         }
       }
     }
+
+    .tk-editor-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 var(--editor-body-h-padding) var(--editor-body-v-padding);
+      background-color: var(--static-light);
+    }
+
+    .tk-editor-counter {
+      color: var(--text-sub-base);
+      font-family: var(--subheading-2xs-font, Geologica);
+      font-size: var(--subheading-2xs-size, 11px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--subheading-2xs-line-height, 16px);
+      text-transform: uppercase;
+      pointer-events: none;
+      white-space: nowrap;
+
+      &.tk-editor-counter-maxed {
+        color: var(--states-danger-base);
+      }
+    }
+
+    .tk-editor-resize-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      cursor: se-resize;
+    }
   }
 }
 
