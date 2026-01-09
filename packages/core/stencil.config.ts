@@ -21,6 +21,7 @@ const vueComponentModels: ComponentModelConfig[] = [
       'tk-upload',
       'tk-tree-view',
       'tk-toggle-button-group',
+      'tk-color-picker',
     ],
     event: 'tk-change',
     targetAttr: 'value',
