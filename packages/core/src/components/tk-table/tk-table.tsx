@@ -793,7 +793,6 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
-    removeDialogScrollListener(this.elFilterPanelElement);
     // Clean up floating UI listeners before removing element
     this.cleanup?.();
     // Clear reference to allow garbage collection
@@ -801,6 +800,7 @@ export class TkTable implements ComponentInterface {
 
     // Then remove the element from DOM
     if (this.elFilterPanelElement) {
+      removeDialogScrollListener(this.el);
       this.elFilterPanelElement.remove();
       this.elFilterPanelElement = null;
     }

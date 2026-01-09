@@ -1,5 +1,6 @@
 import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
+import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { v4 as uuidv4 } from 'uuid';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from './color-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
@@ -251,6 +252,8 @@ export class TkColorPicker implements ComponentInterface {
     this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.inline || this.preventDismiss });
 
     if (this.isOpen && this.inputRef && this.panelRef) {
+      addDialogScrollListener(this.panelRef, this.handleCloseClick);
+
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -836,6 +839,10 @@ export class TkColorPicker implements ComponentInterface {
   }
 
   private renderPanel() {
+    if (!this.isOpen && !this.inline) {
+      removeDialogScrollListener(this.panelRef);
+      return null;
+    }
     const panelCls = classNames('tk-color-picker-panel', {
       'tk-color-picker-panel-inline': this.inline,
       'tk-color-picker-panel-horizontal': this.orientation === 'horizontal',
@@ -860,7 +867,7 @@ export class TkColorPicker implements ComponentInterface {
     return (
       <div class={rootClasses}>
         {this.renderInput()}
-        {(this.isOpen || this.inline) && this.renderPanel()}
+        {this.renderPanel()}
       </div>
     );
   }

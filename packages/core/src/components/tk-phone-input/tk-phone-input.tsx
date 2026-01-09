@@ -165,13 +165,7 @@ export class TkPhoneInput implements ComponentInterface {
    * Add event listeners when the component is connected to the DOM.
    */
   connectedCallback(): void {
-    document.addEventListener('click', this.handleClickOutside);
-    addDialogScrollListener(this.el, e => {
-      if (e.composedPath().includes(this.el)) {
-        return;
-      }
-      this.panelRef?.remove();
-    });
+    document.addEventListener('click', this.closeDropdown);
   }
 
   /**
@@ -182,8 +176,7 @@ export class TkPhoneInput implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    document.removeEventListener('click', this.handleClickOutside);
-    removeDialogScrollListener(this.el);
+    document.removeEventListener('click', this.closeDropdown);
   }
 
   /**
@@ -206,6 +199,7 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
+      addDialogScrollListener(this.panelRef, this.closeDropdown);
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -221,6 +215,25 @@ export class TkPhoneInput implements ComponentInterface {
   formResetCallback() {
     this.handleFormReset();
   }
+
+  private closeDropdown = (event: Event) => {
+    if (event.composedPath().includes(this.el) || !this.isDropdownOpen) {
+      return;
+    }
+
+    const target = event.target as Node;
+
+    if (this.panelRef && this.panelRef.contains(target)) {
+      return;
+    }
+
+    const hostElement = this.inputRef?.closest('tk-phone-input');
+    if (hostElement && hostElement.contains(target)) {
+      return;
+    }
+
+    this.isDropdownOpen = false;
+  };
 
   private updatePosition() {
     const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLElement;
@@ -319,15 +332,6 @@ export class TkPhoneInput implements ComponentInterface {
     this.isDropdownOpen = false;
     this.searchTerm = '';
     this.inputRef?.focus();
-  };
-
-  /**
-   * Event handler for clicks outside the component to close dropdown.
-   */
-  private handleClickOutside = (event: MouseEvent): void => {
-    if (!this.el.contains(event.target as Node)) {
-      this.isDropdownOpen = false;
-    }
   };
 
   /**
@@ -439,14 +443,22 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <div class="tk-phone-input__dropdown">
         {this.createDropdownButton()}
-        {this.isDropdownOpen && (
-          <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
-            {this.createDropdownSearch()}
-            {this.createDropdownList()}
-          </div>
-        )}
+        {this.renderCountryDropdown()}
       </div>
     );
+  }
+  private renderCountryDropdown() {
+    if (this.isDropdownOpen) {
+      return (
+        <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
+          {this.createDropdownSearch()}
+          {this.createDropdownList()}
+        </div>
+      );
+    } else {
+      removeDialogScrollListener(this.panelRef);
+      return null;
+    }
   }
 
   /**

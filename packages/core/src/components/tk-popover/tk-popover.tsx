@@ -109,8 +109,6 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
     }
-
-    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   disconnectedCallback() {
@@ -124,7 +122,6 @@ export class TkPopover implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -135,6 +132,7 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
+      addDialogScrollListener(this.popoverElement, this.closeHandler);
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -157,26 +155,33 @@ export class TkPopover implements ComponentInterface {
   private updatePosition() {
     this.cleanup = floatingElementAutoUpdate(this.triggerElement, this.popoverElement, this.arrowElement, { placement: this.position });
   }
-
+  private renderPopoverElement() {
+    if (this.isOpen) {
+      return (
+        <div
+          ref={el => (this.popoverElement = el as HTMLElement)}
+          class={{
+            'tk-popover-content': true,
+            [`tk-popover-${this.type}`]: true,
+          }}
+          style={{ ...this.containerStyle }}
+          role="popover"
+          onClick={e => e.stopPropagation()}
+        >
+          {this.hasContentSlot && <slot name="content" />}
+          <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow"></div>
+        </div>
+      );
+    } else {
+      removeDialogScrollListener(this.popoverElement);
+      return null;
+    }
+  }
   render() {
     return (
       <div class="tk-popover">
         <slot name="trigger" />
-        {this.isOpen && (
-          <div
-            ref={el => (this.popoverElement = el as HTMLElement)}
-            class={{
-              'tk-popover-content': true,
-              [`tk-popover-${this.type}`]: true,
-            }}
-            style={{ ...this.containerStyle }}
-            role="popover"
-            onClick={e => e.stopPropagation()}
-          >
-            {this.hasContentSlot && <slot name="content" />}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow"></div>
-          </div>
-        )}
+        {this.renderPopoverElement()}
       </div>
     );
   }

@@ -127,8 +127,6 @@ export class TkDropdown implements ComponentInterface {
       handler: this.closeHandler,
       disabled: this.disabled || !this.isOpen,
     });
-
-    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   componentDidUpdate() {
@@ -136,6 +134,7 @@ export class TkDropdown implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
+      addDialogScrollListener(this.panelRef, this.closeHandler);
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -152,7 +151,6 @@ export class TkDropdown implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -218,7 +216,10 @@ export class TkDropdown implements ComponentInterface {
   }
 
   private renderDropdown() {
-    if (!this.isOpen) return null;
+    if (!this.isOpen) {
+      removeDialogScrollListener(this.panelRef);
+      return null;
+    }
 
     return (
       <div class="tk-dropdown-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-dropdown-id={this.uniqueId}>

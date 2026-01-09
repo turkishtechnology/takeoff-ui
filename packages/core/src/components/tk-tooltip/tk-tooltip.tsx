@@ -83,13 +83,13 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
-    addDialogScrollListener(this.el, () => {
-      this.isOpen = false;
-    });
   }
 
   componentDidUpdate() {
     if (this.isOpen) {
+      addDialogScrollListener(this.tooltipElement, () => {
+        this.isOpen = false;
+      });
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -106,7 +106,6 @@ export class TkTooltip implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
   }
 
   private updatePosition() {
@@ -121,54 +120,61 @@ export class TkTooltip implements ComponentInterface {
     this.isOpen = false;
   };
 
-  render() {
-    let iconVariant;
+  private renderTooltipElement() {
+    if (this.isOpen) {
+      let iconVariant;
 
-    if (this.variant == 'dark') iconVariant = 'neutral';
-    else iconVariant = this.variant;
+      if (this.variant == 'dark') iconVariant = 'neutral';
+      else iconVariant = this.variant;
 
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
-    if (this.icon) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, {
-        variant: iconVariant,
-        sign: true,
-        size: 'small',
-        additionalProps: { class: classNames('tk-tooltip-item-icon') },
-      });
-      _leftIcon = leftIcon;
-      _rightIcon = rightIcon;
+      let _leftIcon: HTMLTkIconElement;
+      let _rightIcon: HTMLTkIconElement;
+      if (this.icon) {
+        const { leftIcon, rightIcon } = renderIcons(this.icon, {
+          variant: iconVariant,
+          sign: true,
+          size: 'small',
+          additionalProps: { class: classNames('tk-tooltip-item-icon') },
+        });
+        _leftIcon = leftIcon;
+        _rightIcon = rightIcon;
+      }
+      return (
+        <div
+          ref={el => (this.tooltipElement = el as HTMLElement)}
+          class={{
+            'tk-tooltip-content': true,
+            [`tk-tooltip-${this.variant}`]: !!this.variant,
+          }}
+          style={{ ...this.containerStyle }}
+          role="tooltip"
+        >
+          {this.hasContentSlot ? (
+            <slot name="content" />
+          ) : (
+            <Fragment>
+              {_leftIcon}
+              <div>
+                <div class="tk-tooltip-header">{this.header}</div>
+                <div class="tk-tooltip-description">{this.description}</div>
+              </div>
+              {_rightIcon}
+            </Fragment>
+          )}
+          <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
+        </div>
+      );
+    } else {
+      removeDialogScrollListener(this.tooltipElement);
+      return null;
     }
+  }
 
+  render() {
     return (
       <div class="tk-tooltip">
         <slot name="trigger" />
-
-        {this.isOpen && (
-          <div
-            ref={el => (this.tooltipElement = el as HTMLElement)}
-            class={{
-              'tk-tooltip-content': true,
-              [`tk-tooltip-${this.variant}`]: !!this.variant,
-            }}
-            style={{ ...this.containerStyle }}
-            role="tooltip"
-          >
-            {this.hasContentSlot ? (
-              <slot name="content" />
-            ) : (
-              <Fragment>
-                {_leftIcon}
-                <div>
-                  <div class="tk-tooltip-header">{this.header}</div>
-                  <div class="tk-tooltip-description">{this.description}</div>
-                </div>
-                {_rightIcon}
-              </Fragment>
-            )}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
-          </div>
-        )}
+        {this.renderTooltipElement()}
       </div>
     );
   }

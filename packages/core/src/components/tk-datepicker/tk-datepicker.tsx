@@ -374,7 +374,6 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el, this.closeHandler);
 
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
@@ -401,6 +400,7 @@ export class TkDatePicker {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
+        addDialogScrollListener(this.panelRef, this.closeHandler);
         // Clean up old floating UI listeners before setting up new ones
         this.cleanup?.();
         this.updatePosition();
@@ -419,7 +419,6 @@ export class TkDatePicker {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -1964,7 +1963,10 @@ export class TkDatePicker {
   }
 
   private renderPanel() {
-    if (!this.isOpen && !this.inline) return null;
+    if (!this.isOpen && !this.inline) {
+      removeDialogScrollListener(this.panelRef);
+      return null;
+    }
     const panelClasses = classNames('tk-datepicker-panel', {
       'tk-datepicker-panel-inline': this.inline,
     });

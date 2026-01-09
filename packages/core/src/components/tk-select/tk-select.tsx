@@ -293,8 +293,6 @@ export class TkSelect implements ComponentInterface {
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el, this.closeHandler);
-
     if (this.allowCustomValue) {
       this.editable = true;
     }
@@ -329,6 +327,7 @@ export class TkSelect implements ComponentInterface {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
+        addDialogScrollListener(this.panelRef, this.closeHandler);
         // Clean up old floating UI listeners before setting up new ones
         this.cleanup?.();
         this.updatePosition();
@@ -349,7 +348,6 @@ export class TkSelect implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -1052,7 +1050,10 @@ export class TkSelect implements ComponentInterface {
   }
 
   private renderDropdown() {
-    if (!this.isOpen) return null;
+    if (!this.isOpen) {
+      removeDialogScrollListener(this.panelRef);
+      return null;
+    }
     return (
       <div class="tk-select-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
         <div class="dropdown-item-holder">

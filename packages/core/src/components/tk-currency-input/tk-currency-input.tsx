@@ -212,6 +212,7 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
+      addDialogScrollListener(this.dropdownEl, this.closeDropdown);
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -226,7 +227,6 @@ export class TkCurrencyInput implements ComponentInterface {
 
   connectedCallback() {
     document.addEventListener('click', this.closeDropdown);
-    addDialogScrollListener(this.el, this.closeDropdown);
   }
 
   disconnectedCallback() {
@@ -235,7 +235,6 @@ export class TkCurrencyInput implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     document.removeEventListener('click', this.closeDropdown);
-    removeDialogScrollListener(this.el);
   }
 
   private updatePosition() {
@@ -641,14 +640,22 @@ export class TkCurrencyInput implements ComponentInterface {
     return (
       <div class="tk-currency-input__dropdown">
         {this.renderDropdownButton()}
-
-        {this.isDropdownOpen && (
-          <div class="tk-currency-input__dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
-            {this.renderCurrencyList()}
-          </div>
-        )}
+        {this.renderCurrencyDropdown()}
       </div>
     );
+  }
+
+  private renderCurrencyDropdown() {
+    if (this.isDropdownOpen) {
+      return (
+        <div class="tk-currency-input__dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
+          {this.renderCurrencyList()}
+        </div>
+      );
+    } else {
+      removeDialogScrollListener(this.dropdownEl);
+      return null;
+    }
   }
 
   private renderDropdownButton() {
