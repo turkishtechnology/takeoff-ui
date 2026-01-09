@@ -68,7 +68,7 @@ export interface ITableColumn {
     };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
-    selectAllCheckbox?: { label?: string };
+    selectAllCheckbox?: { show?: boolean; label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
     optionsSearchDatepicker?: {
       label?: string;
