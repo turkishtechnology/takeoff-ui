@@ -146,96 +146,157 @@
     color: var(--static-white);
 
     &.filled {
-      @include button-variant-filled(var(--primary-base), var(--primary-darkest), var(--primary-base), var(--primary-focus), var(--frames-sub-base));
+      background-color: var(--primary-base);
+      &:hover {
+        background-color: var(--primary-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--primary-base);
+        box-shadow: var(--primary-focus);
+      }
+    }
+
+    &.filledlight {
+      color: var(--primary-500);
+      background-color: var(--primary-lightest);
+
+      .tk-button-icon {
+        color: var(--primary-500);
+      }
+
+      &:hover {
+        background-color: var(--primary-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--primary-lightest);
+        box-shadow: var(--primary-focus);
+      }
     }
 
     &.outlined {
-      @include button-variant-outlined(
-        var(--primary-base),
-        var(--primary-base),
-        var(--primary-lightest),
-        var(--overlay-white-lightest),
-        var(--primary-focus),
-        var(--text-sub-base),
-        var(--border-sub-base)
-      );
+      background-color: transparent;
+      color: var(--primary-base);
+      border: 1px solid var(--primary-sub-base);
+
+      &:hover {
+        background-color: var(--primary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--primary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--text-sub-base);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+        
+        .tk-button-icon {
+          color: var(--text-sub-base);
+        }
+      }
     }
 
     &.text {
-      @include button-variant-text(var(--primary-base), var(--primary-lightest), var(--primary-lightest), var(--primary-focus), var(--text-sub-base));
+      background-color: transparent;
+      color: var(--primary-base);
+      box-shadow: none;
+
+      .tk-button-icon {
+        color: var(--primary-base);
+      }
+
+      &:hover {
+        background-color: var(--primary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--primary-lightest);
+        box-shadow: var(--primary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+        .tk-button-icon {
+          color: var(--text-sub-base);
+        }
+      }
     }
 
     &.link {
       @include button-variant-link(var(--primary-base), var(--primary-dark));
+    }
+
+    @include tk-button-disabled {
+      color: var(--static-white);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--static-white);
+      }
     }
   }
 
   &.secondary {
     border: 0px;
     color: var(--text-lightest);
+    background-color: var(--secondary-dark);
 
     &.filled {
-      @include button-variant-filled(var(--secondary-darkest), var(--secondary-dark), var(--secondary-darkest), var(--secondary-focus), var(--frames-sub-base));
+      &:hover {
+        background-color: var(--secondary-darkest);
+        cursor: pointer;
+      }
 
-      @include tk-button-disabled {
-        color: var(--text-lightest);
+      &:focus-visible {
+        background-color: var(--secondary-dark);
+        box-shadow: var(--secondary-focus);
       }
     }
 
-    &.outlined {
-      @include button-variant-outlined(
-        var(--secondary-base),
-        var(--secondary-base),
-        var(--secondary-lightest),
-        var(--overlay-white-lightest),
-        var(--secondary-focus),
-        var(--text-sub-base),
-        var(--border-sub-base)
-      );
-    }
-
-    &.text {
-      @include button-variant-text(var(--secondary-base), var(--secondary-lightest), var(--secondary-lightest), var(--secondary-focus), var(--text-sub-base));
-    }
-
-    &.link {
-      @include button-variant-link(var(--secondary-dark), var(--secondary-darkest));
-    }
-  }
-
-  &.neutral {
-    border: 0px;
-    color: var(--text-lightest);
-
-    &.filled {
-      @include button-variant-filled(var(--frames-base), var(--frames-darkest), var(--frames-base), var(--secondary-focus), var(--frames-sub-base));
-    }
-
-    &.outlined {
-      background-color: transparent;
-      color: var(--text-darkest);
-      border: 1px solid var(--border-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-darkest);
-      }
+    &.filledlight {
+      color: var(--secondary-dark);
+      background-color: var(--secondary-lightest);
 
       &:hover {
-        background-color: var(--frames-lightest);
-        border-color: var(--border-base);
+        background-color: var(--secondary-light);
         cursor: pointer;
       }
 
       &:focus-visible {
         background-color: var(--overlay-white-lightest);
-        border-color: var(--border-base);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--secondary-dark);
+      border: 1px solid var(--secondary-sub-base);
+
+      &:hover {
+        background-color: var(--secondary-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
       @include tk-button-disabled {
         color: var(--text-sub-base);
+        background-color: transparent;
         border-color: var(--border-sub-base);
-
+        
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -244,19 +305,20 @@
 
     &.text {
       background-color: transparent;
-      color: var(--text-darkest);
+      color: var(--secondary-dark);
+      box-shadow: none;
 
       .tk-button-icon {
-        color: var(--icon-darkest);
+        color: var(--secondary-dark);
       }
 
       &:hover {
-        background-color: var(--frames-lightest);
+        background-color: var(--secondary-lightest);
         cursor: pointer;
       }
 
       &:focus-visible {
-        background-color: var(--frames-lightest);
+        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -271,7 +333,118 @@
     }
 
     &.link {
+      @include button-variant-link(var(--secondary-dark), var(--secondary-darkest));
+    }
+
+    @include tk-button-disabled {
+      color: var(--text-lightest);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+    }
+  }
+
+  &.neutral {
+    border: 0px;
+    color: var(--text-darkest);
+
+    .tk-button-icon {
+      color: var(--icon-darkest);
+    }
+
+    &.filled {
+      color: var(--text-lightest);
+      background-color: var(--background-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+      &:hover {
+        background-color: var(--background-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--background-base);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--background-lightest);
+
+      &:hover {
+        background-color: var(--background-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--background-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      border: 1px solid var(--border-sub-base);
+
+      &:hover {
+        background-color: var(--background-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--text-sub-base);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+        
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      box-shadow: none;
+
+      &:hover {
+        background-color: var(--background-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--background-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
+    }
+
+    &.link {
       @include button-variant-link(var(--text-dark), var(--text-darkest));
+    }
+
+    @include tk-button-disabled {
+      color: var(--static-white);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--static-white);
+      }
     }
   }
 
@@ -280,92 +453,305 @@
     color: var(--text-lightest);
 
     &.filled {
-      @include button-variant-filled(var(--states-info-dark), var(--states-info-darkest), var(--states-info-base), var(--secondary-focus), var(--states-info-sub-base));
+      background-color: var(--states-info-dark);
+      &:hover {
+        background-color: var(--states-info-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-info-dark);
+        box-shadow: var(--info-focus);
+      }
+    }
+
+    &.filledlight {
+      color: var(--states-info-dark);
+      background-color: var(--states-info-lightest);
+
+      &:hover {
+        background-color: var(--states-info-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
     }
 
     &.outlined {
-      @include button-variant-outlined(
-        var(--states-info-dark),
-        var(--states-info-dark),
-        var(--states-info-light),
-        var(--overlay-white-lightest),
-        var(--secondary-focus),
-        var(--states-info-light),
-        var(--states-info-light)
-      );
+      background-color: transparent;
+      color: var(--states-info-dark);
+      border: 1px solid var(--states-info-sub-base);
+
+      &:hover {
+        background-color: var(--states-info-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--text-sub-base);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+        
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
     }
 
     &.text {
-      @include button-variant-text(var(--states-info-dark), var(--states-info-light), var(--states-info-light), var(--secondary-focus), var(--states-info-light));
+      background-color: transparent;
+      color: var(--states-info-dark);
+      box-shadow: none;
+
+      .tk-button-icon {
+        color: var(--states-info-dark);
+      }
+
+      &:hover {
+        background-color: var(--states-info-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
     }
 
     &.link {
       @include button-variant-link(var(--states-info-dark), var(--states-info-darkest));
+    }
+
+    @include tk-button-disabled {
+      color: var(--text-lightest);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
     }
   }
 
   &.success {
     border: 0px;
     color: var(--text-lightest);
+    background-color: var(--states-success-dark);
 
     &.filled {
-      @include button-variant-filled(var(--states-success-dark), var(--states-success-darkest), var(--states-success-dark), var(--secondary-focus), var(--states-success-sub-base));
+      &:hover {
+        background-color: var(--states-success-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-success-dark);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.filledlight {
+      color: var(--states-success-dark);
+      background-color: var(--states-success-lightest);
+
+      &:hover {
+        background-color: var(--states-success-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
     }
 
     &.outlined {
-      @include button-variant-outlined(
-        var(--states-success-dark),
-        var(--states-success-dark),
-        var(--states-success-light),
-        var(--overlay-white-lightest),
-        var(--secondary-focus),
-        var(--states-success-light),
-        var(--states-success-light)
-      );
+      background-color: transparent;
+      color: var(--states-success-dark);
+      border: 1px solid var(--states-success-sub-base);
+
+      &:hover {
+        background-color: var(--states-success-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--icon-sub-base);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+        
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
     }
 
     &.text {
-      @include button-variant-text(var(--states-success-dark), var(--states-success-light), var(--states-success-light), var(--secondary-focus), var(--states-success-light));
+      background-color: transparent;
+      color: var(--states-success-dark);
+      box-shadow: none;
+
+      .tk-button-icon {
+        color: var(--states-success-dark);
+      }
+
+      &:hover {
+        background-color: var(--states-success-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--icon-sub-base);
+
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
     }
 
     &.link {
       @include button-variant-link(var(--states-success-dark), var(--states-success-darkest));
     }
+
+    @include tk-button-disabled {
+      color: var(--text-lightest);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+    }
   }
 
   &.danger {
     border: 0px;
-    color: var(--states-danger-dark);
+    color: var(--text-lightest);
+    background-color: var(--states-danger-dark);
 
     &.filled {
-      @include button-variant-filled(
-        var(--states-danger-dark),
-        var(--states-danger-darkest),
-        var(--states-danger-dark),
-        var(--secondary-focus),
-        var(--states-danger-light),
-        var(--text-lightest)
-      );
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-danger-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-danger-dark);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.filledlight {
+      color: var(--states-danger-dark);
+      background-color: var(--states-danger-lightest);
+
+      &:hover {
+        background-color: var(--states-danger-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
     }
 
     &.outlined {
-      @include button-variant-outlined(
-        var(--states-danger-dark),
-        var(--states-danger-dark),
-        var(--states-danger-light),
-        var(--overlay-white-lightest),
-        var(--secondary-focus),
-        var(--states-danger-light),
-        var(--states-danger-light)
-      );
+      background-color: transparent;
+      color: var(--states-danger-dark);
+      border: 1px solid var(--states-danger-sub-base);
+
+      &:hover {
+        background-color: var(--states-danger-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--background-sub-base);
+        background-color: transparent;
+        border-color: var(--background-sub-base);
+        
+        .tk-button-icon {
+          color: var(--background-sub-base);
+        }
+      }
     }
 
     &.text {
-      @include button-variant-text(var(--states-danger-dark), var(--states-danger-light), var(--states-danger-light), var(--secondary-focus), var(--states-danger-light));
+      background-color: transparent;
+      color: var(--states-danger-dark);
+      box-shadow: none;
+
+      .tk-button-icon {
+        color: var(--states-danger-dark);
+      }
+
+      &:hover {
+        background-color: var(--states-danger-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--background-sub-base);
+
+        .tk-button-icon {
+          color: var(--background-sub-base);
+        }
+      }
     }
 
     &.link {
       @include button-variant-link(var(--states-danger-dark), var(--states-danger-darkest));
+    }
+
+    @include tk-button-disabled {
+      color: var(--text-lightest);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
     }
   }
 
@@ -374,19 +760,26 @@
     color: var(--states-warning-dark);
 
     &.filled {
-      @include button-variant-filled(
-        var(--states-warning-dark),
-        var(--states-warning-darkest),
-        var(--states-warning-dark),
-        var(--secondary-focus),
-        var(--states-warning-sub-base),
-        var(--text-lightest)
-      );
+      color: var(--text-lightest);
+      background-color: var(--states-warning-dark);
+      
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--states-warning-darkest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--states-warning-dark);
+        box-shadow: var(--secondary-focus);
+      }
     }
 
-    &.outlined {
-      background-color: transparent;
-      border: 1px solid var(--states-warning-dark);
+    &.filledlight {
+      background-color: var(--states-warning-lightest);
 
       &:hover {
         background-color: var(--states-warning-light);
@@ -394,55 +787,102 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-light);
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      border: 1px solid var(--states-warning-sub-base);
+
+      &:hover {
+        background-color: var(--states-warning-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
       @include tk-button-disabled {
-        color: var(--states-warning-light);
-        border-color: var(--states-warning-light);
+        color: var(--text-light);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+        
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
       }
     }
 
     &.text {
-      @include button-variant-text(var(--states-warning-dark), var(--states-warning-light), var(--states-warning-light), var(--secondary-focus), var(--states-warning-light));
+      background-color: transparent;
+      box-shadow: none;
+
+      &:hover {
+        background-color: var(--states-warning-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--text-light);
+
+        .tk-button-icon {
+          color: var(--icon-sub-base);
+        }
+      }
     }
 
     &.link {
       @include button-variant-link(var(--states-warning-dark), var(--states-warning-darkest));
     }
+
+    @include tk-button-disabled {
+      color: var(--text-lightest);
+      background-color: var(--background-sub-base);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+    }
   }
 
   &.white {
     border: 0px;
+    background-color: var(--static-light);
+    color: var(--text-darkest);
+
+    .tk-button-icon {
+      color: var(--icon-darkest);
+    }
 
     &.filled {
-      background-color: var(--static-light);
-      color: var(--text-darkest);
-
-      .tk-button-icon {
-        color: var(--icon-darkest);
-      }
-
       &:hover {
         background-color: var(--background-lightest);
         cursor: pointer;
       }
 
       &:focus-visible {
-        box-shadow: var(--secondary-focus);
-      }
-
-      @include tk-button-disabled {
         background-color: var(--static-light);
-        color: var(--overlay-white-light);
+        box-shadow: var(--secondary-focus);
       }
     }
 
-    &.outlined {
-      background-color: transparent;
-      color: var(--static-light);
-      border: 1px solid var(--static-light);
+    &.filledlight {
+      background-color: var(--overlay-white-lightest);
+      color: var(--text-lightest);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
 
       &:hover {
         background-color: var(--overlay-white-light);
@@ -451,28 +891,172 @@
 
       &:focus-visible {
         background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--text-lightest);
+      border: 1px solid var(--text-lightest);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--overlay-white-light);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-white-lightest);
+        box-shadow: var(--secondary-focus);
       }
 
       @include tk-button-disabled {
-        color: var(--text-sub-base);
-        border-color: var(--border-sub-base);
+        background-color: transparent;
+        border-color: var(--overlay-white-lightest);
       }
     }
 
     &.text {
       background-color: transparent;
-      color: var(--static-light);
+      color: var(--text-lightest);
       box-shadow: none;
 
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
       &:hover {
-        color: var(--text-dark);
+        color: var(--text-lightest);
         background-color: var(--overlay-white-light);
         cursor: pointer;
+      }
+
+      &:focus-visible {
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
       }
     }
 
     &.link {
       @include button-variant-link(var(--text-lightest), var(--text-light));
+    }
+
+     @include tk-button-disabled {
+      background-color: var(--overlay-white-lightest);
+      color: var(--overlay-white-light);
+      .tk-button-icon {
+        color: var(--overlay-white-light);
+      }
+    }
+  }
+
+  &.black {
+    border: 0px;
+    color: var(--text-darkest);
+
+    &.filled {
+      background-color: var(--background-darkest);
+      color: var(--text-lightest);
+
+      .tk-button-icon {
+        color: var(--icon-lightest);
+      }
+
+      &:hover {
+        background-color: var(--static-dark);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--background-darkest);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.filledlight {
+      background-color: var(--overlay-black-xlightest);
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        background-color: var(--overlay-black-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-black-xlightest);
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;      
+      border: 1px solid var(--icon-darkest);
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        background-color: var(--overlay-black-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-black-xxlightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        border-color: var(--overlay-black-xlightest);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      box-shadow: none;
+
+      .tk-button-icon {
+        color: var(--icon-darkest);
+      }
+
+      &:hover {
+        color: var(--text-darkest);
+        background-color: var(--overlay-black-lightest);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        background-color: var(--overlay-black-xxlightest);
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+      }
+    }
+
+    &.link {
+      @include button-variant-link(var(--text-dark), var(--text-darkest));
+    }
+
+    @include tk-button-disabled {
+      color: var(--overlay-black-lightest);
+      background-color: var(--overlay-black-xlightest);
+
+      .tk-button-icon {
+        color: var(--overlay-black-lightest);
+      }
     }
   }
 

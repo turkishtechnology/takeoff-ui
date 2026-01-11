@@ -31,7 +31,7 @@ export class TkButton implements ComponentInterface {
    * This field specifies the design type of the component.
    * @defaultValue filled
    */
-  @Prop({ mutable: true }) type: 'filled' | 'elevated' | 'outlined' | 'text' = 'filled';
+  @Prop({ mutable: true }) type: 'filled' | 'filledlight' | 'elevated' | 'outlined' | 'text' = 'filled';
 
   /**
    * Specifies a material icon name to be displayed.
@@ -89,7 +89,7 @@ export class TkButton implements ComponentInterface {
   /**
    * Determines the button's variant for different styles.
    */
-  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' | 'black' = 'primary';
 
   /**
    * Emitted when the button click.
