@@ -1031,6 +1031,9 @@ export class TkTable implements ComponentInterface {
       const currentFilter = this.filters.find(filter => filter.field === field);
       const selectedValues = (currentFilter?.value as string[]) || [];
 
+      const divider = document.createElement('tk-divider');
+      divider.my = 1;
+
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
@@ -1065,33 +1068,35 @@ export class TkTable implements ComponentInterface {
         });
         filterContainer.appendChild(optionsSearchInput);
       }
-      const allCheckbox = document.createElement('tk-checkbox');
-      allCheckbox.classList.add('select-all');
-      allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
-      allCheckbox.value = selectedValues.length === column.filterOptions.length;
-      if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
-        allCheckbox.indeterminate = true;
-      }
-      checkboxWrapper.appendChild(allCheckbox);
-      allCheckbox.addEventListener('tk-change', (e: any) => {
-        const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
-        allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
-          cb.value = e.detail;
-        });
-        if (e.detail) {
-          selectedValues.length = 0;
-          selectedValues.push(...column.filterOptions.map(option => option.value));
-        } else {
-          selectedValues.length = 0;
+
+      let allCheckbox: HTMLTkCheckboxElement;
+
+      if (!column?.filterElements?.selectAllCheckbox?.hide) {
+        allCheckbox = document.createElement('tk-checkbox');
+        allCheckbox.classList.add('select-all');
+        allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || 'Select All';
+        allCheckbox.value = selectedValues.length === column.filterOptions.length;
+        if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
+          allCheckbox.indeterminate = true;
         }
-        allCheckbox.indeterminate = false;
-      });
+        checkboxWrapper.appendChild(allCheckbox);
+        allCheckbox.addEventListener('tk-change', (e: any) => {
+          const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
+          allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
+            cb.value = e.detail;
+          });
+          if (e.detail) {
+            selectedValues.length = 0;
+            selectedValues.push(...column.filterOptions.map(option => option.value));
+          } else {
+            selectedValues.length = 0;
+          }
+          allCheckbox.indeterminate = false;
+        });
 
-      const divider = document.createElement('tk-divider');
-      divider.my = 1;
-
-      filterContainer.appendChild(checkboxWrapper);
-      filterContainer.appendChild(divider);
+        filterContainer.appendChild(checkboxWrapper);
+        filterContainer.appendChild(divider);
+      }
       // Create checkboxes for each option
       column.filterOptions.forEach(option => {
         const checkboxWrapper = document.createElement('div');
@@ -1101,21 +1106,24 @@ export class TkTable implements ComponentInterface {
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
 
-        checkbox.addEventListener('tk-change', () => {
-          const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
-          const visibleCheckboxes = allItemCheckboxes.filter(
-            cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
-          );
-          const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
-          const anySelected = visibleCheckboxes.some(cb => cb.value);
-          allCheckbox.value = allSelected;
+        if (!column?.filterElements?.selectAllCheckbox?.hide) {
+          checkbox.addEventListener('tk-change', () => {
+            const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
+            const visibleCheckboxes = allItemCheckboxes.filter(
+              cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
+            );
 
-          if (!allSelected && anySelected) {
-            allCheckbox.indeterminate = true;
-          } else {
-            allCheckbox.indeterminate = false;
-          }
-        });
+            const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
+            const anySelected = visibleCheckboxes.some(cb => cb.value);
+            allCheckbox.value = allSelected;
+
+            if (!allSelected && anySelected) {
+              allCheckbox.indeterminate = true;
+            } else {
+              allCheckbox.indeterminate = false;
+            }
+          });
+        }
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
