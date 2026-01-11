@@ -1670,6 +1670,7 @@ export class TkTable implements ComponentInterface {
             value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
+            onClick={e => e.stopPropagation()}
           ></tk-checkbox>
         </td>
       );
@@ -1683,6 +1684,7 @@ export class TkTable implements ComponentInterface {
             checked={_.isEqual(this.selection, row)}
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
+            onClick={e => e.stopPropagation()}
           ></tk-radio>
         </td>
       );
