@@ -1069,10 +1069,9 @@ export class TkTable implements ComponentInterface {
         filterContainer.appendChild(optionsSearchInput);
       }
 
-      const showSelectAll = column?.filterElements?.selectAllCheckbox?.show !== false;
       let allCheckbox: HTMLTkCheckboxElement;
 
-      if (showSelectAll) {
+      if (!column?.filterElements?.selectAllCheckbox?.hide) {
         allCheckbox = document.createElement('tk-checkbox');
         allCheckbox.classList.add('select-all');
         allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || 'Select All';
@@ -1107,7 +1106,7 @@ export class TkTable implements ComponentInterface {
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
 
-        if (showSelectAll) {
+        if (!column?.filterElements?.selectAllCheckbox?.hide) {
           checkbox.addEventListener('tk-change', () => {
             const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
             const visibleCheckboxes = allItemCheckboxes.filter(
