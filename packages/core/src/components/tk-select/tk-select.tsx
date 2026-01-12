@@ -698,7 +698,6 @@ export class TkSelect implements ComponentInterface {
       // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
       if (this.multiple && this.editable) {
         this.nativeInputRef.value = null;
-        this.renderOptions = await this.filter(null, this.options);
       }
 
       this.inputRef.value = [...tmpValue];
@@ -709,6 +708,9 @@ export class TkSelect implements ComponentInterface {
       this.tkChange.emit(this.getOptionValue(item));
       this.isOpen = false;
     }
+
+    // seçim yapıldıktan sonra eğer filtreleme yapılarak bir seçim yapıldıysa eski filtreleme sonuçlarının tutulmaması ve tüm listesinin optionlarda render edilebilmesi için yapılmıştır.
+    this.renderOptions = await this.filter(null, this.options);
   }
 
   private async handleInputChange(value) {
@@ -767,8 +769,6 @@ export class TkSelect implements ComponentInterface {
       }
       this.tkChange.emit(this.value);
     } else {
-      // this.isOpen = true;
-
       if (this.editable && this.allowCustomValue) {
         this.value = value;
         this.tkChange.emit(value);
