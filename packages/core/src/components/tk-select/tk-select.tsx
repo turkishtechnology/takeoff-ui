@@ -333,8 +333,11 @@ export class TkSelect implements ComponentInterface {
         this.updatePosition();
         this.setFlatOptions();
         // Panel açıldığında ilk itemin active olmasını sağlamak için
-        const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
-        firstItem?.setAttribute('data-active', 'true');
+        const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
+        if (!activeItem) {
+          const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
+          firstItem?.setAttribute('data-active', 'true');
+        }
       }
     } else {
       // Remove floating UI listeners when select closes
