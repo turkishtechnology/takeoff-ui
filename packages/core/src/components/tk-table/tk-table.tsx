@@ -50,10 +50,6 @@ export class TkTable implements ComponentInterface {
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
   @State() renderData: Record<PropertyKey, unknown>[] = [];
-  @Watch('renderData')
-  renderDataChanged(newValue: Record<PropertyKey, unknown>[], oldValue: Record<PropertyKey, unknown>[]) {
-    if (!_.isEqual(oldValue, newValue)) this.tkVisibleDataChange.emit(newValue);
-  }
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -273,11 +269,6 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
 
-  /**
-   * Emitted when the visible data changes.
-   */
-  @Event({ eventName: 'tk-visible-data-change' }) tkVisibleDataChange: EventEmitter<Record<PropertyKey, unknown>[]>;
-
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -402,14 +393,19 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async serverRequest() {
-    this.tkRequest.emit({
+    const requestData: any = {
       currentPage: this.currentPage,
       rowsPerPage: this.rowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
       filters: this.filters,
-    } as ITableRequest);
+    };
+    if (this.paginationMethod === 'client') {
+      requestData.totalItems = this.totalItems;
+    }
+
+    this.tkRequest.emit(requestData as ITableRequest);
   }
 
   /**
@@ -747,14 +743,19 @@ export class TkTable implements ComponentInterface {
 
     // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
     if (!isWillLoad) {
-      this.tkRequest.emit({
+      const requestData: any = {
         currentPage: this.currentPage,
         rowsPerPage: this.rowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
         filters: this.filters,
-      } as ITableRequest);
+      };
+      if (this.paginationMethod === 'client') {
+        requestData.totalItems = _data?.length;
+      }
+
+      this.tkRequest.emit(requestData as ITableRequest);
     }
 
     if (this.paginationMethod == 'client') {
