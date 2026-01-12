@@ -110,7 +110,7 @@ const TreeViewMode = () => {
           borderRadius: '8px',
         }}
         stepStyle={{ backgroundColor: 'rgb(241 241 241)', maxHeight: '200px', overflowY: 'auto', minWidth: '200px' }}
-        mode="basic"
+        mode="stepper"
         type="divided"
         size="base"
         items={sampleData}
