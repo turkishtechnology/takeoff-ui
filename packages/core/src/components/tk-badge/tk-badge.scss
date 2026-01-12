@@ -297,6 +297,31 @@
       }
     }
 
+    &.teal {
+      border: 0px;
+      color: var(--text-lightest);
+
+      &.filled {
+        background-color: var(--teal-600);
+      }
+
+      &.outlined {
+        background-color: transparent;
+        color: var(--teal-700);
+        border: 1px solid var(--teal-200);
+      }
+
+      &.filledlight {
+        background-color: var(--teal-100);
+        color: var(--teal-800);
+      }
+
+      &.text {
+        background-color: transparent;
+        color: var(--teal-600);
+      }
+    }
+
     &.small {
       height: 16px;
       line-height: var(--desktop-body-2xs-line-height);
@@ -428,6 +453,10 @@
 
       &.business {
         background-color: var(--business-600);
+      }
+
+      &.teal {
+        background-color: var(--teal-600);
       }
     }
   }

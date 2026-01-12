@@ -72,7 +72,7 @@ export class TkBadge implements ComponentInterface {
    * Determines the badge's variant for different styles.
    * @defaultValue 'primary'
    */
-  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' | 'purple' | 'cyan' | 'business' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' | 'purple' | 'cyan' | 'business' | 'teal' = 'primary';
 
   componentDidLoad(): void {
     this.hasSlot = this.el.shadowRoot.querySelector('slot')?.assignedNodes?.().length > 0;
