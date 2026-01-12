@@ -1,6 +1,7 @@
 import { Element, Component, Prop, Host, h, ComponentInterface, Watch } from '@stencil/core';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { ITooltipOptions } from '../../global/interfaces/ITooltipOptions';
+import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 @Component({
   tag: 'tk-tabs-item',
@@ -49,7 +50,6 @@ export class TkTabsItem implements ComponentInterface {
 
   /**
    * Sets badge component's label.
-   * @deprecated since version 0.0.40. Use 'badgeCount' instead.
    */
   @Prop() badgeLabel?: string;
   @Watch('badgeLabel')
@@ -63,6 +63,15 @@ export class TkTabsItem implements ComponentInterface {
   @Prop() badgeCount?: number | string;
   @Watch('badgeCount')
   badgeCountChanged() {
+    this.emitUpdate();
+  }
+
+  /**
+   * Sets badge component's options.
+   */
+  @Prop() badgeOptions?: IBadgeOptions;
+  @Watch('badgeOptions')
+  badgeOptionsChanged() {
     this.emitUpdate();
   }
 
@@ -88,6 +97,7 @@ export class TkTabsItem implements ComponentInterface {
           badged: this.badged,
           badgeCount: this.badgeCount,
           badgeLabel: this.badgeLabel,
+          badgeOptions: this.badgeOptions,
           tooltipOptions: this.tooltipOptions,
         },
       }),
