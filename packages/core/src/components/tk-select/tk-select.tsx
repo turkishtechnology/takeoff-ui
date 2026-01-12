@@ -44,7 +44,6 @@ export class TkSelect implements ComponentInterface {
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
-  @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
   @Watch('isOpen')
@@ -333,6 +332,12 @@ export class TkSelect implements ComponentInterface {
         this.cleanup?.();
         this.updatePosition();
         this.setFlatOptions();
+        // Panel açıldığında ilk itemin active olmasını sağlamak için
+        const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
+        if (!activeItem) {
+          const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
+          firstItem?.setAttribute('data-active', 'true');
+        }
       }
     } else {
       // Remove floating UI listeners when select closes
@@ -789,11 +794,14 @@ export class TkSelect implements ComponentInterface {
         this.tkChange.emit(null);
       }
     }
+    // girilen değer değişince dropdown açılsın
+    if (!this.isOpen && !this.disabled && !this.readonly) {
+      this.isOpen = true;
+    }
   }
 
   private handleInputClick() {
     if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.hasFocus = true;
       this.isOpen = true;
     }
   }
@@ -836,7 +844,6 @@ export class TkSelect implements ComponentInterface {
       if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         // Enter, Arrow Up/Down: Open dropdown
         if (!this.disabled && !this.readonly) {
-          this.hasFocus = true;
           this.isOpen = true;
         }
         return;
@@ -848,7 +855,6 @@ export class TkSelect implements ComponentInterface {
       if (e.key === 'Escape') {
         // Escape: Close dropdown without selecting
         this.isOpen = false;
-        this.hasFocus = false;
         return;
       }
       if (e.key === 'ArrowDown') {
@@ -905,7 +911,6 @@ export class TkSelect implements ComponentInterface {
 
     // Handle Tab key
     if (e.key === 'Tab') {
-      this.hasFocus = false;
       this.isOpen = false;
     }
   }
@@ -1091,7 +1096,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-select-container', this.size, { focus: this.hasFocus });
+    const rootClasses = classNames('tk-select-container', this.size);
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
