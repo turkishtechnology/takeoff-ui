@@ -3,17 +3,451 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Stencil Component Starter</title>
+    <title>TkButton Gallery</title>
 
     <script type="module" src="/build/core.esm.js"></script>
     <script nomodule src="/build/core.js"></script>
     <link rel="stylesheet" href="/build/core.css" />
     <style>
-      .harun {
-        background-color: red;
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        padding: 40px;
+        background-color: #f9fafb;
+        color: #111827;
+      }
+      section {
+        margin-bottom: 48px;
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      h1 {
+        margin-bottom: 32px;
+        font-size: 2.5rem;
+        color: #1f2937;
+      }
+      h2 {
+        margin-top: 0;
+        margin-bottom: 24px;
+        text-transform: capitalize;
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 12px;
+      }
+      .label-col {
+        min-width: 100px;
+        font-weight: 500;
+        color: #6b7280;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .row:last-child {
+        margin-bottom: 0;
+      }
+      .col-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
       }
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <h1>tk-button Gallery</h1>
+
+    <section>
+      <h2>Variants</h2>
+      <div class="row">
+        <tk-button label="Primary" variant="primary"></tk-button>
+        <tk-button label="Secondary" variant="secondary"></tk-button>
+        <tk-button label="Neutral" variant="neutral"></tk-button>
+        <tk-button label="Info" variant="info"></tk-button>
+        <tk-button label="Success" variant="success"></tk-button>
+        <tk-button label="Danger" variant="danger"></tk-button>
+        <tk-button label="Warning" variant="warning"></tk-button>
+        <tk-button label="White" variant="white"></tk-button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Types</h2>
+      <div class="row">
+        <div class="label-col">Filled</div>
+        <tk-button label="Filled" type="filled"></tk-button>
+        <tk-button label="Icon" icon="add_circle" type="filled"></tk-button>
+      </div>
+      <div class="row">
+        <div class="label-col">Filled Light</div>
+        <tk-button label="Filled Light" type="filledlight"></tk-button>
+        <tk-button label="Icon" icon="add_circle" type="filledlight"></tk-button>
+      </div>
+      <div class="row">
+        <div class="label-col">Elevated</div>
+        <tk-button label="Elevated" type="elevated"></tk-button>
+        <tk-button label="Icon" icon="add_circle" type="elevated"></tk-button>
+      </div>
+      <div class="row">
+        <div class="label-col">Outlined</div>
+        <tk-button label="Outlined" type="outlined"></tk-button>
+        <tk-button label="Icon" icon="add_circle" type="outlined"></tk-button>
+      </div>
+      <div class="row">
+        <div class="label-col">Text</div>
+        <tk-button label="Text" type="text"></tk-button>
+        <tk-button label="Icon" icon="add_circle" type="text"></tk-button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sizes</h2>
+      <div class="row">
+        <tk-button label="Small" size="small"></tk-button>
+        <tk-button label="Base (Default)" size="base"></tk-button>
+        <tk-button label="Large" size="large"></tk-button>
+      </div>
+      <div class="row" style="align-items: baseline">
+        <tk-button icon="settings" size="small" type="outlined"></tk-button>
+        <tk-button icon="settings" size="base" type="outlined"></tk-button>
+        <tk-button icon="settings" size="large" type="outlined"></tk-button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Icons & Position</h2>
+      <div class="row">
+        <tk-button label="Left (Default)" icon="arrow_back"></tk-button>
+        <tk-button label="Right" icon="arrow_forward" icon-position="right"></tk-button>
+        <tk-button rounded icon="favorite" variant="danger"></tk-button>
+        <tk-button rounded icon="edit" type="outlined"></tk-button>
+        <tk-button rounded icon="more_vert" type="text" variant="neutral"></tk-button>
+      </div>
+    </section>
+
+    <section>
+      <h2>States</h2>
+      <div class="row">
+        <tk-button label="Active"></tk-button>
+        <tk-button label="Loading" loading></tk-button>
+        <tk-button label="Disabled" disabled></tk-button>
+        <tk-button label="Loading Disabled" loading disabled></tk-button>
+      </div>
+       <div class="row">
+        <tk-button label="Active" type="outlined"></tk-button>
+        <tk-button label="Loading" type="outlined" loading></tk-button>
+        <tk-button label="Disabled" type="outlined" disabled></tk-button>
+      </div>
+    </section>
+
+     <section>
+      <h2>Comprehensive Matrix</h2>
+      
+      <h3>Primary</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Primary" icon="check" variant="primary" type="filled"></tk-button>
+         <tk-button label="Primary" icon="check" variant="primary" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Primary" icon="check" variant="primary" type="filledlight"></tk-button>
+         <tk-button label="Primary" icon="check" variant="primary" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Primary" icon="check" variant="primary" type="elevated"></tk-button>
+         <tk-button label="Primary" icon="check" variant="primary" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Primary" icon="check" variant="primary" type="outlined"></tk-button>
+         <tk-button label="Primary" icon="check" variant="primary" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Primary" icon="check" variant="primary" type="text"></tk-button>
+         <tk-button label="Primary" icon="check" variant="primary" type="text" disabled></tk-button>
+      </div>
+
+      <h3>Secondary</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="filled"></tk-button>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="filledlight"></tk-button>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="elevated"></tk-button>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="outlined"></tk-button>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="text"></tk-button>
+         <tk-button label="Secondary" icon="bookmark" variant="secondary" type="text" disabled></tk-button>
+      </div>
+
+      <h3>Neutral</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="filled"></tk-button>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="filledlight"></tk-button>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="elevated"></tk-button>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="outlined"></tk-button>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="text"></tk-button>
+         <tk-button label="Neutral" icon="settings" variant="neutral" type="text" disabled></tk-button>
+      </div>
+
+      <h3>Success</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Success" icon="check_circle" variant="success" type="filled"></tk-button>
+         <tk-button label="Success" icon="check_circle" variant="success" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Success" icon="check_circle" variant="success" type="filledlight"></tk-button>
+         <tk-button label="Success" icon="check_circle" variant="success" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Success" icon="check_circle" variant="success" type="elevated"></tk-button>
+         <tk-button label="Success" icon="check_circle" variant="success" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Success" icon="check_circle" variant="success" type="outlined"></tk-button>
+         <tk-button label="Success" icon="check_circle" variant="success" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Success" icon="check_circle" variant="success" type="text"></tk-button>
+         <tk-button label="Success" icon="check_circle" variant="success" type="text" disabled></tk-button>
+      </div>
+
+      <h3>Danger</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Danger" icon="error" variant="danger" type="filled"></tk-button>
+         <tk-button label="Danger" icon="error" variant="danger" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Danger" icon="error" variant="danger" type="filledlight"></tk-button>
+         <tk-button label="Danger" icon="error" variant="danger" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Danger" icon="error" variant="danger" type="elevated"></tk-button>
+         <tk-button label="Danger" icon="error" variant="danger" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Danger" icon="error" variant="danger" type="outlined"></tk-button>
+         <tk-button label="Danger" icon="error" variant="danger" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Danger" icon="error" variant="danger" type="text"></tk-button>
+         <tk-button label="Danger" icon="error" variant="danger" type="text" disabled></tk-button>
+      </div>
+
+      <h3>Info</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Info" icon="info" variant="info" type="filled"></tk-button>
+         <tk-button label="Info" icon="info" variant="info" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Info" icon="info" variant="info" type="filledlight"></tk-button>
+         <tk-button label="Info" icon="info" variant="info" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Info" icon="info" variant="info" type="elevated"></tk-button>
+         <tk-button label="Info" icon="info" variant="info" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Info" icon="info" variant="info" type="outlined"></tk-button>
+         <tk-button label="Info" icon="info" variant="info" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Info" icon="info" variant="info" type="text"></tk-button>
+         <tk-button label="Info" icon="info" variant="info" type="text" disabled></tk-button>
+      </div>
+
+       <h3>Warning</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Warning" icon="warning" variant="warning" type="filled"></tk-button>
+         <tk-button label="Warning" icon="warning" variant="warning" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Warning" icon="warning" variant="warning" type="filledlight"></tk-button>
+         <tk-button label="Warning" icon="warning" variant="warning" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Warning" icon="warning" variant="warning" type="elevated"></tk-button>
+         <tk-button label="Warning" icon="warning" variant="warning" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Warning" icon="warning" variant="warning" type="outlined"></tk-button>
+         <tk-button label="Warning" icon="warning" variant="warning" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Warning" icon="warning" variant="warning" type="text"></tk-button>
+         <tk-button label="Warning" icon="warning" variant="warning" type="text" disabled></tk-button>
+      </div>
+
+      <h3>White</h3>
+      <div style="background: #333; padding: 10px; border-radius: 8px;">
+        <div class="row" style="margin-bottom: 8px;">
+           <div class="label-col"></div>
+           <div style="font-weight: 600; color: #fff;">Active</div>
+           <div style="font-weight: 600; color: #fff; margin-left: 20px;">Disabled</div>
+        </div>
+        <div class="row">
+             <div class="label-col" style="color: #fff">Filled</div>
+             <tk-button label="White" icon="star" variant="white" type="filled"></tk-button>
+             <tk-button label="White" icon="star" variant="white" type="filled" disabled></tk-button>
+        </div>
+        <div class="row">
+             <div class="label-col" style="color: #fff">Filled Light</div>
+             <tk-button label="White" icon="star" variant="white" type="filledlight"></tk-button>
+             <tk-button label="White" icon="star" variant="white" type="filledlight" disabled></tk-button>
+        </div>
+        <div class="row">
+             <div class="label-col" style="color: #fff">Elevated</div>
+             <tk-button label="White" icon="star" variant="white" type="elevated"></tk-button>
+             <tk-button label="White" icon="star" variant="white" type="elevated" disabled></tk-button>
+        </div>
+        <div class="row">
+             <div class="label-col" style="color: #fff">Outlined</div>
+             <tk-button label="White" icon="star" variant="white" type="outlined"></tk-button>
+             <tk-button label="White" icon="star" variant="white" type="outlined" disabled></tk-button>
+        </div>
+        <div class="row">
+             <div class="label-col" style="color: #fff">Text</div>
+             <tk-button label="White" icon="star" variant="white" type="text"></tk-button>
+             <tk-button label="White" icon="star" variant="white" type="text" disabled></tk-button>
+        </div>
+      </div>
+
+      <h3>Black</h3>
+      <div class="row" style="margin-bottom: 8px;">
+         <div class="label-col"></div>
+         <div style="font-weight: 600; color: #374151;">Active</div>
+         <div style="font-weight: 600; color: #374151; margin-left: 20px;">Disabled</div>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled</div>
+         <tk-button label="Black" icon="star" variant="black" type="filled"></tk-button>
+         <tk-button label="Black" icon="star" variant="black" type="filled" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Filled Light</div>
+         <tk-button label="Black" icon="star" variant="black" type="filledlight"></tk-button>
+         <tk-button label="Black" icon="star" variant="black" type="filledlight" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Elevated</div>
+         <tk-button label="Black" icon="star" variant="black" type="elevated"></tk-button>
+         <tk-button label="Black" icon="star" variant="black" type="elevated" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Outlined</div>
+         <tk-button label="Black" icon="star" variant="black" type="outlined"></tk-button>
+         <tk-button label="Black" icon="star" variant="black" type="outlined" disabled></tk-button>
+      </div>
+      <div class="row">
+         <div class="label-col">Text</div>
+         <tk-button label="Black" icon="star" variant="black" type="text"></tk-button>
+         <tk-button label="Black" icon="star" variant="black" type="text" disabled></tk-button>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Full Width</h2>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <tk-button label="Full Width Button" full-width></tk-button>
+        <tk-button label="Full Width Outlined" full-width type="outlined"></tk-button>
+      </div>
+    </section>
+
+  </body>
 </html>
