@@ -21,6 +21,11 @@ export class TkTreeView implements ComponentInterface {
 
   @State() expandedPaths: Set<string> = new Set();
   @State() selectedPath: string | null = null;
+  /**
+   * başlangıçta expanded keys lerin seçili gibi görünmesini ve herhangi bir item'a tıklandığında
+   * bu state'in false'a çekilerek expandedKeys'lerin sürekli seçili görünmesini engellemek için kurgulanmıştır.s
+   */
+  @State() isInitialLoad: boolean = true;
 
   /**
    * Array of tree items data. This is the primary way to provide data to the tree view.
@@ -520,6 +525,7 @@ export class TkTreeView implements ComponentInterface {
 
   private handleSelect = (pathStr: string, item: ITreeItem) => {
     this.selectedPath = pathStr;
+    this.isInitialLoad = false;
     this.tkItemClick.emit(item);
   };
 
@@ -674,7 +680,7 @@ export class TkTreeView implements ComponentInterface {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
     const isDirectory = !!(item.children && item.children.length > 0);
     const isExpanded = this.expandedPaths.has(pathStr);
-    const isSelected = this.selectedPath === pathStr;
+    const isSelected = this.selectedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
 
     const nodeClass = classNames('tk-tree-view', 'node', {

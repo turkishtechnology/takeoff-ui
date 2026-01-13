@@ -117,7 +117,7 @@ const treeData = [
   }
 ];
 
-const [expandedKeys, setExpandedKeys] = useState(['reports', 'project-2']);
+const [expandedKeys, setExpandedKeys] = useState(['third-directory', 'projects']);
 
 <TkTreeView
   mode="basic"
@@ -184,7 +184,7 @@ const treeData = [
   }
 ];
 
-const expandedKeys = ref(['reports', 'project-2']);
+const expandedKeys = ref(['third-directory', 'projects']);
 </script>
 
 <template>
@@ -233,7 +233,7 @@ const expandedKeys = ref(['reports', 'project-2']);
         </div>
       </div>
       <TkTreeView
-        mode="stepper"
+        mode="basic"
         type="light"
         size="base"
         items={sampleData}

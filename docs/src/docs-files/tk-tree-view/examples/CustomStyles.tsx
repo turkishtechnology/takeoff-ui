@@ -96,9 +96,38 @@ const sampleData = [
   },
 ];
 
-const TreeViewMode = () => {
-  const reactCode = '';
-  const vueCode = '';
+const CustomStyles = () => {
+  const reactCode = `<TkTreeView
+  containerStyle={{
+    backgroundColor: '#f8d7da',
+    padding: '10px',
+    borderRadius: '8px',
+  }}
+  stepStyle={{ backgroundColor: 'rgb(241 241 241)', maxHeight: '200px', overflowY: 'auto', minWidth: '200px' }}
+  mode="stepper"
+  type="divided"
+  size="base"
+  items={sampleData}
+  branchIcon="folder"
+/>`;
+  const vueCode = `<tk-tree-view
+  :container-style="{
+    backgroundColor: '#f8d7da',
+    padding: '10px',
+    borderRadius: '8px',
+  }"
+  :step-style="{ 
+    backgroundColor: 'rgb(241 241 241)', 
+    maxHeight: '200px', 
+    overflowY: 'auto', 
+    minWidth: '200px' 
+  }"
+  mode="stepper"
+  type="divided"
+  size="base"
+  :items="sampleData"
+  branch-icon="folder"
+></tk-tree-view>`;
 
   const demo = (
     <div>
@@ -122,4 +151,4 @@ const TreeViewMode = () => {
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode="" />;
 };
 
-export default TreeViewMode;
+export default CustomStyles;
