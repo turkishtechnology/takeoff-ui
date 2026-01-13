@@ -40,7 +40,6 @@ import { TkBadge } from '@takeoff-ui/react';
 | tk-request              | Emitted when a request needs to be made to the server.                                                                                                                           |
 | tk-row-click            | Emitted when a row is clicked.                                                                                                                                                   |
 | tk-selection-change     |                                                                                                                                                                                  |
-| tk-visible-data-change  | Emitted when the visible data changes.                                                                                                                                           |
 
 ### Methods {#table-methods}
 
@@ -171,12 +170,8 @@ It is the return type of the tkRequest event.
 interface ITableRequest {
   /** The current page number */
   currentPage: number;
-  /** The total number of pages */
-  totalPages: number;
-  /** The starting index of the items on the current page */
-  startItem: number;
-  /** The ending index of the items on the current page */
-  endItem: number;
+  /** The total number of items, working only client side pagination */
+  totalItems?: number;
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */

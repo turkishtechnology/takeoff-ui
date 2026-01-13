@@ -393,19 +393,20 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async serverRequest() {
-    const requestData: any = {
+    const requestData = {
       currentPage: this.currentPage,
       rowsPerPage: this.rowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
       filters: this.filters,
-    };
+    } as ITableRequest;
+
     if (this.paginationMethod === 'client') {
       requestData.totalItems = this.totalItems;
     }
 
-    this.tkRequest.emit(requestData as ITableRequest);
+    this.tkRequest.emit(requestData);
   }
 
   /**
@@ -743,19 +744,20 @@ export class TkTable implements ComponentInterface {
 
     // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
     if (!isWillLoad) {
-      const requestData: any = {
+      const requestData = {
         currentPage: this.currentPage,
         rowsPerPage: this.rowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
         filters: this.filters,
-      };
+      } as ITableRequest;
+
       if (this.paginationMethod === 'client') {
         requestData.totalItems = _data?.length;
       }
 
-      this.tkRequest.emit(requestData as ITableRequest);
+      this.tkRequest.emit(requestData);
     }
 
     if (this.paginationMethod == 'client') {

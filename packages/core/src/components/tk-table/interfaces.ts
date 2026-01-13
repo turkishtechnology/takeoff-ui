@@ -111,7 +111,7 @@ export interface ITableRequest {
   /** The current page number */
   currentPage: number;
   /** The total number of items, working only client side pagination */
-  totalItems: number;
+  totalItems?: number;
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
