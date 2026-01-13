@@ -4,28 +4,34 @@ import Size from './examples/Size';
 import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
 import ExpandAll from './examples/ExpandAll';
+import CustomStyles from './examples/CustomStyles';
 
 ## Mode
 
-The mode prop controls the display mode of the tree view. It can be set to `basic` or `stepper`.
+The mode prop controls the display mode of the tree view. It can be set to
+`basic` or `stepper`.
 
 <Mode />
 
 ## Selectable
 
-Enable checkbox selection with the `selectable` prop for multi-selection functionality. Use the `value` prop to control selected items and listen to `tk-change` events for selection updates.
+Enable checkbox selection with the `selectable` prop for multi-selection
+functionality. Use the `value` prop to control selected items and listen to
+`tk-change` events for selection updates.
 
 <Selectable />
 
 ## Type
 
-The `type` prop controls the style type of the tree view. It can be set to `basic`, `divided`, or `light`.
+The `type` prop controls the style type of the tree view. It can be set to
+`basic`, `divided`, or `light`.
 
 <Type />
 
 ## Size
 
-The `size` prop controls the size of the tree view. It can be set to `base`, `small`, or `large`.
+The `size` prop controls the size of the tree view. It can be set to `base`,
+`small`, or `large`.
 
 <Size />
 
@@ -40,3 +46,10 @@ The `expandAll` prop controls the initial expansion state of tree nodes.
 The expandedKeys prop to control the expanded items.
 
 <ExpandedKeys />
+
+## Custom Styles
+
+The `containerStyle` and `stepStyle` props allow you to apply custom styles. The
+`stepStyle` prop only works in stepper mode.
+
+<CustomStyles />

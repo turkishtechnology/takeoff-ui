@@ -63,6 +63,13 @@ export const overviewItems: OverviewItem[] = [
     SvgDark: require('@site/static/img/overview/chips-dark.png').default,
   },
   {
+    title: 'Color Picker',
+    href: 'Color-Picker',
+    Svg: require('@site/static/img/overview/color-picker.png').default,
+    SvgDark: require('@site/static/img/overview/color-picker-dark.png').default,
+    isNew: true,
+  },
+  {
     title: 'Currency Input',
     href: 'Currency-Input',
     Svg: require('@site/static/img/overview/input.png').default,

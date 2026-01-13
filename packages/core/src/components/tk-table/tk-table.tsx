@@ -6,14 +6,14 @@ import _ from 'lodash';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/Geologica/Geologica-Regular';
 import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
-import { applyStyles, showElement, hideElement } from '../../utils/style-utils';
+import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -32,7 +32,6 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 export class TkTable implements ComponentInterface {
   private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
-  private cleanupFilterPanel;
   private elFilterPanelElement: HTMLElement;
   private isResizing: boolean = false;
   private resizeColumnIndex: number = -1;
@@ -40,6 +39,7 @@ export class TkTable implements ComponentInterface {
   private startWidth: number = 0;
   private customCellCache: Map<string, HTMLElement> = new Map();
   private isSelectionUpdating: boolean = false;
+  private cleanup;
 
   @Element() el: HTMLTkTableElement;
 
@@ -50,10 +50,6 @@ export class TkTable implements ComponentInterface {
   @State() filters: ITableFilter[] = [];
   @State() currentPage: number = 1;
   @State() renderData: Record<PropertyKey, unknown>[] = [];
-  @Watch('renderData')
-  renderDataChanged(newValue: Record<PropertyKey, unknown>[], oldValue: Record<PropertyKey, unknown>[]) {
-    if (!_.isEqual(oldValue, newValue)) this.tkVisibleDataChange.emit(newValue);
-  }
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
   @State() isFilterOpen: boolean = false;
@@ -273,11 +269,6 @@ export class TkTable implements ComponentInterface {
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
 
-  /**
-   * Emitted when the visible data changes.
-   */
-  @Event({ eventName: 'tk-visible-data-change' }) tkVisibleDataChange: EventEmitter<Record<PropertyKey, unknown>[]>;
-
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
   checkForClickOutside(ev: MouseEvent) {
@@ -359,19 +350,24 @@ export class TkTable implements ComponentInterface {
   componentDidUpdate() {
     if (this.isFilterOpen) {
       if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-        this.cleanupFilterPanel = autoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, () => this.updatePosition());
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePanelPosition();
       }
     } else {
+      // Remove floating UI listeners when filter closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.closeFilterPanel();
     }
   }
 
   disconnectedCallback(): void {
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
-
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.elActiveSearchIcon = null;
     this.elFilterPanelElement = null;
     this.isFilterOpen = false;
@@ -397,14 +393,20 @@ export class TkTable implements ComponentInterface {
    */
   @Method()
   async serverRequest() {
-    this.tkRequest.emit({
+    const requestData = {
       currentPage: this.currentPage,
       rowsPerPage: this.rowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
       filters: this.filters,
-    } as ITableRequest);
+    } as ITableRequest;
+
+    if (this.paginationMethod === 'client') {
+      requestData.totalItems = this.totalItems;
+    }
+
+    this.tkRequest.emit(requestData);
   }
 
   /**
@@ -717,6 +719,14 @@ export class TkTable implements ComponentInterface {
     this.totalItems = flatRenderData.length;
   }
 
+  private updatePanelPosition() {
+    this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
+      placement: 'bottom',
+      shift: { padding: 5 },
+      offset: 4,
+    });
+  }
+
   private clearGroupingInternal() {
     this.groupByColumnField = null;
     this.groupedData = [];
@@ -734,14 +744,20 @@ export class TkTable implements ComponentInterface {
 
     // component will load dan geldiğinde tkRequest tetiklenmesin diye bu kontrol eklendi.
     if (!isWillLoad) {
-      this.tkRequest.emit({
+      const requestData = {
         currentPage: this.currentPage,
         rowsPerPage: this.rowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
         filters: this.filters,
-      } as ITableRequest);
+      } as ITableRequest;
+
+      if (this.paginationMethod === 'client') {
+        requestData.totalItems = _data?.length;
+      }
+
+      this.tkRequest.emit(requestData);
     }
 
     if (this.paginationMethod == 'client') {
@@ -778,32 +794,13 @@ export class TkTable implements ComponentInterface {
     requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
-  private updatePosition() {
-    if (this.elActiveSearchIcon && this.elFilterPanelElement) {
-      computePosition(this.elActiveSearchIcon, this.elFilterPanelElement, {
-        strategy: 'fixed',
-        placement: 'bottom',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        // Ensure the element still exists before updating its position
-        if (this.elFilterPanelElement) {
-          applyStyles(this.elFilterPanelElement, {
-            left: `${x}px`,
-            top: `${y}px`,
-          });
-        }
-      });
-    }
-  }
-
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
     removeDialogScrollListener(this.elFilterPanelElement);
-    // First cleanup the floating UI
-    if (this.cleanupFilterPanel) {
-      this.cleanupFilterPanel();
-      this.cleanupFilterPanel = null;
-    }
+    // Clean up floating UI listeners before removing element
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
 
     // Then remove the element from DOM
     if (this.elFilterPanelElement) {
@@ -1037,6 +1034,9 @@ export class TkTable implements ComponentInterface {
       const currentFilter = this.filters.find(filter => filter.field === field);
       const selectedValues = (currentFilter?.value as string[]) || [];
 
+      const divider = document.createElement('tk-divider');
+      divider.my = 1;
+
       const checkboxWrapper = document.createElement('div');
 
       checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
@@ -1071,33 +1071,35 @@ export class TkTable implements ComponentInterface {
         });
         filterContainer.appendChild(optionsSearchInput);
       }
-      const allCheckbox = document.createElement('tk-checkbox');
-      allCheckbox.classList.add('select-all');
-      allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || column?.filterButtons?.selectAllCheckbox?.label || 'Select All';
-      allCheckbox.value = selectedValues.length === column.filterOptions.length;
-      if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
-        allCheckbox.indeterminate = true;
-      }
-      checkboxWrapper.appendChild(allCheckbox);
-      allCheckbox.addEventListener('tk-change', (e: any) => {
-        const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
-        allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
-          cb.value = e.detail;
-        });
-        if (e.detail) {
-          selectedValues.length = 0;
-          selectedValues.push(...column.filterOptions.map(option => option.value));
-        } else {
-          selectedValues.length = 0;
+
+      let allCheckbox: HTMLTkCheckboxElement;
+
+      if (!column?.filterElements?.selectAllCheckbox?.hide) {
+        allCheckbox = document.createElement('tk-checkbox');
+        allCheckbox.classList.add('select-all');
+        allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || 'Select All';
+        allCheckbox.value = selectedValues.length === column.filterOptions.length;
+        if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
+          allCheckbox.indeterminate = true;
         }
-        allCheckbox.indeterminate = false;
-      });
+        checkboxWrapper.appendChild(allCheckbox);
+        allCheckbox.addEventListener('tk-change', (e: any) => {
+          const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
+          allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
+            cb.value = e.detail;
+          });
+          if (e.detail) {
+            selectedValues.length = 0;
+            selectedValues.push(...column.filterOptions.map(option => option.value));
+          } else {
+            selectedValues.length = 0;
+          }
+          allCheckbox.indeterminate = false;
+        });
 
-      const divider = document.createElement('tk-divider');
-      divider.my = 1;
-
-      filterContainer.appendChild(checkboxWrapper);
-      filterContainer.appendChild(divider);
+        filterContainer.appendChild(checkboxWrapper);
+        filterContainer.appendChild(divider);
+      }
       // Create checkboxes for each option
       column.filterOptions.forEach(option => {
         const checkboxWrapper = document.createElement('div');
@@ -1107,21 +1109,24 @@ export class TkTable implements ComponentInterface {
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
 
-        checkbox.addEventListener('tk-change', () => {
-          const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
-          const visibleCheckboxes = allItemCheckboxes.filter(
-            cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
-          );
-          const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
-          const anySelected = visibleCheckboxes.some(cb => cb.value);
-          allCheckbox.value = allSelected;
+        if (!column?.filterElements?.selectAllCheckbox?.hide) {
+          checkbox.addEventListener('tk-change', () => {
+            const allItemCheckboxes = Array.from(filterContainer.querySelectorAll('tk-checkbox:not(.select-all)')) as HTMLTkCheckboxElement[];
+            const visibleCheckboxes = allItemCheckboxes.filter(
+              cb => (cb as HTMLTkCheckboxElement).style.display !== 'none' && (cb.parentElement as HTMLElement)?.style.display !== 'none',
+            );
 
-          if (!allSelected && anySelected) {
-            allCheckbox.indeterminate = true;
-          } else {
-            allCheckbox.indeterminate = false;
-          }
-        });
+            const allSelected = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.value);
+            const anySelected = visibleCheckboxes.some(cb => cb.value);
+            allCheckbox.value = allSelected;
+
+            if (!allSelected && anySelected) {
+              allCheckbox.indeterminate = true;
+            } else {
+              allCheckbox.indeterminate = false;
+            }
+          });
+        }
 
         checkboxWrapper.appendChild(checkbox);
         filterContainer.appendChild(checkboxWrapper);
@@ -1668,6 +1673,7 @@ export class TkTable implements ComponentInterface {
             value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
+            onClick={e => e.stopPropagation()}
           ></tk-checkbox>
         </td>
       );
@@ -1681,6 +1687,7 @@ export class TkTable implements ComponentInterface {
             checked={_.isEqual(this.selection, row)}
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
+            onClick={e => e.stopPropagation()}
           ></tk-radio>
         </td>
       );

@@ -3,7 +3,7 @@ name: Publish to NPM
 on:
   push:
     tags:
-      - '*.*.*' # 0.5.2, 1.0.0 gibi semantic version taglerinde tetiklenir
+      - "*.*.*" # 0.5.2, 1.0.0 gibi semantic version taglerinde tetiklenir
 
 jobs:
   publish:
@@ -22,8 +22,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.12.2'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20.12.2"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

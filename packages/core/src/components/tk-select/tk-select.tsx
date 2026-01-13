@@ -1,7 +1,6 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { computePosition, flip, shift, offset, size, autoUpdate } from '@floating-ui/dom';
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
@@ -9,6 +8,7 @@ import { addDialogScrollListener, removeDialogScrollListener } from '../../utils
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkSelect component description.
@@ -44,7 +44,6 @@ export class TkSelect implements ComponentInterface {
     this.boundRunFilterForMultiple = this.runFilterForMultiple.bind(this);
   }
 
-  @State() hasFocus = false;
   @State() renderOptions: any[];
   @State() isOpen: boolean = false;
   @Watch('isOpen')
@@ -329,18 +328,31 @@ export class TkSelect implements ComponentInterface {
 
     if (this.isOpen) {
       if (this.inputRef && this.panelRef) {
-        this.cleanup = autoUpdate(this.inputRef.querySelector('.tk-input'), this.panelRef, () => this.updatePosition(), {
-          animationFrame: true,
-        });
+        // Clean up old floating UI listeners before setting up new ones
+        this.cleanup?.();
+        this.updatePosition();
         this.setFlatOptions();
+        // Panel açıldığında ilk itemin active olmasını sağlamak için
+        const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
+        if (!activeItem) {
+          const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
+          firstItem?.setAttribute('data-active', 'true');
+        }
       }
     } else {
+      // Remove floating UI listeners when select closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.panelRef?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
     removeDialogScrollListener(this.el);
 
@@ -350,6 +362,29 @@ export class TkSelect implements ComponentInterface {
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  private updatePosition() {
+    const dropdownWidthMode = this.dropdownWidthMode;
+    const tkInputRootEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+      size: {
+        apply({ rects, elements }) {
+          if (dropdownWidthMode === 'match-parent') {
+            applyStyles(elements.floating, {
+              width: `${rects.reference.width}px`,
+            });
+          } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
+            applyStyles(elements.floating, {
+              width: dropdownWidthMode,
+            });
+          }
+        },
+      },
+    });
   }
 
   /**
@@ -395,40 +430,6 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private updatePosition() {
-    const tkInputRootEl = this.inputRef.querySelector('.tk-input');
-    const dropdownWidthMode = this.dropdownWidthMode;
-
-    if (tkInputRootEl && this.panelRef) {
-      computePosition(tkInputRootEl, this.panelRef, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [
-          offset(4),
-          flip(),
-          shift({ padding: 5 }),
-          size({
-            apply({ rects, elements }) {
-              if (dropdownWidthMode === 'match-parent') {
-                applyStyles(elements.floating, {
-                  width: `${rects.reference.width}px`,
-                });
-              } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
-                applyStyles(elements.floating, {
-                  width: dropdownWidthMode,
-                });
-              }
-            },
-          }),
-        ],
-      }).then(({ x, y }) => {
-        applyStyles(this.panelRef, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
-  }
   private isOptionSelected(valueArr: any[], optionValue: any): boolean {
     if (typeof optionValue === 'object' && !Array.isArray(optionValue) && optionValue !== null) {
       return valueArr.some(v => _.isEqual(v, optionValue));
@@ -702,7 +703,6 @@ export class TkSelect implements ComponentInterface {
       // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
       if (this.multiple && this.editable) {
         this.nativeInputRef.value = null;
-        this.renderOptions = await this.filter(null, this.options);
       }
 
       this.inputRef.value = [...tmpValue];
@@ -713,6 +713,9 @@ export class TkSelect implements ComponentInterface {
       this.tkChange.emit(this.getOptionValue(item));
       this.isOpen = false;
     }
+
+    // seçim yapıldıktan sonra eğer filtreleme yapılarak bir seçim yapıldıysa eski filtreleme sonuçlarının tutulmaması ve tüm listesinin optionlarda render edilebilmesi için yapılmıştır.
+    this.renderOptions = await this.filter(null, this.options);
   }
 
   private async handleInputChange(value) {
@@ -771,8 +774,6 @@ export class TkSelect implements ComponentInterface {
       }
       this.tkChange.emit(this.value);
     } else {
-      // this.isOpen = true;
-
       if (this.editable && this.allowCustomValue) {
         this.value = value;
         this.tkChange.emit(value);
@@ -793,11 +794,14 @@ export class TkSelect implements ComponentInterface {
         this.tkChange.emit(null);
       }
     }
+    // girilen değer değişince dropdown açılsın
+    if (!this.isOpen && !this.disabled && !this.readonly) {
+      this.isOpen = true;
+    }
   }
 
   private handleInputClick() {
     if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.hasFocus = true;
       this.isOpen = true;
     }
   }
@@ -840,7 +844,6 @@ export class TkSelect implements ComponentInterface {
       if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         // Enter, Arrow Up/Down: Open dropdown
         if (!this.disabled && !this.readonly) {
-          this.hasFocus = true;
           this.isOpen = true;
         }
         return;
@@ -852,7 +855,6 @@ export class TkSelect implements ComponentInterface {
       if (e.key === 'Escape') {
         // Escape: Close dropdown without selecting
         this.isOpen = false;
-        this.hasFocus = false;
         return;
       }
       if (e.key === 'ArrowDown') {
@@ -909,7 +911,6 @@ export class TkSelect implements ComponentInterface {
 
     // Handle Tab key
     if (e.key === 'Tab') {
-      this.hasFocus = false;
       this.isOpen = false;
     }
   }
@@ -1095,7 +1096,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-select-container', this.size, { focus: this.hasFocus });
+    const rootClasses = classNames('tk-select-container', this.size);
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>

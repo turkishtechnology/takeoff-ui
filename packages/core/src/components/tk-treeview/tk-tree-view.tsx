@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmi
 import classNames from 'classnames';
 import { ITreeItem } from './interfaces';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The `TkTreeview` component displays hierarchical data in a tree structure with expandable/collapsible nodes.
@@ -20,6 +21,11 @@ export class TkTreeView implements ComponentInterface {
 
   @State() expandedPaths: Set<string> = new Set();
   @State() selectedPath: string | null = null;
+  /**
+   * başlangıçta expanded keys lerin seçili gibi görünmesini ve herhangi bir item'a tıklandığında
+   * bu state'in false'a çekilerek expandedKeys'lerin sürekli seçili görünmesini engellemek için kurgulanmıştır.s
+   */
+  @State() isInitialLoad: boolean = true;
 
   /**
    * Array of tree items data. This is the primary way to provide data to the tree view.
@@ -103,6 +109,16 @@ export class TkTreeView implements ComponentInterface {
    * **leaf:** selecting a node selects only leaf descendants (and leaf itself if it is a leaf)
    */
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
+
+  /**
+   * The style attribute of container element
+   */
+  @Prop() containerStyle?: CSSStyleProperties = null;
+
+  /**
+   * The style attribute of column element for stepper mode
+   */
+  @Prop() stepStyle?: CSSStyleProperties = null;
 
   /**
    * If true, expands all nodes in basic mode.
@@ -509,6 +525,7 @@ export class TkTreeView implements ComponentInterface {
 
   private handleSelect = (pathStr: string, item: ITreeItem) => {
     this.selectedPath = pathStr;
+    this.isInitialLoad = false;
     this.tkItemClick.emit(item);
   };
 
@@ -663,7 +680,7 @@ export class TkTreeView implements ComponentInterface {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
     const isDirectory = !!(item.children && item.children.length > 0);
     const isExpanded = this.expandedPaths.has(pathStr);
-    const isSelected = this.selectedPath === pathStr;
+    const isSelected = this.selectedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
 
     const nodeClass = classNames('tk-tree-view', 'node', {
@@ -746,9 +763,9 @@ export class TkTreeView implements ComponentInterface {
     if (this.mode === 'stepper') {
       const columns = this.getStepperColumns();
       return (
-        <div class={classNames('tk-tree-view', 'stepper')}>
+        <div class={classNames('tk-tree-view', 'stepper')} style={this.containerStyle}>
           {columns.map((column, idx) => (
-            <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx}>
+            <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx} style={this.stepStyle}>
               {column.items.map((item, itemIndex) => this.renderItem(item, column.basePath, itemIndex))}
             </div>
           ))}
@@ -757,7 +774,7 @@ export class TkTreeView implements ComponentInterface {
     } else {
       const rootClasses = classNames('tk-tree-view', this.type, { disabled: this.disabled });
       return (
-        <div class={rootClasses}>
+        <div class={rootClasses} style={this.containerStyle}>
           <div class={classNames('tk-tree-view', 'content')}>{this.items.map((item, index) => this.renderItem(item, '', index))}</div>
         </div>
       );

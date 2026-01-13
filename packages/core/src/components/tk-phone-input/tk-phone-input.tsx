@@ -1,13 +1,12 @@
 import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { applyStyles } from '../../utils/style-utils';
 import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -179,6 +178,10 @@ export class TkPhoneInput implements ComponentInterface {
    * Remove event listeners when the component is disconnected from the DOM.
    */
   disconnectedCallback(): void {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     document.removeEventListener('click', this.handleClickOutside);
     removeDialogScrollListener(this.el);
   }
@@ -203,17 +206,29 @@ export class TkPhoneInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      this.cleanup = autoUpdate(this.el.querySelector('.tk-phone-input__wrapper'), this.el, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.panelRef?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
   formResetCallback() {
     this.handleFormReset();
+  }
+
+  private updatePosition() {
+    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
+      placement: 'bottom-start',
+      shift: { padding: 5 },
+      offset: 4,
+    });
   }
 
   /**
@@ -252,22 +267,6 @@ export class TkPhoneInput implements ComponentInterface {
     }
 
     return maskedValue;
-  }
-
-  private updatePosition() {
-    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper');
-
-    if (tkInputRootEl && this.panelRef) {
-      computePosition(tkInputRootEl, this.panelRef, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ y }) => {
-        applyStyles(this.panelRef, {
-          top: `${y}px`,
-        });
-      });
-    }
   }
 
   /**
@@ -312,6 +311,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: this.selectedCountry.mask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -356,6 +356,7 @@ export class TkPhoneInput implements ComponentInterface {
           id: this.selectedCountry.id,
           label: this.selectedCountry.label,
           dialCode: this.selectedCountry.dialCode,
+          placeholder: this.selectedCountry.placeholder,
         },
       };
       this.tkChange.emit(this.value);
@@ -380,6 +381,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: currentMask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -404,6 +406,7 @@ export class TkPhoneInput implements ComponentInterface {
         label: this.selectedCountry.label,
         dialCode: this.selectedCountry.dialCode,
         mask: this.selectedCountry.mask,
+        placeholder: this.selectedCountry.placeholder,
       },
     } as IPhoneInputValue;
     this.tkChange.emit(this.value);
@@ -521,7 +524,7 @@ export class TkPhoneInput implements ComponentInterface {
         type="tel"
         class="tk-phone-input__input"
         autoComplete="off"
-        placeholder={this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
+        placeholder={this.selectedCountry?.placeholder || this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
         value={this.inputValue}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}

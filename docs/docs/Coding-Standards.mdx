@@ -5,78 +5,94 @@ title: Coding Guidelines
 
 # Takeoff UI Coding Standards
 
-This document outlines comprehensive guidelines for component development using the Stencil library. These standards ensure consistency and maintainability across projects.
+This document outlines comprehensive guidelines for component development using
+the Stencil library. These standards ensure consistency and maintainability
+across projects.
 
 ## Folder Structure
 
 Each component directory should contain:
-```plaintext 
+
+```plaintext
 tk-component/
 ├── tk-component.tsx        # Component logic
 ├── tk-component.scss       # Component styles
 ├── interfaces.ts           # Type definitions (if needed)
-└── test/                  
+└── test/
     ├── tk-component.spec.tsx    # Unit tests
     └── tk-component.e2e.tsx     # E2E tests (if needed)
 ```
+
 ---
+
 ## Naming Conventions
 
 ### Component Naming
+
 **File/Tag Name**: Use dash-case with `tk-` prefix
-  ```typescript
-  // Example: tk-button.tsx
-  @Component({
-    tag: 'tk-button',
-    styleUrl: 'tk-button.scss',
-    shadow: true
-  })
-  ```
+
+```typescript
+// Example: tk-button.tsx
+@Component({
+  tag: 'tk-button',
+  styleUrl: 'tk-button.scss',
+  shadow: true
+})
+```
 
 ### Class Names
+
 **Component Class**: Use PascalCase with `Tk` prefix
-  ```typescript
-  export class TkButton implements ComponentInterface {
-    // ...
-  }
-  ```
+
+```typescript
+export class TkButton implements ComponentInterface {
+  // ...
+}
+```
 
 ### Decorators and Methods
+
 **`@Element`**: Use `el` as name
-  ```typescript
-  @Element() el: HTMLTkButtonElement;
-  ```
+
+```typescript
+@Element() el: HTMLTkButtonElement;
+```
 
 **`@State`**, **`@Prop`**: Use camelCase
-  ```typescript
-  @Prop() buttonSize: 'small' | 'medium' | 'large' = 'medium';
-  @State() isPressed = false;
-  ```
+
+```typescript
+@Prop() buttonSize: 'small' | 'medium' | 'large' = 'medium';
+@State() isPressed = false;
+```
 
 **`@Watch`**: Use camelCase with `Changed` suffix
-  ```typescript
-  @Watch('value')
-  valueChanged(newValue: string) {
-    // ...
-  }
-  ```
+
+```typescript
+@Watch('value')
+valueChanged(newValue: string) {
+  // ...
+}
+```
 
 **`@Event`**: Use camelCase with `tk` prefix
-  ```typescript
-  @Event() tkChange: EventEmitter<string>;
-  @Event() tkFocus: EventEmitter<void>;
-  ```
+
+```typescript
+@Event() tkChange: EventEmitter<string>;
+@Event() tkFocus: EventEmitter<void>;
+```
 
 **Handler Methods**: Use camelCase with `handle` prefix
-  ```typescript
-  private handleClick() {
-    // ...
-  }
-  ```
+
+```typescript
+private handleClick() {
+  // ...
+}
+```
 
 ## Component Implementation
 
 ### Code Organization Template
+
 ```typescript
 import { Component, h, Prop, State, Event, Element, Watch } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
@@ -96,7 +112,7 @@ export class TkComponent implements ComponentInterface {
 
   // 3. Prop decorators
   @Prop() value: string;
-  
+
   // 4. Watch decorators (immediately after related prop)
   @Watch('value')
   valueChanged(newValue: string) {
@@ -155,18 +171,22 @@ export class TkComponent implements ComponentInterface {
   }
 }
 ```
+
 ---
+
 # Testing Standards
 
 ## Test Types
 
 ### Unit Tests (`*.spec.tsx`)
+
 - Located in `test` directory
 - Tests component props, states, and synchronous methods
 - Uses `newSpecPage()` for virtual DOM testing
 - Focuses on isolated component behavior
 
 ### E2E Tests (`*.e2e.ts`)
+
 - Located in `test` directory alongside spec files
 - Tests user interactions and animations
 - Uses `newE2EPage()` for browser environment testing
@@ -204,15 +224,19 @@ describe('tk-component', () => {
 ## Best Practices
 
 ### DOM Queries
+
 ```typescript
 // Recommended: Use data-testid
-const element = await page.find('tk-component >>> [data-testid="component-element"]');
+const element = await page.find(
+  'tk-component >>> [data-testid="component-element"]',
+);
 
 // Not Recommended: Direct DOM manipulation
 const element = page.root.shadowRoot.querySelector('.component-class');
 ```
 
 ### Asynchronous Operations
+
 ```typescript
 // Recommended: Wait for changes
 await page.waitForChanges();
@@ -222,6 +246,7 @@ await page.waitForTimeout(1000);
 ```
 
 ### Event Testing
+
 ```typescript
 // Recommended: Simulate user interaction
 const button = await page.find('[data-testid="submit-button"]');
@@ -234,6 +259,7 @@ await element.callMethod('submit');
 ## Coverage Requirements
 
 The following coverage thresholds must be maintained:
+
 - Statements: 90%
 - Branches: 80%
 - Functions: 90%
@@ -272,16 +298,20 @@ Before submitting a component, ensure all these aspects are tested:
 6. Add edge case testing
 7. Check coverage report
 8. Address coverage gaps
+
 ---
+
 ## Styling
 
 ### SCSS Notes
+
 - Use design system variables from Figma
 - Follow `tk-` naming with component prefix
+
 ```css
 .tk-component {
   color: var(--static-white);
-  
+
   &.tk-component-large {
     font-size: var(--desktop-body-m-base-size);
   }
@@ -291,14 +321,20 @@ Before submitting a component, ensure all these aspects are tested:
   }
 }
 ```
+
 ---
+
 ## Framework Integration
 
 ### Binding Support
-The framework integration is handled through the Stencil configuration. Component developers should ensure their components emit proper events for framework bindings:
+
+The framework integration is handled through the Stencil configuration.
+Component developers should ensure their components emit proper events for
+framework bindings:
 
 For `v-model` support (Vue.js):
-  ```typescript
-  @Event() tkChange: EventEmitter<string>;
-  @Prop() value: string;
-  ```
+
+```typescript
+@Event() tkChange: EventEmitter<string>;
+@Prop() value: string;
+```
