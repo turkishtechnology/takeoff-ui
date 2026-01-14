@@ -32,12 +32,6 @@
       "defaultValue": "checkbox-name"
     },
     {
-      "key": "value",
-      "label": "Checked",
-      "type": "checkbox",
-      "defaultValue": false
-    },
-    {
       "key": "disabled",
       "label": "Disabled",
       "type": "checkbox",
