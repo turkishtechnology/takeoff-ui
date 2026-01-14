@@ -122,6 +122,8 @@ export interface ITableRequest {
   sorts?: ITableSort[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
+  /** A list of data */
+  data?: any[];
 }
 
 /** Represents a filter applied to a table */

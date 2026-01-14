@@ -404,6 +404,7 @@ export class TkTable implements ComponentInterface {
 
     if (this.paginationMethod === 'client') {
       requestData.totalItems = this.totalItems;
+      requestData.data = this.data;
     }
 
     this.tkRequest.emit(requestData);
@@ -755,6 +756,7 @@ export class TkTable implements ComponentInterface {
 
       if (this.paginationMethod === 'client') {
         requestData.totalItems = _data?.length;
+        requestData.data = _data;
       }
 
       this.tkRequest.emit(requestData);
