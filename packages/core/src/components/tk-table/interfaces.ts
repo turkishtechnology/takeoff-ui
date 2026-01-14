@@ -148,11 +148,6 @@ export interface ITableCellEdit {
   value: string;
 }
 
-export interface ICustomElement {
-  ref: HTMLElement;
-  element: HTMLElement;
-}
-
 export interface ITableExportOptions {
   /** only works when type is `pdf`. Default value is `vertical` */
   orientation?: 'horizontal' | 'vertical';
