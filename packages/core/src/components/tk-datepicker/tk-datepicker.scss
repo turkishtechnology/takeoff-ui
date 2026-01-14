@@ -23,6 +23,10 @@
     position: static;
     box-shadow: none;
     border: 1px solid var(--border-light);
+
+    &.invalid {
+      border-color: var(--states-danger-base);
+    }
   }
 
   .tk-datepicker-panel-inner {
@@ -244,6 +248,14 @@
       color: var(--text-lightest);
       background: var(--primary-base);
       border-radius: var(--datepicker-items-base-radius);
+    }
+  }
+
+  &.selected.disabled,
+  &.selected.readonly {
+    .tk-datepicker-day {
+      color: var(--primary-light);
+      background: var(--primary-lightest);
     }
   }
 
