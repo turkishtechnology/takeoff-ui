@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ICustomElement, ITableExportOptions, ITableSort, ITableGroup } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup } from './interfaces';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import _ from 'lodash';
 import jsPDF from 'jspdf';
@@ -30,7 +30,6 @@ import { floatingElementAutoUpdate } from '../../utils/position-utils';
   shadow: true,
 })
 export class TkTable implements ComponentInterface {
-  private customHeaderElements: ICustomElement[] = [];
   private refSelectAll: HTMLTkCheckboxElement;
   private elFilterPanelElement: HTMLElement;
   private isResizing: boolean = false;
@@ -324,9 +323,6 @@ export class TkTable implements ComponentInterface {
   }
 
   componentDidRender(): void {
-    this.customHeaderElements?.forEach(element => {
-      element?.ref?.replaceChildren(element.element);
-    });
     // Reset transient selection flag after a render cycle
     if (this.isSelectionUpdating) {
       this.isSelectionUpdating = false;
@@ -404,6 +400,7 @@ export class TkTable implements ComponentInterface {
 
     if (this.paginationMethod === 'client') {
       requestData.totalItems = this.totalItems;
+      requestData.data = this.data;
     }
 
     this.tkRequest.emit(requestData);
@@ -755,6 +752,7 @@ export class TkTable implements ComponentInterface {
 
       if (this.paginationMethod === 'client') {
         requestData.totalItems = _data?.length;
+        requestData.data = _data;
       }
 
       this.tkRequest.emit(requestData);
@@ -1803,9 +1801,8 @@ export class TkTable implements ComponentInterface {
                     ...styleRowObject,
                     ...styleCellObject,
                   }}
-                >
-                  {getNestedValue(row, col.field)}
-                </td>
+                  ref={el => el?.replaceChildren(getNestedValue(row, col.field))}
+                ></td>
               );
             }
           })}
@@ -1903,8 +1900,6 @@ export class TkTable implements ComponentInterface {
   }
 
   private createHead() {
-    this.customHeaderElements = [];
-
     const theadClasses = classNames(this.headerType);
     let selectionTh;
 
@@ -1946,38 +1941,42 @@ export class TkTable implements ComponentInterface {
             let _searchIcon;
             let _headerStructure;
             let _customHeader;
-            let _customHeaderElements: ICustomElement;
 
             if (typeof col?.headerHtml == 'function') {
               _customHeader = col.headerHtml();
-
-              if (_customHeader instanceof HTMLElement) {
-                _customHeaderElements = {
-                  ref: null,
-                  element: _customHeader,
-                } as ICustomElement;
-                this.customHeaderElements.push(_customHeaderElements);
-              }
             }
 
-            if (_customHeader && !_customHeaderElements) {
-              _headerStructure = <div class="header-container" innerHTML={_customHeader}></div>;
-            } else if (_customHeader && _customHeaderElements) {
-              _headerStructure = <div ref={el => (_customHeaderElements.ref = el as HTMLElement)} class="header-container"></div>;
-            } else {
-              _headerStructure = (
-                <div class="header-container">
-                  <div class="header" title={col.header}>
-                    {col.header}
-                  </div>
-                  {col?.subHeader?.length > 0 && (
-                    <div class="sub-header" title={col.subHeader}>
-                      {col.subHeader}
-                    </div>
-                  )}
-                </div>
-              );
-            }
+            _headerStructure = (
+              <div
+                class="header-container"
+                ref={el => {
+                  if (_customHeader) {
+                    if (typeof _customHeader === 'string') {
+                      el?.setHTMLUnsafe(_customHeader);
+                    } else if (typeof _customHeader == 'object') {
+                      el?.replaceChildren(_customHeader);
+                    }
+                  } else {
+                    const _header = document.createElement('div');
+                    _header.classList.add('header');
+                    _header.title = col.header;
+                    _header.textContent = col.header;
+
+                    let _subHeader = null;
+                    if (!col.subHeader) {
+                      el?.replaceChildren(_header);
+                    } else {
+                      _subHeader = document.createElement('div');
+                      _subHeader.classList.add('sub-header');
+                      _subHeader.title = col.subHeader;
+                      _subHeader.textContent = col.subHeader;
+
+                      el?.replaceChildren(_header, _subHeader);
+                    }
+                  }
+                }}
+              ></div>
+            );
 
             // generate expander th
             if (col.expander) {

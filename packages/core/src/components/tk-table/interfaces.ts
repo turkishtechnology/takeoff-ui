@@ -122,6 +122,8 @@ export interface ITableRequest {
   sorts?: ITableSort[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
+  /** A list of data */
+  data?: any[];
 }
 
 /** Represents a filter applied to a table */
@@ -144,11 +146,6 @@ export interface ITableCellEdit {
   field: string;
   /** The new value for the field */
   value: string;
-}
-
-export interface ICustomElement {
-  ref: HTMLElement;
-  element: HTMLElement;
 }
 
 export interface ITableExportOptions {
