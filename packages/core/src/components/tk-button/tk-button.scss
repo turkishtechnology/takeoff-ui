@@ -461,11 +461,10 @@
 
     &.text {
       background-color: transparent;
-      color: var(--static-light);
+      color: var(--text-lightest);
       box-shadow: none;
 
       &:hover {
-        color: var(--text-dark);
         background-color: var(--overlay-white-light);
         cursor: pointer;
       }
