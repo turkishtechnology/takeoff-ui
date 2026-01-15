@@ -807,8 +807,12 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleInputBlur() {
-    if (this.multiple) return;
-
+    // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
+    if (this.multiple) {
+      this.nativeInputRef.value = null;
+      this.renderOptions = await this.filter(null, this.options);
+      return;
+    }
     if (this.editable && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
