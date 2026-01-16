@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
@@ -166,12 +165,6 @@ export class TkPhoneInput implements ComponentInterface {
    */
   connectedCallback(): void {
     document.addEventListener('click', this.handleClickOutside);
-    addDialogScrollListener(this.el, e => {
-      if (e.composedPath().includes(this.el)) {
-        return;
-      }
-      this.panelRef?.remove();
-    });
   }
 
   /**
@@ -183,7 +176,6 @@ export class TkPhoneInput implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     document.removeEventListener('click', this.handleClickOutside);
-    removeDialogScrollListener(this.el);
   }
 
   /**

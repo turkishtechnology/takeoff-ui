@@ -1,5 +1,4 @@
 import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
@@ -109,8 +108,6 @@ export class TkPopover implements ComponentInterface {
     } else {
       this.triggerElement?.addEventListener('click', () => (this.isOpen = !this.isOpen));
     }
-
-    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   disconnectedCallback() {
@@ -124,7 +121,6 @@ export class TkPopover implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();

@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { getIconElementProps } from '../../utils/icon-utils';
 import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
@@ -226,7 +225,6 @@ export class TkCurrencyInput implements ComponentInterface {
 
   connectedCallback() {
     document.addEventListener('click', this.closeDropdown);
-    addDialogScrollListener(this.el, this.closeDropdown);
   }
 
   disconnectedCallback() {
@@ -235,7 +233,6 @@ export class TkCurrencyInput implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     document.removeEventListener('click', this.closeDropdown);
-    removeDialogScrollListener(this.el);
   }
 
   private updatePosition() {
