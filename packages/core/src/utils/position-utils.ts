@@ -25,7 +25,14 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     });
   }
 
-  const middleware = [offset(off), flip(), shift({ padding: 5 }), ...(arrowElement ? [arrow({ element: arrowElement })] : []), ...(sizeOptions ? [size(sizeOptions)] : []), hide()];
+  const middleware = [
+    offset(off),
+    flip(),
+    shift({ padding: 5 }),
+    ...(arrowElement ? [arrow({ element: arrowElement, padding: 8 })] : []),
+    ...(sizeOptions ? [size(sizeOptions)] : []),
+    hide(),
+  ];
 
   return computePosition(triggerElement, floatingElement, {
     strategy: 'fixed',
@@ -46,7 +53,7 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
         top: ay != null ? `${ay}px` : '',
         right: '',
         bottom: '',
-        [reverseSide]: '-6px',
+        [reverseSide]: '-5.7px',
       });
 
       const borderStyles = {
