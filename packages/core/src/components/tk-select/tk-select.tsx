@@ -365,8 +365,6 @@ export class TkSelect implements ComponentInterface {
     const tkInputRootEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
       size: {
         apply({ rects, elements }) {
           if (dropdownWidthMode === 'match-parent') {

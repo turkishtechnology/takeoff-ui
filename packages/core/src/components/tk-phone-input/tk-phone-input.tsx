@@ -218,8 +218,6 @@ export class TkPhoneInput implements ComponentInterface {
     const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 

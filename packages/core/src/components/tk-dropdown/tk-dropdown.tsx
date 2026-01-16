@@ -154,8 +154,6 @@ export class TkDropdown implements ComponentInterface {
   private updatePosition() {
     this.cleanup = floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
       placement: this.position,
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 

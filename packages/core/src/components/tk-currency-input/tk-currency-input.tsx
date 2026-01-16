@@ -239,8 +239,6 @@ export class TkCurrencyInput implements ComponentInterface {
     const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 

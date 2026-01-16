@@ -718,7 +718,6 @@ export class TkTable implements ComponentInterface {
   private updatePanelPosition() {
     this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
       placement: 'bottom',
-      shift: { padding: 5 },
       offset: 4,
     });
   }
