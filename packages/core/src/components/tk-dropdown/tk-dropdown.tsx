@@ -100,10 +100,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
