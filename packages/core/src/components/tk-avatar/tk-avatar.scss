@@ -22,6 +22,7 @@
   flex-shrink: 0;
   gap: 10px;
   box-shadow: var(--effect-1-default-sm);
+  box-sizing: border-box;
   user-select: none;
   -webkit-user-drag: none;
 

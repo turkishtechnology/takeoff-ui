@@ -31,7 +31,6 @@
   --ifm-heading-font-family: 'Geologica', sans-serif;
   --ifm-heading-color: var(--text-darkest);
   --ifm-heading-font-weight: 400;
-  --ifm-heading-line-height: var(--desktop-title-h3-line-height);
 
   /* Headings */
   --ifm-h1-font-size: var(--desktop-title-h3-size) !important;
@@ -56,15 +55,15 @@
 
   strong,
   b {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
   }
 
   code {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
   }
 
   ::marker {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
   }
 
   /* Docs Sidebar */
@@ -824,15 +823,7 @@ body {
 .markdown h1:first-child {
   --ifm-h1-font-size: var(--desktop-title-h3-size) !important;
   margin-bottom: 12px !important;
-}
-
-.markdown > h2 {
-  margin-top: 64px !important;
-  margin-bottom: 12px !important;
-}
-
-.markdown > p {
-  margin-bottom: 32px !important;
+  --ifm-heading-line-height: var(--desktop-title-h3-line-height) !important;
 }
 
 /* Sidebar Menu Spacing */
