@@ -54,6 +54,19 @@
   --ifm-line-height-base: 1.5;
   --ifm-color-content: var(--text-base, #717784);
 
+  strong,
+  b {
+    color: var(--text-dark);
+  }
+
+  code {
+    color: var(--text-dark);
+  }
+
+  ::marker {
+    color: var(--text-dark);
+  }
+
   /* Docs Sidebar */
   --doc-sidebar-width: 248px !important;
   --ifm-menu-color: var(--text-base) !important;
@@ -848,5 +861,15 @@ body {
   &:hover {
     background-color: var(--background-lightest);
     color: var(--text-darkest);
+  }
+}
+
+/* Custom padding for main documentation content on wide screens */
+@media (min-width: 1440px) {
+  main[class*='docMainContainer_'] .container {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
