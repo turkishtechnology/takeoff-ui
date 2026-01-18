@@ -106,7 +106,7 @@ export class TkAccordionItem implements ComponentInterface {
       open: this.active,
     });
 
-    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', size: 'small', sign: true })}></tk-icon>;
+    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { class: 'tk-accordion-item-icon', variant: 'neutral', size: 'small', sign: true }, 'rounded')}></tk-icon>;
 
     return (
       <Host>

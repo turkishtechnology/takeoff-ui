@@ -17,13 +17,13 @@
     flex-grow: 1;
   }
 
-  .icon {
-    transition: transform 0.3s;
-    margin-bottom: -5px;
-  }
-
   &.base {
-    .tk-accordion-item-toggle-icon span{
+    .tk-accordion-item-icon i {
+      padding: 2px;
+      width: 20px;
+      height: 20px;
+    }
+    .tk-accordion-item-toggle-icon span {
       font-size: 20px;
     }
     .header {
