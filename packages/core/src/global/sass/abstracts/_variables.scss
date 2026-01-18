@@ -1303,6 +1303,36 @@
   --toast-sign-small-size: var(--spacing-4xl);
   --toast-sign-small-full-padding: var(--spacing-xs);
 
+  // sign variables
+  --sign-2xlarge-radius: var(--radius-xl);
+  --sign-2xlarge-icon-size: var(--spacing-8xl);
+  --sign-2xlarge-h-padding: var(--spacing-4xl);
+  --sign-2xlarge-v-padding: var(--spacing-4xl);
+  --sign-xlarge-radius: var(--radius-l);
+  --sign-xlarge-icon-size: var(--spacing-6xl);
+  --sign-xlarge-h-padding: var(--spacing-xl);
+  --sign-xlarge-v-padding: var(--spacing-xl);
+  --sign-large-radius: var(--radius-l);
+  --sign-large-icon-size: var(--spacing-6xl);
+  --sign-large-h-padding: var(--spacing-m-base);
+  --sign-large-v-padding: var(--spacing-m-base);
+  --sign-base-radius: var(--radius-m-base);
+  --sign-base-icon-size: var(--spacing-5xl);
+  --sign-base-h-padding: var(--spacing-s);
+  --sign-base-v-padding: var(--spacing-s);
+  --sign-small-radius: var(--radius-s);
+  --sign-small-icon-size: var(--spacing-4xl);
+  --sign-small-h-padding: var(--spacing-xs);
+  --sign-small-v-padding: var(--spacing-xs);
+  --sign-xsmall-radius: var(--radius-s);
+  --sign-xsmall-icon-size: var(--spacing-xl);
+  --sign-xsmall-h-padding: var(--spacing-xs);
+  --sign-xsmall-v-padding: var(--spacing-xs);
+  --sign-xxsmall-radius: var(--radius-s);
+  --sign-xxsmall-icon-size: var(--spacing-l);
+  --sign-xxsmall-h-padding: var(--spacing-xxs);
+  --sign-xxsmall-v-padding: var(--spacing-xxs);
+
   // drawer variables
   --notification-header-h-padding: var(--spacing-4xl);
   --notification-header-v-padding: var(--spacing-4xl);

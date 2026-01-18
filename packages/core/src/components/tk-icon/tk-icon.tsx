@@ -107,18 +107,6 @@ export class TkIcon implements ComponentInterface {
 
     const iconElement = <IconTag {...iconProps}>{this.icon}</IconTag>;
 
-    if (this.sign) {
-      return (
-        <div
-          class="tk-icon-sign-container"
-          style={{
-            borderColor: this.borderColor,
-          }}
-        >
-          {iconElement}
-        </div>
-      );
-    }
     return iconElement;
   }
 }
