@@ -22,6 +22,35 @@
     margin-bottom: -5px;
   }
 
+  &.base {
+    .header {
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--desktop-body-s-line-height);
+    }
+    .content {
+      font-size: var(--desktop-body-xs-size);
+      font-weight: 300;
+      line-height: var(--desktop-body-xs-line-height);
+    }
+  }
+
+  &.large {
+    .header {
+      font-size: var(--desktop-body-m-base-size);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--desktop-body-m-base-line-height);
+    }
+    .content {
+      font-size: var(--desktop-body-s-size);
+      font-style: normal;
+      font-weight: 300;
+      line-height: var(--desktop-body-s-line-height);
+    }
+  }
+
   &.grouped {
     gap: 10px;
     border-radius: var(--accordion-base-radius);
@@ -59,9 +88,6 @@
 
     &.base {
       .header {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: var(--desktop-body-s-line-height);
         gap: var(--accordion-base-gap);
         padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
       }
@@ -73,9 +99,6 @@
 
     &.large {
       .header {
-        font-size: 16px;
-        font-weight: 400;
-        line-height: var(--desktop-body-m-base-line-height);
         padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
         gap: var(--accordion-large-gap);
       }
