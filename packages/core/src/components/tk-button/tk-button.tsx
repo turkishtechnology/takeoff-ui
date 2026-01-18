@@ -148,7 +148,11 @@ export class TkButton implements ComponentInterface {
     if (this.loading) {
       _leftIcon = spinnerElement;
     } else if (this.icon) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, { variant: null, additionalProps: { class: 'tk-button-icon' }, size: this.size === 'small' ? 'medium' : 'large' }, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(
+        this.icon,
+        { variant: null, additionalProps: { class: 'tk-button-icon' }, size: this.size === 'small' ? 'medium' : 'large' },
+        this.iconPosition,
+      );
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }

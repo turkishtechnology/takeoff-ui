@@ -196,7 +196,7 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--text-sub-base);
         }
@@ -296,7 +296,7 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -404,7 +404,7 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -499,7 +499,7 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -600,7 +600,7 @@
         color: var(--icon-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -705,7 +705,7 @@
         color: var(--background-sub-base);
         background-color: transparent;
         border-color: var(--background-sub-base);
-        
+
         .tk-button-icon {
           color: var(--background-sub-base);
         }
@@ -762,7 +762,7 @@
     &.filled {
       color: var(--text-lightest);
       background-color: var(--states-warning-dark);
-      
+
       .tk-button-icon {
         color: var(--icon-lightest);
       }
@@ -810,7 +810,7 @@
         color: var(--text-light);
         background-color: transparent;
         border-color: var(--border-sub-base);
-        
+
         .tk-button-icon {
           color: var(--icon-sub-base);
         }
@@ -948,7 +948,7 @@
       @include button-variant-link(var(--text-lightest), var(--text-light));
     }
 
-     @include tk-button-disabled {
+    @include tk-button-disabled {
       background-color: var(--overlay-white-lightest);
       color: var(--overlay-white-light);
       .tk-button-icon {
@@ -999,7 +999,7 @@
     }
 
     &.outlined {
-      background-color: transparent;      
+      background-color: transparent;
       border: 1px solid var(--icon-darkest);
 
       .tk-button-icon {
