@@ -87,7 +87,7 @@ export class TkAccordionItem implements ComponentInterface {
 
     const icon = (
       <tk-icon
-        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'span')}
+        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'small' }, 'outlined', 'span')}
       ></tk-icon>
     );
 
@@ -106,7 +106,7 @@ export class TkAccordionItem implements ComponentInterface {
       open: this.active,
     });
 
-    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
+    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', size: 'small', sign: true })}></tk-icon>;
 
     return (
       <Host>
