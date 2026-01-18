@@ -11,6 +11,7 @@ const FeatureDemo = ({ demo, reactCode, vueCode, angularCode, cssCode = '', data
         style={{
           border: '1px solid var(--border-light)',
           background: 'var(--background-lightest)',
+          borderRadius: '8px',
         }}
         className="p-4 rounded-lg"
       >
