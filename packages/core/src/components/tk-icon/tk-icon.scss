@@ -11,6 +11,10 @@ tk-icon {
     line-height: 1;
   }
 
+  &.tk-icon-xxsmall {
+    font-size: var(--sign-xxsmall-icon-size);
+  }
+
   &.tk-icon-xsmall {
     font-size: var(--sign-xsmall-icon-size);
   }
@@ -76,6 +80,13 @@ tk-icon {
     border: 1px solid;
     box-sizing: border-box;
     overflow: hidden;
+
+    &.tk-icon-xxsmall {
+      width: calc(var(--sign-xxsmall-icon-size) + var(--sign-xxsmall-h-padding) * 2);
+      height: calc(var(--sign-xxsmall-icon-size) + var(--sign-xxsmall-v-padding) * 2);
+      border-radius: var(--sign-xxsmall-radius);
+      padding: var(--sign-xxsmall-v-padding) var(--sign-xxsmall-h-padding);
+    }
 
     &.tk-icon-xsmall {
       width: calc(var(--sign-xsmall-icon-size) + var(--sign-xsmall-h-padding) * 2);
