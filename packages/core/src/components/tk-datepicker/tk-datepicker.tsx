@@ -1470,14 +1470,25 @@ export class TkDatePicker {
     const isSelected = isSelectedStart || isSelectedEnd;
     let isInRange = false;
 
-    if (start && (end || this.hoverDate)) {
-      const rangeEnd = (end || this.hoverDate) as Date;
-      if (start.getTime() < rangeEnd.getTime()) {
-        isInRange = dateTime > start.getTime() && dateTime < rangeEnd.getTime();
+    const rangeEnd = end || this.hoverDate;
+    let visualRangeStart: Date | null = null;
+    let visualRangeEnd: Date | null = null;
+
+    if (start && rangeEnd) {
+      if (start.getTime() <= rangeEnd.getTime()) {
+        visualRangeStart = start;
+        visualRangeEnd = rangeEnd;
       } else {
-        isInRange = dateTime > rangeEnd.getTime() && dateTime < start.getTime();
+        // Reverse selection: user selected end date first, then hovering/selecting earlier date
+        visualRangeStart = rangeEnd;
+        visualRangeEnd = start;
       }
+      isInRange = dateTime > visualRangeStart.getTime() && dateTime < visualRangeEnd.getTime();
     }
+
+    const isVisualRangeStart = visualRangeStart && dateTime === visualRangeStart.getTime();
+    const isVisualRangeEnd = visualRangeEnd && dateTime === visualRangeEnd.getTime();
+
     const isDisabled = this.isDateDisabled(date);
     const isToday = this.isToday(date);
 
@@ -1486,8 +1497,8 @@ export class TkDatePicker {
         class={classNames('tk-datepicker-day-cell', {
           'selected': isSelected,
           'in-range': isInRange,
-          'range-start': isSelectedStart && this.mode === 'range',
-          'range-end': isSelectedEnd && this.mode === 'range',
+          'range-start': isVisualRangeStart && this.mode === 'range',
+          'range-end': isVisualRangeEnd && this.mode === 'range',
           'today': isToday && !isSelected && !isInRange,
           'disabled': isDisabled || this.disabled,
           'readonly': this.readonly,
