@@ -1066,7 +1066,7 @@
       var(--button-sizes-small-h-padding),
       var(--button-sizes-small-gap),
       var(--button-sizes-small-icon-size),
-      var(--sizes-small-full-padding, 6px)
+      var(--button-sizes-small-full-padding)
     );
 
     &.rounded {
@@ -1083,7 +1083,7 @@
       var(--button-sizes-base-h-padding),
       var(--button-sizes-base-gap),
       var(--button-sizes-base-icon-size),
-      var(--sizes-base-full-padding, 8px)
+      var(--button-sizes-base-full-padding)
     );
 
     &.rounded {
@@ -1100,7 +1100,7 @@
       var(--button-sizes-large-h-padding),
       var(--button-sizes-large-gap),
       var(--button-sizes-large-icon-size),
-      var(--sizes-large-full-padding, 12px)
+      var(--button-sizes-large-full-padding)
     );
 
     &.rounded {
