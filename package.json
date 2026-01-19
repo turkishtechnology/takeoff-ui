@@ -82,5 +82,14 @@
       "version": "10.8.1",
       "onFail": "error"
     }
+  },
+  "pnpm": {
+    "overrides": {
+      "undici": ">=7.18.2",
+      "diff": ">=8.0.3",
+      "tar": ">=7.5.3",
+      "path-to-regexp@<6.0.0": "0.1.10",
+      "path-to-regexp@>=6.0.0": ">=8.3.0"
+    }
   }
 }
