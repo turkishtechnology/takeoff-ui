@@ -553,7 +553,7 @@ export class TkInput implements ComponentInterface {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
         let isRemovable;
-        if (this.chipDisabled?.(item)) {
+        if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
           isRemovable = false;
         } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
           isRemovable = item.removable;
@@ -569,6 +569,7 @@ export class TkInput implements ComponentInterface {
           variant: (itemChipOptions.variant ?? 'neutral') as IChipOptions['variant'],
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
+          disabled: this.disabled || this.readonly,
         };
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
