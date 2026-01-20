@@ -798,9 +798,20 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleInputBlur() {
-    if (this.multiple) return;
+    // item click'den geldiğinde blur çalıştırma
+    if (this.isItemClickFlag) {
+      this.isItemClickFlag = false;
+      return;
+    }
 
-    if (this.editable && !this.allowCustomValue) {
+    if (!this.editable) return;
+
+    // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
+    if (this.multiple) {
+      this.nativeInputRef.value = null;
+    }
+
+    if (!this.multiple && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
 
@@ -808,20 +819,18 @@ export class TkSelect implements ComponentInterface {
 
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
-        !this.isItemClickFlag &&
         // seçili item yok ise ama inutda bir değer var ise
-        ((!selectedItem && inputValue) ||
-          // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
-          (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
+        (!selectedItem && inputValue) ||
+        // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
+        (selectedItem && this.getOptionLabel(selectedItem) != inputValue)
       ) {
         this.value = null;
         this.inputRef.value = null;
         this.tkChange.emit(null);
-        this.renderOptions = await this.filter(null, this.options);
-      } else {
-        this.isItemClickFlag = false;
       }
     }
+
+    this.renderOptions = await this.filter(null, this.options);
   }
 
   private async handleInputKeydown(e) {
