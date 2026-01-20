@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
@@ -292,8 +291,6 @@ export class TkSelect implements ComponentInterface {
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el, this.closeHandler);
-
     if (this.allowCustomValue) {
       this.editable = true;
     }
@@ -354,7 +351,6 @@ export class TkSelect implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -369,8 +365,6 @@ export class TkSelect implements ComponentInterface {
     const tkInputRootEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
       size: {
         apply({ rects, elements }) {
           if (dropdownWidthMode === 'match-parent') {
@@ -390,10 +384,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 

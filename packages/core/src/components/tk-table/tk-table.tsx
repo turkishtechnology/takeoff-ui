@@ -12,7 +12,6 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
@@ -719,7 +718,6 @@ export class TkTable implements ComponentInterface {
   private updatePanelPosition() {
     this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
       placement: 'bottom',
-      shift: { padding: 5 },
       offset: 4,
     });
   }
@@ -794,7 +792,6 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
-    removeDialogScrollListener(this.elFilterPanelElement);
     // Clean up floating UI listeners before removing element
     this.cleanup?.();
     // Clear reference to allow garbage collection
@@ -1008,12 +1005,6 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
-    addDialogScrollListener(this.el, e => {
-      if (e.composedPath().includes(this.el)) {
-        return;
-      }
-      this.closeFilterPanel();
-    });
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');

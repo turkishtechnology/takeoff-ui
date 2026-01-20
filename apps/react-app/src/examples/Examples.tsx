@@ -17,6 +17,9 @@ function Examples() {
         <Link to="zod-validation" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
           Zod Validation
         </Link>
+        <Link to="floatingElements" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
+          Floating Elements
+        </Link>
       </div>
     </TkCard>
   );

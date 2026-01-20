@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -374,8 +373,6 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el, this.closeHandler);
-
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
@@ -419,7 +416,6 @@ export class TkDatePicker {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -480,8 +476,6 @@ export class TkDatePicker {
     const inputEl = this.inputRef!.querySelector('.tk-input') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 
