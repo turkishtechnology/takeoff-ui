@@ -8,3 +8,4 @@ packages:
   - "docs"
   - "apps/react-app"
   - "apps/vue-app"
+  - "apps/angular-app"
