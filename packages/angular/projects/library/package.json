@@ -1,9 +1,14 @@
 {
   "name": "@takeoff-ui/angular",
-  "private": true,
+  "version": "0.8.2",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json"
+  },
   "peerDependencies": {
     "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0"
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "rxjs": "^7.0.0"
   },
   "bin": {
     "patch-transform-selectors": "./scripts/patch-transform-selectors.mjs"
@@ -17,5 +22,20 @@
     "@takeoff-ui/core": "workspace:*",
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "publishConfig": {
+    "access": "public",
+    "dependencies": {
+      "@takeoff-ui/core": "^0.8.2"
+    }
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/compiler-cli": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "ng-packagr": "^20.0.0",
+    "rxjs": "^7.8.2",
+    "typescript": "~5.8.2"
+  }
 }
