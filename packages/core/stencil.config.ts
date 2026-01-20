@@ -1,7 +1,17 @@
 import { Config } from '@stencil/core';
 import { ComponentModelConfig, vueOutputTarget } from '@stencil/vue-output-target';
 import { reactOutputTarget } from '@stencil/react-output-target';
+import { angularOutputTarget, ValueAccessorConfig } from '@stencil/angular-output-target';
 import { sass } from '@stencil/sass';
+
+const angularValueAccessorBindings: ValueAccessorConfig[] = [
+  {
+    elementSelectors: ['tk-input'],
+    event: 'tkChange',
+    targetAttr: 'value',
+    type: 'text',
+  },
+];
 
 const vueComponentModels: ComponentModelConfig[] = [
   {
@@ -50,6 +60,11 @@ export const config: Config = {
     enableImportInjection: true,
   },
   outputTargets: [
+    angularOutputTarget({
+      componentCorePackage: '@takeoff-ui/core',
+      directivesProxyFile: '../angular/projects/library/src/directives/proxies.ts',
+      valueAccessorConfigs: angularValueAccessorBindings,
+    }),
     vueOutputTarget({
       componentCorePackage: '@takeoff-ui/core',
       proxiesFile: '../vue/lib/components.ts',
@@ -103,6 +118,7 @@ export const config: Config = {
       injectGlobalPaths: ['src/global/sass/fonts/_material-symbols.scss'],
     }),
   ],
+
   minifyJs: true,
   minifyCss: true,
   sourceMap: false,

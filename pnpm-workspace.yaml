@@ -3,6 +3,8 @@ packages:
   - "packages/vue"
   - "packages/core"
   - "packages/tailwind"
+  - "packages/angular"
+  - "packages/angular/projects/library"
   - "docs"
   - "apps/react-app"
   - "apps/vue-app"
