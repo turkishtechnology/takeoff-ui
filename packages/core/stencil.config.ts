@@ -1,7 +1,6 @@
 import { Config } from '@stencil/core';
 import { ComponentModelConfig, vueOutputTarget } from '@stencil/vue-output-target';
 import { reactOutputTarget } from '@stencil/react-output-target';
-import { ValueAccessorConfig, angularOutputTarget } from '@stencil/angular-output-target';
 import { sass } from '@stencil/sass';
 
 const vueComponentModels: ComponentModelConfig[] = [
@@ -43,27 +42,6 @@ const vueComponentModels: ComponentModelConfig[] = [
   },
 ];
 
-const angularValueAccessorBindings: ValueAccessorConfig[] = [
-  {
-    elementSelectors: ['tk-input', 'tk-phone-input', 'tk-select', 'tk-datepicker', 'tk-rating'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'text',
-  },
-  {
-    elementSelectors: ['tk-radio-group', 'tk-radio'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'radio',
-  },
-  {
-    elementSelectors: ['tk-checkbox', 'tk-toggle'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'boolean',
-  },
-];
-
 export const config: Config = {
   namespace: 'core',
   globalStyle: 'src/global/sass/style.scss',
@@ -81,13 +59,6 @@ export const config: Config = {
     reactOutputTarget({
       outDir: '../react/lib/components/stencil-generated/',
       stencilPackageName: '@takeoff-ui/core',
-    }),
-    angularOutputTarget({
-      componentCorePackage: '@takeoff-ui/core',
-      outputType: 'component',
-      directivesProxyFile: '../angular/projects/library/src/lib/stencil-generated/components.ts',
-      directivesArrayFile: '../angular/projects/library/src/lib/stencil-generated/index.ts',
-      valueAccessorConfigs: angularValueAccessorBindings,
     }),
     {
       type: 'docs-json',
