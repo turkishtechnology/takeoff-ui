@@ -1640,16 +1640,16 @@ export class TkDatePicker {
         <div class="tk-datepicker-header-content">
           <div class="tk-datepicker-header-content-start">
             <tk-button
-              variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
-              variant="neutral"
-              icon={{ name: 'chevron_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled}
@@ -1665,16 +1665,16 @@ export class TkDatePicker {
           </div>
           <div class="tk-datepicker-header-content-end">
             <tk-button
-              variant="neutral"
-              icon={{ name: 'chevron_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
               disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
-              variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
               disabled={this.readonly || this.disabled}
