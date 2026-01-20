@@ -203,6 +203,8 @@
     }
   }
   &.disabled {
+    pointer-events: none;
+    user-select: none;
     .tk-toggle-button-icon,
     .tk-toggle-button-label {
       color: var(--text-sub-base);
