@@ -35,6 +35,8 @@ export interface ITableColumn {
   headerHtml?: Function;
   /** Custom rendering function for HTML content in the column cells */
   html?: Function;
+  /** Custom formatting function for exporting column data */
+  exportFormat?: Function;
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
