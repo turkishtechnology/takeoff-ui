@@ -1,7 +1,7 @@
 /**
  * Base default chart options that apply to all chart types
  */
-import { merge } from 'lodash';
+import { merge } from 'lodash-es';
 
 export const DEFAULT_CHART_OPTIONS: any = {
   responsive: true,
