@@ -63,7 +63,7 @@ export class TkCard implements ComponentInterface {
     severity: 'light',
     background: 'solid',
     rounded: true,
-    size: 'small'
+    size: 'small',
   };
 
   /**

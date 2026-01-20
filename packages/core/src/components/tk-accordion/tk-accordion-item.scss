@@ -83,7 +83,7 @@
           padding-bottom: 0px;
         }
       }
-      
+
       &.base {
         .content {
           padding-top: 6px;
@@ -147,14 +147,12 @@
     }
 
     &.base {
-
       .content {
         padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
       }
     }
 
     &.large {
-
       .content {
         padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
       }
