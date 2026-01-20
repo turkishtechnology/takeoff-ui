@@ -2,6 +2,7 @@ dist/
 www/
 loader/
 coverage/
+components/
 
 *~
 *.sw[mnpcod]

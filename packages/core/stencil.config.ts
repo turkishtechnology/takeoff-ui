@@ -71,11 +71,13 @@ export const config: Config = {
         { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
         { src: 'global/images', dest: 'assets/images' },
       ],
+      esmLoaderPath: '../loader',
     },
     {
       type: 'dist-custom-elements',
       // customElementsExportBehavior: 'auto-define-custom-elements',
       externalRuntime: false,
+      dir: 'components',
       copy: [
         {
           src: '**/*.{jpg,png}',
