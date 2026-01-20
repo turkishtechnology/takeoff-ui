@@ -29,7 +29,7 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "4.26.0",
+    "@stencil/core": "4.41.2",
     "@stencil/sass": "3.2.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^16.18.11",
