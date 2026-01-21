@@ -271,13 +271,13 @@
       background: var(--primary-base);
       border-radius: var(--datepicker-items-base-radius);
     }
-  }
 
-  &.selected.disabled,
-  &.selected.readonly {
-    .tk-datepicker-day {
-      color: var(--primary-light);
-      background: var(--primary-lightest);
+    &.disabled,
+    &.readonly {
+      .tk-datepicker-day {
+        color: var(--primary-light);
+        background: var(--primary-lightest);
+      }
     }
   }
 
