@@ -79,7 +79,6 @@ tk-radio:not([disabled]) {
 
     input:focus-visible + .mask {
       border-color: var(--states-info-base);
-      background-color: var(--static-light);
     }
 
     &:hover input:checked + .mask {

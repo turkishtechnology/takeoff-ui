@@ -31,7 +31,6 @@
   }
 
   &:focus-visible {
-    background-color: $focus-bg;
     box-shadow: $focus-shadow;
   }
 
@@ -51,7 +50,6 @@
   }
 
   &:focus-visible {
-    background-color: $focus-bg;
     box-shadow: $focus-shadow;
   }
 
@@ -71,7 +69,6 @@
   }
 
   &:focus-visible {
-    background-color: $focus-bg;
     box-shadow: $focus-shadow;
   }
 
@@ -150,7 +147,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--primary-base);
         box-shadow: var(--primary-focus);
       }
     }
@@ -169,7 +165,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--primary-lightest);
         box-shadow: var(--primary-focus);
       }
     }
@@ -185,7 +180,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--primary-focus);
       }
 
@@ -215,7 +209,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--primary-lightest);
         box-shadow: var(--primary-focus);
       }
 
@@ -254,7 +247,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--secondary-dark);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -269,7 +261,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -285,7 +276,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -315,7 +305,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -364,7 +353,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--background-base);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -378,14 +366,13 @@
       }
 
       &:focus-visible {
-        background-color: var(--background-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
 
     &.outlined {
       background-color: transparent;
-      border: 1px solid var(--border-sub-base);
+      border: 1px solid var(--background-sub-base);
 
       &:hover {
         background-color: var(--background-lightest);
@@ -393,7 +380,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -418,7 +404,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--background-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -457,7 +442,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--states-info-dark);
         box-shadow: var(--info-focus);
       }
     }
@@ -472,7 +456,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -488,7 +471,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -518,7 +500,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -558,7 +539,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--states-success-dark);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -573,7 +553,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -589,7 +568,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -619,7 +597,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -663,7 +640,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--states-danger-dark);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -678,7 +654,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -694,7 +669,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -724,7 +698,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -770,7 +743,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--states-warning-dark);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -784,7 +756,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -799,7 +770,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -824,7 +794,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -868,7 +837,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--static-light);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -887,7 +855,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -907,7 +874,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-white-lightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -972,7 +938,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--background-darkest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -990,7 +955,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-black-xlightest);
         box-shadow: var(--secondary-focus);
       }
     }
@@ -1009,7 +973,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-black-xxlightest);
         box-shadow: var(--secondary-focus);
       }
 
@@ -1034,7 +997,6 @@
       }
 
       &:focus-visible {
-        background-color: var(--overlay-black-xxlightest);
         box-shadow: var(--secondary-focus);
       }
 
