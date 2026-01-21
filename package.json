@@ -30,6 +30,7 @@
     "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build && cd .. && pnpm run format",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",
+    "dev:angular": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd apps/angular-app && pnpm run dev",
     "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run start",
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache",
