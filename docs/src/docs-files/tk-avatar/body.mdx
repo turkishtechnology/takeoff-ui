@@ -1,11 +1,11 @@
-import Basic from "./Examples/Basic";
-import Sizes from "./Examples/Sizes";
-import Variants from "./Examples/Variants";
-import WithImages from "./Examples/WithImages";
-import WithBadges from "./Examples/WithBadges";
-import WithShadow from "./Examples/WithShadow";
-import AvatarGroupDemo from "./Examples/AvatarGroupDemo";
-import {TkAlert, TkAvatar} from "@takeoff-ui/react"
+import Basic from './Examples/Basic';
+import Sizes from './Examples/Sizes';
+import Variants from './Examples/Variants';
+import WithImages from './Examples/WithImages';
+import WithBadges from './Examples/WithBadges';
+import WithShadow from './Examples/WithShadow';
+import AvatarGroupDemo from './Examples/AvatarGroupDemo';
+import { TkAlert, TkAvatar } from '@takeoff-ui/react';
 import Playground from '../../components/Playground';
 import avatarConfigData from './avatarPlaygroundConfig.json';
 
@@ -30,10 +30,16 @@ Demonstrates various avatar sizes available via the `size` property.
 
 ## Variants
 
-Showcases different variant levels (variants) of the avatar using the `variant` property.
+Showcases different variant levels (variants) of the avatar using the `variant`
+property.
 
-<TkAlert header="Note" variant="warning" message="This feature works in conjunction with the `background` prop set to `solid`." filledlight />
-<br/>
+<TkAlert
+  header="Note"
+  variant="warning"
+  message="This feature works in conjunction with the `background` prop set to `solid`."
+  filledlight
+/>
+<br />
 <Variants />
 
 ## Avatar with Images
@@ -44,20 +50,28 @@ Displays how to use images inside the `TkAvatar` component.
 
 ## Avatar with Badges
 
-Illustrates adding badges to avatars using the `badge` and `badgeStatus` properties.
+Illustrates adding badges to avatars using the `badge` and `badgeStatus`
+properties.
 
 <WithBadges />
 
 ## Shadow
 
-Avatars have shadow effect by default. Use `hideShadow` property to remove the shadow effect.
+Avatars have shadow effect by default. Use `hideShadow` property to remove the
+shadow effect.
 
-<TkAlert header="Note" variant="info" message="When badge is present, shadow is always applied regardless of hideShadow property." filledlight />
-<br/>
+<TkAlert
+  header="Note"
+  variant="info"
+  message="When badge is present, shadow is always applied regardless of hideShadow property."
+  filledlight
+/>
+<br />
 <WithShadow />
 
 ## Avatar Group
 
-Shows how to group multiple avatars together using the `TkAvatarGroup` component.
+Shows how to group multiple avatars together using the `TkAvatarGroup`
+component.
 
 <AvatarGroupDemo />

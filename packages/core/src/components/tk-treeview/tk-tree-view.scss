@@ -9,6 +9,7 @@
     flex-direction: row;
     align-items: flex-start;
     gap: var(--tree-gap, 12px);
+    overflow-x: auto;
 
     .column .node .tk-tree-view.pointer {
       height: 100%;
@@ -100,6 +101,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 4px;
     cursor: pointer;
     color: var(--text-dark, #525866);
     user-select: none;

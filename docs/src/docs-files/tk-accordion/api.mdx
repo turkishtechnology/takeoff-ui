@@ -1,28 +1,28 @@
-import { TkBadge } from "@takeoff-ui/react"; 
+import { TkBadge } from '@takeoff-ui/react';
 
 ### Props {#accordion-props}
 
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/> | <code>(string, number)[], number, string</code> | null | Currently active panel indexes. Can be a single value or an array. When allowMultiple is false, only the last value in the array will be used. Has priority over AccordionItem's active prop. To prevent conflicts, avoid using both simultaneously. |
-| <TkBadge label="allowMultiple" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Allows multiple accordion items to be expanded simultaneously. |
-| <TkBadge label="arrowPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code> | 'right' | Sets the position of opening and closing chevrons. |
-| <TkBadge label="collapseIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | 'keyboard_arrow_up' | Sets the collapse icon |
-| <TkBadge label="expandIcon" variant="primary" size="large" type="filledlight"/> | <code>IIconOptions, string</code> | 'keyboard_arrow_down' | Sets the expand icon |
-| <TkBadge label="hideArrows" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Whether to hide the arrow icons. |
-| <TkBadge label="type" variant="primary" size="large" type="filledlight"/> | <code>"divided", "grouped"</code> | 'grouped' | Sets accordion style for the component. |
+| Name                                                                               | Type                                            | Default               | Description                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <TkBadge label="activeIndex" variant="primary" size="large" type="filledlight"/>   | <code>(string, number)[], number, string</code> | null                  | Currently active panel indexes. Can be a single value or an array. When allowMultiple is false, only the last value in the array will be used. Has priority over AccordionItem's active prop. To prevent conflicts, avoid using both simultaneously. |
+| <TkBadge label="allowMultiple" variant="primary" size="large" type="filledlight"/> | <code>boolean</code>                            | false                 | Allows multiple accordion items to be expanded simultaneously.                                                                                                                                                                                       |
+| <TkBadge label="arrowPosition" variant="primary" size="large" type="filledlight"/> | <code>"left", "right"</code>                    | 'right'               | Sets the position of opening and closing chevrons.                                                                                                                                                                                                   |
+| <TkBadge label="collapseIcon" variant="primary" size="large" type="filledlight"/>  | <code>IIconOptions, string</code>               | 'keyboard_arrow_up'   | Sets the collapse icon                                                                                                                                                                                                                               |
+| <TkBadge label="expandIcon" variant="primary" size="large" type="filledlight"/>    | <code>IIconOptions, string</code>               | 'keyboard_arrow_down' | Sets the expand icon                                                                                                                                                                                                                                 |
+| <TkBadge label="hideArrows" variant="primary" size="large" type="filledlight"/>    | <code>boolean</code>                            | false                 | Whether to hide the arrow icons.                                                                                                                                                                                                                     |
+| <TkBadge label="type" variant="primary" size="large" type="filledlight"/>          | <code>"divided", "grouped"</code>               | 'grouped'             | Sets accordion style for the component.                                                                                                                                                                                                              |
 
 ### Events {#accordion-events}
 
-| Name | Description |
-| ---- | ----------- |
+| Name                       | Description                                |
+| -------------------------- | ------------------------------------------ |
 | tk-accordion-item-selected | Emitted when an accordion item is selected |
-| tk-active-index-change | Emitted when an active index is changed |
+| tk-active-index-change     | Emitted when an active index is changed    |
 
 ### Slots {#accordion-slots}
 
-| Name | Description |
-| ---- | ----------- |
+| Name    | Description                                        |
+| ------- | -------------------------------------------------- |
 | default | Default slot to detect TkAccordionItem components. |
 
 ### Interfaces {#accordion-interfaces}
@@ -35,4 +35,3 @@ interface IAccordionItemSelect {
   active: boolean;
 }
 ```
-

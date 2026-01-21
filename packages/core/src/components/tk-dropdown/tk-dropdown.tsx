@@ -1,10 +1,8 @@
 import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, h } from '@stencil/core';
-import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
-import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -102,10 +100,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -128,8 +123,6 @@ export class TkDropdown implements ComponentInterface {
       handler: this.closeHandler,
       disabled: this.disabled || !this.isOpen,
     });
-
-    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   componentDidUpdate() {
@@ -137,33 +130,31 @@ export class TkDropdown implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.disabled || !this.isOpen });
 
     if (this.isOpen) {
-      this.cleanup = autoUpdate(this.triggerRef, this.panelRef, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
 
   disconnectedCallback() {
-    removeDialogScrollListener(this.el);
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
   }
 
   private updatePosition() {
-    if (this.triggerRef && this.panelRef) {
-      computePosition(this.triggerRef, this.panelRef, {
-        placement: this.position,
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        applyStyles(this.panelRef, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-      });
-    }
+    this.cleanup = floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
+      placement: this.position,
+    });
   }
 
   private isGrouped(): boolean {

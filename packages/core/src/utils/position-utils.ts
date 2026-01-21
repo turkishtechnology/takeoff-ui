@@ -1,4 +1,4 @@
-import { computePosition, offset, flip, shift, arrow, autoUpdate } from '@floating-ui/dom';
+import { computePosition, offset, flip, shift, arrow, autoUpdate, size, hide } from '@floating-ui/dom';
 
 import type { Placement } from '@floating-ui/dom';
 import { applyStyles } from './style-utils';
@@ -6,28 +6,38 @@ import { applyStyles } from './style-utils';
 export interface FloatingElementOptions {
   placement: Placement;
   offset?: number;
-  outSideOffset?: number;
-  arrowSize?: number;
+  size?: any;
 }
 
-function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement: HTMLElement, options: FloatingElementOptions) {
-  const { placement, offset: off = 8, outSideOffset = 6, arrowSize = 9 } = options;
+function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement?: HTMLElement, options?: FloatingElementOptions) {
+  const { placement, offset: off = 8, size: sizeOptions } = options || {};
 
-  applyStyles(arrowElement, {
-    position: 'absolute',
-    width: `${arrowSize}px`,
-    height: `${arrowSize}px`,
-    background: 'inherit',
-    border: `1px solid`,
-    borderColor: `inherit`,
-    transform: 'rotate(45deg)',
-    zIndex: '1300',
-  });
+  if (arrowElement) {
+    applyStyles(arrowElement, {
+      position: 'absolute',
+      width: '9px',
+      height: '9px',
+      background: 'inherit',
+      border: '1px solid',
+      borderColor: 'inherit',
+      transform: 'rotate(45deg)',
+      zIndex: '1300',
+    });
+  }
+
+  const middleware = [
+    offset(off),
+    flip(),
+    shift({ padding: 5 }),
+    ...(arrowElement ? [arrow({ element: arrowElement, padding: 8 })] : []),
+    ...(sizeOptions ? [size(sizeOptions)] : []),
+    hide(),
+  ];
 
   return computePosition(triggerElement, floatingElement, {
     strategy: 'fixed',
     placement,
-    middleware: [offset(off), flip(), shift(), arrow({ element: arrowElement })],
+    middleware,
   }).then(({ x, y, middlewareData, placement }) => {
     floatingElement.style.left = `${x}px`;
     floatingElement.style.top = `${y}px`;
@@ -35,46 +45,33 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     const side = placement.split('-')[0];
     const reverseSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side];
 
-    if (middlewareData.arrow) {
+    if (arrowElement && middlewareData.arrow) {
       const { x: ax, y: ay } = middlewareData.arrow;
-      arrowElement.setAttribute('data-side', side);
-      Object.assign(arrowElement.style, {
+      arrowElement.dataset.side = side;
+      applyStyles(arrowElement, {
         left: ax != null ? `${ax}px` : '',
         top: ay != null ? `${ay}px` : '',
         right: '',
         bottom: '',
-        [reverseSide]: `-${outSideOffset}px`,
+        [reverseSide]: '-5.7px',
+      });
+
+      const borderStyles = {
+        top: { borderTop: 'none', borderLeft: 'none' },
+        bottom: { borderBottom: 'none', borderRight: 'none' },
+        left: { borderLeft: 'none', borderBottom: 'none' },
+        right: { borderRight: 'none', borderTop: 'none' },
+      };
+
+      applyStyles(arrowElement, borderStyles[side]);
+    }
+
+    if (middlewareData.hide) {
+      applyStyles(floatingElement, {
+        visibility: middlewareData.hide.referenceHidden ? 'hidden' : 'visible',
       });
     }
 
-    switch (side) {
-      case 'top':
-        applyStyles(arrowElement, {
-          borderTop: 'none',
-          borderLeft: 'none',
-        });
-        break;
-      case 'bottom':
-        applyStyles(arrowElement, {
-          borderBottom: 'none',
-          borderRight: 'none',
-        });
-        break;
-
-      case 'left':
-        applyStyles(arrowElement, {
-          borderLeft: 'none',
-          borderBottom: 'none',
-        });
-        break;
-
-      case 'right':
-        applyStyles(arrowElement, {
-          borderRight: 'none',
-          borderTop: 'none',
-        });
-        break;
-    }
     return placement;
   });
 }
@@ -82,15 +79,15 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
 export function floatingElementAutoUpdate(
   triggerElement: HTMLElement,
   floatingElement: HTMLElement,
-  arrowElement: HTMLElement,
-  options: FloatingElementOptions,
+  arrowElement?: HTMLElement,
+  options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
   return autoUpdate(
     triggerElement,
     floatingElement,
     () => {
-      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement && handlePlacement(position));
+      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement?.(position));
     },
     { animationFrame: true },
   );

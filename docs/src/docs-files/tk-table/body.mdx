@@ -31,19 +31,23 @@ The basic features of the TkTable component are demonstrated.
 
 ## Striped
 
-To enable striped mode, set the striped prop to true. This feature displays rows with alternating background colors.
+To enable striped mode, set the striped prop to true. This feature displays rows
+with alternating background colors.
 
 <Striped />
 
 ## Header Type
 
-The headerType prop is used to change the style of the table headers and allows you to customize the headers' style with values such as basic, primary, and dark.
+The headerType prop is used to change the style of the table headers and allows
+you to customize the headers' style with values such as basic, primary, and
+dark.
 
 <HeaderType />
 
 ## Selection
 
-This feature allows users to select rows in the table. The selected rows are visually highlighted and can be used for various actions.
+This feature allows users to select rows in the table. The selected rows are
+visually highlighted and can be used for various actions.
 
 <Selection />
 
@@ -55,7 +59,9 @@ The table supports three types of filtering:
 - Checkbox filtering: Enables selecting multiple values from predefined options
 - Radio filtering: Allows selecting a single value from predefined options
 
-The filtering type can be configured using the `filterType` property in column definition. For checkbox and radio filters, you need to provide `filterOptions` with value-label pairs.
+The filtering type can be configured using the `filterType` property in column
+definition. For checkbox and radio filters, you need to provide `filterOptions`
+with value-label pairs.
 
 <TkAlert
   header="Deprecation"
@@ -76,7 +82,9 @@ The filtering type can be configured using the `filterType` property in column d
 ## Multi Sorting
 
 This feature allows users to sort the table by multiple columns simultaneously.
-Users can click on the column headers to apply sorting, and the order of sorting can be adjusted by clicking on the headers in the desired sequence.
+Users can click on the column headers to apply sorting, and the order of sorting
+can be adjusted by clicking on the headers in the desired sequence.
+
 <TkAlert
   header="Information"
   message="You need to add equal conditions to sorter function for multi-sort to be effective"
@@ -88,7 +96,8 @@ Users can click on the column headers to apply sorting, and the order of sorting
 
 ## Clear Filters and Sorting
 
-This example demonstrates how to clear all filters and sorting settings programmatically using the `clearFilters` and `clearSorting` methods.
+This example demonstrates how to clear all filters and sorting settings
+programmatically using the `clearFilters` and `clearSorting` methods.
 
 <ClearFiltersAndSort />
 
@@ -100,8 +109,9 @@ Client side pagination
 
 ## Localization
 
-Customize pagination labels for different locales using `pageReportTemplate` and `itemsReportTemplate` props.
-Available placeholders: `{currentPage}`, `{totalPages}`, `{startItem}`, `{endItem}`, `{totalItems}`.
+Customize pagination labels for different locales using `pageReportTemplate` and
+`itemsReportTemplate` props. Available placeholders: `{currentPage}`,
+`{totalPages}`, `{startItem}`, `{endItem}`, `{totalItems}`.
 
 <Localization />
 
@@ -139,19 +149,23 @@ The basic features of the TkTable component are demonstrated.
 
 ## Sticky Column
 
-This feature allows the selected columns stay in their position in case of having multiple columns that extands the space.
+This feature allows the selected columns stay in their position in case of
+having multiple columns that extands the space.
 
 <StickyColumn />
 
 ## Sticky Header
 
-This feature allows the table header to remain fixed at the top when scrolling through large datasets. To enable sticky header functionality, you must provide a height value through the `containerStyle` prop.
+This feature allows the table header to remain fixed at the top when scrolling
+through large datasets. To enable sticky header functionality, you must provide
+a height value through the `containerStyle` prop.
 
 <StickyHeader />
 
 ## Column Arrangement
 
-This feature allows the user to drag and drop the columns to the desired position.
+This feature allows the user to drag and drop the columns to the desired
+position.
 
 <ColumnArrangement />
 
@@ -163,13 +177,17 @@ This feature allows the user to use alternative sizes.
 
 ## Empty Data Slot
 
-This feature allows you to customize the content displayed when there are no data in the table.
+This feature allows you to customize the content displayed when there are no
+data in the table.
 
 <EmptySlot />
 
 ## Header and Footer Slot
 
-This feature allows you to add custom header and footer rows within the table body (`<tbody>`). You can use the `slot` attribute to specify whether the row is a header or footer. This is useful for adding summary rows, additional information, or custom styling to specific sections of the table body.
+This feature allows you to add custom header and footer rows within the table
+body (`<tbody>`). You can use the `slot` attribute to specify whether the row is
+a header or footer. This is useful for adding summary rows, additional
+information, or custom styling to specific sections of the table body.
 
 <HeaderAndFooterSlot />
 

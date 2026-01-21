@@ -26,22 +26,22 @@
   },
   "repository": "github:turkishtechnology/takeoff-ui",
   "scripts": {
-    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app",
-    "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build",
+    "build": "turbo run build --filter=!./apps/react-app --filter=!./apps/vue-app --filter=!./docs && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build && cd .. && pnpm run format",
+    "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build && cd .. && pnpm run format",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",
     "dev:ng": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/angular && cd packages/angular && pnpm run start",
-    "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run start",
+    "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run start",
     "prepare": "husky",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache",
     "lint": "eslint --fix",
     "clean": "pnpm -r exec rimraf dist node_modules .stencil www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --filter=@takeoff-ui/tailwind --access public --no-git-checks",
     "clear:docs": "cd docs && pnpm run clear"
   },
   "lint-staged": {
-    "*.{tsx,ts,js,scss,css}": [
-      "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css}\" --cache"
+    "*.{tsx,ts,js,scss,css,json,vue,md,mdx,yml,yaml,html}": [
+      "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache"
     ]
   },
   "engines": {
@@ -81,6 +81,15 @@
       "name": "pnpm",
       "version": "10.8.1",
       "onFail": "error"
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "undici": ">=7.18.2",
+      "diff": ">=8.0.3",
+      "tar": ">=7.5.3",
+      "path-to-regexp@<6.0.0": "0.1.10",
+      "path-to-regexp@>=6.0.0": ">=8.3.0"
     }
   }
 }

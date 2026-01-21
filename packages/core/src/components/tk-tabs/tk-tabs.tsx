@@ -217,11 +217,17 @@ export class TkTabs implements ComponentInterface {
 
   private renderTabBadge(tab: HTMLTkTabsItemElement, index: number) {
     if (tab.badged) {
-      const badgeCount = tab.badgeCount !== undefined ? tab.badgeCount : tab.badgeLabel;
-
+      const badgeSize = this.size === 'xsmall' || this.size === 'xxsmall' ? 'small' : this.size;
       return (
         <div class="tk-tabs-item-badge-container">
-          <tk-badge count={badgeCount} variant={this.internalActiveIndex === index ? this.variant : 'neutral'} type="filledlight" rounded size="small" />
+          <tk-badge
+            label={tab.badgeLabel}
+            count={tab.badgeCount}
+            variant={tab.badgeOptions?.variant ?? (this.internalActiveIndex === index ? this.variant : 'neutral')}
+            type={tab.badgeOptions?.type ?? 'filledlight'}
+            rounded={tab.badgeOptions?.rounded ?? true}
+            size={badgeSize}
+          />
         </div>
       );
     }

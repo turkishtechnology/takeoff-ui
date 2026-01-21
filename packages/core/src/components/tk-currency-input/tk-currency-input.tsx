@@ -1,13 +1,11 @@
 import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 import { getIconElementProps } from '../../utils/icon-utils';
-import { ICurrency, CurrencyInputChangeEvent } from './interfaces';
+import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
-import { applyStyles } from '../../utils/style-utils';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
+import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -33,6 +31,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
+  private validSeparators: Separator[] = [',', '.', ' '] as const;
 
   /**
    * The currently selected currency object.
@@ -129,14 +128,14 @@ export class TkCurrencyInput implements ComponentInterface {
    * If provided, this will override the currency's default decimal separator.
    * Example: "." for USD style, "," for EUR style
    */
-  @Prop() decimalSeparator?: string;
+  @Prop() decimalSeparator?: Separator;
 
   /**
    * Custom thousands separator to use for formatting.
    * If provided, this will override the currency's default thousands separator.
    * Example: "," for USD style, "." for EUR style, " " for some European styles
    */
-  @Prop() thousandsSeparator?: string;
+  @Prop() thousandsSeparator?: Separator;
 
   @Watch('defaultCurrency')
   defaultCurrencyChanged() {
@@ -203,6 +202,8 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
+    this.validateSeparators();
+    this.validateSeparatorTypes();
   }
 
   /**
@@ -210,23 +211,35 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentDidUpdate() {
     if (this.isDropdownOpen) {
-      this.cleanup = autoUpdate(this.el.querySelector('.tk-currency-input__wrapper'), this.el, () => this.updatePosition(), {
-        animationFrame: true,
-      });
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
+      this.updatePosition();
     } else {
+      // Remove floating UI listeners when dropdown closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
       this.dropdownEl?.remove();
-      this.cleanup && this.cleanup();
     }
   }
 
   connectedCallback() {
     document.addEventListener('click', this.closeDropdown);
-    addDialogScrollListener(this.el, this.closeDropdown);
   }
 
   disconnectedCallback() {
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
     document.removeEventListener('click', this.closeDropdown);
-    removeDialogScrollListener(this.el);
+  }
+
+  private updatePosition() {
+    const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
+    this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
+      placement: 'bottom-start',
+    });
   }
 
   /**
@@ -244,22 +257,6 @@ export class TkCurrencyInput implements ComponentInterface {
     this.updateDisplayValue();
   }
 
-  private updatePosition() {
-    const tkCurrenInputRootEl = this.el.querySelector('.tk-currency-input__wrapper');
-
-    if (tkCurrenInputRootEl && this.dropdownEl) {
-      computePosition(tkCurrenInputRootEl, this.dropdownEl, {
-        strategy: 'fixed',
-        placement: 'bottom-start',
-        middleware: [offset(4), flip(), shift({ padding: 5 })],
-      }).then(({ y }) => {
-        applyStyles(this.dropdownEl, {
-          top: `${y}px`,
-        });
-      });
-    }
-  }
-
   private updateDisplayValue() {
     if (this.currentNumericValue === null || this.currentNumericValue === undefined || isNaN(this.currentNumericValue)) {
       this.displayValue = '';
@@ -273,15 +270,34 @@ export class TkCurrencyInput implements ComponentInterface {
   /**
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
-  private getDecimalSeparator(): string {
+  private getDecimalSeparator(): Separator {
     return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
   }
 
   /**
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
-  private getThousandsSeparator(): string {
+  private getThousandsSeparator(): Separator {
     return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
+  }
+
+  /**
+   * Validators
+   */
+  private validateSeparators(): void {
+    if (!this.validSeparators.includes(this.getDecimalSeparator())) {
+      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeparators);
+    }
+
+    if (!this.validSeparators.includes(this.getThousandsSeparator())) {
+      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeparators);
+    }
+  }
+
+  private validateSeparatorTypes(): void {
+    if (this.getDecimalSeparator() === this.getThousandsSeparator()) {
+      console.error('TkCurrencyInput: decimalSeparator and thousandsSeparator cannot be the same.');
+    }
   }
 
   private formatCurrency(amount: number): string {
@@ -291,7 +307,7 @@ export class TkCurrencyInput implements ComponentInterface {
     const decimalSeparator = this.getDecimalSeparator();
     const thousandsSeparator = this.getThousandsSeparator();
 
-    const isNegative = amount < 0;
+    const isNegative = amount < 0 || Object.is(amount, -0);
     const absoluteAmount = Math.abs(amount);
 
     // Format the number with the specified precision
@@ -327,8 +343,16 @@ export class TkCurrencyInput implements ComponentInterface {
     // Remove negative sign temporarily for processing
     let cleanValue = formattedValue.replace('-', '');
 
-    // Remove thousands separators and replace decimal separator with dot
-    cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '').replace(decimalSeparator, '.');
+    // Remove thousands separators
+    if (thousandsSeparator) {
+      cleanValue = cleanValue.replace(new RegExp('\\' + thousandsSeparator, 'g'), '');
+    }
+
+    // Handle decimal separator: split by separator, keep first part as integer, join rest as decimal
+    const parts = cleanValue.split(decimalSeparator);
+    if (parts.length > 1) {
+      cleanValue = parts[0] + '.' + parts.slice(1).join('');
+    }
 
     // Remove non-numeric characters except decimal point
     cleanValue = cleanValue.replace(/[^0-9.]/g, '');
@@ -367,39 +391,67 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   };
 
-  private calculateNewCursorPosition(oldValue: string, newValue: string, oldCursorPosition: number, removedCharsBeforeCursor: number): number {
-    // Use custom thousands separator if provided, otherwise fall back to currency default
-    const thousandsSeparator = this.getThousandsSeparator();
+  private calculateNewCursorPosition(inputValue: string, formattedValue: string, oldCursorPosition: number): number {
+    const decimalSeparator = this.getDecimalSeparator();
 
-    let adjustedPosition = oldCursorPosition - removedCharsBeforeCursor;
+    // Find decimal separator positions
+    const inputDecimalIndex = inputValue.indexOf(decimalSeparator);
+    const formattedDecimalIndex = formattedValue.indexOf(decimalSeparator);
 
-    let oldSeparatorsBeforeCursor = 0;
-    for (let i = 0; i < Math.min(adjustedPosition, oldValue.length); i++) {
-      if (oldValue[i] === thousandsSeparator) {
-        oldSeparatorsBeforeCursor++;
-      }
-    }
+    // If no decimal separator in formatted value (precision 0), treat end as decimal point
+    const targetDecimalIndex = formattedDecimalIndex === -1 ? formattedValue.length : formattedDecimalIndex;
 
-    let newSeparatorsBeforeCursor = 0;
-    let digitCount = 0;
-    let targetDigitPosition = adjustedPosition - oldSeparatorsBeforeCursor;
+    // If no decimal separator in input, treat end as decimal point
+    const sourceDecimalIndex = inputDecimalIndex === -1 ? inputValue.length : inputDecimalIndex;
 
-    for (let i = 0; i < newValue.length; i++) {
-      if (newValue[i] === thousandsSeparator) {
-        newSeparatorsBeforeCursor++;
-      } else if (newValue[i] >= '0' && newValue[i] <= '9') {
-        digitCount++;
-        if (digitCount >= targetDigitPosition) {
-          return i + 1;
-        }
-      } else if (newValue[i] === this.getDecimalSeparator()) {
-        if (digitCount >= targetDigitPosition) {
-          return i + 1;
+    // Helper to count digits in a range
+    const countDigits = (str: string, start: number, end: number) => {
+      let count = 0;
+      for (let i = Math.min(start, end); i < Math.max(start, end); i++) {
+        if (str[i] >= '0' && str[i] <= '9') {
+          count++;
         }
       }
+      return count;
+    };
+
+    // Calculate logical distance (number of digits) from decimal separator
+    const isCursorAfterDecimal = oldCursorPosition > sourceDecimalIndex;
+    const logicalDist = countDigits(inputValue, oldCursorPosition, sourceDecimalIndex);
+
+    if (logicalDist === 0) {
+      return isCursorAfterDecimal ? targetDecimalIndex + 1 : targetDecimalIndex;
     }
 
-    return Math.min(adjustedPosition + (newSeparatorsBeforeCursor - oldSeparatorsBeforeCursor), newValue.length);
+    // Traverse formatted value to find new position
+    let currentDist = 0;
+
+    if (isCursorAfterDecimal) {
+      // Moving right from decimal separator
+      for (let i = targetDecimalIndex + 1; i < formattedValue.length; i++) {
+        if (currentDist >= logicalDist) {
+          return i;
+        }
+        if (formattedValue[i] >= '0' && formattedValue[i] <= '9') {
+          currentDist++;
+        }
+      }
+      return formattedValue.length;
+    } else {
+      // Moving left from decimal separator
+      for (let i = targetDecimalIndex - 1; i >= 0; i--) {
+        if (formattedValue[i] >= '0' && formattedValue[i] <= '9') {
+          currentDist++;
+        }
+        if (currentDist > logicalDist) {
+          // Use > because we want to be *after* the digit that completes the count
+          return i + 1;
+        }
+      }
+      // If we run out of digits, go to start, but respect negative sign
+      const hasNegative = formattedValue.startsWith('-');
+      return hasNegative ? 1 : 0;
+    }
   }
 
   private handleInput = (event: Event) => {
@@ -411,30 +463,57 @@ export class TkCurrencyInput implements ComponentInterface {
     const decimalSeparator = this.getDecimalSeparator();
     const thousandsSeparator = this.getThousandsSeparator();
 
+    // Check if decimal separator was deleted
+    if (this.displayValue.includes(decimalSeparator) && !inputValue.includes(decimalSeparator)) {
+      const expectedValueWithoutSeparator = this.displayValue.replace(decimalSeparator, '');
+      if (inputValue === expectedValueWithoutSeparator) {
+        target.value = this.displayValue;
+        const commaIndex = this.displayValue.indexOf(decimalSeparator);
+        target.setSelectionRange(commaIndex, commaIndex);
+        return;
+      }
+    }
+
     // Allow negative sign if allowNegative is true
     const negativePattern = this.allowNegative ? '\\-' : '';
     const allowedChars = new RegExp(`[0-9\\${decimalSeparator}\\${thousandsSeparator}${negativePattern}]`);
 
     let filteredValue = '';
-    let removedCharsBeforeCursor = 0;
     let hasNegativeSign = false;
 
-    for (let i = 0; i < inputValue.length; i++) {
-      const char = inputValue[i];
+    const parts = inputValue.split(decimalSeparator);
+    if (parts.length > 2) {
+      const firstSeparatorIndex = inputValue.indexOf(decimalSeparator);
+      const newIntegerPart = inputValue.substring(0, firstSeparatorIndex);
+      const displayParts = this.displayValue.split(decimalSeparator);
+      const oldDecimalPart = displayParts.length > 1 ? displayParts[1] : '';
+      filteredValue = newIntegerPart + decimalSeparator + oldDecimalPart;
+    } else {
+      for (let i = 0; i < inputValue.length; i++) {
+        const char = inputValue[i];
 
-      // Handle negative sign - only allow it at the beginning
-      if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
-        filteredValue += char;
-        hasNegativeSign = true;
-      } else if (char === '-' && this.allowNegative && hasNegativeSign) {
-        // Remove duplicate negative signs
-        if (i < cursorPosition) {
-          removedCharsBeforeCursor++;
+        // Handle negative sign - only allow it at the beginning
+        if (char === '-' && this.allowNegative && i === 0 && !hasNegativeSign) {
+          filteredValue += char;
+          hasNegativeSign = true;
+        } else if (char === '-' && this.allowNegative && hasNegativeSign) {
+          // Remove duplicate negative signs
+        } else if (allowedChars.test(char) && char !== '-') {
+          filteredValue += char;
         }
-      } else if (allowedChars.test(char) && char !== '-') {
-        filteredValue += char;
-      } else if (i < cursorPosition) {
-        removedCharsBeforeCursor++;
+      }
+    }
+
+    // Truncate decimal digits if they exceed precision
+    if (this.precision >= 0) {
+      const parts = filteredValue.split(decimalSeparator);
+      if (parts.length > 1) {
+        const integerPart = parts[0];
+        const decimalPart = parts[1];
+
+        if (decimalPart.length > this.precision) {
+          filteredValue = integerPart + decimalSeparator + decimalPart.substring(0, this.precision);
+        }
       }
     }
 
@@ -448,11 +527,9 @@ export class TkCurrencyInput implements ComponentInterface {
 
     target.value = formattedValue;
 
-    const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition, removedCharsBeforeCursor);
+    const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition);
 
-    requestAnimationFrame(() => {
-      target.setSelectionRange(newCursorPosition, newCursorPosition);
-    });
+    target.setSelectionRange(newCursorPosition, newCursorPosition);
 
     const eventData = {
       value: numericValue,
@@ -461,6 +538,14 @@ export class TkCurrencyInput implements ComponentInterface {
     } as CurrencyInputChangeEvent;
 
     this.tkChange.emit(eventData);
+  };
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    const decimalSeparator = this.getDecimalSeparator();
+
+    if (event.key === '.' && decimalSeparator !== '.') {
+      event.preventDefault();
+    }
   };
 
   private handleFocus = () => {
@@ -540,6 +625,7 @@ export class TkCurrencyInput implements ComponentInterface {
         readonly={this.readonly}
         name={this.name}
         onInput={this.handleInput}
+        onKeyDown={this.handleKeyDown}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
       />

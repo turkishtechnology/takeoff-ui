@@ -8,6 +8,9 @@ const docsJson = path.join(__dirname, 'docs.json');
 const data = JSON.parse(fs.readFileSync(docsJson, 'utf8'));
 const typeLibraryAllKeys = Object.keys(data.typeLibrary);
 
+// Props to preserve original type name
+const preservedTypes = new Set(['CSSStyleProperties', 'Separator']);
+
 function clearString(value) {
   return value?.replaceAll('|', ',').replaceAll('\n', ' ').replaceAll('\r', ' ').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 }
@@ -106,16 +109,16 @@ ${docs} \n
     props.forEach(prop => {
       const hasImportedType = prop.complexType?.references && Object.keys(prop.complexType.references).length > 0;
 
-      const isCSSStyleProperties = prop.complexType?.original === 'CSSStyleProperties';
+      const shouldPreserve = preservedTypes.has(prop.complexType?.original);
 
       let propType;
-      if (isCSSStyleProperties) {
-        propType = 'CSSStyleProperties';
+      if (shouldPreserve) {
+        propType = prop.complexType?.original;
       } else {
         propType = prop.type;
       }
 
-      if (hasImportedType && !isCSSStyleProperties) {
+      if (hasImportedType && !shouldPreserve) {
         propType = wrapTypeWithLink(propType, prop.complexType.references, tag);
       }
 

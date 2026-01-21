@@ -1,71 +1,70 @@
-import { TkBadge } from "@takeoff-ui/react"; 
+import { TkBadge } from '@takeoff-ui/react';
 
 ### Props {#table-props}
 
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/> | <code>string</code> | '' |  |
-| <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, column: ITableColumn)=>any</code> | null | Provides a function to customize cell styles. This function takes the row and column information and returns the style object for a specific cell. |
-| <TkBadge label="columns" variant="primary" size="large" type="filledlight"/> | <code>ITableColumn[]</code> | [] | The column definitions (Array of Objects) |
-| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/> | <code>CSSStyleProperties</code> | null | The style attribute of container element |
-| <TkBadge label="data" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Rows of data to display |
-| <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Property of each row that defines the unique key of each row |
-| <TkBadge label="expandedRowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any)=>any</code> | null | Provides a function to customize expanded row styles. This function takes row information and returns the style object for the expanded row content. |
-| <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/> | <code>any[]</code> | [] | Specifies which rows are expanded to show additional content. |
-| <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
-| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/> | <code>"basic", "dark", "primary"</code> | 'basic' | Style to apply to header of table |
-| <TkBadge label="itemsReportTemplate" variant="primary" size="large" type="filledlight"/> | <code>string</code> | `'item: { startItem}-{ endItem}of{ totalItems}'` | Template string for items report in pagination. Available placeholders: &#123;startItem&#125;, &#123;endItem&#125;, &#123;totalItems&#125; |
-| <TkBadge label="loading" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | null | Displays a loading indicator while data is being fetched or processed. |
-| <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables multi-column sorting. |
-| <TkBadge label="pageReportTemplate" variant="primary" size="large" type="filledlight"/> | <code>string</code> | `'page: { currentPage}of{ totalPages}'` | Template string for current page report in pagination. Available placeholders: &#123;currentPage&#125;, &#123;totalPages&#125; |
-| <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/> | <code>string</code> | null | Defines whether pagination is handled on the client or server side. |
-| <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/> | <code>"grouped", "outlined", "text"</code> | 'outlined' | The type of the pagination |
-| <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/> | <code>(row: any, index?: number)=>any</code> | null | Provides a function to customize row styles. This function takes row information and row index, and returns the style object for a specific  row. |
-| <TkBadge label="rowsPerPage" variant="primary" size="large" type="filledlight"/> | <code>number</code> | 6 | Number of items per page. |
-| <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/> | <code>number[]</code> | null | Number of rows per page options |
-| <TkBadge label="selection" variant="primary" size="large" type="filledlight"/> | <code>any</code> | [] | List of the selected |
-| <TkBadge label="selectionMode" variant="primary" size="large" type="filledlight"/> | <code>"checkbox", "radio"</code> | null | Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection). |
-| <TkBadge label="selectionRowDisabled" variant="primary" size="large" type="filledlight"/> | <code>Function</code> | null | A function that returns true if the row should be disabled |
-| <TkBadge label="size" variant="primary" size="large" type="filledlight"/> | <code>"base", "small", "xsmall"</code> | 'base' | Sets size for the component. |
-| <TkBadge label="striped" variant="primary" size="large" type="filledlight"/> | <code>boolean</code> | false | Enables or disables alternating row background colors for easier readability. |
-| <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/> | <code>number</code> | null | Number of total items. |
+| Name                                                                                      | Type                                               | Default                                          | Description                                                                                                                                                                                                                                                                     |
+| ----------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <TkBadge label="cardTitle" variant="primary" size="large" type="filledlight"/>            | <code>string</code>                                | ''                                               |                                                                                                                                                                                                                                                                                 |
+| <TkBadge label="cellStyle" variant="primary" size="large" type="filledlight"/>            | <code>(row: any, column: ITableColumn)=>any</code> | null                                             | Provides a function to customize cell styles. This function takes the row and column information and returns the style object for a specific cell.                                                                                                                              |
+| <TkBadge label="columns" variant="primary" size="large" type="filledlight"/>              | <code>ITableColumn[]</code>                        | []                                               | The column definitions (Array of Objects)                                                                                                                                                                                                                                       |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/>       | <code>CSSStyleProperties</code>                    | null                                             | The style attribute of container element                                                                                                                                                                                                                                        |
+| <TkBadge label="data" variant="primary" size="large" type="filledlight"/>                 | <code>any[]</code>                                 | []                                               | Rows of data to display                                                                                                                                                                                                                                                         |
+| <TkBadge label="dataKey" variant="primary" size="large" type="filledlight"/>              | <code>string</code>                                | null                                             | Property of each row that defines the unique key of each row                                                                                                                                                                                                                    |
+| <TkBadge label="expandedRowStyle" variant="primary" size="large" type="filledlight"/>     | <code>(row: any)=>any</code>                       | null                                             | Provides a function to customize expanded row styles. This function takes row information and returns the style object for the expanded row content.                                                                                                                            |
+| <TkBadge label="expandedRows" variant="primary" size="large" type="filledlight"/>         | <code>any[]</code>                                 | []                                               | Specifies which rows are expanded to show additional content.                                                                                                                                                                                                                   |
+| <TkBadge label="groupBy" variant="primary" size="large" type="filledlight"/>              | <code>string</code>                                | null                                             | Column field name to group the table data by. When specified, the table will automatically group rows by unique values in this column. Set to null or undefined to disable grouping. This makes the component controlled - changes should be handled via tkGroupByChange event. |
+| <TkBadge label="headerType" variant="primary" size="large" type="filledlight"/>           | <code>"basic", "dark", "primary"</code>            | 'basic'                                          | Style to apply to header of table                                                                                                                                                                                                                                               |
+| <TkBadge label="itemsReportTemplate" variant="primary" size="large" type="filledlight"/>  | <code>string</code>                                | `'item: { startItem}-{ endItem}of{ totalItems}'` | Template string for items report in pagination. Available placeholders: &#123;startItem&#125;, &#123;endItem&#125;, &#123;totalItems&#125;                                                                                                                                      |
+| <TkBadge label="loading" variant="primary" size="large" type="filledlight"/>              | <code>boolean</code>                               | null                                             | Displays a loading indicator while data is being fetched or processed.                                                                                                                                                                                                          |
+| <TkBadge label="multiSort" variant="primary" size="large" type="filledlight"/>            | <code>boolean</code>                               | false                                            | Enables multi-column sorting.                                                                                                                                                                                                                                                   |
+| <TkBadge label="pageReportTemplate" variant="primary" size="large" type="filledlight"/>   | <code>string</code>                                | `'page: { currentPage}of{ totalPages}'`          | Template string for current page report in pagination. Available placeholders: &#123;currentPage&#125;, &#123;totalPages&#125;                                                                                                                                                  |
+| <TkBadge label="paginationMethod" variant="primary" size="large" type="filledlight"/>     | <code>string</code>                                | null                                             | Defines whether pagination is handled on the client or server side.                                                                                                                                                                                                             |
+| <TkBadge label="paginationType" variant="primary" size="large" type="filledlight"/>       | <code>"grouped", "outlined", "text"</code>         | 'outlined'                                       | The type of the pagination                                                                                                                                                                                                                                                      |
+| <TkBadge label="rowStyle" variant="primary" size="large" type="filledlight"/>             | <code>(row: any, index?: number)=>any</code>       | null                                             | Provides a function to customize row styles. This function takes row information and row index, and returns the style object for a specific row.                                                                                                                                |
+| <TkBadge label="rowsPerPage" variant="primary" size="large" type="filledlight"/>          | <code>number</code>                                | 6                                                | Number of items per page.                                                                                                                                                                                                                                                       |
+| <TkBadge label="rowsPerPageOptions" variant="primary" size="large" type="filledlight"/>   | <code>number[]</code>                              | null                                             | Number of rows per page options                                                                                                                                                                                                                                                 |
+| <TkBadge label="selection" variant="primary" size="large" type="filledlight"/>            | <code>any</code>                                   | []                                               | List of the selected                                                                                                                                                                                                                                                            |
+| <TkBadge label="selectionMode" variant="primary" size="large" type="filledlight"/>        | <code>"checkbox", "radio"</code>                   | null                                             | Determines how rows can be selected, either with radio buttons (single selection) or checkboxes (multiple selection).                                                                                                                                                           |
+| <TkBadge label="selectionRowDisabled" variant="primary" size="large" type="filledlight"/> | <code>Function</code>                              | null                                             | A function that returns true if the row should be disabled                                                                                                                                                                                                                      |
+| <TkBadge label="size" variant="primary" size="large" type="filledlight"/>                 | <code>"base", "small", "xsmall"</code>             | 'base'                                           | Sets size for the component.                                                                                                                                                                                                                                                    |
+| <TkBadge label="striped" variant="primary" size="large" type="filledlight"/>              | <code>boolean</code>                               | false                                            | Enables or disables alternating row background colors for easier readability.                                                                                                                                                                                                   |
+| <TkBadge label="totalItems" variant="primary" size="large" type="filledlight"/>           | <code>number</code>                                | null                                             | Number of total items.                                                                                                                                                                                                                                                          |
 
 ### Events {#table-events}
 
-| Name | Description |
-| ---- | ----------- |
-| tk-cell-edit | Emitted when a cell is edited. |
-| tk-expanded-rows-change | Emitted when the expanded rows change. |
-| tk-group-by-change | Emitted when the groupBy value changes. Always emitted for both controlled and uncontrolled components. For controlled components, handle this event to update the groupBy prop. |
-| tk-request | Emitted when a request needs to be made to the server. |
-| tk-row-click | Emitted when a row is clicked. |
-| tk-selection-change |  |
-| tk-visible-data-change | Emitted when the visible data changes. |
+| Name                    | Description                                                                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| tk-cell-edit            | Emitted when a cell is edited.                                                                                                                                                   |
+| tk-expanded-rows-change | Emitted when the expanded rows change.                                                                                                                                           |
+| tk-group-by-change      | Emitted when the groupBy value changes. Always emitted for both controlled and uncontrolled components. For controlled components, handle this event to update the groupBy prop. |
+| tk-request              | Emitted when a request needs to be made to the server.                                                                                                                           |
+| tk-row-click            | Emitted when a row is clicked.                                                                                                                                                   |
+| tk-selection-change     |                                                                                                                                                                                  |
 
 ### Methods {#table-methods}
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| clearFilters | <code>clearFilters(columns?: string[]) =\> Promise\<void\></code> | Clears all filters or specific column filters |
-| clearGrouping | <code>clearGrouping() =\> Promise\<void\></code> | Clears the current grouping and returns to normal table view  Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state. |
-| clearSorting | <code>clearSorting() =\> Promise\<void\></code> | Clears all sorting for server side pagination |
-| exportFile | <code>exportFile(options: ITableExportOptions) =\> Promise\<void\></code> | Exports the table data to a file |
-| getFilters | <code>getFilters() =\> Promise\<ITableFilter[]\></code> | Returns the current filters |
-| getSorting | <code>getSorting() =\> Promise\<ITableSort[] \| \{ field: string; order: "desc" \| "asc"; \}\></code> | Returns the current sorting settings |
-| groupByColumn | <code>groupByColumn(columnField: string) =\> Promise\<void\></code> | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)".  Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
-| runFilters | <code>runFilters() =\> Promise\<void\></code> | Applies the current filters to the data for client side pagination |
-| serverRequest | <code>serverRequest() =\> Promise\<void\></code> | Allows tk-request event to be triggered manually |
-| setCurrentPage | <code>setCurrentPage(page: number) =\> Promise\<void\></code> | Sets the current page for pagination |
-| setFilters | <code>setFilters(filters: ITableFilter[]) =\> Promise\<void\></code> | Sets the current filter settings |
-| setSorting | <code>setSorting(sorts: ITableSort[] \| \{ field: string; order: "asc" \| "desc"; \}) =\> Promise\<void\></code> | Sets the current sorting settings |
+| Name           | Type                                                                                                             | Description                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| clearFilters   | <code>clearFilters(columns?: string[]) =\> Promise\<void\></code>                                                | Clears all filters or specific column filters                                                                                                                                                                                                                                                                                                                                        |
+| clearGrouping  | <code>clearGrouping() =\> Promise\<void\></code>                                                                 | Clears the current grouping and returns to normal table view Always emits tkGroupByChange event with null value. For uncontrolled components, also clears internal state.                                                                                                                                                                                                            |
+| clearSorting   | <code>clearSorting() =\> Promise\<void\></code>                                                                  | Clears all sorting for server side pagination                                                                                                                                                                                                                                                                                                                                        |
+| exportFile     | <code>exportFile(options: ITableExportOptions) =\> Promise\<void\></code>                                        | Exports the table data to a file                                                                                                                                                                                                                                                                                                                                                     |
+| getFilters     | <code>getFilters() =\> Promise\<ITableFilter[]\></code>                                                          | Returns the current filters                                                                                                                                                                                                                                                                                                                                                          |
+| getSorting     | <code>getSorting() =\> Promise\<ITableSort[] \| \{ field: string; order: "desc" \| "asc"; \}\></code>            | Returns the current sorting settings                                                                                                                                                                                                                                                                                                                                                 |
+| groupByColumn  | <code>groupByColumn(columnField: string) =\> Promise\<void\></code>                                              | Groups table data by the specified column field Creates group header rows that display the unique value and count of items in that group. For example, if you have a 'status' column with values 'Open' and 'Closed', this will create group headers like "Open (5)" and "Closed (3)". Always emits tkGroupByChange event. For uncontrolled components, also updates internal state. |
+| runFilters     | <code>runFilters() =\> Promise\<void\></code>                                                                    | Applies the current filters to the data for client side pagination                                                                                                                                                                                                                                                                                                                   |
+| serverRequest  | <code>serverRequest() =\> Promise\<void\></code>                                                                 | Allows tk-request event to be triggered manually                                                                                                                                                                                                                                                                                                                                     |
+| setCurrentPage | <code>setCurrentPage(page: number) =\> Promise\<void\></code>                                                    | Sets the current page for pagination                                                                                                                                                                                                                                                                                                                                                 |
+| setFilters     | <code>setFilters(filters: ITableFilter[]) =\> Promise\<void\></code>                                             | Sets the current filter settings                                                                                                                                                                                                                                                                                                                                                     |
+| setSorting     | <code>setSorting(sorts: ITableSort[] \| \{ field: string; order: "asc" \| "desc"; \}) =\> Promise\<void\></code> | Sets the current sorting settings                                                                                                                                                                                                                                                                                                                                                    |
 
 ### Slots {#table-slots}
 
-| Name | Description |
-| ---- | ----------- |
+| Name        | Description                                                                                     |
+| ----------- | ----------------------------------------------------------------------------------------------- |
 | body-footer | Custom independent rows at the bottom of tbody (e.g., totals, summary, or additional data rows) |
-| body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows) |
-| empty-data | Set how the table will appear when there is no data |
+| body-header | Custom independent rows at the top of tbody (e.g., summary, totals, or custom data rows)        |
+| empty-data  | Set how the table will appear when there is no data                                             |
 
 ### Interfaces {#table-interfaces}
 
@@ -136,8 +135,12 @@ interface ITableColumn {
     };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
-    selectAllCheckbox?: { label?: string };
-    optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
+    selectAllCheckbox?: { hide?: boolean; label?: string };
+    optionsSearchInput?: {
+      show?: boolean;
+      placeholder?: string;
+      emptyMessage?: string;
+    };
     optionsSearchDatepicker?: {
       label?: string;
       placeholder?: string;
@@ -167,12 +170,8 @@ It is the return type of the tkRequest event.
 interface ITableRequest {
   /** The current page number */
   currentPage: number;
-  /** The total number of pages */
-  totalPages: number;
-  /** The starting index of the items on the current page */
-  startItem: number;
-  /** The ending index of the items on the current page */
-  endItem: number;
+  /** The total number of items, working only client side pagination */
+  totalItems?: number;
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
@@ -263,15 +262,6 @@ interface IFilterOption {
 }
 ```
 
-#### <span id="icustomelement">ICustomElement</span>
-
-```typescript
-interface ICustomElement {
-  ref: HTMLElement;
-  element: HTMLElement;
-}
-```
-
 #### <span id="itableexportexcelcolumn">ITableExportExcelColumn</span>
 
 ```typescript
@@ -296,4 +286,3 @@ interface ITableGroup {
   rows: any[];
 }
 ```
-

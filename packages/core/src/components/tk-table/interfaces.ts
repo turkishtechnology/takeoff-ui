@@ -35,6 +35,8 @@ export interface ITableColumn {
   headerHtml?: Function;
   /** Custom rendering function for HTML content in the column cells */
   html?: Function;
+  /** Custom formatting function for exporting column data */
+  exportFormat?: Function;
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
@@ -68,7 +70,7 @@ export interface ITableColumn {
     };
     searchButton?: { label?: string };
     cancelButton?: { label?: string };
-    selectAllCheckbox?: { label?: string };
+    selectAllCheckbox?: { hide?: boolean; label?: string };
     optionsSearchInput?: { show?: boolean; placeholder?: string; emptyMessage?: string };
     optionsSearchDatepicker?: {
       label?: string;
@@ -110,12 +112,8 @@ export interface ITableSort {
 export interface ITableRequest {
   /** The current page number */
   currentPage: number;
-  /** The total number of pages */
-  totalPages: number;
-  /** The starting index of the items on the current page */
-  startItem: number;
-  /** The ending index of the items on the current page */
-  endItem: number;
+  /** The total number of items, working only client side pagination */
+  totalItems?: number;
   /** The number of rows per page */
   rowsPerPage: number;
   /** The field by which the table is sorted */
@@ -126,6 +124,8 @@ export interface ITableRequest {
   sorts?: ITableSort[];
   /** A list of filters applied to the table */
   filters: ITableFilter[];
+  /** A list of data */
+  data?: any[];
 }
 
 /** Represents a filter applied to a table */
@@ -148,11 +148,6 @@ export interface ITableCellEdit {
   field: string;
   /** The new value for the field */
   value: string;
-}
-
-export interface ICustomElement {
-  ref: HTMLElement;
-  element: HTMLElement;
 }
 
 export interface ITableExportOptions {

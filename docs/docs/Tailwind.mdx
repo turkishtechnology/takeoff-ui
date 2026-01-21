@@ -4,24 +4,32 @@ sidebar_position: 5
 
 # Tailwind CSS Plugin
 
-A Tailwind CSS plugin that transforms Takeoff UI Design System variables into utility classes and responsive components.
+A Tailwind CSS plugin that transforms Takeoff UI Design System variables into
+utility classes and responsive components.
 
 ## Installation
+
 Install the plugin using your preferred package manager:
+
 ```bash
 npm install @takeoff-ui/tailwind
 # or
 yarn add @takeoff-ui/tailwind
 ```
+
 ## Basic Setup
+
 Add the plugin to your `tailwind.config.js`:
+
 ```javascript
 module.exports = {
-// ...other config
-plugins: [require('@takeoff-ui/tailwind')],
-}
+  // ...other config
+  plugins: [require('@takeoff-ui/tailwind')],
+};
 ```
+
 ## Features
+
 ### Typography
 
 Responsive typography classes for consistent text styling:
@@ -32,54 +40,71 @@ Responsive typography classes for consistent text styling:
 - `.title-display-md` - Medium display title
 
 #### Headings
+
 - `.title-h1` through `.title-h6` - Traditional heading styles
 
 #### Body Text
+
 - `.body-2xl` through `.body-2xs` - Range of body text sizes
 - `.body-base` - Default body text size
 
 #### Subheadings & Labels
+
 - `.subheading-base` through `.subheading-2xs` - Various subheading sizes
 - `.label-lg` through `.label-sm` - Standard and underlined label variants
 
 ### Colors
+
 Comprehensive color system with semantic variants:
+
 - Brand Colors: `primary-{50-900}`, `secondary-{50-900}`
 - Neutrals: `neutral-{50-900}`
-- Other Primitive Colors: `red-`, `blue-`, `green-`, `yellow-`, `purple-`, `cyan-`, `teal-`, `business-`
+- Other Primitive Colors: `red-`, `blue-`, `green-`, `yellow-`, `purple-`,
+  `cyan-`, `teal-`, `business-`
 - Alpha Variants: `alpha-{color}-{opacity}`
 - Aviation-specific: `aviation-amber-{50-900}`
 
 ### Spacing
+
 Consistent spacing scale:
+
 ```jsx
 none, px, xxs, xs, ...96xl
 ```
+
 Use with margins, paddings, gaps, and other spacing properties.
 
 ### Border Radius
+
 Configurable border radius utilities:
+
 ```jsx
 rounded-none, rounded-xxs, rounded-xs, ...rounded-full
 ```
 
 ### Box Shadows
+
 Two sets of elevation effects with hover states:
+
 ```jsx
 shadow-1-default-{size}
 shadow-1-hover-{size}
 shadow-2-default-{size}
 shadow-2-hover-{size}
 ```
+
 Focus state shadows for interactive elements:
+
 ```jsx
-shadow-primary-focus
-shadow-secondary-focus
-shadow-info-focus
+shadow - primary - focus;
+shadow - secondary - focus;
+shadow - info - focus;
 ```
 
 ### Breakpoints
+
 Responsive design breakpoints:
+
 ```javascript
 xs: '0px',
 sm: '600px',
@@ -89,6 +114,7 @@ xl: '1440px'
 ```
 
 ## Usage Examples
+
 ```jsx
 //Typography with Colors
 <h1 className="title-display-lg text-primary-500">Large Title</h1>
@@ -106,6 +132,7 @@ xl: '1440px'
 ```
 
 ## Troubleshooting
+
 1. Confirm proper plugin installation and configuration
 2. Check PostCSS configuration
 3. Verify breakpoint settings match design requirements

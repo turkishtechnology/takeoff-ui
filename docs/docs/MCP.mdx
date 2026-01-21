@@ -1,25 +1,36 @@
 ---
 sidebar_position: 4
-title: MCP Server 
+title: MCP Server
 ---
+
 ## Takeoff UI MCP Server
 
-An MCP (Model Context Protocol) server that gives AI assistants structured access to Takeoff UI documentation, component data, and integration guides.
+An MCP (Model Context Protocol) server that gives AI assistants structured
+access to Takeoff UI documentation, component data, and integration guides.
 
 ### What is MCP?
 
-Model Context Protocol is an open protocol and SDK that allows AI assistants to call external tools and data sources in a consistent, secure way. This server implements MCP tools and prompts so assistants can answer questions about Takeoff UI and generate code that follows its standards.
+Model Context Protocol is an open protocol and SDK that allows AI assistants to
+call external tools and data sources in a consistent, secure way. This server
+implements MCP tools and prompts so assistants can answer questions about
+Takeoff UI and generate code that follows its standards.
 
 ### What is Takeoff UI?
 
-Takeoff UI is a comprehensive design system of framework-agnostic web components built with Stencil.js, with official bindings for React, Vue, and Angular, plus a Tailwind CSS plugin. It is developed in a Turborepo monorepo and ships consistent APIs, styles, and documentation across frameworks.
+Takeoff UI is a comprehensive design system of framework-agnostic web components
+built with Stencil.js, with official bindings for React, Vue, and Angular, plus
+a Tailwind CSS plugin. It is developed in a Turborepo monorepo and ships
+consistent APIs, styles, and documentation across frameworks.
 
 ## Features
 
-- **Component discovery and details**: List all components and fetch in-depth docs and examples
-- **Tailwind CSS integration**: Guidance on setup, tokens, typography, spacing, and more
+- **Component discovery and details**: List all components and fetch in-depth
+  docs and examples
+- **Tailwind CSS integration**: Guidance on setup, tokens, typography, spacing,
+  and more
 - **Framework integration**: React, Vue, Angular, Next.js, Nuxt guides
-- **Smart prompts**: Figma-to-code and refactoring prompts tailored to Takeoff UI
+- **Smart prompts**: Figma-to-code and refactoring prompts tailored to Takeoff
+  UI
 - **Flexible transports**: STDIO, Streamable HTTP, and legacy SSE
 
 ## Transport options
@@ -62,6 +73,7 @@ npm run start:sse
 ```
 
 Default addresses:
+
 - **Main (Streamable HTTP)**: `http://127.0.0.1:3845/mcp`
 - **SSE events**: `http://127.0.0.1:3845/sse`
 - **Health**: `http://127.0.0.1:3845/health`
@@ -101,9 +113,9 @@ mcpServers:
   - name: takeoff-ui-mcp
     command: npx
     args:
-      - "-y"
-      - "mcp-remote"
-      - "https://takeoffui.turkishtechlab.com/mcp"
+      - '-y'
+      - 'mcp-remote'
+      - 'https://takeoffui.turkishtechlab.com/mcp'
 ```
 
 Local STDIO:
@@ -194,7 +206,8 @@ HTTP:
 }
 ```
 
-Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your prompts (for example: "Show Tailwind setup for React — use takeoff-ui-mcp").
+Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your
+prompts (for example: "Show Tailwind setup for React — use takeoff-ui-mcp").
 
 ## Tools
 
@@ -208,7 +221,8 @@ Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your pr
 
 ## Prompts
 
-- **`refactor_takeoff_ui_code`**: Refactor code to align with Takeoff UI best practices
+- **`refactor_takeoff_ui_code`**: Refactor code to align with Takeoff UI best
+  practices
   - Parameters:
     - `code` (string, required)
     - `framework?` (react | vue | angular)
@@ -217,13 +231,15 @@ Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your pr
     - `preferComposition?` (boolean; default true)
     - `includeTests?` (boolean; default false)
 
-- **`figma_to_code`**: Convert Figma designs to code using Takeoff UI with a tool-driven, verifiable process
+- **`figma_to_code`**: Convert Figma designs to code using Takeoff UI with a
+  tool-driven, verifiable process
   - Parameters:
     - `figmaUrl` (string, URL, required)
     - `framework?` (react | vue | angular | nextjs | nuxt; default react)
     - `includeInteractivity?` (boolean; default true)
     - `useTypeScript?` (boolean; default true)
-    - `styling?` (tailwind | css-modules | styled-components | emotion; default tailwind)
+    - `styling?` (tailwind | css-modules | styled-components | emotion; default
+      tailwind)
     - `accessibility?` (boolean; default true)
     - `responsiveness?` (boolean; default true)
     - `fileStructure?` (single | multi; default single)
@@ -288,7 +304,9 @@ src/
 ```
 
 Scripts:
-- `build`, `watch`, `dev`, `start`, `start:stream`, `start:sse`, `inspector`, `clean`
+
+- `build`, `watch`, `dev`, `start`, `start:stream`, `start:sse`, `inspector`,
+  `clean`
 
 ## HTTP API (when using Streamable HTTP)
 
@@ -301,7 +319,6 @@ Scripts:
 - **Node version**: Use Node.js 18+
 - **Port conflicts**: Set `PORT` in `.env`
 - **Debug logs**: Set `LOG_LEVEL=0`
-
 
 ## Related Links
 

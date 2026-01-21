@@ -14,6 +14,7 @@ const Variant = () => {
 <TkBadge variant="purple" label="purple" />
 <TkBadge variant="cyan" label="cyan" />
 <TkBadge variant="business" label="business" />
+<TkBadge variant="teal" label="teal" />
 `;
 
   const vueCode = `<TkBadge variant="primary" label="primary" />
@@ -27,6 +28,7 @@ const Variant = () => {
 <TkBadge variant="purple" label="purple" />
 <TkBadge variant="cyan" label="cyan" />
 <TkBadge variant="business" label="business" />
+<TkBadge variant="teal" label="teal" />
 `;
 
   const angularCode = `<tk-badge variant="primary" label="primary" />
@@ -39,7 +41,8 @@ const Variant = () => {
 <tk-badge variant="verified" label="verified" />
 <tk-badge variant="purple" label="purple" />
 <tk-badge variant="cyan" label="cyan" />
-<tk-badge variant="business" label="business" />`;
+<tk-badge variant="business" label="business" />
+<tk-badge variant="teal" label="teal" />`;
 
   const demo = (
     <div className="flex justify-center flex-wrap gap-2">
@@ -54,6 +57,7 @@ const Variant = () => {
       <TkBadge variant="purple" label="purple" />
       <TkBadge variant="cyan" label="cyan" />
       <TkBadge variant="business" label="business" />
+      <TkBadge variant="teal" label="teal" />
     </div>
   );
 

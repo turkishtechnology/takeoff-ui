@@ -5,13 +5,18 @@
 [![npm version](https://img.shields.io/npm/v/@takeoff-ui/vue.svg)](https://www.npmjs.com/package/@takeoff-ui/vue)
 [![npm downloads](https://img.shields.io/npm/dm/@takeoff-ui/vue.svg)](https://www.npmjs.com/package/@takeoff-ui/vue)
 
-Vue bindings for the Takeoff UI Design System. This package exposes Vue components that wrap the framework‑agnostic web components in `@takeoff-ui/core` (built with Stencil.js), giving you a smooth Vue developer experience.
+Vue bindings for the Takeoff UI Design System. This package exposes Vue
+components that wrap the framework‑agnostic web components in `@takeoff-ui/core`
+(built with Stencil.js), giving you a smooth Vue developer experience.
 
 ## Documentation
 
-- Full docs: [Introduction](https://takeoff-ui-blond.vercel.app/docs/Introduction)
-- Getting started: [Installation Guide](https://takeoff-ui-blond.vercel.app/docs/Installation)
-- Component APIs and examples: [Components Overview](https://takeoff-ui-blond.vercel.app/docs/Components/Overview)
+- Full docs:
+  [Introduction](https://takeoff-ui-blond.vercel.app/docs/Introduction)
+- Getting started:
+  [Installation Guide](https://takeoff-ui-blond.vercel.app/docs/Installation)
+- Component APIs and examples:
+  [Components Overview](https://takeoff-ui-blond.vercel.app/docs/Components/Overview)
 
 ## Installation
 
@@ -25,9 +30,10 @@ yarn add @takeoff-ui/vue
 
 ## Quick Start
 
-1) Register the custom elements and import global styles:
+1. Register the custom elements and import global styles:
 
 - main.ts
+
 ```ts
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -39,7 +45,7 @@ createApp(App)
   .mount('#app');
 ```
 
-2) Use Vue components:
+2. Use Vue components:
 
 ```vue
 <!-- App.vue -->
@@ -60,7 +66,8 @@ const value = ref('');
 
 ## Features
 
-- Vue wrappers for all Takeoff UI components (e.g., `TkButton`, `TkInput`, `TkDialog`, ...)
+- Vue wrappers for all Takeoff UI components (e.g., `TkButton`, `TkInput`,
+  `TkDialog`, ...)
 - v-model support where applicable
 - Typed props and events
 - Works with Vite, Vue CLI, Nuxt 3
@@ -73,7 +80,9 @@ Takeoff UI ships with a Tailwind CSS plugin for tokens and utilities.
 
 ## Contributing
 
-We welcome contributions! Please read the guide for details on issues, PRs, and coding standards.
+We welcome contributions! Please read the guide for details on issues, PRs, and
+coding standards.
+
 - [Contribution guide](https://takeoff-ui-blond.vercel.app/docs/CONTRIBUTING)
 
 ## License

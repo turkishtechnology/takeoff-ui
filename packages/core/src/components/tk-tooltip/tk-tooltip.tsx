@@ -2,7 +2,6 @@ import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -83,23 +82,30 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
-    addDialogScrollListener(this.el, () => {
-      this.isOpen = false;
-    });
   }
 
   componentDidUpdate() {
     if (this.isOpen) {
+      // Clean up old floating UI listeners before setting up new ones
+      this.cleanup?.();
       this.updatePosition();
     } else {
-      this.cleanup && this.cleanup();
+      // Remove floating UI listeners when tooltip closes
+      this.cleanup?.();
+      // Clear reference to allow garbage collection
+      this.cleanup = null;
     }
   }
+
   disconnectedCallback() {
-    removeDialogScrollListener(this.el);
+    // Clean up floating UI listeners on component unmount
+    this.cleanup?.();
+    // Clear reference to allow garbage collection
+    this.cleanup = null;
   }
+
   private updatePosition() {
-    floatingElementAutoUpdate(this.triggerElement, this.tooltipElement, this.arrowElement, { placement: this.position });
+    this.cleanup = floatingElementAutoUpdate(this.triggerElement, this.tooltipElement, this.arrowElement, { placement: this.position });
   }
 
   private handleMouseEnter = () => {

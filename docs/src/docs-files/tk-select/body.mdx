@@ -12,27 +12,27 @@ import ChipOptions from './Examples/ChipOptions';
 import Icon from './Examples/Icon';
 import SelectAll from './Examples/SelectAll';
 import VisibleItemCount from './Examples/VisibleItemCount';
-import PanelHeader from './Examples/PanelHeader'
+import PanelHeader from './Examples/PanelHeader';
 import OptionDisabled from './Examples/OptionDisabled';
 import { TkAlert } from '@takeoff-ui/react';
 import Playground from '../../components/Playground/Playground';
 import selectPlaygroundConfig from './selectPlaygroundConfig.json';
 import { TkSelect } from '@takeoff-ui/react';
 
-export const TkSelectWithOptions = (props) => {
+export const TkSelectWithOptions = props => {
   const options = [
-    { label: "Option 1", value: "opt1" },
-    { label: "Option 2", value: "opt2" },
-    { label: "Option 3", value: "opt3" }
+    { label: 'Option 1', value: 'opt1' },
+    { label: 'Option 2', value: 'opt2' },
+    { label: 'Option 3', value: 'opt3' },
   ];
   return <TkSelect options={options} {...props} />;
 };
 
 ### Playground
 
-<Playground 
-  configs={[selectPlaygroundConfig]} 
-  componentMap={{ TkSelect: TkSelectWithOptions }} 
+<Playground
+  configs={[selectPlaygroundConfig]}
+  componentMap={{ TkSelect: TkSelectWithOptions }}
 />
 
 ## Basic
