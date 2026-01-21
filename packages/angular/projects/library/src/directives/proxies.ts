@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* auto-generated angular directive proxies */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone } from '@angular/core';
 
-import { ProxyCmp } from './angular-component-lib/utils';
+import { ProxyCmp, proxyOutputs } from './angular-component-lib/utils';
 
 import type { Components } from '@takeoff-ui/core/components';
 
@@ -64,12 +64,9 @@ import { defineCustomElement as defineTkUpload } from '@takeoff-ui/core/componen
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['activeIndex', 'allowMultiple', 'arrowPosition', 'collapseIcon', 'expandIcon', 'hideArrows', 'type'],
-  outputs: ['tk-active-index-change', 'tk-accordion-item-selected'],
 })
 export class TkAccordion {
   protected el: HTMLTkAccordionElement;
-  @Output() tkActiveIndexChange = new EventEmitter<CustomEvent<string | number | (string | number)[]>>();
-  @Output() tkAccordionItemSelected = new EventEmitter<CustomEvent<ITkAccordionIAccordionItemSelect>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -77,6 +74,7 @@ export class TkAccordion {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-active-index-change', 'tk-accordion-item-selected']);
   }
 }
 
@@ -103,11 +101,9 @@ export declare interface TkAccordion extends Components.TkAccordion {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['active', 'header', 'icon', 'itemKey', 'size'],
-  outputs: ['tk-active-change'],
 })
 export class TkAccordionItem {
   protected el: HTMLTkAccordionItemElement;
-  @Output() tkActiveChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -115,6 +111,7 @@ export class TkAccordionItem {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-active-change']);
   }
 }
 
@@ -285,11 +282,9 @@ export declare interface TkBreadcrumbItem extends Components.TkBreadcrumbItem {}
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'fullWidth', 'href', 'icon', 'iconPosition', 'label', 'loading', 'mode', 'rounded', 'size', 'target', 'type', 'underline', 'variant'],
-  outputs: ['tk-click'],
 })
 export class TkButton {
   protected el: HTMLTkButtonElement;
-  @Output() tkClick = new EventEmitter<CustomEvent<MouseEvent>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -297,6 +292,7 @@ export class TkButton {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-click']);
   }
 }
 
@@ -398,11 +394,9 @@ export declare interface TkCard extends Components.TkCard {}
     'showPlayerButton',
     'verticalViewHeight',
   ],
-  outputs: ['tk-change'],
 })
 export class TkCarousel {
   protected el: HTMLTkCarouselElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<number>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -410,6 +404,7 @@ export class TkCarousel {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -456,11 +451,9 @@ export declare interface TkChart extends Components.TkChart {}
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['description', 'disabled', 'indeterminate', 'invalid', 'label', 'name', 'type', 'value'],
-  outputs: ['tk-change'],
 })
 export class TkCheckbox {
   protected el: HTMLTkCheckboxElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -468,6 +461,7 @@ export class TkCheckbox {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -488,11 +482,9 @@ export declare interface TkCheckbox extends Components.TkCheckbox {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['autoSelfDestroy', 'containerStyle', 'disabled', 'icon', 'label', 'removable', 'size', 'type', 'value', 'variant'],
-  outputs: ['tk-remove'],
 })
 export class TkChips {
   protected el: HTMLTkChipsElement;
-  @Output() tkRemove = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -500,6 +492,7 @@ export class TkChips {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-remove']);
   }
 }
 
@@ -571,15 +564,9 @@ export declare interface TkChips extends Components.TkChips {
     'size',
     'value',
   ],
-  outputs: ['tk-change', 'tk-open', 'tk-close', 'tk-apply', 'tk-cancel'],
 })
 export class TkColorPicker {
   protected el: HTMLTkColorPickerElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<string>>();
-  @Output() tkOpen = new EventEmitter<CustomEvent<void>>();
-  @Output() tkClose = new EventEmitter<CustomEvent<void>>();
-  @Output() tkApply = new EventEmitter<CustomEvent<string>>();
-  @Output() tkCancel = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -587,6 +574,7 @@ export class TkColorPicker {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tk-open', 'tk-close', 'tk-apply', 'tk-cancel']);
   }
 }
 
@@ -661,13 +649,9 @@ export declare interface TkColorPicker extends Components.TkColorPicker {
     'thousandsSeparator',
     'value',
   ],
-  outputs: ['tk-change', 'tkBlur', 'tkFocus'],
 })
 export class TkCurrencyInput {
   protected el: HTMLTkCurrencyInputElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
-  @Output() tkBlur = new EventEmitter<CustomEvent<void>>();
-  @Output() tkFocus = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -675,6 +659,7 @@ export class TkCurrencyInput {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tkBlur', 'tkFocus']);
   }
 }
 
@@ -774,12 +759,9 @@ export declare interface TkCurrencyInput extends Components.TkCurrencyInput {
     'timeOnly',
     'value',
   ],
-  outputs: ['tk-input-change', 'tk-change'],
 })
 export class TkDatepicker {
   protected el: HTMLTkDatepickerElement;
-  @Output() tkInputChange = new EventEmitter<CustomEvent<string>>();
-  @Output() tkChange = new EventEmitter<CustomEvent<ITkDatepickerIDateSelection | string>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -787,6 +769,7 @@ export class TkDatepicker {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-input-change', 'tk-change']);
   }
 }
 
@@ -842,13 +825,9 @@ export declare interface TkDatepicker extends Components.TkDatepicker {
     'variant',
     'visible',
   ],
-  outputs: ['tk-open', 'tk-close', 'tk-visible-change'],
 })
 export class TkDialog {
   protected el: HTMLTkDialogElement;
-  @Output() tkOpen = new EventEmitter<CustomEvent<void>>();
-  @Output() tkClose = new EventEmitter<CustomEvent<void>>();
-  @Output() tkVisibleChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -856,6 +835,7 @@ export class TkDialog {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-open', 'tk-close', 'tk-visible-change']);
   }
 }
 
@@ -910,15 +890,9 @@ export declare interface TkDivider extends Components.TkDivider {}
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['containerStyle', 'footerType', 'header', 'headerType', 'hideBackdrop', 'hideCloseIcon', 'maskVariant', 'open', 'position', 'preventDismiss', 'unblockScroll'],
-  outputs: ['tk-drawer-open', 'tk-drawer-close', 'tk-drawer-enter', 'tk-drawer-leave', 'tk-drawer-change'],
 })
 export class TkDrawer {
   protected el: HTMLTkDrawerElement;
-  @Output() tkDrawerOpen = new EventEmitter<CustomEvent<void>>();
-  @Output() tkDrawerClose = new EventEmitter<CustomEvent<void>>();
-  @Output() tkDrawerEnter = new EventEmitter<CustomEvent<void>>();
-  @Output() tkDrawerLeave = new EventEmitter<CustomEvent<void>>();
-  @Output() tkDrawerChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -926,6 +900,7 @@ export class TkDrawer {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-drawer-open', 'tk-drawer-close', 'tk-drawer-enter', 'tk-drawer-leave', 'tk-drawer-change']);
   }
 }
 
@@ -962,11 +937,9 @@ export declare interface TkDrawer extends Components.TkDrawer {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'emptyMessage', 'groupNameKey', 'groupOptionsKey', 'optionHtml', 'optionLabelKey', 'optionValueKey', 'options', 'optionsAlign', 'position', 'size'],
-  outputs: ['tk-item-click'],
 })
 export class TkDropdown {
   protected el: HTMLTkDropdownElement;
-  @Output() tkItemClick = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -974,6 +947,7 @@ export class TkDropdown {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-item-click']);
   }
 }
 
@@ -1031,13 +1005,9 @@ export declare interface TkDropdown extends Components.TkDropdown {
     'toolbar',
     'value',
   ],
-  outputs: ['tk-change', 'tkFocus', 'tkBlur'],
 })
 export class TkEditor {
   protected el: HTMLTkEditorElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<string>>();
-  @Output() tkFocus = new EventEmitter<CustomEvent<void>>();
-  @Output() tkBlur = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1045,6 +1015,7 @@ export class TkEditor {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tkFocus', 'tkBlur']);
   }
 }
 
@@ -1149,14 +1120,9 @@ export declare interface TkIcon extends Components.TkIcon {}
     'step',
     'value',
   ],
-  outputs: ['tk-change', 'tk-blur', 'tk-focus', 'tk-clear-click'],
 })
 export class TkInput {
   protected el: HTMLTkInputElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
-  @Output() tkBlur = new EventEmitter<CustomEvent<void>>();
-  @Output() tkFocus = new EventEmitter<CustomEvent<void>>();
-  @Output() tkClearClick = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1164,6 +1130,7 @@ export class TkInput {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tk-blur', 'tk-focus', 'tk-clear-click']);
   }
 }
 
@@ -1197,11 +1164,9 @@ export declare interface TkInput extends Components.TkInput {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['accessibilityLabel', 'collapsible', { name: 'data', required: true }, 'options'],
-  outputs: ['tk-node-click'],
 })
 export class TkOrgChart {
   protected el: HTMLTkOrgChartElement;
-  @Output() tkNodeClick = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1209,6 +1174,7 @@ export class TkOrgChart {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-node-click']);
   }
 }
 
@@ -1229,14 +1195,9 @@ export declare interface TkOrgChart extends Components.TkOrgChart {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['currentPage', 'itemsReportTemplate', 'mode', 'pageReportTemplate', 'rounded', 'rowsPerPage', 'rowsPerPageOptions', 'totalItems', 'type'],
-  outputs: ['tk-next-page', 'tk-page-change', 'tk-prev-page', 'tk-rows-per-page-change'],
 })
 export class TkPagination {
   protected el: HTMLTkPaginationElement;
-  @Output() tkNextPage = new EventEmitter<CustomEvent<{ page: number }>>();
-  @Output() tkPageChange = new EventEmitter<CustomEvent<{ page: number; totalPages: number; startItem: number; endItem: number }>>();
-  @Output() tkPrevPage = new EventEmitter<CustomEvent<{ page: number }>>();
-  @Output() tkRowsPerPageChange = new EventEmitter<CustomEvent<number>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1244,6 +1205,7 @@ export class TkPagination {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-next-page', 'tk-page-change', 'tk-prev-page', 'tk-rows-per-page-change']);
   }
 }
 
@@ -1276,13 +1238,9 @@ export declare interface TkPagination extends Components.TkPagination {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
-  outputs: ['tk-change', 'tk-blur', 'tk-focus'],
 })
 export class TkPhoneInput {
   protected el: HTMLTkPhoneInputElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
-  @Output() tkBlur = new EventEmitter<CustomEvent<void>>();
-  @Output() tkFocus = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1290,6 +1248,7 @@ export class TkPhoneInput {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tk-blur', 'tk-focus']);
   }
 }
 
@@ -1319,11 +1278,9 @@ export declare interface TkPhoneInput extends Components.TkPhoneInput {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['containerStyle', 'position', 'trigger', 'type'],
-  outputs: ['tk-change'],
 })
 export class TkPopover {
   protected el: HTMLTkPopoverElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1331,6 +1288,7 @@ export class TkPopover {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -1351,11 +1309,9 @@ export declare interface TkPopover extends Components.TkPopover {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['checked', 'description', 'disabled', 'invalid', 'label', 'name', 'position', 'value'],
-  outputs: ['tk-change'],
 })
 export class TkRadio {
   protected el: HTMLTkRadioElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1363,6 +1319,7 @@ export class TkRadio {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -1383,11 +1340,9 @@ export declare interface TkRadio extends Components.TkRadio {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['direction', 'error', 'invalid', 'label', 'name', 'position', 'showAsterisk', 'spread', 'type', 'value'],
-  outputs: ['tk-change'],
 })
 export class TkRadioGroup {
   protected el: HTMLTkRadioGroupElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1395,6 +1350,7 @@ export class TkRadioGroup {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -1415,11 +1371,9 @@ export declare interface TkRadioGroup extends Components.TkRadioGroup {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'maxRating', 'readonly', 'showRatingValue', 'type', 'value'],
-  outputs: ['tk-change'],
 })
 export class TkRating {
   protected el: HTMLTkRatingElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<number>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1427,6 +1381,7 @@ export class TkRating {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -1515,14 +1470,9 @@ export declare interface TkRating extends Components.TkRating {
     'value',
     'visibleItemCount',
   ],
-  outputs: ['tk-change', 'tk-select-all', 'tk-open', 'tk-close'],
 })
 export class TkSelect {
   protected el: HTMLTkSelectElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
-  @Output() tkSelectAll = new EventEmitter<CustomEvent<boolean>>();
-  @Output() tkOpen = new EventEmitter<CustomEvent<void>>();
-  @Output() tkClose = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1530,6 +1480,7 @@ export class TkSelect {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tk-select-all', 'tk-open', 'tk-close']);
   }
 }
 
@@ -1562,11 +1513,9 @@ export declare interface TkSelect extends Components.TkSelect {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'error', 'hint', 'invalid', 'label', 'max', 'min', 'range', 'rangeVisibility', 'showAsterisk', 'step', 'type', 'value'],
-  outputs: ['tkChange'],
 })
 export class TkSlider {
   protected el: HTMLTkSliderElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<number | [number, number]>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1574,6 +1523,7 @@ export class TkSlider {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tkChange']);
   }
 }
 
@@ -1706,12 +1656,9 @@ export declare interface TkStep extends Components.TkStep {}
     'signStyle',
     'stepMode',
   ],
-  outputs: ['tk-step-change', 'tk-step-click'],
 })
 export class TkStepper {
   protected el: HTMLTkStepperElement;
-  @Output() tkStepChange = new EventEmitter<CustomEvent<number>>();
-  @Output() tkStepClick = new EventEmitter<CustomEvent<ITkStepperIStepClickDetail>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1719,6 +1666,7 @@ export class TkStepper {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-step-change', 'tk-step-click']);
   }
 }
 
@@ -1811,16 +1759,9 @@ export declare interface TkStepper extends Components.TkStepper {
     'striped',
     'totalItems',
   ],
-  outputs: ['tk-selection-change', 'tk-request', 'tk-expanded-rows-change', 'tk-cell-edit', 'tk-row-click', 'tk-group-by-change'],
 })
 export class TkTable {
   protected el: HTMLTkTableElement;
-  @Output() tkSelectionChange = new EventEmitter<CustomEvent<any[] | any>>();
-  @Output() tkRequest = new EventEmitter<CustomEvent<ITkTableITableRequest>>();
-  @Output() tkExpandedRowsChange = new EventEmitter<CustomEvent<any[]>>();
-  @Output() tkCellEdit = new EventEmitter<CustomEvent<ITkTableITableCellEdit>>();
-  @Output() tkRowClick = new EventEmitter<CustomEvent<any>>();
-  @Output() tkGroupByChange = new EventEmitter<CustomEvent<string | null>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1828,6 +1769,7 @@ export class TkTable {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-selection-change', 'tk-request', 'tk-expanded-rows-change', 'tk-cell-edit', 'tk-row-click', 'tk-group-by-change']);
   }
 }
 
@@ -1900,12 +1842,9 @@ For controlled components, handle this event to update the groupBy prop. @param 
     'type',
     'variant',
   ],
-  outputs: ['tk-tab-click', 'tk-tab-change'],
 })
 export class TkTabs {
   protected el: HTMLTkTabsElement;
-  @Output() tkTabClick = new EventEmitter<CustomEvent<number>>();
-  @Output() tkTabChange = new EventEmitter<CustomEvent<number>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1913,6 +1852,7 @@ export class TkTabs {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-tab-click', 'tk-tab-change']);
   }
 }
 
@@ -1963,14 +1903,9 @@ export declare interface TkTabsItem extends Components.TkTabsItem {}
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'error', 'hint', 'invalid', 'label', 'maxLength', 'name', 'placeholder', 'readonly', 'rows', 'showAsterisk', 'size', 'value'],
-  outputs: ['tk-input', 'tk-change', 'tk-blur', 'tk-focus'],
 })
 export class TkTextarea {
   protected el: HTMLTkTextareaElement;
-  @Output() tkInput = new EventEmitter<CustomEvent<KeyboardEvent>>();
-  @Output() tkChange = new EventEmitter<CustomEvent<string | number | undefined | null>>();
-  @Output() tkBlur = new EventEmitter<CustomEvent<void>>();
-  @Output() tkFocus = new EventEmitter<CustomEvent<void>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -1978,6 +1913,7 @@ export class TkTextarea {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-input', 'tk-change', 'tk-blur', 'tk-focus']);
   }
 }
 
@@ -2060,11 +1996,9 @@ export declare interface TkTimelineItem extends Components.TkTimelineItem {}
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['ariaLabelledby', 'disabled', 'icon', 'invalid', 'label', 'name', 'showIcon', 'size', 'value', 'variant'],
-  outputs: ['tk-change'],
 })
 export class TkToggle {
   protected el: HTMLTkToggleElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<boolean>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -2072,6 +2006,7 @@ export class TkToggle {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -2092,11 +2027,9 @@ export declare interface TkToggle extends Components.TkToggle {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled', 'icon', 'iconPosition', 'label', 'rounded', 'selected', 'size', 'type', 'value', 'variant'],
-  outputs: ['tk-toggle'],
 })
 export class TkToggleButton {
   protected el: HTMLTkToggleButtonElement;
-  @Output() tkToggle = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -2104,6 +2037,7 @@ export class TkToggleButton {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-toggle']);
   }
 }
 
@@ -2124,11 +2058,9 @@ export declare interface TkToggleButton extends Components.TkToggleButton {
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['direction', 'rounded', 'type', 'value'],
-  outputs: ['tk-change'],
 })
 export class TkToggleButtonGroup {
   protected el: HTMLTkToggleButtonGroupElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<any>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -2136,6 +2068,7 @@ export class TkToggleButtonGroup {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change']);
   }
 }
 
@@ -2219,13 +2152,9 @@ export declare interface TkTooltip extends Components.TkTooltip {}
     'type',
     'value',
   ],
-  outputs: ['tk-item-click', 'tk-change', 'tk-expand-change'],
 })
 export class TkTreeView {
   protected el: HTMLTkTreeViewElement;
-  @Output() tkItemClick = new EventEmitter<CustomEvent<ITkTreeViewITreeItem>>();
-  @Output() tkChange = new EventEmitter<CustomEvent<string[]>>();
-  @Output() tkExpandChange = new EventEmitter<CustomEvent<string[]>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -2233,6 +2162,7 @@ export class TkTreeView {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-item-click', 'tk-change', 'tk-expand-change']);
   }
 }
 
@@ -2313,15 +2243,9 @@ Only the keys of expanded items are emitted, not full paths.
     'uploadButtonLabel',
     'value',
   ],
-  outputs: ['tk-change', 'tk-files-rejected', 'tk-upload', 'tk-removed-file', 'tk-download-file'],
 })
 export class TkUpload {
   protected el: HTMLTkUploadElement;
-  @Output() tkChange = new EventEmitter<CustomEvent<File[]>>();
-  @Output() tkFilesRejected = new EventEmitter<CustomEvent<{ reason: string; file: File | FileList }[]>>();
-  @Output() tkUpload = new EventEmitter<CustomEvent<File[]>>();
-  @Output() tkRemovedFile = new EventEmitter<CustomEvent<File>>();
-  @Output() tkDownloadFile = new EventEmitter<CustomEvent<File>>();
   constructor(
     c: ChangeDetectorRef,
     r: ElementRef,
@@ -2329,6 +2253,7 @@ export class TkUpload {
   ) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tk-change', 'tk-files-rejected', 'tk-upload', 'tk-removed-file', 'tk-download-file']);
   }
 }
 

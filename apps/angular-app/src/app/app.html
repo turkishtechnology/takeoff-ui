@@ -4,138 +4,15 @@
   <section class="demo-section">
     <h2>Buttons</h2>
     <div class="demo-row">
-      <tk-button label="Primary" variant="primary"></tk-button>
-      <tk-button label="Secondary" variant="secondary"></tk-button>
-      <tk-button label="Success" variant="success"></tk-button>
-      <tk-button label="Warning" variant="warning"></tk-button>
-      <tk-button label="Danger" variant="danger"></tk-button>
-      <tk-button label="Loading" [loading]="true"></tk-button>
-      <tk-button label="Disabled" [disabled]="true"></tk-button>
+      <tk-button label="Primary" variant="primary" (tkClick)="onButtonClick()"></tk-button>
+      <form [formGroup]="formGroup">
+        <tk-input label="harun" formControlName="firstname" (tkChange)="onInputChange()" />
+      </form>
+      {{ formGroup.getRawValue() | json }}
+
+      <tk-input label="ng model test" [(ngModel)]="textValue"></tk-input>
+      <p>{{ textValue }}</p>
     </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Input</h2>
-    <div class="demo-row">
-      <tk-input
-        label="Text Input"
-        placeholder="Enter text..."
-        [value]="inputValue"
-        (tk-change)="onInputChange($event)"
-      >
-      </tk-input>
-      <tk-input label="With Icon" placeholder="Search..." icon="pi pi-search"></tk-input>
-      <tk-input label="Disabled" placeholder="Disabled" [disabled]="true"></tk-input>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Select</h2>
-    <div class="demo-row">
-      <tk-select
-        label="Select an option"
-        placeholder="Choose..."
-        [options]="selectOptions"
-        [value]="selectValue"
-        (tk-change)="onSelectChange($event)"
-      >
-      </tk-select>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Checkbox & Toggle</h2>
-    <div class="demo-row">
-      <tk-checkbox
-        label="Accept terms"
-        [value]="checkboxValue"
-        (tk-change)="onCheckboxChange($event)"
-      >
-      </tk-checkbox>
-      <tk-toggle label="Enable feature" [value]="toggleValue" (tk-change)="onToggleChange($event)">
-      </tk-toggle>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Alerts</h2>
-    <div class="demo-column">
-      <tk-alert type="info" header="Info" message="This is an info alert"></tk-alert>
-      <tk-alert type="success" header="Success" message="This is a success alert"></tk-alert>
-      <tk-alert type="warning" header="Warning" message="This is a warning alert"></tk-alert>
-      <tk-alert type="danger" header="Error" message="This is an error alert"></tk-alert>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Badges</h2>
-    <div class="demo-row">
-      <tk-badge label="Default"></tk-badge>
-      <tk-badge label="Info" type="info"></tk-badge>
-      <tk-badge label="Success" type="success"></tk-badge>
-      <tk-badge label="Warning" type="warning"></tk-badge>
-      <tk-badge label="Danger" type="danger"></tk-badge>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Card</h2>
-    <div class="demo-row">
-      <tk-card header="Card Title" subheader="Card subtitle">
-        <p>This is the card content. You can put any content here.</p>
-      </tk-card>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Accordion</h2>
-    <tk-accordion>
-      <tk-accordion-item header="Section 1">
-        <p>Content for section 1</p>
-      </tk-accordion-item>
-      <tk-accordion-item header="Section 2">
-        <p>Content for section 2</p>
-      </tk-accordion-item>
-      <tk-accordion-item header="Section 3">
-        <p>Content for section 3</p>
-      </tk-accordion-item>
-    </tk-accordion>
-  </section>
-
-  <section class="demo-section">
-    <h2>Tabs</h2>
-    <tk-tabs>
-      <tk-tabs-item label="Tab 1">
-        <p>Content for Tab 1</p>
-      </tk-tabs-item>
-      <tk-tabs-item label="Tab 2">
-        <p>Content for Tab 2</p>
-      </tk-tabs-item>
-      <tk-tabs-item label="Tab 3">
-        <p>Content for Tab 3</p>
-      </tk-tabs-item>
-    </tk-tabs>
-  </section>
-
-  <section class="demo-section">
-    <h2>Spinner</h2>
-    <div class="demo-row">
-      <tk-spinner size="small"></tk-spinner>
-      <tk-spinner size="medium"></tk-spinner>
-      <tk-spinner size="large"></tk-spinner>
-    </div>
-  </section>
-
-  <section class="demo-section">
-    <h2>Dialog</h2>
-    <tk-button label="Open Dialog" (tk-click)="openDialog()"></tk-button>
-    <tk-dialog header="Dialog Title" [visible]="dialogVisible" (tk-close)="closeDialog()">
-      <p>This is the dialog content.</p>
-      <div slot="footer">
-        <tk-button label="Close" variant="secondary" (tk-click)="closeDialog()"></tk-button>
-        <tk-button label="Save" variant="primary"></tk-button>
-      </div>
-    </tk-dialog>
   </section>
 </div>
 

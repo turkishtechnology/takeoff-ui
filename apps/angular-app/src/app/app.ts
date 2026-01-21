@@ -1,21 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {
-  TkButton,
-  TkInput,
-  TkSelect,
-  TkCheckbox,
-  TkToggle,
-  TkAlert,
-  TkBadge,
-  TkCard,
-  TkAccordion,
-  TkAccordionItem,
-  TkTabs,
-  TkTabsItem,
-  TkSpinner,
-  TkDialog,
-} from '@takeoff-ui/angular';
+import { TkButton, TkInput, TextValueAccessor } from '@takeoff-ui/angular';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -23,66 +10,30 @@ import {
     RouterOutlet,
     TkButton,
     TkInput,
-    TkSelect,
-    TkCheckbox,
-    TkToggle,
-    TkAlert,
-    TkBadge,
-    TkCard,
-    TkAccordion,
-    TkAccordionItem,
-    TkTabs,
-    TkTabsItem,
-    TkSpinner,
-    TkDialog,
+    TextValueAccessor,
+    ReactiveFormsModule,
+    JsonPipe,
+    FormsModule,
   ],
   templateUrl: './app.html',
+  standalone: true,
   styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Takeoff UI Angular Demo');
+  private readonly fb = inject(FormBuilder);
 
-  inputValue = '';
-  selectValue = '';
-  checkboxValue = false;
-  toggleValue = false;
-  dialogVisible = false;
+  formGroup: FormGroup = this.fb.group({
+    firstname: ['test'],
+  });
 
-  selectOptions = [
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
-    { label: 'Option 3', value: '3' },
-  ];
-
-  onButtonClick() {
+  onButtonClick(): void {
     console.log('Button clicked!');
   }
 
-  onInputChange(event: CustomEvent) {
-    this.inputValue = event.detail;
-    console.log('Input changed:', event.detail);
+  onInputChange(): void {
+    console.log('input change');
   }
 
-  onSelectChange(event: CustomEvent) {
-    this.selectValue = event.detail;
-    console.log('Select changed:', event.detail);
-  }
-
-  onCheckboxChange(event: CustomEvent) {
-    this.checkboxValue = event.detail;
-    console.log('Checkbox changed:', event.detail);
-  }
-
-  onToggleChange(event: CustomEvent) {
-    this.toggleValue = event.detail;
-    console.log('Toggle changed:', event.detail);
-  }
-
-  openDialog() {
-    this.dialogVisible = true;
-  }
-
-  closeDialog() {
-    this.dialogVisible = false;
-  }
+  textValue = 'harun';
 }
