@@ -23,10 +23,6 @@
     position: static;
     box-shadow: none;
     border: 1px solid var(--border-light);
-
-    &.invalid {
-      border-color: var(--states-danger-base);
-    }
   }
 
   .tk-datepicker-panel-inner {
