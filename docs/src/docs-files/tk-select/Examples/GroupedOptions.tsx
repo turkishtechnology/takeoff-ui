@@ -52,7 +52,7 @@ const selectValue = ref();
     groupOptionsKey="options"
     optionLabelKey="label"
     optionValueKey="value"
-    :options.prop="[
+    :options="[
       {
         groupName: 'Marmara',
         options: [
