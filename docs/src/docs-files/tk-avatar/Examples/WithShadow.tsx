@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { TkAvatar, TkCheckbox } from '@takeoff-ui/react';
 import React, { useState } from 'react';
 import FeatureDemo from '../../../components/FeatureDemo';
@@ -13,17 +12,17 @@ const WithShadow = () => {
 <TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hideShadow' : ''} />
 <TkAvatar label="AD" rounded badge ${hideShadow ? 'hideShadow' : ''} />`;
 
-  const vueCode = `<TkAvatar label="JS" ${hideShadow ? 'hide-shadow' : ''} />
-<TkAvatar label="AD" rounded ${hideShadow ? 'hide-shadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hide-shadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hide-shadow' : ''} />
-<TkAvatar label="AD" rounded badge ${hideShadow ? 'hide-shadow' : ''} />`;
+  const vueCode = `<TkAvatar label="JS" ${hideShadow ? 'hideShadow' : ''} />
+<TkAvatar label="AD" rounded ${hideShadow ? 'hideShadow' : ''} />
+<TkAvatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hideShadow' : ''} />
+<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hideShadow' : ''} />
+<TkAvatar label="AD" rounded badge ${hideShadow ? 'hideShadow' : ''} />`;
 
-  const angularCode = `<tk-avatar label="JS" ${hideShadow ? 'hideShadow' : ''} />
-<tk-avatar label="AD" rounded ${hideShadow ? 'hideShadow' : ''} />
-<tk-avatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hideShadow' : ''} />
-<tk-avatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hideShadow' : ''} />
-<tk-avatar label="AD" rounded badge ${hideShadow ? 'hideShadow' : ''} />`;
+  const angularCode = `<tk-avatar label="JS" ${hideShadow ? 'hide-shadow' : ''} />
+<tk-avatar label="AD" rounded ${hideShadow ? 'hide-shadow' : ''} />
+<tk-avatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hide-shadow' : ''} />
+<tk-avatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hide-shadow' : ''} />
+<tk-avatar label="AD" rounded badge ${hideShadow ? 'hide-shadow' : ''} />`;
 
   const demo = (
     <div className="flex flex-col gap-6 w-full">
@@ -40,10 +39,7 @@ const WithShadow = () => {
     </div>
   );
 
-  return (
-    <>
-      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
-    </>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
+
 export default WithShadow;
