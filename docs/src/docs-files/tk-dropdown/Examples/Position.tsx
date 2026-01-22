@@ -71,23 +71,23 @@ const options = [
 
 <template>
   <div>
-    <TkDropdown :options.prop="options" position="bottom">
+    <TkDropdown :options="options" position="bottom">
       <TkButton label="Bottom" slot="trigger" />
     </TkDropdown>
-    <TkDropdown :options.prop="options" position="bottom-start">
+    <TkDropdown :options="options" position="bottom-start">
       <TkButton label="Bottom Start" slot="trigger" />
     </TkDropdown>
-    <TkDropdown :options.prop="options" position="bottom-end">
+    <TkDropdown :options="options" position="bottom-end">
       <TkButton label="Bottom End" slot="trigger" />
     </TkDropdown>
 
-    <TkDropdown :options.prop="options" position="right">
+    <TkDropdown :options="options" position="right">
       <TkButton label="Right" slot="trigger" />
     </TkDropdown>
-    <TkDropdown :options.prop="options" position="right-start">
+    <TkDropdown :options="options" position="right-start">
       <TkButton label="Right Start" slot="trigger" />
     </TkDropdown>
-    <TkDropdown :options.prop="options" position="right-end">
+    <TkDropdown :options="options" position="right-end">
       <TkButton label="Right End" slot="trigger" />
     </TkDropdown>
   </div>

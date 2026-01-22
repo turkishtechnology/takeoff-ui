@@ -46,14 +46,14 @@ const options = [
 
 <template>
   <div>
-    <tk-dropdown :options.prop="options">
-      <tk-button
+    <TkDropdown :options="options">
+      <TkButton
         label="Select"
         icon="keyboard_arrow_down"
-        icon-position="right"
+        :iconPosition="right"
         slot="trigger"
       />
-    </tk-dropdown>
+    </TkDropdown>
   </div>
 </template>
 `;

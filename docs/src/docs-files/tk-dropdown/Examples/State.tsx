@@ -32,17 +32,17 @@ return (
 import { TkDropdown, TkButton } from '@takeoff-ui/vue'
 
 const options = [
-  { label: "Lorem Ipsum", value: "1", disabled: true },
-  { label: "It is established", value: "2" },
-  { label: "Many desktop", value: "3" },
+  { label: "Enable Item", value: "1" },
+  { label: "Disabled Item", value: "2", disabled: true },
+  { label: "Enable Item", value: "3" },
 ];
 
 </script>
 
 <template>
   <div>
-    <TkDropdown :options.prop="options" position="bottom">
-      <TkButton label="Bottom" slot="trigger" />
+    <TkDropdown :options="options">
+      <TkButton label="Disable Item Example" slot="trigger" />
     </TkDropdown>
   </div>
 </template>

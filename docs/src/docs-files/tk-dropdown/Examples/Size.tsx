@@ -16,13 +16,13 @@ const Size = () => {
     ];
 
     <TkDropdown options={options} size="small">
-        <TkButton label="Small" slot="trigger"/>
+        <TkButton label="Small" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="small" />
     </TkDropdown>
     <TkDropdown options={options} size="base">
-        <TkButton label="Base" slot="trigger"/>
+        <TkButton label="Base" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="base" />
     </TkDropdown>
     <TkDropdown options={options} size="large">
-        <TkButton label="Large" slot="trigger"/>
+        <TkButton label="Large" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="large" />
     </TkDropdown>;`;
 
   const vueCode = `<script setup>
@@ -37,15 +37,15 @@ const Size = () => {
 
         <template>
         <div>
-            <tk-dropdown :options.prop="options" size="small">
-            <tk-button label="Small" slot="trigger"/>
-            </tk-dropdown>
-            <tk-dropdown :options.prop="options" size="base">
-            <tk-button label="Base" slot="trigger"/>
-            </tk-dropdown>
-            <tk-dropdown :options.prop="options" size="large">
-            <tk-button label="Large" slot="trigger"/>
-            </tk-dropdown>
+            <TkDropdown :options="options" size="small">
+            <TkButton label="Small" icon="keyboard_arrow_down" :iconPosition="right" slot="trigger" size="small" />
+            </TkDropdown>
+            <TkDropdown :options="options" size="base">
+            <TkButton label="Base" icon="keyboard_arrow_down" :iconPosition="right" slot="trigger" size="base" />
+            </TkDropdown>
+            <TkDropdown :options="options" size="large">
+            <TkButton label="Large" icon="keyboard_arrow_down" :iconPosition="right" slot="trigger" size="large" />
+            </TkDropdown>
         </div>
         </template>`;
 
@@ -54,7 +54,7 @@ const Size = () => {
         { label: 'It is established', value: '2' },
         { label: 'Many desktop', value: '3' }
     ]" size="small">
-        <tk-button label="Small" slot="trigger"/>
+        <tk-button label="Small" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="small" />
     </tk-dropdown>
     
     <tk-dropdown [options]="[
@@ -62,7 +62,7 @@ const Size = () => {
         { label: 'It is established', value: '2' },
         { label: 'Many desktop', value: '3' }
     ]" size="base">
-        <tk-button label="Base" slot="trigger"/>
+        <tk-button label="Base" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="base" />
     </tk-dropdown>
     
     <tk-dropdown [options]="[
@@ -70,7 +70,7 @@ const Size = () => {
         { label: 'It is established', value: '2' },
         { label: 'Many desktop', value: '3' }
     ]" size="large">
-        <tk-button label="Large" slot="trigger"/>
+        <tk-button label="Large" icon="keyboard_arrow_down" iconPosition="right" slot="trigger" size="large" />
     </tk-dropdown>`;
 
   const demo = (

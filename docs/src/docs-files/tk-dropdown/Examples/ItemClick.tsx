@@ -59,13 +59,13 @@ alert(\`\${e.detail.label} has been clicked\`);
 
 <template>
   <div>
-    <TkDropdown :options.prop="options"
-    @tkItemClick="handleItemClick"
+    <TkDropdown :options="options"
+    @tk-item-click="handleItemClick"
     >
       <TkButton
         label="Item Click Example"
         icon="keyboard_arrow_down"
-        icon-position="right"
+        :iconPosition="right"
         slot="trigger"
       />
     </TkDropdown>
