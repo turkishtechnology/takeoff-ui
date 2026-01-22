@@ -20,9 +20,9 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const label = page.root.shadowRoot.querySelector('label');
+      const label = page.root.querySelector('label');
 
-      expect(label.textContent).toBe('checkTest label');
+      expect(label.textContent).toBe('Test label');
     });
     it('renders with name', async () => {
       const page = await newSpecPage({
@@ -32,7 +32,7 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const input = page.root.shadowRoot.querySelector('input');
+      const input = page.root.querySelector('input');
 
       expect(input.getAttribute('name')).toBe('Test name');
     });
@@ -49,11 +49,11 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const container = page.root.shadowRoot.querySelector('.tk-checkbox-container');
+      const container = page.root.querySelector('.tk-checkbox-container');
 
       expect(container.getAttribute('aria-disabled')).not.toBeNull();
 
-      const input = page.root.shadowRoot.querySelector('input');
+      const input = page.root.querySelector('input');
 
       expect(input.getAttribute('disabled')).toBeTruthy;
     });
@@ -66,7 +66,7 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const container = page.root.shadowRoot.querySelector('.tk-checkbox-container');
+      const container = page.root.querySelector('.tk-checkbox-container');
 
       expect(container.getAttribute('aria-invalid')).not.toBeNull();
     });
@@ -79,11 +79,11 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const input = page.root.shadowRoot.querySelector('input');
+      const input = page.root.querySelector('input');
 
       expect(input.getAttribute('indeterminate')).not.toBeNull();
 
-      const mask = page.root.shadowRoot.querySelector('.mask');
+      const mask = page.root.querySelector('.mask');
 
       expect(mask.textContent).toBe('remove');
     });
@@ -102,7 +102,7 @@ describe('tk-checkbox', () => {
 
       page.root.addEventListener('tk-change', changeSpy);
 
-      const checkbox = page.root.shadowRoot.querySelector('input[type="checkbox"]');
+      const checkbox = page.root.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeTruthy();
 
@@ -123,7 +123,7 @@ describe('tk-checkbox', () => {
 
       page.root.addEventListener('tk-change', changeSpy);
 
-      const checkbox = page.root.shadowRoot.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const checkbox = page.root.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox).toBeTruthy();
       expect(checkbox.getAttribute('indeterminate')).toBeFalsy();

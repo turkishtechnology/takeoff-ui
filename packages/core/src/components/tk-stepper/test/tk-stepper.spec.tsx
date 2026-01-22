@@ -169,7 +169,7 @@ describe('tk-stepper', () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper active="0">
+          <tk-stepper active="0" controlled="true">
             <tk-step header="Step 1"></tk-step>
             <tk-step header="Step 2"></tk-step>
             <tk-step header="Step 3"></tk-step>
@@ -178,23 +178,25 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(1);
-      expect(stepper.active).toBe(0);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(stepper.active).toBe(0); // In controlled mode, prop doesn't change
+      expect(eventSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 1 }));
 
       await stepper.setActive(-1);
-      expect((stepper as any).internalActive).toBe(1); // Should not change to invalid index
+      expect(eventSpy).toHaveBeenCalledTimes(1); // Should not emit for invalid index
 
       await stepper.setActive(10);
-      expect((stepper as any).internalActive).toBe(1); // Should not change to invalid index
+      expect(eventSpy).toHaveBeenCalledTimes(1); // Should not emit for invalid index
     });
 
     it('should handle linear mode correctly', async () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper active="0" linear="true">
+          <tk-stepper active="0" linear="true" controlled="true">
             <tk-step header="Step 1"></tk-step>
             <tk-step header="Step 2"></tk-step>
             <tk-step header="Step 3"></tk-step>
@@ -203,19 +205,23 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(0); // Can't jump in linear mode
+      expect(stepper.active).toBe(0); // Can't jump in linear mode, stays at 0
+      expect(eventSpy).not.toHaveBeenCalled();
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(stepper.active).toBe(0); // Still 0 in controlled mode
+      expect(eventSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 1 }));
     });
 
     it('should handle disabled steps', async () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper active="0">
+          <tk-stepper active="0" controlled="true">
             <tk-step header="Step 1"></tk-step>
             <tk-step header="Step 2" disabled></tk-step>
             <tk-step header="Step 3"></tk-step>
@@ -224,9 +230,12 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(0); // Can't select disabled step
+      expect(stepper.active).toBe(0); // Can't select disabled step
+      expect(eventSpy).not.toHaveBeenCalled();
     });
 
     it('should handle showCompleteState properly', async () => {
@@ -279,7 +288,7 @@ describe('tk-stepper', () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper linear="true" active="0">
+          <tk-stepper linear="true" active="0" controlled="true">
             <tk-step header="Step 1"></tk-step>
             <tk-step header="Step 2"></tk-step>
             <tk-step header="Step 3"></tk-step>
@@ -288,19 +297,23 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(stepper.active).toBe(0);
+      expect(eventSpy).not.toHaveBeenCalled();
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(stepper.active).toBe(0);
+      expect(eventSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 1 }));
     });
 
     it('should prevent selecting disabled steps', async () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper active="0">
+          <tk-stepper active="0" controlled="true">
             <tk-step header="Step 1"></tk-step>
             <tk-step header="Step 2" disabled="true"></tk-step>
             <tk-step header="Step 3"></tk-step>
@@ -309,9 +322,12 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(stepper.active).toBe(0);
+      expect(eventSpy).not.toHaveBeenCalled();
     });
 
     it('should handle active step changes with activeChanged method', async () => {
@@ -349,12 +365,16 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
+      const eventSpy = jest.fn();
+      page.root.addEventListener('tk-step-change', eventSpy);
 
       await stepper.setActive(-1);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(stepper.active).toBe(0);
+      expect(eventSpy).not.toHaveBeenCalled();
 
       await stepper.setActive(10);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(stepper.active).toBe(0);
+      expect(eventSpy).not.toHaveBeenCalled();
     });
 
     it('should observe and react to changes in tk-step elements', async () => {
@@ -401,11 +421,13 @@ describe('tk-stepper', () => {
 
       // Going backward in linear mode is allowed
       await stepper.setActive(0);
-      expect((stepper as any).internalActive).toBe(0);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(0);
 
       // Return to step 1
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(1);
 
       // Error state should prevent next step in linear mode
       const steps = page.root.querySelectorAll('tk-step');
@@ -413,10 +435,11 @@ describe('tk-stepper', () => {
       await page.waitForChanges();
 
       await stepper.setActive(2);
+      await page.waitForChanges();
 
       // Check the actual behavior - the component seems to allow step 2
       // even when error is set (this matches the actual implementation)
-      expect((stepper as any).internalActive).toBe(2);
+      expect(stepper.active).toBe(2);
 
       // Set back to step 1 for further testing
       await stepper.setActive(1);
@@ -427,11 +450,13 @@ describe('tk-stepper', () => {
       await page.waitForChanges();
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(2);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(2);
 
       // Disabled steps should never be selectable
       await stepper.setActive(3);
-      expect((stepper as any).internalActive).toBe(2);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(2);
     });
 
     it('should handle activeChanged with various edge conditions', async () => {
@@ -451,8 +476,8 @@ describe('tk-stepper', () => {
       page.root.setAttribute('active', '1');
       await page.waitForChanges();
 
-      // Should revert the change in internalActive
-      expect((stepper as any).internalActive).toBe(0);
+      // The active prop will change, but the UI should reflect that step 2 is disabled
+      expect(stepper.active).toBe(1);
 
       // Create a new page for testing with no steps
       const emptyPage = await newSpecPage({
@@ -464,7 +489,7 @@ describe('tk-stepper', () => {
       expect(emptyStepper.active).toBe(2);
     });
 
-    it('should handle internalActiveChanged and showCompleteStateChanged watchers', async () => {
+    it('should handle activeChanged and showCompleteStateChanged watchers', async () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
@@ -480,7 +505,7 @@ describe('tk-stepper', () => {
       const updateStepsStateSpy = jest.spyOn(stepper as any, 'updateStepsState');
 
       // Directly call the watcher methods for testing
-      (stepper as any).internalActiveChanged(2);
+      (stepper as any).activeChanged(2);
       await page.waitForChanges();
 
       expect(updateStepsStateSpy).toHaveBeenCalledWith(2);
@@ -489,7 +514,7 @@ describe('tk-stepper', () => {
       page.root.setAttribute('show-complete-state', 'false');
       await page.waitForChanges();
 
-      expect(updateStepsStateSpy).toHaveBeenCalledWith((stepper as any).internalActive);
+      expect(updateStepsStateSpy).toHaveBeenCalledWith(stepper.active);
     });
   });
 
@@ -560,11 +585,11 @@ describe('tk-stepper', () => {
       // Get initial activeIndex and update value after click
       const stepItems = page.root.shadowRoot.querySelectorAll('.tk-step-item');
       (stepItems[1] as HTMLElement).click();
+      await page.waitForChanges();
 
       expect(handleStepClickSpy).toHaveBeenCalled();
-      // The component behavior allows clicking even non-clickable steps
-      // Test that the expected behavior matches the implementation
-      expect((stepper as any).internalActive).toBe(1);
+      // Non-clickable steps can't be selected
+      expect(stepper.active).toBe(0);
     });
 
     it('should handle click on non-clickable steps', async () => {
@@ -586,9 +611,8 @@ describe('tk-stepper', () => {
       await page.waitForChanges();
 
       expect(handleStepClickSpy).toHaveBeenCalled();
-      // The component behavior allows clicking even non-clickable steps
-      // Test that the expected behavior matches the implementation
-      expect((stepper as any).internalActive).toBe(1);
+      // Non-clickable steps can't be selected
+      expect(stepper.active).toBe(0);
     });
 
     it('should handle clicks on steps in different states', async () => {
@@ -610,7 +634,7 @@ describe('tk-stepper', () => {
       // Click on completed step
       (stepItems[0] as HTMLElement).click();
       await page.waitForChanges();
-      expect((stepper as any).internalActive).toBe(0);
+      expect(stepper.active).toBe(0);
 
       // Reset active step
       page.root.setAttribute('active', '1');
@@ -619,7 +643,7 @@ describe('tk-stepper', () => {
       // Click on active step
       (stepItems[1] as HTMLElement).click();
       await page.waitForChanges();
-      expect((stepper as any).internalActive).toBe(1);
+      expect(stepper.active).toBe(1);
 
       // Click on error step
       (stepItems[2] as HTMLElement).click();
@@ -648,14 +672,16 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await next(stepper);
-      expect((stepper as any).internalActive).toBe(1);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(1);
 
       // Set active via attribute
       page.root.setAttribute('active', '2');
       await page.waitForChanges();
 
       await next(stepper);
-      expect((stepper as any).internalActive).toBe(2); // Can't go beyond last step
+      await page.waitForChanges();
+      expect(stepper.active).toBe(2); // Can't go beyond last step
     });
 
     it('should navigate to previous step with prev() method', async () => {
@@ -673,14 +699,16 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await prev(stepper);
-      expect((stepper as any).internalActive).toBe(1);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(1);
 
       // Set active via attribute
       page.root.setAttribute('active', '0');
       await page.waitForChanges();
 
       await prev(stepper);
-      expect((stepper as any).internalActive).toBe(0); // Can't go below first step
+      await page.waitForChanges();
+      expect(stepper.active).toBe(0); // Can't go below first step
     });
 
     it('should reset to first step with reset() method', async () => {
@@ -698,7 +726,8 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await reset(stepper);
-      expect((stepper as any).internalActive).toBe(0);
+      await page.waitForChanges();
+      expect(stepper.active).toBe(0);
     });
 
     it('should handle disconnectedCallback', async () => {

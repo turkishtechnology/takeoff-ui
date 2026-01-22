@@ -85,11 +85,16 @@ describe('tk-drawer', () => {
 
     expect(tkButton).toBeTruthy();
 
+    // Set up event listener to verify the close event is emitted
+    const closeEventSpy = jest.fn();
+    drawer.addEventListener('tk-drawer-close', closeEventSpy);
+
     const button: HTMLButtonElement = tkButton.shadowRoot.querySelector('button');
     button.click();
     await page.waitForChanges();
 
-    expect(drawer.open).toBe(false);
+    // Verify the close event was emitted
+    expect(closeEventSpy).toHaveBeenCalled();
   });
 
   // Methods
@@ -100,10 +105,16 @@ describe('tk-drawer', () => {
     });
 
     const drawer = page.root as HTMLTkDrawerElement;
+
+    // Set up event listener to verify the open event is emitted
+    const openEventSpy = jest.fn();
+    drawer.addEventListener('tk-drawer-open', openEventSpy);
+
     await drawer.show();
     await page.waitForChanges();
 
-    expect(drawer.open).toBe(true);
+    // Verify the open event was emitted
+    expect(openEventSpy).toHaveBeenCalled();
   });
 
   it('should drawer close when close method is called', async () => {
@@ -113,10 +124,16 @@ describe('tk-drawer', () => {
     });
 
     const drawer = page.root as HTMLTkDrawerElement;
+
+    // Set up event listener to verify the close event is emitted
+    const closeEventSpy = jest.fn();
+    drawer.addEventListener('tk-drawer-close', closeEventSpy);
+
     await drawer.close();
     await page.waitForChanges();
 
-    expect(drawer.open).toBe(false);
+    // Verify the close event was emitted
+    expect(closeEventSpy).toHaveBeenCalled();
   });
 
   // State
@@ -229,11 +246,16 @@ describe('tk-drawer', () => {
 
     const drawer = page.root as HTMLTkDrawerElement;
 
+    // Set up event listener to verify the close event is emitted
+    const closeEventSpy = jest.fn();
+    drawer.addEventListener('tk-drawer-close', closeEventSpy);
+
     const overlay: HTMLDivElement = drawer.shadowRoot.querySelector('.tk-drawer-overlay');
 
     overlay.click();
     await page.waitForChanges();
 
-    expect(drawer.open).toBe(false);
+    // Verify the close event was emitted when overlay is clicked
+    expect(closeEventSpy).toHaveBeenCalled();
   });
 });
