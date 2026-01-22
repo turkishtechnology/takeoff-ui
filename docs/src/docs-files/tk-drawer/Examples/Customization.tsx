@@ -68,8 +68,8 @@ const width = ref('400px');
   <TkDrawer
     header="Custom Width Drawer"
     :open="showDrawer"
-    @tkDrawerClose="showDrawer = false"
-    :containerStyle="{ width }"
+    @tk-drawer-close="showDrawer = false"
+    :container-style="{ width }"
   >
     <div slot="content">
         <p>

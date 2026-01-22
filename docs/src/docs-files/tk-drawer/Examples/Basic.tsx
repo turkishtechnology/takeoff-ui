@@ -48,11 +48,11 @@ const showDrawer = ref(false);
 
 <template>
   <div>
-    <TkButton label="Open Drawer" @tkClick="showDrawer = true" />
+    <TkButton label="Open Drawer" @tk-click="showDrawer = true" />
     <TkDrawer
       header="Header Text"
       :open="showDrawer"
-      @tkDrawerClose="() => (showDrawer = false)"
+      @tk-drawer-close="() => (showDrawer = false)"
     >
       <div slot="content">
         <p>

@@ -67,13 +67,13 @@ const showDrawer = ref(false);
         v-model="preventDismiss"
       />
     </div>
-    <TkButton label="Open Drawer" @tkClick="() => (showDrawer = true)" />
+    <TkButton label="Open Drawer" @tk-click="() => (showDrawer = true)" />
 
     <TkDrawer
       header="Prevent Dismiss Drawer"
       :open="showDrawer"
-      :preventDismiss="preventDismiss"
-      @tkDrawerClose="showDrawer = false"
+      :prevent-dismiss="preventDismiss"
+      @tk-drawer-close="showDrawer = false"
     >
       <div slot="content">
         <p v-if="preventDismiss">

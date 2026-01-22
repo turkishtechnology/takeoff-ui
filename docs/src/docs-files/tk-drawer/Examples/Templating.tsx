@@ -188,16 +188,16 @@ const showDrawer = ref(false);
 </script>
 
 <template>
-  <TkButton label="Open Custom Drawer" @tkClick="showDrawer = true" />
+  <TkButton label="Open Custom Drawer" @tk-click="showDrawer = true" />
   <TkDrawer
     header="Settings"
     :open="showDrawer"
-    @tkDrawerClose="() => (showDrawer = false)"
+    @tk-drawer-close="() => (showDrawer = false)"
   >
     <div slot="container">
-      <div className="notification-panel-header">
-        <span className="header-title">Notification</span>
-        <div className="header-actions">
+      <div class="notification-panel-header">
+        <span class="header-title">Notification</span>
+        <div class="header-actions">
           <TkButton
             variant="neutral"
             icon="more_vert"
@@ -209,7 +209,7 @@ const showDrawer = ref(false);
             icon="close"
             size="small"
             type="text"
-            @tkClick="showDrawer = false"
+            @tk-click="showDrawer = false"
           ></TkButton>
         </div>
       </div>
@@ -218,20 +218,20 @@ const showDrawer = ref(false);
         size="base"
         tab-style="basic"
         variant="primary"
-        is-closable="false"
+        :is-closable="false"
         default-active-index="0"
         :is-extendable="false"
       >
         <TkTabsItem label="All">
-          <div className="notification-container">
-            <div className="notification-content">
-              <div className="message-container">
-                <div className="message-header">
-                  <div className="message-header-start">
-                    <div className="message-date">14 april 2024</div>
-                    <div className="message-title">Header Text</div>
+          <div class="notification-container">
+            <div class="notification-content">
+              <div class="message-container">
+                <div class="message-header">
+                  <div class="message-header-start">
+                    <div class="message-date">14 april 2024</div>
+                    <div class="message-title">Header Text</div>
                   </div>
-                  <div className="message-header-end">
+                  <div class="message-header-end">
                     <TkBadge
                       label="New"
                       variant="info"
@@ -239,15 +239,15 @@ const showDrawer = ref(false);
                     ></TkBadge>
                   </div>
                 </div>
-                <p className="message-text">
+                <p class="message-text">
                   Lorem Ipsum dolor sit amet consiquences.
                 </p>
               </div>
-              <div className="message-action">
+              <div class="message-action">
                 <TkButton variant="info" label="Action" type="text"></TkButton>
               </div>
             </div>
-            <div className="notification-end">
+            <div class="notification-end">
               <TkButton
                 variant="neutral"
                 size="small"
