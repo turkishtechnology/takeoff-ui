@@ -6,7 +6,7 @@ const PlayerButton = () => {
   const reactCode = `<TkCarousel 
   navigationPlacement="outside" 
   autoplay={true} 
-  showPlayerToggleButton={true} 
+  showPlayerButton={true} 
   itemsPerView={3}
 >
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
@@ -20,7 +20,7 @@ const PlayerButton = () => {
   const vueCode = `<TkCarousel 
   navigationPlacement="outside" 
   :autoplay="true" 
-  :showPlayerToggleButton="true" 
+  :showPlayerButton="true" 
   :itemsPerView="3"
 >
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
@@ -32,10 +32,10 @@ const PlayerButton = () => {
 </TkCarousel>`;
 
   const angularCode = `<tk-carousel 
-  navigationPlacement="outside" 
+  navigation-placement="outside" 
   [autoplay]="true" 
-  [showPlayerToggleButton]="true" 
-  [itemsPerView]="3"
+  [show-player-button]="true" 
+  [items-per-view]="3"
 >
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
   <img src="https://picsum.photos/800/400?random=2" alt="Slide 2" />
