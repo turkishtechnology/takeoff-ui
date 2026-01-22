@@ -103,7 +103,6 @@ const treeData = [
   items={treeData}
   branchIcon="folder"
   leafIcon="insert_drive_file"
-  onTkItemClick={(e) => console.log('Clicked item:', e.detail)}
 />
 `);
     setVueCode(`
@@ -155,9 +154,8 @@ const treeData = [
     type="light" 
     size="base" 
     :items="treeData"
-    branch-icon="folder"
-    leaf-icon="insert_drive_file"
-    @tkItemClick="(e) => console.log('Clicked item:', e.detail)"
+    branchIcon="folder"
+    leafIcon="insert_drive_file"
   />
 </template>
 `);
