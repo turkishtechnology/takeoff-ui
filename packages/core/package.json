@@ -24,7 +24,7 @@
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --detectOpenHandles --silent",
-    "test.coverage": "stencil test --spec --coverage --detectOpenHandles > test-results.log 2>&1",
+    "test.coverage": "stencil test --spec --coverage --detectOpenHandles --silent",
     "test.watch": "stencil test --spec --watchAll --detectOpenHandles --silent",
     "generate": "stencil generate"
   },
