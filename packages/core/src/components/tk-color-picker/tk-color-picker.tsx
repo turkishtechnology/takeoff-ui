@@ -243,12 +243,12 @@ export class TkColorPicker implements ComponentInterface {
     this.clickOutsideMixin = new ClickOutsideMixin({
       referenceElement: this.el,
       handler: this.handleClickOutside,
-      disabled: !this.isOpen || this.inline || this.preventDismiss,
+      disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss,
     });
   }
 
   componentDidUpdate() {
-    this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.inline || this.preventDismiss });
+    this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss });
 
     if (this.isOpen && this.inputRef && this.panelRef) {
       // Clean up old floating UI listeners before setting up new ones
@@ -277,7 +277,7 @@ export class TkColorPicker implements ComponentInterface {
    */
   @Method()
   async open() {
-    if (!this.disabled && !this.inline) {
+    if (!this.disabled && !this.readonly && !this.inline) {
       this.pendingValue = { ...this.internalHSVA };
       this.isOpen = true;
     }
@@ -377,7 +377,7 @@ export class TkColorPicker implements ComponentInterface {
 
   private handleTriggerClick = (e: MouseEvent) => {
     e.stopPropagation();
-    if (this.disabled || this.inline) return;
+    if (this.disabled || this.readonly || this.inline) return;
 
     if (!this.isOpen) {
       this.pendingValue = { ...this.internalHSVA };
