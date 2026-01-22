@@ -38,13 +38,13 @@ const setShowDialog = (value) => {
 </script>
 
 <template>
-  <>
-    <TkButton label="Open Dialog" @tkClick="showDialog = true" />
-    <TkDialog header="Dialog Variants" subheader="This is a info dialog" :visible.prop="showDialog" variant="success"
+  <div>
+    <TkButton label="Open Dialog" @tk-click="showDialog = true" />
+    <TkDialog header="Dialog Variants" subheader="This is a info dialog" :visible="showDialog" variant="success"
       @tk-visible-change="(e) => {
         showDialog = e.detail;
       }"
-      :containerStyle="{ width: '450px' }">
+      :container-style="{ width: '450px' }">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam
         deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
@@ -52,7 +52,7 @@ const setShowDialog = (value) => {
         quas!
       </p>
     </TkDialog>
-  </>
+  </div>
 </template>`;
 
   const demo = (

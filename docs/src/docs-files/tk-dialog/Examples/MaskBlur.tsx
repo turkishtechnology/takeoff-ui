@@ -74,8 +74,8 @@ const handleClick = () => {
       header="Welcome"
       subheader="Basic Dialog Example"
       v-model="showDialog"
-      :containerStyle="{ width: '450px' }"
-      isMaskBlur={true}
+      :container-style="{ width: '450px' }"
+      :is-mask-blur="true"
     >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed

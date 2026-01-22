@@ -40,14 +40,14 @@ const setShowDialog = (value) => {
 </script>
 
 <template>
-  <>
+  <div>
     <TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
     <TkDialog
       header="Header Types"
       subheader="This dialog uses the ${headerType} header type"
       v-model="showDialog"
-      :headerType.prop="headerType"
-      :containerStyle="{ width: '450px' }"
+      :header-type="headerType"
+      :container-style="{ width: '450px' }"
     >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
@@ -56,7 +56,7 @@ const setShowDialog = (value) => {
         cupiditate neque quas!
       </p>
     </TkDialog>
-  </>
+  </div>
 </template>
 `;
 
