@@ -73,7 +73,7 @@ const value4 = ref();
     <TkInput
       label="Date Mask"
       placeholder="dd.mm.YYYY"
-      :maskOptions.prop="{
+      :maskOptions="{
         date: true,
         delimiter: '.',
         datePattern: ['d', 'm', 'Y'],
@@ -83,7 +83,7 @@ const value4 = ref();
     <TkInput
       label="Expire Date"
       placeholder="mm/yy"
-      :maskOptions.prop="{
+      :maskOptions="{
         date: true,
         datePattern: ['m', 'y'],
       }"
@@ -92,7 +92,7 @@ const value4 = ref();
     <TkInput
       label="Time Formatting"
       placeholder="hh:mm"
-      :maskOptions.prop="{
+      :maskOptions="{
         time: true,
         timePattern: ['h', 'm'],
       }"
@@ -101,7 +101,7 @@ const value4 = ref();
     <TkInput
       label="Credit Card"
       placeholder="xxxx xxxx xxxx xxxx"
-      :maskOptions.prop="{
+      :maskOptions="{
         blocks: [4, 4, 4, 4],
         numericOnly: true,
       }"
@@ -110,7 +110,7 @@ const value4 = ref();
     <TkInput
       label="Letter Only"
       placeholder="xxxxxxxxxx"
-      :maskOptions.prop="{
+      :maskOptions="{
         blocks: [40],
         letterOnly: true,
       }"
