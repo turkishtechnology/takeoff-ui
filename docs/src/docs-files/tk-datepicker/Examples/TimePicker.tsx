@@ -29,9 +29,9 @@ const timeFormat = ref<'12' | '24'>('12');
 <TkDatepicker
     label="Select Date & Time"
     placeholder="YYYY-MM-DD HH:mm"
-    showTimePicker
+    show-time-picker
     v-model="selectedDateTime"
-    :timeFormat.prop="timeFormat"
+    :time-format="timeFormat"
 />`;
 
   const demo = (

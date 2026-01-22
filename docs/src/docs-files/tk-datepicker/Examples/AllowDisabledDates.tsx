@@ -37,15 +37,15 @@ const selectedDate2 = ref("");
 <TkDatepicker
    label="Only specific dates are selectable"
    placeholder="Choose a date"
-   dateFormat="dd/MM/yyyy"
-   :allowedDates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
+   date-format="dd/MM/yyyy"
+   :allowed-dates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
    v-model="selectedDate1"
 />
 <TkDatepicker
    label="Specific dates are disabled"
    placeholder="Choose a date"
-   dateFormat="dd/MM/yyyy"
-   :disabledDates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
+   date-format="dd/MM/yyyy"
+   :disabled-dates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
    v-model="selectedDate2"
 />`;
   const demo = (
