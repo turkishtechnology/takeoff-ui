@@ -39,8 +39,8 @@ import { TkColorPicker, TkButton } from '@takeoff-ui/vue';
 <template>
   <TkColorPicker
     inline
-    showheader
-    headerType="${headerType}"
+    showHeader
+    header-type="${headerType}"
     header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
   >
     <div slot="footer-actions">
@@ -50,11 +50,10 @@ import { TkColorPicker, TkButton } from '@takeoff-ui/vue';
 </template>`;
 
     const angularCode = `<tk-color-picker
-    inline
-    showHeader
-    headerType="${headerType}"
-    header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header"
-  >
+  inline
+  [show-header]="true"
+  header-type="${headerType}"
+  header="${headerType.charAt(0).toUpperCase() + headerType.slice(1)} Header">
   <div slot="footer-actions">
     <tk-button label='Apply' variant="primary" size="small"></tk-button>
   </div>
