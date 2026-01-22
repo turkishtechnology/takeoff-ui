@@ -192,7 +192,7 @@ const handleClearSorting = () => {
       <TkButton @click="handleClearFilters" label="Clear Filters"></TkButton>
       <TkButton @click="handleClearSorting" label="Clear Sorting"></TkButton>
     </div>
-    <TkTable ref="tableRef" :columns.prop="column" :data.prop="basicData" />
+    <TkTable ref="tableRef" :columns="column" :data="basicData" />
   </div>
 </template>`;
 

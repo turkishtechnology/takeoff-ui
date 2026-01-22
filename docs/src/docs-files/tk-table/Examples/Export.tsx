@@ -204,10 +204,10 @@ const handleItemClick = (e) => {
 
 <template>
    <div :style="{ padding: '8px' }">
-    <TkTable ref="tableRef" :columns.prop="column" :data.prop="basicData">
+    <TkTable ref="tableRef" :columns="column" :data="basicData">
       <div slot="header-right">
         <TkDropdown
-          :options.prop="exportOptions"
+          :options="exportOptions"
           position="bottom-end"
           @tkItemClick="handleItemClick"
         >
