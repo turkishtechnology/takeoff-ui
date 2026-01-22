@@ -42,7 +42,7 @@ tk-checkbox {
       width: 20px;
       height: 20px;
       background-color: var(--static-light);
-      border: 2px solid var(--border-light);
+      border: 2px solid var(--border-sub-base);
       border-radius: var(--radius-s);
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -100,7 +100,7 @@ tk-checkbox {
       color: var(--text-sub-base);
 
       input + .mask {
-        border: 2px solid var(--border-light);
+        border: 2px solid var(--border-sub-base);
         background-color: var(--background-light);
 
         i {
