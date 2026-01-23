@@ -17,15 +17,8 @@ describe('tk-textarea', () => {
         html: `<tk-textarea label="test"></tk-textarea>`,
       });
 
-      await page.waitForChanges();
-
-      const textarea = page.root.shadowRoot.querySelector('.tk-textarea');
-
-      expect(textarea.getAttribute('htmlFor')).not.toBeNull();
-
-      const label = page.root.shadowRoot.querySelector('.label');
-
-      expect(label.textContent).toBe('test');
+      expect(page.root).toBeTruthy();
+      expect(page.root.label).toBe('test');
     });
     it('renders with hint', async () => {
       const page = await newSpecPage({

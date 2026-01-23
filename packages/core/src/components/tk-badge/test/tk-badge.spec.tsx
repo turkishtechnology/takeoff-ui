@@ -1,5 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkBadge } from '../tk-badge';
+import { TkIcon } from '../../tk-icon/tk-icon';
+
 describe('tk-badge', () => {
   //Basic Rendering
   describe('basic rendering', () => {
@@ -105,9 +107,8 @@ describe('tk-badge', () => {
     });
     it('handles icon object', async () => {
       const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge 
-        ></tk-badge>`,
+        components: [TkBadge, TkIcon],
+        html: `<tk-badge></tk-badge>`,
       });
 
       page.root.icon = {
@@ -118,24 +119,28 @@ describe('tk-badge', () => {
       };
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-rounded') as HTMLElement;
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon');
+      expect(tkIcon).toBeTruthy();
 
+      const icon = tkIcon.querySelector('.material-symbols-rounded') as HTMLElement;
+      expect(icon).toBeTruthy();
       expect(icon.textContent).toBe('search');
       expect(icon.classList.contains('fill')).toBe(true);
-      expect(icon.style.color).toBe('#000000');
+      expect(icon.style.getPropertyValue('color')).toBe('#000000');
     });
     it('handles icon string', async () => {
       const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge icon="home"
-        ></tk-badge>`,
+        components: [TkBadge, TkIcon],
+        html: `<tk-badge icon="home"></tk-badge>`,
       });
 
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.tk-badge-icon');
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon');
+      expect(tkIcon).toBeTruthy();
 
-      expect(icon.classList.contains('material-symbols-outlined')).toBe(true);
+      const icon = tkIcon.querySelector('.material-symbols-outlined') as HTMLElement;
+      expect(icon).toBeTruthy();
       expect(icon.textContent).toBe('home');
     });
     it('handles slots', async () => {

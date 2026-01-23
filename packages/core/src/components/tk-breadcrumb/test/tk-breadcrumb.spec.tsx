@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkBreadcrumb } from '../tk-breadcrumb';
 import { TkBreadcrumbItem } from '../tk-breadcrumb-item/tk-breadcrumb-item';
+import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-breadcrumb', () => {
   // Basic Rendering
@@ -15,12 +16,11 @@ describe('tk-breadcrumb', () => {
     });
     it('renders tk-breadcrumb-item ', async () => {
       const page = await newSpecPage({
-        components: [TkBreadcrumb, TkBreadcrumbItem],
-        html: `<tk-breadcrumb>
-        </tk-breadcrumb>`,
+        components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
+        html: `<tk-breadcrumb></tk-breadcrumb>`,
       });
 
-      page.rootInstance.model = [{ label: 'home', href: '/', icon: { name: 'home' }, isCurrent: 'true', isExternal: 'true' }];
+      page.root.model = [{ label: 'home', href: '/', icon: { name: 'home' }, isCurrent: 'true', isExternal: 'true' }];
 
       await page.waitForChanges();
 
@@ -34,12 +34,10 @@ describe('tk-breadcrumb', () => {
       expect(item.classList.contains('tk-breadcrumb-item-current')).toBe(true);
       expect(item.classList.contains('tk-breadcrumb-item-icon-only')).toBe(false);
 
-      const icon = page.root.shadowRoot.querySelector('.tk-breadcrumb-item-icon');
+      const iconComponent = page.root.shadowRoot.querySelector('tk-icon.tk-breadcrumb-item-icon') as HTMLTkIconElement;
 
-      expect(icon).toBeTruthy();
-      expect(icon.classList.contains("material-symbols-'outlined'"));
-      expect(icon.getAttribute('style')).toBe('color: inherit;');
-      expect(icon.textContent).toBe('home');
+      expect(iconComponent).toBeTruthy();
+      expect(iconComponent.icon).toBe('home');
 
       const link = page.root.shadowRoot.querySelector('.tk-breadcrumb-link');
 
@@ -60,13 +58,13 @@ describe('tk-breadcrumb', () => {
       ];
       for (const type of separatorTypes) {
         const page = await newSpecPage({
-          components: [TkBreadcrumb, TkBreadcrumbItem],
+          components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
           html: `<tk-breadcrumb 
           separator=${type.separator}>
           </tk-breadcrumb>`,
         });
 
-        page.rootInstance.model = [{ label: 'home' }, { label: 'profile' }, { label: 'cart' }];
+        page.root.model = [{ label: 'home' }, { label: 'profile' }, { label: 'cart' }];
 
         await page.waitForChanges();
 
@@ -108,12 +106,12 @@ describe('tk-breadcrumb', () => {
     });
     it('should render items when no slots provided', async () => {
       const page = await newSpecPage({
-        components: [TkBreadcrumb, TkBreadcrumbItem],
+        components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
         html: `<tk-breadcrumb>
         </tk-breadcrumb>`,
       });
 
-      page.rootInstance.model = [{ label: 'home', href: '/', icon: { name: 'home' } }];
+      page.root.model = [{ label: 'home', href: '/', icon: { name: 'home' } }];
 
       await page.waitForChanges();
 
@@ -127,12 +125,12 @@ describe('tk-breadcrumb', () => {
     });
     it('correctly assign the last item as isCurrent ', async () => {
       const page = await newSpecPage({
-        components: [TkBreadcrumb, TkBreadcrumbItem],
+        components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
         html: `<tk-breadcrumb>
         </tk-breadcrumb>`,
       });
 
-      page.rootInstance.model = [{ label: 'home' }, { label: 'profile' }, { label: 'cart' }];
+      page.root.model = [{ label: 'home' }, { label: 'profile' }, { label: 'cart' }];
 
       await page.waitForChanges();
 

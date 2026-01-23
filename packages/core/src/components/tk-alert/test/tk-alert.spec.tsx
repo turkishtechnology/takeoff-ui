@@ -1,12 +1,14 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAlert } from '../tk-alert';
+import { TkIcon } from '../../tk-icon/tk-icon';
+import { TkButton } from '../../tk-button/tk-button';
 
 describe('tk-alert', () => {
   // Basic Rendering
   describe('basic rendering', () => {
     it('renders with default props', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert></tk-alert>`,
       });
 
@@ -14,7 +16,7 @@ describe('tk-alert', () => {
     });
     it('renders with header', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert header='Test header'></tk-alert>`,
       });
 
@@ -26,7 +28,7 @@ describe('tk-alert', () => {
     });
     it('renders with message', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert message='Test message'></tk-alert>`,
       });
 
@@ -50,22 +52,27 @@ describe('tk-alert', () => {
       ];
       for (const variant of variants) {
         const page = await newSpecPage({
-          components: [TkAlert],
+          components: [TkAlert, TkIcon],
           html: `<tk-alert variant='${variant.variant}'></tk-alert>`,
         });
 
         const container = page.root.shadowRoot.querySelector('.tk-alert-container');
-        const icon = page.root.shadowRoot.querySelector('.icon');
+        const tkIcon = page.root.shadowRoot.querySelector('tk-icon');
+        const iconElement = tkIcon?.querySelector('.material-symbols-rounded');
 
         expect(container.classList.contains(variant.variant)).toBe(true);
-        expect(icon.textContent).toBe(variant.icon);
+        if (variant.icon) {
+          expect(iconElement?.textContent).toBe(variant.icon);
+        } else {
+          expect(iconElement?.textContent || '').toBe('');
+        }
       }
     });
     it('handles types correctly', async () => {
       const types = ['filled', 'filledlight', 'outlined', 'gradient'];
       for (const type of types) {
         const page = await newSpecPage({
-          components: [TkAlert],
+          components: [TkAlert, TkIcon],
           html: `<tk-alert type='${type}'></tk-alert>`,
         });
 
@@ -76,7 +83,7 @@ describe('tk-alert', () => {
     });
     it('handles icon object', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert 
           ></tk-alert>`,
       });
@@ -89,39 +96,41 @@ describe('tk-alert', () => {
       };
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-rounded') as HTMLElement;
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon');
+      const icon = tkIcon?.querySelector('.material-symbols-rounded') as HTMLElement;
 
-      expect(icon.textContent).toBe('search');
-      expect(icon.classList.contains('fill')).toBe(true);
-      expect(icon.style.color).toBe('#000000');
+      expect(icon?.textContent).toBe('search');
+      expect(icon?.classList.contains('fill')).toBe(true);
+      expect(icon?.style.color).toBe('#000000');
     });
     it('handles icon string', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert icon="home"
           ></tk-alert>`,
       });
 
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-rounded') as HTMLElement;
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon');
+      const icon = tkIcon?.querySelector('.material-symbols-rounded') as HTMLElement;
 
-      expect(icon.textContent).toBe('home');
+      expect(icon?.textContent).toBe('home');
     });
     it('handles icon size', async () => {
       const sizes = ['small', 'base', 'large'];
       for (const size of sizes) {
         const page = await newSpecPage({
-          components: [TkAlert],
+          components: [TkAlert, TkIcon],
           html: `<tk-alert icon="home" icon-size=${size}
             ></tk-alert>`,
         });
 
         await page.waitForChanges();
 
-        const icon = page.root.shadowRoot.querySelector('.icon');
+        const tkIcon = page.root.shadowRoot.querySelector('tk-icon') as HTMLTkIconElement;
 
-        expect(icon.classList.contains(size)).toBeTruthy;
+        expect(tkIcon?.size).toBe(size);
       }
     });
     it('renders multiple messages', async () => {
@@ -132,7 +141,7 @@ describe('tk-alert', () => {
         'Ligula turpis id netus himenaeos magna semper netus elit.',
       ];
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon],
         html: `<tk-alert></tk-alert>`,
       });
       page.root.message = message;
@@ -140,11 +149,9 @@ describe('tk-alert', () => {
       await page.waitForChanges();
 
       const divs = page.root.shadowRoot.querySelectorAll('.tk-alert-message');
-      console.log(page.root.shadowRoot.innerHTML);
       expect(divs.length).toBe(message.length);
 
       for (let i = 0; i < message.length; i++) {
-        console.log(divs[i].textContent);
         expect(divs[i].textContent.trim()).toBe(message[i].trim());
       }
     });
@@ -154,26 +161,31 @@ describe('tk-alert', () => {
   describe('event handling', () => {
     it('should remove the alert when close button is clicked', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon, TkButton],
         html: `<tk-alert removable
               ></tk-alert>`,
       });
 
       await page.waitForChanges();
 
-      const button = page.root.shadowRoot.querySelector('tk-button');
+      const tkButtonElement = page.root.shadowRoot.querySelector('tk-button') as HTMLTkButtonElement;
+      const buttonInnerElement = tkButtonElement.shadowRoot.querySelector('button');
 
-      expect(button).toBeTruthy;
-      expect(button.getAttribute('icon')).toBe('close');
+      expect(tkButtonElement).toBeTruthy();
+      expect(tkButtonElement.icon).toBe('close');
 
-      button.dispatchEvent(new Event('click'));
+      // Spy on the remove method to verify it's called
+      const removeSpy = jest.spyOn(page.root, 'remove');
+
+      buttonInnerElement.click();
 
       await page.waitForChanges();
-      expect(page.root).toBeNull;
+
+      expect(removeSpy).toHaveBeenCalled();
     });
     it('should call handleCloseButtonClick when close button is clicked', async () => {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon, TkButton],
         html: `<tk-alert removable
                 ></tk-alert>`,
       });
@@ -182,19 +194,19 @@ describe('tk-alert', () => {
 
       const instance = page.rootInstance;
 
-      expect(instance).toBeTruthy;
+      expect(instance).toBeTruthy();
 
       const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
-      const button = page.root.shadowRoot.querySelector('tk-button');
+      const tkButtonElement = page.root.shadowRoot.querySelector('tk-button') as HTMLTkButtonElement;
+      const buttonInnerElement = tkButtonElement.shadowRoot.querySelector('button');
 
-      expect(button).toBeTruthy;
+      expect(tkButtonElement).toBeTruthy();
 
-      button.dispatchEvent(new Event('click'));
+      buttonInnerElement.click();
 
       await page.waitForChanges();
 
-      expect(spy).toHaveBeenCalled;
-      expect(page.root).toBeNull;
+      expect(spy).toHaveBeenCalled();
     });
   });
 });

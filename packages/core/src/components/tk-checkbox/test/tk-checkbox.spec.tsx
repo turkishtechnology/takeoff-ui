@@ -20,9 +20,9 @@ describe('tk-checkbox', () => {
 
       await page.waitForChanges();
 
-      const label = page.root.querySelector('label');
+      const labelText = page.root.querySelector('.tk-checkbox-label');
 
-      expect(label.textContent).toBe('Test label');
+      expect(labelText.textContent).toBe('Test label');
     });
     it('renders with name', async () => {
       const page = await newSpecPage({

@@ -1,8 +1,24 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkButton } from '../tk-button';
-import { h } from '@stencil/core';
+import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-button', () => {
+  // Mock HTMLFormElement.prototype.requestSubmit for tests
+  beforeAll(() => {
+    // Mock requestSubmit for all form elements if it doesn't exist
+    if (!HTMLFormElement.prototype.requestSubmit) {
+      Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
+        value: function (this: HTMLFormElement) {
+          // Trigger submit event
+          const event = new Event('submit', { bubbles: true, cancelable: true });
+          this.dispatchEvent(event);
+        },
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
   //Basic Rendering
   describe('basic rendering', () => {
     it('renders with default props', async () => {
@@ -132,7 +148,7 @@ describe('tk-button', () => {
     });
     it('handles icon basic object', async () => {
       const page = await newSpecPage({
-        components: [TkButton],
+        components: [TkButton, TkIcon],
         html: `<tk-button
         ></tk-button>`,
       });
@@ -142,13 +158,13 @@ describe('tk-button', () => {
       };
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-outlined') as HTMLElement;
-
-      expect(icon.textContent).toBe('search');
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon') as HTMLTkIconElement;
+      expect(tkIcon).toBeTruthy();
+      expect(tkIcon.icon).toBe('search');
     });
     it('handles icon object', async () => {
       const page = await newSpecPage({
-        components: [TkButton],
+        components: [TkButton, TkIcon],
         html: `<tk-button
         ></tk-button>`,
       });
@@ -161,24 +177,25 @@ describe('tk-button', () => {
       };
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-rounded') as HTMLElement;
-
-      expect(icon.textContent).toBe('search');
-      expect(icon.classList.contains('fill')).toBe(true);
-      expect(icon.style.color).toBe('#000000');
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon') as HTMLTkIconElement;
+      expect(tkIcon).toBeTruthy();
+      expect(tkIcon.icon).toBe('search');
+      expect(tkIcon.iconType).toBe('rounded');
+      expect(tkIcon.fill).toBe(true);
+      expect(tkIcon.color).toBe('#000000');
     });
     it('handles icon string', async () => {
       const page = await newSpecPage({
-        components: [TkButton],
+        components: [TkButton, TkIcon],
         html: `<tk-button icon="home"></tk-button>`,
       });
 
       await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.tk-button-icon');
-
-      expect(icon.classList.contains('material-symbols-outlined')).toBe(true);
-      expect(icon.textContent).toBe('home');
+      const tkIcon = page.root.shadowRoot.querySelector('tk-icon.tk-button-icon') as HTMLTkIconElement;
+      expect(tkIcon).toBeTruthy();
+      expect(tkIcon.icon).toBe('home');
+      expect(tkIcon.iconType).toBe('outlined');
     });
   });
   describe('event handling', () => {
@@ -219,32 +236,35 @@ describe('tk-button', () => {
     });
 
     it('emits submit events correctly', async () => {
+      const submitSpy = jest.fn();
+
       const page = await newSpecPage({
         components: [TkButton],
-        template: () => (
-          <form>
+        html: `
+          <form id="test-form">
             <tk-button mode="submit"></tk-button>
           </form>
-        ),
+        `,
       });
-      const spy = jest.fn();
 
-      const form = page.root;
+      const form = page.body.querySelector('form') as HTMLFormElement;
       const button = page.body.querySelector('tk-button');
 
       expect(form).toBeTruthy();
       expect(button).toBeTruthy();
+
+      // Add submit event listener
       form.addEventListener('submit', e => {
         e.preventDefault();
-        spy();
+        submitSpy();
       });
 
+      // Click the button
       button.shadowRoot.querySelector('button').click();
       await page.waitForChanges();
 
-      // TODO: event dinlemesi tekrar denenecek
-      // expect(spy).toHaveBeenCalled();
-      expect(button).toBeTruthy();
+      // Verify submit event was triggered through requestSubmit
+      expect(submitSpy).toHaveBeenCalled();
     });
   });
 });

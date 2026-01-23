@@ -9,7 +9,7 @@ describe('tk-radio', () => {
     });
 
     expect(page.root).toBeTruthy();
-    expect(page.root.shadowRoot.textContent).toContain('Default Radio'); // Use shadowRoot
+    expect(page.root.textContent).toContain('Default Radio');
   });
 
   it('applies name attribute', async () => {
@@ -18,7 +18,7 @@ describe('tk-radio', () => {
       html: `<tk-radio name="group1" label="Radio 1"></tk-radio>`,
     });
 
-    const input = page.root.shadowRoot.querySelector('input');
+    const input = page.root.querySelector('input');
     expect(input.name).toBe('group1');
   });
 
@@ -28,7 +28,7 @@ describe('tk-radio', () => {
       html: `<tk-radio checked label="Checked Radio"></tk-radio>`,
     });
 
-    const input = page.root.shadowRoot.querySelector('input');
+    const input = page.root.querySelector('input');
     expect(input.checked).toBe(true);
   });
 
@@ -38,7 +38,7 @@ describe('tk-radio', () => {
       html: `<tk-radio label="Toggle Radio"></tk-radio>`,
     });
 
-    const radio = page.root.shadowRoot.querySelector('input');
+    const radio = page.root.querySelector('input');
     expect(radio.checked).toBe(false);
 
     radio.dispatchEvent(new Event('change'));
@@ -53,7 +53,7 @@ describe('tk-radio', () => {
       html: `<tk-radio disabled label="Disabled Radio"></tk-radio>`,
     });
 
-    const radio = page.root.shadowRoot.querySelector('input');
+    const radio = page.root.querySelector('input');
     expect(radio.disabled).toBe(true);
 
     radio.dispatchEvent(new Event('change'));
@@ -71,7 +71,7 @@ describe('tk-radio', () => {
     const spy = jest.fn();
     page.root.addEventListener('tk-change', spy);
 
-    const radio = page.root.shadowRoot.querySelector('input');
+    const radio = page.root.querySelector('input');
     radio.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
@@ -89,8 +89,8 @@ describe('tk-radio', () => {
     });
 
     const radios = page.body.querySelectorAll('tk-radio');
-    const firstRadio = radios[0].shadowRoot.querySelector('input');
-    const secondRadio = radios[1].shadowRoot.querySelector('input');
+    const firstRadio = radios[0].querySelector('input');
+    const secondRadio = radios[1].querySelector('input');
 
     expect(firstRadio.checked).toBe(true);
     expect(secondRadio.checked).toBe(false);
