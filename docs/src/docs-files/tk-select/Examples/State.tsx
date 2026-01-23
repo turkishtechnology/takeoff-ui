@@ -19,9 +19,9 @@ const State = () => {
   const [errvalue, setErrvalue] = useState(options[0]);
   const demo = (
     <div className="flex justify-center gap-2 flex-wrap">
-      <TkSelect label="Error" options={options} value={errvalue} onTkChange={e => setErrvalue(e.detail)} error="Bu alan zorunludur" invalid />
-      <TkSelect label="Readonly" options={options} value={value} onTkChange={e => setValue(e.detail)} readonly />
-      <TkSelect label="Disabled" options={options} value={value} onTkChange={e => setValue(e.detail)} disabled />
+      <TkSelect label="Error" options={options} error="Bu alan zorunludur" invalid />
+      <TkSelect label="Readonly" options={options} value={value} readonly />
+      <TkSelect label="Disabled" options={options} value={value} disabled />
     </div>
   );
 
