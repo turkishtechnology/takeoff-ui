@@ -1814,7 +1814,7 @@ export class TkTable implements ComponentInterface {
                     ...styleRowObject,
                     ...styleCellObject,
                   }}
-                  ref={el => el?.replaceChildren(getNestedValue(row, col.field))}
+                  ref={el => el?.replaceChildren(getNestedValue(row, col.field) ?? '')}
                 ></td>
               );
             }
