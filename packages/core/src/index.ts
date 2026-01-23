@@ -9,3 +9,6 @@
  */
 export type * from './components.d.ts';
 export * from './utils/toaster';
+
+// Export interfaces
+export type * from './interfaces';
