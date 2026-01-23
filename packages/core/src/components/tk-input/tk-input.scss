@@ -1,6 +1,10 @@
 tk-input {
   display: block;
 }
+//tk-input'u kullanan componentler shadow DOM kullandığında global font stilleri uygulanmıyor.
+tk-input input {
+  font-family: 'Geologica', sans-serif;
+}
 
 tk-input.tk-select-input:not(.editable-select) {
   .tk-input,
