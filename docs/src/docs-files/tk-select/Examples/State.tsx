@@ -1,31 +1,27 @@
 import { TkSelect } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
-import React from 'react';
+import { useState } from 'react';
 
 const State = () => {
-  const reactCode = `<TkSelect
-  label="Error"
-  placeholder="Error"
-  invalid={true}
-  error="Bu alan zorunludur"
-/>
-<TkSelect label="Readonly" placeholder="Readonly" readonly />
-<TkSelect label="Disabled" placeholder="Disabled" disabled />`;
+  const reactCode = `<TkSelect label="Error" options={options} value={value} error="Bu alan zorunludur" invalid/>
+<TkSelect label="Readonly" options={options} value={value} readonly />
+<TkSelect label="Disabled" options={options} value={value} disabled />`;
 
-  const vueCode = `<TkSelect
-  label="Error"
-  placeholder="Error"
-  :invalid="true"
-  error="Bu alan zorunludur"
-/>
-<TkSelect label="Readonly" placeholder="Readonly" readonly />
-<TkSelect label="Disabled" placeholder="Disabled" disabled />`;
-
+  const vueCode = `<TkSelect label="Error"  options={options} value={value} error="Bu alan zorunludur" invalid/>
+<TkSelect label="Readonly" options={options} value={value} readonly />
+<TkSelect label="Disabled" options={options} value={value} disabled />`;
+  const options = [
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' },
+    { value: 'other', label: 'Other' },
+  ];
+  const [value, setValue] = useState(options[0]);
+  const [errvalue, setErrvalue] = useState(options[0]);
   const demo = (
     <div className="flex justify-center gap-2 flex-wrap">
-      <TkSelect label="Error" placeholder="Error" invalid={true} error="Bu alan zorunludur" />
-      <TkSelect label="Readonly" placeholder="Readonly" readonly />
-      <TkSelect label="Disabled" placeholder="Disabled" disabled />
+      <TkSelect label="Error" options={options} error="Bu alan zorunludur" invalid />
+      <TkSelect label="Readonly" options={options} value={value} readonly />
+      <TkSelect label="Disabled" options={options} value={value} disabled />
     </div>
   );
 
