@@ -65,7 +65,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-success-gradient-tozero, linear-gradient(270deg, var(--background-lightest, #f9fafc) 89%, var(--states-success-sub-base, #a0e6ba) 100%));
+      background: var(--gradient-success-gradient-tozero);
     }
   }
 
@@ -85,7 +85,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-info-gradient-tozero, linear-gradient(270deg, var(--background-lightest, #f9fafc) 89%, var(--states-info-sub-base, #abc9fb) 100%));
+      background: var(--gradient-info-gradient-tozero);
     }
   }
 
@@ -105,7 +105,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-danger-gradient-tozero, linear-gradient(270deg, var(--background-lightest, #f9fafc) 89%, var(--states-danger-sub-base, #ffaca7) 100%));
+      background: var(--gradient-danger-gradient-tozero);
     }
   }
 
@@ -125,7 +125,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-warning-gradient-tozero, linear-gradient(270deg, var(--background-lightest, #f9fafc) 89%, var(--states-warning-sub-base, #f6de95) 100%));
+      background: var(--gradient-warning-gradient-tozero);
     }
   }
 
@@ -155,7 +155,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-gradient-gray, linear-gradient(270deg, var(--background-lightest, #f9fafc) 89%, var(--background-sub-base, #cacfd8) 100%));
+      background: var(--gradient-neutral-gradient-tozero);
     }
   }
 
