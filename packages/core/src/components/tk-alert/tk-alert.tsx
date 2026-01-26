@@ -79,6 +79,7 @@ export class TkAlert implements ComponentInterface {
       else if (this.variant == 'info') iconValue = 'info';
       else if (this.variant == 'danger') iconValue = 'error';
       else if (this.variant == 'warning') iconValue = 'warning';
+      else if (this.variant == 'neutral') iconValue = 'bolt';
     }
     return <tk-icon fill {...getIconElementProps(iconValue, { variant: this.variant, sign: true, size: this.iconSize }, 'rounded', 'i')} />;
   }
