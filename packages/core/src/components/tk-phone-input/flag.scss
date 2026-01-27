@@ -3,16 +3,14 @@ span.flag {
   height: 30px;
   display: inline-block;
 }
-img.flag {
+.flag {
+  background: url(https://cdn.turkishairlines.com/m/546a9655f75197ed/original/takeoff-ui-flags.png) no-repeat;
+  background-size: 150%;
+  vertical-align: middle;
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background-position-x: 45%;
-}
-.flag {
-  background: url(https://primefaces.org/cdn/primevue/images/flag/flags_responsive.png) no-repeat;
-  background-size: 150%;
-  vertical-align: middle;
+  background-position-x: center;
 }
 .flag-ad {
   background-position-y: 0.413223%;

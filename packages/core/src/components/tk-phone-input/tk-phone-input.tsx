@@ -451,11 +451,7 @@ export class TkPhoneInput implements ComponentInterface {
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
-          <img
-            src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
-            alt={`${this.selectedCountry.label} flag`}
-            class={this.getFlagClass(this.selectedCountry)}
-          />
+          <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />
           {this.selectedCountry.dialCode && <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
@@ -495,7 +491,7 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${country.label} flag`} class={this.getFlagClass(country)} />
+            <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />
             <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
             {country.dialCode && <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>}
           </li>
