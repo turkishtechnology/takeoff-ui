@@ -4,9 +4,9 @@
   <section class="demo-section">
     <h2>Buttons</h2>
     <div class="demo-row">
-      <tk-button label="Primary" variant="primary" (tkClick)="onButtonClick()"></tk-button>
+      <tk-button label="Primary" variant="primary" (tk-click)="onButtonClick()"></tk-button>
       <form [formGroup]="formGroup">
-        <tk-input label="harun" formControlName="firstname" (tkChange)="onInputChange()" />
+        <tk-input label="harun" formControlName="firstname" />
       </form>
       {{ formGroup.getRawValue() | json }}
 

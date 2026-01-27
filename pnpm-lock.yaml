@@ -432,8 +432,8 @@ importers:
         version: 11.1.0
     devDependencies:
       "@stencil/angular-output-target":
-        specifier: 1.3.0
-        version: 1.3.0(@stencil/core@4.41.2)
+        specifier: 1.1.0
+        version: 1.1.0(@stencil/core@4.41.2)
       "@stencil/core":
         specifier: 4.41.2
         version: 4.41.2
@@ -4041,8 +4041,8 @@ packages:
   "@socket.io/component-emitter@3.1.2":
     resolution: { integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA== }
 
-  "@stencil/angular-output-target@1.3.0":
-    resolution: { integrity: sha512-sh21V5+RatCHxlDZtfsNZ9IzDgXTf3abh0bvsQzULnRbnbJ0pOMCoiphVroJ1gyWw6XxPcmEJ1KNfhFomymWYg== }
+  "@stencil/angular-output-target@1.1.0":
+    resolution: { integrity: sha512-V1tlX2LgtioTHa6+W2enk+GNDyV0BhC5iH3fY5fc30l8MNNWiLm8yP7EfN3DbT8L7DHxrQeYkrvJJeG8IX7NSA== }
     peerDependencies:
       "@stencil/core": ">=2.0.0 || >=3 || >= 4.0.0-beta.0 || >= 4.0.0"
 
@@ -15999,7 +15999,7 @@ snapshots:
 
   "@socket.io/component-emitter@3.1.2": {}
 
-  "@stencil/angular-output-target@1.3.0(@stencil/core@4.41.2)":
+  "@stencil/angular-output-target@1.1.0(@stencil/core@4.41.2)":
     dependencies:
       "@stencil/core": 4.41.2
 

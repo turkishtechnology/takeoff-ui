@@ -7,7 +7,7 @@ import { sass } from '@stencil/sass';
 const angularValueAccessorBindings: ValueAccessorConfig[] = [
   {
     elementSelectors: ['tk-input'],
-    event: 'tkChange',
+    event: 'tk-change',
     targetAttr: 'value',
     type: 'text',
   },
