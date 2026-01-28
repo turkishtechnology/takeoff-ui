@@ -271,6 +271,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
   private getDecimalSeparator(): Separator {
+    if (this.thousandsSeparator && !this.decimalSeparator) {
+      const alternatives: Separator[] = [',', '.', ' '];
+      return alternatives.find(sep => sep !== this.thousandsSeparator) || '.';
+    }
     return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
   }
 
@@ -278,6 +282,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
   private getThousandsSeparator(): Separator {
+    if (!this.thousandsSeparator && this.decimalSeparator) {
+      const alternatives: Separator[] = [',', '.', ' '];
+      return alternatives.find(sep => sep !== this.decimalSeparator) || ',';
+    }
     return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
   }
 
@@ -591,14 +599,6 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   };
 
-  private handlePropsDecimalAndThousandsSeparator() {
-    if (this.decimalSeparator && this.thousandsSeparator) {
-      return false; // If both separators are provided, we assume custom formatting is required
-    } else {
-      return true;
-    }
-  }
-
   private renderLabel() {
     if (this.label) {
       return (
@@ -718,7 +718,7 @@ export class TkCurrencyInput implements ComponentInterface {
         {this.renderLabel()}
         <div class="tk-currency-input__wrapper">
           {this.renderCurrencyInput()}
-          {this.handlePropsDecimalAndThousandsSeparator() && this.renderCurrencySelector()}
+          {this.renderCurrencySelector()}
         </div>
         {this.renderHint()}
       </div>
