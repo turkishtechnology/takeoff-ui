@@ -6,19 +6,18 @@
  */
 
 // ============================================================================
-// Global Interfaces and Types
+// Global Interfaces
 // ============================================================================
 export type { IBadgeOptions } from './global/interfaces/IBadgeOptions';
 export type { IIconOptions, IMultiIconOptions } from './global/interfaces/IIconOptions';
 export type { ITooltipOptions } from './global/interfaces/ITooltipOptions';
-export type { CSSStyleProperties } from './global/types';
 
 // ============================================================================
-// Component Interfaces and Types
+// Component Interfaces
 // ============================================================================
 
 // tk-accordion
-export type { IAccordionItemSelect } from './components/tk-accordion/types';
+export type { IAccordionItemSelect } from './components/tk-accordion/interfaces';
 
 // tk-alert
 export type { IAlertActionButton } from './components/tk-alert/interfaces';
@@ -30,13 +29,13 @@ export type { IBreadcrumbModel } from './components/tk-breadcrumb/interfaces';
 export type { IChipOptions } from './components/tk-chips/interfaces';
 
 // tk-currency-input
-export type { ICurrency, CurrencyInputChangeEvent, Separator } from './components/tk-currency-input/types';
+export type { ICurrency, CurrencyInputChangeEvent } from './components/tk-currency-input/interfaces';
 
 // tk-datepicker
 export type { IDateSelection } from './components/tk-datepicker/interfaces';
 
 // tk-editor
-export type { TkEditorCustomButton, HeadingLevel, TkEditorToolbarButtonBehavior, TkEditorDefaultButton, TkEditorToolbarConfig } from './components/tk-editor/interfaces';
+export type { TkEditorCustomButton } from './components/tk-editor/interfaces';
 
 // tk-input
 export type { IInputMaskOptions } from './components/tk-input/interfaces';

@@ -10,5 +10,7 @@
 export type * from './components.d.ts';
 export * from './utils/toaster';
 
+export type { CSSStyleProperties } from './global/types';
+
 // Export interfaces
 export type * from './interfaces';

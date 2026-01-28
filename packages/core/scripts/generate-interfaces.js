@@ -17,10 +17,9 @@ const GLOBAL_DIR = path.join(__dirname, '../src/global');
 const OUTPUT_FILE = path.join(__dirname, '../src/interfaces.ts');
 
 // Files that contain interfaces/types
-const INTERFACE_FILES = new Set(['interfaces.ts', 'types.ts']);
+const INTERFACE_FILES = new Set(['interfaces.ts']);
 
 const INTERFACE_REGEX = /export\s+interface\s+(\w+)/g;
-const TYPE_REGEX = /export\s+type\s+(\w+)\s*=/g;
 
 /**
  * Find all interface/type files in a directory recursively
@@ -62,10 +61,6 @@ function extractExports(filePath) {
     exports.push(match[1]);
   }
 
-  for (const match of content.matchAll(TYPE_REGEX)) {
-    exports.push(match[1]);
-  }
-
   return exports;
 }
 
@@ -87,15 +82,6 @@ function generateGlobalSection() {
         const importPath = `./global/interfaces/${file.replace('.ts', '')}`;
         lines.push(`export type { ${exports.join(', ')} } from '${importPath}';`);
       }
-    }
-  }
-
-  // Add global types
-  const globalTypesFile = path.join(GLOBAL_DIR, 'types.ts');
-  if (fs.existsSync(globalTypesFile)) {
-    const exports = extractExports(globalTypesFile);
-    if (exports.length > 0) {
-      lines.push(`export type { ${exports.join(', ')} } from './global/types';`);
     }
   }
 
@@ -153,12 +139,12 @@ function generateInterfacesFile() {
     ' */',
     '',
     '// ============================================================================',
-    '// Global Interfaces and Types',
+    '// Global Interfaces',
     '// ============================================================================',
     generateGlobalSection(),
     '',
     '// ============================================================================',
-    '// Component Interfaces and Types',
+    '// Component Interfaces',
     '// ============================================================================',
     generateComponentSection(),
   ];
