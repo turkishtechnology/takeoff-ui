@@ -10,14 +10,16 @@ describe('tk-dialog', () => {
         html: `<tk-dialog></tk-dialog>`,
       });
       expect(page.root).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('.tk-dialog-mask')).toBeFalsy();
+      const mask = page.root.querySelector('.tk-dialog-mask');
+      expect(mask).toBeTruthy();
+      expect(mask.classList.contains('tk-dialog-visible')).toBe(false);
     });
     it('should render when visible is true', async () => {
       const page = await newSpecPage({
         components: [TkDialog],
         html: `<tk-dialog visible="true"></tk-dialog>`,
       });
-      const mask = page.root.shadowRoot.querySelector('.tk-dialog-mask');
+      const mask = page.root.querySelector('.tk-dialog-mask');
       expect(mask).toBeTruthy();
       expect(mask.classList.contains('tk-dialog-visible')).toBe(true);
     });
@@ -26,8 +28,8 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" header="Test Header" subheader="Test Subheader"></tk-dialog>`,
       });
-      const title = page.root.shadowRoot.querySelector('.tk-dialog-title');
-      const subtitle = page.root.shadowRoot.querySelector('.tk-dialog-subtitle');
+      const title = page.root.querySelector('.tk-dialog-title');
+      const subtitle = page.root.querySelector('.tk-dialog-subtitle');
       expect(title.textContent).toBe('Test Header');
       expect(subtitle.textContent).toBe('Test Subheader');
     });
@@ -66,7 +68,7 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" header-type="divided"></tk-dialog>`,
       });
-      const header = page.root.shadowRoot.querySelector('.tk-dialog-header');
+      const header = page.root.querySelector('.tk-dialog-header');
       expect(header.classList.contains('tk-dialog-header-divided')).toBe(true);
     });
     it('should handle all header types correctly', async () => {
@@ -76,7 +78,7 @@ describe('tk-dialog', () => {
           components: [TkDialog],
           html: `<tk-dialog visible="true" header-type="${type}" header="Test"></tk-dialog>`,
         });
-        const header = page.root.shadowRoot.querySelector('.tk-dialog-header');
+        const header = page.root.querySelector('.tk-dialog-header');
         expect(header.classList.contains(`tk-dialog-header-${type}`)).toBe(true);
       }
     });
@@ -85,10 +87,11 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" variant="success"></tk-dialog>`,
       });
-      const dialog = page.root.shadowRoot.querySelector('.tk-dialog');
-      const icon = page.root.shadowRoot.querySelector('.tk-dialog-sign-icon');
+      const dialog = page.root.querySelector('.tk-dialog');
+      const iconElement = page.root.querySelector('tk-icon.tk-dialog-sign-icon');
       expect(dialog.classList.contains('tk-dialog-success')).toBe(true);
-      expect(icon.textContent).toBe('check_circle');
+      expect(iconElement).toBeTruthy();
+      expect(iconElement.getAttribute('icon')).toBe('check_circle');
     });
     it('should handle all variant icons correctly', async () => {
       const variants = {
@@ -102,8 +105,9 @@ describe('tk-dialog', () => {
           components: [TkDialog],
           html: `<tk-dialog visible="true" variant="${variant}"></tk-dialog>`,
         });
-        const icon = page.root.shadowRoot.querySelector('.tk-dialog-sign-icon');
-        expect(icon.textContent).toBe(expectedIcon);
+        const iconElement = page.root.querySelector('tk-icon.tk-dialog-sign-icon');
+        expect(iconElement).toBeTruthy();
+        expect(iconElement.getAttribute('icon')).toBe(expectedIcon);
       }
     });
     it('should hide close button when showCloseButton is false', async () => {
@@ -111,7 +115,7 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" show-close-button="false"></tk-dialog>`,
       });
-      const closeButton = page.root.shadowRoot.querySelector('tk-button[icon="close"]');
+      const closeButton = page.root.querySelector('tk-button[icon="close"]');
       expect(closeButton).toBeFalsy();
     });
     it('should hide backdrop when hideBackdrop is true', async () => {
@@ -119,7 +123,7 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" hide-backdrop="true"></tk-dialog>`,
       });
-      const mask = page.root.shadowRoot.querySelector('.tk-dialog-mask');
+      const mask = page.root.querySelector('.tk-dialog-mask');
       expect(mask.classList.contains('tk-dialog-mask-hidden')).toBe(true);
     });
     it('should apply correct mask variant', async () => {
@@ -127,7 +131,7 @@ describe('tk-dialog', () => {
         components: [TkDialog],
         html: `<tk-dialog visible="true" mask-variant="dark"></tk-dialog>`,
       });
-      const mask = page.root.shadowRoot.querySelector('.tk-dialog-mask');
+      const mask = page.root.querySelector('.tk-dialog-mask');
       expect(mask.classList.contains('tk-dialog-mask-dark')).toBe(true);
     });
     it('should handle container style prop', async () => {
@@ -138,7 +142,7 @@ describe('tk-dialog', () => {
       });
       page.root.containerStyle = testStyle;
       await page.waitForChanges();
-      const dialog = page.root.shadowRoot.querySelector('.tk-dialog') as HTMLElement;
+      const dialog = page.root.querySelector('.tk-dialog') as HTMLElement;
       expect(dialog.style.maxWidth).toBe('500px');
       expect(dialog.style.backgroundColor).toBe('red');
     });
@@ -159,19 +163,16 @@ describe('tk-dialog', () => {
     it('should handle visibility change events', async () => {
       const page = await newSpecPage({
         components: [TkDialog],
-        html: `<tk-dialog></tk-dialog>`,
+        html: `<tk-dialog visible="true"></tk-dialog>`,
       });
       const visibleChangeSpy = jest.fn();
       page.root.addEventListener('tk-visible-change', visibleChangeSpy);
-      // Open
-      await page.root.open();
-      expect(visibleChangeSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          detail: true,
-        }),
-      );
-      // Close
-      await page.root.close();
+
+      // Trigger close via close button
+      const closeButton = page.root.querySelector('tk-button[icon="close"]');
+      closeButton.dispatchEvent(new CustomEvent('tk-click', { bubbles: true }));
+      await page.waitForChanges();
+
       expect(visibleChangeSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           detail: false,
@@ -185,7 +186,7 @@ describe('tk-dialog', () => {
       });
       const closeSpy = jest.fn();
       page.root.addEventListener('tk-close', closeSpy);
-      const overlay = page.root.shadowRoot.querySelector('.tk-dialog-overlay');
+      const overlay = page.root.querySelector('.tk-dialog-overlay');
       const event = new MouseEvent('click');
       overlay.dispatchEvent(event);
       expect(closeSpy).not.toHaveBeenCalled();

@@ -134,11 +134,13 @@ export class TkCard implements ComponentInterface {
   @Prop() contentStyle?: CSSStyleProperties = null;
 
   componentWillLoad() {
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
-    this.hasAvatarSlot = !!this.el.querySelector(':scope > [slot="avatar"]');
-    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+    // Using Array.from(this.el.children) instead of :scope selector for compatibility with Stencil's mock-doc
+    const children = Array.from(this.el.children);
+    this.hasHeaderSlot = children.some(child => child.getAttribute('slot') === 'header');
+    this.hasAvatarSlot = children.some(child => child.getAttribute('slot') === 'avatar');
+    this.hasContentSlot = children.some(child => child.getAttribute('slot') === 'content');
+    this.hasFooterSlot = children.some(child => child.getAttribute('slot') === 'footer');
+    this.hasFooterActionsSlot = children.some(child => child.getAttribute('slot') === 'footer-actions');
     this.hasDefaultSlotBody = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
     });

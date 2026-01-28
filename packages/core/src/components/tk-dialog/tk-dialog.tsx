@@ -131,11 +131,14 @@ export class TkDialog implements ComponentInterface {
   @Event({ eventName: 'tk-visible-change' }) tkVisibleChange: EventEmitter<boolean>;
 
   componentWillLoad() {
-    this.hasContainerSlot = !!this.el.querySelector(':scope > [slot="container"]');
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
-    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+    // Check for slotted content by examining direct children
+    // Using Array.from(this.el.children) instead of :scope selector for test compatibility
+    const children = Array.from(this.el.children);
+    this.hasContainerSlot = children.some(child => child.getAttribute('slot') === 'container');
+    this.hasHeaderSlot = children.some(child => child.getAttribute('slot') === 'header');
+    this.hasContentSlot = children.some(child => child.getAttribute('slot') === 'content');
+    this.hasFooterSlot = children.some(child => child.getAttribute('slot') === 'footer');
+    this.hasFooterActionsSlot = children.some(child => child.getAttribute('slot') === 'footer-actions');
 
     this.hasDefaultSlotContent = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');

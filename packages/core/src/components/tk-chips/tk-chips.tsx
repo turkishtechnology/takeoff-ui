@@ -68,7 +68,7 @@ export class TkChips implements ComponentInterface {
    * The value of the chips
    * @defaultValue this.label
    */
-  @Prop() value: any;
+  @Prop() value?: any;
 
   /**
    * Custom style to apply to the chip component.
@@ -80,12 +80,12 @@ export class TkChips implements ComponentInterface {
    */
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
 
-  componentWillLoad(): void {
-    if (this.value == null) this.value = this.label;
+  private getValue(): any {
+    return this.value != null ? this.value : this.label;
   }
 
   private handleClick() {
-    this.tkRemove.emit(this.value);
+    this.tkRemove.emit(this.getValue());
     if (this.autoSelfDestroy) this.el?.remove();
   }
 
