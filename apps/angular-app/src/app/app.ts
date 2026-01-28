@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TkButton, TkInput, TextValueAccessor } from '@takeoff-ui/angular';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
+import { TkButton, TkInput, TextValueAccessor } from '@takeoff-ui/angular';
 
 @Component({
   selector: 'app-root',
@@ -20,20 +20,14 @@ import { JsonPipe } from '@angular/common';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('Takeoff UI Angular Demo');
   private readonly fb = inject(FormBuilder);
 
   formGroup: FormGroup = this.fb.group({
-    firstname: ['test'],
+    firstname: [''],
+    surname: [''],
   });
 
   onButtonClick(): void {
-    console.log('Button clicked!');
+    alert('Button clicked!');
   }
-
-  onInputChange(): void {
-    console.log('input change');
-  }
-
-  textValue = 'harun';
 }

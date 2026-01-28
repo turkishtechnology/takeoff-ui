@@ -1,19 +1,14 @@
 <div class="container">
-  <h1>{{ title() }}</h1>
+  <h4>Button and Event Usage Example</h4>
+  <tk-button label="Example Button" variant="primary" (tk-click)="onButtonClick()"></tk-button>
 
-  <section class="demo-section">
-    <h2>Buttons</h2>
-    <div class="demo-row">
-      <tk-button label="Primary" variant="primary" (tk-click)="onButtonClick()"></tk-button>
-      <form [formGroup]="formGroup">
-        <tk-input label="harun" formControlName="firstname" />
-      </form>
-      {{ formGroup.getRawValue() | json }}
+  <h4>Reactive Form Example</h4>
+  <form [formGroup]="formGroup">
+    <tk-input label="Name" formControlName="firstname" />
+    <tk-input label="Surname" formControlName="surname" />
+  </form>
 
-      <tk-input label="ng model test" [(ngModel)]="textValue"></tk-input>
-      <p>{{ textValue }}</p>
-    </div>
-  </section>
+  {{ formGroup.getRawValue() | json }}
 </div>
 
 <router-outlet />
