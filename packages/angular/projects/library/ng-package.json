@@ -1,8 +1,9 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "dist",
+  "dest": "./dist",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "allowedNonPeerDependencies": ["@takeoff-ui/core"]
+  "allowedNonPeerDependencies": ["@takeoff-ui/core"],
+  "assets": ["./scripts/**/*"]
 }

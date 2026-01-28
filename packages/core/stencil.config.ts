@@ -1,8 +1,17 @@
 import { Config } from '@stencil/core';
 import { ComponentModelConfig, vueOutputTarget } from '@stencil/vue-output-target';
 import { reactOutputTarget } from '@stencil/react-output-target';
-import { ValueAccessorConfig, angularOutputTarget } from '@stencil/angular-output-target';
+import { angularOutputTarget, ValueAccessorConfig } from '@stencil/angular-output-target';
 import { sass } from '@stencil/sass';
+
+const angularValueAccessorBindings: ValueAccessorConfig[] = [
+  {
+    elementSelectors: ['tk-input'],
+    event: 'tk-change',
+    targetAttr: 'value',
+    type: 'text',
+  },
+];
 
 const vueComponentModels: ComponentModelConfig[] = [
   {
@@ -43,27 +52,6 @@ const vueComponentModels: ComponentModelConfig[] = [
   },
 ];
 
-const angularValueAccessorBindings: ValueAccessorConfig[] = [
-  {
-    elementSelectors: ['tk-input', 'tk-phone-input', 'tk-select', 'tk-datepicker', 'tk-rating'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'text',
-  },
-  {
-    elementSelectors: ['tk-radio-group', 'tk-radio'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'radio',
-  },
-  {
-    elementSelectors: ['tk-checkbox', 'tk-toggle'],
-    event: 'tk-change',
-    targetAttr: 'value',
-    type: 'boolean',
-  },
-];
-
 export const config: Config = {
   namespace: 'core',
   globalStyle: 'src/global/sass/style.scss',
@@ -72,6 +60,11 @@ export const config: Config = {
     enableImportInjection: true,
   },
   outputTargets: [
+    angularOutputTarget({
+      componentCorePackage: '@takeoff-ui/core',
+      directivesProxyFile: '../angular/projects/library/src/directives/proxies.ts',
+      valueAccessorConfigs: angularValueAccessorBindings,
+    }),
     vueOutputTarget({
       componentCorePackage: '@takeoff-ui/core',
       proxiesFile: '../vue/lib/components.ts',
@@ -82,13 +75,6 @@ export const config: Config = {
       outDir: '../react/lib/components/stencil-generated/',
       stencilPackageName: '@takeoff-ui/core',
     }),
-    angularOutputTarget({
-      componentCorePackage: '@takeoff-ui/core',
-      outputType: 'component',
-      directivesProxyFile: '../angular/projects/library/src/lib/stencil-generated/components.ts',
-      directivesArrayFile: '../angular/projects/library/src/lib/stencil-generated/index.ts',
-      valueAccessorConfigs: angularValueAccessorBindings,
-    }),
     {
       type: 'docs-json',
       file: '../../docs/src/docs-files/docs.json',
@@ -96,15 +82,14 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      copy: [
-        { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
-        { src: 'global/images', dest: 'assets/images' },
-      ],
+      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
+      esmLoaderPath: '../loader',
     },
     {
       type: 'dist-custom-elements',
       // customElementsExportBehavior: 'auto-define-custom-elements',
       externalRuntime: false,
+      dir: 'components',
       copy: [
         {
           src: '**/*.{jpg,png}',
@@ -116,10 +101,7 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null, // disable service workers
-      copy: [
-        { src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' },
-        { src: 'global/images', dest: 'build/assets/images' },
-      ],
+      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' }],
     },
   ],
   testing: {
@@ -130,6 +112,7 @@ export const config: Config = {
       injectGlobalPaths: ['src/global/sass/fonts/_material-symbols.scss'],
     }),
   ],
+
   minifyJs: true,
   minifyCss: true,
   sourceMap: false,

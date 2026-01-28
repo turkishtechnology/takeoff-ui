@@ -1,5 +1,5 @@
 import { Component, h, Element, Prop, ComponentInterface, Watch, Event, type EventEmitter, State } from '@stencil/core';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import type { IAccordionItemSelect } from './types';
 

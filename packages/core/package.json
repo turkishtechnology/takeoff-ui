@@ -1,17 +1,45 @@
 {
   "name": "@takeoff-ui/core",
-  "version": "0.8.2",
+  "version": "0.8.3-alpha.4",
   "description": "Core components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.com",
+  "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/core/core.esm.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js"
+    },
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js",
+      "require": "./loader/index.js",
+      "default": "./loader/index.js"
+    },
+    "./components/*.js": {
+      "types": "./dist/types/components/*.d.ts",
+      "import": "./components/*.js"
+    },
+    "./components": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js"
+    },
+    "./dist/core/core.css": "./dist/core/core.css"
+  },
   "files": [
-    "dist/"
+    "dist/",
+    "loader/",
+    "components/"
   ],
   "repository": {
     "type": "git",
@@ -31,8 +59,11 @@
     "generate:interfaces": "node scripts/generate-interfaces.js"
   },
   "devDependencies": {
-    "@stencil/core": "4.26.0",
-    "@stencil/sass": "3.0.12",
+    "@stencil/angular-output-target": "1.1.0",
+    "@stencil/react-output-target": "1.3.2",
+    "@stencil/vue-output-target": "0.8.9",
+    "@stencil/core": "4.41.2",
+    "@stencil/sass": "3.2.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^16.18.11",
     "jest": "^30.2.0",
@@ -43,9 +74,6 @@
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
   "dependencies": {
     "@floating-ui/dom": "^1.7.0",
-    "@stencil/angular-output-target": "0.10.1",
-    "@stencil/react-output-target": "0.8.0",
-    "@stencil/vue-output-target": "0.8.9",
     "@tiptap/core": "^2.11.0",
     "@tiptap/extension-character-count": "^2.27.1",
     "@tiptap/extension-font-family": "^2.1.12",
@@ -67,7 +95,7 @@
     "json-server": "^1.0.0-beta.2",
     "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.7",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.22",
     "mime": "^4.0.6",
     "uuid": "^11.0.5"
   }
