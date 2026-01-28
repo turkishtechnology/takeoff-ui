@@ -183,6 +183,12 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() error: string;
 
   /**
+   * Hides the currency flag icon in the dropdown button and list.
+   * @default false
+   */
+  @Prop() hideFlag: boolean = false;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
@@ -622,7 +628,7 @@ export class TkCurrencyInput implements ComponentInterface {
     return (
       <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
         <div class="tk-currency-input__dropdown-button-selected">
-          <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />
+          {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
           <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
         </div>
@@ -643,7 +649,7 @@ export class TkCurrencyInput implements ComponentInterface {
             onClick={event => this.handleSelectCurrency(currency.code, event)}
             aria-selected={this.selectedCurrency.code === currency.code}
           >
-            <div aria-label={`${currency.code} flag`} class={`flag flag-${currency.id.toLowerCase()}`} />
+            {!this.hideFlag && <div class={`flag flag-${currency.id.toLowerCase()}`} aria-label={`${currency.code} flag`} />}
             <span class="tk-currency-input__dropdown-menu-list-country-label">{currency.symbol}</span>
             <span class="tk-currency-input__dropdown-menu-list-dial-id">{currency.name}</span>
           </li>
