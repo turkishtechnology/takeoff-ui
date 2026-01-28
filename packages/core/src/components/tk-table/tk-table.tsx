@@ -50,6 +50,7 @@ export class TkTable implements ComponentInterface {
   @State() renderData: Record<PropertyKey, unknown>[] = [];
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
+  @State() hasEmptyFilterSlot: boolean;
   @State() isFilterOpen: boolean = false;
   @State() columnWidths: { [key: string]: string } = {};
   @State() stickyOffsets: { left: { [key: string]: number }; right: { [key: string]: number } } = { left: {}, right: {} };
@@ -288,6 +289,7 @@ export class TkTable implements ComponentInterface {
   componentWillLoad(): Promise<void> | void {
     this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+    this.hasEmptyFilterSlot = !!this.el.querySelector('[slot="empty-filter"]');
 
     // Determine if this is a controlled component based on initial groupBy prop
     this.isControlledGrouping = this.groupBy !== undefined;
@@ -331,7 +333,16 @@ export class TkTable implements ComponentInterface {
 
   componentWillUpdate(): Promise<void> | void {
     // empty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+    const slotEmptyFilter: HTMLElement = this.el.querySelector("[slot='empty-filter']");
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
+
+    if (slotEmptyFilter) {
+      if (this.hasEmptyFilterSlot && this.filters?.length > 0 && !this.loading && this.renderData?.length === 0) {
+        showElement(slotEmptyFilter);
+      } else {
+        hideElement(slotEmptyFilter);
+      }
+    }
 
     if (slotEmptyData) {
       if (this.loading || this.renderData?.length > 0) {
@@ -2110,6 +2121,16 @@ export class TkTable implements ComponentInterface {
           {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
 
           <slot name="body-footer"></slot>
+        </tbody>
+      );
+    } else if (this.hasEmptyFilterSlot && this.filters?.length > 0) {
+      return (
+        <tbody>
+          <tr>
+            <td colSpan={100}>
+              <slot name="empty-filter" />
+            </td>
+          </tr>
         </tbody>
       );
     } else if (this.hasEmptyDataSlot) {
