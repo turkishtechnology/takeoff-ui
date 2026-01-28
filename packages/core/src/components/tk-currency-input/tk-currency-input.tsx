@@ -269,7 +269,7 @@ export class TkCurrencyInput implements ComponentInterface {
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
   private getDecimalSeparator(): Separator {
-    return getValidSeparator(this.decimalSeparator, this.thousandsSeparator, this.selectedCurrency.decimalSeparator, this.selectedCurrency.thousandsSeparator, '.');
+    return getValidSeparator(this.decimalSeparator, this.thousandsSeparator, this.selectedCurrency?.decimalSeparator, this.selectedCurrency?.thousandsSeparator, '.');
   }
 
   /**
@@ -277,7 +277,7 @@ export class TkCurrencyInput implements ComponentInterface {
    */
 
   private getThousandsSeparator(): Separator {
-    return getValidSeparator(this.thousandsSeparator, this.decimalSeparator, this.selectedCurrency.thousandsSeparator, this.selectedCurrency.decimalSeparator, ',');
+    return getValidSeparator(this.thousandsSeparator, this.decimalSeparator, this.selectedCurrency?.thousandsSeparator, this.selectedCurrency?.decimalSeparator, ',');
   }
 
   private formatCurrency(amount: number): string {

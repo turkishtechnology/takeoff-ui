@@ -1,4 +1,4 @@
-import { Separator } from '../../../dist/types';
+import { Separator } from './types';
 
 const validSeparators: Separator[] = [',', '.', ' '] as const;
 
@@ -51,13 +51,13 @@ export const getValidSeparator = (
 
   // Check for conflicts in custom props
   if (validTarget && validOpposite && validTarget === validOpposite) {
-    console.error(`TkCurrencyInput: Both separator props are set to '${validTarget}' they cannot be same.`);
+    console.error(`TkCurrencyInput: Both separator props are set to '${validTarget}' they cannot be the same.`);
     return validTarget;
   }
 
   // Check for conflicts in interface fields
   if (validTargetSelected && validOppositeSelected && validTargetSelected === validOppositeSelected) {
-    console.error(`TkCurrencyInput: Both interface separator fields set to '${validTargetSelected}' they cannot be same.`);
+    console.error(`TkCurrencyInput: Both interface separator fields set to '${validTargetSelected}' they cannot be the same.`);
     return validTargetSelected;
   }
 
