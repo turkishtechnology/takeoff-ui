@@ -146,6 +146,12 @@ export class TkPhoneInput implements ComponentInterface {
   @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
+   * Hides the phone flag icon in the dropdown button and list.
+   * @default false
+   */
+  @Prop() hideFlag: boolean = false;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
@@ -451,7 +457,7 @@ export class TkPhoneInput implements ComponentInterface {
       <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
-          <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />
+          {!this.hideFlag && <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />}
           {this.selectedCountry.dialCode && <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
@@ -491,7 +497,7 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />
+            {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
             <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
             {country.dialCode && <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>}
           </li>
