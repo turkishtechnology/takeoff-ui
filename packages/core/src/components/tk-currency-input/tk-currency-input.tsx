@@ -6,6 +6,7 @@ import { getIconElementProps } from '../../utils/icon-utils';
 import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { getValidSeparator } from './helpers';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -31,7 +32,6 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
-  private validSeparators: Separator[] = [',', '.', ' '] as const;
 
   /**
    * The currently selected currency object.
@@ -202,8 +202,6 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
-    this.validateSeparators();
-    this.validateSeparatorTypes();
   }
 
   /**
@@ -271,33 +269,15 @@ export class TkCurrencyInput implements ComponentInterface {
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
   private getDecimalSeparator(): Separator {
-    return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
+    return getValidSeparator(this.decimalSeparator, this.thousandsSeparator, this.selectedCurrency?.decimalSeparator, this.selectedCurrency?.thousandsSeparator, '.');
   }
 
   /**
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
+
   private getThousandsSeparator(): Separator {
-    return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
-  }
-
-  /**
-   * Validators
-   */
-  private validateSeparators(): void {
-    if (!this.validSeparators.includes(this.getDecimalSeparator())) {
-      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeparators);
-    }
-
-    if (!this.validSeparators.includes(this.getThousandsSeparator())) {
-      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeparators);
-    }
-  }
-
-  private validateSeparatorTypes(): void {
-    if (this.getDecimalSeparator() === this.getThousandsSeparator()) {
-      console.error('TkCurrencyInput: decimalSeparator and thousandsSeparator cannot be the same.');
-    }
+    return getValidSeparator(this.thousandsSeparator, this.decimalSeparator, this.selectedCurrency?.thousandsSeparator, this.selectedCurrency?.decimalSeparator, ',');
   }
 
   private formatCurrency(amount: number): string {
@@ -591,14 +571,6 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   };
 
-  private handlePropsDecimalAndThousandsSeparator() {
-    if (this.decimalSeparator && this.thousandsSeparator) {
-      return false; // If both separators are provided, we assume custom formatting is required
-    } else {
-      return true;
-    }
-  }
-
   private renderLabel() {
     if (this.label) {
       return (
@@ -714,7 +686,7 @@ export class TkCurrencyInput implements ComponentInterface {
         {this.renderLabel()}
         <div class="tk-currency-input__wrapper">
           {this.renderCurrencyInput()}
-          {this.handlePropsDecimalAndThousandsSeparator() && this.renderCurrencySelector()}
+          {this.renderCurrencySelector()}
         </div>
         {this.renderHint()}
       </div>
