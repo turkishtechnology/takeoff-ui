@@ -16,20 +16,19 @@ const COMPONENTS_DIR = path.join(__dirname, '../src/components');
 const GLOBAL_DIR = path.join(__dirname, '../src/global');
 const OUTPUT_FILE = path.join(__dirname, '../src/interfaces.ts');
 
-// Files that contain interfaces/types
+// Files that contain interfaces
 const INTERFACE_FILES = new Set(['interfaces.ts']);
 
 const INTERFACE_REGEX = /export\s+interface\s+(\w+)/g;
 
 /**
- * Find all interface/type files in a directory recursively
+ * Find all interface files in a directory recursively
  */
 function findInterfaceFiles(dir, basePath = '') {
   const results = [];
 
   if (!fs.existsSync(dir)) return results;
 
-  // Use withFileTypes for better performance (no need for separate stat calls)
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
   for (const item of items) {
