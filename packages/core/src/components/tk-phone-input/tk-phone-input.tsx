@@ -221,7 +221,7 @@ export class TkPhoneInput implements ComponentInterface {
   }
 
   private updatePosition() {
-    const tkInputRootEl = this.el.querySelector('.tk-phone-input__wrapper') as HTMLElement;
+    const tkInputRootEl = this.el.querySelector('.tk-phone-input-wrapper') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
     });
@@ -416,9 +416,9 @@ export class TkPhoneInput implements ComponentInterface {
   private renderLabel() {
     let label;
     if (this.label?.length > 0) {
-      const asterisk = <span class="tk-phone-input__label-red-asterisk">*</span>;
+      const asterisk = <span class="tk-phone-input-asterisk">*</span>;
       label = (
-        <label htmlFor={this.uniqueId} class="tk-phone-input__label">
+        <label htmlFor={this.uniqueId} class="tk-phone-input-label">
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -433,10 +433,10 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private renderCountrySelector() {
     return (
-      <div class="tk-phone-input__dropdown">
+      <div class="tk-phone-input-dropdown">
         {this.createDropdownButton()}
         {this.isDropdownOpen && (
-          <div class="tk-phone-input__dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
+          <div class="tk-phone-input-dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
             {this.createDropdownSearch()}
             {this.createDropdownList()}
           </div>
@@ -449,16 +449,16 @@ export class TkPhoneInput implements ComponentInterface {
    * Create the dropdown button for selecting a country.
    */
   private createDropdownButton() {
-    const selectedClass = classNames('tk-phone-input__dropdown-button-selected', {
-      'tk-phone-input__dropdown-button-selected--no-dial-code': !this.selectedCountry.dialCode,
+    const selectedClass = classNames('tk-phone-input-dropdown-button-selected', {
+      'tk-phone-input-no-dial-code': !this.selectedCountry.dialCode,
     });
 
     return (
-      <button class="tk-phone-input__dropdown-button" onClick={this.toggleDropdown} type="button">
+      <button class="tk-dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           {!this.hideFlag && <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />}
-          {this.selectedCountry.dialCode && <span class="tk-phone-input__dropdown-button-dial-code">{this.selectedCountry.dialCode}</span>}
+          {this.selectedCountry.dialCode && <span class="tk-phone-input-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
     );
@@ -470,7 +470,7 @@ export class TkPhoneInput implements ComponentInterface {
   private createDropdownSearch() {
     return (
       <tk-input
-        class="tk-phone-input__dropdown-menu-search"
+        class="tk-phone-input-dropdown-menu-search"
         size={this.size}
         placeholder="Search"
         value={this.searchTerm}
@@ -488,18 +488,18 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private createDropdownList() {
     return (
-      <ul class="tk-phone-input__dropdown-menu-list">
+      <ul class="tk-phone-input-menu">
         {this.getFilteredCountries().map(country => (
           <li
-            class="tk-phone-input__dropdown-menu-list-item"
+            class="tk-phone-input-menu-item"
             onClick={() => this.handleCountrySelect(country)}
             key={country.id}
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
             {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
-            <span class="tk-phone-input__dropdown-menu-list-country-label">{country.label}</span>
-            {country.dialCode && <span class="tk-phone-input__dropdown-menu-list-dial-id">{country.dialCode}</span>}
+            {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
+            {country.dialCode && <span class="tk-phone-input-menu-dial-id">{country.dialCode}</span>}
           </li>
         ))}
       </ul>
@@ -514,7 +514,7 @@ export class TkPhoneInput implements ComponentInterface {
       <input
         id={this.uniqueId}
         type="tel"
-        class="tk-phone-input__input"
+        class="tk-phone-input-input"
         autoComplete="off"
         placeholder={this.selectedCountry?.placeholder || this.placeholder || this.selectedCountry.mask?.replace(/9/g, '9')}
         value={this.inputValue}
@@ -531,21 +531,21 @@ export class TkPhoneInput implements ComponentInterface {
     let hint;
 
     if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-hint-icon', variant: null })} />;
       hint = (
-        <span class="tk-phone-input__hint">
+        <span class="tk-phone-input-hint">
           {hintIcon}
-          <span class="tk-phone-input__hint-text">{this.hint}</span>
+          <span class="tk-phone-input-hint-text">{this.hint}</span>
         </span>
       );
     }
 
     if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input__hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-error-icon', variant: null })} />;
       hint = (
-        <span class="tk-phone-input__hint">
+        <span class="tk-phone-input-error">
           {hintIcon}
-          <span class="tk-phone-input__hint-text">{this.error}</span>
+          <span class="tk-phone-input-error-text">{this.error}</span>
         </span>
       );
     }
@@ -558,9 +558,9 @@ export class TkPhoneInput implements ComponentInterface {
    */
   render() {
     return (
-      <div class={classNames('tk-phone-input', `tk-phone-input--${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+      <div class={classNames('tk-phone-input-container', `${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
         {this.renderLabel()}
-        <div class="tk-phone-input__wrapper">
+        <div class="tk-phone-input-wrapper">
           {this.renderCountrySelector()}
           {this.renderPhoneInput()}
         </div>
