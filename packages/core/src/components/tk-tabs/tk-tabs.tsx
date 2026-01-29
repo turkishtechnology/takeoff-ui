@@ -118,15 +118,15 @@ export class TkTabs implements ComponentInterface {
   /**
    * Triggered when a tab is clicked. Returns the clicked tab index.
    */
-  @Event({ eventName: 'tk-tab-click' }) tkTabClick: EventEmitter<number>;
+  @Event({ eventName: 'tk-tab-click', bubbles: false }) tkTabClick: EventEmitter<number>;
 
   /**
    * Triggered when the currently open tab changes. Returns the active index.
    */
-  @Event({ eventName: 'tk-tab-change' }) tkTabChange: EventEmitter<number>;
+  @Event({ eventName: 'tk-tab-change', bubbles: false }) tkTabChange: EventEmitter<number>;
 
   componentWillLoad() {
-    this.internalTabItems = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')) as HTMLTkTabsItemElement[];
+    this.internalTabItems = this.getDirectTabItems();
 
     // slot ismini kullanıcının vermesine gerek kalmadan içeride setlenmesi sağlandı
     this.internalTabItems.forEach((tab, index) => {
@@ -179,22 +179,36 @@ export class TkTabs implements ComponentInterface {
   }
 
   /**
+   * Returns only direct child tab items, filtering out nested ones.
+   * This prevents nested tabs from interfering with each other.
+   */
+  private getDirectTabItems(): HTMLTkTabsItemElement[] {
+    return Array.from(this.el.querySelectorAll('tk-tabs-item')).filter(item => item.closest('tk-tabs') === this.el);
+  }
+
+  /**
    * Handles badge update events from tab items
    */
   private handleTabUpdate(event: CustomEvent) {
     const tab = event.composedPath().find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'tk-tabs-item') as HTMLTkTabsItemElement;
-    if (tab) {
-      const index = Array.from(this.el.querySelectorAll(':scope > tk-tabs-item')).indexOf(tab);
-      if (index !== -1 && this.internalTabItems[index]) {
-        this.internalTabItems[index].label = event.detail.label;
-        this.internalTabItems[index].icon = event.detail.icon;
-        this.internalTabItems[index].disabled = event.detail.disabled;
-        this.internalTabItems[index].badged = event.detail.badged;
-        this.internalTabItems[index].badgeCount = event.detail.badgeCount;
-        this.internalTabItems[index].badgeLabel = event.detail.badgeLabel;
-        this.internalTabItems[index].tooltipOptions = event.detail.tooltipOptions;
-        this.internalTabItems = [...this.internalTabItems];
-      }
+
+    if (!tab) return;
+
+    if (tab.closest('tk-tabs') !== this.el) return;
+
+    event.stopPropagation();
+
+    const directItems = this.getDirectTabItems();
+    const index = directItems.indexOf(tab);
+    if (index !== -1 && this.internalTabItems[index]) {
+      this.internalTabItems[index].label = event.detail.label;
+      this.internalTabItems[index].icon = event.detail.icon;
+      this.internalTabItems[index].disabled = event.detail.disabled;
+      this.internalTabItems[index].badged = event.detail.badged;
+      this.internalTabItems[index].badgeCount = event.detail.badgeCount;
+      this.internalTabItems[index].badgeLabel = event.detail.badgeLabel;
+      this.internalTabItems[index].tooltipOptions = event.detail.tooltipOptions;
+      this.internalTabItems = [...this.internalTabItems];
     }
   }
 
