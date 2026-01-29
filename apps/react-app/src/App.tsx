@@ -44,12 +44,14 @@ import Tabs from './components/Tabs';
 import TreeView from './components/TreeView';
 import Upload from './components/Upload';
 import ColorPicker from './components/ColorPicker';
+import FloatingElements from './examples/FloatingElements';
 
 function App() {
   return (
     <Layout>
       <Routes>
         <Route path="" element={<Home />} />
+        <Route path="examples/floatingElements" element={<FloatingElements />} />
         <Route path="components" element={<Components />} />
         <Route path="components/stepper" element={<Stepper />} />
         <Route path="components/chart" element={<Chart />} />

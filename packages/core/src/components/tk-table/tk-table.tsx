@@ -2,7 +2,7 @@ import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, E
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup } from './interfaces';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
-import _ from 'lodash';
+import { isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
@@ -12,7 +12,6 @@ import '../../global/sass/fonts/Geologica/Geologica-Bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 /**
@@ -51,6 +50,7 @@ export class TkTable implements ComponentInterface {
   @State() renderData: Record<PropertyKey, unknown>[] = [];
   @State() hasHeaderRightSlot: boolean;
   @State() hasEmptyDataSlot: boolean;
+  @State() hasEmptyFilterSlot: boolean;
   @State() isFilterOpen: boolean = false;
   @State() columnWidths: { [key: string]: string } = {};
   @State() stickyOffsets: { left: { [key: string]: number }; right: { [key: string]: number } } = { left: {}, right: {} };
@@ -105,7 +105,7 @@ export class TkTable implements ComponentInterface {
   @Prop() data: any[] = [];
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
-    if (!_.isEqual(oldValue, newValue)) {
+    if (!isEqual(oldValue, newValue)) {
       const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
         this.currentPage = 1;
@@ -289,6 +289,7 @@ export class TkTable implements ComponentInterface {
   componentWillLoad(): Promise<void> | void {
     this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
+    this.hasEmptyFilterSlot = !!this.el.querySelector('[slot="empty-filter"]');
 
     // Determine if this is a controlled component based on initial groupBy prop
     this.isControlledGrouping = this.groupBy !== undefined;
@@ -332,7 +333,16 @@ export class TkTable implements ComponentInterface {
 
   componentWillUpdate(): Promise<void> | void {
     // empty-data slot'unun data her değiştiğinde görünürlüğünü ayarlamak için yapılmıştır.
+    const slotEmptyFilter: HTMLElement = this.el.querySelector("[slot='empty-filter']");
     const slotEmptyData: HTMLElement = this.el.querySelector("[slot='empty-data']");
+
+    if (slotEmptyFilter) {
+      if (this.hasEmptyFilterSlot && this.filters?.length > 0 && !this.loading && this.renderData?.length === 0) {
+        showElement(slotEmptyFilter);
+      } else {
+        hideElement(slotEmptyFilter);
+      }
+    }
 
     if (slotEmptyData) {
       if (this.loading || this.renderData?.length > 0) {
@@ -430,8 +440,14 @@ export class TkTable implements ComponentInterface {
 
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
-        body: _data.map(
-          row => this.columns.map(col => getNestedValue(row, col.field) ?? ''), // Her sütunun değerini dinamik olarak alır
+        body: _data.map(row =>
+          this.columns.map(col => {
+            if (col.exportFormat) {
+              return col.exportFormat(row);
+            } else {
+              return getNestedValue(row, col.field) ?? '';
+            }
+          }),
         ),
         theme: 'striped',
         // styles: { halign: 'center', fontSize: 10 },
@@ -464,7 +480,11 @@ export class TkTable implements ComponentInterface {
           _columns
             .filter(col => !options.ignoreColumnsFields?.includes(col.field))
             .forEach(col => {
-              rowData[col.field] = getNestedValue(item, col.field) ?? '';
+              if (col.exportFormat) {
+                rowData[col.field] = col.exportFormat(item);
+              } else {
+                rowData[col.field] = getNestedValue(item, col.field) ?? '';
+              }
             });
 
           return rowData;
@@ -479,7 +499,19 @@ export class TkTable implements ComponentInterface {
       link.click();
     } else if (options.type == 'csv') {
       const headers = this.columns.map(col => col.header).join(',');
-      const rows = _data.map(row => this.columns.map(col => getNestedValue(row, col.field) ?? '').join(',')).join('\n');
+      const rows = _data
+        .map(row =>
+          this.columns
+            .map(col => {
+              if (col.exportFormat) {
+                return col.exportFormat(row);
+              } else {
+                return getNestedValue(row, col.field) ?? '';
+              }
+            })
+            .join(','),
+        )
+        .join('\n');
       const csvContent = headers + '\n' + rows;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -719,7 +751,6 @@ export class TkTable implements ComponentInterface {
   private updatePanelPosition() {
     this.cleanup = floatingElementAutoUpdate(this.elActiveSearchIcon, this.elFilterPanelElement, undefined, {
       placement: 'bottom',
-      shift: { padding: 5 },
       offset: 4,
     });
   }
@@ -794,7 +825,6 @@ export class TkTable implements ComponentInterface {
 
   // Add a new method to safely close the filter panel
   private closeFilterPanel() {
-    removeDialogScrollListener(this.elFilterPanelElement);
     // Clean up floating UI listeners before removing element
     this.cleanup?.();
     // Clear reference to allow garbage collection
@@ -908,7 +938,7 @@ export class TkTable implements ComponentInterface {
   private handleCheckboxSelectChange(isSelect: boolean, row) {
     this.isSelectionUpdating = true;
     let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
-    const hasSelect = _.some(tmpSelection, item => _.isEqual(item, row));
+    const hasSelect = some(tmpSelection, item => isEqual(item, row));
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
@@ -1008,12 +1038,6 @@ export class TkTable implements ComponentInterface {
     // First close any existing filter panel
     this.closeFilterPanel();
 
-    addDialogScrollListener(this.el, e => {
-      if (e.composedPath().includes(this.el)) {
-        return;
-      }
-      this.closeFilterPanel();
-    });
     this.elActiveSearchIcon = refSearchIcon;
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
@@ -1668,7 +1692,7 @@ export class TkTable implements ComponentInterface {
         <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
-            value={_.some(this.selection, itemValue => _.isEqual(itemValue, row))}
+            value={some(this.selection, itemValue => isEqual(itemValue, row))}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
             onClick={e => e.stopPropagation()}
@@ -1682,7 +1706,7 @@ export class TkTable implements ComponentInterface {
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
             value={row}
             name={this.el.id ? `${this.el.id}-selection` : 'selection'}
-            checked={_.isEqual(this.selection, row)}
+            checked={isEqual(this.selection, row)}
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
             onClick={e => e.stopPropagation()}
@@ -1692,7 +1716,7 @@ export class TkTable implements ComponentInterface {
     }
 
     const isSelected =
-      this.selectionMode === 'checkbox' ? _.some(this.selection, itemValue => _.isEqual(itemValue, row)) : this.selectionMode === 'radio' ? _.isEqual(this.selection, row) : false;
+      this.selectionMode === 'checkbox' ? some(this.selection, itemValue => isEqual(itemValue, row)) : this.selectionMode === 'radio' ? isEqual(this.selection, row) : false;
 
     return (
       <Fragment>
@@ -1801,7 +1825,7 @@ export class TkTable implements ComponentInterface {
                     ...styleRowObject,
                     ...styleCellObject,
                   }}
-                  ref={el => el?.replaceChildren(getNestedValue(row, col.field))}
+                  ref={el => el?.replaceChildren(getNestedValue(row, col.field) ?? '')}
                 ></td>
               );
             }
@@ -2097,6 +2121,16 @@ export class TkTable implements ComponentInterface {
           {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
 
           <slot name="body-footer"></slot>
+        </tbody>
+      );
+    } else if (this.hasEmptyFilterSlot && this.filters?.length > 0) {
+      return (
+        <tbody>
+          <tr>
+            <td colSpan={100}>
+              <slot name="empty-filter" />
+            </td>
+          </tr>
         </tbody>
       );
     } else if (this.hasEmptyDataSlot) {

@@ -65,7 +65,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-success-gradient-tozero, linear-gradient(270deg, rgba(202, 241, 216, 0) 89%, #a0e6ba 100%));
+      background: var(--gradient-success-gradient-tozero);
     }
   }
 
@@ -85,7 +85,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-info-gradient-tozero, linear-gradient(270deg, rgba(208, 225, 253, 0) 89%, #abc9fb 100%));
+      background: var(--gradient-info-gradient-tozero);
     }
   }
 
@@ -105,7 +105,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-danger-gradinet-tozero, linear-gradient(270deg, rgba(255, 208, 206, 0) 89%, #ff8780 100%));
+      background: var(--gradient-danger-gradient-tozero);
     }
   }
 
@@ -125,7 +125,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-warning-gradient-tozero, linear-gradient(270deg, rgba(246, 222, 149, 0) 89%, #f2d066 100%));
+      background: var(--gradient-warning-gradient-tozero);
     }
   }
 
@@ -155,7 +155,7 @@
     }
 
     &.gradient {
-      background: var(--gradient-gradient-gray, linear-gradient(270deg, rgba(202, 207, 216, 0) 89%, #cacfd8 100%));
+      background: var(--gradient-gradient-gray);
     }
   }
 

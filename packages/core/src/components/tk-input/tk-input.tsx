@@ -4,7 +4,7 @@ import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
 import { IInputMaskOptions } from './interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import _ from 'lodash';
+import { isEqual, pull, isNil, includes } from 'lodash-es';
 import { CleaveOptions } from 'cleave.js/options';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
@@ -165,7 +165,7 @@ export class TkInput implements ComponentInterface {
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
   protected valueChanged(newValue, oldValue) {
-    if (!_.isEqual(newValue, oldValue) && this.mode !== 'chips') {
+    if (!isEqual(newValue, oldValue) && this.mode !== 'chips') {
       if (typeof newValue === 'object' && typeof oldValue === 'object') {
         this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
       } else {
@@ -351,7 +351,7 @@ export class TkInput implements ComponentInterface {
         _value = this.cleaveInstance?.getFormattedValue();
       }
 
-      if (!_.isEqual(this.value, _value)) {
+      if (!isEqual(this.value, _value)) {
         this.value = _value;
         this.tkChange.emit(_value);
       }
@@ -469,7 +469,7 @@ export class TkInput implements ComponentInterface {
     if (!this.disabled) {
       let currentValue: number;
       if (this.value === '' || this.value === null || this.value === undefined) {
-        currentValue = !_.isNil(this.min) ? Number(this.min) : 0;
+        currentValue = !isNil(this.min) ? Number(this.min) : 0;
       } else {
         currentValue = Number(this.value);
       }
@@ -485,8 +485,8 @@ export class TkInput implements ComponentInterface {
   private handleChipsRemove(item: any) {
     const chipsArr = [...(this.value as any[])];
 
-    if (_.includes(chipsArr, item)) {
-      _.pull(chipsArr, item);
+    if (includes(chipsArr, item)) {
+      pull(chipsArr, item);
       this.value = chipsArr;
       this.tkChange.emit(chipsArr);
     }
@@ -553,7 +553,7 @@ export class TkInput implements ComponentInterface {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
         let isRemovable;
-        if (this.chipDisabled?.(item)) {
+        if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
           isRemovable = false;
         } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
           isRemovable = item.removable;
@@ -569,6 +569,7 @@ export class TkInput implements ComponentInterface {
           variant: (itemChipOptions.variant ?? 'neutral') as IChipOptions['variant'],
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
+          disabled: this.disabled || this.readonly,
         };
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);

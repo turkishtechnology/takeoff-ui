@@ -7,7 +7,7 @@
 /packages/vue/lib/vue-component-lib
 /packages/vue/lib/components.ts
 /packages/react/lib/components/stencil-generated
-/packages/angular/projects/library/src/lib/stencil-generated
+/packages/angular/projects/library/src/directives
 .DS_Store
 .turbo
 .docusaurus

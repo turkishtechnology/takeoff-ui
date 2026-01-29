@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -374,8 +373,6 @@ export class TkDatePicker {
     this.internals?.form?.addEventListener('reset', () => {
       this.handleFormReset();
     });
-    addDialogScrollListener(this.el, this.closeHandler);
-
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
       this.clickOutsideMixin = new ClickOutsideMixin({
@@ -419,7 +416,6 @@ export class TkDatePicker {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -480,8 +476,6 @@ export class TkDatePicker {
     const inputEl = this.inputRef!.querySelector('.tk-input') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(inputEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 
@@ -1640,16 +1634,16 @@ export class TkDatePicker {
         <div class="tk-datepicker-header-content">
           <div class="tk-datepicker-header-content-start">
             <tk-button
-              variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
-              variant="neutral"
-              icon={{ name: 'chevron_left', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled}
@@ -1665,16 +1659,16 @@ export class TkDatePicker {
           </div>
           <div class="tk-datepicker-header-content-end">
             <tk-button
-              variant="neutral"
-              icon={{ name: 'chevron_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
               disabled={this.readonly || this.disabled}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
-              variant="neutral"
-              icon={{ name: 'keyboard_double_arrow_right', color: this.headerType === 'primary' || this.headerType === 'dark' ? 'var(--icon-lightest)' : '' }}
+              variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
               disabled={this.readonly || this.disabled}

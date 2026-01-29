@@ -82,33 +82,72 @@ createApp(App).use(ComponentLibrary).mount('#app');
 
 ### Angular
 
+The package was published with Angular 20
+
 ```css title="/src/styles.css"
-@import url('@takeoff-ui/core/dist/core/core.css');
+@import '@takeoff-ui/core/dist/core/core.css';
 ```
 
-Add ComponentLibraryModule to app.module.ts file.
+```typescript title="/src/app/app.ts"
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { JsonPipe } from '@angular/common';
+import { TkButton, TkInput, TextValueAccessor } from '@takeoff-ui/angular';
 
-```typescript title="/src/app/app.module.ts"
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ComponentLibraryModule } from '@takeoff-ui/angular/dist';
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, ComponentLibraryModule],
-  providers: [],
-  bootstrap: [AppComponent],
+@Component({
+  selector: 'app-root',
+  imports: [
+    RouterOutlet,
+    TkButton,
+    TkInput,
+    TextValueAccessor,
+    ReactiveFormsModule,
+    JsonPipe,
+    FormsModule,
+  ],
+  templateUrl: './app.html',
+  standalone: true,
+  styleUrl: './app.css',
 })
-export class AppModule {}
+export class App {
+  private readonly fb = inject(FormBuilder);
+
+  formGroup: FormGroup = this.fb.group({
+    firstname: [''],
+    surname: [''],
+  });
+
+  onButtonClick(): void {
+    alert('Button clicked!');
+  }
+}
 ```
 
-In a component template:
+```html title="/src/app/app.html"
+<div class="container">
+  <h4>Button and Event Usage Example</h4>
+  <tk-button
+    label="Example Button"
+    variant="primary"
+    (tk-click)="onButtonClick()"
+  ></tk-button>
 
-```html
-<tk-button label="Click me"></tk-button>
+  <h4>Reactive Form Example</h4>
+  <form [formGroup]="formGroup">
+    <tk-input label="Name" formControlName="firstname" />
+    <tk-input label="Surname" formControlName="surname" />
+  </form>
+
+  {{ formGroup.getRawValue() | json }}
+</div>
+
+<router-outlet />
 ```
 
 ### Next.js (App Router)

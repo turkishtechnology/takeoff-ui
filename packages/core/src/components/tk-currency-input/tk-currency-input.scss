@@ -218,10 +218,7 @@
         align-items: center;
         gap: var(--spacing-xs);
         border-left: var(--spacing-px) solid var(--border-light);
-
-        .flag {
-          margin-left: var(--input-external-label-large-label-h-padding);
-        }
+        padding-left: var(--input-external-label-large-label-h-padding);
       }
     }
 
