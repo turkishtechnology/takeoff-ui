@@ -4,6 +4,16 @@
   "hasChildren": false,
   "props": [
     {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "labels",
+      "options": [
+        { "label": "Labels", "value": "labels" },
+        { "label": "Ticks", "value": "ticks" }
+      ]
+    },
+    {
       "key": "label",
       "label": "Label",
       "type": "text",
@@ -33,16 +43,7 @@
       "type": "text",
       "defaultValue": 50
     },
-    {
-      "key": "type",
-      "label": "Type",
-      "type": "select",
-      "defaultValue": "labels",
-      "options": [
-        { "label": "Labels", "value": "labels" },
-        { "label": "Ticks", "value": "ticks" }
-      ]
-    },
+
     {
       "key": "hint",
       "label": "Hint",
@@ -53,7 +54,8 @@
       "key": "error",
       "label": "Error",
       "type": "text",
-      "defaultValue": ""
+      "defaultValue": "",
+      "tooltip": "It is recommended to use with invalid prop."
     },
     {
       "key": "range",

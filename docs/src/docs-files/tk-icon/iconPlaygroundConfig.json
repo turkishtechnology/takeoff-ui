@@ -5,7 +5,7 @@
   "props": [
     {
       "key": "icon",
-      "label": "Icon Name",
+      "label": "Icon",
       "type": "text",
       "defaultValue": "home"
     },

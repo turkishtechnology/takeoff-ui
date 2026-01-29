@@ -67,7 +67,8 @@
       "key": "error",
       "label": "Error",
       "type": "text",
-      "defaultValue": ""
+      "defaultValue": "",
+      "tooltip": "It is recommended to use with invalid prop."
     },
     {
       "key": "value",
