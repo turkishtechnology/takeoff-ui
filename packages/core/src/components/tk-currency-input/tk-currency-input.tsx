@@ -6,6 +6,7 @@ import { getIconElementProps } from '../../utils/icon-utils';
 import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { getValidSeparator } from './helpers';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -31,7 +32,6 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
-  private validSeparators: Separator[] = [',', '.', ' '] as const;
 
   /**
    * The currently selected currency object.
@@ -183,6 +183,12 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() error: string;
 
   /**
+   * Hides the currency flag icon in the dropdown button and list.
+   * @default false
+   */
+  @Prop() hideFlag: boolean = false;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
@@ -202,8 +208,6 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
-    this.validateSeparators();
-    this.validateSeparatorTypes();
   }
 
   /**
@@ -271,33 +275,15 @@ export class TkCurrencyInput implements ComponentInterface {
    * Get the decimal separator to use - custom prop takes priority over currency default
    */
   private getDecimalSeparator(): Separator {
-    return this.decimalSeparator ?? this.selectedCurrency?.decimalSeparator ?? '.';
+    return getValidSeparator(this.decimalSeparator, this.thousandsSeparator, this.selectedCurrency?.decimalSeparator, this.selectedCurrency?.thousandsSeparator, '.');
   }
 
   /**
    * Get the thousands separator to use - custom prop takes priority over currency default
    */
+
   private getThousandsSeparator(): Separator {
-    return this.thousandsSeparator ?? this.selectedCurrency?.thousandsSeparator ?? ',';
-  }
-
-  /**
-   * Validators
-   */
-  private validateSeparators(): void {
-    if (!this.validSeparators.includes(this.getDecimalSeparator())) {
-      console.error('TkCurrencyInput: decimalSeparator must be one of the following: ', this.validSeparators);
-    }
-
-    if (!this.validSeparators.includes(this.getThousandsSeparator())) {
-      console.error('TkCurrencyInput: thousandsSeparator must be one of the following: ', this.validSeparators);
-    }
-  }
-
-  private validateSeparatorTypes(): void {
-    if (this.getDecimalSeparator() === this.getThousandsSeparator()) {
-      console.error('TkCurrencyInput: decimalSeparator and thousandsSeparator cannot be the same.');
-    }
+    return getValidSeparator(this.thousandsSeparator, this.decimalSeparator, this.selectedCurrency?.thousandsSeparator, this.selectedCurrency?.decimalSeparator, ',');
   }
 
   private formatCurrency(amount: number): string {
@@ -591,14 +577,6 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   };
 
-  private handlePropsDecimalAndThousandsSeparator() {
-    if (this.decimalSeparator && this.thousandsSeparator) {
-      return false; // If both separators are provided, we assume custom formatting is required
-    } else {
-      return true;
-    }
-  }
-
   private renderLabel() {
     if (this.label) {
       return (
@@ -650,11 +628,7 @@ export class TkCurrencyInput implements ComponentInterface {
     return (
       <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
         <div class="tk-currency-input__dropdown-button-selected">
-          <img
-            src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
-            alt={`${this.selectedCurrency.name} flag`}
-            class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`}
-          />
+          {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
           <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
         </div>
@@ -675,7 +649,7 @@ export class TkCurrencyInput implements ComponentInterface {
             onClick={event => this.handleSelectCurrency(currency.code, event)}
             aria-selected={this.selectedCurrency.code === currency.code}
           >
-            <img src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" alt={`${currency.code} flag`} class={`flag flag-${currency.id.toLowerCase()}`} />
+            {!this.hideFlag && <div class={`flag flag-${currency.id.toLowerCase()}`} aria-label={`${currency.code} flag`} />}
             <span class="tk-currency-input__dropdown-menu-list-country-label">{currency.symbol}</span>
             <span class="tk-currency-input__dropdown-menu-list-dial-id">{currency.name}</span>
           </li>
@@ -718,7 +692,7 @@ export class TkCurrencyInput implements ComponentInterface {
         {this.renderLabel()}
         <div class="tk-currency-input__wrapper">
           {this.renderCurrencyInput()}
-          {this.handlePropsDecimalAndThousandsSeparator() && this.renderCurrencySelector()}
+          {this.renderCurrencySelector()}
         </div>
         {this.renderHint()}
       </div>

@@ -1,32 +1,53 @@
 {
   "name": "@takeoff-ui/angular",
-  "version": "0.8.2",
-  "description": "Angular components library designed for Turkish Technology.",
-  "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
-  "homepage": "https://takeoffui.com",
+  "version": "0.9.1",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json"
+  },
+  "main": "./dist/fesm2022/takeoff-ui-angular.mjs",
+  "module": "./dist/fesm2022/takeoff-ui-angular.mjs",
+  "typings": "./dist/types/takeoff-ui-angular.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./dist/types/takeoff-ui-angular.d.ts",
+      "default": "./dist/fesm2022/takeoff-ui-angular.mjs"
+    }
+  },
   "peerDependencies": {
-    "@angular/common": "^18.2.0",
-    "@angular/core": "^18.2.0"
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "rxjs": "^7.0.0"
   },
+  "bin": {
+    "patch-transform-selectors": "./scripts/patch-transform-selectors.mjs"
+  },
+  "files": [
+    "dist",
+    "scripts",
+    "package.json"
+  ],
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@takeoff-ui/core": "workspace:*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/turkishtechnology/takeoff-ui.git"
+    "@takeoff-ui/core": "workspace:*",
+    "tslib": "^2.3.0"
   },
   "publishConfig": {
     "access": "public",
     "dependencies": {
-      "@takeoff-ui/core": "^0.8.2"
+      "@takeoff-ui/core": "^0.9.1"
     }
-  },
-  "scripts": {
-    "build": "pnpm ng build"
   },
   "sideEffects": false,
   "devDependencies": {
-    "@angular/cli": "^18.2.18"
+    "@angular/common": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "ng-packagr": "^21.0.0",
+    "rxjs": "^7.8.2",
+    "typescript": "~5.9.0"
   }
 }

@@ -1,7 +1,7 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import _ from 'lodash';
+import { isEqual, some, remove } from 'lodash-es';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getNestedValue } from '../../utils/object-utils';
@@ -192,7 +192,7 @@ export class TkSelect implements ComponentInterface {
   @Prop() options: any[];
   @Watch('options')
   protected optionsChanged(newValue: any[], oldValue: any[]) {
-    if (_.isEqual(newValue, oldValue)) return;
+    if (isEqual(newValue, oldValue)) return;
 
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
 
@@ -243,7 +243,7 @@ export class TkSelect implements ComponentInterface {
    */
   @Watch('value')
   protected valueChanged(newValue: any, oldValue: any) {
-    if (_.isEqual(newValue, oldValue)) return;
+    if (isEqual(newValue, oldValue)) return;
     this.setValue();
     if (this.multiple && this.selectAll) {
       const newValues = Array.isArray(newValue) ? newValue : [];
@@ -423,7 +423,7 @@ export class TkSelect implements ComponentInterface {
 
   private isOptionSelected(valueArr: any[], optionValue: any): boolean {
     if (typeof optionValue === 'object' && !Array.isArray(optionValue) && optionValue !== null) {
-      return valueArr.some(v => _.isEqual(v, optionValue));
+      return valueArr.some(v => isEqual(v, optionValue));
     } else {
       return valueArr.includes(optionValue);
     }
@@ -477,7 +477,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
-            return _.isEqual(opt, item);
+            return isEqual(opt, item);
           }
         });
       });
@@ -487,7 +487,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
-            return _.isEqual(opt, item);
+            return isEqual(opt, item);
           }
         });
       });
@@ -539,7 +539,7 @@ export class TkSelect implements ComponentInterface {
         if (this.optionValueKey?.length > 0) {
           return searchOptions.find(item => this.getOptionValue(item) == this.value);
         } else {
-          return searchOptions.find(item => _.isEqual(item, this.value));
+          return searchOptions.find(item => isEqual(item, this.value));
         }
       } else {
         return null;
@@ -565,7 +565,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             found = this.flatOptions.find(opt => this.getOptionValue(opt) === val);
           } else {
-            found = this.flatOptions.find(opt => _.isEqual(opt, val));
+            found = this.flatOptions.find(opt => isEqual(opt, val));
           }
           if (found !== undefined) return found;
           if (this.allowCustomValue) return val;
@@ -599,7 +599,7 @@ export class TkSelect implements ComponentInterface {
       this.selectedItem = this.flatOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = this.flatOptions?.find(item => _.isEqual(item, this.value));
+      this.selectedItem = this.flatOptions?.find(item => isEqual(item, this.value));
     }
 
     // Set input value based on selection state
@@ -683,9 +683,9 @@ export class TkSelect implements ComponentInterface {
 
       const tmpItem = this.getOptionValue(item);
 
-      if (_.some(tmpValue, itemValue => _.isEqual(itemValue, this.getOptionValue(tmpItem)))) {
+      if (some(tmpValue, itemValue => isEqual(itemValue, this.getOptionValue(tmpItem)))) {
         // tıklanan item zaten seçili ise seçimi kaldırır
-        _.remove(tmpValue, itemValue => _.isEqual(itemValue, tmpItem));
+        remove(tmpValue, itemValue => isEqual(itemValue, tmpItem));
       } else {
         // tıklanan item seçili değilse ekler
         tmpValue.push(tmpItem);
@@ -732,7 +732,7 @@ export class TkSelect implements ComponentInterface {
                 if (this.optionValueKey && typeof displayChip === 'object' && typeof validChip === 'object') {
                   return this.getOptionValue(displayChip) === this.getOptionValue(validChip);
                 }
-                return _.isEqual(displayChip, validChip);
+                return isEqual(displayChip, validChip);
               }),
           );
 
@@ -745,7 +745,7 @@ export class TkSelect implements ComponentInterface {
               if (this.optionValueKey && typeof removedChip === 'object') {
                 return val !== removedValue;
               }
-              return !_.isEqual(val, removedValue);
+              return !isEqual(val, removedValue);
             });
 
             this.value = updatedValue;
@@ -929,7 +929,7 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      const checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      const checking = some(this.value, itemValue => isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (

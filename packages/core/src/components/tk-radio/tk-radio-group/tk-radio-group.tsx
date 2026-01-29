@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../../utils/icon-utils';
-import * as _ from 'lodash';
+import { isEqual } from 'lodash-es';
 
 @Component({
   tag: 'tk-radio-group',
@@ -95,7 +95,7 @@ export class TkRadioGroup implements ComponentInterface {
   private updateTkRadio() {
     if (this.slottedItems.length > 0) {
       this.slottedItems.forEach(item => {
-        item.checked = _.isEqual(this.value, item.value);
+        item.checked = isEqual(this.value, item.value);
       });
     }
   }
@@ -121,7 +121,7 @@ export class TkRadioGroup implements ComponentInterface {
           this.handleChange(e);
         });
 
-        item.checked = _.isEqual(this.value, item.value);
+        item.checked = isEqual(this.value, item.value);
         item.invalid = this.invalid;
         if (this.spread) item.style.flex = '1';
         item.setAttribute('data-type', this.type);
