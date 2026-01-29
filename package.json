@@ -89,7 +89,7 @@
       "tar": ">=7.5.3",
       "path-to-regexp@<6.0.0": "0.1.10",
       "path-to-regexp@>=6.0.0": ">=8.3.0",
-      "find-cache-directory": "^5.0.0"
+      "find-cache-directory": "6.0.0"
     }
   }
 }
