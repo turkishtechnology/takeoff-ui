@@ -1,0 +1,148 @@
+{
+  "name": "TkColorPicker",
+  "componentName": "TkColorPicker",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "vertical",
+      "options": [
+        { "label": "Vertical", "value": "vertical" },
+        { "label": "Horizontal", "value": "horizontal" }
+      ]
+    },
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Primary", "value": "primary" }
+      ],
+      "tooltip": "This feature works only when the Show Header is enabled."
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Select Color"
+    },
+    {
+      "key": "header",
+      "label": "Header Label",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "This feature works only when the Show Header is enabled."
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "value",
+      "label": "Value",
+      "type": "text",
+      "defaultValue": "#326FD1"
+    },
+    {
+      "key": "inline",
+      "label": "Inline",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showHeader",
+      "label": "Show Header",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAlphaSlider",
+      "label": "Show Alpha Slider",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showPresets",
+      "label": "Show Presets",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showFormatSelector",
+      "label": "Show Format Selector",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showCloseButton",
+      "label": "Show Close Button",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "Shows close button in the header. Works when Show Header is enabled."
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "Displays a red asterisk (*) next to the label."
+    },
+    {
+      "key": "preventDismiss",
+      "label": "Prevent Dismiss",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "Prevents the panel from being dismissed by clicking outside."
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
