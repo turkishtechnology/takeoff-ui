@@ -611,6 +611,7 @@ export declare interface TkColorPicker extends Components.TkColorPicker {
     'defaultCurrency',
     'disabled',
     'error',
+    'hideFlag',
     'hint',
     'invalid',
     'label',
@@ -637,6 +638,7 @@ export declare interface TkColorPicker extends Components.TkColorPicker {
     'defaultCurrency',
     'disabled',
     'error',
+    'hideFlag',
     'hint',
     'invalid',
     'label',
@@ -1230,14 +1232,14 @@ export declare interface TkPagination extends Components.TkPagination {
 
 @ProxyCmp({
   defineCustomElementFn: defineTkPhoneInput,
-  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
+  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
 })
 @Component({
   selector: 'tk-phone-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
+  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
 })
 export class TkPhoneInput {
   protected el: HTMLTkPhoneInputElement;
