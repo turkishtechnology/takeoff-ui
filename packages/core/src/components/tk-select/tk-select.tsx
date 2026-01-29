@@ -959,7 +959,7 @@ export class TkSelect implements ComponentInterface {
         <div
           class={classNames('dropdown-item', { multiple: this.multiple }, { disabled: isDisabled })}
           data-option-index={startIndex + index}
-          data-selected={this.multiple && checking ? 'true' : this.value == item ? 'true' : 'false'}
+          data-selected={this.multiple && checking ? 'true' : this.value === this.getOptionValue(item) ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
         >
