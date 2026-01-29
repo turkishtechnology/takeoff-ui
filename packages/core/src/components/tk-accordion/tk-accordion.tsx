@@ -1,7 +1,7 @@
 import { Component, h, Element, Prop, ComponentInterface, Watch, Event, type EventEmitter, State } from '@stencil/core';
 import { isEqual } from 'lodash-es';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import type { IAccordionItemSelect } from './types';
+import type { IAccordionItemSelect } from './interfaces';
 
 /**
  * The TkAccordion component is a user interface element that organizes content under headers, allowing users to expand and collapse sections by clicking on each header. It is particularly useful for improving layout and readability on pages with extensive information.
