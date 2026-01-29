@@ -1,6 +1,6 @@
 import { IInputMaskOptions } from '../tk-input/interfaces';
 import { CSSStyleProperties } from '../../global/types';
-import { IDateSelection } from '../tk-datepicker/interfaces';
+import { IDateSelection } from '../tk-datepicker/tk-datepicker';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 
 /**
