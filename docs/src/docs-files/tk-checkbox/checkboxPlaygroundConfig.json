@@ -14,6 +14,22 @@
       ]
     },
     {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Base",
+          "value": "base"
+        }
+      ]
+    },
+    {
       "key": "label",
       "label": "Label",
       "type": "text",
