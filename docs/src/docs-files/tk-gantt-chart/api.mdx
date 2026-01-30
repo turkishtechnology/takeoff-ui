@@ -1,0 +1,51 @@
+import { TkBadge } from '@takeoff-ui/react';
+
+### Props {#gantt-chart-props}
+
+| Name                                                                              | Type                                | Default | Description                                             |
+| --------------------------------------------------------------------------------- | ----------------------------------- | ------- | ------------------------------------------------------- |
+| <TkBadge label="tasks" variant="primary" size="large" type="filledlight"/>        | <code>IGanttTask[]</code>           | []      | An array of task objects to display on the Gantt chart. |
+| <TkBadge label="viewType" variant="primary" size="large" type="filledlight"/>     | <code>"day", "week", "month"</code> | 'week'  | The time scale view type for the chart.                 |
+| <TkBadge label="locale" variant="primary" size="large" type="filledlight"/>       | <code>string</code>                 | 'en-US' | Locale for date formatting (e.g., 'en-US', 'tr-TR').    |
+| <TkBadge label="rowHeight" variant="primary" size="large" type="filledlight"/>    | <code>number</code>                 | 40      | Height of each task row in pixels.                      |
+| <TkBadge label="showProgress" variant="primary" size="large" type="filledlight"/> | <code>boolean</code>                | true    | Whether to show progress indicator on task bars.        |
+| <TkBadge label="showTooltip" variant="primary" size="large" type="filledlight"/>  | <code>boolean</code>                | true    | Whether to show tooltip on task hover.                  |
+
+### Events {#gantt-chart-events}
+
+| Name                                                                           | Type                               | Description                                          |
+| ------------------------------------------------------------------------------ | ---------------------------------- | ---------------------------------------------------- |
+| <TkBadge label="tkTaskClick" variant="info" size="large" type="filledlight"/>  | <code>IGanttTaskClickDetail</code> | Emitted when a task bar is clicked.                  |
+| <TkBadge label="tkViewChange" variant="info" size="large" type="filledlight"/> | <code>string</code>                | Emitted when the view type changes (day/week/month). |
+
+### Interfaces {#gantt-chart-interfaces}
+
+#### <span id="igantt-task">IGanttTask</span>
+
+```typescript
+interface IGanttTask {
+  /** Unique identifier for the task */
+  id: string | number;
+  /** Display name of the task */
+  name: string;
+  /** Start date in ISO format (YYYY-MM-DD) */
+  startDate: string;
+  /** End date in ISO format (YYYY-MM-DD) */
+  endDate: string;
+  /** Progress percentage (0-100) */
+  progress?: number;
+  /** Custom color for the task bar */
+  color?: string;
+}
+```
+
+#### <span id="igantt-task-click-detail">IGanttTaskClickDetail</span>
+
+```typescript
+interface IGanttTaskClickDetail {
+  /** The clicked task object */
+  task: IGanttTask;
+  /** The original mouse event */
+  event: MouseEvent;
+}
+```

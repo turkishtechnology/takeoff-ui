@@ -9,3 +9,4 @@
  */
 export type * from './components.d.ts';
 export * from './utils/toaster';
+export type { IGanttTask, IGanttTaskClickDetail } from './components/tk-gantt-chart/interfaces';
