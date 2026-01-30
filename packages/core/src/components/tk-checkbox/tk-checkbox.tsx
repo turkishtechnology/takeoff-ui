@@ -60,6 +60,11 @@ export class TkCheckbox implements ComponentInterface {
   @Prop() type: 'default' | 'card' = 'default';
 
   /**
+   * Determines the size of the checkbox.
+   */
+  @Prop() size: 'small' | 'base' = 'base';
+
+  /**
    * If true, the checkbox will be indeterminate.
    */
   @Prop({ mutable: true }) indeterminate: boolean = false;
@@ -134,7 +139,7 @@ export class TkCheckbox implements ComponentInterface {
 
   render() {
     return (
-      <div class={classNames('tk-checkbox-container', this.type)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+      <div class={classNames('tk-checkbox-container', this.type, this.size)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         <label htmlFor={this.uniqueId}>
           {this.renderInput()}
           <div class="mask">
