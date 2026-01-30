@@ -11,10 +11,12 @@ const Example = () => {
     {
       field: 'id',
       header: 'Id',
+      exportFormat: row => `#${row.id}`,
     },
     {
       field: 'name',
       header: 'Name',
+      exportFormat: row => row.name.toUpperCase(),
     },
     {
       field: 'category',
@@ -23,6 +25,9 @@ const Example = () => {
     {
       field: 'quantity',
       header: 'Quantity',
+      exportFormat: row => {
+        return row?.quantity > 50 ? 'High Stock' : 'Low Stock';
+      },
     },
   ];
 
@@ -68,10 +73,12 @@ const column: ITableColumn[] = [
   {
     field: "id",
     header: "Id",
+    exportFormat: row => \`#\${row.id}\`,
   },
   {
     field: "name",
     header: "Name",
+    exportFormat: row => row.name.toUpperCase(),
   },
   {
     field: "category",
@@ -80,6 +87,9 @@ const column: ITableColumn[] = [
   {
     field: "quantity",
     header: "Quantity",
+    exportFormat: row => {
+      return row?.quantity > 50 ? 'High Stock' : 'Low Stock';
+    },
   },
 ];
 const exportOptions = [
@@ -164,10 +174,12 @@ const column = [
   {
     field: "id",
     header: "Id",
+    exportFormat: row => \`#\${row.id}\`,
   },
   {
     field: "name",
     header: "Name",
+    exportFormat: row => row.name.toUpperCase(),
   },
   {
     field: "category",
@@ -176,6 +188,9 @@ const column = [
   {
     field: "quantity",
     header: "Quantity",
+    exportFormat: row => {
+      return row?.quantity > 50 ? 'High Stock' : 'Low Stock';
+    },
   },
 ];
 const exportOptions = [

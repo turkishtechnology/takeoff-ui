@@ -1,7 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, h } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -101,10 +100,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -127,8 +123,6 @@ export class TkDropdown implements ComponentInterface {
       handler: this.closeHandler,
       disabled: this.disabled || !this.isOpen,
     });
-
-    addDialogScrollListener(this.el, this.closeHandler);
   }
 
   componentDidUpdate() {
@@ -152,7 +146,6 @@ export class TkDropdown implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -161,8 +154,6 @@ export class TkDropdown implements ComponentInterface {
   private updatePosition() {
     this.cleanup = floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
       placement: this.position,
-      shift: { padding: 5 },
-      offset: 4,
     });
   }
 

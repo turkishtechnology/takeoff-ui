@@ -5,29 +5,30 @@ import React from 'react';
 const State = () => {
   const reactCode = `<TkTextarea
   label="Error"
-  placeholder="Error"
+  value="Error"
   invalid={true}
   error="Bu alan zorunludur"
 />
 <TkTextarea
   label="Readonly"
-  placeholder="Readonly"
+  value="Readonly"
   readonly
 />
 <TkTextarea
   label="Disabled"
-  placeholder="Disabled"
+  value="Disabled"
   disabled
 />`;
 
   const vueCode = `<TkTextarea
   label="Error"
-  placeholder="Error"
+  value="Error"
   :invalid="true"
   error="Bu alan zorunludur"
 />
 <TkTextarea
   label="Readonly"
+<<<<<<< HEAD
   placeholder="Readonly"
   :readonly="true"
 />
@@ -35,30 +36,39 @@ const State = () => {
   label="Disabled"
   placeholder="Disabled"
   :disabled="true"
+=======
+  value="Readonly"
+  readonly
+/>
+<TkTextarea
+  label="Disabled"
+  value="Disabled"
+  disabled
+>>>>>>> develop
 />`;
 
   const angularCode = `<tk-textarea
   label="Error"
-  placeholder="Error"
+  value="Error"
   [invalid]="true"
   error="Bu alan zorunludur"
 />
 <tk-textarea
   label="Readonly"
-  placeholder="Readonly"
+  value="Readonly"
   [readonly]="true"
 />
 <tk-textarea
   label="Disabled"
-  placeholder="Disabled"
+  value="Disabled"
   [disabled]="true"
 />`;
 
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
-      <TkTextarea label="Error" placeholder="Error" invalid={true} error="Bu alan zorunludur" />
-      <TkTextarea label="Readonly" placeholder="Readonly" readonly />
-      <TkTextarea label="Disabled" placeholder="Disabled" disabled />
+      <TkTextarea label="Error" value="Error" invalid={true} error="Bu alan zorunludur" />
+      <TkTextarea label="Readonly" value="Readonly" readonly />
+      <TkTextarea label="Disabled" value="Disabled" disabled />
     </div>
   );
 

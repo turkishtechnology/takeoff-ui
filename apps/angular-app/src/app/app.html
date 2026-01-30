@@ -1,0 +1,14 @@
+<div class="container">
+  <h4>Button and Event Usage Example</h4>
+  <tk-button label="Example Button" variant="primary" (tk-click)="onButtonClick()"></tk-button>
+
+  <h4>Reactive Form Example</h4>
+  <form [formGroup]="formGroup">
+    <tk-input label="Name" formControlName="firstname" />
+    <tk-input label="Surname" formControlName="surname" />
+  </form>
+
+  {{ formGroup.getRawValue() | json }}
+</div>
+
+<router-outlet />

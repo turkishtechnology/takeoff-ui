@@ -1,10 +1,9 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import _ from 'lodash';
+import { isEqual, some, remove } from 'lodash-es';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
@@ -193,7 +192,7 @@ export class TkSelect implements ComponentInterface {
   @Prop() options: any[];
   @Watch('options')
   protected optionsChanged(newValue: any[], oldValue: any[]) {
-    if (_.isEqual(newValue, oldValue)) return;
+    if (isEqual(newValue, oldValue)) return;
 
     this.renderOptions = this.options?.length > 0 ? [...this.options] : [];
 
@@ -244,7 +243,7 @@ export class TkSelect implements ComponentInterface {
    */
   @Watch('value')
   protected valueChanged(newValue: any, oldValue: any) {
-    if (_.isEqual(newValue, oldValue)) return;
+    if (isEqual(newValue, oldValue)) return;
     this.setValue();
     if (this.multiple && this.selectAll) {
       const newValues = Array.isArray(newValue) ? newValue : [];
@@ -292,8 +291,6 @@ export class TkSelect implements ComponentInterface {
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
 
-    addDialogScrollListener(this.el, this.closeHandler);
-
     if (this.allowCustomValue) {
       this.editable = true;
     }
@@ -334,7 +331,7 @@ export class TkSelect implements ComponentInterface {
         this.setFlatOptions();
         // Panel açıldığında ilk itemin active olmasını sağlamak için
         const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
-        if (!activeItem) {
+        if (!activeItem && !this.allowCustomValue) {
           const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
           firstItem?.setAttribute('data-active', 'true');
         }
@@ -354,7 +351,6 @@ export class TkSelect implements ComponentInterface {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset.bind(this));
-    removeDialogScrollListener(this.el);
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -369,8 +365,6 @@ export class TkSelect implements ComponentInterface {
     const tkInputRootEl = this.inputRef.querySelector('.tk-input') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
-      shift: { padding: 5 },
-      offset: 4,
       size: {
         apply({ rects, elements }) {
           if (dropdownWidthMode === 'match-parent') {
@@ -390,10 +384,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Click outside handler implementation - called by the mixin
    */
-  private closeHandler = (e: Event): void => {
-    if (e.composedPath().includes(this.el)) {
-      return;
-    }
+  private closeHandler = (): void => {
     this.isOpen = false;
   };
 
@@ -432,7 +423,7 @@ export class TkSelect implements ComponentInterface {
 
   private isOptionSelected(valueArr: any[], optionValue: any): boolean {
     if (typeof optionValue === 'object' && !Array.isArray(optionValue) && optionValue !== null) {
-      return valueArr.some(v => _.isEqual(v, optionValue));
+      return valueArr.some(v => isEqual(v, optionValue));
     } else {
       return valueArr.includes(optionValue);
     }
@@ -486,7 +477,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
-            return _.isEqual(opt, item);
+            return isEqual(opt, item);
           }
         });
       });
@@ -496,7 +487,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             return this.getOptionValue(opt) === this.getOptionValue(item);
           } else {
-            return _.isEqual(opt, item);
+            return isEqual(opt, item);
           }
         });
       });
@@ -548,7 +539,7 @@ export class TkSelect implements ComponentInterface {
         if (this.optionValueKey?.length > 0) {
           return searchOptions.find(item => this.getOptionValue(item) == this.value);
         } else {
-          return searchOptions.find(item => _.isEqual(item, this.value));
+          return searchOptions.find(item => isEqual(item, this.value));
         }
       } else {
         return null;
@@ -574,7 +565,7 @@ export class TkSelect implements ComponentInterface {
           if (this.optionValueKey) {
             found = this.flatOptions.find(opt => this.getOptionValue(opt) === val);
           } else {
-            found = this.flatOptions.find(opt => _.isEqual(opt, val));
+            found = this.flatOptions.find(opt => isEqual(opt, val));
           }
           if (found !== undefined) return found;
           if (this.allowCustomValue) return val;
@@ -608,7 +599,7 @@ export class TkSelect implements ComponentInterface {
       this.selectedItem = this.flatOptions?.find(item => this.getOptionValue(item) === this.value);
     } else {
       // Handle object values without optionValueKey
-      this.selectedItem = this.flatOptions?.find(item => _.isEqual(item, this.value));
+      this.selectedItem = this.flatOptions?.find(item => isEqual(item, this.value));
     }
 
     // Set input value based on selection state
@@ -692,9 +683,9 @@ export class TkSelect implements ComponentInterface {
 
       const tmpItem = this.getOptionValue(item);
 
-      if (_.some(tmpValue, itemValue => _.isEqual(itemValue, this.getOptionValue(tmpItem)))) {
+      if (some(tmpValue, itemValue => isEqual(itemValue, this.getOptionValue(tmpItem)))) {
         // tıklanan item zaten seçili ise seçimi kaldırır
-        _.remove(tmpValue, itemValue => _.isEqual(itemValue, tmpItem));
+        remove(tmpValue, itemValue => isEqual(itemValue, tmpItem));
       } else {
         // tıklanan item seçili değilse ekler
         tmpValue.push(tmpItem);
@@ -741,7 +732,7 @@ export class TkSelect implements ComponentInterface {
                 if (this.optionValueKey && typeof displayChip === 'object' && typeof validChip === 'object') {
                   return this.getOptionValue(displayChip) === this.getOptionValue(validChip);
                 }
-                return _.isEqual(displayChip, validChip);
+                return isEqual(displayChip, validChip);
               }),
           );
 
@@ -754,7 +745,7 @@ export class TkSelect implements ComponentInterface {
               if (this.optionValueKey && typeof removedChip === 'object') {
                 return val !== removedValue;
               }
-              return !_.isEqual(val, removedValue);
+              return !isEqual(val, removedValue);
             });
 
             this.value = updatedValue;
@@ -807,9 +798,20 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async handleInputBlur() {
-    if (this.multiple) return;
+    // item click'den geldiğinde blur çalıştırma
+    if (this.isItemClickFlag) {
+      this.isItemClickFlag = false;
+      return;
+    }
 
-    if (this.editable && !this.allowCustomValue) {
+    if (!this.editable) return;
+
+    // filtreleme ardında yapılan seçimden sonra filtrelem için kullandığımız tk-input içerisindeki native inputu temizleme işlemi
+    if (this.multiple) {
+      this.nativeInputRef.value = null;
+    }
+
+    if (!this.multiple && !this.allowCustomValue) {
       const selectedItem = this.getSelectedItem();
       const inputValue = this.nativeInputRef.value;
 
@@ -817,20 +819,18 @@ export class TkSelect implements ComponentInterface {
 
       // custom value'ya izin verilmiyor ise inputu boşalt
       if (
-        !this.isItemClickFlag &&
         // seçili item yok ise ama inutda bir değer var ise
-        ((!selectedItem && inputValue) ||
-          // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
-          (selectedItem && this.getOptionLabel(selectedItem) != inputValue))
+        (!selectedItem && inputValue) ||
+        // seçili item var ise ama inputta yazar değer seçili item ile uyuşmuyor ise
+        (selectedItem && this.getOptionLabel(selectedItem) != inputValue)
       ) {
         this.value = null;
         this.inputRef.value = null;
         this.tkChange.emit(null);
-        this.renderOptions = await this.filter(null, this.options);
-      } else {
-        this.isItemClickFlag = false;
       }
     }
+
+    this.renderOptions = await this.filter(null, this.options);
   }
 
   private async handleInputKeydown(e) {
@@ -929,7 +929,7 @@ export class TkSelect implements ComponentInterface {
     return options?.map((item, index) => {
       let itemProps = {};
       let children;
-      const checking = _.some(this.value, itemValue => _.isEqual(itemValue, this.getOptionValue(item)));
+      const checking = some(this.value, itemValue => isEqual(itemValue, this.getOptionValue(item)));
       if (this.multiple) {
         if (this.optionHtml != undefined) {
           children = (
@@ -959,7 +959,7 @@ export class TkSelect implements ComponentInterface {
         <div
           class={classNames('dropdown-item', { multiple: this.multiple }, { disabled: isDisabled })}
           data-option-index={startIndex + index}
-          data-selected={this.multiple && checking ? 'true' : this.value == item ? 'true' : 'false'}
+          data-selected={this.multiple && checking ? 'true' : this.value === this.getOptionValue(item) ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
         >

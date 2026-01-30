@@ -2,7 +2,6 @@ import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import classNames from 'classnames';
-import { addDialogScrollListener, removeDialogScrollListener } from '../../utils/dialog-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -83,9 +82,6 @@ export class TkTooltip implements ComponentInterface {
 
     this.triggerElement?.addEventListener('mouseenter', this.handleMouseEnter);
     this.triggerElement?.addEventListener('mouseleave', this.handleMouseLeave);
-    addDialogScrollListener(this.el, () => {
-      this.isOpen = false;
-    });
   }
 
   componentDidUpdate() {
@@ -106,7 +102,6 @@ export class TkTooltip implements ComponentInterface {
     this.cleanup?.();
     // Clear reference to allow garbage collection
     this.cleanup = null;
-    removeDialogScrollListener(this.el);
   }
 
   private updatePosition() {

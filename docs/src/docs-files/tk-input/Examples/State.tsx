@@ -5,35 +5,35 @@ import React from 'react';
 const State = () => {
   const reactCode = `<TkInput
   label="Error"
-  placeholder="Error"
+  value="Error"
   invalid={true}
   error="Bu alan zorunludur"
 />
 <TkInput
   label="Readonly"
-  placeholder="Readonly"
+  value="Readonly"
   readonly
 />
 <TkInput
   label="Disabled"
-  placeholder="Disabled"
+  value="Disabled"
   disabled
 />`;
 
   const vueCode = `<TkInput
   label="Error"
-  placeholder="Error"
+  value="Error"
   :invalid="true"
   error="Bu alan zorunludur"
 />
-<TkInput label="Readonly" placeholder="Readonly" readonly />
-<TkInput label="Disabled" placeholder="Disabled" disabled />`;
+<TkInput label="Readonly" value="Readonly" readonly />
+<TkInput label="Disabled" value="Disabled" disabled />`;
 
   const demo = (
     <div className="flex gap-2 flex-wrap justify-center">
-      <TkInput label="Error" placeholder="Error" invalid={true} error="Bu alan zorunludur" />
-      <TkInput label="Readonly" placeholder="Readonly" readonly />
-      <TkInput label="Disabled" placeholder="Disabled" disabled />
+      <TkInput label="Error" value="Error" error="Bu alan zorunludur" invalid />
+      <TkInput label="Readonly" value="Readonly" readonly />
+      <TkInput label="Disabled" value="Disabled" disabled />
     </div>
   );
 

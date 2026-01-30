@@ -1216,6 +1216,11 @@
   --toast-sign-large-full-padding: var(--spacing-m-base);
   --toast-sign-small-size: var(--spacing-4xl);
   --toast-sign-small-full-padding: var(--spacing-xs);
+  --gradient-info-gradient-tozero: linear-gradient(270deg, var(--background-lightest) 89%, var(--states-info-sub-base) 100%);
+  --gradient-success-gradient-tozero: linear-gradient(270deg, var(--background-lightest) 89%, var(--states-success-sub-base) 100%);
+  --gradient-danger-gradient-tozero: linear-gradient(270deg, var(--background-lightest) 89%, var(--states-danger-sub-base) 100%);
+  --gradient-warning-gradient-tozero: linear-gradient(270deg, var(--background-lightest) 89%, var(--states-warning-sub-base) 100%);
+  --gradient-gradient-gray: linear-gradient(270deg, var(--background-lightest) 89%, var(--background-sub-base) 100%);
 
   // drawer variables
   --notification-header-h-padding: var(--spacing-4xl);
