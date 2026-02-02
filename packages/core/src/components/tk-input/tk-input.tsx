@@ -4,7 +4,7 @@ import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
 import { IInputMaskOptions } from './interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { isEqual, pull, isNil, includes } from 'lodash-es';
+import { isEqual, isNil } from 'lodash-es';
 import { CleaveOptions } from 'cleave.js/options';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
@@ -482,11 +482,11 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  private handleChipsRemove(item: any) {
+  private handleChipsRemove(index: number) {
     const chipsArr = [...(this.value as any[])];
 
-    if (includes(chipsArr, item)) {
-      pull(chipsArr, item);
+    if (index >= 0 && index < chipsArr.length) {
+      chipsArr.splice(index, 1);
       this.value = chipsArr;
       this.tkChange.emit(chipsArr);
     }
@@ -574,7 +574,7 @@ export class TkInput implements ComponentInterface {
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
-        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(item)} {...baseProps}></tk-chips>;
+        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps}></tk-chips>;
       });
     }
   }
