@@ -1,4 +1,5 @@
 import { IAlertActionButton } from '../components/tk-alert/interfaces';
+import { CSSStyleProperties } from '../global/types';
 
 export interface IToast {
   position?: string;
@@ -14,6 +15,7 @@ export interface IToast {
   timeout?: number;
   persistentId?: string;
   persistent?: boolean;
+  containerStyle?: CSSStyleProperties;
 }
 
 const persistentToasts: Map<
@@ -67,6 +69,9 @@ export const createToast = (options: IToast) => {
     });
 
     tkAlert.appendChild(slotFooterAction);
+  }
+  if (options.containerStyle) {
+    tkAlert.containerStyle = options.containerStyle;
   }
 
   const toast = document.createElement('div');
