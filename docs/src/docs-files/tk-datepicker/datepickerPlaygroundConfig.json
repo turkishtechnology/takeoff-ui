@@ -40,36 +40,6 @@
       ]
     },
     {
-      "key": "label",
-      "label": "Label",
-      "type": "text",
-      "defaultValue": "Select Date"
-    },
-    {
-      "key": "placeholder",
-      "label": "Placeholder",
-      "type": "text",
-      "defaultValue": "yyyy-mm-dd"
-    },
-    {
-      "key": "dateFormat",
-      "label": "Date Format",
-      "type": "text",
-      "defaultValue": "yyyy-MM-dd"
-    },
-    {
-      "key": "minDate",
-      "label": "Min Date",
-      "type": "text",
-      "defaultValue": ""
-    },
-    {
-      "key": "maxDate",
-      "label": "Max Date",
-      "type": "text",
-      "defaultValue": ""
-    },
-    {
       "key": "headerType",
       "label": "Header Type",
       "type": "select",
@@ -131,8 +101,93 @@
       "tooltip": "This feature works only when the `showTimePicker` prop is enabled."
     },
     {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Select Date"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "yyyy-mm-dd"
+    },
+    {
+      "key": "dateFormat",
+      "label": "Date Format",
+      "type": "text",
+      "defaultValue": "yyyy-MM-dd"
+    },
+    {
+      "key": "minDate",
+      "label": "Min Date",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "maxDate",
+      "label": "Max Date",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "maxTime",
+      "label": "Max Time",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "minTime",
+      "label": "Min Time",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "minuteStep",
+      "label": "Minute Step",
+      "type": "text",
+      "defaultValue": 1
+    },
+    {
+      "key": "hourStep",
+      "label": "Hour Step",
+      "type": "text",
+      "defaultValue": 1
+    },
+    {
+      "key": "error",
+      "label": "Error Message",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "It is recommended to use with invalid prop."
+    },
+    {
+      "key": "hint",
+      "label": "Hint Message",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": "calendar_month"
+    },
+    {
+      "key": "locale",
+      "label": "Localization",
+      "type": "text",
+      "defaultValue": "en"
+    },
+    {
       "key": "disabled",
       "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "disableMask",
+      "label": "Disable Mask",
       "type": "checkbox",
       "defaultValue": false
     },
