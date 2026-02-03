@@ -45,6 +45,26 @@
         }
       }
     }
+    &.tk-stepper-reverse {
+      .tk-step {
+        position: relative;
+        padding-bottom: calc(32px + var(--stepper-items-content-gap));
+
+        .tk-step-rail {
+          top: auto;
+          bottom: calc(36px / 2);
+        }
+
+        .tk-step-sign {
+          position: absolute;
+          bottom: 0;
+        }
+
+        .tk-step-content {
+          margin-top: 0;
+        }
+      }
+    }
   }
 
   &.tk-stepper-vertical {
@@ -76,6 +96,27 @@
       .tk-step-content {
         min-height: calc(36px * 2.5);
         overflow: hidden;
+      }
+    }
+
+    &.tk-stepper-reverse {
+      align-items: flex-end;
+      .tk-step {
+        flex-direction: row-reverse;
+
+        .tk-step-rail {
+          inset-inline-start: auto;
+          inset-inline-end: calc(50px / 2);
+        }
+
+        .tk-step-sign {
+          margin-inline-start: 8px;
+        }
+
+        .tk-step-content {
+          text-align: right;
+          align-items: flex-end;
+        }
       }
     }
   }

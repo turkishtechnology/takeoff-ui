@@ -109,6 +109,12 @@ export class TkStepper implements ComponentInterface {
   @Prop() railStyle?: CSSStyleProperties = null;
 
   /**
+   * Whether the step headers and content should be reversed.
+   * @defaultValue false
+   */
+  @Prop() reverse: boolean = false;
+
+  /**
    * Emitted when the active step changes.
    */
   @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
@@ -314,6 +320,7 @@ export class TkStepper implements ComponentInterface {
   render() {
     const rootClasses = classNames('tk-stepper', `tk-stepper-${this.orientation}`, `tk-stepper-${this.stepMode}`, {
       'tk-stepper-linear': this.linear,
+      'tk-stepper-reverse': this.reverse,
     });
 
     return (
