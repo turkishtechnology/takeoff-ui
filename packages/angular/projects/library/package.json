@@ -1,25 +1,25 @@
 {
   "name": "@takeoff-ui/angular",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "scripts": {
     "build": "ng-packagr -p ng-package.json"
   },
   "main": "./dist/fesm2022/takeoff-ui-angular.mjs",
   "module": "./dist/fesm2022/takeoff-ui-angular.mjs",
-  "typings": "./dist/index.d.ts",
+  "typings": "./dist/types/takeoff-ui-angular.d.ts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/takeoff-ui-angular.d.ts",
       "default": "./dist/fesm2022/takeoff-ui-angular.mjs"
     }
   },
   "peerDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
     "rxjs": "^7.0.0"
   },
   "bin": {
@@ -37,17 +37,17 @@
   "publishConfig": {
     "access": "public",
     "dependencies": {
-      "@takeoff-ui/core": "^0.9.0"
+      "@takeoff-ui/core": "^0.9.1"
     }
   },
   "sideEffects": false,
   "devDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/compiler-cli": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
-    "ng-packagr": "^20.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "ng-packagr": "^21.0.0",
     "rxjs": "^7.8.2",
-    "typescript": "~5.8.2"
+    "typescript": "~5.9.0"
   }
 }

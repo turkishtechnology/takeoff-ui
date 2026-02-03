@@ -128,18 +128,40 @@
 
     .tk-datepicker-divider {
       width: 1px;
-      height: 16px;
+      height: 24px;
       background-color: var(--border-light);
     }
   }
 
-  &.tk-datepicker-header-primary,
-  &.tk-datepicker-header-dark {
-    .tk-datepicker-header-icon-button {
-      color: var(--icon-darkest);
-    }
-
+  &.tk-datepicker-header-primary {
     .tk-datepicker-header-content {
+      .tk-datepicker-divider {
+        background-color: var(--primary-lightest);
+
+        &.disabled {
+          background-color: var(--primary-sub-base);
+        }
+      }
+
+      .tk-datepicker-select-container {
+        .tk-datepicker-select-month,
+        .tk-datepicker-select-year {
+          color: var(--primary-lightest);
+
+          &.disabled {
+            color: var(--primary-light);
+          }
+        }
+      }
+    }
+  }
+
+  &.tk-datepicker-header-dark {
+    .tk-datepicker-header-content {
+      .tk-datepicker-divider {
+        background-color: var(--background-base);
+      }
+
       .tk-datepicker-select-container {
         .tk-datepicker-select-month,
         .tk-datepicker-select-year {
@@ -244,6 +266,14 @@
       color: var(--text-lightest);
       background: var(--primary-base);
       border-radius: var(--datepicker-items-base-radius);
+    }
+
+    &.disabled,
+    &.readonly {
+      .tk-datepicker-day {
+        color: var(--primary-light);
+        background: var(--primary-lightest);
+      }
     }
   }
 
