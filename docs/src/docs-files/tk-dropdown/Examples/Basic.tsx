@@ -34,28 +34,20 @@ return (
   </TkDropdown>
 );`;
 
-  const vueCode = `<script setup>
-import { TkDropdown, TkButton } from '@takeoff-ui/vue';
-
+  const vueCode = `
 const options = [
   { label: 'Lorem Ipsum', value: '1' },
   { label: 'It is established', value: '2' },
   { label: 'Many desktop', value: '3' },
 ];
-</script>
-
-<template>
-  <div>
-    <TkDropdown :options="options">
-      <TkButton
-        label="Select"
-        icon="keyboard_arrow_down"
-        :iconPosition="right"
-        slot="trigger"
-      />
-    </TkDropdown>
-  </div>
-</template>
+<TkDropdown :options="options">
+  <TkButton
+    label="Select"
+    icon="keyboard_arrow_down"
+    :iconPosition="right"
+    slot="trigger"
+  />
+</TkDropdown>
 `;
 
   const angularCode = `<tk-dropdown [options]="[

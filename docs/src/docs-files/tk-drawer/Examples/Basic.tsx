@@ -39,32 +39,23 @@ const Basic = () => {
   </div>
 </TkDrawer>`;
 
-  const vueCode = `<script setup>
-import { TkDrawer, TkButton } from '@takeoff-ui/vue';
-import { ref } from 'vue';
+  const vueCode = `const showDrawer = ref(false);
 
-const showDrawer = ref(false);
-</script>
-
-<template>
-  <div>
-    <TkButton label="Open Drawer" @tk-click="showDrawer = true" />
-    <TkDrawer
-      header="Header Text"
-      :open="showDrawer"
-      @tk-drawer-close="() => (showDrawer = false)"
-    >
-      <div slot="content">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
-        </p>
-      </div>
-    </TkDrawer>
+<TkButton label="Open Drawer" @tk-click="showDrawer = true" />
+<TkDrawer
+  header="Header Text"
+  :open="showDrawer"
+  @tk-drawer-close="() => (showDrawer = false)"
+>
+  <div slot="content">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
+      sed consequuntur error repudiandae numquam deserunt quisquam repellat
+      libero asperiores earum nam nobis, culpa ratione quam perferendis
+      esse, cupiditate neque quas!
+    </p>
   </div>
-</template>
+</TkDrawer>
 
 `;
 

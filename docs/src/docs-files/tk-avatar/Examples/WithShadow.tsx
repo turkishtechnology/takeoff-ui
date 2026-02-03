@@ -6,23 +6,23 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 const WithShadow = () => {
   const [hideShadow, setHideShadow] = useState(false);
 
-  const reactCode = `<TkAvatar label="JS" ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar label="AD" rounded ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar label="AD" rounded badge ${hideShadow ? 'hideShadow' : ''} />`;
+  const reactCode = `<TkAvatar label="JS" hideShadow={hideShadow} />
+<TkAvatar label="AD" rounded hideShadow={hideShadow} />
+<TkAvatar image="/img/docs/tk-avatar/user-1.png" hideShadow={hideShadow} />
+<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded hideShadow={hideShadow} />
+<TkAvatar label="AD" rounded badge hideShadow={hideShadow} />`;
 
-  const vueCode = `<TkAvatar label="JS" ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar label="AD" rounded ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hideShadow' : ''} />
-<TkAvatar label="AD" rounded badge ${hideShadow ? 'hideShadow' : ''} />`;
+  const vueCode = `<TkAvatar label="JS" hideShadow={hideShadow} />
+<TkAvatar label="AD" rounded hideShadow={hideShadow} />
+<TkAvatar image="/img/docs/tk-avatar/user-1.png" hideShadow={hideShadow} />
+<TkAvatar image="/img/docs/tk-avatar/user-2.png" rounded hideShadow={hideShadow} />
+<TkAvatar label="AD" rounded badge hideShadow={hideShadow} />`;
 
-  const angularCode = `<tk-avatar label="JS" ${hideShadow ? 'hide-shadow' : ''} />
-<tk-avatar label="AD" rounded ${hideShadow ? 'hide-shadow' : ''} />
-<tk-avatar image="/img/docs/tk-avatar/user-1.png" ${hideShadow ? 'hide-shadow' : ''} />
-<tk-avatar image="/img/docs/tk-avatar/user-2.png" rounded ${hideShadow ? 'hide-shadow' : ''} />
-<tk-avatar label="AD" rounded badge ${hideShadow ? 'hide-shadow' : ''} />`;
+  const angularCode = `<tk-avatar label="JS" hideShadow={hideShadow} />
+<tk-avatar label="AD" rounded hideShadow={hideShadow} />
+<tk-avatar image="/img/docs/tk-avatar/user-1.png" hideShadow={hideShadow} />
+<tk-avatar image="/img/docs/tk-avatar/user-2.png" rounded hideShadow={hideShadow} />
+<tk-avatar label="AD" rounded badge hideShadow={hideShadow} />`;
 
   const demo = (
     <div className="flex flex-col gap-6 w-full">

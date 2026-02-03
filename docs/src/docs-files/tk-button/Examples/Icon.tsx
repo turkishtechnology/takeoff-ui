@@ -8,6 +8,7 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  iconPosition="left"
   label="left icon"
 />
 <TkButton
@@ -32,6 +33,7 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  iconPosition="left"
   label="left icon"
 />
 <TkButton
@@ -53,6 +55,7 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  icon-position="left"
   label="left icon"
 />
 <tk-button

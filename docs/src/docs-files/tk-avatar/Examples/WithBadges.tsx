@@ -5,15 +5,15 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 const WithBadges = () => {
   const reactCode = `<TkAvatar image="https://via.placeholder.com/40" background="solid" badge badgeStatus="success" rounded />
-<TkAvatar image="https://via.placeholder.com/40" badge badgeStatus="warning" rounded />
+<TkAvatar image="https://via.placeholder.com/40" background="solid" badge badgeStatus="warning" rounded />
 <TkAvatar label="AD" badge badgeStatus="danger" rounded />`;
 
   const vueCode = `<TkAvatar image="https://via.placeholder.com/40" background="solid" badge badgeStatus="success" rounded />
-<TkAvatar image="https://via.placeholder.com/40" badge badgeStatus="warning" rounded />
+<TkAvatar image="https://via.placeholder.com/40" background="solid" badge badgeStatus="warning" rounded />
 <TkAvatar label="AD" badge badgeStatus="danger" rounded />`;
 
   const angularCode = `<tk-avatar image="https://via.placeholder.com/40" background="solid" badge badge-status="success" rounded />
-<tk-avatar image="https://via.placeholder.com/40" badge badge-status="warning" rounded />
+<tk-avatar image="https://via.placeholder.com/40" background="solid" badge badge-status="warning" rounded />
 <tk-avatar label="AD" badge badge-status="danger" rounded />`;
 
   const demo = (

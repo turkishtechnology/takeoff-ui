@@ -3,7 +3,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const Position = () => {
-  const reactCode = `<TkAccordion>
+  const reactCode = `<TkAccordion arrowPosition="right">
   <TkAccordionItem size="base" icon="flight">
     <span slot="header">Panel 1 Title</span>
     <div slot="content">Panel 1 Content</div>
@@ -97,7 +97,7 @@ const Position = () => {
     <div className="flex flex-col gap-4">
       <div>
         <div className="mb-2">Right Positioned Arrows</div>
-        <TkAccordion allowMultiple={false}>
+        <TkAccordion>
           <TkAccordionItem size="base" icon="flight">
             <span slot="header">Panel 1 Title</span>
             <div slot="content">Panel 1 Content</div>
@@ -115,7 +115,7 @@ const Position = () => {
 
       <div>
         <div className="mb-2">Left Positioned Arrows</div>
-        <TkAccordion allowMultiple={false} arrowPosition="left">
+        <TkAccordion arrowPosition="left">
           <TkAccordionItem size="base" icon="flight">
             <span slot="header">Panel 1 Title</span>
             <div slot="content">Panel 1 Content</div>

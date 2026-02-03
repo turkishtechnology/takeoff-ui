@@ -28,33 +28,27 @@ return (
   </TkDropdown>
 );`;
 
-  const vueCode = `<script setup>
-import { TkDropdown, TkButton } from '@takeoff-ui/vue'
-
+  const vueCode = `
 const options = [
   { label: "Enable Item", value: "1" },
   { label: "Disabled Item", value: "2", disabled: true },
   { label: "Enable Item", value: "3" },
 ];
 
-</script>
-
-<template>
-  <div>
-    <TkDropdown :options="options">
-      <TkButton label="Disable Item Example" slot="trigger" />
-    </TkDropdown>
-  </div>
-</template>
+<TkDropdown :options="options">
+  <TkButton label="Disable Item Example" slot="trigger" />
+</TkDropdown>
 `;
 
-  const angularCode = `<tk-dropdown [options]="[
-    { label: 'Enable Item', value: '1' },
-    { label: 'Disabled Item', value: '2', disabled: true },
-    { label: 'Enable Item', value: '3' }
-  ]">
-    <tk-button label="Disable Item Example" slot="trigger" />
-  </tk-dropdown>`;
+  const angularCode = `options = [
+  { label: 'Enable Item', value: '1' },
+  { label: 'Disabled Item', value: '2', disabled: true },
+  { label: 'Enable Item', value: '3' }
+];
+
+<tk-dropdown [options]="options">
+  <tk-button label="Disable Item Example" slot="trigger" />
+</tk-dropdown>`;
 
   const demo = <Example />;
 

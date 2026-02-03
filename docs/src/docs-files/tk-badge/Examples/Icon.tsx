@@ -9,6 +9,7 @@ const Icon = () => {
   size="large"
   type="filled"
   icon="flight"
+  iconPosition="left"
   label="primary"
 />
 
@@ -37,6 +38,7 @@ const Icon = () => {
   size="large"
   type="filled"
   icon="flight"
+  iconPosition="left"
   label="primary"
 />
 
@@ -65,6 +67,7 @@ const Icon = () => {
   size="large"
   type="filled"
   icon="flight"
+  icon-position="left"
   label="primary"
 ></tk-badge>
 
