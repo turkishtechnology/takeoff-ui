@@ -7,15 +7,15 @@ import { ValueAccessor } from './value-accessor';
   /* tslint:disable-next-line:directive-selector */
   selector: 'tk-input',
   host: {
-    '(tk-change)': 'handleChangeEvent($event.target?.["value"])',
+    '(tk-change)': 'handleChangeEvent($event.target?.["value"])'
   },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: TextValueAccessor,
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class TextValueAccessor extends ValueAccessor {
   constructor(el: ElementRef) {

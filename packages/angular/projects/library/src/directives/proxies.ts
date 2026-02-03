@@ -56,7 +56,7 @@ import { defineCustomElement as defineTkTreeView } from '@takeoff-ui/core/compon
 import { defineCustomElement as defineTkUpload } from '@takeoff-ui/core/components/tk-upload.js';
 @ProxyCmp({
   defineCustomElementFn: defineTkAccordion,
-  inputs: ['activeIndex', 'allowMultiple', 'arrowPosition', 'collapseIcon', 'expandIcon', 'hideArrows', 'type'],
+  inputs: ['activeIndex', 'allowMultiple', 'arrowPosition', 'collapseIcon', 'expandIcon', 'hideArrows', 'type']
 })
 @Component({
   selector: 'tk-accordion',
@@ -67,16 +67,13 @@ import { defineCustomElement as defineTkUpload } from '@takeoff-ui/core/componen
 })
 export class TkAccordion {
   protected el: HTMLTkAccordionElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-active-index-change', 'tk-accordion-item-selected']);
   }
 }
+
 
 import type { IAccordionItemSelect as ITkAccordionIAccordionItemSelect } from '@takeoff-ui/core/components';
 
@@ -91,9 +88,10 @@ export declare interface TkAccordion extends Components.TkAccordion {
   'tk-accordion-item-selected': EventEmitter<CustomEvent<ITkAccordionIAccordionItemSelect>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkAccordionItem,
-  inputs: ['active', 'header', 'icon', 'itemKey', 'size'],
+  inputs: ['active', 'header', 'icon', 'itemKey', 'size']
 })
 @Component({
   selector: 'tk-accordion-item',
@@ -104,16 +102,13 @@ export declare interface TkAccordion extends Components.TkAccordion {
 })
 export class TkAccordionItem {
   protected el: HTMLTkAccordionItemElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-active-change']);
   }
 }
+
 
 export declare interface TkAccordionItem extends Components.TkAccordionItem {
   /**
@@ -122,9 +117,10 @@ export declare interface TkAccordionItem extends Components.TkAccordionItem {
   'tk-active-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkAlert,
-  inputs: ['alignItems', 'header', 'icon', 'iconSize', 'message', 'removable', 'type', 'variant'],
+  inputs: ['alignItems', 'header', 'icon', 'iconSize', 'message', 'removable', 'type', 'variant']
 })
 @Component({
   selector: 'tk-alert',
@@ -135,21 +131,19 @@ export declare interface TkAccordionItem extends Components.TkAccordionItem {
 })
 export class TkAlert {
   protected el: HTMLTkAlertElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkAlert extends Components.TkAlert {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkAvatar,
-  inputs: ['ariaLabelledby', 'background', 'badge', 'badgeStatus', 'hideShadow', 'image', 'label', 'name', 'rounded', 'size', 'variant'],
+  inputs: ['ariaLabelledby', 'background', 'badge', 'badgeStatus', 'hideShadow', 'image', 'label', 'name', 'rounded', 'size', 'variant']
 })
 @Component({
   selector: 'tk-avatar',
@@ -160,21 +154,19 @@ export declare interface TkAlert extends Components.TkAlert {}
 })
 export class TkAvatar {
   protected el: HTMLTkAvatarElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkAvatar extends Components.TkAvatar {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkAvatarGroup,
-  inputs: ['compact'],
+  inputs: ['compact']
 })
 @Component({
   selector: 'tk-avatar-group',
@@ -185,21 +177,19 @@ export declare interface TkAvatar extends Components.TkAvatar {}
 })
 export class TkAvatarGroup {
   protected el: HTMLTkAvatarGroupElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkAvatarGroup extends Components.TkAvatarGroup {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkBadge,
-  inputs: ['count', 'dot', 'icon', 'iconPosition', 'label', 'rounded', 'size', 'type', 'variant'],
+  inputs: ['count', 'dot', 'icon', 'iconPosition', 'label', 'rounded', 'size', 'type', 'variant']
 })
 @Component({
   selector: 'tk-badge',
@@ -210,21 +200,19 @@ export declare interface TkAvatarGroup extends Components.TkAvatarGroup {}
 })
 export class TkBadge {
   protected el: HTMLTkBadgeElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkBadge extends Components.TkBadge {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkBreadcrumb,
-  inputs: ['model', 'separator', 'separatorIcon', 'type'],
+  inputs: ['model', 'separator', 'separatorIcon', 'type']
 })
 @Component({
   selector: 'tk-breadcrumb',
@@ -235,21 +223,19 @@ export declare interface TkBadge extends Components.TkBadge {}
 })
 export class TkBreadcrumb {
   protected el: HTMLTkBreadcrumbElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkBreadcrumb extends Components.TkBreadcrumb {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkBreadcrumbItem,
-  inputs: ['href', 'icon', 'isCurrent', 'isExternal', 'label'],
+  inputs: ['href', 'icon', 'isCurrent', 'isExternal', 'label']
 })
 @Component({
   selector: 'tk-breadcrumb-item',
@@ -260,21 +246,19 @@ export declare interface TkBreadcrumb extends Components.TkBreadcrumb {}
 })
 export class TkBreadcrumbItem {
   protected el: HTMLTkBreadcrumbItemElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkBreadcrumbItem extends Components.TkBreadcrumbItem {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkButton,
-  inputs: ['disabled', 'fullWidth', 'href', 'icon', 'iconPosition', 'label', 'loading', 'mode', 'rounded', 'size', 'target', 'type', 'underline', 'variant'],
+  inputs: ['disabled', 'fullWidth', 'href', 'icon', 'iconPosition', 'label', 'loading', 'mode', 'rounded', 'size', 'target', 'type', 'underline', 'variant']
 })
 @Component({
   selector: 'tk-button',
@@ -285,16 +269,13 @@ export declare interface TkBreadcrumbItem extends Components.TkBreadcrumbItem {}
 })
 export class TkButton {
   protected el: HTMLTkButtonElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-click']);
   }
 }
+
 
 export declare interface TkButton extends Components.TkButton {
   /**
@@ -303,110 +284,50 @@ export declare interface TkButton extends Components.TkButton {
   'tk-click': EventEmitter<CustomEvent<MouseEvent>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkCard,
-  inputs: [
-    'avatarProps',
-    'containerStyle',
-    'contentStyle',
-    'enableHoverShadow',
-    'footerType',
-    'header',
-    'headerPosition',
-    'headerType',
-    'hideHeader',
-    'horizontal',
-    'image',
-    'imageOptions',
-    'showAvatar',
-    'showMenuButton',
-    'subheader',
-  ],
+  inputs: ['avatarProps', 'containerStyle', 'contentStyle', 'enableHoverShadow', 'footerType', 'header', 'headerPosition', 'headerType', 'hideHeader', 'horizontal', 'image', 'imageOptions', 'showAvatar', 'showMenuButton', 'subheader']
 })
 @Component({
   selector: 'tk-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'avatarProps',
-    'containerStyle',
-    'contentStyle',
-    'enableHoverShadow',
-    'footerType',
-    'header',
-    'headerPosition',
-    'headerType',
-    'hideHeader',
-    'horizontal',
-    'image',
-    'imageOptions',
-    'showAvatar',
-    'showMenuButton',
-    'subheader',
-  ],
+  inputs: ['avatarProps', 'containerStyle', 'contentStyle', 'enableHoverShadow', 'footerType', 'header', 'headerPosition', 'headerType', 'hideHeader', 'horizontal', 'image', 'imageOptions', 'showAvatar', 'showMenuButton', 'subheader'],
 })
 export class TkCard {
   protected el: HTMLTkCardElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkCard extends Components.TkCard {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkCarousel,
-  inputs: [
-    'autoplay',
-    'autoplayDelay',
-    'circular',
-    'itemsPerView',
-    'navigationPlacement',
-    'navigationPosition',
-    'orientation',
-    'showArrows',
-    'showIndicators',
-    'showPlayerButton',
-    'verticalViewHeight',
-  ],
+  inputs: ['autoplay', 'autoplayDelay', 'circular', 'itemsPerView', 'navigationPlacement', 'navigationPosition', 'orientation', 'showArrows', 'showIndicators', 'showPlayerButton', 'verticalViewHeight']
 })
 @Component({
   selector: 'tk-carousel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'autoplay',
-    'autoplayDelay',
-    'circular',
-    'itemsPerView',
-    'navigationPlacement',
-    'navigationPosition',
-    'orientation',
-    'showArrows',
-    'showIndicators',
-    'showPlayerButton',
-    'verticalViewHeight',
-  ],
+  inputs: ['autoplay', 'autoplayDelay', 'circular', 'itemsPerView', 'navigationPlacement', 'navigationPosition', 'orientation', 'showArrows', 'showIndicators', 'showPlayerButton', 'verticalViewHeight'],
 })
 export class TkCarousel {
   protected el: HTMLTkCarouselElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkCarousel extends Components.TkCarousel {
   /**
@@ -415,10 +336,11 @@ export declare interface TkCarousel extends Components.TkCarousel {
   'tk-change': EventEmitter<CustomEvent<number>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkChart,
   inputs: ['accessibilityLabel', 'data', 'height', 'options', 'plugins', 'type', 'width'],
-  methods: ['getChart', 'getCanvas', 'getBase64Image', 'refresh'],
+  methods: ['getChart', 'getCanvas', 'getBase64Image', 'refresh']
 })
 @Component({
   selector: 'tk-chart',
@@ -429,21 +351,19 @@ export declare interface TkCarousel extends Components.TkCarousel {
 })
 export class TkChart {
   protected el: HTMLTkChartElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkChart extends Components.TkChart {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkCheckbox,
-  inputs: ['description', 'disabled', 'indeterminate', 'invalid', 'label', 'name', 'type', 'value'],
+  inputs: ['description', 'disabled', 'indeterminate', 'invalid', 'label', 'name', 'type', 'value']
 })
 @Component({
   selector: 'tk-checkbox',
@@ -454,16 +374,13 @@ export declare interface TkChart extends Components.TkChart {}
 })
 export class TkCheckbox {
   protected el: HTMLTkCheckboxElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkCheckbox extends Components.TkCheckbox {
   /**
@@ -472,9 +389,10 @@ export declare interface TkCheckbox extends Components.TkCheckbox {
   'tk-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkChips,
-  inputs: ['autoSelfDestroy', 'containerStyle', 'disabled', 'icon', 'label', 'removable', 'size', 'type', 'value', 'variant'],
+  inputs: ['autoSelfDestroy', 'containerStyle', 'disabled', 'icon', 'label', 'removable', 'size', 'type', 'value', 'variant']
 })
 @Component({
   selector: 'tk-chips',
@@ -485,16 +403,13 @@ export declare interface TkCheckbox extends Components.TkCheckbox {
 })
 export class TkChips {
   protected el: HTMLTkChipsElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-remove']);
   }
 }
+
 
 export declare interface TkChips extends Components.TkChips {
   /**
@@ -503,80 +418,28 @@ export declare interface TkChips extends Components.TkChips {
   'tk-remove': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkColorPicker,
-  inputs: [
-    'disabled',
-    'error',
-    'footerType',
-    'format',
-    'header',
-    'headerType',
-    'hint',
-    'inline',
-    'invalid',
-    'label',
-    'name',
-    'orientation',
-    'placeholder',
-    'presets',
-    'preventDismiss',
-    'readonly',
-    'showAlphaSlider',
-    'showAsterisk',
-    'showCloseButton',
-    'showFormatSelector',
-    'showHeader',
-    'showPresets',
-    'size',
-    'value',
-  ],
-  methods: ['open', 'close', 'getValue', 'apply', 'cancel'],
+  inputs: ['disabled', 'error', 'footerType', 'format', 'header', 'headerType', 'hint', 'inline', 'invalid', 'label', 'name', 'orientation', 'placeholder', 'presets', 'preventDismiss', 'readonly', 'showAlphaSlider', 'showAsterisk', 'showCloseButton', 'showFormatSelector', 'showHeader', 'showPresets', 'size', 'value'],
+  methods: ['open', 'close', 'getValue', 'apply', 'cancel']
 })
 @Component({
   selector: 'tk-color-picker',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'disabled',
-    'error',
-    'footerType',
-    'format',
-    'header',
-    'headerType',
-    'hint',
-    'inline',
-    'invalid',
-    'label',
-    'name',
-    'orientation',
-    'placeholder',
-    'presets',
-    'preventDismiss',
-    'readonly',
-    'showAlphaSlider',
-    'showAsterisk',
-    'showCloseButton',
-    'showFormatSelector',
-    'showHeader',
-    'showPresets',
-    'size',
-    'value',
-  ],
+  inputs: ['disabled', 'error', 'footerType', 'format', 'header', 'headerType', 'hint', 'inline', 'invalid', 'label', 'name', 'orientation', 'placeholder', 'presets', 'preventDismiss', 'readonly', 'showAlphaSlider', 'showAsterisk', 'showCloseButton', 'showFormatSelector', 'showHeader', 'showPresets', 'size', 'value'],
 })
 export class TkColorPicker {
   protected el: HTMLTkColorPickerElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tk-open', 'tk-close', 'tk-apply', 'tk-cancel']);
   }
 }
+
 
 export declare interface TkColorPicker extends Components.TkColorPicker {
   /**
@@ -601,67 +464,27 @@ export declare interface TkColorPicker extends Components.TkColorPicker {
   'tk-cancel': EventEmitter<CustomEvent<void>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkCurrencyInput,
-  inputs: [
-    'allowNegative',
-    'currencyDisabled',
-    'currencyList',
-    'decimalSeparator',
-    'defaultCurrency',
-    'disabled',
-    'error',
-    'hint',
-    'invalid',
-    'label',
-    'name',
-    'placeholder',
-    'precision',
-    'readonly',
-    'showAsterisk',
-    'size',
-    'thousandsSeparator',
-    'value',
-  ],
+  inputs: ['allowNegative', 'currencyDisabled', 'currencyList', 'decimalSeparator', 'defaultCurrency', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'name', 'placeholder', 'precision', 'readonly', 'showAsterisk', 'size', 'thousandsSeparator', 'value']
 })
 @Component({
   selector: 'tk-currency-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'allowNegative',
-    'currencyDisabled',
-    'currencyList',
-    'decimalSeparator',
-    'defaultCurrency',
-    'disabled',
-    'error',
-    'hint',
-    'invalid',
-    'label',
-    'name',
-    'placeholder',
-    'precision',
-    'readonly',
-    'showAsterisk',
-    'size',
-    'thousandsSeparator',
-    'value',
-  ],
+  inputs: ['allowNegative', 'currencyDisabled', 'currencyList', 'decimalSeparator', 'defaultCurrency', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'name', 'placeholder', 'precision', 'readonly', 'showAsterisk', 'size', 'thousandsSeparator', 'value'],
 })
 export class TkCurrencyInput {
   protected el: HTMLTkCurrencyInputElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tkBlur', 'tkFocus']);
   }
 }
+
 
 export declare interface TkCurrencyInput extends Components.TkCurrencyInput {
   /**
@@ -671,107 +494,35 @@ export declare interface TkCurrencyInput extends Components.TkCurrencyInput {
   /**
    * Emitted when the input loses focus.
    */
-  'tkBlur': EventEmitter<CustomEvent<void>>;
+  tkBlur: EventEmitter<CustomEvent<void>>;
   /**
    * Emitted when the input has focus.
    */
-  'tkFocus': EventEmitter<CustomEvent<void>>;
+  tkFocus: EventEmitter<CustomEvent<void>>;
 }
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkDatepicker,
-  inputs: [
-    'allowedDates',
-    'clearable',
-    'dateFormat',
-    'disableMask',
-    'disabled',
-    'disabledDates',
-    'disabledWeekDays',
-    'error',
-    'firstDayOfWeekIndex',
-    'footerType',
-    'headerType',
-    'hint',
-    'hourStep',
-    'icon',
-    'iconPosition',
-    'inline',
-    'invalid',
-    'label',
-    'locale',
-    'maxDate',
-    'maxTime',
-    'minDate',
-    'minTime',
-    'minuteStep',
-    'mode',
-    'name',
-    'placeholder',
-    'readonly',
-    'showAsterisk',
-    'showTimePicker',
-    'size',
-    'timeFormat',
-    'timeOnly',
-    'value',
-  ],
-  methods: ['setToday', 'closePanel'],
+  inputs: ['allowedDates', 'clearable', 'dateFormat', 'disableMask', 'disabled', 'disabledDates', 'disabledWeekDays', 'error', 'firstDayOfWeekIndex', 'footerType', 'headerType', 'hint', 'hourStep', 'icon', 'iconPosition', 'inline', 'invalid', 'label', 'locale', 'maxDate', 'maxTime', 'minDate', 'minTime', 'minuteStep', 'mode', 'name', 'placeholder', 'readonly', 'showAsterisk', 'showTimePicker', 'size', 'timeFormat', 'timeOnly', 'value'],
+  methods: ['setToday', 'closePanel']
 })
 @Component({
   selector: 'tk-datepicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'allowedDates',
-    'clearable',
-    'dateFormat',
-    'disableMask',
-    'disabled',
-    'disabledDates',
-    'disabledWeekDays',
-    'error',
-    'firstDayOfWeekIndex',
-    'footerType',
-    'headerType',
-    'hint',
-    'hourStep',
-    'icon',
-    'iconPosition',
-    'inline',
-    'invalid',
-    'label',
-    'locale',
-    'maxDate',
-    'maxTime',
-    'minDate',
-    'minTime',
-    'minuteStep',
-    'mode',
-    'name',
-    'placeholder',
-    'readonly',
-    'showAsterisk',
-    'showTimePicker',
-    'size',
-    'timeFormat',
-    'timeOnly',
-    'value',
-  ],
+  inputs: ['allowedDates', 'clearable', 'dateFormat', 'disableMask', 'disabled', 'disabledDates', 'disabledWeekDays', 'error', 'firstDayOfWeekIndex', 'footerType', 'headerType', 'hint', 'hourStep', 'icon', 'iconPosition', 'inline', 'invalid', 'label', 'locale', 'maxDate', 'maxTime', 'minDate', 'minTime', 'minuteStep', 'mode', 'name', 'placeholder', 'readonly', 'showAsterisk', 'showTimePicker', 'size', 'timeFormat', 'timeOnly', 'value'],
 })
 export class TkDatepicker {
   protected el: HTMLTkDatepickerElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-input-change', 'tk-change']);
   }
 }
+
 
 import type { IDateSelection as ITkDatepickerIDateSelection } from '@takeoff-ui/core/components';
 
@@ -786,58 +537,28 @@ export declare interface TkDatepicker extends Components.TkDatepicker {
   'tk-change': EventEmitter<CustomEvent<ITkDatepickerIDateSelection | string>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkDialog,
-  inputs: [
-    'containerStyle',
-    'header',
-    'headerType',
-    'hideBackdrop',
-    'isMaskBlur',
-    'maskVariant',
-    'preventDismiss',
-    'showCloseButton',
-    'showHeader',
-    'showVariantSign',
-    'subheader',
-    'variant',
-    'visible',
-  ],
-  methods: ['open', 'close'],
+  inputs: ['containerStyle', 'header', 'headerType', 'hideBackdrop', 'isMaskBlur', 'maskVariant', 'preventDismiss', 'showCloseButton', 'showHeader', 'showVariantSign', 'subheader', 'variant', 'visible'],
+  methods: ['open', 'close']
 })
 @Component({
   selector: 'tk-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'containerStyle',
-    'header',
-    'headerType',
-    'hideBackdrop',
-    'isMaskBlur',
-    'maskVariant',
-    'preventDismiss',
-    'showCloseButton',
-    'showHeader',
-    'showVariantSign',
-    'subheader',
-    'variant',
-    'visible',
-  ],
+  inputs: ['containerStyle', 'header', 'headerType', 'hideBackdrop', 'isMaskBlur', 'maskVariant', 'preventDismiss', 'showCloseButton', 'showHeader', 'showVariantSign', 'subheader', 'variant', 'visible'],
 })
 export class TkDialog {
   protected el: HTMLTkDialogElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-open', 'tk-close', 'tk-visible-change']);
   }
 }
+
 
 export declare interface TkDialog extends Components.TkDialog {
   /**
@@ -854,9 +575,10 @@ export declare interface TkDialog extends Components.TkDialog {
   'tk-visible-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkDivider,
-  inputs: ['mx', 'my', 'orientation'],
+  inputs: ['mx', 'my', 'orientation']
 })
 @Component({
   selector: 'tk-divider',
@@ -867,22 +589,20 @@ export declare interface TkDialog extends Components.TkDialog {
 })
 export class TkDivider {
   protected el: HTMLTkDividerElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkDivider extends Components.TkDivider {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkDrawer,
   inputs: ['containerStyle', 'footerType', 'header', 'headerType', 'hideBackdrop', 'hideCloseIcon', 'maskVariant', 'open', 'position', 'preventDismiss', 'unblockScroll'],
-  methods: ['show', 'close'],
+  methods: ['show', 'close']
 })
 @Component({
   selector: 'tk-drawer',
@@ -893,16 +613,13 @@ export declare interface TkDivider extends Components.TkDivider {}
 })
 export class TkDrawer {
   protected el: HTMLTkDrawerElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-drawer-open', 'tk-drawer-close', 'tk-drawer-enter', 'tk-drawer-leave', 'tk-drawer-change']);
   }
 }
+
 
 export declare interface TkDrawer extends Components.TkDrawer {
   /**
@@ -927,9 +644,10 @@ export declare interface TkDrawer extends Components.TkDrawer {
   'tk-drawer-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkDropdown,
-  inputs: ['disabled', 'emptyMessage', 'groupNameKey', 'groupOptionsKey', 'optionHtml', 'optionLabelKey', 'optionValueKey', 'options', 'optionsAlign', 'position', 'size'],
+  inputs: ['disabled', 'emptyMessage', 'groupNameKey', 'groupOptionsKey', 'optionHtml', 'optionLabelKey', 'optionValueKey', 'options', 'optionsAlign', 'position', 'size']
 })
 @Component({
   selector: 'tk-dropdown',
@@ -940,16 +658,13 @@ export declare interface TkDrawer extends Components.TkDrawer {
 })
 export class TkDropdown {
   protected el: HTMLTkDropdownElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-item-click']);
   }
 }
+
 
 export declare interface TkDropdown extends Components.TkDropdown {
   /**
@@ -958,66 +673,28 @@ export declare interface TkDropdown extends Components.TkDropdown {
   'tk-item-click': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkEditor,
-  inputs: [
-    'contentStyle',
-    'customToolbarButtons',
-    'disabled',
-    'error',
-    'extensions',
-    'hideToolbar',
-    'hint',
-    'invalid',
-    'label',
-    'maxLength',
-    'placeholder',
-    'readonly',
-    'resizable',
-    'showAsterisk',
-    'showCounter',
-    'toolbar',
-    'value',
-  ],
-  methods: ['getContent', 'setContent', 'getEditor'],
+  inputs: ['contentStyle', 'customToolbarButtons', 'disabled', 'error', 'extensions', 'hideToolbar', 'hint', 'invalid', 'label', 'maxLength', 'placeholder', 'readonly', 'resizable', 'showAsterisk', 'showCounter', 'toolbar', 'value'],
+  methods: ['getContent', 'setContent', 'getEditor']
 })
 @Component({
   selector: 'tk-editor',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'contentStyle',
-    'customToolbarButtons',
-    'disabled',
-    'error',
-    'extensions',
-    'hideToolbar',
-    'hint',
-    'invalid',
-    'label',
-    'maxLength',
-    'placeholder',
-    'readonly',
-    'resizable',
-    'showAsterisk',
-    'showCounter',
-    'toolbar',
-    'value',
-  ],
+  inputs: ['contentStyle', 'customToolbarButtons', 'disabled', 'error', 'extensions', 'hideToolbar', 'hint', 'invalid', 'label', 'maxLength', 'placeholder', 'readonly', 'resizable', 'showAsterisk', 'showCounter', 'toolbar', 'value'],
 })
 export class TkEditor {
   protected el: HTMLTkEditorElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tkFocus', 'tkBlur']);
   }
 }
+
 
 export declare interface TkEditor extends Components.TkEditor {
   /**
@@ -1027,16 +704,17 @@ export declare interface TkEditor extends Components.TkEditor {
   /**
    * Emitted when editor gets focus
    */
-  'tkFocus': EventEmitter<CustomEvent<void>>;
+  tkFocus: EventEmitter<CustomEvent<void>>;
   /**
    * Emitted when editor loses focus
    */
-  'tkBlur': EventEmitter<CustomEvent<void>>;
+  tkBlur: EventEmitter<CustomEvent<void>>;
 }
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkIcon,
-  inputs: ['backgroundColor', 'borderColor', 'color', 'fill', 'icon', 'iconColor', 'iconTag', 'iconType', 'sign', 'size', 'variant'],
+  inputs: ['backgroundColor', 'borderColor', 'color', 'fill', 'icon', 'iconColor', 'iconTag', 'iconType', 'sign', 'size', 'variant']
 })
 @Component({
   selector: 'tk-icon',
@@ -1047,92 +725,37 @@ export declare interface TkEditor extends Components.TkEditor {
 })
 export class TkIcon {
   protected el: HTMLTkIconElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkIcon extends Components.TkIcon {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkInput,
-  inputs: [
-    'chipDisabled',
-    'chipLabelKey',
-    'chipOptions',
-    'clearable',
-    'disabled',
-    'error',
-    'hint',
-    'icon',
-    'iconPosition',
-    'invalid',
-    'label',
-    'maskOptions',
-    'max',
-    'min',
-    'mode',
-    'name',
-    'placeholder',
-    'pre',
-    'readonly',
-    'showAsterisk',
-    'showSafetyStatus',
-    'size',
-    'step',
-    'value',
-  ],
-  methods: ['setFocus'],
+  inputs: ['chipDisabled', 'chipLabelKey', 'chipOptions', 'clearable', 'disabled', 'error', 'hint', 'icon', 'iconPosition', 'invalid', 'label', 'maskOptions', 'max', 'min', 'mode', 'name', 'placeholder', 'pre', 'readonly', 'showAsterisk', 'showSafetyStatus', 'size', 'step', 'value'],
+  methods: ['setFocus']
 })
 @Component({
   selector: 'tk-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'chipDisabled',
-    'chipLabelKey',
-    'chipOptions',
-    'clearable',
-    'disabled',
-    'error',
-    'hint',
-    'icon',
-    'iconPosition',
-    'invalid',
-    'label',
-    'maskOptions',
-    'max',
-    'min',
-    'mode',
-    'name',
-    'placeholder',
-    'pre',
-    'readonly',
-    'showAsterisk',
-    'showSafetyStatus',
-    'size',
-    'step',
-    'value',
-  ],
+  inputs: ['chipDisabled', 'chipLabelKey', 'chipOptions', 'clearable', 'disabled', 'error', 'hint', 'icon', 'iconPosition', 'invalid', 'label', 'maskOptions', 'max', 'min', 'mode', 'name', 'placeholder', 'pre', 'readonly', 'showAsterisk', 'showSafetyStatus', 'size', 'step', 'value'],
 })
 export class TkInput {
   protected el: HTMLTkInputElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tk-blur', 'tk-focus', 'tk-clear-click']);
   }
 }
+
 
 export declare interface TkInput extends Components.TkInput {
   /**
@@ -1153,10 +776,11 @@ export declare interface TkInput extends Components.TkInput {
   'tk-clear-click': EventEmitter<CustomEvent<void>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkOrgChart,
   inputs: ['accessibilityLabel', 'collapsible', 'data', 'options'],
-  methods: ['getOrgChart', 'refresh', 'addNode', 'fit'],
+  methods: ['getOrgChart', 'refresh', 'addNode', 'fit']
 })
 @Component({
   selector: 'tk-org-chart',
@@ -1167,16 +791,13 @@ export declare interface TkInput extends Components.TkInput {
 })
 export class TkOrgChart {
   protected el: HTMLTkOrgChartElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-node-click']);
   }
 }
+
 
 export declare interface TkOrgChart extends Components.TkOrgChart {
   /**
@@ -1185,9 +806,10 @@ export declare interface TkOrgChart extends Components.TkOrgChart {
   'tk-node-click': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkPagination,
-  inputs: ['currentPage', 'itemsReportTemplate', 'mode', 'pageReportTemplate', 'rounded', 'rowsPerPage', 'rowsPerPageOptions', 'totalItems', 'type'],
+  inputs: ['currentPage', 'itemsReportTemplate', 'mode', 'pageReportTemplate', 'rounded', 'rowsPerPage', 'rowsPerPageOptions', 'totalItems', 'type']
 })
 @Component({
   selector: 'tk-pagination',
@@ -1198,16 +820,13 @@ export declare interface TkOrgChart extends Components.TkOrgChart {
 })
 export class TkPagination {
   protected el: HTMLTkPaginationElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-next-page', 'tk-page-change', 'tk-prev-page', 'tk-rows-per-page-change']);
   }
 }
+
 
 export declare interface TkPagination extends Components.TkPagination {
   /**
@@ -1228,29 +847,27 @@ export declare interface TkPagination extends Components.TkPagination {
   'tk-rows-per-page-change': EventEmitter<CustomEvent<number>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkPhoneInput,
-  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
+  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value']
 })
 @Component({
   selector: 'tk-phone-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
+  inputs: ['countryList', 'defaultCountry', 'disabled', 'error', 'hideFlag', 'hint', 'invalid', 'label', 'placeholder', 'readonly', 'showAsterisk', 'size', 'value'],
 })
 export class TkPhoneInput {
   protected el: HTMLTkPhoneInputElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tk-blur', 'tk-focus']);
   }
 }
+
 
 export declare interface TkPhoneInput extends Components.TkPhoneInput {
   /**
@@ -1267,10 +884,11 @@ export declare interface TkPhoneInput extends Components.TkPhoneInput {
   'tk-focus': EventEmitter<CustomEvent<void>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkPopover,
   inputs: ['containerStyle', 'position', 'trigger', 'type'],
-  methods: ['close'],
+  methods: ['close']
 })
 @Component({
   selector: 'tk-popover',
@@ -1281,16 +899,13 @@ export declare interface TkPhoneInput extends Components.TkPhoneInput {
 })
 export class TkPopover {
   protected el: HTMLTkPopoverElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkPopover extends Components.TkPopover {
   /**
@@ -1299,9 +914,10 @@ export declare interface TkPopover extends Components.TkPopover {
   'tk-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkRadio,
-  inputs: ['checked', 'description', 'disabled', 'invalid', 'label', 'name', 'position', 'value'],
+  inputs: ['checked', 'description', 'disabled', 'invalid', 'label', 'name', 'position', 'value']
 })
 @Component({
   selector: 'tk-radio',
@@ -1312,16 +928,13 @@ export declare interface TkPopover extends Components.TkPopover {
 })
 export class TkRadio {
   protected el: HTMLTkRadioElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkRadio extends Components.TkRadio {
   /**
@@ -1330,9 +943,10 @@ export declare interface TkRadio extends Components.TkRadio {
   'tk-change': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkRadioGroup,
-  inputs: ['direction', 'error', 'invalid', 'label', 'name', 'position', 'showAsterisk', 'spread', 'type', 'value'],
+  inputs: ['direction', 'error', 'invalid', 'label', 'name', 'position', 'showAsterisk', 'spread', 'type', 'value']
 })
 @Component({
   selector: 'tk-radio-group',
@@ -1343,16 +957,13 @@ export declare interface TkRadio extends Components.TkRadio {
 })
 export class TkRadioGroup {
   protected el: HTMLTkRadioGroupElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkRadioGroup extends Components.TkRadioGroup {
   /**
@@ -1361,9 +972,10 @@ export declare interface TkRadioGroup extends Components.TkRadioGroup {
   'tk-change': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkRating,
-  inputs: ['disabled', 'maxRating', 'readonly', 'showRatingValue', 'type', 'value'],
+  inputs: ['disabled', 'maxRating', 'readonly', 'showRatingValue', 'type', 'value']
 })
 @Component({
   selector: 'tk-rating',
@@ -1374,16 +986,13 @@ export declare interface TkRadioGroup extends Components.TkRadioGroup {
 })
 export class TkRating {
   protected el: HTMLTkRatingElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkRating extends Components.TkRating {
   /**
@@ -1392,97 +1001,27 @@ export declare interface TkRating extends Components.TkRating {
   'tk-change': EventEmitter<CustomEvent<number>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkSelect,
-  inputs: [
-    'allowCustomValue',
-    'chipOptions',
-    'clearable',
-    'disabled',
-    'dropdownWidthMode',
-    'editable',
-    'emptyMessage',
-    'error',
-    'filter',
-    'filterDebounceDelay',
-    'groupNameKey',
-    'groupOptionsKey',
-    'hint',
-    'icon',
-    'invalid',
-    'label',
-    'loading',
-    'multiple',
-    'name',
-    'optionDisabled',
-    'optionHtml',
-    'optionLabelKey',
-    'optionValueKey',
-    'options',
-    'panelTopHtml',
-    'placeholder',
-    'readonly',
-    'selectAll',
-    'selectAllLabel',
-    'showAsterisk',
-    'size',
-    'value',
-    'visibleItemCount',
-  ],
+  inputs: ['allowCustomValue', 'chipOptions', 'clearable', 'disabled', 'dropdownWidthMode', 'editable', 'emptyMessage', 'error', 'filter', 'filterDebounceDelay', 'groupNameKey', 'groupOptionsKey', 'hint', 'icon', 'invalid', 'label', 'loading', 'multiple', 'name', 'optionDisabled', 'optionHtml', 'optionLabelKey', 'optionValueKey', 'options', 'panelTopHtml', 'placeholder', 'readonly', 'selectAll', 'selectAllLabel', 'showAsterisk', 'size', 'value', 'visibleItemCount']
 })
 @Component({
   selector: 'tk-select',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'allowCustomValue',
-    'chipOptions',
-    'clearable',
-    'disabled',
-    'dropdownWidthMode',
-    'editable',
-    'emptyMessage',
-    'error',
-    'filter',
-    'filterDebounceDelay',
-    'groupNameKey',
-    'groupOptionsKey',
-    'hint',
-    'icon',
-    'invalid',
-    'label',
-    'loading',
-    'multiple',
-    'name',
-    'optionDisabled',
-    'optionHtml',
-    'optionLabelKey',
-    'optionValueKey',
-    'options',
-    'panelTopHtml',
-    'placeholder',
-    'readonly',
-    'selectAll',
-    'selectAllLabel',
-    'showAsterisk',
-    'size',
-    'value',
-    'visibleItemCount',
-  ],
+  inputs: ['allowCustomValue', 'chipOptions', 'clearable', 'disabled', 'dropdownWidthMode', 'editable', 'emptyMessage', 'error', 'filter', 'filterDebounceDelay', 'groupNameKey', 'groupOptionsKey', 'hint', 'icon', 'invalid', 'label', 'loading', 'multiple', 'name', 'optionDisabled', 'optionHtml', 'optionLabelKey', 'optionValueKey', 'options', 'panelTopHtml', 'placeholder', 'readonly', 'selectAll', 'selectAllLabel', 'showAsterisk', 'size', 'value', 'visibleItemCount'],
 })
 export class TkSelect {
   protected el: HTMLTkSelectElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tk-select-all', 'tk-open', 'tk-close']);
   }
 }
+
 
 export declare interface TkSelect extends Components.TkSelect {
   /**
@@ -1503,9 +1042,10 @@ export declare interface TkSelect extends Components.TkSelect {
   'tk-close': EventEmitter<CustomEvent<void>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkSlider,
-  inputs: ['disabled', 'error', 'hint', 'invalid', 'label', 'max', 'min', 'range', 'rangeVisibility', 'showAsterisk', 'step', 'type', 'value'],
+  inputs: ['disabled', 'error', 'hint', 'invalid', 'label', 'max', 'min', 'range', 'rangeVisibility', 'showAsterisk', 'step', 'type', 'value']
 })
 @Component({
   selector: 'tk-slider',
@@ -1516,16 +1056,13 @@ export declare interface TkSelect extends Components.TkSelect {
 })
 export class TkSlider {
   protected el: HTMLTkSliderElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tkChange']);
   }
 }
+
 
 export declare interface TkSlider extends Components.TkSlider {
   /**
@@ -1535,9 +1072,10 @@ Emits a number for single mode, or a [min, max] tuple for range mode.
   tkChange: EventEmitter<CustomEvent<number | [number, number]>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkSpinner,
-  inputs: ['label', 'orientation', 'size', 'type'],
+  inputs: ['label', 'orientation', 'size', 'type']
 })
 @Component({
   selector: 'tk-spinner',
@@ -1548,127 +1086,60 @@ Emits a number for single mode, or a [min, max] tuple for range mode.
 })
 export class TkSpinner {
   protected el: HTMLTkSpinnerElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkSpinner extends Components.TkSpinner {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkStep,
-  inputs: [
-    'activeIcon',
-    'complete',
-    'completeIcon',
-    'disabled',
-    'error',
-    'errorIcon',
-    'header',
-    'icon',
-    'inactiveIcon',
-    'index',
-    'isActive',
-    'isClickable',
-    'labelPosition',
-    'stepMode',
-    'subheader',
-  ],
+  inputs: ['activeIcon', 'complete', 'completeIcon', 'disabled', 'error', 'errorIcon', 'header', 'icon', 'inactiveIcon', 'index', 'isActive', 'isClickable', 'labelPosition', 'stepMode', 'subheader']
 })
 @Component({
   selector: 'tk-step',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'activeIcon',
-    'complete',
-    'completeIcon',
-    'disabled',
-    'error',
-    'errorIcon',
-    'header',
-    'icon',
-    'inactiveIcon',
-    'index',
-    'isActive',
-    'isClickable',
-    'labelPosition',
-    'stepMode',
-    'subheader',
-  ],
+  inputs: ['activeIcon', 'complete', 'completeIcon', 'disabled', 'error', 'errorIcon', 'header', 'icon', 'inactiveIcon', 'index', 'isActive', 'isClickable', 'labelPosition', 'stepMode', 'subheader'],
 })
 export class TkStep {
   protected el: HTMLTkStepElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkStep extends Components.TkStep {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkStepper,
-  inputs: [
-    'active',
-    'activeIcon',
-    'completeIcon',
-    'containerStyle',
-    'contentStyle',
-    'controlled',
-    'errorIcon',
-    'inactiveIcon',
-    'linear',
-    'orientation',
-    'showCompleteState',
-    'signStyle',
-    'stepMode',
-  ],
-  methods: ['setActive'],
+  inputs: ['active', 'activeIcon', 'completeIcon', 'containerStyle', 'contentStyle', 'controlled', 'errorIcon', 'inactiveIcon', 'linear', 'orientation', 'showCompleteState', 'signStyle', 'stepMode'],
+  methods: ['setActive']
 })
 @Component({
   selector: 'tk-stepper',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'active',
-    'activeIcon',
-    'completeIcon',
-    'containerStyle',
-    'contentStyle',
-    'controlled',
-    'errorIcon',
-    'inactiveIcon',
-    'linear',
-    'orientation',
-    'showCompleteState',
-    'signStyle',
-    'stepMode',
-  ],
+  inputs: ['active', 'activeIcon', 'completeIcon', 'containerStyle', 'contentStyle', 'controlled', 'errorIcon', 'inactiveIcon', 'linear', 'orientation', 'showCompleteState', 'signStyle', 'stepMode'],
 })
 export class TkStepper {
   protected el: HTMLTkStepperElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-step-change', 'tk-step-click']);
   }
 }
+
 
 import type { IStepClickDetail as ITkStepperIStepClickDetail } from '@takeoff-ui/core/components';
 
@@ -1683,100 +1154,34 @@ export declare interface TkStepper extends Components.TkStepper {
   'tk-step-click': EventEmitter<CustomEvent<ITkStepperIStepClickDetail>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkTable,
-  inputs: [
-    'cardTitle',
-    'cellStyle',
-    'columns',
-    'containerStyle',
-    'data',
-    'dataKey',
-    'expandedRowStyle',
-    'expandedRows',
-    'groupBy',
-    'headerType',
-    'itemsReportTemplate',
-    'loading',
-    'multiSort',
-    'pageReportTemplate',
-    'paginationMethod',
-    'paginationType',
-    'rowStyle',
-    'rowsPerPage',
-    'rowsPerPageOptions',
-    'selection',
-    'selectionMode',
-    'selectionRowDisabled',
-    'size',
-    'striped',
-    'totalItems',
-  ],
-  methods: [
-    'serverRequest',
-    'exportFile',
-    'clearFilters',
-    'clearSorting',
-    'getFilters',
-    'getSorting',
-    'setCurrentPage',
-    'setFilters',
-    'setSorting',
-    'runFilters',
-    'groupByColumn',
-    'clearGrouping',
-  ],
+  inputs: ['cardTitle', 'cellStyle', 'columns', 'containerStyle', 'data', 'dataKey', 'expandedRowStyle', 'expandedRows', 'groupBy', 'headerType', 'itemsReportTemplate', 'loading', 'multiSort', 'pageReportTemplate', 'paginationMethod', 'paginationType', 'rowStyle', 'rowsPerPage', 'rowsPerPageOptions', 'selection', 'selectionMode', 'selectionRowDisabled', 'size', 'striped', 'totalItems'],
+  methods: ['serverRequest', 'exportFile', 'clearFilters', 'clearSorting', 'getFilters', 'getSorting', 'setCurrentPage', 'setFilters', 'setSorting', 'runFilters', 'groupByColumn', 'clearGrouping']
 })
 @Component({
   selector: 'tk-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'cardTitle',
-    'cellStyle',
-    'columns',
-    'containerStyle',
-    'data',
-    'dataKey',
-    'expandedRowStyle',
-    'expandedRows',
-    'groupBy',
-    'headerType',
-    'itemsReportTemplate',
-    'loading',
-    'multiSort',
-    'pageReportTemplate',
-    'paginationMethod',
-    'paginationType',
-    'rowStyle',
-    'rowsPerPage',
-    'rowsPerPageOptions',
-    'selection',
-    'selectionMode',
-    'selectionRowDisabled',
-    'size',
-    'striped',
-    'totalItems',
-  ],
+  inputs: ['cardTitle', 'cellStyle', 'columns', 'containerStyle', 'data', 'dataKey', 'expandedRowStyle', 'expandedRows', 'groupBy', 'headerType', 'itemsReportTemplate', 'loading', 'multiSort', 'pageReportTemplate', 'paginationMethod', 'paginationType', 'rowStyle', 'rowsPerPage', 'rowsPerPageOptions', 'selection', 'selectionMode', 'selectionRowDisabled', 'size', 'striped', 'totalItems'],
 })
 export class TkTable {
   protected el: HTMLTkTableElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-selection-change', 'tk-request', 'tk-expanded-rows-change', 'tk-cell-edit', 'tk-row-click', 'tk-group-by-change']);
   }
 }
 
+
 import type { ITableRequest as ITkTableITableRequest } from '@takeoff-ui/core/components';
 import type { ITableCellEdit as ITkTableITableCellEdit } from '@takeoff-ui/core/components';
 
 export declare interface TkTable extends Components.TkTable {
+
   'tk-selection-change': EventEmitter<CustomEvent<any[] | any>>;
   /**
    * Emitted when a request needs to be made to the server.
@@ -1802,59 +1207,27 @@ For controlled components, handle this event to update the groupBy prop. @param 
   'tk-group-by-change': EventEmitter<CustomEvent<string | null>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkTabs,
-  inputs: [
-    'activeIndex',
-    'alignHeaders',
-    'containerStyle',
-    'contentStyle',
-    'controlled',
-    'defaultActiveIndex',
-    'headerContainerStyle',
-    'isClosable',
-    'isExtendable',
-    'orientation',
-    'size',
-    'spreadHeaders',
-    'type',
-    'variant',
-  ],
+  inputs: ['activeIndex', 'alignHeaders', 'containerStyle', 'contentStyle', 'controlled', 'defaultActiveIndex', 'headerContainerStyle', 'isClosable', 'isExtendable', 'orientation', 'size', 'spreadHeaders', 'type', 'variant']
 })
 @Component({
   selector: 'tk-tabs',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'activeIndex',
-    'alignHeaders',
-    'containerStyle',
-    'contentStyle',
-    'controlled',
-    'defaultActiveIndex',
-    'headerContainerStyle',
-    'isClosable',
-    'isExtendable',
-    'orientation',
-    'size',
-    'spreadHeaders',
-    'type',
-    'variant',
-  ],
+  inputs: ['activeIndex', 'alignHeaders', 'containerStyle', 'contentStyle', 'controlled', 'defaultActiveIndex', 'headerContainerStyle', 'isClosable', 'isExtendable', 'orientation', 'size', 'spreadHeaders', 'type', 'variant'],
 })
 export class TkTabs {
   protected el: HTMLTkTabsElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-tab-click', 'tk-tab-change']);
   }
 }
+
 
 export declare interface TkTabs extends Components.TkTabs {
   /**
@@ -1867,9 +1240,10 @@ export declare interface TkTabs extends Components.TkTabs {
   'tk-tab-change': EventEmitter<CustomEvent<number>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkTabsItem,
-  inputs: ['badgeCount', 'badgeLabel', 'badgeOptions', 'badged', 'disabled', 'icon', 'label', 'tooltipOptions'],
+  inputs: ['badgeCount', 'badgeLabel', 'badgeOptions', 'badged', 'disabled', 'icon', 'label', 'tooltipOptions']
 })
 @Component({
   selector: 'tk-tabs-item',
@@ -1880,22 +1254,20 @@ export declare interface TkTabs extends Components.TkTabs {
 })
 export class TkTabsItem {
   protected el: HTMLTkTabsItemElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkTabsItem extends Components.TkTabsItem {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkTextarea,
   inputs: ['disabled', 'error', 'hint', 'invalid', 'label', 'maxLength', 'name', 'placeholder', 'readonly', 'rows', 'showAsterisk', 'size', 'value'],
-  methods: ['setFocus'],
+  methods: ['setFocus']
 })
 @Component({
   selector: 'tk-textarea',
@@ -1906,16 +1278,13 @@ export declare interface TkTabsItem extends Components.TkTabsItem {}
 })
 export class TkTextarea {
   protected el: HTMLTkTextareaElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-input', 'tk-change', 'tk-blur', 'tk-focus']);
   }
 }
+
 
 export declare interface TkTextarea extends Components.TkTextarea {
   /**
@@ -1936,9 +1305,10 @@ export declare interface TkTextarea extends Components.TkTextarea {
   'tk-focus': EventEmitter<CustomEvent<void>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkTimeline,
-  inputs: ['alternate', 'items', 'orientation'],
+  inputs: ['alternate', 'items', 'orientation']
 })
 @Component({
   selector: 'tk-timeline',
@@ -1949,20 +1319,18 @@ export declare interface TkTextarea extends Components.TkTextarea {
 })
 export class TkTimeline {
   protected el: HTMLTkTimelineElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkTimeline extends Components.TkTimeline {}
 
+
 @ProxyCmp({
-  defineCustomElementFn: defineTkTimelineItem,
+  defineCustomElementFn: defineTkTimelineItem
 })
 @Component({
   selector: 'tk-timeline-item',
@@ -1973,22 +1341,20 @@ export declare interface TkTimeline extends Components.TkTimeline {}
 })
 export class TkTimelineItem {
   protected el: HTMLTkTimelineItemElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkTimelineItem extends Components.TkTimelineItem {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkToggle,
   inputs: ['ariaLabelledby', 'disabled', 'icon', 'invalid', 'label', 'name', 'showIcon', 'size', 'value', 'variant'],
-  methods: ['getInputElement'],
+  methods: ['getInputElement']
 })
 @Component({
   selector: 'tk-toggle',
@@ -1999,16 +1365,13 @@ export declare interface TkTimelineItem extends Components.TkTimelineItem {}
 })
 export class TkToggle {
   protected el: HTMLTkToggleElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkToggle extends Components.TkToggle {
   /**
@@ -2017,9 +1380,10 @@ export declare interface TkToggle extends Components.TkToggle {
   'tk-change': EventEmitter<CustomEvent<boolean>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkToggleButton,
-  inputs: ['disabled', 'icon', 'iconPosition', 'label', 'rounded', 'selected', 'size', 'type', 'value', 'variant'],
+  inputs: ['disabled', 'icon', 'iconPosition', 'label', 'rounded', 'selected', 'size', 'type', 'value', 'variant']
 })
 @Component({
   selector: 'tk-toggle-button',
@@ -2030,16 +1394,13 @@ export declare interface TkToggle extends Components.TkToggle {
 })
 export class TkToggleButton {
   protected el: HTMLTkToggleButtonElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-toggle']);
   }
 }
+
 
 export declare interface TkToggleButton extends Components.TkToggleButton {
   /**
@@ -2048,9 +1409,10 @@ export declare interface TkToggleButton extends Components.TkToggleButton {
   'tk-toggle': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkToggleButtonGroup,
-  inputs: ['direction', 'rounded', 'type', 'value'],
+  inputs: ['direction', 'rounded', 'type', 'value']
 })
 @Component({
   selector: 'tk-toggle-button-group',
@@ -2061,16 +1423,13 @@ export declare interface TkToggleButton extends Components.TkToggleButton {
 })
 export class TkToggleButtonGroup {
   protected el: HTMLTkToggleButtonGroupElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change']);
   }
 }
+
 
 export declare interface TkToggleButtonGroup extends Components.TkToggleButtonGroup {
   /**
@@ -2079,9 +1438,10 @@ export declare interface TkToggleButtonGroup extends Components.TkToggleButtonGr
   'tk-change': EventEmitter<CustomEvent<any>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkTooltip,
-  inputs: ['containerStyle', 'description', 'header', 'icon', 'position', 'variant'],
+  inputs: ['containerStyle', 'description', 'header', 'icon', 'position', 'variant']
 })
 @Component({
   selector: 'tk-tooltip',
@@ -2092,79 +1452,36 @@ export declare interface TkToggleButtonGroup extends Components.TkToggleButtonGr
 })
 export class TkTooltip {
   protected el: HTMLTkTooltipElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
   }
 }
 
+
 export declare interface TkTooltip extends Components.TkTooltip {}
+
 
 @ProxyCmp({
   defineCustomElementFn: defineTkTreeView,
-  inputs: [
-    'badgeOptions',
-    'branchIcon',
-    'containerStyle',
-    'disabled',
-    'expandAll',
-    'expandedKeys',
-    'items',
-    'leafIcon',
-    'mode',
-    'selectable',
-    'selectionStrategy',
-    'showBadge',
-    'showPointer',
-    'showZeroCountBadges',
-    'size',
-    'stepStyle',
-    'type',
-    'value',
-  ],
+  inputs: ['badgeOptions', 'branchIcon', 'containerStyle', 'disabled', 'expandAll', 'expandedKeys', 'items', 'leafIcon', 'mode', 'selectable', 'selectionStrategy', 'showBadge', 'showPointer', 'showZeroCountBadges', 'size', 'stepStyle', 'type', 'value']
 })
 @Component({
   selector: 'tk-tree-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'badgeOptions',
-    'branchIcon',
-    'containerStyle',
-    'disabled',
-    'expandAll',
-    'expandedKeys',
-    'items',
-    'leafIcon',
-    'mode',
-    'selectable',
-    'selectionStrategy',
-    'showBadge',
-    'showPointer',
-    'showZeroCountBadges',
-    'size',
-    'stepStyle',
-    'type',
-    'value',
-  ],
+  inputs: ['badgeOptions', 'branchIcon', 'containerStyle', 'disabled', 'expandAll', 'expandedKeys', 'items', 'leafIcon', 'mode', 'selectable', 'selectionStrategy', 'showBadge', 'showPointer', 'showZeroCountBadges', 'size', 'stepStyle', 'type', 'value'],
 })
 export class TkTreeView {
   protected el: HTMLTkTreeViewElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-item-click', 'tk-change', 'tk-expand-change']);
   }
 }
+
 
 import type { ITreeItem as ITkTreeViewITreeItem } from '@takeoff-ui/core/components';
 
@@ -2185,77 +1502,27 @@ Only the keys of expanded items are emitted, not full paths.
   'tk-expand-change': EventEmitter<CustomEvent<string[]>>;
 }
 
+
 @ProxyCmp({
   defineCustomElementFn: defineTkUpload,
-  inputs: [
-    'accept',
-    'autoUpload',
-    'chooseButtonLabel',
-    'description',
-    'disabled',
-    'downloadable',
-    'dragDrop',
-    'dragDropDescription',
-    'dragDropTitle',
-    'error',
-    'hint',
-    'invalid',
-    'label',
-    'loading',
-    'maxFileCount',
-    'maxFileSize',
-    'multiple',
-    'showAsterisk',
-    'showFiles',
-    'title',
-    'type',
-    'uploadButtonLabel',
-    'value',
-  ],
+  inputs: ['accept', 'autoUpload', 'chooseButtonLabel', 'description', 'disabled', 'downloadable', 'dragDrop', 'dragDropDescription', 'dragDropTitle', 'error', 'hint', 'invalid', 'label', 'loading', 'maxFileCount', 'maxFileSize', 'multiple', 'showAsterisk', 'showFiles', 'title', 'type', 'uploadButtonLabel', 'value']
 })
 @Component({
   selector: 'tk-upload',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: [
-    'accept',
-    'autoUpload',
-    'chooseButtonLabel',
-    'description',
-    'disabled',
-    'downloadable',
-    'dragDrop',
-    'dragDropDescription',
-    'dragDropTitle',
-    'error',
-    'hint',
-    'invalid',
-    'label',
-    'loading',
-    'maxFileCount',
-    'maxFileSize',
-    'multiple',
-    'showAsterisk',
-    'showFiles',
-    'title',
-    'type',
-    'uploadButtonLabel',
-    'value',
-  ],
+  inputs: ['accept', 'autoUpload', 'chooseButtonLabel', 'description', 'disabled', 'downloadable', 'dragDrop', 'dragDropDescription', 'dragDropTitle', 'error', 'hint', 'invalid', 'label', 'loading', 'maxFileCount', 'maxFileSize', 'multiple', 'showAsterisk', 'showFiles', 'title', 'type', 'uploadButtonLabel', 'value'],
 })
 export class TkUpload {
   protected el: HTMLTkUploadElement;
-  constructor(
-    c: ChangeDetectorRef,
-    r: ElementRef,
-    protected z: NgZone,
-  ) {
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
     proxyOutputs(this, this.el, ['tk-change', 'tk-files-rejected', 'tk-upload', 'tk-removed-file', 'tk-download-file']);
   }
 }
+
 
 export declare interface TkUpload extends Components.TkUpload {
   /**
@@ -2279,3 +1546,5 @@ export declare interface TkUpload extends Components.TkUpload {
    */
   'tk-download-file': EventEmitter<CustomEvent<File>>;
 }
+
+
