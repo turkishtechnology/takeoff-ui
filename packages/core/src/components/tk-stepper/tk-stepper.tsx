@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { IStep, IStepClickDetail } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { CSSStyleProperties } from '../../global/types';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * TkStepper component for managing a series of steps.
@@ -103,6 +104,11 @@ export class TkStepper implements ComponentInterface {
   @Prop() signStyle?: CSSStyleProperties = null;
 
   /**
+   * The style attribute of rail elements
+   */
+  @Prop() railStyle?: CSSStyleProperties = null;
+
+  /**
    * Emitted when the active step changes.
    */
   @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
@@ -185,24 +191,11 @@ export class TkStepper implements ComponentInterface {
     return false;
   }
 
-  private getIconElement(icon: string | IIconOptions): JSX.Element {
-    const iconClasses = 'tk-step-icon';
-    let iconProps: { class: string } | { class: string; style: any };
-    if (typeof icon === 'string') {
-      iconProps = {
-        class: classNames('material-symbols-outlined', iconClasses),
-      };
-    } else {
-      const { style = 'outlined', fill, color } = icon;
-      iconProps = {
-        class: classNames(`material-symbols-${style}`, iconClasses, { fill: fill }),
-        style: { color },
-      };
-    }
+  private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}): JSX.Element {
+    const defaultProps = { size: 'large', fill: true, color: 'var(--primary-base)', ...props, class: classNames('tk-step-icon', props?.class) };
+    const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
-    const iconName = typeof icon === 'string' ? icon : icon.name;
-
-    return <i {...iconProps}>{iconName}</i>;
+    return <tk-icon {...iconProps} />;
   }
 
   private handleStepClick = (index: number) => {
@@ -215,7 +208,11 @@ export class TkStepper implements ComponentInterface {
 
   private createStepIcon(step: IStep, index: number): JSX.Element {
     if (step.disabled) {
-      return this.createDefaultInactiveIcon();
+      return this.getIconElement({
+        name: 'fiber_manual_record',
+        color: 'var(--border-light)',
+        size: 'large',
+      });
     }
 
     if (step.icon) {
@@ -223,11 +220,24 @@ export class TkStepper implements ComponentInterface {
     }
 
     if (step.error) {
-      return step.errorIcon ? this.getIconElement(step.errorIcon) : this.errorIcon ? this.getIconElement(this.errorIcon) : this.createDefaultErrorIcon();
+      return this.getIconElement(
+        step.errorIcon ||
+          this.errorIcon || {
+            name: 'close',
+            color: 'var(--static-light)',
+            size: 'large',
+          },
+      );
     }
 
     if (step.complete) {
-      return step.completeIcon ? this.getIconElement(step.completeIcon) : this.completeIcon ? this.getIconElement(this.completeIcon) : this.createDefaultCompleteIcon();
+      return this.getIconElement(
+        step.completeIcon ||
+          this.completeIcon || {
+            name: 'check',
+            size: 'large',
+          },
+      );
     }
 
     if (this.stepMode === 'number') {
@@ -235,55 +245,23 @@ export class TkStepper implements ComponentInterface {
     }
 
     if (step.isActive) {
-      return step.activeIcon ? this.getIconElement(step.activeIcon) : this.activeIcon ? this.getIconElement(this.activeIcon) : this.createDefaultActiveIcon();
+      return this.getIconElement(
+        step.activeIcon ||
+          this.activeIcon || {
+            name: 'fiber_manual_record',
+            color: 'var(--static-white)',
+            size: 'large',
+          },
+      );
     }
 
-    return step.inactiveIcon ? this.getIconElement(step.inactiveIcon) : this.inactiveIcon ? this.getIconElement(this.inactiveIcon) : this.createDefaultInactiveIcon();
-  }
-
-  private createDefaultErrorIcon(): JSX.Element {
-    return (
-      <span class="tk-step-icon-error">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path
-            d="M15.25 4.75843C14.925 4.43343 14.4 4.43343 14.075 4.75843L9.99998 8.8251L5.92498 4.7501C5.59998 4.4251 5.07498 4.4251 4.74998 4.7501C4.42498 5.0751 4.42498 5.6001 4.74998 5.9251L8.82498 10.0001L4.74998 14.0751C4.42498 14.4001 4.42498 14.9251 4.74998 15.2501C5.07498 15.5751 5.59998 15.5751 5.92498 15.2501L9.99998 11.1751L14.075 15.2501C14.4 15.5751 14.925 15.5751 15.25 15.2501C15.575 14.9251 15.575 14.4001 15.25 14.0751L11.175 10.0001L15.25 5.9251C15.5666 5.60843 15.5666 5.0751 15.25 4.75843Z"
-            fill="var(--static-light)"
-          />
-        </svg>
-      </span>
-    );
-  }
-
-  private createDefaultCompleteIcon(): JSX.Element {
-    return (
-      <span class="tk-step-icon-complete">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none">
-          <path
-            d="M4.32922 9.22925L1.43755 6.33758C1.11255 6.01258 0.587549 6.01258 0.262549 6.33758C-0.0624512 6.66258 -0.0624512 7.18758 0.262549 7.51258L3.74588 10.9959C4.07088 11.3209 4.59588 11.3209 4.92088 10.9959L13.7376 2.17925C14.0626 1.85425 14.0626 1.32925 13.7376 1.00425C13.4126 0.679248 12.8875 0.679248 12.5625 1.00425L4.32922 9.22925Z"
-            fill="var(--primary-base)"
-          />
-        </svg>
-      </span>
-    );
-  }
-
-  private createDefaultActiveIcon(): JSX.Element {
-    return (
-      <span class="tk-step-icon-dot">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <circle cx="6" cy="6" r="6" fill="var(--static-white)" />
-        </svg>
-      </span>
-    );
-  }
-
-  private createDefaultInactiveIcon(): JSX.Element {
-    return (
-      <span class="tk-step-icon-dot">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <circle cx="6" cy="6" r="6" fill="var(--border-light)" />
-        </svg>
-      </span>
+    return this.getIconElement(
+      step.inactiveIcon ||
+        this.inactiveIcon || {
+          name: 'fiber_manual_record',
+          color: 'var(--border-light)',
+          size: 'large',
+        },
     );
   }
 
@@ -320,7 +298,7 @@ export class TkStepper implements ComponentInterface {
         >
           <div class={containerClasses} data-index={index} data-clickable={step.isClickable && !step.disabled}>
             <div class={stepClasses}>
-              <div class="tk-step-rail"></div>
+              <div class="tk-step-rail" style={this.railStyle}></div>
               {this.createStepSign(step, index)}
               <div class={contentClasses} style={this.contentStyle}>
                 <div class="tk-step-header">{step.header}</div>
