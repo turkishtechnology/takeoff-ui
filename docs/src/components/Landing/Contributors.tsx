@@ -32,6 +32,12 @@ export default function Contributors() {
           <TkTooltip header="Atakan Erhan Bayil" description="Frontend Developer" position="top" variant="dark">
             <TkAvatar image="img/contributors/atakan-bayil.JPG" size="xlarge" rounded slot="trigger" />
           </TkTooltip>
+          <TkTooltip header="Kıvanç Eski" description="Frontend Developer" position="top" variant="dark">
+            <TkAvatar image="img/contributors/kivanc-eski.png" size="xlarge" rounded slot="trigger" />
+          </TkTooltip>
+          <TkTooltip header="Hayrunnisa Çiko" description="Frontend Developer" position="top" variant="dark">
+            <TkAvatar image="img/contributors/hayrunnisa-ciko.jpg" size="xlarge" rounded slot="trigger" />
+          </TkTooltip>
         </div>
       </div>
     </section>

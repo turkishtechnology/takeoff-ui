@@ -8,7 +8,7 @@ overrides:
   undici: ">=7.18.2"
   diff: ">=8.0.3"
   tar: ">=7.5.3"
-  path-to-regexp@<6.0.0: 0.1.10
+  path-to-regexp@<6.0.0: 0.1.12
   path-to-regexp@>=6.0.0: ">=8.3.0"
 
 importers:
@@ -318,7 +318,7 @@ importers:
         version: 3.11.0
       vercel:
         specifier: ^50.4.5
-        version: 50.9.1(encoding@0.1.13)(rollup@4.57.0)(typescript@5.5.4)
+        version: 50.9.5(encoding@0.1.13)(rollup@4.57.0)(typescript@5.5.4)
 
   packages/angular: {}
 
@@ -4516,8 +4516,8 @@ packages:
   "@vercel/nestjs@0.2.31":
     resolution: { integrity: sha512-OGcUy8rrGKnrQO/izSfwEG01wcJBQCv2IXR1jTlPjAd6ijEfss9qBPGC/Rmp6yaYeg8IFZl9J0479gyZ+l3qUA== }
 
-  "@vercel/next@4.15.18":
-    resolution: { integrity: sha512-BUZ2hZgK12u0vAE8fPqINP/8Hjaw+Ck3Rf+J7lXRpzs91UCSUgxrUWRFqwjNKi4QW/24fihryZ6Q7wswAgkU4Q== }
+  "@vercel/next@4.15.19":
+    resolution: { integrity: sha512-o8jYfrm4Bb/W7xfEiBxAOYsjsYGLfnFGX8NGSDlZmmh7C4KqkmRDZwangw6oMpgYVO6ygDbRrdlsGq+wRPbutA== }
 
   "@vercel/nft@1.1.1":
     resolution: { integrity: sha512-mKMGa7CEUcXU75474kOeqHbtvK1kAcu4wiahhmlUenB5JbTQB8wVlDI8CyHR3rpGo0qlzoRWqcDzI41FUoBJCA== }
@@ -4527,8 +4527,8 @@ packages:
   "@vercel/node@5.5.28":
     resolution: { integrity: sha512-zuhUKqFdeoTz+o6S5zyKKXERrxbJpFmbt5qMrsg7t2pfxJZSAR6xg+HRSJd710uJnKpmi4h89hp/TIu1CuvAUQ== }
 
-  "@vercel/python@6.3.2":
-    resolution: { integrity: sha512-UmmciTMvNpWcQu2QaRJ8YEQTu/nPlbRgSAqwFIjVf+NScp4Vvm+ZaBqckX2f+1rsMOrdoZz4+ya3vUoNf1O6xQ== }
+  "@vercel/python@6.4.1":
+    resolution: { integrity: sha512-7921TTz4OXQGhiSLpL7A2n7FIOQLA2Pth4f1SXXoU4C4pJT5ds6gdl0F776Osb5XzP0GjZfFKv6gMRvZdP9nHA== }
 
   "@vercel/redwood@2.4.9":
     resolution: { integrity: sha512-U7bYIuWfMEFMIcKKbX7lTT8pFNjig9Q3vLeCYRYQUrKVP8xLoUBXSEfW3ijtWJBUV8GmbZCDI30A16uUfNhN+g== }
@@ -8780,8 +8780,8 @@ packages:
     resolution: { integrity: sha512-oWyT4gICAu+kaA7QWk/jvCHWarMKNs6pXOGWKDTr7cw4IGcUbW+PeTfbaQiLGheFRpjo6O9J0PmyMfQPjH71oA== }
     engines: { node: 20 || >=22 }
 
-  path-to-regexp@0.1.10:
-    resolution: { integrity: sha512-7lf7qcQidTku0Gu3YDPc8DJ1q7OOucfa/BSsIwjuh56VU7katFvuM8hULfkwB3Fns/rsVF7PwPKVw1sl5KQS9w== }
+  path-to-regexp@0.1.12:
+    resolution: { integrity: sha512-RA1GjUVMnvYFxuqovrEqZoxxW5NUZqbwKtYz/Tt7nXerk0LbLblQmrsgdeOxV5SFHf0UDggjS/bSeOZwt1pmEQ== }
 
   path-to-regexp@6.3.0:
     resolution: { integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ== }
@@ -10977,8 +10977,8 @@ packages:
     resolution: { integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg== }
     engines: { node: ">= 0.8" }
 
-  vercel@50.9.1:
-    resolution: { integrity: sha512-ZohNx0olOCMYUH9qdVeubvPhcCDhXSE0I+d0B80ul6UxrP4uWQj5PM1rzGAP7L0qzWUH1fSShS8doOv8i/X6KA== }
+  vercel@50.9.5:
+    resolution: { integrity: sha512-D0sGpN/QtPpKTlp5SLYIlTDsrlbXGXZhAawXKfKwFwjROGRhY2HjR/OaNtjrbpwAEXJHhzaQUZGRVKSsWTEcKA== }
     engines: { node: ">= 18" }
     hasBin: true
 
@@ -16507,7 +16507,7 @@ snapshots:
       - rollup
       - supports-color
 
-  "@vercel/next@4.15.18(encoding@0.1.13)(rollup@4.57.0)":
+  "@vercel/next@4.15.19(encoding@0.1.13)(rollup@4.57.0)":
     dependencies:
       "@vercel/nft": 1.1.1(encoding@0.1.13)(rollup@4.57.0)
     transitivePeerDependencies:
@@ -16566,7 +16566,7 @@ snapshots:
       - rollup
       - supports-color
 
-  "@vercel/python@6.3.2": {}
+  "@vercel/python@6.4.1": {}
 
   "@vercel/redwood@2.4.9(encoding@0.1.13)(rollup@4.57.0)":
     dependencies:
@@ -18836,7 +18836,7 @@ snapshots:
       methods: 1.1.2
       on-finished: 2.4.1
       parseurl: 1.3.3
-      path-to-regexp: 0.1.10
+      path-to-regexp: 0.1.12
       proxy-addr: 2.0.7
       qs: 6.14.1
       range-parser: 1.2.1
@@ -21975,7 +21975,7 @@ snapshots:
       lru-cache: 11.2.5
       minipass: 7.1.2
 
-  path-to-regexp@0.1.10: {}
+  path-to-regexp@0.1.12: {}
 
   path-to-regexp@6.3.0: {}
 
@@ -22838,7 +22838,7 @@ snapshots:
       history: 4.10.1
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
-      path-to-regexp: 0.1.10
+      path-to-regexp: 0.1.12
       prop-types: 15.8.1
       react: 18.3.1
       react-is: 16.13.1
@@ -23477,7 +23477,7 @@ snapshots:
       mime-types: 2.1.18
       minimatch: 3.1.2
       path-is-inside: 1.0.2
-      path-to-regexp: 0.1.10
+      path-to-regexp: 0.1.12
       range-parser: 1.2.0
 
   serve-index@1.9.2:
@@ -24547,7 +24547,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vercel@50.9.1(encoding@0.1.13)(rollup@4.57.0)(typescript@5.5.4):
+  vercel@50.9.5(encoding@0.1.13)(rollup@4.57.0)(typescript@5.5.4):
     dependencies:
       "@vercel/backends": 0.0.23(encoding@0.1.13)(rollup@4.57.0)(typescript@5.5.4)
       "@vercel/blob": 1.0.2
@@ -24563,9 +24563,9 @@ snapshots:
       "@vercel/hydrogen": 1.3.5
       "@vercel/koa": 0.1.10(encoding@0.1.13)(rollup@4.57.0)
       "@vercel/nestjs": 0.2.31(encoding@0.1.13)(rollup@4.57.0)
-      "@vercel/next": 4.15.18(encoding@0.1.13)(rollup@4.57.0)
+      "@vercel/next": 4.15.19(encoding@0.1.13)(rollup@4.57.0)
       "@vercel/node": 5.5.28(encoding@0.1.13)(rollup@4.57.0)
-      "@vercel/python": 6.3.2
+      "@vercel/python": 6.4.1
       "@vercel/redwood": 2.4.9(encoding@0.1.13)(rollup@4.57.0)
       "@vercel/remix-builder": 5.5.9(encoding@0.1.13)(rollup@4.57.0)
       "@vercel/ruby": 2.2.5
