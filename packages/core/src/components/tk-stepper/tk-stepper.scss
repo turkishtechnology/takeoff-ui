@@ -14,109 +14,86 @@
 
     .tk-step-item {
       flex: 1;
+    }
 
-      .tk-step {
-        .tk-step-sign {
-          margin-inline-start: 40px;
-        }
+    .tk-step-sign {
+      margin-inline-start: 40px;
+    }
 
-        .tk-step-rail {
-          position: absolute;
-          top: calc(36px / 2);
-          font-size: 0px;
-          width: calc(100% - 48px);
-          padding: 0 24px;
-          margin-inline-start: calc(36px / 2 + 40px);
+    .tk-step-rail {
+      position: absolute;
+      font-size: 0px;
+      margin-inline-start: 58px;
 
-          &::after {
-            content: '';
-            height: 2px;
-            width: 100%;
-          }
-        }
-
-        .tk-step-content {
-          display: flex;
-          width: calc((36px / 2 + 40px) * 2);
-          margin-top: var(--stepper-items-content-gap);
-          text-align: center;
-          flex-direction: column;
-          align-items: center;
-        }
+      &::after {
+        content: '';
+        height: 2px;
+        width: 100%;
       }
     }
+
+    .tk-step-content {
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
     &.tk-stepper-reverse {
+      align-items: flex-end;
       .tk-step {
         position: relative;
-        padding-bottom: calc(32px + var(--stepper-items-content-gap));
+      }
+      .tk-step-rail {
+        top: auto;
+      }
 
-        .tk-step-rail {
-          top: auto;
-          bottom: calc(36px / 2);
-        }
-
-        .tk-step-sign {
-          position: absolute;
-          bottom: 0;
-        }
-
-        .tk-step-content {
-          margin-top: 0;
-        }
+      .tk-step-sign {
+        position: absolute;
+        bottom: 0;
       }
     }
   }
 
   &.tk-stepper-vertical {
     flex-direction: column;
-    align-items: flex-start;
 
     .tk-step {
       display: flex;
       flex-direction: row;
-      align-items: flex-start;
+    }
 
-      .tk-step-rail {
-        position: absolute;
-        top: 0px;
-        height: calc(100% - 48px);
-        padding: 40px 0;
+    .tk-step-rail {
+      position: absolute;
+      top: 0px;
+      width: 2px;
+
+      &::after {
+        content: '';
         width: 2px;
-        inset-inline-start: calc(34px / 2);
-
-        &::after {
-          content: '';
-          width: 2px;
-          height: 100%;
-          background-color: var(--border-light);
-          border-radius: var(--radius-full);
-        }
+        height: 100%;
+        background-color: var(--border-light);
+        border-radius: var(--radius-full);
       }
+    }
 
-      .tk-step-content {
-        min-height: calc(36px * 2.5);
-        overflow: hidden;
-      }
+    .tk-step-content {
+      overflow: hidden;
     }
 
     &.tk-stepper-reverse {
       align-items: flex-end;
       .tk-step {
         flex-direction: row-reverse;
+      }
 
-        .tk-step-rail {
-          inset-inline-start: auto;
-          inset-inline-end: calc(50px / 2);
-        }
+      .tk-step-sign {
+        margin-inline-start: 8px;
+      }
 
-        .tk-step-sign {
-          margin-inline-start: 8px;
-        }
-
-        .tk-step-content {
-          text-align: right;
-          align-items: flex-end;
-        }
+      .tk-step-content {
+        text-align: right;
+        align-items: flex-end;
       }
     }
   }
@@ -128,105 +105,328 @@
     overflow: visible;
 
     &:last-child {
+      flex: none;
       .tk-step-rail {
         display: none;
       }
     }
+  }
 
-    .tk-step-container {
-      outline: none;
+  .tk-step-container {
+    outline: none;
+  }
 
-      .tk-step {
-        cursor: pointer;
+  .tk-step {
+    cursor: pointer;
+    &.tk-step-disabled {
+      cursor: not-allowed;
+    }
 
+    &:not(.tk-step-disabled) {
+      &.tk-step-active {
         .tk-step-sign {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 32px;
-          height: 32px;
-          border: 2px solid var(--border-light);
-          background-color: var(--static-white);
-          border-radius: var(--radius-full);
-          text-align: center;
-          margin-inline-end: 8px;
+          border-color: var(--primary-base);
+          background-color: var(--primary-base);
+          color: var(--static-white);
+        }
+
+        .tk-step-header {
+          color: var(--text-darkest);
+        }
+      }
+
+      &.tk-step-inactive {
+        .tk-step-sign {
+          border-color: var(--border-light);
+          color: var(--border-light);
+        }
+      }
+
+      &.tk-step-completed {
+        .tk-step-sign {
+          border-color: var(--primary-base);
+          color: var(--primary-base);
+
+          .tk-step-icon {
+            color: var(--primary-base);
+          }
         }
 
         .tk-step-rail::after {
-          display: inline-block;
-          transition: background-color 0.2s ease-in-out;
-          background-color: var(--border-light);
-          border-radius: var(--radius-full);
+          background-color: var(--primary-base);
+        }
+      }
+
+      &.tk-step-error {
+        .tk-step-sign {
+          border-color: var(--states-danger-base);
+          color: var(--static-white);
+          background: var(--states-danger-base);
         }
 
         .tk-step-content {
           .tk-step-header {
-            color: var(--text-dark);
-            font-size: var(--desktop-size-sm);
-            font-weight: var(--desktop-weight-medium);
-            line-height: var(--desktop-line-height-sm-normal);
-          }
-
-          .tk-step-subheader {
-            color: var(--text-base);
-            font-size: var(--desktop-size-xs);
-            font-weight: var(--desktop-weight-regular);
-            line-height: var(--desktop-line-height-xs-normal);
+            color: var(--states-danger-base);
           }
         }
+      }
+    }
+  }
 
-        &.tk-step-disabled {
-          cursor: not-allowed;
+  .tk-step-sign {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--border-light);
+    background-color: var(--static-white);
+    border-radius: var(--radius-full);
+    text-align: center;
+    margin-inline-end: 8px;
+  }
+
+  .tk-step-rail::after {
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+    background-color: var(--border-light);
+    border-radius: var(--radius-full);
+  }
+
+  .tk-step-content {
+    .tk-step-header {
+      color: var(--text-dark);
+      font-weight: var(--desktop-weight-medium);
+    }
+
+    .tk-step-subheader {
+      color: var(--text-base);
+      font-weight: var(--desktop-weight-regular);
+    }
+  }
+
+  &.tk-stepper-xsmall {
+    .tk-step-sign {
+      width: 16px;
+      height: 16px;
+    }
+
+    .tk-step-content {
+      .tk-step-header {
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .tk-step-subheader {
+        font-size: 8px;
+        line-height: 14px;
+      }
+    }
+
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((20px / 2 + 40px) * 2);
+        margin-top: 0px;
+      }
+      .tk-step-rail {
+        top: 10px;
+        padding-inline: 6px;
+        width: calc(100% - 28px);
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(16px + var(--stepper-items-content-gap));
         }
+        .tk-step-rail {
+          top: auto;
+          bottom: 8px;
+        }
+      }
+    }
 
-        &:not(.tk-step-disabled) {
-          &.tk-step-active {
-            .tk-step-sign {
-              border-color: var(--primary-base);
-              background-color: var(--primary-base);
-              color: var(--static-white);
-            }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(20px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 28px);
+        padding-block: 24px;
+        left: 9px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 17px;
+          left: unset;
+        }
+      }
+    }
+  }
 
-            .tk-step-header {
-              color: var(--text-darkest);
-            }
-          }
+  &.tk-stepper-small {
+    .tk-step-sign {
+      width: 24px;
+      height: 24px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: 14px;
+        line-height: 18px;
+      }
 
-          &.tk-step-inactive {
-            .tk-step-sign {
-              border-color: var(--border-light);
-              color: var(--border-light);
-            }
-          }
+      .tk-step-subheader {
+        font-size: 10px;
+        line-height: 16px;
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((30px / 2 + 40px) * 2);
+        margin-top: 2px;
+      }
+      .tk-step-rail {
+        top: 14px;
+        padding-inline: 14px;
+        width: calc(100% - 35px);
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(24px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 12px;
+        }
+        .tk-step-content {
+          margin-bottom: 2px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(30px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 36px);
+        padding-block: 32px;
+        left: 13px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 21px;
+          left: unset;
+        }
+      }
+    }
+  }
 
-          &.tk-step-completed {
-            .tk-step-sign {
-              border-color: var(--primary-base);
-              color: var(--primary-base);
+  &.tk-stepper-base {
+    .tk-step-sign {
+      width: 32px;
+      height: 32px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: 16px;
+        line-height: 20px;
+      }
 
-              .tk-step-icon {
-                color: var(--primary-base);
-              }
-            }
+      .tk-step-subheader {
+        font-size: 12px;
+        line-height: 18px;
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((36px / 2 + 40px) * 2);
+        margin-top: 4px;
+      }
+      .tk-step-rail {
+        padding-inline: 21px;
+        top: 18px;
+        width: calc(100% - 42px);
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(32px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 16px;
+        }
+        .tk-step-content {
+          margin-bottom: 4px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(36px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 44px);
+        padding-block: 40px;
+        left: 17px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 25px;
+          left: unset;
+        }
+      }
+    }
+  }
 
-            .tk-step-rail::after {
-              background-color: var(--primary-base);
-            }
-          }
+  &.tk-stepper-large {
+    .tk-step-sign {
+      width: 40px;
+      height: 40px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: 18px;
+        line-height: 22px;
+      }
 
-          &.tk-step-error {
-            .tk-step-sign {
-              border-color: var(--states-danger-base);
-              color: var(--static-white);
-              background: var(--states-danger-base);
-            }
+      .tk-step-subheader {
+        font-size: 14px;
+        line-height: 20px;
+      }
+    }
 
-            .tk-step-content {
-              .tk-step-header {
-                color: var(--states-danger-base);
-              }
-            }
-          }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((44px / 2 + 40px) * 2);
+        margin-top: 6px;
+      }
+      .tk-step-rail {
+        top: 22px;
+        padding-inline: 28px;
+        width: calc(100% - 49px);
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(40px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 20px;
+        }
+        .tk-step-content {
+          margin-bottom: 6px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(44px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 52px);
+        padding-block: 48px;
+        left: 21px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 29px;
+          left: unset;
         }
       }
     }

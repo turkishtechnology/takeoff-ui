@@ -48,6 +48,11 @@ export class TkStepper implements ComponentInterface {
   @Prop() linear: boolean = false;
 
   /**
+   *
+   */
+  @Prop() size: 'large' | 'base' | 'small' | 'xsmall' = 'base';
+
+  /**
    * Currently active step index
    * @defaultValue 0
    */
@@ -198,7 +203,13 @@ export class TkStepper implements ComponentInterface {
   }
 
   private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}): JSX.Element {
-    const defaultProps = { size: 'large', fill: true, color: 'var(--primary-base)', ...props, class: classNames('tk-step-icon', props?.class) };
+    const iconSizes = {
+      large: 'xxlarge',
+      base: 'medium',
+      small: 'base',
+      xsmall: 'xsmall',
+    };
+    const defaultProps = { size: iconSizes[this.size], fill: true, color: 'var(--primary-base)', ...props, class: classNames('tk-step-icon', props?.class) };
     const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
     return <tk-icon {...iconProps} />;
@@ -217,7 +228,6 @@ export class TkStepper implements ComponentInterface {
       return this.getIconElement({
         name: 'fiber_manual_record',
         color: 'var(--border-light)',
-        size: 'large',
       });
     }
 
@@ -231,7 +241,6 @@ export class TkStepper implements ComponentInterface {
           this.errorIcon || {
             name: 'close',
             color: 'var(--static-light)',
-            size: 'large',
           },
       );
     }
@@ -241,7 +250,6 @@ export class TkStepper implements ComponentInterface {
         step.completeIcon ||
           this.completeIcon || {
             name: 'check',
-            size: 'large',
           },
       );
     }
@@ -256,7 +264,6 @@ export class TkStepper implements ComponentInterface {
           this.activeIcon || {
             name: 'fiber_manual_record',
             color: 'var(--static-white)',
-            size: 'large',
           },
       );
     }
@@ -266,7 +273,6 @@ export class TkStepper implements ComponentInterface {
         this.inactiveIcon || {
           name: 'fiber_manual_record',
           color: 'var(--border-light)',
-          size: 'large',
         },
     );
   }
@@ -318,7 +324,7 @@ export class TkStepper implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-stepper', `tk-stepper-${this.orientation}`, `tk-stepper-${this.stepMode}`, {
+    const rootClasses = classNames('tk-stepper', `tk-stepper-${this.orientation}`, `tk-stepper-${this.stepMode}`, `tk-stepper-${this.size}`, {
       'tk-stepper-linear': this.linear,
       'tk-stepper-reverse': this.reverse,
     });
