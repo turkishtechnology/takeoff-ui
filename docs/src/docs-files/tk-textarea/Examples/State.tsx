@@ -28,15 +28,6 @@ const State = () => {
 />
 <TkTextarea
   label="Readonly"
-<<<<<<< HEAD
-  placeholder="Readonly"
-  :readonly="true"
-/>
-<TkTextarea
-  label="Disabled"
-  placeholder="Disabled"
-  :disabled="true"
-=======
   value="Readonly"
   readonly
 />
@@ -44,7 +35,6 @@ const State = () => {
   label="Disabled"
   value="Disabled"
   disabled
->>>>>>> develop
 />`;
 
   const angularCode = `<tk-textarea
