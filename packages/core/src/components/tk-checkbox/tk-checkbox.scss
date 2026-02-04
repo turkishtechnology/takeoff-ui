@@ -18,6 +18,7 @@ tk-checkbox {
     }
   }
   label {
+    padding: 2px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,8 +40,6 @@ tk-checkbox {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 20px;
-      height: 20px;
       background-color: var(--static-light);
       border: 2px solid var(--border-light);
       border-radius: var(--radius-s);
@@ -51,9 +50,7 @@ tk-checkbox {
 
       i {
         visibility: hidden;
-        font-size: 12px;
         color: var(--static-light);
-        border-radius: var(--radius-xs);
         background-color: var(--states-info-base);
       }
     }
@@ -132,6 +129,38 @@ tk-checkbox {
         input:indeterminate + .mask {
           border-color: var(--states-danger-sub-base);
           background-color: var(--states-danger-light);
+        }
+      }
+    }
+  }
+
+  &.base {
+    label {
+      .mask {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 2px solid var(--background-sub-base);
+
+        i {
+          font-size: 12px;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  &.small {
+    label {
+      .mask {
+        width: 16px;
+        height: 16px;
+        border-radius: 4.8px;
+        border: 1.6px solid var(--background-sub-base);
+
+        i {
+          font-size: 8px;
+          border-radius: 1.333px;
         }
       }
     }
