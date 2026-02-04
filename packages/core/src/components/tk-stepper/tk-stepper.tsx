@@ -48,7 +48,8 @@ export class TkStepper implements ComponentInterface {
   @Prop() linear: boolean = false;
 
   /**
-   *
+   * The size of the stepper component.
+   * @defaultValue 'base'
    */
   @Prop() size: 'large' | 'base' | 'small' | 'xsmall' = 'base';
 
