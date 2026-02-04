@@ -23,7 +23,6 @@
     .tk-step-rail {
       position: absolute;
       font-size: 0px;
-      margin-inline-start: 58px;
 
       &::after {
         content: '';
@@ -228,17 +227,17 @@
       }
       .tk-step-rail {
         top: 10px;
-        padding-inline: 6px;
         width: calc(100% - 28px);
+        left: 64px;
       }
-      &.tk-stepper-reverse {
-        .tk-step {
-          padding-bottom: calc(16px + var(--stepper-items-content-gap));
-        }
-        .tk-step-rail {
-          top: auto;
-          bottom: 8px;
-        }
+    }
+    &.tk-stepper-reverse {
+      .tk-step {
+        padding-bottom: calc(16px + var(--stepper-items-content-gap));
+      }
+      .tk-step-rail {
+        top: auto;
+        bottom: 8px;
       }
     }
 
@@ -248,7 +247,7 @@
       }
       .tk-step-rail {
         height: calc(100% - 28px);
-        padding-block: 24px;
+        top: 24px;
         left: 9px;
       }
       &.tk-stepper-reverse {
@@ -283,8 +282,8 @@
       }
       .tk-step-rail {
         top: 14px;
-        padding-inline: 14px;
-        width: calc(100% - 35px);
+        width: calc(100% - 36px);
+        left: 72px;
       }
       &.tk-stepper-reverse {
         .tk-step {
@@ -305,7 +304,7 @@
       }
       .tk-step-rail {
         height: calc(100% - 36px);
-        padding-block: 32px;
+        top: 32px;
         left: 13px;
       }
       &.tk-stepper-reverse {
@@ -339,10 +338,11 @@
         margin-top: 4px;
       }
       .tk-step-rail {
-        padding-inline: 21px;
         top: 18px;
-        width: calc(100% - 42px);
+        left: 80px;
+        width: calc(100% - 44px);
       }
+
       &.tk-stepper-reverse {
         .tk-step {
           padding-bottom: calc(32px + var(--stepper-items-content-gap));
@@ -362,7 +362,7 @@
       }
       .tk-step-rail {
         height: calc(100% - 44px);
-        padding-block: 40px;
+        top: 40px;
         left: 17px;
       }
       &.tk-stepper-reverse {
@@ -398,8 +398,8 @@
       }
       .tk-step-rail {
         top: 22px;
-        padding-inline: 28px;
-        width: calc(100% - 49px);
+        width: calc(100% - 52px);
+        left: 88px;
       }
       &.tk-stepper-reverse {
         .tk-step {
@@ -420,7 +420,7 @@
       }
       .tk-step-rail {
         height: calc(100% - 52px);
-        padding-block: 48px;
+        top: 48px;
         left: 21px;
       }
       &.tk-stepper-reverse {
