@@ -21,10 +21,6 @@ export interface IIconOptions {
    * Indicates whether the icon is a sign
    */
   sign?: boolean;
-  /**
-   * The size of the icon
-   */
-  size?: 'xxlarge' | 'xlarge' | 'large' | 'medium' | 'base' | 'small' | 'xsmall';
 }
 
 /** Interface for multi-position icon configuration */
