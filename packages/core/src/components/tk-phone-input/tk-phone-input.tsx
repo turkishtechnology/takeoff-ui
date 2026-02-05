@@ -6,6 +6,7 @@ import { INTERNAL_COUNTRIES } from './constants';
 import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { applyStyles } from '../../utils/style-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -152,6 +153,12 @@ export class TkPhoneInput implements ComponentInterface {
   @Prop() hideFlag: boolean = false;
 
   /**
+   * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
+   * @defaultValue match-parent
+   */
+  @Prop() dropdownWidthMode: 'match-parent' | 'auto' | string = 'match-parent';
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
@@ -221,9 +228,23 @@ export class TkPhoneInput implements ComponentInterface {
   }
 
   private updatePosition() {
+    const dropdownWidthMode = this.dropdownWidthMode;
     const tkInputRootEl = this.el.querySelector('.tk-phone-input-wrapper') as HTMLElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.panelRef, undefined, {
       placement: 'bottom-start',
+      size: {
+        apply({ rects, elements }) {
+          if (dropdownWidthMode === 'match-parent') {
+            applyStyles(elements.floating, {
+              width: `${rects.reference.width}px`,
+            });
+          } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
+            applyStyles(elements.floating, {
+              width: dropdownWidthMode,
+            });
+          }
+        },
+      },
     });
   }
 
@@ -488,9 +509,9 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private createDropdownList() {
     return (
-      <ul class="tk-phone-input-menu">
+      <div class="tk-phone-input-menu">
         {this.getFilteredCountries().map(country => (
-          <li
+          <div
             class="tk-phone-input-menu-item"
             onClick={() => this.handleCountrySelect(country)}
             key={country.id}
@@ -500,9 +521,9 @@ export class TkPhoneInput implements ComponentInterface {
             {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
             {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
             {country.dialCode && <span class="tk-phone-input-menu-dial-id">{country.dialCode}</span>}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     );
   }
 

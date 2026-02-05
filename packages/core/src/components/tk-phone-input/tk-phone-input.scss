@@ -42,7 +42,7 @@
       align-items: center;
       border: none;
       background-color: transparent;
-      padding-right: var(--input-external-label-large-label-h-padding);
+      padding: 0%;
 
       .tk-phone-input-dropdown-button-selected {
         display: flex;
@@ -50,15 +50,15 @@
         gap: var(--spacing-xs);
         border-right: var(--spacing-px) solid var(--border-light);
 
-        .tk-phone-input-no-dial-code {
+        .tk-phone-input-dial-code {
+          padding-right: var(--input-external-label-large-label-h-padding);
+        }
+
+        &.tk-phone-input-no-dial-code {
           padding-right: var(--input-external-label-large-label-h-padding);
         }
       }
-      .tk-phone-input-dial-code {
-        padding-right: var(--input-external-label-large-label-h-padding);
-      }
     }
-
     .tk-phone-input-dropdown-menu {
       position: fixed;
       z-index: 800;
@@ -66,7 +66,6 @@
       border: var(--spacing-px) solid var(--border-light);
       border-radius: var(--button-sizes-large-radius);
       box-shadow: var(--effect-1-default-sm);
-      width: var(--spacing-80xl);
       display: flex;
       flex-direction: column;
 
@@ -77,8 +76,7 @@
       .tk-phone-input-menu {
         list-style: none;
         padding: var(--spacing-none);
-        margin: var(--spacing-none) var(--spacing-m-base) var(--spacing-none) var(--spacing-none);
-        max-height: var(--spacing-56xl);
+        margin: 8px;
         overflow-y: auto;
 
         .tk-phone-input-menu-item {
