@@ -42,6 +42,12 @@ export class TkStepper implements ComponentInterface {
   @Prop() stepMode: 'basic' | 'number' = 'basic';
 
   /**
+   * Controls the display mode of the stepper component.
+   * @defaultValue 'default'
+   */
+  @Prop() mode: 'default' | 'compact' = 'default';
+
+  /**
    * Whether the steps follow a linear progression (can only navigate to the next step when current step is completed).
    * @defaultValue false
    */
@@ -286,6 +292,11 @@ export class TkStepper implements ComponentInterface {
     );
   }
 
+  private createRail(): JSX.Element {
+    if (this.mode === 'compact') return null;
+    else return <div class="tk-step-rail" style={this.railStyle}></div>;
+  }
+
   private renderSteps(): JSX.Element[] {
     return this.steps.map((step, index) => {
       const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
@@ -311,7 +322,7 @@ export class TkStepper implements ComponentInterface {
         >
           <div class={containerClasses} data-index={index} data-clickable={step.isClickable && !step.disabled}>
             <div class={stepClasses}>
-              <div class="tk-step-rail" style={this.railStyle}></div>
+              {this.createRail()}
               {this.createStepSign(step, index)}
               <div class={contentClasses} style={this.contentStyle}>
                 <div class="tk-step-header">{step.header}</div>
@@ -325,7 +336,7 @@ export class TkStepper implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-stepper', `tk-stepper-${this.orientation}`, `tk-stepper-${this.stepMode}`, `tk-stepper-${this.size}`, {
+    const rootClasses = classNames('tk-stepper', `tk-stepper-${this.orientation}`, `tk-stepper-${this.stepMode}`, `tk-stepper-${this.size}`, `tk-stepper-${this.mode}`, {
       'tk-stepper-linear': this.linear,
       'tk-stepper-reverse': this.reverse,
     });

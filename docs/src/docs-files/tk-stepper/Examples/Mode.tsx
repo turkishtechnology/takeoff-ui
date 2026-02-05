@@ -2,14 +2,14 @@ import React from 'react';
 import { TkStepper, TkStep, TkDivider } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
-const Reverse = () => {
+const Mode = () => {
   const reactCode = `<TkStepper>
   <TkStep header="Information" subheader="Details" />
   <TkStep header="Details" subheader="Categorization" />
   <TkStep header="Communication" subheader="Communication" />
 </TkStepper>
 
-<TkStepper reverse>
+<TkStepper mode="compact">
   <TkStep header="Information" subheader="Details" />
   <TkStep header="Details" subheader="Categorization" />
   <TkStep header="Communication" subheader="Communication" />
@@ -21,7 +21,7 @@ const Reverse = () => {
   <tk-step header="Communication" subheader="Communication" />
 </tk-stepper>
 
-<tk-stepper reverse>
+<tk-stepper mode="compact">
   <tk-step header="Information" subheader="Details" />
   <tk-step header="Details" subheader="Categorization" />
   <tk-step header="Communication" subheader="Communication" />
@@ -33,7 +33,7 @@ const Reverse = () => {
   <tk-step header="Communication" subheader="Communication"></tk-step>
 </tk-stepper>
 
-<tk-stepper reverse>
+<tk-stepper mode="compact">
   <tk-step header="Information" subheader="Details"></tk-step>
   <tk-step header="Details" subheader="Categorization"></tk-step>
   <tk-step header="Communication" subheader="Communication"></tk-step>
@@ -42,7 +42,7 @@ const Reverse = () => {
   const demo = (
     <>
       <div className="px-4 h-32">
-        <p className="font-medium mb-4">Default</p>
+        <p className="font-medium mb-4">Default Mode</p>
         <TkStepper containerStyle={{ paddingInline: '20px' }}>
           <TkStep header="Information" subheader="Details" />
           <TkStep header="Details" subheader="Categorization" />
@@ -50,9 +50,9 @@ const Reverse = () => {
         </TkStepper>
       </div>
       <TkDivider />
-      <div className="px-4 mb-4 h-32">
-        <p className="font-medium mb-4">Reverse</p>
-        <TkStepper reverse containerStyle={{ paddingInline: '20px' }}>
+      <div className="h-32">
+        <p className="font-medium mb-8 mx-4">Compact Mode</p>
+        <TkStepper mode="compact" containerStyle={{ paddingInline: '20px' }}>
           <TkStep header="Information" subheader="Details" />
           <TkStep header="Details" subheader="Categorization" />
           <TkStep header="Communication" subheader="Communication" />
@@ -64,4 +64,4 @@ const Reverse = () => {
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };
 
-export default Reverse;
+export default Mode;
