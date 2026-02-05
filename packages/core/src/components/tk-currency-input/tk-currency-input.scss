@@ -10,22 +10,16 @@
   gap: var(--input-external-label-small-container-gap);
 
   .tk-currency-input-label {
-    display: flex;
-    align-items: center;
-    align-self: stretch;
-    gap: var(--input-external-label-small-container-gap);
     font-weight: var(--weight-medium);
 
     .tk-currency-input-label-title {
       color: var(--text-darkest);
-      font-family: var(--label-m-base-font, Geologica);
-      font-style: normal;
     }
 
     .tk-currency-input-label-asterisk {
       color: var(--states-danger-base);
-      font-family: var(--label-m-base-font, Geologica);
-      font-style: normal;
+      font-size: var(--desktop-label-l-size);
+      line-height: var(--line-height-xs-none);
     }
   }
 
@@ -65,8 +59,6 @@
       align-items: center;
       border: none;
       background-color: transparent;
-      font-style: normal;
-      font-weight: 400;
       padding: 0;
 
       .tk-currency-input-dropdown-button-selected {
@@ -89,14 +81,10 @@
       display: flex;
       flex-direction: column;
 
-      .tk-currency-input-dropdown-menu-search {
-        padding: var(--spacing-m-base);
-      }
-
       .tk-currency-input-dropdown-menu-list {
         list-style: none;
         padding: var(--spacing-none);
-        margin: var(--spacing-none) var(--spacing-m-base) var(--spacing-none) var(--spacing-none);
+        margin: 8px;
         max-height: var(--spacing-56xl);
         overflow-y: auto;
 
@@ -110,28 +98,6 @@
           &:hover {
             background-color: var(--background-lightest);
           }
-        }
-
-        /* width */
-        &::-webkit-scrollbar {
-          width: var(--spacing-l);
-        }
-
-        /* Track */
-        &::-webkit-scrollbar-track {
-          background: var(--background-lightest);
-          border-radius: var(--radius-m-base);
-        }
-
-        /* Handle */
-        &::-webkit-scrollbar-thumb {
-          background: var(--secondary-300);
-          border-radius: var(--radius-m-base);
-        }
-
-        /* Handle on hover */
-        &::-webkit-scrollbar-thumb:hover {
-          background: var(--secondary-400);
         }
       }
     }
@@ -207,77 +173,65 @@
 
   &.tk-currency-input-container-large {
     .tk-currency-input-label {
-      padding: var(--external-label-large-label-v-padding, 0) var(--external-label-large-label-h-padding, 8px);
+      padding: var(--input-external-label-large-label-v-padding) var(--external-label-large-label-h-padding);
 
       .tk-currency-input-label-title {
-        font-size: var(--label-l-size, 16px);
-        line-height: var(--label-l-line-height, 24px);
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
       }
     }
 
     .tk-currency-input-wrapper {
-      padding: var(--input-external-label-large-input-v-padding, 12px) var(--input-external-label-large-input-h-padding, 12px);
-      gap: var(--input-external-label-large-input-gap, 4px);
+      padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+      gap: var(--input-external-label-large-input-gap);
 
-      .tk-currency-input-input {
-        font-size: var(--body-m-base-size, 16px);
-        line-height: var(--body-m-base-line-height, 24px);
-      }
-
+      .tk-currency-input-input,
       .tk-currency-input-dropdown-button {
-        font-size: var(--body-m-base-size, 16px);
-        line-height: var(--body-m-base-line-height, 24px);
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
       }
     }
   }
 
   &.tk-currency-input-container-base {
     .tk-currency-input-label {
-      padding: var(--external-label-base-label-v-padding, 0) var(--external-label-base-label-h-padding, 8px);
+      padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
 
       .tk-currency-input-label-title {
-        font-size: var(--label-m-base-size, 14px);
-        line-height: var(--label-m-base-line-height, 20px);
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
       }
     }
 
     .tk-currency-input-wrapper {
-      padding: var(--input-external-label-base-input-v-padding, 10px) var(--input-external-label-base-input-h-padding, 10px);
-      gap: var(--input-external-label-base-input-gap, 4px);
+      padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
+      gap: var(--input-external-label-base-input-gap);
 
-      .tk-currency-input-input {
-        font-size: var(--body-s-base-size, 14px);
-        line-height: var(--body-s-base-line-height, 20px);
-      }
+      .tk-currency-input-input,
       .tk-currency-input-dropdown-button {
-        font-size: var(--body-s-base-size, 14px);
-        line-height: var(--body-s-base-line-height, 20px);
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
       }
     }
   }
 
   &.tk-currency-input-container-small {
     .tk-currency-input-label {
-      padding: var(--external-label-small-label-v-padding, 0) var(--external-label-small-label-h-padding, 6px);
-
+      padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
       .tk-currency-input-label-title {
-        font-size: var(--label-s-size, 12px);
-        line-height: var(--label-s-line-height, 18px);
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
       }
     }
 
     .tk-currency-input-wrapper {
-      padding: var(--input-external-label-small-input-v-padding, 6px) var(--input-external-label-small-input-h-padding, 8px);
-      gap: var(--input-external-label-small-input-gap, 4px);
+      padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
+      gap: var(--input-external-label-small-input-gap);
 
-      .tk-currency-input-input {
-        font-size: var(--body-xs-base-size, 12px);
-        line-height: var(--body-xs-base-line-height, 18px);
-      }
-
+      .tk-currency-input-input,
       .tk-currency-input-dropdown-button {
-        font-size: var(--body-xs-base-size, 12px);
-        line-height: var(--body-xs-base-line-height, 18px);
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
       }
     }
   }
