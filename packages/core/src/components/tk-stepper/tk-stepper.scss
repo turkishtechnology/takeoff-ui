@@ -193,16 +193,12 @@
   .tk-step-content {
     .tk-step-header {
       color: var(--text-dark);
-      font-size: var(--desktop-size-sm);
       font-weight: var(--desktop-weight-medium);
-      line-height: var(--desktop-line-height-sm-normal);
     }
 
     .tk-step-subheader {
       color: var(--text-base);
-      font-size: var(--desktop-size-xs);
       font-weight: var(--desktop-weight-regular);
-      line-height: var(--desktop-line-height-xs-normal);
     }
   }
 
@@ -211,7 +207,17 @@
       width: 16px;
       height: 16px;
     }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-2xs-size);
+        line-height: var(--desktop-line-height-2xs-normal);
+      }
 
+      .tk-step-subheader {
+        font-size: 10px;
+        line-height: 14px;
+      }
+    }
     &.tk-stepper-horizontal {
       .tk-step-content {
         width: calc((20px / 2 + 40px) * 2);
@@ -255,6 +261,17 @@
     .tk-step-sign {
       width: 24px;
       height: 24px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-body-xs-line-height);
+      }
+
+      .tk-step-subheader {
+        font-size: var(--desktop-body-2xs-size);
+        line-height: var(--desktop-line-height-2xs-normal);
+      }
     }
     &.tk-stepper-horizontal {
       .tk-step-content {
@@ -301,6 +318,17 @@
     .tk-step-sign {
       width: 32px;
       height: 32px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
+
+      .tk-step-subheader {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
+      }
     }
     &.tk-stepper-horizontal {
       .tk-step-content {
@@ -349,7 +377,17 @@
       width: 40px;
       height: 40px;
     }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
+      }
 
+      .tk-step-subheader {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-line-height-s-normal);
+      }
+    }
     &.tk-stepper-horizontal {
       .tk-step-content {
         width: calc((44px / 2 + 40px) * 2);
