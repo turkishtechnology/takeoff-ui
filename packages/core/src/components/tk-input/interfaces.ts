@@ -44,4 +44,5 @@ export interface IInputMaskOptions {
   timeFormatter?: any;
   timePattern?: string[];
   uppercase?: boolean;
+  regex?: RegExp | string;
 }
