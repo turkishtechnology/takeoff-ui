@@ -185,7 +185,7 @@
 .tk-slider-error {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-xs);
   font-family: var(--subheading-xs-font, Geologica);
   font-size: 12px;
   font-weight: 400;

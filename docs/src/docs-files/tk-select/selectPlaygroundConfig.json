@@ -37,6 +37,12 @@
       ]
     },
     {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
       "key": "hint",
       "label": "Hint",
       "type": "text",
@@ -46,7 +52,8 @@
       "key": "error",
       "label": "Error",
       "type": "text",
-      "defaultValue": ""
+      "defaultValue": "",
+      "tooltip": "It is recommended to use with invalid prop."
     },
     {
       "key": "emptyMessage",
@@ -60,6 +67,13 @@
       "type": "text",
       "defaultValue": "",
       "tooltip": "This feature works only when the `multiple` prop is enabled. Accepts numeric values."
+    },
+    {
+      "key": "selectAllLabel",
+      "label": "Select All Label",
+      "type": "text",
+      "defaultValue": "All",
+      "tooltip": "This feature works only when the `multiple` prop is enabled."
     },
     {
       "key": "disabled",
@@ -115,6 +129,12 @@
       "type": "checkbox",
       "defaultValue": false,
       "tooltip": "This feature works only when the `multiple` prop is enabled."
+    },
+    {
+      "key": "editable",
+      "label": "Editable",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }

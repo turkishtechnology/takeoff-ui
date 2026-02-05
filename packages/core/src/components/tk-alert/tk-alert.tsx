@@ -2,6 +2,7 @@ import { Component, Prop, h, ComponentInterface, Element, Fragment } from '@sten
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { CSSStyleProperties } from '../../global/types';
 
 /**
  * The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.
@@ -68,6 +69,11 @@ export class TkAlert implements ComponentInterface {
    */
   @Prop() removable: boolean = false;
 
+  /**
+   * The style attribute of container element
+   */
+  @Prop() containerStyle?: CSSStyleProperties = null;
+
   private handleCloseButtonClick() {
     this.el.remove();
   }
@@ -132,7 +138,7 @@ export class TkAlert implements ComponentInterface {
     const closeButton = this.renderCloseButton();
 
     return (
-      <div class={rootClasses}>
+      <div class={rootClasses} style={this.containerStyle}>
         {this.hasContentSlot ? (
           <slot name="content" />
         ) : (
