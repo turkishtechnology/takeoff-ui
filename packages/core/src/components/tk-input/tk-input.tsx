@@ -339,16 +339,27 @@ export class TkInput implements ComponentInterface {
         _value = input.value || '';
       }
 
-      // masklı kullanımlar için value'yu formatlama yapılıyor.
-      if (this.maskOptions && this.cleaveInstance) {
-        // If letterOnly option is enabled, filter out non-letters
+      if (this.maskOptions) {
+        // Custom regex mask
+        if (this.maskOptions?.regex && this.mode === 'text') {
+          const regex = typeof this.maskOptions.regex === 'string' ? new RegExp(this.maskOptions.regex, 'g') : new RegExp(this.maskOptions.regex.source, 'g');
+
+          // Regex'e uyan karakterleri filtrele
+          const matches = _value.match(regex);
+          _value = matches ? matches.join('') : '';
+          input.value = _value;
+        }
+
         if (this.maskOptions.letterOnly) {
+          // If letterOnly option is enabled, filter out non-letters
           _value = _value.replace(/[^a-zA-Z]/g, '');
           input.value = _value;
         }
 
-        this.cleaveInstance?.setRawValue(_value);
-        _value = this.cleaveInstance?.getFormattedValue();
+        if (this.cleaveInstance) {
+          this.cleaveInstance?.setRawValue(_value);
+          _value = this.cleaveInstance?.getFormattedValue();
+        }
       }
 
       if (!isEqual(this.value, _value)) {
