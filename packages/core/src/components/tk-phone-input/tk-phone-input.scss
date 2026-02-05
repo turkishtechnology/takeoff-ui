@@ -77,6 +77,7 @@
         list-style: none;
         padding: var(--spacing-none);
         margin: 8px;
+        max-height: var(--spacing-56xl);
         overflow-y: auto;
 
         .tk-phone-input-menu-item {
