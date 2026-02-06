@@ -36,7 +36,7 @@ const Mask = () => {
 />
 <TkInput
   label="Credit Card"
-  placeholder="hh:mm"
+  placeholder="xxxx xxxx xxxx xxxx"
   maskOptions={{
     blocks: [4, 4, 4, 4],
     numericOnly: true,
@@ -56,6 +56,19 @@ const Mask = () => {
   onTkChange={(e) => {
     setValue4(e.detail);
   }}
+/>
+
+<TkInput
+  label="Custom Regex (PNR Code)"
+  placeholder="ABC123"
+  maskOptions={{
+    regex: /[A-Z0-9]/,
+    blocks: [6],
+  }}
+  value={value5}
+  onTkChange={(e) => {
+    setValue5(e.detail);
+  }}
 />`;
 
   const vueCode = `<script setup>
@@ -66,6 +79,7 @@ const value1 = ref();
 const value2 = ref();
 const value3 = ref();
 const value4 = ref();
+const value5 = ref();
 </script>
 
 <template>
@@ -116,15 +130,81 @@ const value4 = ref();
       }"
       v-model="value4"
     />
+    <TkInput
+      label="Custom Regex (PNR Code)"
+      placeholder="ABC123"
+      :maskOptions.prop="{
+        regex: /[A-Z0-9]/,
+        blocks: [6],
+      }"
+      v-model="value5"
+    />
   </div>
 </template>
 `;
+
+  const angularCode = `<tk-input
+  label="Date Mask"
+  placeholder="dd.mm.YYYY"
+  [maskOptions]="{
+    date: true,
+    delimiter: '.',
+    datePattern: ['d', 'm', 'Y'],
+  }"
+  [(ngModel)]="value"
+></tk-input>
+<tk-input
+  label="Expire Date"
+  placeholder="mm/yy"
+  [maskOptions]="{
+    date: true,
+    datePattern: ['m', 'y'],
+  }"
+  [(ngModel)]="value1"
+></tk-input>
+<tk-input
+  label="Time Formatting"
+  placeholder="hh:mm"
+  [maskOptions]="{
+    time: true,
+    timePattern: ['h', 'm'],
+  }"
+  [(ngModel)]="value2"
+></tk-input>
+<tk-input
+  label="Credit Card"
+  placeholder="xxxx xxxx xxxx xxxx"
+  [maskOptions]="{
+    blocks: [4, 4, 4, 4],
+    numericOnly: true,
+  }"
+  [(ngModel)]="value3"
+></tk-input>
+<tk-input
+  label="Letter Only"
+  placeholder="xxxxxxxxxx"
+  [maskOptions]="{
+    blocks: [40],
+    letterOnly: true,
+  }"
+  [(ngModel)]="value4"
+></tk-input>
+<tk-input
+  label="Custom Regex (PNR Code)"
+  placeholder="ABC123"
+  [maskOptions]="{
+    regex: /[A-Z0-9]/,
+    blocks: [6],
+  }"
+  [(ngModel)]="value5"
+></tk-input>`;
 
   const [value, setValue] = useState();
   const [value1, setValue1] = useState();
   const [value2, setValue2] = useState();
   const [value3, setValue3] = useState();
   const [value4, setValue4] = useState();
+  const [value5, setValue5] = useState();
   const demo = (
     <div className="flex flex-col gap-2 w-[300px]">
       <TkInput
@@ -184,10 +264,23 @@ const value4 = ref();
           setValue4(e.detail);
         }}
       />
+
+      <TkInput
+        label="Custom Regex (PNR Code)"
+        placeholder="ABC123"
+        maskOptions={{
+          regex: /[A-Z0-9]/,
+          blocks: [6],
+        }}
+        value={value5}
+        onTkChange={e => {
+          setValue5(e.detail);
+        }}
+      />
     </div>
   );
 
-  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Mask;

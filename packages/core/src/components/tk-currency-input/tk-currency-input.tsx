@@ -240,7 +240,7 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   private updatePosition() {
-    const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
+    const tkInputRootEl = this.el.querySelector('.tk-currency-input-wrapper') as HTMLTkInputElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
       placement: 'bottom-start',
     });
@@ -580,9 +580,9 @@ export class TkCurrencyInput implements ComponentInterface {
   private renderLabel() {
     if (this.label) {
       return (
-        <label class="tk-currency-input__label" htmlFor={this.uniqueId}>
-          <span class="tk-currency-input__label-title">{this.label}</span>
-          {this.showAsterisk && <span class="tk-currency-input__label-red-asterisk">*</span>}
+        <label class="tk-currency-input-label" htmlFor={this.uniqueId}>
+          <span class="tk-currency-input-label-title">{this.label}</span>
+          {this.showAsterisk && <span class="tk-currency-input-label-asterisk">*</span>}
         </label>
       );
     }
@@ -595,7 +595,7 @@ export class TkCurrencyInput implements ComponentInterface {
         id={this.uniqueId}
         ref={el => (this.inputElement = el)}
         type="text"
-        class="tk-currency-input__input"
+        class="tk-currency-input-input"
         autoComplete="off"
         value={this.displayValue}
         placeholder={this.placeholder}
@@ -612,11 +612,11 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderCurrencySelector() {
     return (
-      <div class="tk-currency-input__dropdown">
+      <div class="tk-currency-input-dropdown">
         {this.renderDropdownButton()}
 
         {this.isDropdownOpen && (
-          <div class="tk-currency-input__dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
+          <div class="tk-currency-input-dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
             {this.renderCurrencyList()}
           </div>
         )}
@@ -626,10 +626,10 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderDropdownButton() {
     return (
-      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
-        <div class="tk-currency-input__dropdown-button-selected">
+      <button type="button" class="tk-currency-input-dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
+        <div class="tk-currency-input-dropdown-button-selected">
           {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
-          <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
+          <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
         </div>
       </button>
@@ -640,18 +640,18 @@ export class TkCurrencyInput implements ComponentInterface {
     const currencies = this.getCurrencies();
 
     return (
-      <ul class="tk-currency-input__dropdown-menu-list">
+      <ul class="tk-currency-input-dropdown-menu-list">
         {currencies.map(currency => (
           <li
-            class="tk-currency-input__dropdown-menu-list-item"
+            class="tk-currency-input-dropdown-menu-list-item"
             key={currency.code}
             role="option"
             onClick={event => this.handleSelectCurrency(currency.code, event)}
             aria-selected={this.selectedCurrency.code === currency.code}
           >
             {!this.hideFlag && <div class={`flag flag-${currency.id.toLowerCase()}`} aria-label={`${currency.code} flag`} />}
-            <span class="tk-currency-input__dropdown-menu-list-country-label">{currency.symbol}</span>
-            <span class="tk-currency-input__dropdown-menu-list-dial-id">{currency.name}</span>
+            <span class="tk-currency-input-dropdown-menu-list-country-label">{currency.symbol}</span>
+            <span class="tk-currency-input-dropdown-menu-list-dial-id">{currency.name}</span>
           </li>
         ))}
       </ul>
@@ -662,23 +662,23 @@ export class TkCurrencyInput implements ComponentInterface {
     let hint;
 
     if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
 
       hint = (
-        <span class="tk-currency-input__hint">
+        <span class="tk-currency-input-hint">
           {hintIcon}
-          <span class="tk-currency-input__hint-text">{this.hint}</span>
+          <span class="tk-currency-input-hint-text">{this.hint}</span>
         </span>
       );
     }
 
     if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
 
       hint = (
-        <span class="tk-currency-input__hint">
+        <span class="tk-currency-input-hint">
           {hintIcon}
-          <span class="tk-currency-input__hint-text">{this.error}</span>
+          <span class="tk-currency-input-hint-text">{this.error}</span>
         </span>
       );
     }
@@ -688,9 +688,14 @@ export class TkCurrencyInput implements ComponentInterface {
 
   render() {
     return (
-      <div class={classNames('tk-currency-input', `tk-currency-input--${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+      <div
+        class={classNames('tk-currency-input-container', `tk-currency-input-container-${this.size}`)}
+        aria-invalid={this.invalid}
+        aria-disabled={this.disabled}
+        aria-readonly={this.readonly}
+      >
         {this.renderLabel()}
-        <div class="tk-currency-input__wrapper">
+        <div class="tk-currency-input-wrapper">
           {this.renderCurrencyInput()}
           {this.renderCurrencySelector()}
         </div>

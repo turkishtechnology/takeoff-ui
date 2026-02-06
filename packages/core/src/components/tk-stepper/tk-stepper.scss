@@ -5,111 +5,94 @@
 .tk-stepper {
   display: flex;
   width: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Geologica';
   text-align: initial;
   list-style: none;
   box-sizing: border-box;
 
   &.tk-stepper-horizontal {
-    flex-direction: row;
     overflow-x: auto;
 
     .tk-step-item {
       flex: 1;
+    }
 
-      &:last-child {
-        flex: none;
+    .tk-step-sign {
+      margin-inline-start: 40px;
+    }
+
+    .tk-step-rail {
+      position: absolute;
+      font-size: 0px;
+
+      &::after {
+        content: '';
+        height: 2px;
+        width: 100%;
+      }
+    }
+
+    .tk-step-content {
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &.tk-stepper-reverse {
+      align-items: flex-end;
+      .tk-step {
+        position: relative;
+      }
+      .tk-step-rail {
+        top: auto;
       }
 
-      .tk-step {
-        .tk-step-sign {
-          margin-inline-start: 40px;
-          margin-inline-end: 8px;
-          vertical-align: top;
-        }
-
-        .tk-step-rail {
-          position: absolute;
-          top: calc(28px / 2);
-          font-size: 0px;
-          width: calc(100% - 48px);
-          padding: 0 24px;
-          inset-inline-start: 0;
-          margin-inline-start: calc(32px / 2 + 40px);
-
-          &::after {
-            content: '';
-            display: inline-block;
-            height: 2px;
-            width: 100%;
-            background-color: var(--border-light);
-            border-radius: var(--radius-full);
-          }
-        }
-
-        .tk-step-content {
-          display: flex;
-          width: calc((32px / 2 + 40px) * 2);
-          margin-top: var(--stepper-items-content-gap);
-          text-align: center;
-          flex-direction: column;
-          align-items: center;
-          flex-shrink: 0;
-        }
+      .tk-step-sign {
+        position: absolute;
+        bottom: 0;
       }
     }
   }
 
   &.tk-stepper-vertical {
     flex-direction: column;
-    align-items: flex-start;
 
-    .tk-step-item {
-      display: block;
-      flex: 1 0 auto;
-      padding-inline-start: 0;
-      overflow: visible;
+    .tk-step {
+      display: flex;
+      flex-direction: row;
+    }
 
-      &:last-child {
-        flex: none;
+    .tk-step-rail {
+      position: absolute;
+      top: 0px;
+      width: 2px;
+
+      &::after {
+        content: '';
+        width: 2px;
+        height: 100%;
+        background-color: var(--border-light);
+        border-radius: var(--radius-full);
+      }
+    }
+
+    .tk-step-content {
+      overflow: hidden;
+    }
+
+    &.tk-stepper-reverse {
+      align-items: flex-end;
+      .tk-step {
+        flex-direction: row-reverse;
       }
 
-      .tk-step {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
+      .tk-step-sign {
+        margin-inline-start: 8px;
+      }
 
-        .tk-step-sign {
-          float: left;
-          margin-inline-end: 8px;
-        }
-
-        .tk-step-rail {
-          position: absolute;
-          top: 0px;
-          font-size: 0px;
-          height: calc(100% - 48px);
-          padding: 40px 0;
-          width: 2px;
-          inset-inline-start: calc(30px / 2);
-
-          &::after {
-            content: '';
-            display: inline-block;
-            width: 2px;
-            height: 100%;
-            background-color: var(--border-light);
-            border-radius: var(--radius-full);
-          }
-        }
-
-        .tk-step-content {
-          display: block;
-          min-height: calc(32px * 2.5);
-          overflow: hidden;
-        }
+      .tk-step-content {
+        text-align: right;
+        align-items: flex-end;
       }
     }
   }
@@ -121,141 +104,432 @@
     overflow: visible;
 
     &:last-child {
+      flex: none;
       .tk-step-rail {
         display: none;
       }
     }
+  }
 
-    .tk-step-container {
-      outline: none;
+  .tk-step-container {
+    outline: none;
+  }
 
-      .tk-step {
-        cursor: pointer;
+  .tk-step {
+    cursor: pointer;
+    &.tk-step-disabled {
+      cursor: not-allowed;
+    }
 
+    &:not(.tk-step-disabled) {
+      &.tk-step-active {
         .tk-step-sign {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 28px;
-          height: 28px;
-          border: 2px solid var(--border-light);
-          background-color: var(--static-white);
-          border-radius: var(--radius-full);
-          text-align: center;
+          border-color: var(--primary-base);
+          background-color: var(--primary-base);
+          color: var(--static-white);
+        }
 
-          .tk-step-icon,
-          .tk-step-number,
-          .tk-step-icon-error,
-          svg {
-            position: relative;
-            line-height: 1;
-            font-size: var(--size-xl);
-            width: 20px;
-            height: 20px;
-          }
+        .tk-step-header {
+          color: var(--text-darkest);
+        }
+      }
 
-          .tk-step-icon-dot svg {
-            width: 12px;
-            height: 12px;
-          }
+      &.tk-step-inactive {
+        .tk-step-sign {
+          border-color: var(--border-light);
+          color: var(--border-light);
+        }
+      }
 
-          .tk-step-icon-complete svg {
-            width: 14px;
-            height: 12px;
+      &.tk-step-completed {
+        .tk-step-sign {
+          border-color: var(--primary-base);
+          color: var(--primary-base);
+
+          .tk-step-icon {
+            color: var(--primary-base);
           }
         }
 
         .tk-step-rail::after {
-          transition: background-color 0.2s ease-in-out;
+          background-color: var(--primary-base);
+        }
+      }
+
+      &.tk-step-error {
+        .tk-step-sign {
+          border-color: var(--states-danger-base);
+          color: var(--static-white);
+          background: var(--states-danger-base);
         }
 
         .tk-step-content {
           .tk-step-header {
-            color: var(--text-dark);
-            font-family: var(--desktop-family-body);
-            font-size: var(--desktop-size-sm);
-            font-weight: var(--desktop-weight-medium);
-            line-height: var(--desktop-line-height-sm-normal);
-          }
-
-          .tk-step-subheader {
-            color: var(--text-base);
-            font-family: var(--desktop-family-body);
-            font-size: var(--desktop-size-xs, 12px);
-            font-weight: var(--desktop-weight-regular, 400);
-            line-height: var(--desktop-line-height-xs-normal, 1.5);
+            color: var(--states-danger-base);
           }
         }
+      }
+    }
+  }
 
-        &.tk-step-disabled {
-          cursor: not-allowed;
+  .tk-step-sign {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--border-light);
+    background-color: var(--static-white);
+    border-radius: var(--radius-full);
+    text-align: center;
+    margin-inline-end: 8px;
+  }
+
+  .tk-step-rail::after {
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+    background-color: var(--border-light);
+    border-radius: var(--radius-full);
+  }
+
+  .tk-step-content {
+    .tk-step-header {
+      color: var(--text-dark);
+      font-weight: var(--desktop-weight-medium);
+    }
+
+    .tk-step-subheader {
+      color: var(--text-base);
+      font-weight: var(--desktop-weight-regular);
+    }
+  }
+
+  &.tk-stepper-xsmall {
+    .tk-step-sign {
+      width: 16px;
+      height: 16px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-2xs-size);
+        line-height: var(--desktop-line-height-2xs-normal);
+      }
+
+      .tk-step-subheader {
+        font-size: 10px;
+        line-height: 14px;
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((20px / 2 + 40px) * 2);
+        margin-top: 0px;
+      }
+      .tk-step-rail {
+        top: 10px;
+        width: calc(100% - 28px);
+        left: 64px;
+      }
+    }
+    &.tk-stepper-reverse {
+      .tk-step {
+        padding-bottom: calc(16px + var(--stepper-items-content-gap));
+      }
+      .tk-step-rail {
+        top: auto;
+        bottom: 8px;
+      }
+    }
+
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(20px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 28px);
+        top: 24px;
+        left: 9px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 17px;
+          left: unset;
+        }
+      }
+    }
+  }
+
+  &.tk-stepper-small {
+    .tk-step-sign {
+      width: 24px;
+      height: 24px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-body-xs-line-height);
+      }
+
+      .tk-step-subheader {
+        font-size: var(--desktop-body-2xs-size);
+        line-height: var(--desktop-line-height-2xs-normal);
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((30px / 2 + 40px) * 2);
+        margin-top: 2px;
+      }
+      .tk-step-rail {
+        top: 14px;
+        width: calc(100% - 36px);
+        left: 72px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(24px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 12px;
+        }
+        .tk-step-content {
+          margin-bottom: 2px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(30px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 36px);
+        top: 32px;
+        left: 13px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 21px;
+          left: unset;
+        }
+      }
+    }
+  }
+
+  &.tk-stepper-base {
+    .tk-step-sign {
+      width: 32px;
+      height: 32px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
+
+      .tk-step-subheader {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((36px / 2 + 40px) * 2);
+        margin-top: 4px;
+      }
+      .tk-step-rail {
+        top: 18px;
+        left: 80px;
+        width: calc(100% - 44px);
+      }
+
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(32px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 16px;
+        }
+        .tk-step-content {
+          margin-bottom: 4px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(36px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 44px);
+        top: 40px;
+        left: 17px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 25px;
+          left: unset;
+        }
+      }
+    }
+  }
+
+  &.tk-stepper-large {
+    .tk-step-sign {
+      width: 40px;
+      height: 40px;
+    }
+    .tk-step-content {
+      .tk-step-header {
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
+      }
+
+      .tk-step-subheader {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-line-height-s-normal);
+      }
+    }
+    &.tk-stepper-horizontal {
+      .tk-step-content {
+        width: calc((44px / 2 + 40px) * 2);
+        margin-top: 6px;
+      }
+      .tk-step-rail {
+        top: 22px;
+        width: calc(100% - 52px);
+        left: 88px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step {
+          padding-bottom: calc(40px + var(--stepper-items-content-gap));
+        }
+        .tk-step-rail {
+          top: auto;
+          bottom: 20px;
+        }
+        .tk-step-content {
+          margin-bottom: 6px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step-content {
+        min-height: calc(44px * 2.5);
+      }
+      .tk-step-rail {
+        height: calc(100% - 52px);
+        top: 48px;
+        left: 21px;
+      }
+      &.tk-stepper-reverse {
+        .tk-step-rail {
+          right: 29px;
+          left: unset;
+        }
+      }
+    }
+  }
+
+  &.tk-stepper-compact {
+    gap: 4px;
+    &.tk-stepper-horizontal {
+      .tk-step-item {
+        flex: 1 !important;
+      }
+      .tk-step {
+        display: flex;
+        gap: 4px;
+        border-top: 2px solid var(--border-light);
+        transition: border-top-color 0.2s ease-in-out;
+
+        &.tk-step-active,
+        &.tk-step-completed {
+          border-top-color: var(--primary-base);
         }
 
-        &:not(.tk-step-disabled) {
-          &.tk-step-active {
-            .tk-step-sign {
-              border-color: var(--primary-base);
-              background-color: var(--primary-base);
-              color: var(--static-white);
+        &.tk-step-error {
+          border-top-color: var(--states-danger-base);
+        }
+      }
+      .tk-step-sign {
+        margin: 4px 0px 0px 0px;
+      }
+      .tk-step-content {
+        align-items: flex-start;
+        text-align: start;
+        margin: 0px;
+        margin-top: 4px;
+      }
 
-              .tk-step-icon,
-              svg {
-                color: var(--static-white);
-              }
-            }
+      &.tk-stepper-reverse {
+        .tk-step {
+          border: none;
+          border-bottom: 2px solid var(--border-light);
+          padding-bottom: 0px !important;
+          transition: border-bottom-color 0.2s ease-in-out;
 
-            .tk-step-header {
-              color: var(--text-darkest);
-            }
-          }
-
-          &.tk-step-inactive {
-            .tk-step-sign {
-              border-color: var(--border-light);
-              color: var(--border-light);
-
-              svg circle {
-                fill: var(--border-light);
-              }
-            }
-          }
-
+          &.tk-step-active,
           &.tk-step-completed {
-            .tk-step-sign {
-              border-color: var(--primary-base);
-              color: var(--primary-base);
-
-              .tk-step-icon {
-                color: var(--primary-base);
-              }
-            }
-
-            .tk-step-rail::after {
-              background-color: var(--primary-base);
-            }
+            border-bottom-color: var(--primary-base);
           }
 
           &.tk-step-error {
-            .tk-step-sign {
-              border-color: var(--states-danger-base);
-              color: var(--states-danger-base);
-              background: var(--states-danger-base);
-
-              .tk-step-icon {
-                color: var(--static-light);
-              }
-
-              svg path {
-                fill: var(--static-light);
-              }
-            }
-
-            .tk-step-content {
-              .tk-step-header {
-                color: var(--states-danger-base);
-              }
-            }
+            border-bottom-color: var(--states-danger-base);
           }
+        }
+        .tk-step-sign {
+          margin: 0px 0px 4px 0px;
+          position: static;
+          align-self: flex-end;
+        }
+        .tk-step-content {
+          margin: 0px;
+          margin-bottom: 4px;
+        }
+      }
+    }
+    &.tk-stepper-vertical {
+      .tk-step {
+        gap: 4px;
+        border-left: 2px solid var(--border-light);
+        transition: border-left-color 0.2s ease-in-out;
+
+        &.tk-step-active,
+        &.tk-step-completed {
+          border-left-color: var(--primary-base);
+        }
+
+        &.tk-step-error {
+          border-left-color: var(--states-danger-base);
+        }
+      }
+      .tk-step-sign {
+        margin: 0px 0px 0px 4px;
+      }
+      .tk-step-content {
+        margin-left: 4px;
+      }
+
+      &.tk-stepper-reverse {
+        .tk-step {
+          border: none;
+          border-right: 2px solid var(--border-light);
+          transition: border-right-color 0.2s ease-in-out;
+
+          &.tk-step-active,
+          &.tk-step-completed {
+            border-right-color: var(--primary-base);
+          }
+
+          &.tk-step-error {
+            border-right-color: var(--states-danger-base);
+          }
+        }
+        .tk-step-sign {
+          margin: 0px 4px 0px 0px;
+          align-self: flex-start;
+        }
+        .tk-step-content {
+          margin: 0px;
         }
       }
     }
