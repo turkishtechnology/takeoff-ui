@@ -2,39 +2,139 @@
   display: block;
 }
 
-.tk-currency-input {
+.tk-currency-input-container {
   display: flex;
   flex-direction: column;
-  gap: var(--input-external-label-large-container-gap);
-  box-sizing: border-box;
+  align-items: flex-start;
+  color: var(--text-darkest);
+  gap: var(--input-external-label-small-container-gap);
+
+  .tk-currency-input-label {
+    font-weight: var(--weight-medium);
+
+    .tk-currency-input-label-title {
+      color: var(--text-darkest);
+    }
+
+    .tk-currency-input-label-asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-l-size);
+      line-height: var(--line-height-xs-none);
+    }
+  }
+
+  .tk-currency-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--input-external-label-small-container-gap);
+    align-self: stretch;
+    border-radius: var(--button-sizes-large-radius);
+    border: var(--spacing-px) solid var(--border-light);
+    background: var(--static-light);
+
+    &:focus {
+      border: var(--spacing-px) solid var(--states-info-base);
+    }
+
+    &:hover {
+      background-color: var(--background-lightest);
+    }
+  }
+
+  .tk-currency-input-input {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--text-sub-base, #99a0ae);
+    }
+  }
+
+  .tk-currency-input-dropdown {
+    .tk-currency-input-dropdown-button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border: none;
+      background-color: transparent;
+      padding: 0;
+
+      .tk-currency-input-dropdown-button-selected {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding-left: var(--spacing-m-base);
+        border-left: var(--spacing-px) solid var(--border-light);
+      }
+    }
+
+    .tk-currency-input-dropdown-menu {
+      position: fixed;
+      z-index: 800;
+      background: var(--static-light);
+      border: var(--spacing-px) solid var(--border-light);
+      border-radius: var(--button-sizes-large-radius);
+      box-shadow: var(--effect-1-default-sm);
+      width: var(--spacing-80xl);
+      display: flex;
+      flex-direction: column;
+
+      .tk-currency-input-dropdown-menu-list {
+        list-style: none;
+        padding: var(--spacing-none);
+        margin: 8px;
+        max-height: var(--spacing-56xl);
+        overflow-y: auto;
+
+        .tk-currency-input-dropdown-menu-list-item {
+          display: flex;
+          gap: var(--spacing-xs);
+          padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: var(--background-lightest);
+          }
+        }
+      }
+    }
+  }
 
   &[aria-invalid] {
-    & .tk-currency-input__wrapper {
+    .tk-currency-input-wrapper {
       border-color: var(--states-danger-base);
     }
 
-    & .tk-currency-input__hint-text {
-      color: var(--states-danger-base);
-    }
-    & .tk-currency-input__hint i {
+    .tk-currency-input-hint {
       color: var(--states-danger-base);
     }
   }
 
   &[aria-disabled] {
-    & .tk-currency-input__wrapper {
+    .tk-currency-input-wrapper {
       background-color: var(--background-lightest);
-      border-color: var(--border-light);
     }
 
-    & .tk-currency-input__label,
-    & .tk-currency-input__hint-text {
+    .tk-currency-input-label {
+      pointer-events: none;
+
+      .tk-currency-input-label-title,
+      .tk-currency-input-label-asterisk {
+        color: var(--text-sub-base);
+      }
+    }
+
+    .tk-currency-input-hint-text,
+    .tk-currency-input-hint-icon {
       color: var(--text-sub-base);
       pointer-events: none;
     }
 
-    & .tk-currency-input__input,
-    & .tk-currency-input__dropdown-button {
+    .tk-currency-input-input,
+    .tk-currency-input-dropdown-button {
       color: var(--text-sub-base);
       pointer-events: none;
 
@@ -45,19 +145,24 @@
   }
 
   &[aria-readonly] {
-    & .tk-currency-input__wrapper {
+    .tk-currency-input-wrapper {
       background-color: var(--background-lightest);
-      border-color: var(--border-light);
     }
 
-    & .tk-currency-input__label,
-    & .tk-currency-input__hint-text {
+    .tk-currency-input-label {
+      .tk-currency-input-label-title,
+      .tk-currency-input-label-asterisk {
+        color: var(--text-sub-base);
+      }
+    }
+
+    .tk-currency-input-hint-text,
+    .tk-currency-input-hint-icon {
       color: var(--text-sub-base);
     }
 
-    & .tk-currency-input__input,
-    & .tk-currency-input__dropdown-button {
-      color: var(--text-darkest);
+    .tk-currency-input-input,
+    .tk-currency-input-dropdown-button {
       pointer-events: none;
 
       &::placeholder {
@@ -66,265 +171,83 @@
     }
   }
 
-  &--large {
-    .tk-currency-input__wrapper {
-      height: var(--spacing-12xl);
-      padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
+  &.tk-currency-input-container-large {
+    .tk-currency-input-label {
+      padding: var(--input-external-label-large-label-v-padding) var(--external-label-large-label-h-padding);
+
+      .tk-currency-input-label-title {
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
+      }
     }
 
-    .tk-currency-input__label {
-      font-size: var(--desktop-label-l-size);
-      line-height: var(--desktop-label-l-line-height);
-      padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
-    }
+    .tk-currency-input-wrapper {
+      padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
+      gap: var(--input-external-label-large-input-gap);
 
-    .tk-currency-input__label-title {
-      font-size: var(--desktop-label-l-size);
-      line-height: var(--desktop-label-l-line-height);
-    }
-
-    .tk-currency-input__dropdown-menu {
-      top: var(--spacing-12xl);
-    }
-
-    .tk-currency-input__dropdown-menu-list-item {
-      font-size: var(--desktop-label-l-size);
-      line-height: var(--desktop-label-l-line-height);
+      .tk-currency-input-input,
+      .tk-currency-input-dropdown-button {
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
+      }
     }
   }
 
-  &--base {
-    .tk-currency-input__wrapper {
-      height: var(--spacing-10xl);
+  &.tk-currency-input-container-base {
+    .tk-currency-input-label {
       padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
+
+      .tk-currency-input-label-title {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
     }
 
-    .tk-currency-input__label {
-      font-size: var(--desktop-label-m-base-size);
-      line-height: var(--desktop-label-m-base-line-height);
-      padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
-    }
+    .tk-currency-input-wrapper {
+      padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
+      gap: var(--input-external-label-base-input-gap);
 
-    .tk-currency-input__label-title {
-      font-size: var(--desktop-label-m-base-size);
-      line-height: var(--desktop-label-m-base-line-height);
-    }
-
-    .tk-currency-input__dropdown-menu {
-      top: var(--spacing-10xl);
-    }
-
-    .tk-currency-input__dropdown-menu-list-item {
-      font-size: var(--desktop-label-m-base-size);
-      line-height: var(--desktop-label-m-base-line-height);
+      .tk-currency-input-input,
+      .tk-currency-input-dropdown-button {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
     }
   }
 
-  &--small {
-    .tk-currency-input__wrapper {
-      height: var(--spacing-8xl);
+  &.tk-currency-input-container-small {
+    .tk-currency-input-label {
       padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
-    }
-
-    .tk-currency-input__label {
-      font-size: var(--desktop-label-s-size);
-      line-height: var(--desktop-label-s-line-height);
-      padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
-    }
-
-    .tk-currency-input__label-title {
-      font-size: var(--desktop-label-s-size);
-      line-height: var(--desktop-label-s-line-height);
-    }
-
-    .tk-currency-input__dropdown-menu {
-      top: var(--spacing-8xl);
-    }
-
-    .tk-currency-input__dropdown-menu-list-item {
-      font-size: var(--desktop-label-s-size);
-      line-height: var(--desktop-label-s-line-height);
-    }
-  }
-
-  &__label {
-    display: flex;
-    align-items: flex-start;
-    box-sizing: border-box;
-
-    &-title {
-      color: var(--text-darkest);
-      font-family: var(--desktop-label-s-font, 'Georgia');
-      font-weight: var(--weight-medium);
-    }
-    &-red-asterisk {
-      color: var(--states-danger-base);
-      font-size: var(--desktop-label-m-base-size);
-      font-weight: var(--weight-regular);
-      line-height: var(--desktop-label-s-line-height);
-    }
-  }
-
-  &__wrapper {
-    box-sizing: border-box;
-    position: relative;
-    display: flex;
-    width: -webkit-fill-available;
-    color: var(--text-darkest);
-    font-family: var(--desktop-label-s-font, 'Georgia');
-    border-radius: var(--button-sizes-large-radius);
-    border: var(--spacing-px) solid var(--border-light);
-    background: var(--static-light);
-
-    &--focus {
-      border: var(--spacing-px) solid var(--states-info-base);
-    }
-
-    &:hover {
-      background-color: var(--background-lightest);
-    }
-  }
-
-  &__dropdown {
-    box-sizing: border-box;
-
-    &-button {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      width: max-content;
-      height: 100%;
-      border: none;
-      font-family: var(--desktop-label-s-font, 'Georgia');
-      font-size: var(--desktop-label-l-size);
-      font-weight: var(--weight-medium);
-      color: var(--text-darkest);
-      background-color: transparent;
-      padding-right: var(--input-external-label-large-label-h-padding);
-
-      &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-        color: var(--text-sub-base);
-        pointer-events: none;
-
-        .tk-currency-input__dropdown-button-selected {
-          opacity: 0.6;
-        }
-      }
-
-      &-selected {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xs);
-        border-left: var(--spacing-px) solid var(--border-light);
-        padding-left: var(--input-external-label-large-label-h-padding);
+      .tk-currency-input-label-title {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
       }
     }
 
-    &-menu {
-      position: fixed;
-      right: var(--spacing-none);
-      z-index: 800;
-      background: var(--static-light);
-      border: var(--spacing-px) solid var(--border-light);
-      border-radius: var(--button-sizes-large-radius);
-      box-shadow: var(--effect-1-default-sm);
-      width: var(--spacing-80xl);
-      display: flex;
-      flex-direction: column;
+    .tk-currency-input-wrapper {
+      padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
+      gap: var(--input-external-label-small-input-gap);
 
-      &-search {
-        padding: var(--spacing-m-base);
-      }
-
-      &-list {
-        list-style: none;
-        padding: var(--spacing-none);
-        margin: var(--spacing-none) var(--spacing-m-base) var(--spacing-none) var(--spacing-none);
-        max-height: var(--spacing-56xl);
-        overflow-y: auto;
-
-        &-item {
-          display: flex;
-          align-items: center;
-          gap: var(--spacing-xs);
-          padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
-          cursor: pointer;
-          transition: background-color 0.2s;
-          font-family: var(--desktop-label-s-font, 'Georgia');
-
-          &:hover {
-            background-color: var(--background-lightest);
-          }
-
-          &-country-label {
-            flex-grow: 1;
-            white-space: nowrap;
-            color: var(--text-darkest);
-            font-size: var(--size-sm);
-          }
-
-          &-dial-id {
-            color: var(--text-darkest);
-            font-size: var(--desktop-label-m-base-size);
-          }
-        }
-
-        /* width */
-        &::-webkit-scrollbar {
-          width: var(--spacing-l);
-        }
-
-        /* Track */
-        &::-webkit-scrollbar-track {
-          background: var(--background-lightest);
-          border-radius: var(--radius-m-base);
-        }
-
-        /* Handle */
-        &::-webkit-scrollbar-thumb {
-          background: var(--secondary-300);
-          border-radius: var(--radius-m-base);
-        }
-
-        /* Handle on hover */
-        &::-webkit-scrollbar-thumb:hover {
-          background: var(--secondary-400);
-        }
+      .tk-currency-input-input,
+      .tk-currency-input-dropdown-button {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-line-height-xs-normal);
       }
     }
   }
 
-  &__input {
-    border: none;
-    font-family: var(--desktop-label-s-font, 'Georgia');
-    font-size: var(--desktop-label-l-size);
-    font-weight: var(--weight-medium);
-    background-color: transparent;
-    outline: none;
-    color: var(--text-darkest);
-    width: inherit;
-
-    &::placeholder {
-      color: var(--text-sub-base);
-    }
-  }
-
-  &__hint {
+  .tk-currency-input-hint,
+  .tk-currency-input-error {
     color: var(--text-base);
     line-height: var(--desktop-label-s-line-height);
     font-size: var(--desktop-label-s-size);
-    font-weight: 300;
+    font-weight: var(--weight-medium);
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-
-    &-icon {
-      font-size: var(--size-base);
-      width: var(--size-base);
-      height: var(--size-base);
-      color: var(--icon-base);
-    }
+    padding-left: var(--spacing-xs);
+  }
+  .tk-currency-input-error {
+    color: var(--states-danger-base);
   }
 }
