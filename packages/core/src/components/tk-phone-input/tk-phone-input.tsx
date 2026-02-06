@@ -509,9 +509,9 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private createDropdownList() {
     return (
-      <div class="tk-phone-input-menu">
+      <ul class="tk-phone-input-menu">
         {this.getFilteredCountries().map(country => (
-          <div
+          <li
             class="tk-phone-input-menu-item"
             onClick={() => this.handleCountrySelect(country)}
             key={country.id}
@@ -521,9 +521,9 @@ export class TkPhoneInput implements ComponentInterface {
             {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
             {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
             {country.dialCode && <span class="tk-phone-input-menu-dial-id">{country.dialCode}</span>}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     );
   }
 

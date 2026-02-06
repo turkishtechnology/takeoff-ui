@@ -27,6 +27,16 @@
       "defaultValue": "TRY"
     },
     {
+      "key": "dropdownWidthMode",
+      "label": "Dropdown Width",
+      "type": "select",
+      "defaultValue": "match-parent",
+      "options": [
+        { "label": "Match Parent", "value": "match-parent" },
+        { "label": "Auto", "value": "auto" }
+      ]
+    },
+    {
       "key": "label",
       "label": "Label",
       "type": "text",
