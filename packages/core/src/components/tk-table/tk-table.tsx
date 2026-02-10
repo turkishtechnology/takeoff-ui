@@ -58,6 +58,7 @@ export class TkTable implements ComponentInterface {
   @State() groupedData: ITableGroup[] = [];
   @State() groupByColumnField: string = null;
   @State() isControlledGrouping: boolean = false;
+  @State() internalRowsPerPage: number;
 
   /**
    * The column definitions (Array of Objects)
@@ -109,8 +110,8 @@ export class TkTable implements ComponentInterface {
       const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
         this.currentPage = 1;
-        const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-        const endIndex = startIndex + this.rowsPerPage;
+        const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+        const endIndex = startIndex + this.internalRowsPerPage;
         this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
         this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
@@ -143,7 +144,13 @@ export class TkTable implements ComponentInterface {
   /**
    * Number of items per page.
    */
-  @Prop({ mutable: true }) rowsPerPage: number = 6;
+  @Prop() rowsPerPage: number = 6;
+  @Watch('rowsPerPage')
+  rowsPerPageChanged(newValue: number, oldValue: number) {
+    if (oldValue !== newValue) {
+      this.internalRowsPerPage = newValue;
+    }
+  }
 
   /**
    * Number of rows per page options
@@ -294,6 +301,8 @@ export class TkTable implements ComponentInterface {
     // Determine if this is a controlled component based on initial groupBy prop
     this.isControlledGrouping = this.groupBy !== undefined;
 
+    this.internalRowsPerPage = this.rowsPerPage;
+
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
     }
@@ -401,7 +410,7 @@ export class TkTable implements ComponentInterface {
   async serverRequest() {
     const requestData = {
       currentPage: this.currentPage,
-      rowsPerPage: this.rowsPerPage,
+      rowsPerPage: this.internalRowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
@@ -738,8 +747,8 @@ export class TkTable implements ComponentInterface {
     });
 
     if (this.paginationMethod === 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = flatRenderData.slice(startIndex, endIndex);
     } else {
       this.renderData = flatRenderData;
@@ -774,7 +783,7 @@ export class TkTable implements ComponentInterface {
     if (!isWillLoad) {
       const requestData = {
         currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
+        rowsPerPage: this.internalRowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
@@ -790,8 +799,8 @@ export class TkTable implements ComponentInterface {
     }
 
     if (this.paginationMethod == 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = _data.slice(startIndex, endIndex);
       this.totalItems = _data?.length;
     } else {
@@ -1627,8 +1636,8 @@ export class TkTable implements ComponentInterface {
     let endIndex = this.renderData.length;
 
     if (this.paginationMethod === 'client') {
-      startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      endIndex = startIndex + this.rowsPerPage;
+      startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      endIndex = startIndex + this.internalRowsPerPage;
     }
 
     let currentRowIndex = 0;
@@ -2192,14 +2201,14 @@ export class TkTable implements ComponentInterface {
         <tk-pagination
           type={this.paginationType}
           totalItems={this.totalItems}
-          rowsPerPage={this.rowsPerPage}
+          rowsPerPage={this.internalRowsPerPage}
           rowsPerPageOptions={this.rowsPerPageOptions}
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
-            this.rowsPerPage = e.detail;
+            this.internalRowsPerPage = e.detail;
             const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;
