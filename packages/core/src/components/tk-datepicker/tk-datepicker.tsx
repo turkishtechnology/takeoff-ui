@@ -1366,8 +1366,10 @@ export class TkDatePicker {
             this.internalStartTime = { hour: parsedTime.getHours(), minute: parsedTime.getMinutes() };
             this.internalEndTime = this.internalStartTime;
             this.isInvalid = false;
-            this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
-          } else {
+            if (!this.allowApplyButton) {
+              this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
+            }
+          } else if (!this.allowApplyButton) {
             this.isInvalid = true;
             this.tkChange.emit(undefined);
           }
@@ -1393,7 +1395,7 @@ export class TkDatePicker {
             this.isInvalid = false;
             const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
             this.tkChange.emit(formattedValue);
-          } else {
+          } else if (!this.allowApplyButton) {
             this.isInvalid = true;
           }
         }
@@ -1402,9 +1404,10 @@ export class TkDatePicker {
         this.internalSelectedDates = { start: null, end: null };
         this.internalStartTime = null;
         this.internalEndTime = null;
-        this.tkChange.emit(undefined);
+        if (!this.allowApplyButton) {
+          this.tkChange.emit(undefined);
+        }
       }
-      this.inputValue = this.formatInputValue();
     }, 300);
   };
 
