@@ -206,7 +206,7 @@ export class TkDatePicker {
 
   /**
    * Whether to require manual confirmation (Apply button) before committing changes.
-   * If true, changes are only applied when applyChanges() is called.
+   * If true, changes are only applied when apply() is called.
    * @defaultValue false
    */
   @Prop() allowApplyButton: boolean = false;
@@ -438,44 +438,15 @@ export class TkDatePicker {
       this.internalStartTime = null;
       this.internalEndTime = null;
     }
-    this.applyChanges();
+    this.handleApply();
   }
 
   /**
    * Applies the current internal selection and emits tk-change
    */
   @Method()
-  async applyChanges() {
-    const { start, end } = this.internalSelectedDates;
-    let emitValue: IDateSelection | string | null = null;
-
-    if (this.timeOnly) {
-      if (this.internalStartTime) {
-        const tempDate = new Date();
-        tempDate.setHours(this.internalStartTime.hour, this.internalStartTime.minute, 0, 0);
-        emitValue = format(tempDate, this.getOnlyTimeFormat());
-      }
-    } else {
-      const formattedStart = start ? this.formatDateOrDateTime(start, 'start') : null;
-      if (this.mode === 'range') {
-        emitValue = {
-          start: formattedStart || '',
-          end: end ? this.formatDateOrDateTime(end, 'end') : undefined,
-        };
-      } else {
-        emitValue = formattedStart;
-      }
-    }
-
-    this.inputValue = this.formatInputValue();
-    this.value = emitValue;
-    this.tkChange.emit(emitValue);
-
-    if (!this.inline && this.isOpen) {
-      this.isOpen = false;
-    }
-    this.isInvalid = false;
-    this.currentView = 'days';
+  async apply() {
+    this.handleApply();
   }
 
   /**
@@ -1061,6 +1032,39 @@ export class TkDatePicker {
     return { time: timeState, type: targetType };
   }
 
+  private handleApply = () => {
+    const { start, end } = this.internalSelectedDates;
+    let emitValue: IDateSelection | string | null = null;
+
+    if (this.timeOnly) {
+      if (this.internalStartTime) {
+        const tempDate = new Date();
+        tempDate.setHours(this.internalStartTime.hour, this.internalStartTime.minute, 0, 0);
+        emitValue = format(tempDate, this.getOnlyTimeFormat());
+      }
+    } else {
+      const formattedStart = start ? this.formatDateOrDateTime(start, 'start') : null;
+      if (this.mode === 'range') {
+        emitValue = {
+          start: formattedStart || '',
+          end: end ? this.formatDateOrDateTime(end, 'end') : undefined,
+        };
+      } else {
+        emitValue = formattedStart;
+      }
+    }
+
+    this.inputValue = this.formatInputValue();
+    this.value = emitValue;
+    this.tkChange.emit(emitValue);
+
+    if (!this.inline && this.isOpen) {
+      this.isOpen = false;
+    }
+    this.isInvalid = false;
+    this.currentView = 'days';
+  };
+
   private handleIncreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
@@ -1318,7 +1322,7 @@ export class TkDatePicker {
     }
     this.remeasureCalendarOnNextFrame();
     if (!this.allowApplyButton) {
-      this.applyChanges();
+      this.handleApply();
     }
     this.isInvalid = false;
   };
