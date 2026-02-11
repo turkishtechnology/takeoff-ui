@@ -11,12 +11,21 @@ export interface ControlConfig {
   tooltip?: string | {}; // Optional tooltip for the control
 }
 
+export interface ChildConfig {
+  type: 'text' | 'component';
+  content?: string; // for type: 'text'
+  componentName?: string; // for type: 'component'
+  props?: Record<string, string | number | boolean>;
+  children?: ChildConfig[]; // recursive nesting
+}
+
 export interface ComponentConfig {
   name: string;
   component?: React.ComponentType<any>;
   componentName?: string;
   defaultChildren?: React.ReactNode;
   hasChildren?: boolean; // Indicates if the component can have children
+  children?: ChildConfig[];
   props: ControlConfig[];
   examples?: {
     name: string;
@@ -38,6 +47,7 @@ export interface ConfigWithComponentName {
   componentName?: string;
   defaultChildren?: React.ReactNode;
   hasChildren?: boolean; // Indicates if the component can have children
+  children?: ChildConfig[];
   props: ControlConfig[];
   examples?: {
     name: string;

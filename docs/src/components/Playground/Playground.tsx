@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { ControlConfig, PlaygroundProps } from './Playground.types';
+import type { ChildConfig, ControlConfig, PlaygroundProps } from './Playground.types';
 import './playground.css';
 import { createConfigFromJson } from './utils/createConfig';
 import { TkButton, TkInput, TkSelect, TkCheckbox, TkTooltip, TkTabs, TkTabsItem } from '@takeoff-ui/react';
@@ -106,10 +106,41 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
     }
   };
 
+  const renderChildren = (children: ChildConfig[]): React.ReactNode[] => {
+    return children.map((child, index) => {
+      if (child.type === 'text') {
+        return <span key={index}>{child.content}</span>;
+      }
+      if (child.type === 'component' && child.componentName) {
+        const ChildComponent = componentMap[child.componentName];
+        if (!ChildComponent) return null;
+        const childProps = child.props || {};
+        if (child.children && child.children.length > 0) {
+          return (
+            <ChildComponent key={index} {...childProps}>
+              {renderChildren(child.children)}
+            </ChildComponent>
+          );
+        }
+        return <ChildComponent key={index} {...childProps} />;
+      }
+      return null;
+    });
+  };
+
   const renderPreviewComponent = () => {
     const Component = currentConfig.component;
 
     const cleanProps = Object.fromEntries(Object.entries(propValues).filter(([_, value]) => value !== undefined && value !== null && (typeof value !== 'string' || value !== '')));
+
+    const childConfigs = currentConfig.children;
+    if (childConfigs && childConfigs.length > 0) {
+      return <Component {...cleanProps}>{renderChildren(childConfigs)}</Component>;
+    }
+
+    if (currentConfig.hasChildren && currentConfig.defaultChildren) {
+      return <Component {...cleanProps}>{currentConfig.defaultChildren}</Component>;
+    }
 
     return <Component {...cleanProps} />;
   };
