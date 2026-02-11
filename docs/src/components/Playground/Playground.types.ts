@@ -17,6 +17,7 @@ export interface ChildConfig {
   componentName?: string; // for type: 'component'
   props?: Record<string, string | number | boolean>;
   children?: ChildConfig[]; // recursive nesting
+  slot?: string; // named slot target (e.g. "content", "header")
 }
 
 export interface ComponentConfig {
@@ -26,6 +27,7 @@ export interface ComponentConfig {
   defaultChildren?: React.ReactNode;
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
+  fullWidth?: boolean; // Stretch component to fill preview width
   props: ControlConfig[];
   examples?: {
     name: string;
@@ -48,6 +50,7 @@ export interface ConfigWithComponentName {
   defaultChildren?: React.ReactNode;
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
+  fullWidth?: boolean; // Stretch component to fill preview width
   props: ControlConfig[];
   examples?: {
     name: string;

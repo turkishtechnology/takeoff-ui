@@ -109,12 +109,16 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
   const renderChildren = (children: ChildConfig[]): React.ReactNode[] => {
     return children.map((child, index) => {
       if (child.type === 'text') {
-        return <span key={index}>{child.content}</span>;
+        return (
+          <span key={index} {...(child.slot ? { slot: child.slot } : {})}>
+            {child.content}
+          </span>
+        );
       }
       if (child.type === 'component' && child.componentName) {
         const ChildComponent = componentMap[child.componentName];
         if (!ChildComponent) return null;
-        const childProps = child.props || {};
+        const childProps = { ...(child.props || {}), ...(child.slot ? { slot: child.slot } : {}) };
         if (child.children && child.children.length > 0) {
           return (
             <ChildComponent key={index} {...childProps}>
@@ -133,16 +137,28 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
 
     const cleanProps = Object.fromEntries(Object.entries(propValues).filter(([_, value]) => value !== undefined && value !== null && (typeof value !== 'string' || value !== '')));
 
+    // Key forces remount when props change — needed for web components that
+    // don't react to attribute updates after initial render.
+    const componentKey = JSON.stringify(cleanProps);
+
     const childConfigs = currentConfig.children;
     if (childConfigs && childConfigs.length > 0) {
-      return <Component {...cleanProps}>{renderChildren(childConfigs)}</Component>;
+      return (
+        <Component key={componentKey} {...cleanProps}>
+          {renderChildren(childConfigs)}
+        </Component>
+      );
     }
 
     if (currentConfig.hasChildren && currentConfig.defaultChildren) {
-      return <Component {...cleanProps}>{currentConfig.defaultChildren}</Component>;
+      return (
+        <Component key={componentKey} {...cleanProps}>
+          {currentConfig.defaultChildren}
+        </Component>
+      );
     }
 
-    return <Component {...cleanProps} />;
+    return <Component key={componentKey} {...cleanProps} />;
   };
 
   const generateCodeString = (framework: 'react' | 'vue' | 'angular') => {
@@ -359,7 +375,7 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
     return (
       <div className="playground-preview">
         <h3 className="playground-section-title">Preview</h3>
-        <div className="playground-component-wrapper">{renderPreviewComponent()}</div>
+        <div className={`playground-component-wrapper${currentConfig.fullWidth ? ' full-width' : ''}`}>{renderPreviewComponent()}</div>
       </div>
     );
   }
