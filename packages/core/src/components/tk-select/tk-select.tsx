@@ -793,7 +793,8 @@ export class TkSelect implements ComponentInterface {
 
   private handleInputClick(e) {
     if (!this.disabled && !this.readonly) {
-      if (e.composedPath().some(el => el.tagName === 'TK-ICON')) {
+      const isChevron = e.composedPath().some(el => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+      if (isChevron) {
         this.isOpen = !this.isOpen;
       } else if (!this.isOpen) {
         this.isOpen = true;
