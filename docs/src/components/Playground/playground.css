@@ -107,6 +107,10 @@
   align-items: center;
 }
 
+.playground-component-wrapper.full-width > * {
+  width: 100%;
+}
+
 .playground-stats {
   display: grid;
   gap: 8px;

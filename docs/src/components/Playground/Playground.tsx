@@ -287,6 +287,143 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
       return currentConfig.name;
     };
 
+    const generateChildrenCode = (children: ChildConfig[], indent: number): React.ReactNode[] => {
+      const pad = '  '.repeat(indent);
+      return children.map((child, index) => {
+        if (child.type === 'text') {
+          return (
+            <div key={`child-${index}`}>
+              {pad}
+              {child.slot ? (
+                <>
+                  <span className="syntax-bracket">{'<'}</span>
+                  <span className="syntax-component-name">span</span> <span className="syntax-attribute">slot</span>
+                  <span className="syntax-operator">=</span>
+                  <span className="syntax-attr-equals">"</span>
+                  <span className="syntax-value">{child.slot}</span>
+                  <span className="syntax-attr-equals">"</span>
+                  <span className="syntax-bracket">{'>'}</span>
+                  <span className="syntax-value">{child.content}</span>
+                  <span className="syntax-bracket">{'</'}</span>
+                  <span className="syntax-component-name">span</span>
+                  <span className="syntax-bracket">{'>'}</span>
+                </>
+              ) : (
+                <span className="syntax-value">{child.content}</span>
+              )}
+            </div>
+          );
+        }
+        if (child.type === 'component' && child.componentName) {
+          const childName = framework === 'angular' ? child.componentName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() : child.componentName;
+          const childPropEntries = Object.entries(child.props || {}).filter(([_, v]) => v !== undefined && v !== null && v !== '');
+          if (child.slot) {
+            childPropEntries.unshift(['slot', child.slot]);
+          }
+          const childPropElements = childPropEntries
+            .map(([key, value]) => {
+              if (typeof value === 'string') {
+                return (
+                  <span key={key}>
+                    {' '}
+                    <span className="syntax-attribute">{key}</span>
+                    <span className="syntax-operator">=</span>
+                    <span className="syntax-attr-equals">"</span>
+                    <span className="syntax-value">{value}</span>
+                    <span className="syntax-attr-equals">"</span>
+                  </span>
+                );
+              } else if (typeof value === 'boolean') {
+                if (!value) return null;
+                if (framework === 'react') {
+                  return (
+                    <span key={key}>
+                      {' '}
+                      <span className="syntax-attribute">{key}</span>
+                    </span>
+                  );
+                }
+                return (
+                  <span key={key}>
+                    {' '}
+                    <span className="syntax-attribute">{key}</span>
+                    <span className="syntax-operator">=</span>
+                    <span className="syntax-attr-equals">"</span>
+                    <span className="syntax-boolean">true</span>
+                    <span className="syntax-attr-equals">"</span>
+                  </span>
+                );
+              } else {
+                return (
+                  <span key={key}>
+                    {' '}
+                    <span className="syntax-attribute">{key}</span>
+                    <span className="syntax-operator">=</span>
+                    <span className="syntax-bracket">{'{'}</span>
+                    <span className="syntax-number">{JSON.stringify(value)}</span>
+                    <span className="syntax-bracket">{'}'}</span>
+                  </span>
+                );
+              }
+            })
+            .filter(Boolean);
+
+          if (child.children && child.children.length > 0) {
+            return (
+              <div key={`child-${index}`}>
+                {pad}
+                <span className="syntax-bracket">{'<'}</span>
+                <span className="syntax-component-name">{childName}</span>
+                {childPropElements}
+                <span className="syntax-bracket">{'>'}</span>
+                {generateChildrenCode(child.children, indent + 1)}
+                {pad}
+                <span className="syntax-bracket">{'</'}</span>
+                <span className="syntax-component-name">{childName}</span>
+                <span className="syntax-bracket">{'>'}</span>
+              </div>
+            );
+          }
+
+          return (
+            <div key={`child-${index}`}>
+              {pad}
+              <span className="syntax-bracket">{'<'}</span>
+              <span className="syntax-component-name">{childName}</span>
+              {childPropElements}
+              <span className="syntax-bracket">{' />'}</span>
+            </div>
+          );
+        }
+        return null;
+      });
+    };
+
+    const childConfigs = currentConfig.children;
+    const hasDefaultChildren = currentConfig.hasChildren && currentConfig.defaultChildren;
+
+    if ((childConfigs && childConfigs.length > 0) || hasDefaultChildren) {
+      return (
+        <div>
+          <span className="syntax-bracket">{'<'}</span>
+          <span className="syntax-component-name">{getComponentName()}</span>
+          {props.length > 0 && <>{props}</>}
+          <span className="syntax-bracket">{'>'}</span>
+          {childConfigs && childConfigs.length > 0 ? (
+            generateChildrenCode(childConfigs, 1)
+          ) : (
+            <div>
+              {'  '}
+              <span className="syntax-value">{String(currentConfig.defaultChildren)}</span>
+            </div>
+          )}
+          <span className="syntax-bracket">{'</'}</span>
+          <span className="syntax-component-name">{getComponentName()}</span>
+          <span className="syntax-bracket">{'>'}</span>
+        </div>
+      );
+    }
+
     return (
       <div>
         <span className="syntax-bracket">{'<'}</span>
@@ -339,6 +476,56 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
       }
       return currentConfig.name;
     };
+
+    const generateChildrenText = (children: ChildConfig[], indent: number): string => {
+      const pad = '  '.repeat(indent);
+      return children
+        .map(child => {
+          if (child.type === 'text') {
+            if (child.slot) {
+              return `${pad}<span slot="${child.slot}">${child.content}</span>`;
+            }
+            return `${pad}${child.content}`;
+          }
+          if (child.type === 'component' && child.componentName) {
+            const childName = framework === 'angular' ? child.componentName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() : child.componentName;
+            const childPropEntries = Object.entries(child.props || {}).filter(([_, v]) => v !== undefined && v !== null && v !== '');
+            if (child.slot) {
+              childPropEntries.unshift(['slot', child.slot]);
+            }
+            const childPropsStr = childPropEntries
+              .map(([key, value]) => {
+                if (typeof value === 'string') return `${key}="${value}"`;
+                if (typeof value === 'boolean') {
+                  if (!value) return '';
+                  if (framework === 'react') return key;
+                  return `${key}="true"`;
+                }
+                return `${key}={${JSON.stringify(value)}}`;
+              })
+              .filter(Boolean)
+              .join(' ');
+            const propsSegment = childPropsStr ? ` ${childPropsStr}` : '';
+
+            if (child.children && child.children.length > 0) {
+              const nestedChildren = generateChildrenText(child.children, indent + 1);
+              return `${pad}<${childName}${propsSegment}>\n${nestedChildren}\n${pad}</${childName}>`;
+            }
+            return `${pad}<${childName}${propsSegment} />`;
+          }
+          return '';
+        })
+        .filter(Boolean)
+        .join('\n');
+    };
+
+    const childConfigs = currentConfig.children;
+    const hasDefaultChildren = currentConfig.hasChildren && currentConfig.defaultChildren;
+
+    if ((childConfigs && childConfigs.length > 0) || hasDefaultChildren) {
+      const childrenStr = childConfigs && childConfigs.length > 0 ? generateChildrenText(childConfigs, 1) : `  ${String(currentConfig.defaultChildren)}`;
+      return `<${getComponentName()}${propsString}>\n${childrenStr}\n</${getComponentName()}>`;
+    }
 
     return `<${getComponentName()}${propsString} />`;
   };
