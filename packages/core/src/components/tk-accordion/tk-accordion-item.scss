@@ -104,4 +104,29 @@
       line-height: var(--desktop-body-s-line-height);
     }
   }
+
+  &.compact {
+    margin: 0;
+    border-radius: 0;
+    border-bottom: 0;
+
+    &.divided {
+      gap: 0;
+      .header,
+      .content {
+        border-radius: 0;
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
+:host(:last-of-type) {
+  .tk-accordion-item.compact {
+    &.grouped,
+    &.divided:not(.open) .header,
+    &.divided .content.open {
+      border-bottom: 1px solid var(--border-light);
+    }
+  }
 }

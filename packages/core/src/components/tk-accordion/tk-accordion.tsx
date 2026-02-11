@@ -84,6 +84,12 @@ export class TkAccordion implements ComponentInterface {
   @Prop() type: 'grouped' | 'divided' = 'grouped';
 
   /**
+   * Controls the display mode of the accordion component.
+   * @defaultValue 'default'
+   */
+  @Prop() mode: 'default' | 'compact' = 'default';
+
+  /**
    * Emitted when an active index is changed
    */
   @Event({ eventName: 'tk-active-index-change' }) tkActiveIndexChange: EventEmitter<string | number | (string | number)[]>;

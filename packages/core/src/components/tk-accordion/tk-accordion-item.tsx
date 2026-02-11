@@ -23,6 +23,7 @@ export class TkAccordionItem implements ComponentInterface {
   @State() collapseIcon: string | IIconOptions;
   @State() hideArrows: boolean = false;
   @State() hasHeaderSlot = false;
+  @State() mode: 'default' | 'compact' = 'default';
 
   /**
    * Sets if the accordion is active.
@@ -71,6 +72,7 @@ export class TkAccordionItem implements ComponentInterface {
       this.expandIcon = this.parentEl.expandIcon;
       this.collapseIcon = this.parentEl.collapseIcon;
       this.hideArrows = this.parentEl.hideArrows;
+      this.mode = this.parentEl.mode;
     }
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
   }
