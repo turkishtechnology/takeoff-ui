@@ -84,10 +84,13 @@ export class TkAccordionItem implements ComponentInterface {
     } else {
       _renderIcon = this.expandIcon;
     }
-
+    const iconSizes = {
+      large: 'large',
+      base: 'medium',
+    };
     const icon = (
       <tk-icon
-        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'span')}
+        {...getIconElementProps(_renderIcon, { size: iconSizes[this.size], class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null }, 'outlined', 'i')}
       ></tk-icon>
     );
 
@@ -102,18 +105,23 @@ export class TkAccordionItem implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-accordion-item', this.size, this.type, {
+    const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
 
-    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
+    const iconSizes = {
+      large: 'base',
+      base: 'small',
+    };
+
+    const icon = <tk-icon {...getIconElementProps(this.icon, { size: iconSizes[this.size], class: 'tk-accordion-item-icon', variant: 'neutral', sign: true })}></tk-icon>;
 
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
             {this.arrowPosition === 'left' && this.createIcon()}
-            {icon}
+            <span class="icon">{icon}</span>
             <span class="title">{this.createHeader()}</span>
             {this.arrowPosition === 'right' && this.createIcon()}
           </div>
