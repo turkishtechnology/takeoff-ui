@@ -54,13 +54,13 @@
     border: 1px solid var(--border-light);
     background: var(--static-light);
 
-    &:hover {
-      background: var(--background-lightest);
-    }
-
     &.open {
       .header {
         padding-bottom: 0;
+      }
+      :hover {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
       }
     }
 
@@ -110,6 +110,9 @@
     border-radius: 0;
     border-bottom: 0;
 
+    .header:hover {
+      border-radius: 0;
+    }
     &.divided {
       gap: 0;
       .header,
