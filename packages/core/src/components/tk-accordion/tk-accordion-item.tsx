@@ -23,6 +23,7 @@ export class TkAccordionItem implements ComponentInterface {
   @State() collapseIcon: string | IIconOptions;
   @State() hideArrows: boolean = false;
   @State() hasHeaderSlot = false;
+  @State() mode: 'default' | 'compact' = 'default';
 
   /**
    * Sets if the accordion is active.
@@ -71,6 +72,7 @@ export class TkAccordionItem implements ComponentInterface {
       this.expandIcon = this.parentEl.expandIcon;
       this.collapseIcon = this.parentEl.collapseIcon;
       this.hideArrows = this.parentEl.hideArrows;
+      this.mode = this.parentEl.mode;
     }
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
   }
@@ -84,10 +86,9 @@ export class TkAccordionItem implements ComponentInterface {
     } else {
       _renderIcon = this.expandIcon;
     }
-
     const icon = (
       <tk-icon
-        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'span')}
+        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'i')}
       ></tk-icon>
     );
 
@@ -102,18 +103,18 @@ export class TkAccordionItem implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-accordion-item', this.size, this.type, {
+    const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
 
-    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
+    const icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-accordion-item-icon', variant: 'neutral', sign: true })}></tk-icon>;
 
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
             {this.arrowPosition === 'left' && this.createIcon()}
-            {icon}
+            <span class="icon">{icon}</span>
             <span class="title">{this.createHeader()}</span>
             {this.arrowPosition === 'right' && this.createIcon()}
           </div>
