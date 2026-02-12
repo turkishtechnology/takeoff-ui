@@ -936,6 +936,7 @@ export class TkSelect implements ComponentInterface {
 
   private createOptionItem(options: any[], startIndex: number = 0) {
     return options?.map((item, index) => {
+      const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
       let itemProps = {};
       let children;
       const checking = some(this.value, itemValue => isEqual(itemValue, this.getOptionValue(item)));
@@ -943,14 +944,14 @@ export class TkSelect implements ComponentInterface {
         if (this.optionHtml != undefined) {
           children = (
             <Fragment>
-              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+              <tk-checkbox value={checking} disabled={isDisabled} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div class="multiple-option-content" innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
           children = (
             <Fragment>
-              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+              <tk-checkbox value={checking} disabled={isDisabled} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div>{this.getOptionLabel(item)}</div>
             </Fragment>
           );
@@ -962,7 +963,6 @@ export class TkSelect implements ComponentInterface {
           itemProps = { innerHTML: this.getOptionLabel(item) };
         }
       }
-      const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
 
       return (
         <div
@@ -998,7 +998,7 @@ export class TkSelect implements ComponentInterface {
             ></tk-checkbox>
             <div>{this.selectAllLabel}</div>
           </div>
-          <tk-divider my={1} style={{ margin: '4px' }} />
+          <tk-divider my={1} style={{ margin: '6px 4px 0px' }} />
         </div>
       );
     }
