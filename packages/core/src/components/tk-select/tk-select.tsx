@@ -785,20 +785,24 @@ export class TkSelect implements ComponentInterface {
         this.tkChange.emit(null);
       }
     }
-    // girilen değer değişince dropdown açılsın
-    if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.isOpen = true;
-    }
   }
 
   private handleInputClick(e) {
-    if (!this.disabled && !this.readonly) {
-      const isChevron = e.composedPath().some(el => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
-      if (isChevron) {
-        this.isOpen = !this.isOpen;
-      } else if (!this.isOpen) {
-        this.isOpen = true;
-      }
+    if (this.disabled || this.readonly) return;
+
+    const path = e.composedPath();
+    const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
+    const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+
+    if (isClearButton) return;
+
+    if (isChevron) {
+      this.isOpen = !this.isOpen;
+      return;
+    }
+
+    if (!this.isOpen) {
+      this.isOpen = true;
     }
   }
 
