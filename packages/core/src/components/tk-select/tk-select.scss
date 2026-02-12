@@ -61,13 +61,13 @@ tk-select {
         &[data-selected='true'] {
           cursor: pointer;
           background: var(--states-info-lightest);
-          border: 1px solid var(--states-info-light);
+          outline: 1px solid var(--states-info-light);
         }
         &.disabled {
           cursor: not-allowed;
           background: var(--background-lightest);
-          border: 1px solid var(--border-light);
           color: var(--text-sub-base);
+          outline: none;
         }
         &:hover {
           cursor: pointer;
@@ -75,7 +75,7 @@ tk-select {
         }
         &[data-active='true'] {
           cursor: pointer;
-          border: 1px solid var(--states-info-base);
+          outline: 1px solid var(--background-light);
         }
       }
     }
