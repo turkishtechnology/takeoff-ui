@@ -79,16 +79,16 @@
       box-shadow: var(--effect-1-default-sm);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       .tk-currency-input-dropdown-menu-list {
         list-style: none;
-        padding: var(--spacing-none);
-        margin: 8px;
         max-height: var(--spacing-56xl);
         overflow-y: auto;
 
         .tk-currency-input-dropdown-menu-list-item {
           display: flex;
+          align-items: center;
           gap: var(--spacing-xs);
           padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
           cursor: pointer;
@@ -185,7 +185,8 @@
       gap: var(--input-external-label-large-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-m-size);
         line-height: var(--desktop-body-m-line-height);
       }
@@ -207,7 +208,8 @@
       gap: var(--input-external-label-base-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-s-size);
         line-height: var(--desktop-body-s-line-height);
       }
@@ -228,7 +230,8 @@
       gap: var(--input-external-label-small-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-line-height-xs-normal);
       }

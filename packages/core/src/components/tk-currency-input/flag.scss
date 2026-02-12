@@ -7,10 +7,30 @@ span.flag {
   background: url(https://cdn.turkishairlines.com/m/546a9655f75197ed/original/takeoff-ui-flags.png) no-repeat;
   background-size: 150%;
   vertical-align: middle;
-  width: 20px;
-  height: 20px;
   border-radius: 100%;
   background-position-x: center;
+  align-self: center;
+}
+.tk-currency-input-container-small,
+.tk-phone-input-container-small {
+  .flag {
+    width: 20px;
+    height: 20px;
+  }
+}
+.tk-currency-input-container-base,
+.tk-phone-input-container-base {
+  .flag {
+    width: 22px;
+    height: 22px;
+  }
+}
+.tk-currency-input-container-large,
+.tk-phone-input-container-large {
+  .flag {
+    width: 24px;
+    height: 24px;
+  }
 }
 .flag-ad {
   background-position-y: 0.413223%;
