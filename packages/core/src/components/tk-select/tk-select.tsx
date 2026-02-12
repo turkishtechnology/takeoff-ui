@@ -791,9 +791,14 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
-  private handleInputClick() {
-    if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.isOpen = true;
+  private handleInputClick(e) {
+    if (!this.disabled && !this.readonly) {
+      const isChevron = e.composedPath().some(el => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+      if (isChevron) {
+        this.isOpen = !this.isOpen;
+      } else if (!this.isOpen) {
+        this.isOpen = true;
+      }
     }
   }
 
@@ -1044,7 +1049,7 @@ export class TkSelect implements ComponentInterface {
         chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
         aria-expanded={!!this.isOpen}
-        onClick={() => this.handleInputClick()}
+        onClick={e => this.handleInputClick(e)}
         onTk-change={e => {
           e.stopPropagation();
           this.handleInputChange(e.detail);
