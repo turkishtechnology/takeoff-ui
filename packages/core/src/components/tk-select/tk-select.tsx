@@ -785,14 +785,14 @@ export class TkSelect implements ComponentInterface {
         this.tkChange.emit(null);
       }
     }
-    // girilen değer değişince dropdown açılsın
-    if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.isOpen = true;
-    }
   }
 
-  private handleInputClick() {
-    if (!this.isOpen && !this.disabled && !this.readonly) {
+  private handleInputClick(e) {
+    if (this.disabled || this.readonly) return;
+    if (e.composedPath().some(el => el.classList?.contains('tk-input-clear-button'))) {
+      return;
+    }
+    if (!this.isOpen) {
       this.isOpen = true;
     }
   }
@@ -1044,7 +1044,7 @@ export class TkSelect implements ComponentInterface {
         chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
         aria-expanded={!!this.isOpen}
-        onClick={() => this.handleInputClick()}
+        onClick={e => this.handleInputClick(e)}
         onTk-change={e => {
           e.stopPropagation();
           this.handleInputChange(e.detail);
