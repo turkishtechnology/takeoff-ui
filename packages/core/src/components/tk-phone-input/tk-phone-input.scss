@@ -65,6 +65,7 @@
       box-shadow: var(--effect-1-default-sm);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       .tk-phone-input-dropdown-menu-search {
         padding: var(--spacing-m-base);
@@ -72,13 +73,12 @@
 
       .tk-phone-input-menu {
         list-style: none;
-        padding: var(--spacing-none);
-        margin: 8px;
         max-height: var(--spacing-56xl);
         overflow-y: auto;
 
         .tk-phone-input-menu-item {
           display: flex;
+          align-items: center;
           gap: var(--spacing-xs);
           padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
           cursor: pointer;
