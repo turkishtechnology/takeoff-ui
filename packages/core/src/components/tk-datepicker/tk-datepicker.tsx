@@ -438,7 +438,6 @@ export class TkDatePicker {
       this.internalStartTime = null;
       this.internalEndTime = null;
     }
-    this.handleApply();
   }
 
   /**
