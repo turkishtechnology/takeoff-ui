@@ -1,9 +1,6 @@
 .playground-container {
   display: flex;
   justify-content: space-between;
-  padding: 16px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
   background-color: var(--static-light);
   height: 600px;
   gap: 16px;
