@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import carouselConfigData from './carouselPlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import SlidesPerView from './Examples/SlidesPerView';
 import Circular from './Examples/Circular';
@@ -6,6 +8,11 @@ import PlayerButton from './Examples/PlayerButton';
 import NavigationPlacement from './Examples/NavigationPlacement';
 import ShowIndicatorAndArrows from './Examples/ShowIndicatorAndArrows';
 import Vertical from './Examples/Vertical';
+import { TkCarousel } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[carouselConfigData]} componentMap={{ TkCarousel }} />
 
 ## Basic
 

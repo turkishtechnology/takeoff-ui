@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import stepperConfigData from './stepperPlaygroundConfig.json';
 import Orientation from './Examples/Orientation';
 import StepMode from './Examples/StepMode';
 import LinearMode from './Examples/LinearMode';
@@ -7,6 +9,14 @@ import StyleProps from './Examples/StyleProps';
 import Size from './Examples/Size';
 import Reverse from './Examples/Reverse';
 import Mode from './Examples/Mode';
+import { TkStepper, TkStep } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[stepperConfigData]}
+  componentMap={{ TkStepper, TkStep }}
+/>
 
 ## Step Mode
 

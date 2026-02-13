@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import treeViewConfigData from './treeViewPlaygroundConfig.json';
 import Mode from './examples/Mode';
 import Type from './examples/Type';
 import Size from './examples/Size';
@@ -5,6 +7,11 @@ import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
 import ExpandAll from './examples/ExpandAll';
 import CustomStyles from './examples/CustomStyles';
+import { TkTreeView } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[treeViewConfigData]} componentMap={{ TkTreeView }} />
 
 ## Mode
 

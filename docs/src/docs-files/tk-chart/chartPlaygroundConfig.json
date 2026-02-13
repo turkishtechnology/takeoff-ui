@@ -1,0 +1,54 @@
+{
+  "name": "TkChart",
+  "componentName": "TkChart",
+  "hasChildren": false,
+  "fullWidth": true,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "bar",
+      "options": [
+        { "label": "Bar", "value": "bar" },
+        { "label": "Line", "value": "line" },
+        { "label": "Pie", "value": "pie" },
+        { "label": "Doughnut", "value": "doughnut" },
+        { "label": "Radar", "value": "radar" },
+        { "label": "Polar Area", "value": "polarArea" },
+        { "label": "Scatter", "value": "scatter" },
+        { "label": "Bubble", "value": "bubble" }
+      ]
+    },
+    {
+      "key": "data",
+      "label": "Data",
+      "type": "json",
+      "defaultValue": {
+        "labels": ["Jan", "Feb", "Mar", "Apr", "May"],
+        "datasets": [
+          {
+            "label": "Sales",
+            "data": [12, 19, 3, 5, 2],
+            "backgroundColor": ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"]
+          }
+        ]
+      }
+    },
+    {
+      "key": "height",
+      "label": "Height (px)",
+      "type": "number",
+      "defaultValue": 300,
+      "min": 100,
+      "max": 800
+    },
+    {
+      "key": "width",
+      "label": "Width",
+      "type": "text",
+      "defaultValue": "",
+      "tooltip": "Width of the chart container (e.g. '400px' or '100%')."
+    }
+  ]
+}

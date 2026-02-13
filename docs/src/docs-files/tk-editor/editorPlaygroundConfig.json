@@ -1,0 +1,82 @@
+{
+  "name": "TkEditor",
+  "componentName": "TkEditor",
+  "hasChildren": false,
+  "fullWidth": true,
+  "props": [
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Editor"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "Start typing..."
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "maxLength",
+      "label": "Max Length",
+      "type": "number",
+      "defaultValue": 140,
+      "min": 1,
+      "max": 10000
+    },
+    {
+      "key": "showCounter",
+      "label": "Show Counter",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "hideToolbar",
+      "label": "Hide Toolbar",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "resizable",
+      "label": "Resizable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

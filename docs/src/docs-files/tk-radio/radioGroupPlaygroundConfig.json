@@ -1,0 +1,79 @@
+{
+  "name": "TkRadioGroup",
+  "componentName": "TkRadioGroup",
+  "hasChildren": true,
+  "fullWidth": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkRadio",
+      "props": { "label": "Option 1", "value": "1" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkRadio",
+      "props": { "label": "Option 2", "value": "2" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkRadio",
+      "props": { "label": "Option 3", "value": "3" }
+    }
+  ],
+  "props": [
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Radio Group"
+    },
+    {
+      "key": "direction",
+      "label": "Direction",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "default",
+      "options": [
+        { "label": "Default", "value": "default" },
+        { "label": "Card", "value": "card" }
+      ]
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
+      "key": "spread",
+      "label": "Spread",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
