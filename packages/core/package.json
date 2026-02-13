@@ -54,7 +54,8 @@
     "test": "stencil test --spec --detectOpenHandles --silent",
     "test.coverage": "stencil test --spec --coverage --detectOpenHandles --silent",
     "test.watch": "stencil test --spec --watchAll --detectOpenHandles --silent",
-    "generate": "stencil generate"
+    "generate": "stencil generate",
+    "generate:interfaces": "node scripts/generate-interfaces.js"
   },
   "devDependencies": {
     "@stencil/angular-output-target": "1.1.0",
