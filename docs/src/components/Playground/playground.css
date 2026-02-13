@@ -105,6 +105,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 160px;
 }
 
 .playground-component-wrapper.full-width > * {
@@ -184,4 +185,25 @@ tk-slider {
 .syntax-component-name {
   color: rgb(78, 201, 176);
   font-weight: bold;
+}
+
+/* JSON textarea */
+.playground-json-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  background-color: var(--static-light);
+  color: inherit;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.playground-json-textarea-small {
+  min-height: 40px;
 }

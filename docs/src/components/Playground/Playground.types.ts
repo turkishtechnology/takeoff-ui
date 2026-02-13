@@ -1,10 +1,10 @@
-export type ControlType = 'text' | 'select' | 'checkbox' | 'number';
+export type ControlType = 'text' | 'select' | 'checkbox' | 'number' | 'json';
 
 export interface ControlConfig {
   key: string;
   label: string;
   type: ControlType;
-  defaultValue: string | number | boolean;
+  defaultValue: string | number | boolean | object;
   options?: { label: string; value: string | number | boolean }[];
   min?: number;
   max?: number;
@@ -15,7 +15,7 @@ export interface ChildConfig {
   type: 'text' | 'component';
   content?: string; // for type: 'text'
   componentName?: string; // for type: 'component'
-  props?: Record<string, string | number | boolean>;
+  props?: Record<string, any>;
   children?: ChildConfig[]; // recursive nesting
   slot?: string; // named slot target (e.g. "content", "header")
 }
@@ -28,10 +28,14 @@ export interface ComponentConfig {
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
   fullWidth?: boolean; // Stretch component to fill preview width
+  staticProps?: Record<string, any>; // Props always passed to the component but not shown as controls
+  triggerProp?: string; // Boolean prop key toggled by a trigger button (e.g. "visible", "open")
+  triggerLabel?: string; // Label for the trigger button (e.g. "Open Dialog")
+  triggerCloseEvent?: string; // React event handler name to close the overlay (e.g. "onTkVisibleChange")
   props: ControlConfig[];
   examples?: {
     name: string;
-    props: Record<string, string | number | boolean>;
+    props: Record<string, any>;
     children?: React.ReactNode;
   }[];
 }
@@ -51,10 +55,14 @@ export interface ConfigWithComponentName {
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
   fullWidth?: boolean; // Stretch component to fill preview width
+  staticProps?: Record<string, any>; // Props always passed to the component but not shown as controls
+  triggerProp?: string;
+  triggerLabel?: string;
+  triggerCloseEvent?: string;
   props: ControlConfig[];
   examples?: {
     name: string;
-    props: Record<string, string | number | boolean>;
+    props: Record<string, any>;
     children?: React.ReactNode;
   }[];
 }

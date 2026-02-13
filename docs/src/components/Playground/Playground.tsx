@@ -26,20 +26,25 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
         acc[prop.key] = prop.defaultValue;
         return acc;
       },
-      {} as Record<string, string | number | boolean>,
+      {} as Record<string, any>,
     );
   }
 
-  const [propValues, setPropValues] = useState<Record<string, string | number | boolean>>(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
+  const [propValues, setPropValues] = useState<Record<string, any>>(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
+
+  const [jsonErrors, setJsonErrors] = useState<Record<string, boolean>>({});
+  const [jsonRawValues, setJsonRawValues] = useState<Record<string, string>>({});
 
   const currentConfig = processedConfigs[defaultConfigIndex];
 
-  const handlePropChange = (key: string, value: string | number | boolean) => {
+  const handlePropChange = (key: string, value: any) => {
     setPropValues(prev => ({ ...prev, [key]: value }));
   };
 
   const resetPlayground = () => {
     setPropValues(() => getDefaultPropValues(processedConfigs[defaultConfigIndex]));
+    setJsonErrors({});
+    setJsonRawValues({});
   };
 
   const renderControl = (control: ControlConfig) => {
@@ -101,6 +106,40 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
           return <TkCheckbox {...commonPropsforCheckbox} />;
         }
 
+      case 'json': {
+        const displayValue = jsonErrors[control.key] ? jsonRawValues[control.key] : JSON.stringify(value, null, 2);
+
+        const textarea = (
+          <div>
+            <textarea
+              className={`playground-json-textarea${!Array.isArray(control.defaultValue) && (control.defaultValue === null || typeof control.defaultValue !== 'object') ? ' playground-json-textarea-small' : ''}`}
+              value={displayValue ?? ''}
+              onChange={e => {
+                const raw = e.target.value;
+                setJsonRawValues(prev => ({ ...prev, [control.key]: raw }));
+                try {
+                  const parsed = JSON.parse(raw);
+                  handlePropChange(control.key, parsed);
+                  setJsonErrors(prev => ({ ...prev, [control.key]: false }));
+                } catch {
+                  setJsonErrors(prev => ({ ...prev, [control.key]: true }));
+                }
+              }}
+            />
+            {jsonErrors[control.key] && <span style={{ color: '#e06c75', fontSize: 12 }}>Invalid JSON</span>}
+          </div>
+        );
+
+        if (control.tooltip) {
+          return (
+            <TkTooltip header={typeof control.tooltip === 'string' ? control.tooltip : null} variant="dark">
+              <div slot="trigger">{textarea}</div>
+            </TkTooltip>
+          );
+        }
+        return textarea;
+      }
+
       default:
         return null;
     }
@@ -116,7 +155,8 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
         );
       }
       if (child.type === 'component' && child.componentName) {
-        const ChildComponent = componentMap[child.componentName];
+        const isNativeElement = child.componentName.charAt(0) === child.componentName.charAt(0).toLowerCase();
+        const ChildComponent = isNativeElement ? child.componentName : componentMap[child.componentName];
         if (!ChildComponent) return null;
         const childProps = { ...(child.props || {}), ...(child.slot ? { slot: child.slot } : {}) };
         if (child.children && child.children.length > 0) {
@@ -135,36 +175,106 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
   const renderPreviewComponent = () => {
     const Component = currentConfig.component;
 
-    const cleanProps = Object.fromEntries(Object.entries(propValues).filter(([_, value]) => value !== undefined && value !== null && (typeof value !== 'string' || value !== '')));
+    const cleanProps = Object.fromEntries(
+      Object.entries(propValues).filter(([_, value]) => value !== undefined && value !== null && (typeof value === 'object' || typeof value !== 'string' || value !== '')),
+    );
+
+    // Merge staticProps (non-editable defaults) with user-controlled props
+    const mergedProps: Record<string, any> = { ...(currentConfig.staticProps || {}), ...cleanProps };
+
+    // Attach close event handler for overlay components with a trigger
+    if (currentConfig.triggerProp && currentConfig.triggerCloseEvent) {
+      mergedProps[currentConfig.triggerCloseEvent] = () => handlePropChange(currentConfig.triggerProp!, false);
+    }
 
     // Key forces remount when props change — needed for web components that
     // don't react to attribute updates after initial render.
-    const componentKey = JSON.stringify(cleanProps);
+    const componentKey = JSON.stringify(mergedProps);
+
+    let componentElement: React.ReactNode;
 
     const childConfigs = currentConfig.children;
     if (childConfigs && childConfigs.length > 0) {
-      return (
-        <Component key={componentKey} {...cleanProps}>
+      componentElement = (
+        <Component key={componentKey} {...mergedProps}>
           {renderChildren(childConfigs)}
         </Component>
       );
-    }
-
-    if (currentConfig.hasChildren && currentConfig.defaultChildren) {
-      return (
-        <Component key={componentKey} {...cleanProps}>
+    } else if (currentConfig.hasChildren && currentConfig.defaultChildren) {
+      componentElement = (
+        <Component key={componentKey} {...mergedProps}>
           {currentConfig.defaultChildren}
         </Component>
       );
+    } else {
+      componentElement = <Component key={componentKey} {...mergedProps} />;
     }
 
-    return <Component key={componentKey} {...cleanProps} />;
+    // Render a trigger button for overlay components (dialog, drawer, etc.)
+    if (currentConfig.triggerProp) {
+      return (
+        <>
+          <TkButton
+            label={currentConfig.triggerLabel || `Open ${currentConfig.name}`}
+            variant="primary"
+            size="base"
+            type="filled"
+            mode="button"
+            onClick={() => handlePropChange(currentConfig.triggerProp!, true)}
+          />
+          {componentElement}
+        </>
+      );
+    }
+
+    return componentElement;
   };
 
   const generateCodeString = (framework: 'react' | 'vue' | 'angular') => {
-    const props = Object.entries(propValues)
-      .filter(([_, value]) => value !== undefined && value !== null && value !== '')
+    const allCodeProps = { ...(currentConfig.staticProps || {}), ...propValues };
+    const props = Object.entries(allCodeProps)
+      .filter(([_, value]) => value !== undefined && value !== null && (typeof value === 'object' || value !== ''))
       .map(([key, value]) => {
+        if (typeof value === 'object') {
+          const jsonStr = JSON.stringify(value);
+          if (framework === 'vue') {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-operator">:</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{jsonStr}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          } else if (framework === 'angular') {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-bracket">[</span>
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-bracket">]</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-attr-equals">"</span>
+                <span className="syntax-value">{jsonStr}</span>
+                <span className="syntax-attr-equals">"</span>
+              </div>
+            );
+          } else {
+            return (
+              <div key={key}>
+                {'  '}
+                <span className="syntax-attribute">{key}</span>
+                <span className="syntax-operator">=</span>
+                <span className="syntax-bracket">{'{'}</span>
+                <span className="syntax-value">{jsonStr}</span>
+                <span className="syntax-bracket">{'}'}</span>
+              </div>
+            );
+          }
+        }
         if (framework === 'vue') {
           if (typeof value === 'string') {
             return (
@@ -435,9 +545,16 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
   };
 
   const generateCodeStringAsText = (framework: 'react' | 'vue' | 'angular') => {
-    const props = Object.entries(propValues)
-      .filter(([_, value]) => value !== undefined && value !== null && value !== '')
+    const allCodeProps = { ...(currentConfig.staticProps || {}), ...propValues };
+    const props = Object.entries(allCodeProps)
+      .filter(([_, value]) => value !== undefined && value !== null && (typeof value === 'object' || value !== ''))
       .map(([key, value]) => {
+        if (typeof value === 'object') {
+          const jsonStr = JSON.stringify(value);
+          if (framework === 'vue') return `:${key}="${jsonStr}"`;
+          if (framework === 'angular') return `[${key}]="${jsonStr}"`;
+          return `${key}={${jsonStr}}`;
+        }
         if (framework === 'vue') {
           if (typeof value === 'string') {
             return `${key}="${value}"`;
@@ -548,7 +665,7 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
 
         <div className="playground-controls-grid">
           {currentConfig.props.map(control => (
-            <div key={control.key}>
+            <div key={control.key} style={control.type === 'json' ? { gridColumn: '1 / -1' } : undefined}>
               {control.type !== 'checkbox' && <label className="playground-label">{control.label}:</label>}
               {renderControl(control)}
             </div>
