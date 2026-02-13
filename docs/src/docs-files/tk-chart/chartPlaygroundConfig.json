@@ -38,10 +38,8 @@
     {
       "key": "height",
       "label": "Height (px)",
-      "type": "number",
-      "defaultValue": 300,
-      "min": 100,
-      "max": 800
+      "type": "text",
+      "defaultValue": "300"
     },
     {
       "key": "width",

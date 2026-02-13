@@ -57,18 +57,14 @@
     {
       "key": "itemsPerView",
       "label": "Items Per View",
-      "type": "number",
-      "defaultValue": 1,
-      "min": 1,
-      "max": 3
+      "type": "text",
+      "defaultValue": "1"
     },
     {
       "key": "autoplayDelay",
       "label": "Autoplay Delay (ms)",
-      "type": "number",
-      "defaultValue": 3000,
-      "min": 500,
-      "max": 10000
+      "type": "text",
+      "defaultValue": "3000"
     },
     {
       "key": "verticalViewHeight",

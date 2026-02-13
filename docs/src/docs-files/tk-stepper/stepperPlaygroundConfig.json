@@ -66,10 +66,8 @@
     {
       "key": "active",
       "label": "Active Step",
-      "type": "number",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 2
+      "type": "text",
+      "defaultValue": "0"
     },
     {
       "key": "linear",
