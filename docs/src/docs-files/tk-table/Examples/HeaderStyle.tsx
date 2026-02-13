@@ -165,8 +165,8 @@ const column = [
 
 <template>
   <TkTable
-    :columns.prop="column"
-    :data.prop="basicData"    
+    :columns="column"
+    :data="basicData"    
   />
 </template>
 `;

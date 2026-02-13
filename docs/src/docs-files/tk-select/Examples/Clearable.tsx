@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 const Clearable = () => {
   const reactCode = `<TkSelect label="Clearable Select" options={options} value="Option 1" clearable />`;
 
-  const vueCode = `<TkSelect label="Clearable Select" :options.prop="options" value="Option 1" clearable />`;
+  const vueCode = `<TkSelect label="Clearable Select" :options="options" value="Option 1" clearable />`;
 
   const options = ['Option 1', 'Option 2', 'Option 3'];
 

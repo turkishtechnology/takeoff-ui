@@ -19,7 +19,7 @@ const ChipOptions = () => {
 
   const vueCode = `<TkSelect
     label="Test Chip Options"
-    :options.prop="['Apple', 'Banana', 'Cherry']"
+    :options="['Apple', 'Banana', 'Cherry']"
     multiple
     v-model="value"
     :chipOptions="{

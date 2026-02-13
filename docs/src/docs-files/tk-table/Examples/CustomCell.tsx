@@ -215,7 +215,7 @@ const handleRequest = async (e) => {
 </script>
 
 <template>
-  <TkTable :columns.prop="column" :data.prop="data" paginationMethod="server" :rowsPerPage="5" :totalItems="totalItem"
+  <TkTable :columns="column" :data="data" paginationMethod="server" :rowsPerPage="5" :totalItems="totalItem"
     :loading="loading" @tkRequest="handleRequest" />
 </template>
 `;

@@ -51,42 +51,31 @@ return (
   </>
 );`;
 
-  const vueCode = `<script setup>
-import { TkDrawer, TkButton, TkCheckbox } from '@takeoff-ui/vue';
-import { ref } from 'vue';
-
-const preventDismiss = ref(false);
+  const vueCode = `const preventDismiss = ref(false);
 const showDrawer = ref(false);
-</script>
 
-<template>
-  <div>
-    <div>
-      <TkCheckbox
-        label="Prevent Dismiss by Clicking Outside"
-        v-model="preventDismiss"
-      />
-    </div>
-    <TkButton label="Open Drawer" @tkClick="() => (showDrawer = true)" />
+<div>
+  <TkCheckbox
+    label="Prevent Dismiss by Clicking Outside"
+    v-model="preventDismiss"
+  />
+</div>
+<TkButton label="Open Drawer" @tk-click="() => (showDrawer = true)" />
 
-    <TkDrawer
-      header="Prevent Dismiss Drawer"
-      :open="showDrawer"
-      :preventDismiss="preventDismiss"
-      @tkDrawerClose="showDrawer = false"
-    >
-      <div slot="content">
-        <p v-if="preventDismiss">
-          Clicking outside the drawer will not close it. Please use the close
-          button.
-        </p>
-        <p v-else>Clicking outside the drawer will close it.</p>
-      </div>
-    </TkDrawer>
+<TkDrawer
+  header="Prevent Dismiss Drawer"
+  :open="showDrawer"
+  :prevent-dismiss="preventDismiss"
+  @tk-drawer-close="showDrawer = false"
+>
+  <div slot="content">
+    <p v-if="preventDismiss">
+      Clicking outside the drawer will not close it. Please use the close
+      button.
+    </p>
+    <p v-else>Clicking outside the drawer will close it.</p>
   </div>
-</template>
-
-`;
+</TkDrawer>`;
 
   const demo = <Example />;
 

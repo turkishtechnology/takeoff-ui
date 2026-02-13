@@ -11,23 +11,23 @@ const Basic = () => {
   ];
 
   const reactCode = `const items = [
- { label: 'Home', href: '/', isExternal: true  },
- { label: 'Library', href: '/library', isExternal: true  },
- { label: 'Data', href: '/library/data', isExternal: true  },
- { label: 'Current Page' },
+  { label: 'Home', href: '/', isExternal: true },
+  { label: 'Library', href: '/library', isExternal: true },
+  { label: 'Data', href: '/library/data', isExternal: true },
+  { label: 'Current Page' },
 ];
 
 <TkBreadcrumb model={items} />`;
 
   const vueCode = `<script setup>
-  import { TkBreadcrumb } from '@takeoff-ui/vue';
-  
-  const items = [
-  { label: 'Home', href: '/', isExternal: true  },
-  { label: 'Library', href: '/library', isExternal: true  },
-  { label: 'Data', href: '/library/data', isExternal: true  },
+import { TkBreadcrumb } from '@takeoff-ui/vue';
+
+const items = [
+  { label: 'Home', href: '/', isExternal: true },
+  { label: 'Library', href: '/library', isExternal: true },
+  { label: 'Data', href: '/library/data', isExternal: true },
   { label: 'Current Page' },
-  ];
+];
 </script>
 <template>
   <TkBreadcrumb :model.prop="items" />

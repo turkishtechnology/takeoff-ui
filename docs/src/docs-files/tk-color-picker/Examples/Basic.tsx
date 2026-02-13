@@ -37,7 +37,7 @@ const color = ref('#326FD1');
 
   const angularCode = `<tk-color-picker
   label="Select Color"
-  showAsterisk
+  [show-asterisk]="true"
   [value]="color"
   (tkChange)="onColorChange($event)">
 </tk-color-picker>`;

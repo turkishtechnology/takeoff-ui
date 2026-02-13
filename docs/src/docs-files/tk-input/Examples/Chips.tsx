@@ -16,7 +16,7 @@ const Chips = () => {
   v-model="value" 
 />`;
 
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(['chip 1', 'chip 2']);
 
   const demo = (
     <div className="flex items-end gap-2">

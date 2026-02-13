@@ -45,10 +45,7 @@ const Variants = () => {
     </div>
   );
 
-  return (
-    <>
-      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
-    </>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
+
 export default Variants;

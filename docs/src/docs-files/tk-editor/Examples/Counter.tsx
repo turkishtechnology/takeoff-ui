@@ -14,12 +14,12 @@ const Counter = () => {
   maxLength={280}
 />`;
 
-  const vueCode = `<tk-editor
+  const vueCode = `<TkEditor
   label="Editor with Counter"
   placeholder="Type something..."
-  :show-counter="${showCounter}"
+  :showCounter="${showCounter}"
   :resizable="${resizable}"
-  :max-length="280"
+  :maxLength="280"
 />`;
 
   const demo = (

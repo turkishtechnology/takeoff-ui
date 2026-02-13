@@ -114,7 +114,7 @@ const showEmptySlot = () => {
       <TkButton label="Load Data" @tk-click="loadData" class="mt-2" />
       <TkButton label="Show Empty Data Slot" @tk-click="showEmptySlot" class="mt-2" />
     </div>
-    <TkTable :columns.prop="columns" :data.prop="data">
+    <TkTable :columns="columns" :data="data">
       <div slot="empty-data" class="p-4 text-center text-gray-500">No data found...</div>
     </TkTable>
   </div>

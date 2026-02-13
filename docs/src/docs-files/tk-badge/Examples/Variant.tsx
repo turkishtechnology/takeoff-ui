@@ -4,7 +4,7 @@ import React from 'react';
 
 const Variant = () => {
   const reactCode = `<TkBadge variant="primary" label="primary" />
-<TkBadge variant="secondary" label="secondary" /> 
+<TkBadge variant="secondary" label="secondary" />
 <TkBadge variant="neutral" label="neutral" />
 <TkBadge variant="info" label="info" />
 <TkBadge variant="warning" label="warning" />
@@ -32,7 +32,7 @@ const Variant = () => {
 `;
 
   const angularCode = `<tk-badge variant="primary" label="primary" />
-<tk-badge variant="secondary" label="secondary" /> 
+<tk-badge variant="secondary" label="secondary" />
 <tk-badge variant="neutral" label="neutral" />
 <tk-badge variant="info" label="info" />
 <tk-badge variant="warning" label="warning" />
@@ -61,11 +61,7 @@ const Variant = () => {
     </div>
   );
 
-  return (
-    <>
-      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
-    </>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
 export default Variant;

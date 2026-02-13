@@ -7,7 +7,7 @@ const CustomCountryList = () => {
     label="Currency Input"
     showAsterisk={true}
     currencyList={currencyList}
-    defaultCurrency='TRY'
+    defaultCurrency="GBP"
     value={value}
     onTkChange={(e) => setValue(e.detail)}
     />`;
@@ -16,7 +16,7 @@ const CustomCountryList = () => {
     label="Currency Input"
     :showAsterisk="true"
     :currencyList="currencyList"
-    defaultCurrency="TRY"
+    defaultCurrency="GBP"
     v-model="value"
    />`;
 
@@ -24,7 +24,7 @@ const CustomCountryList = () => {
     label="Currency Input"
     [showAsterisk]="true"
     [currencyList]="currencyList"
-    defaultCurrency="TRY"
+    defaultCurrency="GBP"
     [(ngModel)]="value"
   />`;
 
@@ -40,24 +40,24 @@ const CustomCountryList = () => {
       id: 'GB',
       symbol: '£',
       name: 'British Pound',
-      decimalSeparator: '.',
-      thousandsSeparator: ',',
+      decimalSeparator: '.' as const,
+      thousandsSeparator: ',' as const,
     },
     {
       code: 'TRY',
       id: 'TR',
       symbol: '₺',
       name: 'Turkish Lira',
-      decimalSeparator: ',',
-      thousandsSeparator: '.',
+      decimalSeparator: ',' as const,
+      thousandsSeparator: '.' as const,
     },
     {
       code: 'JPY',
       id: 'JP',
       symbol: '¥',
       name: 'Japanese Yen',
-      decimalSeparator: '.',
-      thousandsSeparator: ',',
+      decimalSeparator: '.' as const,
+      thousandsSeparator: ',' as const,
     },
   ];
 

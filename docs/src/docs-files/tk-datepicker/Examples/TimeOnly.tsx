@@ -28,10 +28,10 @@ const TimeOnly = () => {
   const vueCode = `const selectedTime = ref("");
 <TkDatepicker
     label="Select Time"
-    timeOnly
-    headerType="${type}"
+    time-only
+    header-type="${type}"
     v-model="selectedTime"
-    timeFormat="${timeFormat}"
+    time-format="${timeFormat}"
 />`;
 
   const demo = (

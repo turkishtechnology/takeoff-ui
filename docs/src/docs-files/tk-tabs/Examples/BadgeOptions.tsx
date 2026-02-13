@@ -15,14 +15,14 @@ const BadgeOptions = () => {
 </TkTabs>`;
 
   const vueCode = `<TkTabs>
-  <TkTabsItem label="Tab label" icon="flight" badged badgeCount="2" :badgeOptions="{ type: 'text', variant: 'danger' }">
-    <p className="m-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+  <TkTabsItem label="Tab label" icon="flight" badged :badgeCount="2" :badgeOptions="{ type: 'text', variant: 'danger' }">
+    <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
   </TkTabsItem>
-  <TkTabsItem label="Tab label" icon="flight" badged badgeCount="5" :badgeOptions="{ type: 'outlined', variant: 'warning', rounded: false }">
-    <p className="m-0">Incididunt velit elit cupidatat dolore elit tempor laborum dolor amet magna aute magna pariatur.</p>
+  <TkTabsItem label="Tab label" icon="flight" badged :badgeCount="5" :badgeOptions="{ type: 'outlined', variant: 'warning', rounded: false }">
+    <p class="m-0">Incididunt velit elit cupidatat dolore elit tempor laborum dolor amet magna aute magna pariatur.</p>
   </TkTabsItem>
   <TkTabsItem label="Tab label" icon="flight" badged badgeLabel="999" :badgeOptions="{ type: 'filled', variant: 'info' }">
-    <p className="m-0">Nulla cillum laborum amet sunt irure dolore veniam esse veniam ex ullamco.</p>
+    <p class="m-0">Nulla cillum laborum amet sunt irure dolore veniam esse veniam ex ullamco.</p>
   </TkTabsItem>
 </TkTabs>`;
 

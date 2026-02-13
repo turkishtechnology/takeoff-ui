@@ -33,7 +33,7 @@ const WithImages = () => {
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="success" rounded />
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="info" rounded />
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="danger" rounded />
-    
+
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="primary" />
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="light" />
 <tk-avatar image="https://via.placeholder.com/40" background="solid" variant="success" />
@@ -59,10 +59,7 @@ const WithImages = () => {
     </div>
   );
 
-  return (
-    <>
-      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
-    </>
-  );
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
+
 export default WithImages;

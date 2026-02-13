@@ -174,95 +174,82 @@ const CustomContent = () => {
       </div>
   </TkDrawer>`;
 
-  const vueCode = `<script setup>
-import {
-  TkDrawer,
-  TkButton,
-  TkTabs,
-  TkTabsItem,
-  TkBadge,
-} from '@takeoff-ui/vue';
-import { ref } from 'vue';
+  const vueCode = `const showDrawer = ref(false);
 
-const showDrawer = ref(false);
-</script>
-
-<template>
-  <TkButton label="Open Custom Drawer" @tkClick="showDrawer = true" />
-  <TkDrawer
-    header="Settings"
-    :open="showDrawer"
-    @tkDrawerClose="() => (showDrawer = false)"
-  >
-    <div slot="container">
-      <div className="notification-panel-header">
-        <span className="header-title">Notification</span>
-        <div className="header-actions">
-          <TkButton
-            variant="neutral"
-            icon="more_vert"
-            size="small"
-            type="text"
-          ></TkButton>
-          <TkButton
-            variant="neutral"
-            icon="close"
-            size="small"
-            type="text"
-            @tkClick="showDrawer = false"
-          ></TkButton>
-        </div>
+<TkButton label="Open Custom Drawer" @tk-click="showDrawer = true" />
+<TkDrawer
+  header="Settings"
+  :open="showDrawer"
+  @tk-drawer-close="() => (showDrawer = false)"
+>
+  <div slot="container">
+    <div class="notification-panel-header">
+      <span class="header-title">Notification</span>
+      <div class="header-actions">
+        <TkButton
+          variant="neutral"
+          icon="more_vert"
+          size="small"
+          type="text"
+        ></TkButton>
+        <TkButton
+          variant="neutral"
+          icon="close"
+          size="small"
+          type="text"
+          @tk-click="showDrawer = false"
+        ></TkButton>
       </div>
-      <TkTabs
-        orientation="horizontal"
-        size="base"
-        tab-style="basic"
-        variant="primary"
-        is-closable="false"
-        default-active-index="0"
-        :is-extendable="false"
-      >
-        <TkTabsItem label="All">
-          <div className="notification-container">
-            <div className="notification-content">
-              <div className="message-container">
-                <div className="message-header">
-                  <div className="message-header-start">
-                    <div className="message-date">14 april 2024</div>
-                    <div className="message-title">Header Text</div>
-                  </div>
-                  <div className="message-header-end">
-                    <TkBadge
-                      label="New"
-                      variant="info"
-                      type="filledlight"
-                    ></TkBadge>
-                  </div>
+    </div>
+    <TkTabs
+      orientation="horizontal"
+      size="base"
+      tab-style="basic"
+      variant="primary"
+      :is-closable="false"
+      default-active-index="0"
+      :is-extendable="false"
+    >
+      <TkTabsItem label="All">
+        <div class="notification-container">
+          <div class="notification-content">
+            <div class="message-container">
+              <div class="message-header">
+                <div class="message-header-start">
+                  <div class="message-date">14 april 2024</div>
+                  <div class="message-title">Header Text</div>
                 </div>
-                <p className="message-text">
-                  Lorem Ipsum dolor sit amet consiquences.
-                </p>
+                <div class="message-header-end">
+                  <TkBadge
+                    label="New"
+                    variant="info"
+                    type="filledlight"
+                  ></TkBadge>
+                </div>
               </div>
-              <div className="message-action">
-                <TkButton variant="info" label="Action" type="text"></TkButton>
-              </div>
+              <p class="message-text">
+                Lorem Ipsum dolor sit amet consiquences.
+              </p>
             </div>
-            <div className="notification-end">
-              <TkButton
-                variant="neutral"
-                size="small"
-                icon="more_vert"
-                type="text"
-              ></TkButton>
+            <div class="message-action">
+              <TkButton variant="info" label="Action" type="text"></TkButton>
             </div>
           </div>
-        </TkTabsItem>
-        <TkTabsItem label="New"></TkTabsItem>
-        <TkTabsItem label="Unreaded"></TkTabsItem>
-      </TkTabs>
-    </div>
-  </TkDrawer>
-</template>
+          <div class="notification-end">
+            <TkButton
+              variant="neutral"
+              size="small"
+              icon="more_vert"
+              type="text"
+            ></TkButton>
+          </div>
+        </div>
+      </TkTabsItem>
+      <TkTabsItem label="New"></TkTabsItem>
+      <TkTabsItem label="Unreaded"></TkTabsItem>
+    </TkTabs>
+  </div>
+</TkDrawer>
 
 <style>
 ${demoStyles}

@@ -21,7 +21,7 @@ const Basic = () => {
 <TkDatepicker
     label="Select Date"
     placeholder="Choose a date"
-    dateFormat="dd/MM/yyyy"
+    date-format="dd/MM/yyyy"
     v-model="selectedDate"
 />`;
 

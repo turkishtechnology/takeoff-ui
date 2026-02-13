@@ -17,14 +17,14 @@ const ToggleButtonVariant = () => {
   const [rounded, setRounded] = useState(false);
   const [value, setValue] = useState('1');
   const reactCode = `<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
-    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="1" value="1" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="One"/>
-    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="2" value="2" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Two"/>
-    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="3" value="3" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Three"/>
+    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="1" value="1" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="One"/>
+    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="2" value="2" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="Two"/>
+    <TkToggleButton ${disabled ? 'disabled' : ''} type="outlined" variant="neutral" key="3" value="3" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="Three"/>
    </TkToggleButtonGroup >`;
   const vueCode = `<TkToggleButtonGroup :value="1" type="basic" @tk-change="(e) => toggleButtonDemo.value = e.detail">
-    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="1" :value="1" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="One"/>
-    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="2" :value="2" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Two"/>
-    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="3" :value="3" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Three"/>
+    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="1" :value="1" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="One"/>
+    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="2" :value="2" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Two"/>
+    <TkToggleButton ${disabled ? ':disabled="true"' : ''} type="outlined" variant="neutral" :key="3" :value="3" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Three"/>
   </TkToggleButtonGroup>`;
   const options = [
     { label: 'One', value: '1' },

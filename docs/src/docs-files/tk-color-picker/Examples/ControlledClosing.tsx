@@ -99,8 +99,8 @@ handleCancel() {
   #colorPicker
   label="Select Color"
   [value]="color"
-  [preventDismiss]="true"
-  [showCloseButton]="false"
+  [prevent-dismiss]="true"
+  [show-close-button]="false"
   (tkChange)="onColorChange($event)">
   <div slot="footer-actions">
     <tk-button label='Cancel' variant="secondary" size="small" (tkClick)="handleCancel()">

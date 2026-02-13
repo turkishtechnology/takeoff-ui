@@ -7,9 +7,9 @@ const ShowRatingValue = () => {
 <TkRating type="heart" value={2.5} showRatingValue />
 <TkRating type="dot" value={3.5} showRatingValue />`;
 
-  const vueCode = `<TkRating type="star" :value="2" :showRatingValue.prop="true" />
-<TkRating type="heart" :value="2.5" :showRatingValue.prop="true" />
-<TkRating type="dot" :value="3.5" :showRatingValue.prop="true" />`;
+  const vueCode = `<TkRating type="star" :value="2" :showRatingValue="true" />
+<TkRating type="heart" :value="2.5" :showRatingValue="true" />
+<TkRating type="dot" :value="3.5" :showRatingValue="true" />`;
 
   const angularCode = `<tk-rating type="star" [value]="2" showRatingValue />
 <tk-rating type="heart" [value]="2.5" showRatingValue />

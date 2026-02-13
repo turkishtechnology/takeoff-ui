@@ -43,23 +43,23 @@ const CardWithHeaderMode = () => {
   <p>This card demonstrates different header options.</p>
 </TkCard>`;
 
-  const angularCode = `Ï<tk-card header="Basic Header" headerType="basic">
+  const angularCode = `<tk-card header="Basic Header" header-type="basic">
   <p>This card demonstrates different header options.</p>
 </tk-card>
 
-<tk-card header="Divided Header" headerType="divided">
+<tk-card header="Divided Header" header-type="divided">
   <p>This card demonstrates different header options.</p>
 </tk-card>
 
-<tk-card header="Light Header" headerType="light">
+<tk-card header="Light Header" header-type="light">
   <p>This card demonstrates different header options.</p>
 </tk-card>
 
-<tk-card header="Dark Header" headerType="dark">
+<tk-card header="Dark Header" header-type="dark">
   <p>This card demonstrates different header options.</p>
 </tk-card>
 
-<tk-card header="Primary Header" headerType="primary">
+<tk-card header="Primary Header" header-type="primary">
   <p>This card demonstrates different header options.</p>
 </tk-card>`;
 
