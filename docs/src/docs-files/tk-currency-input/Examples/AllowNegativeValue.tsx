@@ -19,9 +19,9 @@ const AllowNegativeValue = () => {
 
   const angularCode = `<tk-currency-input
   label="Currency Input"
-  show-asterisk
+  [show-asterisk]="true"
   placeholder="Placeholder text"
-  allow-negative
+  [allow-negative]="true"
 />`;
 
   const [value, setValue] = useState({

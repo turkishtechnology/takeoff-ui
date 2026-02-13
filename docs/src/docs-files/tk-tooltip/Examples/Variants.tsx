@@ -10,7 +10,7 @@ const Variants = () => {
   icon="flight"
   variant="dark"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Dark (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -19,7 +19,7 @@ const Variants = () => {
   icon="flight"
   variant="white"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   White (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -28,7 +28,7 @@ const Variants = () => {
   icon="flight"
   variant="info"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Info (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -37,7 +37,7 @@ const Variants = () => {
   icon="flight"
   variant="success"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Success (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -46,7 +46,7 @@ const Variants = () => {
   icon="flight"
   variant="danger"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Danger (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -55,7 +55,7 @@ const Variants = () => {
   icon="flight"
   variant="warning"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Warning (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -64,7 +64,7 @@ const Variants = () => {
   icon="flight"
   variant="neutral"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Neutral (Hover Me!)" />
 </TkTooltip>`;
 
   const vueCode = `<TkTooltip
@@ -74,7 +74,7 @@ const Variants = () => {
   icon="flight"
   variant="dark"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Dark (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -83,7 +83,7 @@ const Variants = () => {
   icon="flight"
   variant="white"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   White (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -92,7 +92,7 @@ const Variants = () => {
   icon="flight"
   variant="info"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Info (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -101,7 +101,7 @@ const Variants = () => {
   icon="flight"
   variant="success"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Success (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -110,7 +110,7 @@ const Variants = () => {
   icon="flight"
   variant="danger"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Danger (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -119,7 +119,7 @@ const Variants = () => {
   icon="flight"
   variant="warning"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Warning (Hover Me!)" />
 </TkTooltip>
 <TkTooltip
   header="Tooltip Header"
@@ -128,7 +128,7 @@ const Variants = () => {
   icon="flight"
   variant="neutral"
 >
-  <TkButton slot="trigger" label="Hover Me!"></TkButton>
+  <TkButton slot="trigger" data-tooltip-trigger label="   Neutral (Hover Me!)" />
 </TkTooltip>`;
 
   const angularCode = `<tk-tooltip
@@ -138,7 +138,7 @@ const Variants = () => {
   icon="flight"
   variant="dark"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Dark (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -147,7 +147,7 @@ const Variants = () => {
   icon="flight"
   variant="white"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   White (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -156,7 +156,7 @@ const Variants = () => {
   icon="flight"
   variant="info"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Info (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -165,7 +165,7 @@ const Variants = () => {
   icon="flight"
   variant="success"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Success (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -174,7 +174,7 @@ const Variants = () => {
   icon="flight"
   variant="danger"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Danger (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -183,7 +183,7 @@ const Variants = () => {
   icon="flight"
   variant="warning"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Warning (Hover Me!)" />
 </tk-tooltip>
 <tk-tooltip
   header="Tooltip Header"
@@ -192,7 +192,7 @@ const Variants = () => {
   icon="flight"
   variant="neutral"
 >
-  <tk-button slot="trigger" label="Hover Me!"></tk-button>
+  <tk-button slot="trigger" data-tooltip-trigger label="   Neutral (Hover Me!)" />
 </tk-tooltip>`;
 
   const demo = (

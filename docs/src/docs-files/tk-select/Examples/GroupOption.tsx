@@ -94,7 +94,7 @@ const groupOptions = [
 </script>
 
 <template>
-    <TkSelect label="Group Option" :options.prop="groupOptions" />
+    <TkSelect label="Group Option" :options="groupOptions" />
 </template>
 `;
 

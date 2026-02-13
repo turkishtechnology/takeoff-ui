@@ -15,9 +15,9 @@ const CustomIcons = () => {
   ];
 
   const reactCode = `const items = [
- { label: 'Home', href: '/', icon: 'home', isExternal: true  },
- { label: 'Library', href: '/library', icon: 'local_library', isExternal: true  },
- { label: 'Data', icon: 'data_usage' },
+  { label: 'Home', href: '/', icon: 'home', isExternal: true },
+  { label: 'Library', href: '/library', icon: 'local_library', isExternal: true },
+  { label: 'Data', icon: 'data_usage' },
 ];
 <TkBreadcrumb model={items} separatorIcon="navigate_next" />`;
 
@@ -44,7 +44,7 @@ const items = [
     { label: 'Home', href: '/', icon: 'home', isExternal: true },
     { label: 'Library', href: '/library', icon: 'local_library', isExternal: true },
     { label: 'Data', icon: 'data_usage' }
-  ]" separatorIcon="navigate_next" />`;
+  ]" separator-icon="navigate_next" />`;
 
   const demo = <TkBreadcrumb model={items} separatorIcon="navigate_next" />;
 

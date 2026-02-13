@@ -57,30 +57,23 @@ const Customization = () => {
   </div>
 </TkDrawer>`;
 
-  const vueCode = `<script setup>
-import { ref } from 'vue';
-
-const showDrawer = ref(false);
+  const vueCode = `const showDrawer = ref(false);
 const width = ref('400px');
-</script>
-
-<template>
-  <TkDrawer
-    header="Custom Width Drawer"
-    :open="showDrawer"
-    @tkDrawerClose="showDrawer = false"
-    :containerStyle="{ width }"
-  >
-    <div slot="content">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-            sed consequuntur error repudiandae numquam deserunt quisquam repellat
-            libero asperiores earum nam nobis, culpa ratione quam perferendis
-            esse, cupiditate neque quas!
-        </p>
-    </div>
-  </TkDrawer>
-</template>`;
+<TkDrawer
+  header="Custom Width Drawer"
+  :open="showDrawer"
+  @tk-drawer-close="showDrawer = false"
+  :container-style="{ width }"
+>
+  <div slot="content">
+      <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
+          sed consequuntur error repudiandae numquam deserunt quisquam repellat
+          libero asperiores earum nam nobis, culpa ratione quam perferendis
+          esse, cupiditate neque quas!
+      </p>
+  </div>
+</TkDrawer>`;
 
   const demo = <Example />;
 

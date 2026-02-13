@@ -236,8 +236,8 @@ const refreshData = async () => {
   />
   <TkTable 
     ref="tableRef"
-    :columns.prop="column" 
-    :data.prop="data" 
+    :columns="column" 
+    :data="data" 
     paginationMethod="server" 
     :rowsPerPage="rowsPerPage" 
     :totalItems="totalItem"

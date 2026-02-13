@@ -126,9 +126,8 @@ const [expandedKeys, setExpandedKeys] = useState(['third-directory', 'projects']
   items={treeData}
   branchIcon="folder"
   leafIcon="insert_drive_file"
-  :expanded-keys="expandedKeys"
+  expandedKeys={expandedKeys}
   onTkExpandChange={(e) => setExpandedKeys(e.detail)}
-  onTkItemClick={(e) => console.log('Clicked item:', e.detail)}
 />
 `);
     setVueCode(`
@@ -193,11 +192,10 @@ const expandedKeys = ref(['third-directory', 'projects']);
     type="light"
     size="base"
     :items="treeData"
-    branch-icon="folder"
-    leaf-icon="insert_drive_file"
-    :expanded-keys="${expandedKeys}"
+    branchIcon="folder"
+    leafIcon="insert_drive_file"
+    :expandedKeys="expandedKeys"
     @tk-expand-change="(e) => expandedKeys = e.detail"
-    @tk-item-click="(e) => console.log('Clicked item:', e.detail)"
   />
 </template>
 `);

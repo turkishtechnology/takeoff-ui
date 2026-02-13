@@ -28,14 +28,14 @@ const FirstDayOfWeek = () => {
   const vueCode = `<TkDatepicker 
     label="Default for First Day of Week" 
     placeholder="Choose a date" 
-    dateFormat="dd/MM/yyyy"
+    date-format="dd/MM/yyyy"
     v-model="selectedDate"
 />
 <TkDatepicker 
     label="Thursday for First Day of Week" 
     placeholder="Choose a date" 
-    dateFormat="dd/MM/yyyy"
-    :firstDayOfWeekIndex.prop="3" 
+    date-format="dd/MM/yyyy"
+    :first-day-of-week-index="3" 
     v-model="selectedDate" 
 />
 `;

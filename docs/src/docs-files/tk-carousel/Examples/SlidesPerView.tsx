@@ -3,7 +3,7 @@ import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
 const SlidesPerView = () => {
-  const reactCode = `<TkCarousel itemsPerView={4}>
+  const reactCode = `<TkCarousel itemsPerView={2}>
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
   <img src="https://picsum.photos/800/400?random=2" alt="Slide 2" />
   <img src="https://picsum.photos/800/400?random=3" alt="Slide 3" />
@@ -12,7 +12,7 @@ const SlidesPerView = () => {
   <img src="https://picsum.photos/800/400?random=6" alt="Slide 6" />
 </TkCarousel>`;
 
-  const vueCode = `<TkCarousel :itemsPerView="4">
+  const vueCode = `<TkCarousel :itemsPerView="2">
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
   <img src="https://picsum.photos/800/400?random=2" alt="Slide 2" />
   <img src="https://picsum.photos/800/400?random=3" alt="Slide 3" />
@@ -21,7 +21,7 @@ const SlidesPerView = () => {
   <img src="https://picsum.photos/800/400?random=6" alt="Slide 6" />
 </TkCarousel>`;
 
-  const angularCode = `<tk-carousel [itemsPerView]="4">
+  const angularCode = `<tk-carousel [items-per-view]="2">
   <img src="https://picsum.photos/800/400?random=1" alt="Slide 1" />
   <img src="https://picsum.photos/800/400?random=2" alt="Slide 2" />
   <img src="https://picsum.photos/800/400?random=3" alt="Slide 3" />

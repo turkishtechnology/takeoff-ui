@@ -6,7 +6,6 @@ const Basic = () => {
   const reactCode = `<TkPhoneInput 
     label="Phone Input"
     hint="Hint text"
-    placeholder="Placeholder text"
     value={value}
     onTkChange={(e) => setValue(e.detail)}
     />`;
@@ -14,14 +13,12 @@ const Basic = () => {
   const vueCode = `<TkPhoneInput 
     label="Phone Input"
     hint="Hint text"
-    placeholder="Placeholder text"
     v-model="value"
    />`;
 
   const angularCode = `<tk-phone-input  
     label="Phone Input"
     hint="Hint text"
-    placeholder="Placeholder text"
     [(ngModel)]="value"
   />`;
 

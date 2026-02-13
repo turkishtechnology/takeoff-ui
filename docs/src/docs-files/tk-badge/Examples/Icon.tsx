@@ -9,8 +9,10 @@ const Icon = () => {
   size="large"
   type="filled"
   icon="flight"
+  iconPosition="left"
   label="primary"
 />
+
 <TkBadge
   variant="primary"
   size="large"
@@ -19,17 +21,16 @@ const Icon = () => {
   iconPosition="right"
   label="primary"
 />
+
 <TkBadge
-variant="primary"
-size="large"
-type="filled"
-icon={
-  {
-    left: { name: 'key', color: 'pink' } as IIconOptions,
-    right: { name: 'check_circle', color: 'pink', fill: true } as IIconOptions,
-  } as IMultiIconOptions
-}
-label="primary"
+  variant="primary"
+  size="large"
+  type="filled"
+  icon={{
+    left: { name: 'key', color: 'pink' },
+    right: { name: 'check_circle', color: 'pink', fill: true },
+  }}
+  label="primary"
 />`;
 
   const vueCode = `<TkBadge
@@ -37,8 +38,10 @@ label="primary"
   size="large"
   type="filled"
   icon="flight"
+  iconPosition="left"
   label="primary"
 />
+
 <TkBadge
   variant="primary"
   size="large"
@@ -47,17 +50,16 @@ label="primary"
   iconPosition="right"
   label="primary"
 />
+
 <TkBadge
-variant="primary"
-size="large"
-type="filled"
-:icon={
-  {
-    left: { name: 'key', color: 'pink' } as IIconOptions,
-    right: { name: 'check_circle', color: 'pink', fill: true } as IIconOptions,
-  } as IMultiIconOptions
-}
-label="primary"
+  variant="primary"
+  size="large"
+  type="filled"
+  :icon="{
+    left: { name: 'key', color: 'pink' },
+    right: { name: 'check_circle', color: 'pink', fill: true },
+  }"
+  label="primary"
 />`;
 
   const angularCode = `<tk-badge
@@ -65,29 +67,29 @@ label="primary"
   size="large"
   type="filled"
   icon="flight"
+  icon-position="left"
   label="primary"
-/>
+></tk-badge>
+
 <tk-badge
   variant="primary"
   size="large"
   type="filled"
   icon="flight"
-  iconPosition="right"
+  icon-position="right"
   label="primary"
-/>
+></tk-badge>
+
 <tk-badge
-variant="primary"
-size="large"
-type="filled"
-icon={
-  {
-    left: { name: 'key', color: 'pink' } as IIconOptions,
-    right: { name: 'check_circle', color: 'pink', fill: true } as IIconOptions,
-  } as IMultiIconOptions
-}
-label="primary"
-/>
-`;
+  variant="primary"
+  size="large"
+  type="filled"
+  [icon]="{
+    left: { name: 'key', color: 'pink' },
+    right: { name: 'check_circle', color: 'pink', fill: true },
+  }"
+  label="primary"
+></tk-badge>`;
 
   const demo = (
     <div className="flex flex-col items-center justify-center gap-2">

@@ -80,12 +80,12 @@ const selectOptions = [
   <TkSelect
       editable
       label="Default Filter"
-      :options.prop="selectOptions"
+      :options="selectOptions"
     />
     <TkSelect
       editable
       label="Custom Filter Function"
-      :options.prop="selectOptions"
+      :options="selectOptions"
       filter="async (text: string, options: any[]) => {
         return options.filter(
           (item) =>

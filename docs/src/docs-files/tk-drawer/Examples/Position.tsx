@@ -44,11 +44,10 @@ const Position = () => {
   onTkDrawerClose={() => setShowDrawer(false)}
 >
   <div slot="content">
-    <span>Content Slot</span>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
-        quas!
-      </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+      quas!
+    </p>
   </div>
 </TkDrawer>`;
 
@@ -67,15 +66,15 @@ const handleClick = (positionValue) => {
 
 <template>
   <div>
-    <TkButton icon="keyboard_arrow_down" @tkClick="handleClick('top')" />
-    <TkButton icon="keyboard_arrow_left" @tkClick="handleClick('right')" />
-    <TkButton icon="keyboard_arrow_up" @tkClick="handleClick('bottom')" />
-    <TkButton icon="keyboard_arrow_right" @tkClick="handleClick('left')" />
+    <TkButton icon="keyboard_arrow_down" @tk-click="handleClick('top')" />
+    <TkButton icon="keyboard_arrow_left" @tk-click="handleClick('right')" />
+    <TkButton icon="keyboard_arrow_up" @tk-click="handleClick('bottom')" />
+    <TkButton icon="keyboard_arrow_right" @tk-click="handleClick('left')" />
     <TkDrawer
       header="Header Text"
       :open="showDrawer"
       :position="position"
-      @tkDrawerClose="() => (showDrawer = false)"
+      @tk-drawer-close="() => (showDrawer = false)"
     >
       <div slot="content">
         <p>

@@ -26,14 +26,14 @@ const ToggleButtonVariant = () => {
   // Update Vue code when button type changes
   useEffect(() => {
     setVueCode(`<TkToggleButtonGroup value="1" type="basic" @tk-change="(e) => value = e.detail">
-  <TkToggleButton type="${buttonType}" variant="neutral" key="1" value="1" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="One"/>
-  <TkToggleButton type="${buttonType}" variant="neutral" key="2" value="2" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Two"/>
-  <TkToggleButton type="${buttonType}" variant="neutral" key="3" value="3" :icon="{ name: 'bolt', fill: true }" icon-position="right" size="large" label="Three"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="1" value="1" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="One"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="2" value="2" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Two"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="3" value="3" :icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Three"/>
 </TkToggleButtonGroup>`);
     setReactCode(`<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
-  <TkToggleButton type="${buttonType}" variant="neutral" key="1" value="1" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="One"/>
-  <TkToggleButton type="${buttonType}" variant="neutral" key="2" value="2" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Two"/>
-  <TkToggleButton type="${buttonType}" variant="neutral" key="3" value="3" icon="{ name: 'bolt', fill: true }" iconPosition="right" size="large" label="Three"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="1" value="1" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="One"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="2" value="2" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="Two"/>
+  <TkToggleButton type="${buttonType}" variant="neutral" key="3" value="3" icon={{ name: 'bolt', fill: true }} iconPosition="right" size="large" label="Three"/>
 </TkToggleButtonGroup>`);
   }, [buttonType]);
 

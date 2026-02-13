@@ -27,69 +27,71 @@ const options = {
 
 const SemiDoughnut = () => {
   const reactCode = `const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-        {
-            label: 'My First dataset',
-            data: [1, 10, 5, 2, 20, 32],
-            backgroundColor: [
-                '#F5F9FF',
-                '#D0E1FD',
-                '#ABC9FB',
-                '#3B82F6',
-                '#295BAC',
-                '#204887',
-            ],
-        },
-    ],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      data: [1, 10, 5, 2, 20, 32],
+      backgroundColor: [
+        '#F5F9FF',
+        '#D0E1FD',
+        '#ABC9FB',
+        '#3B82F6',
+        '#295BAC',
+        '#204887',
+      ],
+    },
+  ],
 };
 const options = {
-    cutout: '90%',
-    rotation: 225,
-    circumference: 270,
-    plugins: {
-        legend: {
-            labels: {
-                usePointStyle: true,
-            },
-        },
+  cutout: '90%',
+  rotation: 225,
+  circumference: 270,
+  plugins: {
+    legend: {
+      labels: {
+        usePointStyle: true,
+      },
     },
+  },
 };
-<TkChart type="doughnut" data={data} options={options}/>`;
+<TkChart type="doughnut" width="450px" data={data} options={options} />`;
+
   const vueCode = `const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-        {
-            label: 'My First dataset',
-            data: [1, 10, 5, 2, 20, 32],
-            backgroundColor: [
-                '#F5F9FF',
-                '#D0E1FD',
-                '#ABC9FB',
-                '#3B82F6',
-                '#295BAC',
-                '#204887',
-            ],
-        },
-    ],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      data: [1, 10, 5, 2, 20, 32],
+      backgroundColor: [
+        '#F5F9FF',
+        '#D0E1FD',
+        '#ABC9FB',
+        '#3B82F6',
+        '#295BAC',
+        '#204887',
+      ],
+    },
+  ],
 };
 const options = {
-    cutout: '90%',
-    rotation: 225,
-    circumference: 270,
-    plugins: {
-        legend: {
-            labels: {
-                usePointStyle: true,
-            },
-        },
+  cutout: '90%',
+  rotation: 225,
+  circumference: 270,
+  plugins: {
+    legend: {
+      labels: {
+        usePointStyle: true,
+      },
     },
+  },
 };
-<TkChart type="doughnut" :data.prop="data" :options.prop="options" />
+<TkChart type="doughnut" width="450px" :data.prop="data" :options.prop="options" />
 `;
 
   const angularCode = `<tk-chart
   type="doughnut"
+  width="450px"
   [data]="{
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [

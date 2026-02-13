@@ -15,7 +15,7 @@ const Clearable = () => {
     label="Clearable Input" 
     clearable 
     v-model="value" 
-    @tkClearClick="() => value = null"
+    @tk-clear-click="() => value = null"
   />`;
 
   const [value, setValue] = useState('Clearable Text');

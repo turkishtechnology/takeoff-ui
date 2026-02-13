@@ -49,20 +49,20 @@ const editorRef = ref();
     hint="You can format text using the toolbar"
     showAsterisk
     v-model="content"
-    :extensions={[
+    :extensions="[
         Highlight.configure()
-    ]}
-    toolbar={[
+    ]"
+    :toolbar="[
         ['h1', 'h2', 'bold', 'italic'],
         ['align-left', 'align-center', 'align-right'],
         [{
             action: 'highlight',
-            icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9" color="#717784"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" color="#717784"/></svg>',
+            icon: '<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M12 20h9&quot; color=&quot;#717784&quot;/><path d=&quot;M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z&quot; color=&quot;#717784&quot;/></svg>',
             label: 'Highlight Text',
             behavior: 'toggle',
             command: (editor) => editor.chain().focus().toggleHighlight().run()
         }]
-    ]}
+    ]"
 />
 `;
 

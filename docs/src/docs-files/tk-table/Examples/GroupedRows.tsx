@@ -433,18 +433,18 @@ const handleControlledGroupByChange = (e) => {
 
       <TkTable
         ref="controlledTableRef"
-        :data-key.prop="'id'"
-        card-title="Controlled Table"
-        :rows-per-page.prop="8"
-        pagination-method="client"
-        :columns.prop="columns"
-        :data.prop="sampleData"
-        selection-mode="checkbox"
-        :selection.prop="controlledSelectedRows"
+        dataKey="id"
+        cardTitle="Controlled Table"
+        :rowsPerPage="8"
+        paginationMethod="client"
+        :columns="columns"
+        :data="sampleData"
+        selectionMode="checkbox"
+        :selection="controlledSelectedRows"
         @tk-selection-change="handleControlledSelectionChange"
         @tk-group-by-change="handleControlledGroupByChange"
-        :group-by.prop="controlledGroupBy"
-        :striped.prop="true"
+        :groupBy="controlledGroupBy"
+        :striped="true"
       />
     </div>
 
@@ -462,17 +462,17 @@ const handleControlledGroupByChange = (e) => {
 
       <TkTable
         ref="uncontrolledTableRef"
-        :data-key.prop="'id'"
-        card-title="Uncontrolled Table"
-        :rows-per-page.prop="8"
-        pagination-method="client"
-        :columns.prop="columns"
-        :data.prop="sampleData"
-        selection-mode="checkbox"
-        :selection.prop="uncontrolledSelectedRows"
+        dataKey="id"
+        cardTitle="Uncontrolled Table"
+        :rowsPerPage="8"
+        paginationMethod="client"
+        :columns="columns"
+        :data="sampleData"
+        selectionMode="checkbox"
+        :selection="uncontrolledSelectedRows"
         @tk-selection-change="handleUncontrolledSelectionChange"
         @tk-group-by-change="handleUncontrolledGroupByChange"
-        :striped.prop="true"
+        :striped="true"
       />
     </div>
   </div>

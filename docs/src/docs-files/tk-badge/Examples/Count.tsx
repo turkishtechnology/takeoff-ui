@@ -2,7 +2,7 @@ import { TkBadge } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
-const Size = () => {
+const Count = () => {
   const reactCode = `<TkBadge variant="purple" size="large" type="filledlight" count="11" rounded />
 <TkBadge variant="purple" size="base" type="filledlight" count="11" rounded />
 <TkBadge variant="purple" size="small" type="filledlight" count="11" rounded />
@@ -28,4 +28,4 @@ const Size = () => {
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
-export default Size;
+export default Count;

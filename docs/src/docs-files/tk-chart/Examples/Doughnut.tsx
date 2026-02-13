@@ -48,7 +48,7 @@ const options = {
     },
   },
 };
-<TkChart type="doughnut" data={data} options={options}/>
+<TkChart type="doughnut" width="450px" data={data} options={options} />
     `;
   const vueCode = `const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -74,13 +74,14 @@ const options = {
         usePointStyle: true,
       },
     },
-    },
+  },
 };
-<TkChart type="doughnut" :data.prop="data" :options.prop="options" />
+<TkChart type="doughnut" width="450px" :data.prop="data" :options.prop="options" />
 `;
 
   const angularCode = `<tk-chart
   type="doughnut"
+  width="450px"
   [data]="{
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [

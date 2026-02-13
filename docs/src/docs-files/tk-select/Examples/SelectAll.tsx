@@ -35,13 +35,13 @@ const handleSelectAll = e => {
 <template>
  <TkSelect
   label="Select All"
-  :options.prop="[
+  :options="[
     { value: 'female', label: 'Female' },
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },
   ]"
   selectAllLabel="Select All"
-  :selectAll.prop="true"
+  :selectAll="true"
   multiple
   @tk-select-all="handleSelectAll"
 />

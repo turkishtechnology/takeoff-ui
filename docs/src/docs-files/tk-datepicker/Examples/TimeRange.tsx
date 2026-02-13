@@ -35,7 +35,7 @@ const TimeRange = () => {
     mode="range"
     label="Select Date & Time Range"
     placeholder="YYYY-MM-DD HH:mm - YYYY-MM-DD HH:mm"
-    showTimePicker
+    show-time-picker
     v-model="dateTimeRange"
 />`;
 

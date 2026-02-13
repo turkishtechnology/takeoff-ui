@@ -289,7 +289,7 @@ const column = [
 </script>
 
 <template>
-  <TkTable :columns.prop="column" :data.prop="data" :multiSort.prop="true" />
+  <TkTable :columns="column" :data="data" :multiSort="true" />
 </template>
 `;
 
