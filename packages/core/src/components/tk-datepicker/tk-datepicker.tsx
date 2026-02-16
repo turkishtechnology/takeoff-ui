@@ -273,6 +273,10 @@ export class TkDatePicker {
    * @defaultValue false
    */
   @Prop() showTimePicker: boolean = false;
+  @Watch('showTimePicker')
+  showTimePickerChanged() {
+    this.updateMaskOptions();
+  }
 
   /**
    * Enables time-only mode. In this mode, no date selection is required and the input shows a time mask.
@@ -599,7 +603,7 @@ export class TkDatePicker {
     return newDate;
   }
 
-  private getMaskOptionsFromDateFormat(format: string): IInputMaskOptions {
+  private getMaskOptionsFromDateFormat(format: string): void {
     const delimiter = format.match(/[^a-zA-Z]/)?.[0] || '';
     const datePattern: string[] = [];
     const blockSizes: number[] = [];
@@ -633,44 +637,26 @@ export class TkDatePicker {
 
     if (this.showTimePicker) {
       if (this.timeFormat === '12') {
-        return {
+        this.maskOptions = {
           blocks: [...blockSizes, 2, 2, 2], // date blocks + HH:MM AM/PM
           delimiters: [...dateDelimiters, ' ', ':', ' '],
+          uppercase: true,
         };
       } else {
-        return {
+        this.maskOptions = {
           blocks: [...blockSizes, 2, 2], // date blocks + HH:MM
           delimiters: [...dateDelimiters, ' ', ':'],
           numericOnly: true,
         };
       }
+    } else {
+      this.maskOptions = {
+        date: true,
+        delimiter,
+        datePattern,
+      };
     }
-
-    if (this.mode === 'range') {
-      if (this.showTimePicker) {
-        if (this.timeFormat === '12') {
-          return {
-            blocks: [...blockSizes, 2, 2, 2, ...blockSizes, 2, 2, 2], // start date+time + end date+time
-            delimiters: [...dateDelimiters, ' ', ':', ' ', ' - ', ...dateDelimiters, ' ', ':', ' '],
-            numericOnly: true,
-          };
-        } else {
-          return {
-            blocks: [...blockSizes, 2, 2, ...blockSizes, 2, 2], // start date+time + end date+time
-            delimiters: [...dateDelimiters, ' ', ':', ' - ', ...dateDelimiters, ' ', ':'],
-            numericOnly: true,
-          };
-        }
-      }
-    }
-
-    return {
-      date: true,
-      delimiter,
-      datePattern,
-    };
   }
-
   private processDateValue(value: string | IDateSelection, updateCurrentMonth: boolean = false): void {
     if (this.timeOnly) {
       // In time-only mode, value is expected to be a time string (e.g., HH:mm or hh:mm a)
@@ -863,8 +849,7 @@ export class TkDatePicker {
         return parsedAlt;
       }
     }
-    // Fallback to date only
-    return this.parseInputDate(dateTimeString.split(' ')[0]);
+    return null;
   }
 
   private parseTimeString(timeString: string): Date | null {
@@ -1068,7 +1053,7 @@ export class TkDatePicker {
         timeFormat: this.timeFormat,
       };
     } else {
-      this.maskOptions = this.getMaskOptionsFromDateFormat(this.dateFormat);
+      this.getMaskOptionsFromDateFormat(this.dateFormat);
     }
   }
   /**
@@ -1974,7 +1959,8 @@ export class TkDatePicker {
     if (this.inline) return null;
 
     const displayValue = this.formatInputValue();
-    const maskOptionsToPass = this.disableMask ? undefined : this.maskOptions;
+    const shouldUseMask = !this.disableMask && this.mode !== 'range';
+    const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
 
     return (
       <tk-input
