@@ -332,8 +332,11 @@ export class TkSelect implements ComponentInterface {
         // Panel açıldığında ilk itemin active olmasını sağlamak için
         const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
         if (!activeItem && !this.allowCustomValue) {
-          const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
-          firstItem?.setAttribute('data-active', 'true');
+          const firstEnabledIndex = this.getNextEnabledItemIndex(-1, 'down');
+          if (firstEnabledIndex !== null) {
+            const firstItem = this.el.querySelector(`.dropdown-item[data-option-index="${firstEnabledIndex}"]`) as HTMLDivElement;
+            firstItem?.setAttribute('data-active', 'true');
+          }
         }
       }
     } else {
@@ -635,6 +638,61 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
+  private getNextEnabledItemIndex(currentIndex: number, direction: 'up' | 'down'): number | null {
+    const totalItems = this.flatOptions.length;
+    const startIndex = this.selectAll && this.multiple ? -1 : 0;
+    const endIndex = totalItems - 1;
+
+    let nextIndex = direction === 'down' ? currentIndex + 1 : currentIndex - 1;
+    let visited = 0;
+    const maxVisits = totalItems + (this.selectAll && this.multiple ? 1 : 0);
+
+    // bütün itemler disabled ise sonsuz döngüye girmemesi için visited sayısı eklenmiştir. visited, toplam item sayısı + selectAll itemi (varsa) kadar olabilir.
+    while (visited < maxVisits) {
+      //circular navigation için
+      if (nextIndex > endIndex) {
+        nextIndex = startIndex;
+      } else if (nextIndex < startIndex) {
+        nextIndex = endIndex;
+      }
+      //select all item için
+      if (nextIndex === -1 && this.selectAll && this.multiple) {
+        return -1;
+      }
+      //kalan disabled olmayan itemleri gezmek için
+      if (nextIndex >= 0 && nextIndex < totalItems) {
+        const item = this.flatOptions[nextIndex];
+        const isDisabled = this.optionDisabled ? this.optionDisabled(item) : false;
+
+        if (!isDisabled) {
+          return nextIndex;
+        }
+      }
+
+      nextIndex = direction === 'down' ? nextIndex + 1 : nextIndex - 1;
+      visited++;
+    }
+
+    return null;
+  }
+
+  private navigateToItem(direction: 'up' | 'down') {
+    const activeItem = this.el.querySelector('.dropdown-item[data-active="true"]') as HTMLDivElement;
+    const activeIndex = activeItem ? Number(activeItem.getAttribute('data-option-index')) : null;
+
+    // activeindex varsa o indexten başlayarak yönüne göre sonraki enabled itemi bul, yoksa aşağı yönünde ilk enabled itemi bul
+    const nextIndex = activeIndex !== null ? this.getNextEnabledItemIndex(activeIndex, direction) : this.getNextEnabledItemIndex(-1, 'down');
+
+    if (nextIndex !== null) {
+      const newActiveItem = this.el.querySelector(`.dropdown-item[data-option-index='${nextIndex}']`) as HTMLDivElement;
+      if (newActiveItem) {
+        activeItem?.setAttribute('data-active', 'false');
+        newActiveItem.setAttribute('data-active', 'true');
+        this.scrollItem(newActiveItem);
+      }
+    }
+  }
+
   private handleFormReset() {
     if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
       this.value = this.value.filter(item => this.optionDisabled(item));
@@ -868,42 +926,12 @@ export class TkSelect implements ComponentInterface {
         return;
       }
       if (e.key === 'ArrowDown') {
-        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-        if (activeItem) {
-          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
-          if (newActiveItem) {
-            activeItem.setAttribute('data-active', 'false');
-            newActiveItem.setAttribute('data-active', 'true');
-            this.scrollItem(newActiveItem);
-          }
-        } else {
-          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-          if (firstItem) {
-            firstItem.setAttribute('data-active', 'true');
-            this.scrollItem(firstItem);
-          }
-        }
+        this.navigateToItem('down');
         return;
       }
 
       if (e.key === 'ArrowUp') {
-        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-        if (activeItem) {
-          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
-          if (newActiveItem) {
-            activeItem.setAttribute('data-active', 'false');
-            newActiveItem.setAttribute('data-active', 'true');
-            this.scrollItem(newActiveItem);
-          }
-        } else {
-          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-          if (firstItem) {
-            firstItem.setAttribute('data-active', 'true');
-            this.scrollItem(firstItem);
-          }
-        }
+        this.navigateToItem('up');
         return;
       }
 
