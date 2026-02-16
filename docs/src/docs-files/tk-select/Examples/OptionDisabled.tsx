@@ -35,7 +35,7 @@ const isOptionDisabled = option => {
   <TkSelect
     label="Disable Options"
     v-model="selectValue"
-    :options.prop="[
+    :options="[
       { value: 'female', label: 'Female' },
       { value: 'male', label: 'Male' },
       { value: 'other', label: 'Other' },

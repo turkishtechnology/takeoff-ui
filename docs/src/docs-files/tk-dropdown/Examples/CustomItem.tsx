@@ -57,12 +57,12 @@ const CustomItem = () => {
   const vueCode = ` <TkDropdown
     optionLabelKey="name" 
     optionValueKey="code" 
-    :options.prop="[
+    :options="[
     { code: 'SAW', name: 'Sabiha Gökçen Havalimanı'},
     { code: 'ESB', name: 'Esenboğa Havalimanı'},
     { code: 'AYT', name: 'Antalya Havalimanı'},
   ]"
-  :optionHtml.prop="(item) => {
+  :optionHtml="(item) => {
      return \`<div class='flex justify-between gap-4'>
                       <div style='font-weight: bold;'>\${item.name}</div>
                       <div style='color: var(--primary-base)'>\${item.code}</div>
@@ -72,7 +72,7 @@ const CustomItem = () => {
       <TkButton
         label="Custom Item Example"
         icon="keyboard_arrow_down"
-        icon-position="right"
+        :iconPosition="right"
         slot="trigger"
       />
 </TkDropdown>`;

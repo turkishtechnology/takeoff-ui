@@ -8,7 +8,7 @@ const Inline = () => {
 
   const vueCode = `<TkColorPicker inline />`;
 
-  const angularCode = ``;
+  const angularCode = `<tk-color-picker inline></tk-color-picker>`;
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };

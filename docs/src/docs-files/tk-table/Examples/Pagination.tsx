@@ -218,8 +218,8 @@ const column = [
 
 <template>
   <TkTable 
-    :columns.prop="column" 
-    :data.prop="data" 
+    :columns="column" 
+    :data="data" 
     paginationMethod="client" 
     :rowsPerPage="5"
     :totalItems="data.length" 

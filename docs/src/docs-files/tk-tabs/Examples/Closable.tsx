@@ -15,7 +15,7 @@ const Closable = () => {
   </TkTabsItem>
 </TkTabs>`;
 
-  const vueCode = `<TkTabs :isClosable.prop="true">
+  const vueCode = `<TkTabs :isClosable="true">
   <TkTabsItem label="Tab label" icon="flight">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate nequequas!</p>
   </TkTabsItem>

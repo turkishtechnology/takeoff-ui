@@ -39,12 +39,12 @@ const Controlled = () => {
   const vueCode = `const activeTab = ref(0);
 
 <TkTabs
-  activeIndex={activeTab}
+  :activeIndex="activeTab"
   controlled
-  onTkTabClick={(e) => activeTab = e.detail}
+  @tk-tab-click="(e) => activeTab = e.detail"
 >
   <TkTabsItem label="Tab label" icon="flight">
-    <p className="m-0">
+    <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
       sed consequuntur error repudiandae numquam deserunt quisquam
       repellat libero asperiores earum nam nobis, culpa ratione quam
@@ -52,7 +52,7 @@ const Controlled = () => {
     </p>
   </TkTabsItem>
   <TkTabsItem label="Tab label" icon="flight">
-    <p className="m-0">
+    <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
       sed consequuntur error repudiandae numquam deserunt quisquam
       repellat libero asperiores earum nam nobis, culpa ratione quam
@@ -60,7 +60,7 @@ const Controlled = () => {
     </p>
   </TkTabsItem>
   <TkTabsItem label="Tab label" icon="flight">
-    <p className="m-0">
+    <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
       sed consequuntur error repudiandae numquam deserunt quisquam
       repellat libero asperiores earum nam nobis, culpa ratione quam

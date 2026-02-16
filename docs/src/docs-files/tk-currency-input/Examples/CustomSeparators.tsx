@@ -5,14 +5,14 @@ import React from 'react';
 const CustomSeparators = () => {
   const reactCode = `<TkCurrencyInput
     label="Currency Franche Example"
-    decimal-separator=","
-    thousands-separator=" "
+    decimalSeparator=","
+    thousandsSeparator=" "
   />`;
 
   const vueCode = `<TkCurrencyInput
     label="Currency Franche Example"
-    decimal-separator=","
-    thousands-separator=" "
+    decimalSeparator=","
+    thousandsSeparator=" "
   />`;
 
   const angularCode = `<tk-currency-input
@@ -23,7 +23,7 @@ const CustomSeparators = () => {
 
   const demo = (
     <div className="flex items-end gap-2">
-      <TkCurrencyInput label="Currency Franche Example" decimal-separator="," thousands-separator=" " />
+      <TkCurrencyInput label="Currency Franche Example" decimalSeparator="," thousandsSeparator=" " />
     </div>
   );
 

@@ -72,16 +72,13 @@ const handleFilesChanged = (e) => {
     removable: true,
   });
 };
-const handleFilesRejected = (e) => {
-  let errorMessage = e.detail
-    ?.map((item) => item.reason + ' ' + item.file.name)
-    .join('');
-
+const handleUpload = (e) => {
+  console.log(e.detail);
   createToast({
-    header: \`\${e.detail.length} dosya eklenemedi!\`,
-    message: errorMessage,
+    header: 'Dosya yüklendi',
+    message: 'Dosya yükleme başarılı.',
     variant: 'success',
-    type: 'outlined',
+    type: 'filled',
     timeout: 10000,
     removable: true,
   });
@@ -90,9 +87,8 @@ const handleFilesRejected = (e) => {
 
 <template>
   <TkUpload
-    multiple
     @tkChange="handleFilesChanged"
-    @tkFilesRejected="handleFilesRejected"
+    @tkUpload="handleUpload"
   >
   </TkUpload>
 </template>

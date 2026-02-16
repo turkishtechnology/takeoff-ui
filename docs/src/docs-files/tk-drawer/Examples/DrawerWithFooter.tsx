@@ -23,11 +23,11 @@ const DrawerWithFooter = () => {
     </div>
 </TkDrawer>`;
 
-  const vueCode = `<TkButton label="Open Drawer" @tkClick="showDrawer = true" />
+  const vueCode = `<TkButton label="Open Drawer" @tk-click="showDrawer = true" />
 <TkDrawer
     header="Drawer with Footer"
     :open="showDrawer"
-    @tkDrawerClose="()=> showDrawer = false"
+    @tk-drawer-close="()=> showDrawer = false"
 >
     <div slot="content">
         <p>
@@ -36,7 +36,7 @@ const DrawerWithFooter = () => {
         </p>
     </div>
     <div slot="footer">
-        <TkButton label="Cancel" variant="neutral" @tkClick="showDrawer = false" type="text" />
+        <TkButton label="Cancel" variant="neutral" @tk-click="showDrawer = false" type="text" />
         <TkButton label="Confirm" variant="primary" />
     </div>
 </TkDrawer>`;

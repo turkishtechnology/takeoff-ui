@@ -44,10 +44,7 @@ return (
     </TkDropdown>
 );`;
 
-  const vueCode = `<script setup>
-import { TkDropdown, TkButton } from '@takeoff-ui/vue';
-
-const options = [
+  const vueCode = `const options = [
   { label: 'Lorem Ipsum', value: '1' },
   { label: 'It is established', value: '2' },
   { label: 'Many desktop', value: '3' },
@@ -55,23 +52,17 @@ const options = [
 const handleItemClick=(e)=>{
 alert(\`\${e.detail.label} has been clicked\`);
 }
-</script>
 
-<template>
-  <div>
-    <TkDropdown :options.prop="options"
-    @tkItemClick="handleItemClick"
-    >
-      <TkButton
-        label="Item Click Example"
-        icon="keyboard_arrow_down"
-        icon-position="right"
-        slot="trigger"
-      />
-    </TkDropdown>
-  </div>
-</template>
-`;
+<TkDropdown :options="options"
+@tk-item-click="handleItemClick"
+>
+  <TkButton
+    label="Item Click Example"
+    icon="keyboard_arrow_down"
+    :iconPosition="right"
+    slot="trigger"
+  />
+</TkDropdown>`;
 
   const demo = <Example />;
 

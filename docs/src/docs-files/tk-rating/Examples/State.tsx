@@ -6,8 +6,8 @@ const State = () => {
   const reactCode = `<TkRating type="star" value={3.5} showRatingValue disabled />
 <TkRating type="star" value={3.5} showRatingValue readonly />`;
 
-  const vueCode = `<TkRating type="star" value="3.5" :showRatingValue.prop="true" disabled />
-<TkRating type="star" value="3.5" :showRatingValue.prop="true" readonly />`;
+  const vueCode = `<TkRating type="star" :value="3.5" :showRatingValue="true" disabled />
+<TkRating type="star" :value="3.5" :showRatingValue="true" readonly />`;
 
   const angularCode = `<tk-rating type="star" [value]="3.5" showRatingValue disabled />
   <tk-rating type="star" [value]="3.5" showRatingValue readonly />`;

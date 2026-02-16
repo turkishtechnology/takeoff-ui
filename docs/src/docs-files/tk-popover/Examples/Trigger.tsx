@@ -41,14 +41,14 @@ const Trigger = () => {
 
   const vueCode = `<TkPopover trigger="click">
   <TkButton slot="trigger" label="Click Me!"></TkButton>
-  <div slot="content" className="flex flex-col gap-2 w-[300px]">
-    <div className="flex gap-2">
+  <div slot="content" class="flex flex-col gap-2 w-[300px]">
+    <div class="flex gap-2">
       <TkIcon icon="bolt" variant="neutral" sign />
-      <span className="text-lg font-bold text-neutral-900">
+      <span class="text-lg font-bold text-neutral-900">
         Popover Header
       </span>
     </div>
-    <div className="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
       <span>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         quos.
@@ -58,14 +58,14 @@ const Trigger = () => {
 </TkPopover>
 <TkPopover trigger="hover">
   <TkButton slot="trigger" label="Hover Me!"></TkButton>
-  <div slot="content" className="flex flex-col gap-2 w-[300px]">
-    <div className="flex gap-2">
+  <div slot="content" class="flex flex-col gap-2 w-[300px]">
+    <div class="flex gap-2">
       <TkIcon icon="bolt" variant="neutral" sign />
-      <span className="text-lg font-bold text-neutral-900">
+      <span class="text-lg font-bold text-neutral-900">
         Popover Header
       </span>
     </div>
-    <div className="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
       <span>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         quos.

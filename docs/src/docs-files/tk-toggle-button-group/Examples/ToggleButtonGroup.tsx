@@ -69,7 +69,7 @@ ${buttonCode}
     type="${buttonType}"
     variant="${buttonVariant}"
     :icon="{ name: 'bolt', fill: true }"
-    icon-position="right"
+    iconPosition="right"
     size="large"
     label="${opt.label}"
   />`,

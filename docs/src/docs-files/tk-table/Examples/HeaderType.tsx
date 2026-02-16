@@ -44,7 +44,7 @@ const HeaderType = () => {
 
   const reactCode = `<TkTable columns={column} data={headerTypeData} headerType="${type}" />`;
 
-  const vueCode = `<TkTable :columns.prop="column" :data.prop="headerTypeData" headerType="${type}" />`;
+  const vueCode = `<TkTable :columns="column" :data="headerTypeData" headerType="${type}" />`;
 
   const angularCode = `<tk-table
   [columns]="[

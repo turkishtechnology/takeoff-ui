@@ -793,8 +793,9 @@ export class TkSelect implements ComponentInterface {
     const path = e.composedPath();
     const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
     const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+    const isChipsClearButton = path.some((el: any) => el.classList?.contains('tk-chips-clear-button'));
 
-    if (isClearButton) return;
+    if (isClearButton || isChipsClearButton) return;
 
     if (isChevron) {
       this.isOpen = !this.isOpen;

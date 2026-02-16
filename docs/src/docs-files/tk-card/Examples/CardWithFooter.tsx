@@ -51,7 +51,7 @@ const CardWithFooter = () => {
   </div>
 </TkCard>`;
 
-  const angularCode = `<tk-card header="Card with Footer" footerType="basic">
+  const angularCode = `<tk-card header="Card with Footer" footer-type="basic">
   <p>This card demonstrates the use of a footer with action buttons.</p>
   <div slot="footer-actions">
     <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
@@ -59,7 +59,7 @@ const CardWithFooter = () => {
   </div>
 </tk-card>
 
-<tk-card header="Card with Footer" footerType="divided">
+<tk-card header="Card with Footer" footer-type="divided">
   <p>This card demonstrates the use of a footer with action buttons.</p>
   <div slot="footer-actions">
     <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
@@ -67,7 +67,7 @@ const CardWithFooter = () => {
   </div>
 </tk-card>
 
-<tk-card header="Card with Footer" footerType="light">
+<tk-card header="Card with Footer" footer-type="light">
   <p>This card demonstrates the use of a footer with action buttons.</p>
   <div slot="footer-actions">
     <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
