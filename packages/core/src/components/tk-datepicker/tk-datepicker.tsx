@@ -87,13 +87,6 @@ export class TkDatePicker {
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
-        // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if (this.showTimePicker && !this.internalStartTime) {
-          const def = this.getDefaultTime();
-          this.internalStartTime = def;
-          if (this.mode !== 'range') this.internalEndTime = def;
-          if (this.timeFormat === '12') this.internalAmPm = def.hour >= 12 ? 'PM' : 'AM';
-        }
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
