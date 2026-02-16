@@ -1067,7 +1067,7 @@ export class TkSelect implements ComponentInterface {
   }
 
   private renderDropdown() {
-    if (!this.isOpen) return null;
+    if (!this.isOpen || this.disabled) return null;
     return (
       <div class="tk-select-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
         <div class="dropdown-item-holder">

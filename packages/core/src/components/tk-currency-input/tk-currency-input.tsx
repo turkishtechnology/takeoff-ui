@@ -636,7 +636,7 @@ export class TkCurrencyInput implements ComponentInterface {
       <div class="tk-currency-input-dropdown">
         {this.renderDropdownButton()}
 
-        {this.isDropdownOpen && (
+        {this.isDropdownOpen && !this.disabled && (
           <div class="tk-currency-input-dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
             {this.renderCurrencyList()}
           </div>

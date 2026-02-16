@@ -858,7 +858,7 @@ export class TkColorPicker implements ComponentInterface {
     return (
       <div class={rootClasses}>
         {this.renderInput()}
-        {(this.isOpen || this.inline) && this.renderPanel()}
+        {!this.disabled && (this.isOpen || this.inline) && this.renderPanel()}
       </div>
     );
   }
