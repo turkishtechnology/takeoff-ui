@@ -75,11 +75,7 @@ export class TkDatePicker {
   }
   @State() hoverDate: Date | null = null;
   @State() currentView: 'days' | 'months' | 'years' = 'days';
-  @State() maskOptions: IInputMaskOptions = {
-    date: true,
-    delimiter: '-',
-    datePattern: ['Y', 'm', 'd'],
-  };
+  @State() maskOptions?: IInputMaskOptions;
   @State() isInvalid: boolean = false;
   @State() isOpen: boolean = false;
   @State() concealUntilMeasured: boolean = false;
@@ -240,9 +236,8 @@ export class TkDatePicker {
    */
   @Prop() dateFormat: string = 'yyyy-MM-dd';
   @Watch('dateFormat')
-  dateFormatChanged(newFormat: string) {
-    if (this.timeOnly) return; // keep time mask in timeOnly mode
-    this.maskOptions = this.getMaskOptionsFromDateFormat(newFormat);
+  dateFormatChanged() {
+    this.updateMaskOptions();
   }
 
   /**
@@ -315,15 +310,15 @@ export class TkDatePicker {
   @Prop() timeFormat: '12' | '24' = '24';
 
   @Watch('timeOnly')
-  timeOnlyChanged(newValue: boolean) {
+  timeOnlyChanged() {
     // Update mask according to the active mode
-    this.maskOptions = newValue ? { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat } : this.getMaskOptionsFromDateFormat(this.dateFormat);
+    this.updateMaskOptions();
   }
 
   @Watch('timeFormat')
   timeFormatChanged() {
     if (this.timeOnly || this.showTimePicker) {
-      this.maskOptions = { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat };
+      this.updateMaskOptions();
       // Sync AM/PM with the current hour when switching to 12h
       if (this.timeFormat === '12' && this.internalStartTime) {
         this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
@@ -350,7 +345,7 @@ export class TkDatePicker {
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<IDateSelection | string>;
 
   componentWillLoad() {
-    this.maskOptions = this.timeOnly ? { time: true, timePattern: ['h', 'm'] } : this.getMaskOptionsFromDateFormat(this.dateFormat);
+    this.updateMaskOptions();
 
     if (this.allowedDates) {
       this.allowedDates = this.allowedDates.filter(date => {
@@ -607,22 +602,49 @@ export class TkDatePicker {
   private getMaskOptionsFromDateFormat(format: string): IInputMaskOptions {
     const delimiter = format.match(/[^a-zA-Z]/)?.[0] || '';
     const datePattern: string[] = [];
+    const blockSizes: number[] = [];
     const parts = format.split(/[^a-zA-Z]/);
 
     parts.forEach(part => {
-      switch (part.toLowerCase()) {
+      const lowerPart = part.toLowerCase();
+      switch (lowerPart) {
         case 'yyyy':
+          datePattern.push('Y');
+          blockSizes.push(4);
+          break;
         case 'yy':
           datePattern.push('Y');
+          blockSizes.push(2);
           break;
         case 'mm':
-        case 'M':
+        case 'm':
+          datePattern.push('m');
+          blockSizes.push(2);
+          break;
         case 'dd':
         case 'd':
-          datePattern.push(part.startsWith('M') ? 'm' : 'd');
+          datePattern.push('d');
+          blockSizes.push(2);
           break;
       }
     });
+
+    const dateDelimiters = Array(blockSizes.length - 1).fill(delimiter);
+
+    if (this.showTimePicker) {
+      if (this.timeFormat === '12') {
+        return {
+          blocks: [...blockSizes, 2, 2, 2], // date blocks + HH:MM AM/PM
+          delimiters: [...dateDelimiters, ' ', ':', ' '],
+        };
+      } else {
+        return {
+          blocks: [...blockSizes, 2, 2], // date blocks + HH:MM
+          delimiters: [...dateDelimiters, ' ', ':'],
+          numericOnly: true,
+        };
+      }
+    }
     return {
       date: true,
       delimiter,
@@ -1018,7 +1040,18 @@ export class TkDatePicker {
     this.tkChange.emit(emitValue);
     this.inputValue = this.formatInputValue();
   }
-
+  private updateMaskOptions() {
+    if (this.timeOnly) {
+      // timeformat'a göre mask options'ları belirle
+      this.maskOptions = {
+        time: true,
+        timePattern: ['h', 'm'],
+        timeFormat: this.timeFormat,
+      };
+    } else {
+      this.maskOptions = this.getMaskOptionsFromDateFormat(this.dateFormat);
+    }
+  }
   /**
    * Click outside handler implementation - called by the mixin
    */
@@ -1922,7 +1955,7 @@ export class TkDatePicker {
     if (this.inline) return null;
 
     const displayValue = this.formatInputValue();
-    const shouldUseMask = !this.disableMask && (this.timeOnly ? this.timeFormat === '24' : this.mode === 'single' && !this.showTimePicker);
+    const shouldUseMask = !this.disableMask && this.mode !== 'range';
     const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
 
     return (
