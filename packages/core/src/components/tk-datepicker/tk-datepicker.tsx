@@ -645,6 +645,25 @@ export class TkDatePicker {
         };
       }
     }
+
+    if (this.mode === 'range') {
+      if (this.showTimePicker) {
+        if (this.timeFormat === '12') {
+          return {
+            blocks: [...blockSizes, 2, 2, 2, ...blockSizes, 2, 2, 2], // start date+time + end date+time
+            delimiters: [...dateDelimiters, ' ', ':', ' ', ' - ', ...dateDelimiters, ' ', ':', ' '],
+            numericOnly: true,
+          };
+        } else {
+          return {
+            blocks: [...blockSizes, 2, 2, ...blockSizes, 2, 2], // start date+time + end date+time
+            delimiters: [...dateDelimiters, ' ', ':', ' - ', ...dateDelimiters, ' ', ':'],
+            numericOnly: true,
+          };
+        }
+      }
+    }
+
     return {
       date: true,
       delimiter,
@@ -1955,8 +1974,7 @@ export class TkDatePicker {
     if (this.inline) return null;
 
     const displayValue = this.formatInputValue();
-    const shouldUseMask = !this.disableMask && this.mode !== 'range';
-    const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
+    const maskOptionsToPass = this.disableMask ? undefined : this.maskOptions;
 
     return (
       <tk-input
