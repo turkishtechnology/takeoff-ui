@@ -629,19 +629,11 @@ export class TkDatePicker {
     const dateDelimiters = Array(blockSizes.length - 1).fill(delimiter);
 
     if (this.showTimePicker) {
-      if (this.timeFormat === '12') {
-        this.maskOptions = {
-          blocks: [...blockSizes, 2, 2, 2], // date blocks + HH:MM AM/PM
-          delimiters: [...dateDelimiters, ' ', ':', ' '],
-          uppercase: true,
-        };
-      } else {
-        this.maskOptions = {
-          blocks: [...blockSizes, 2, 2], // date blocks + HH:MM
-          delimiters: [...dateDelimiters, ' ', ':'],
-          numericOnly: true,
-        };
-      }
+      this.maskOptions = {
+        blocks: [...blockSizes, 2, 2], // date blocks + HH:MM
+        delimiters: [...dateDelimiters, ' ', ':'],
+        numericOnly: true,
+      };
     } else {
       this.maskOptions = {
         date: true,
@@ -1410,17 +1402,19 @@ export class TkDatePicker {
               start: normalized,
               end: null,
             };
+            let formattedValue;
             if (this.showTimePicker) {
               const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
               this.internalStartTime = time;
               this.internalEndTime = time;
+              formattedValue = format(parsedDate, this.getFullDateTimeFormat());
             } else {
               this.internalStartTime = null;
               this.internalEndTime = null;
+              formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
             }
 
             this.isInvalid = false;
-            const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
             this.tkChange.emit(formattedValue);
           } else {
             this.isInvalid = true;
