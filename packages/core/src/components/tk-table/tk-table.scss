@@ -239,7 +239,9 @@
             border-bottom: none;
             position: sticky;
             left: var(--tk-table-sticky-left-offset, 0);
-
+            &.tk-table-collapsible-group-header {
+              cursor: pointer;
+            }
             .tk-table-group-header-cell {
               font-weight: var(--font-weight-semibold);
               color: var(--text-dark);
