@@ -169,9 +169,6 @@
 
       tbody {
         tr {
-          &.tk-table-group-header + tr {
-            border-top: 1px solid var(--border-light);
-          }
           &:last-child {
             border-bottom: none;
           }
@@ -236,7 +233,6 @@
 
           &.tk-table-group-header {
             display: block;
-            border-bottom: none;
             position: sticky;
             left: var(--tk-table-sticky-left-offset, 0);
             &.tk-table-collapsible-group-header {
@@ -246,6 +242,17 @@
               font-weight: var(--font-weight-semibold);
               color: var(--text-dark);
               border: none;
+              position: relative;
+              &::after {
+                content: '';
+                position: absolute;
+                left: 100%;
+                top: 0;
+                bottom: -1px;
+                width: calc(var(--table-holder-width) - 100%);
+                background-color: inherit;
+                border-bottom: 1px solid var(--border-light);
+              }
 
               .tk-table-group-header-content {
                 display: flex;
@@ -405,8 +412,24 @@
         background-color: var(--background-lightest);
       }
 
+      &:nth-child(even).tk-table-group-header {
+        background-color: var(--background-lightest);
+
+        .tk-table-group-header-cell::after {
+          background-color: var(--background-lightest);
+        }
+      }
+
       &:hover td {
         background-color: var(--states-info-light);
+      }
+
+      &.tk-table-group-header:hover {
+        background-color: var(--states-info-light);
+
+        .tk-table-group-header-cell::after {
+          background-color: var(--states-info-light);
+        }
       }
 
       &.selected td {

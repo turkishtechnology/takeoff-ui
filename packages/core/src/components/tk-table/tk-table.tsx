@@ -1660,6 +1660,13 @@ export class TkTable implements ComponentInterface {
     const rows = [];
     let globalIndex = 0;
 
+    // Group headerın olduğu cellden sonra oluşan boşluk için genişlik hesaplaması
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder') as HTMLElement;
+    if (tableHolder) {
+      const tableHolderWidth = tableHolder.clientWidth;
+      tableHolder.style.setProperty('--table-holder-width', `${tableHolderWidth}px`);
+    }
+
     // For pagination, we need to determine which groups and rows to show
     let startIndex = 0;
     let endIndex = this.renderData.length;
@@ -1683,7 +1690,14 @@ export class TkTable implements ComponentInterface {
         // Create group header row
         const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
         const groupHeaderRow = (
-          <tr class={classNames('tk-table-group-header', { 'tk-table-collapsible-group-header': this.collapsibleGroups })} onClick={() => this.toggleExpandGroup(group.groupValue)}>
+          <tr
+            class={classNames(
+              'tk-table-group-header',
+              { 'tk-table-collapsible-group-header': this.collapsibleGroups },
+              { 'tk-table-group-collapsed': this.collapsibleGroups && !isGroupExpanded },
+            )}
+            onClick={() => this.toggleExpandGroup(group.groupValue)}
+          >
             <td colSpan={totalColumns} class="tk-table-group-header-cell">
               <div class="tk-table-group-header-content">
                 {this.collapsibleGroups && <tk-icon icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} variant="neutral" />}
