@@ -1,0 +1,34 @@
+{
+  "name": "TkTimeline",
+  "componentName": "TkTimeline",
+  "hasChildren": false,
+  "fullWidth": true,
+  "props": [
+    {
+      "key": "items",
+      "label": "Items",
+      "type": "json",
+      "defaultValue": [
+        { "title": "Event 1", "description": "First event description", "date": "2024-01-01" },
+        { "title": "Event 2", "description": "Second event description", "date": "2024-02-15" },
+        { "title": "Event 3", "description": "Third event description", "date": "2024-06-30" }
+      ]
+    },
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "alternate",
+      "label": "Alternate",
+      "type": "checkbox",
+      "defaultValue": true
+    }
+  ]
+}

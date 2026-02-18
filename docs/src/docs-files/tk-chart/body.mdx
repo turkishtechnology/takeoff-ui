@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import chartConfigData from './chartPlaygroundConfig.json';
 import Bar from './Examples/Bar';
 import Pie from './Examples/Pie';
 import Line from './Examples/Line';
@@ -5,6 +7,11 @@ import Doughnut from './Examples/Doughnut';
 import SemiDoughnut from './Examples/Semi-Doughnut';
 import MultipleBar from './Examples/Multiple-Bar';
 import Plugin from './Examples/Plugin';
+import { TkChart } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[chartConfigData]} componentMap={{ TkChart }} />
 
 ## Bar
 

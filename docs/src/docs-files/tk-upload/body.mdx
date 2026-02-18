@@ -1,8 +1,15 @@
+import Playground from '../../components/Playground';
+import uploadConfigData from './uploadPlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import State from './Examples/State';
 import Accept from './Examples/Accept';
 import AutoUpload from './Examples/AutoUpload';
 import Type from './Examples/Type';
+import { TkUpload } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[uploadConfigData]} componentMap={{ TkUpload }} />
 
 ## Basic
 

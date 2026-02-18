@@ -1,3 +1,6 @@
+import Playground from '../../components/Playground';
+import accordionConfigData from './accordionPlaygroundConfig.json';
+import { TkAccordion, TkAccordionItem } from '@takeoff-ui/react';
 import Type from './Examples/Type';
 import Mode from './Examples/Mode';
 import AllowMultiple from './Examples/AllowMultiple';
@@ -7,6 +10,13 @@ import Icon from './Examples/Icon';
 import Position from './Examples/Position';
 import ExpandCollapseIcons from './Examples/ExpandCollapseIcons';
 import Size from './Examples/Size';
+
+### Playground
+
+<Playground
+  configs={[accordionConfigData]}
+  componentMap={{ TkAccordion, TkAccordionItem }}
+/>
 
 ## Type
 

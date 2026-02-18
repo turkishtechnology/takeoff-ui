@@ -1,3 +1,6 @@
+import Playground from '../../components/Playground';
+import tabsConfigData from './tabsPlaygroundConfig.json';
+import { TkTabs, TkTabsItem } from '@takeoff-ui/react';
 import Type from './Examples/Type';
 import Orientation from './Examples/Orientation';
 import Variants from './Examples/Variants';
@@ -8,6 +11,10 @@ import Programmatically from './Examples/Programmatically';
 import AlignHeaders from './Examples/AlignHeaders';
 import Controlled from './Examples/Controlled';
 import BadgeOptions from './Examples/BadgeOptions';
+
+### Playground
+
+<Playground configs={[tabsConfigData]} componentMap={{ TkTabs, TkTabsItem }} />
 
 ## Type
 

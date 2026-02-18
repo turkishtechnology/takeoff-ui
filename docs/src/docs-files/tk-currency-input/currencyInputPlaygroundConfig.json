@@ -74,6 +74,16 @@
       "defaultValue": 2
     },
     {
+      "key": "currencyList",
+      "label": "Currency List",
+      "type": "json",
+      "defaultValue": [
+        { "code": "GBP", "id": "GB", "symbol": "£", "name": "British Pound", "decimalSeparator": ".", "thousandsSeparator": "," },
+        { "code": "TRY", "id": "TR", "symbol": "₺", "name": "Turkish Lira", "decimalSeparator": ",", "thousandsSeparator": "." },
+        { "code": "JPY", "id": "JP", "symbol": "¥", "name": "Japanese Yen", "decimalSeparator": ".", "thousandsSeparator": "," }
+      ]
+    },
+    {
       "key": "disabled",
       "label": "Disabled",
       "type": "checkbox",
