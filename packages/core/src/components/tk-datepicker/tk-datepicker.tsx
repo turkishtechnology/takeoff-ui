@@ -1922,9 +1922,6 @@ export class TkDatePicker {
 
   private renderInput() {
     if (this.inline) return null;
-
-    // bu şekilde düzeltme lazım ama internaldates setlenmeden yapılmalı
-    // const displayValue = this.formatInputValue();
     const shouldUseMask = !this.disableMask && (this.timeOnly ? this.timeFormat === '24' : this.mode === 'single' && !this.showTimePicker);
     const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
 
