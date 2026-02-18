@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import inputConfigData from './inputPlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import Password from './Examples/Password';
 import Counter from './Examples/Counter';
@@ -9,7 +11,11 @@ import Chips from './Examples/Chips';
 import LabelTooltip from './Examples/LabelTooltip';
 import Icon from './Examples/Icon';
 import Pre from './Examples/Pre';
-import { TkAlert } from '@takeoff-ui/react';
+import { TkAlert, TkInput } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[inputConfigData]} componentMap={{ TkInput }} />
 
 ## Basic
 

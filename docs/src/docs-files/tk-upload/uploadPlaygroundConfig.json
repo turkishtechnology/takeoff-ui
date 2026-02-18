@@ -1,0 +1,115 @@
+{
+  "name": "TkUpload",
+  "componentName": "TkUpload",
+  "hasChildren": false,
+  "fullWidth": true,
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "default",
+      "options": [
+        { "label": "Default", "value": "default" },
+        { "label": "Centered", "value": "centered" }
+      ]
+    },
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "text",
+      "defaultValue": "Choose a file or drag & drop it here."
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "text",
+      "defaultValue": "JPEG, PNG, PDF and MP4 formats, up to 50MB."
+    },
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "accept",
+      "label": "Accept",
+      "type": "text",
+      "defaultValue": "*",
+      "tooltip": "MIME types or extensions separated by commas."
+    },
+    {
+      "key": "chooseButtonLabel",
+      "label": "Choose Button Label",
+      "type": "text",
+      "defaultValue": "Choose File"
+    },
+    {
+      "key": "uploadButtonLabel",
+      "label": "Upload Button Label",
+      "type": "text",
+      "defaultValue": "Upload"
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "multiple",
+      "label": "Multiple",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "dragDrop",
+      "label": "Drag & Drop",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "autoUpload",
+      "label": "Auto Upload",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "downloadable",
+      "label": "Downloadable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showFiles",
+      "label": "Show Files",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
