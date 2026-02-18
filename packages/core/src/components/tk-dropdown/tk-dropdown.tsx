@@ -209,7 +209,7 @@ export class TkDropdown implements ComponentInterface {
   }
 
   private renderDropdown() {
-    if (!this.isOpen || this.disabled) return null;
+    if (!this.isOpen) return null;
 
     return (
       <div class="tk-dropdown-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-dropdown-id={this.uniqueId}>

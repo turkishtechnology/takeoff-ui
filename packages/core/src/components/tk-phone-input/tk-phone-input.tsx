@@ -456,7 +456,7 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <div class="tk-phone-input-dropdown">
         {this.createDropdownButton()}
-        {this.isDropdownOpen && !this.disabled && (
+        {this.isDropdownOpen && (
           <div class="tk-phone-input-dropdown-menu" role="listbox" ref={el => (this.panelRef = el as HTMLDivElement)}>
             {this.createDropdownSearch()}
             {this.createDropdownList()}
