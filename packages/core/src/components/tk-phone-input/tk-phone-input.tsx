@@ -103,6 +103,10 @@ export class TkPhoneInput implements ComponentInterface {
    * * @defaultValue false
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isDropdownOpen = false;
+  }
 
   /**
    * If `true`, the user cannot modify the value.
