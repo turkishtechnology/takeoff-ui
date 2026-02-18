@@ -230,6 +230,7 @@ export class TkDatePicker {
   @Prop() dateFormat: string = 'yyyy-MM-dd';
   @Watch('dateFormat')
   dateFormatChanged() {
+    if (this.timeOnly) return;
     this.updateMaskOptions();
   }
 
@@ -603,8 +604,7 @@ export class TkDatePicker {
     const parts = format.split(/[^a-zA-Z]/);
 
     parts.forEach(part => {
-      const lowerPart = part.toLowerCase();
-      switch (lowerPart) {
+      switch (part.toLowerCase()) {
         case 'yyyy':
           datePattern.push('Y');
           blockSizes.push(4);
