@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import editorConfigData from './editorPlaygroundConfig.json';
 import Default from './Examples/Default';
 import Label from './Examples/Label';
 import States from './Examples/States';
@@ -7,7 +9,11 @@ import GetContent from './Examples/GetContent';
 import MediaAndUrl from './Examples/MediaAndUrl';
 import Placeholder from './Examples/Placeholder';
 import Counter from './Examples/Counter';
-import { TkAlert } from '@takeoff-ui/react';
+import { TkAlert, TkEditor } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[editorConfigData]} componentMap={{ TkEditor }} />
 
 ## Default
 

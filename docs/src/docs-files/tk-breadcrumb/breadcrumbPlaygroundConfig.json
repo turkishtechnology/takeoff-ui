@@ -1,0 +1,47 @@
+{
+  "name": "TkBreadcrumb",
+  "componentName": "TkBreadcrumb",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "model",
+      "label": "Model",
+      "type": "json",
+      "defaultValue": [
+        { "label": "Home", "href": "/", "isExternal": true },
+        { "label": "Library", "href": "/library", "isExternal": true },
+        { "label": "Data", "href": "/library/data", "isExternal": true },
+        { "label": "Current Page" }
+      ]
+    },
+    {
+      "key": "separator",
+      "label": "Separator",
+      "type": "select",
+      "defaultValue": "icon",
+      "options": [
+        { "label": "Icon", "value": "icon" },
+        { "label": "Slash", "value": "slash" },
+        { "label": "Dot", "value": "dot" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "separatorIcon",
+      "label": "Separator Icon",
+      "type": "text",
+      "defaultValue": "chevron_right",
+      "tooltip": "Only applies when separator is set to 'icon'."
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Outlined", "value": "outlined" }
+      ]
+    }
+  ]
+}

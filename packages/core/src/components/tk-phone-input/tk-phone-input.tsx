@@ -103,6 +103,10 @@ export class TkPhoneInput implements ComponentInterface {
    * * @defaultValue false
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isDropdownOpen = false;
+  }
 
   /**
    * If `true`, the user cannot modify the value.
@@ -475,7 +479,7 @@ export class TkPhoneInput implements ComponentInterface {
     });
 
     return (
-      <button class="tk-dropdown-button" onClick={this.toggleDropdown} type="button">
+      <button class="tk-phone-input-dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
           {!this.hideFlag && <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />}

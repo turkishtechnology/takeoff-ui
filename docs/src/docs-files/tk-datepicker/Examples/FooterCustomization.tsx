@@ -1,23 +1,29 @@
-import React, { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { TkDatepicker, TkButton } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 
 const FooterCustomization = () => {
-  const reactCode = `import { useRef } from "react";
+  const reactCode = `import { useRef, useState } from "react";
 import { TkDatepicker, TkButton } from "@takeoff-ui/react";
 
 const dp = useRef(null);
 
+const [date, setDate] = useState();
+
 const setToday = async () => {
-   await dp.current.setToday();
+   await dp?.current?.setToday();
 };
 
-<TkDatepicker ref={dp} inline>
+const submit = async () => {
+  await dp?.current?.apply();
+};
+
+<TkDatepicker ref={dp} value={date} allowApplyButton inline onTkChange={e => setDate(e.detail)}>
   <div slot="footer-actions" className="flex justify-between w-full">
     <TkButton label="Today" type="filled" variant="secondary" onTkClick={setToday} />
     <div className="flex gap-2">
       <TkButton label="Cancel" type="text" variant="neutral" />
-      <TkButton label="Submit" />
+      <TkButton label="Submit" onTkClick={submit}></TkButton>
     </div>
   </div>
 </TkDatepicker>`;
@@ -26,19 +32,23 @@ const setToday = async () => {
 import { ref } from 'vue';
 
 const dp = ref(null);
+const value = ref("");
 
 const setToday = async () => {
-   await dp.value.setToday()
+   await dp?.value?.setToday()
+};
+const submit = async () => {
+   await dp?.value?.apply()
 };
 </script>
 <template>
-  <TkDatepicker ref="dp" inline>
+  <TkDatepicker ref="dp" v-model="value" allowApplyButton inline>
     <template #footer-actions>
       <div class="flex justify-between w-full">
         <TkButton label="Today" type="filled" variant="secondary" @tkClick="setToday" />
         <div class="flex gap-2">
           <TkButton label="Cancel" type="text" variant="neutral" />
-          <TkButton label="Submit" />
+          <TkButton label="Submit" @tkClick="submit" />
         </div>
       </div>
     </template>
@@ -46,19 +56,25 @@ const setToday = async () => {
 </template>`;
 
   const dp = useRef<HTMLTkDatepickerElement>(null);
-
+  const [date, setDate] = useState();
   const setToday = async () => {
-    await dp.current.setToday();
+    await dp?.current?.setToday();
+  };
+  const submit = async () => {
+    await dp?.current?.apply();
   };
 
   const demo = (
-    <div className="flex justify-center items-center overflow-auto">
-      <TkDatepicker ref={dp} className="mt-4" inline>
+    <div className="flex flex-col justify-center items-center overflow-auto">
+      <p>
+        <b>Selected Date:</b> {JSON.stringify(date)}
+      </p>
+      <TkDatepicker ref={dp} value={date} allowApplyButton onTkChange={e => setDate(e.detail)}>
         <div slot="footer-actions" className="flex justify-between w-full">
           <TkButton label="Today" type="filled" variant="secondary" onTkClick={setToday}></TkButton>
           <div className="flex gap-2">
-            <TkButton label="Cancel" type="text" variant="neutral"></TkButton>
-            <TkButton label="Submit"></TkButton>
+            <TkButton label="Cancel" type="text" variant="neutral" />
+            <TkButton label="Submit" onTkClick={submit}></TkButton>
           </div>
         </div>
       </TkDatepicker>

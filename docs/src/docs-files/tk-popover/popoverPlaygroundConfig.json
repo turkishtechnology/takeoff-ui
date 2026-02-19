@@ -1,0 +1,61 @@
+{
+  "name": "TkPopover",
+  "componentName": "TkPopover",
+  "hasChildren": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkButton",
+      "props": { "label": "Popover!" },
+      "slot": "trigger"
+    },
+    {
+      "type": "text",
+      "content": "This is a popover content",
+      "slot": "content"
+    }
+  ],
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "White", "value": "white" }
+      ]
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "defaultValue": "bottom",
+      "options": [
+        { "label": "Bottom", "value": "bottom" },
+        { "label": "Bottom Start", "value": "bottom-start" },
+        { "label": "Bottom End", "value": "bottom-end" },
+        { "label": "Top", "value": "top" },
+        { "label": "Top Start", "value": "top-start" },
+        { "label": "Top End", "value": "top-end" },
+        { "label": "Left", "value": "left" },
+        { "label": "Left Start", "value": "left-start" },
+        { "label": "Left End", "value": "left-end" },
+        { "label": "Right", "value": "right" },
+        { "label": "Right Start", "value": "right-start" },
+        { "label": "Right End", "value": "right-end" }
+      ]
+    },
+    {
+      "key": "trigger",
+      "label": "Trigger",
+      "type": "select",
+      "defaultValue": "click",
+      "options": [
+        { "label": "Click", "value": "click" },
+        { "label": "Hover", "value": "hover" }
+      ]
+    }
+  ]
+}

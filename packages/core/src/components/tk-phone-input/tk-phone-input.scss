@@ -33,7 +33,7 @@
   }
 
   .tk-phone-input-dropdown {
-    .tk-dropdown-button {
+    .tk-phone-input-dropdown-button {
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -112,45 +112,24 @@
     }
   }
 
-  &[aria-disabled] {
+  &[aria-disabled],
+  &[aria-readonly] {
+    pointer-events: none;
     .tk-phone-input-wrapper {
       background-color: var(--background-lightest);
     }
 
     .tk-phone-input-label,
-    .tk-phone-input-hint-text {
-      color: var(--text-sub-base);
-      pointer-events: none;
-    }
-
-    .tk-phone-input-input,
+    .tk-phone-input-label-asterisk,
+    .tk-phone-input-hint-text,
+    .tk-phone-input-hint-icon,
     .tk-phone-input-dropdown-button {
       color: var(--text-sub-base);
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-sub-base);
-      }
     }
   }
-
-  &[aria-readonly] {
-    .tk-phone-input-wrapper {
-      background-color: var(--background-lightest);
-    }
-
-    .tk-phone-input-label,
-    .tk-phone-input-hint-text {
+  &[aria-disabled] {
+    .tk-phone-input-input {
       color: var(--text-sub-base);
-    }
-
-    .tk-phone-input-input,
-    .tk-phone-input-dropdown-button {
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-darkest);
-      }
     }
   }
 
@@ -159,7 +138,7 @@
     line-height: var(--desktop-label-l-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-l-size);
       }
@@ -175,7 +154,7 @@
     line-height: var(--desktop-label-m-base-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-m-base-size);
       }
@@ -191,7 +170,7 @@
     line-height: var(--desktop-label-s-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-s-size);
       }

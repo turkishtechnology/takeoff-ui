@@ -1,0 +1,115 @@
+{
+  "name": "TkDialog",
+  "componentName": "TkDialog",
+  "hasChildren": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "p",
+      "children": [
+        {
+          "type": "text",
+          "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!"
+        }
+      ]
+    }
+  ],
+  "staticProps": { "containerStyle": { "width": "450px" } },
+  "triggerProp": "visible",
+  "triggerLabel": "Open Dialog",
+  "triggerCloseEvent": "onTkVisibleChange",
+  "props": [
+    {
+      "key": "header",
+      "label": "Header",
+      "type": "text",
+      "defaultValue": "Dialog Title"
+    },
+    {
+      "key": "subheader",
+      "label": "Subheader",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "info",
+      "options": [
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" }
+      ]
+    },
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Primary", "value": "primary" }
+      ]
+    },
+    {
+      "key": "maskVariant",
+      "label": "Mask Variant",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Lightest", "value": "lightest" },
+        { "label": "Light", "value": "light" },
+        { "label": "Base", "value": "base" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Darkest", "value": "darkest" }
+      ]
+    },
+    {
+      "key": "visible",
+      "label": "Visible",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showHeader",
+      "label": "Show Header",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showCloseButton",
+      "label": "Show Close Button",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showVariantSign",
+      "label": "Show Variant Sign",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "hideBackdrop",
+      "label": "Hide Backdrop",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "isMaskBlur",
+      "label": "Mask Blur",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "preventDismiss",
+      "label": "Prevent Dismiss",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}
