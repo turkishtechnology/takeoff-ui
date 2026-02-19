@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -333,6 +335,7 @@
       align-self: stretch;
       background-color: var(--static-light);
       overflow-y: auto;
+      @include takeoff-scrollbar;
     }
 
     .tk-editor-footer {

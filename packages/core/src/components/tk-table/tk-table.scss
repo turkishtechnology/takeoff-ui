@@ -1,9 +1,13 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-table-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 1px;
   position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-m-base);
 
   .tk-table-header {
     display: flex;
@@ -18,6 +22,7 @@
     border-radius: var(--radius-m-base);
     border-style: hidden;
     box-shadow: 0 0 0 1px var(--border-light);
+    @include takeoff-scrollbar;
 
     table {
       width: 100%;

@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -86,6 +88,7 @@
         max-height: var(--spacing-56xl);
         overflow-y: auto;
         margin: 8px;
+        @include takeoff-scrollbar;
 
         .tk-currency-input-dropdown-menu-list-item {
           display: flex;

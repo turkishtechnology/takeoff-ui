@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -6,6 +8,7 @@
   display: flex;
   align-items: center;
   overflow-x: auto;
+  @include takeoff-scrollbar;
 
   .tk-breadcrumb-list {
     margin: 0;

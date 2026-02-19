@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-upload-container {
   display: flex;
   flex-direction: column;
@@ -183,6 +185,7 @@
     gap: 8px;
     max-height: 500px;
     overflow-y: auto;
+    @include takeoff-scrollbar;
 
     .tk-upload-file-item {
       display: flex;

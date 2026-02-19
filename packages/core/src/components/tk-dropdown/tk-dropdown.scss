@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 tk-dropdown {
   display: inline-block;
 }
@@ -22,6 +24,7 @@ tk-dropdown {
       margin: 8px;
       max-height: 284px;
       overflow-y: auto;
+      @include takeoff-scrollbar;
 
       .tk-dropdown-group-label {
         display: flex;

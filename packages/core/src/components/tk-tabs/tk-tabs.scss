@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -9,6 +11,8 @@
     display: flex;
     flex-shrink: 0;
     overflow-x: auto;
+    @include takeoff-scrollbar;
+
     .tab-header {
       display: flex;
       align-items: center;

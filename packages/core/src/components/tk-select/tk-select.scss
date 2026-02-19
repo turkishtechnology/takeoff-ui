@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 tk-select {
   display: block;
 }
@@ -21,6 +23,7 @@ tk-select {
       display: flex;
       flex-direction: column;
       gap: 6px;
+      @include takeoff-scrollbar;
 
       .dropdown-group {
         display: flex;
