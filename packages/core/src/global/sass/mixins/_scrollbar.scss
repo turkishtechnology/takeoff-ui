@@ -1,0 +1,41 @@
+/* ===== Scrollbar Mixin ===== */
+@mixin takeoff-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-track {
+      background: var(--background-lightest);
+      opacity: 1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--secondary-sub-base);
+      opacity: 1;
+
+      &:hover {
+        background: var(--secondary-dark);
+      }
+    }
+  }
+}
