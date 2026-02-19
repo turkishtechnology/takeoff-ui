@@ -91,6 +91,15 @@ export class TkInput implements ComponentInterface {
    * The maskOptions prop is used to define masking configurations supported by the Cleave.js library. With this prop, you can specify any masking options described in the Cleave.js documentation (https://nosir.github.io/cleave.js/). For example, you can configure it for formatting dates, phone numbers, or credit card numbers as needed.
    */
   @Prop() maskOptions: IInputMaskOptions;
+  @Watch('maskOptions')
+  protected maskOptionsChanged(newValue: IInputMaskOptions, oldValue: IInputMaskOptions) {
+    if (!isEqual(newValue, oldValue)) {
+      this.cleaveInstance?.destroy();
+      this.cleaveInstance = new Cleave(this.nativeInput, {
+        ...this.maskOptions,
+      } as CleaveOptions);
+    }
+  }
 
   /**
    * Maximum value for number inputs
