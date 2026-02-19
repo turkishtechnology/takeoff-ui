@@ -99,13 +99,11 @@ const handleChange = (e) => {
 
 <template>
   <TkUpload
-    multiple
     @tkChange="handleChange"
     @tkUpload="handleUpload"
   >
   </TkUpload>
   <TkUpload
-    multiple
     type="centered"
     @tkChange="handleChange"
     @tkUpload="handleUpload"

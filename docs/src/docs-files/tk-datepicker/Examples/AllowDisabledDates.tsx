@@ -16,11 +16,12 @@ const AllowDisabledDates = () => {
   const dates = getCurrentMonthDates();
   const reactCode = `const [selectedDate1, setSelectedDate1] = useState("");
 const [selectedDate2, setSelectedDate2] = useState("");
+const dates = ["10/02/2026", "15/02/2026", "20/02/2026"]; // Example dates
 <TkDatepicker
    label="Only specific dates are selectable"
    placeholder="Choose a date"
    dateFormat="dd/MM/yyyy"
-   allowedDates={["${dates[0]}", "${dates[1]}", "${dates[2]}"]}
+   allowedDates={dates}
    value={selectedDate1}
    onTkChange={(event) => setSelectedDate1(event.detail)}
 />
@@ -28,24 +29,25 @@ const [selectedDate2, setSelectedDate2] = useState("");
    label="Specific dates are disabled"
    placeholder="Choose a date"
    dateFormat="dd/MM/yyyy"
-   disabledDates={["${dates[0]}", "${dates[1]}", "${dates[2]}"]}
+   disabledDates={dates}
    value={selectedDate2}
    onTkChange={(event) => setSelectedDate2(event.detail)}
 />`;
   const vueCode = `const selectedDate1 = ref("");
 const selectedDate2 = ref("");
+const dates = ["10/02/2026", "15/02/2026", "20/02/2026"]; // Example dates
 <TkDatepicker
    label="Only specific dates are selectable"
    placeholder="Choose a date"
-   dateFormat="dd/MM/yyyy"
-   :allowedDates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
+   date-format="dd/MM/yyyy"
+   :allowed-dates="dates"
    v-model="selectedDate1"
 />
 <TkDatepicker
    label="Specific dates are disabled"
    placeholder="Choose a date"
-   dateFormat="dd/MM/yyyy"
-   :disabledDates="['${dates[0]}', '${dates[1]}', '${dates[2]}']"
+   date-format="dd/MM/yyyy"
+   :disabled-dates="dates"
    v-model="selectedDate2"
 />`;
   const demo = (

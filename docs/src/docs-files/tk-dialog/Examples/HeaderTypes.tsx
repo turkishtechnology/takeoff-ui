@@ -28,36 +28,26 @@ const HeaderTypes = () => {
     </p>
 </TkDialog>`;
 
-  const vueCode = `<script setup>
-import { TkDialog, TkButton } from '@takeoff-ui/vue';
-import { ref } from 'vue';
-
-const showDialog = ref(false);
+  const vueCode = `const showDialog = ref(false);
 const headerType = ref('${headerType}');
 const setShowDialog = (value) => {
   showDialog.value = value;
 };
-</script>
-
-<template>
-  <>
-    <TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
-    <TkDialog
-      header="Header Types"
-      subheader="This dialog uses the ${headerType} header type"
-      v-model="showDialog"
-      :headerType.prop="headerType"
-      :containerStyle="{ width: '450px' }"
-    >
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
-        consequuntur error repudiandae numquam deserunt quisquam repellat libero
-        asperiores earum nam nobis, culpa ratione quam perferendis esse,
-        cupiditate neque quas!
-      </p>
-    </TkDialog>
-  </>
-</template>
+<TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
+<TkDialog
+  header="Header Types"
+  subheader="This dialog uses the ${headerType} header type"
+  v-model="showDialog"
+  :header-type="headerType"
+  :container-style="{ width: '450px' }"
+>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
+    consequuntur error repudiandae numquam deserunt quisquam repellat libero
+    asperiores earum nam nobis, culpa ratione quam perferendis esse,
+    cupiditate neque quas!
+  </p>
+</TkDialog>
 `;
 
   const demo = (
@@ -78,7 +68,10 @@ const setShowDialog = (value) => {
         headerType={headerType}
         containerStyle={{ width: '450px' }}
       >
-        <p>This example demonstrates the different header types available for the TkDialog component.</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam
+          nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+        </p>
       </TkDialog>
     </>
   );

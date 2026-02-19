@@ -377,7 +377,7 @@ const column = [
 </script>
 
 <template>
-  <TkTable :columns.prop="column" :data.prop="data" />
+  <TkTable :columns="column" :data="data" />
 </template>
 `;
 

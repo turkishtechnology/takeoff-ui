@@ -73,7 +73,7 @@ const handleCancel = () => {
   <TkColorPicker
     ref="pickerRef"
     inline
-    footerType="${footerType}"
+    footer-type="${footerType}"
     v-model="color"
   >
     <div slot="footer-actions">
@@ -83,7 +83,27 @@ const handleCancel = () => {
   </TkColorPicker>
 </template>`;
 
-    const angularCode = ``;
+    const angularCode = `@ViewChild('colorPicker') colorPicker: ElementRef<HTMLTkColorPickerElement>;
+
+handleApply() {
+  this.colorPicker.nativeElement.apply();
+}
+
+handleCancel() {
+  this.colorPicker.nativeElement.cancel();
+}
+
+<tk-color-picker
+  #colorPicker
+  inline
+  footer-type="${footerType}"
+  [value]="color"
+  (tkChange)="onColorChange($event)">
+  <div slot="footer-actions">
+    <tk-button label='Cancel' variant="secondary" size="small" (tkClick)="handleCancel()"></tk-button>
+    <tk-button label='Apply' variant="primary" size="small" (tkClick)="handleApply()"></tk-button>
+  </div>
+</tk-color-picker>`;
 
     setCodeSampleReact(reactCode);
     setCodeSampleVue(vueCode);

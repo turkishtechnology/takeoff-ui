@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import tableConfigData from './tablePlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import Striped from './Examples/Striped';
 import HeaderType from './Examples/HeaderType';
@@ -13,7 +15,7 @@ import Export from './Examples/Export';
 import StickyColumn from './Examples/StickyColumn';
 import StickyHeader from './Examples/StickyHeader';
 import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
-import { TkAlert } from '@takeoff-ui/react';
+import { TkAlert, TkTable } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
 import ColumnArrangement from './Examples/ColumnArrangement';
 import HeaderStyle from './Examples/HeaderStyle';
@@ -22,6 +24,10 @@ import MultiSort from './Examples/MultiSort';
 import EmptySlot from './Examples/EmptySlot';
 import HeaderAndFooterSlot from './Examples/HeaderAndFooterSlot';
 import GroupedRows from './Examples/GroupedRows';
+
+### Playground
+
+<Playground configs={[tableConfigData]} componentMap={{ TkTable }} />
 
 ## Basic
 

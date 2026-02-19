@@ -1,0 +1,91 @@
+{
+  "name": "TkDrawer",
+  "componentName": "TkDrawer",
+  "hasChildren": true,
+  "defaultChildren": "Drawer content goes here.",
+  "triggerProp": "open",
+  "triggerLabel": "Open Drawer",
+  "triggerCloseEvent": "onTkDrawerClose",
+  "props": [
+    {
+      "key": "header",
+      "label": "Header",
+      "type": "text",
+      "defaultValue": "Drawer Title"
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "defaultValue": "right",
+      "options": [
+        { "label": "Right", "value": "right" },
+        { "label": "Left", "value": "left" },
+        { "label": "Top", "value": "top" },
+        { "label": "Bottom", "value": "bottom" },
+        { "label": "Full Screen", "value": "full-screen" }
+      ]
+    },
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Primary", "value": "primary" }
+      ]
+    },
+    {
+      "key": "footerType",
+      "label": "Footer Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" }
+      ]
+    },
+    {
+      "key": "maskVariant",
+      "label": "Mask Variant",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Lightest", "value": "lightest" },
+        { "label": "Light", "value": "light" },
+        { "label": "Base", "value": "base" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Darkest", "value": "darkest" }
+      ]
+    },
+    {
+      "key": "open",
+      "label": "Open",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "hideCloseIcon",
+      "label": "Hide Close Icon",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "hideBackdrop",
+      "label": "Hide Backdrop",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "preventDismiss",
+      "label": "Prevent Dismiss",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

@@ -12,9 +12,6 @@
   .tk-phone-input-label {
     font-weight: var(--weight-medium);
     gap: var(--input-external-label-small-container-gap);
-    display: flex;
-    align-items: center;
-    align-self: stretch;
   }
 
   .tk-phone-input-wrapper {
@@ -36,13 +33,13 @@
   }
 
   .tk-phone-input-dropdown {
-    .tk-dropdown-button {
+    .tk-phone-input-dropdown-button {
       cursor: pointer;
       display: flex;
       align-items: center;
       border: none;
       background-color: transparent;
-      padding-right: var(--input-external-label-large-label-h-padding);
+      padding: 0;
 
       .tk-phone-input-dropdown-button-selected {
         display: flex;
@@ -50,15 +47,15 @@
         gap: var(--spacing-xs);
         border-right: var(--spacing-px) solid var(--border-light);
 
-        .tk-phone-input-no-dial-code {
+        .tk-phone-input-dial-code {
+          padding-right: var(--input-external-label-large-label-h-padding);
+        }
+
+        &.tk-phone-input-no-dial-code {
           padding-right: var(--input-external-label-large-label-h-padding);
         }
       }
-      .tk-phone-input-dial-code {
-        padding-right: var(--input-external-label-large-label-h-padding);
-      }
     }
-
     .tk-phone-input-dropdown-menu {
       position: fixed;
       z-index: 800;
@@ -66,9 +63,9 @@
       border: var(--spacing-px) solid var(--border-light);
       border-radius: var(--button-sizes-large-radius);
       box-shadow: var(--effect-1-default-sm);
-      width: var(--spacing-80xl);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       .tk-phone-input-dropdown-menu-search {
         padding: var(--spacing-m-base);
@@ -76,13 +73,12 @@
 
       .tk-phone-input-menu {
         list-style: none;
-        padding: var(--spacing-none);
-        margin: var(--spacing-none) var(--spacing-m-base) var(--spacing-none) var(--spacing-none);
         max-height: var(--spacing-56xl);
         overflow-y: auto;
 
         .tk-phone-input-menu-item {
           display: flex;
+          align-items: center;
           gap: var(--spacing-xs);
           padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
           cursor: pointer;
@@ -116,54 +112,33 @@
     }
   }
 
-  &[aria-disabled] {
-    .tk-phone-input-wrapper {
-      background-color: var(--background-lightest);
-    }
-
-    .tk-phone-input-label,
-    .tk-phone-input-hint-text {
-      color: var(--text-sub-base);
-      pointer-events: none;
-    }
-
-    .tk-phone-input-input,
-    .tk-phone-input-dropdown-button {
-      color: var(--text-sub-base);
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-sub-base);
-      }
-    }
-  }
-
+  &[aria-disabled],
   &[aria-readonly] {
+    pointer-events: none;
     .tk-phone-input-wrapper {
       background-color: var(--background-lightest);
     }
 
     .tk-phone-input-label,
-    .tk-phone-input-hint-text {
+    .tk-phone-input-label-asterisk,
+    .tk-phone-input-hint-text,
+    .tk-phone-input-hint-icon,
+    .tk-phone-input-dropdown-button {
       color: var(--text-sub-base);
     }
-
-    .tk-phone-input-input,
-    .tk-phone-input-dropdown-button {
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-darkest);
-      }
+  }
+  &[aria-disabled] {
+    .tk-phone-input-input {
+      color: var(--text-sub-base);
     }
   }
 
-  &.large {
+  &.tk-phone-input-large {
     font-size: var(--desktop-label-l-size);
     line-height: var(--desktop-label-l-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-l-size);
       }
@@ -174,12 +149,12 @@
     }
   }
 
-  &.base {
+  &.tk-phone-input-base {
     font-size: var(--desktop-label-m-base-size);
     line-height: var(--desktop-label-m-base-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-m-base-size);
       }
@@ -190,12 +165,12 @@
     }
   }
 
-  &.small {
+  &.tk-phone-input-small {
     font-size: var(--desktop-label-s-size);
     line-height: var(--desktop-label-s-line-height);
     .tk-phone-input-wrapper {
       padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
-      .tk-dropdown-button,
+      .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
         font-size: var(--desktop-label-s-size);
       }

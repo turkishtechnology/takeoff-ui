@@ -15,16 +15,12 @@ const Clearable = () => {
     label="Clearable Input" 
     clearable 
     v-model="value" 
-    @tkClearClick="() => value = null"
+    @tk-clear-click="() => value = null"
   />`;
 
   const [value, setValue] = useState('Clearable Text');
 
-  const demo = (
-    <div className="flex gap-2 max-w-[300px]">
-      <TkInput label="Clearable Input" clearable value={value} onTkChange={e => setValue(e.detail)} onTkClearClick={() => setValue(null)} />
-    </div>
-  );
+  const demo = <TkInput className="max-w-[300px]" label="Clearable Input" clearable value={value} onTkChange={e => setValue(e.detail)} onTkClearClick={() => setValue(null)} />;
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={''}></FeatureDemo>;
 };

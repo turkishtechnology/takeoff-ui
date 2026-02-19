@@ -1,3 +1,5 @@
+import Playground from '../../components/Playground';
+import toggleButtonGroupConfigData from './toggleButtonGroupPlaygroundConfig.json';
 import ToggleButtonGroupVariants from './Examples/ToggleButtonGroupType';
 import ToggleButtonGroupType from './Examples/ToggleButtonGroupType';
 import ToggleButtonGroupDirection from './Examples/ToggleButtonGroupDirection';
@@ -7,6 +9,14 @@ import ToggleButtonType from './Examples/ToggleButtonType';
 import ToggleButtonSize from './Examples/ToggleButtonSize';
 import ToggleButtonDisabled from './Examples/ToggleButtonDisabled';
 import ToggleButtonIconPosition from './Examples/ToggleButtonIconPosition';
+import { TkToggleButtonGroup, TkToggleButton } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[toggleButtonGroupConfigData]}
+  componentMap={{ TkToggleButtonGroup, TkToggleButton }}
+/>
 
 ## Group Types
 

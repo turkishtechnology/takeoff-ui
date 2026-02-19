@@ -1,0 +1,71 @@
+{
+  "name": "TkDropdown",
+  "componentName": "TkDropdown",
+  "hasChildren": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkButton",
+      "props": {
+        "label": "Select",
+        "icon": "keyboard_arrow_down",
+        "iconPosition": "right"
+      },
+      "slot": "trigger"
+    }
+  ],
+  "props": [
+    {
+      "key": "options",
+      "label": "Options",
+      "type": "json",
+      "defaultValue": [
+        { "label": "Option 1", "value": "1" },
+        { "label": "Option 2", "value": "2" },
+        { "label": "Option 3", "value": "3" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "defaultValue": "bottom",
+      "options": [
+        { "label": "Bottom", "value": "bottom" },
+        { "label": "Bottom Start", "value": "bottom-start" },
+        { "label": "Bottom End", "value": "bottom-end" },
+        { "label": "Top", "value": "top" },
+        { "label": "Top Start", "value": "top-start" },
+        { "label": "Top End", "value": "top-end" },
+        { "label": "Left", "value": "left" },
+        { "label": "Left Start", "value": "left-start" },
+        { "label": "Left End", "value": "left-end" },
+        { "label": "Right", "value": "right" },
+        { "label": "Right Start", "value": "right-start" },
+        { "label": "Right End", "value": "right-end" }
+      ]
+    },
+    {
+      "key": "optionsAlign",
+      "label": "Options Align",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Center", "value": "center" },
+        { "label": "Right", "value": "right" }
+      ]
+    }
+  ]
+}

@@ -16,9 +16,9 @@ const Icon = () => {
 />`;
 
   const vueCode = `<TkSelect
-  :icon= "{ name: 'key', color: 'red' }"
+  :icon="{ name: 'key', color: 'red' }"
   label="Text Input"
-  :options.prop="[
+  :options="[
     { value: 'female', label: 'Female' },
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },

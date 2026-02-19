@@ -33,11 +33,11 @@ const CustomItem = () => {
   label="Custom Item" 
   optionLabelKey="name" 
   optionValueKey="code" 
-  :options.prop="[
+  :options="[
     { code: 'SAW', name: 'Sabiha Gökçen Havalimanı', country: 'İstanbul' },
     { code: 'ESB', name: 'Esenboğa Havalimanı', country: 'Ankara' },
     { code: 'AYT', name: 'Antalya Havalimanı', country: 'Antalya' },
-  ]" :optionHtml.prop="(item) => {
+  ]" :optionHtml="(item) => {
     return \`<div style='display: flex; flex-direction: column;'>
         <div style='display: flex;justify-content: space-between;'>
           <div style='font-weight: bold;'>\${item.name}</div>

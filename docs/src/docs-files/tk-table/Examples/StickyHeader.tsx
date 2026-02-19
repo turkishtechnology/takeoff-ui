@@ -105,7 +105,7 @@ const column = [
 </script>
 
 <template>
-    <TkTable :columns.prop="column" :data.prop="stickyData" :containerStyle="{height: "300px"}">
+    <TkTable :columns="column" :data="stickyData" :containerStyle="{height: '300px'}">
     </TkTable>
 </template>
 `;

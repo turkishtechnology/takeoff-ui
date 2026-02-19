@@ -769,3 +769,9 @@ body {
 .code-block-new-usage {
   background-color: var(--states-success-darkest);
 }
+
+tk-phone-input ul,
+tk-currency-input ul {
+  --ifm-list-left-padding: 0;
+  --ifm-list-margin: 0;
+}

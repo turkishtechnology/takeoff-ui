@@ -18,7 +18,9 @@ const Disabled = () => {
 <TkColorPicker label="Readonly" placeholder="Select Color" hint="Hint text" readonly />
 <TkColorPicker label="Error" placeholder="Select Color" error="Error text" invalid />`;
 
-  const angularCode = ``;
+  const angularCode = `<tk-color-picker label="Disabled" placeholder="Select Color" hint="Hint text" disabled></tk-color-picker>
+<tk-color-picker label="Readonly" placeholder="Select Color" hint="Hint text" readonly></tk-color-picker>
+<tk-color-picker label="Error" placeholder="Select Color" error="Error text" invalid></tk-color-picker>`;
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode} />;
 };

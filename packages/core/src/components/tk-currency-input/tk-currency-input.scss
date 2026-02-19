@@ -48,7 +48,7 @@
     outline: none;
 
     &::placeholder {
-      color: var(--text-sub-base, #99a0ae);
+      color: var(--text-sub-base);
     }
   }
 
@@ -77,19 +77,18 @@
       border: var(--spacing-px) solid var(--border-light);
       border-radius: var(--button-sizes-large-radius);
       box-shadow: var(--effect-1-default-sm);
-      width: var(--spacing-80xl);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       .tk-currency-input-dropdown-menu-list {
         list-style: none;
-        padding: var(--spacing-none);
-        margin: 8px;
         max-height: var(--spacing-56xl);
         overflow-y: auto;
 
         .tk-currency-input-dropdown-menu-list-item {
           display: flex;
+          align-items: center;
           gap: var(--spacing-xs);
           padding: var(--input-external-label-base-input-v-padding) var(--spacing-4xl);
           cursor: pointer;
@@ -113,61 +112,25 @@
     }
   }
 
-  &[aria-disabled] {
+  &[aria-disabled],
+  &[aria-readonly] {
+    pointer-events: none;
     .tk-currency-input-wrapper {
       background-color: var(--background-lightest);
     }
 
-    .tk-currency-input-label {
-      pointer-events: none;
-
-      .tk-currency-input-label-title,
-      .tk-currency-input-label-asterisk {
-        color: var(--text-sub-base);
-      }
-    }
-
+    .tk-currency-input-label-title,
+    .tk-currency-input-label-asterisk,
     .tk-currency-input-hint-text,
-    .tk-currency-input-hint-icon {
-      color: var(--text-sub-base);
-      pointer-events: none;
-    }
-
-    .tk-currency-input-input,
+    .tk-currency-input-hint-icon,
     .tk-currency-input-dropdown-button {
       color: var(--text-sub-base);
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-sub-base);
-      }
     }
   }
 
-  &[aria-readonly] {
-    .tk-currency-input-wrapper {
-      background-color: var(--background-lightest);
-    }
-
-    .tk-currency-input-label {
-      .tk-currency-input-label-title,
-      .tk-currency-input-label-asterisk {
-        color: var(--text-sub-base);
-      }
-    }
-
-    .tk-currency-input-hint-text,
-    .tk-currency-input-hint-icon {
+  &[aria-disabled] {
+    .tk-currency-input-input {
       color: var(--text-sub-base);
-    }
-
-    .tk-currency-input-input,
-    .tk-currency-input-dropdown-button {
-      pointer-events: none;
-
-      &::placeholder {
-        color: var(--text-darkest);
-      }
     }
   }
 
@@ -186,7 +149,8 @@
       gap: var(--input-external-label-large-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-m-size);
         line-height: var(--desktop-body-m-line-height);
       }
@@ -208,7 +172,8 @@
       gap: var(--input-external-label-base-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-s-size);
         line-height: var(--desktop-body-s-line-height);
       }
@@ -229,7 +194,8 @@
       gap: var(--input-external-label-small-input-gap);
 
       .tk-currency-input-input,
-      .tk-currency-input-dropdown-button {
+      .tk-currency-input-dropdown-button,
+      .tk-currency-input-dropdown-menu-list-item {
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-line-height-xs-normal);
       }
@@ -246,6 +212,7 @@
     align-items: center;
     gap: var(--spacing-xs);
     padding-left: var(--spacing-xs);
+    cursor: default;
   }
   .tk-currency-input-error {
     color: var(--states-danger-base);

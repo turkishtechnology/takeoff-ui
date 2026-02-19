@@ -1,0 +1,97 @@
+{
+  "name": "TkStepper",
+  "componentName": "TkStepper",
+  "hasChildren": true,
+  "fullWidth": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkStep",
+      "props": { "header": "Step 1", "subheader": "Description" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkStep",
+      "props": { "header": "Step 2", "subheader": "Description" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkStep",
+      "props": { "header": "Step 3", "subheader": "Description" }
+    }
+  ],
+  "props": [
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XSmall", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "stepMode",
+      "label": "Step Mode",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Number", "value": "number" }
+      ]
+    },
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "default",
+      "options": [
+        { "label": "Default", "value": "default" },
+        { "label": "Compact", "value": "compact" }
+      ]
+    },
+    {
+      "key": "active",
+      "label": "Active Step",
+      "type": "text",
+      "defaultValue": "0"
+    },
+    {
+      "key": "linear",
+      "label": "Linear",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "reverse",
+      "label": "Reverse",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showCompleteState",
+      "label": "Show Complete State",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "controlled",
+      "label": "Controlled",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

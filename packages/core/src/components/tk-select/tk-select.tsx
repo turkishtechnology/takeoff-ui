@@ -90,6 +90,10 @@ export class TkSelect implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() disabled = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isOpen = false;
+  }
 
   /**
    * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
@@ -785,14 +789,24 @@ export class TkSelect implements ComponentInterface {
         this.tkChange.emit(null);
       }
     }
-    // girilen değer değişince dropdown açılsın
-    if (!this.isOpen && !this.disabled && !this.readonly) {
-      this.isOpen = true;
-    }
   }
 
-  private handleInputClick() {
-    if (!this.isOpen && !this.disabled && !this.readonly) {
+  private handleInputClick(e) {
+    if (this.disabled || this.readonly) return;
+
+    const path = e.composedPath();
+    const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
+    const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+    const isChipsClearButton = path.some((el: any) => el.classList?.contains('tk-chips-clear-button'));
+
+    if (isClearButton || isChipsClearButton) return;
+
+    if (isChevron) {
+      this.isOpen = !this.isOpen;
+      return;
+    }
+
+    if (!this.isOpen) {
       this.isOpen = true;
     }
   }
@@ -927,6 +941,7 @@ export class TkSelect implements ComponentInterface {
 
   private createOptionItem(options: any[], startIndex: number = 0) {
     return options?.map((item, index) => {
+      const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
       let itemProps = {};
       let children;
       const checking = some(this.value, itemValue => isEqual(itemValue, this.getOptionValue(item)));
@@ -934,14 +949,14 @@ export class TkSelect implements ComponentInterface {
         if (this.optionHtml != undefined) {
           children = (
             <Fragment>
-              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+              <tk-checkbox value={checking} disabled={isDisabled} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div class="multiple-option-content" innerHTML={this.optionHtml(item)}></div>
             </Fragment>
           );
         } else {
           children = (
             <Fragment>
-              <tk-checkbox value={checking} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
+              <tk-checkbox value={checking} disabled={isDisabled} onTk-change={e => e.stopPropagation()} onClick={e => e.preventDefault()}></tk-checkbox>
               <div>{this.getOptionLabel(item)}</div>
             </Fragment>
           );
@@ -953,7 +968,6 @@ export class TkSelect implements ComponentInterface {
           itemProps = { innerHTML: this.getOptionLabel(item) };
         }
       }
-      const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
 
       return (
         <div
@@ -989,7 +1003,7 @@ export class TkSelect implements ComponentInterface {
             ></tk-checkbox>
             <div>{this.selectAllLabel}</div>
           </div>
-          <tk-divider my={1} style={{ margin: '4px' }} />
+          <tk-divider my={1} style={{ margin: '6px 4px 0px' }} />
         </div>
       );
     }
@@ -1044,7 +1058,7 @@ export class TkSelect implements ComponentInterface {
         chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
         aria-expanded={!!this.isOpen}
-        onClick={() => this.handleInputClick()}
+        onClick={e => this.handleInputClick(e)}
         onTk-change={e => {
           e.stopPropagation();
           this.handleInputChange(e.detail);

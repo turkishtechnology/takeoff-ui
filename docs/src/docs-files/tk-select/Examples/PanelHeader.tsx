@@ -46,12 +46,12 @@ const PanelHeader = () => {
 
   const vueCode = `<TkSelect
   label="Select With Top Panel"
-  :options.prop="[
+  :options="[
     { value: 'female', label: 'Female' },
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },
   ]"
-  :panelTopHtml.prop="() => {
+  :panelTopHtml="() => {
     return \`<div style="display: flex; align-items:center; gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
               <tk-icon icon="person"></tk-icon>
               <span style="font-size:14px">Choose your gender</span>
@@ -61,12 +61,12 @@ const PanelHeader = () => {
 />
 <TkSelect
   label="Button in Panel Header"
-  :options.prop={[
+  :options="[
     { value: 'female', label: 'Female' },
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },
-  ]}
-  :panelTopHtml.prop="() => {
+  ]"
+  :panelTopHtml="() => {
     const div: HTMLDivElement = document.createElement('div');
     const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
     tkButton.label = 'Set Male';

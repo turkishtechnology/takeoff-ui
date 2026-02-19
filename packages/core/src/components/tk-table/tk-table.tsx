@@ -64,6 +64,17 @@ export class TkTable implements ComponentInterface {
    * The column definitions (Array of Objects)
    */
   @Prop() columns: ITableColumn[] = [];
+  // columns prop'u değiştiğinde sticky column'lar varsa offset'leri güncellemek ve scroll listener'ı kurmak için watch eklenmiştir.
+  @Watch('columns')
+  columnsChanged() {
+    const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
+    if (stickyColumns.length > 0) {
+      setTimeout(() => {
+        this.updateStickyOffsets();
+        this.setupScrollListener();
+      }, 0);
+    }
+  }
 
   /**
    * The style attribute of container element

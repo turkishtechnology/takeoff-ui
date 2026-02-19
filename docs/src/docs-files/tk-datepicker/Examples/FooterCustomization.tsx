@@ -38,7 +38,7 @@ const setToday = async () => {
         <TkButton label="Today" type="filled" variant="secondary" @tkClick="setToday" />
         <div class="flex gap-2">
           <TkButton label="Cancel" type="text" variant="neutral" />
-          <TkButtonlabel="Submit" />
+          <TkButton label="Submit" />
         </div>
       </div>
     </template>

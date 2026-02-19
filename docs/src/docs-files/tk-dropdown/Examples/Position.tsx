@@ -38,7 +38,13 @@ const Example = () => {
 };
 
 const Position = () => {
-  const reactCode = `<TkDropdown options={options} position="bottom">
+  const reactCode = `const options = [
+    { label: 'Lorem Ipsum', value: '1' },
+    { label: 'It is established', value: '2' },
+    { label: 'Many desktop', value: '3' },
+  ];
+
+  <TkDropdown options={options} position="bottom">
   <TkButton label="Bottom" slot="trigger" />
 </TkDropdown>
 <TkDropdown options={options} position="bottom-start">
@@ -58,41 +64,31 @@ const Position = () => {
   <TkButton label="Right End" slot="trigger" />
 </TkDropdown>`;
 
-  const vueCode = `<script setup>
-import { TkDropdown, TkButton } from '@takeoff-ui/vue'
-
-const options = [
+  const vueCode = `const options = [
   { label: "Lorem Ipsum", value: "1" },
   { label: "It is established", value: "2" },
   { label: "Many desktop", value: "3" },
 ];
 
-</script>
+<TkDropdown :options="options" position="bottom">
+  <TkButton label="Bottom" slot="trigger" />
+</TkDropdown>
+<TkDropdown :options="options" position="bottom-start">
+  <TkButton label="Bottom Start" slot="trigger" />
+</TkDropdown>
+<TkDropdown :options="options" position="bottom-end">
+  <TkButton label="Bottom End" slot="trigger" />
+</TkDropdown>
 
-<template>
-  <div>
-    <TkDropdown :options.prop="options" position="bottom">
-      <TkButton label="Bottom" slot="trigger" />
-    </TkDropdown>
-    <TkDropdown :options.prop="options" position="bottom-start">
-      <TkButton label="Bottom Start" slot="trigger" />
-    </TkDropdown>
-    <TkDropdown :options.prop="options" position="bottom-end">
-      <TkButton label="Bottom End" slot="trigger" />
-    </TkDropdown>
-
-    <TkDropdown :options.prop="options" position="right">
-      <TkButton label="Right" slot="trigger" />
-    </TkDropdown>
-    <TkDropdown :options.prop="options" position="right-start">
-      <TkButton label="Right Start" slot="trigger" />
-    </TkDropdown>
-    <TkDropdown :options.prop="options" position="right-end">
-      <TkButton label="Right End" slot="trigger" />
-    </TkDropdown>
-  </div>
-</template>
-`;
+<TkDropdown :options="options" position="right">
+  <TkButton label="Right" slot="trigger" />
+</TkDropdown>
+<TkDropdown :options="options" position="right-start">
+  <TkButton label="Right Start" slot="trigger" />
+</TkDropdown>
+<TkDropdown :options="options" position="right-end">
+  <TkButton label="Right End" slot="trigger" />
+</TkDropdown>`;
 
   const angularCode = `<tk-dropdown
   [options]="[

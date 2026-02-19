@@ -8,6 +8,7 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  iconPosition="left"
   label="left icon"
 />
 <TkButton
@@ -20,6 +21,7 @@ const Icon = () => {
 <TkButton
   variant="primary"
   size="large"
+  iconPosition="right"
   label="multiple icons"
   icon={{
     left: { name: 'key', color: 'pink' },
@@ -31,6 +33,7 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  iconPosition="left"
   label="left icon"
 />
 <TkButton
@@ -42,7 +45,8 @@ const Icon = () => {
 />
 <TkButton
   variant="primary"
-  size="large\"
+  size="large"
+  iconPosition="right"
   label="multiple icons"
   :icon="{ left: { name: 'key', color: 'pink' }, right: { name: 'check_circle', color: 'pink', fill: true } }"
 />`;
@@ -51,21 +55,23 @@ const Icon = () => {
   variant="primary"
   size="large"
   icon="flight"
+  icon-position="left"
   label="left icon"
 />
 <tk-button
   variant="primary"
   size="large"
   icon="flight"
-  iconPosition="right"
+  icon-position="right"
   label="right icon"
 />
 <tk-button
   variant="primary"
   size="large"
+  icon-position="right"
   label="multiple icons"
   [icon]="{ left: { name: 'key', color: 'pink' }, right: { name: 'check_circle', color: 'pink', fill: true } }"
-></tk-button>`;
+/>`;
 
   const demo = (
     <div className="flex justify-center items-end flex-wrap gap-2">
