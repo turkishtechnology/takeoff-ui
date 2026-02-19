@@ -56,12 +56,16 @@ tk-input.tk-table-input {
     background-color: var(--static-light);
     box-sizing: border-box;
     width: -webkit-fill-available;
+
     .tk-input-clear-button {
       margin-left: auto;
     }
-    i {
+
+    i,
+    tk-icon {
       color: var(--icon-base);
       user-select: none;
+      cursor: pointer;
 
       &.clickable {
         cursor: pointer;
