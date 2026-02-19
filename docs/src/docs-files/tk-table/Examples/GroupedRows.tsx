@@ -158,6 +158,7 @@ const GroupedRows = () => {
           onTkGroupByChange={handleControlledGroupByChange}
           groupBy={controlledGroupBy}
           striped={true}
+          collapsibleGroups={true}
         />
       </div>
 
@@ -199,6 +200,7 @@ const GroupedRows = () => {
           onTkSelectionChange={handleUncontrolledSelectionChange}
           onTkGroupByChange={handleUncontrolledGroupByChange}
           striped={true}
+          collapsibleGroups={true}
         />
       </div>
 
@@ -224,6 +226,9 @@ const GroupedRows = () => {
           </li>
           <li>
             <strong>Visual Grouping:</strong> Rows are visually grouped with headers showing group name and count
+          </li>
+          <li>
+            <strong>Collapsible Groups:</strong> Use <code>collapsibleGroups</code> prop to enable expand/collapse functionality for group rows
           </li>
           <li>
             <strong>Pagination Support:</strong> Grouping works seamlessly with both client and server-side pagination
@@ -326,6 +331,7 @@ function GroupedRowsExample() {
           onTkGroupByChange={handleControlledGroupByChange}
           groupBy={controlledGroupBy}
           striped={true}
+          collapsibleGroups={true}
         />
       </div>
 
@@ -354,6 +360,7 @@ function GroupedRowsExample() {
           onTkSelectionChange={handleUncontrolledSelectionChange}
           onTkGroupByChange={handleUncontrolledGroupByChange}
           striped={true}
+          collapsibleGroups={true}
         />
       </div>
     </div>
@@ -445,6 +452,7 @@ const handleControlledGroupByChange = (e) => {
         @tk-group-by-change="handleControlledGroupByChange"
         :groupBy="controlledGroupBy"
         :striped="true"
+        :collapsibleGroups="true"
       />
     </div>
 
@@ -473,6 +481,7 @@ const handleControlledGroupByChange = (e) => {
         @tk-selection-change="handleUncontrolledSelectionChange"
         @tk-group-by-change="handleUncontrolledGroupByChange"
         :striped="true"
+        :collapsibleGroups="true"
       />
     </div>
   </div>
@@ -510,7 +519,8 @@ import { ITableColumn } from '@takeoff-ui/core';
           (tk-selection-change)="handleControlledSelectionChange($event)"
           (tk-group-by-change)="handleControlledGroupByChange($event)"
           [groupBy]="controlledGroupBy"
-          [striped]="true">
+          [striped]="true"
+          [collapsibleGroups]="true">
         </tk-table>
       </div>
 
@@ -538,7 +548,8 @@ import { ITableColumn } from '@takeoff-ui/core';
           [selection]="uncontrolledSelectedRows"
           (tk-selection-change)="handleUncontrolledSelectionChange($event)"
           (tk-group-by-change)="handleUncontrolledGroupByChange($event)"
-          [striped]="true">
+          [striped]="true"
+          [collapsibleGroups]="true">
         </tk-table>
       </div>
     </div>

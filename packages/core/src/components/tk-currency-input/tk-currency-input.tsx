@@ -81,6 +81,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Disables the input field if set to true.
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isDropdownOpen = false;
+  }
 
   /**
    * Marks the input field as invalid if set to true.

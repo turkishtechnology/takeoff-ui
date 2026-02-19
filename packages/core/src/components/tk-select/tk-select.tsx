@@ -90,6 +90,10 @@ export class TkSelect implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() disabled = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isOpen = false;
+  }
 
   /**
    * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.

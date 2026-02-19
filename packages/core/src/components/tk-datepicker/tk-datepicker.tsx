@@ -32,7 +32,6 @@ export class TkDatePicker {
   private panelRef?: HTMLDivElement;
   private uniqueId = uuidv4();
   private cleanup;
-  private isUpdatingTime: boolean = false;
   private isUpdatingAmPm: boolean = false;
   private weeksLength: number = 0;
   private clickOutsideMixin?: ClickOutsideMixin;
@@ -47,26 +46,11 @@ export class TkDatePicker {
     start: Date | null;
     end: Date | null;
   } = { start: null, end: null };
-  @Watch('internalSelectedDates')
-  internalSelectedDatesChanged() {
-    this.inputValue = this.formatInputValue();
-  }
 
   @State() inputValue: string = '';
   @State() internalStartTime: { hour: number; minute: number } | null = null;
-  @Watch('internalStartTime')
-  internalStartTimeChanged() {
-    if (this.isUpdatingTime || this.isUpdatingAmPm) {
-      return;
-    }
-    this.inputValue = this.formatInputValue();
-  }
 
   @State() internalEndTime: { hour: number; minute: number } | null = null;
-  @Watch('internalEndTime')
-  internalEndTimeChanged() {
-    this.inputValue = this.formatInputValue();
-  }
 
   @State() internalAmPm: 'AM' | 'PM' = 'AM';
   @Watch('internalAmPm')
@@ -75,11 +59,7 @@ export class TkDatePicker {
   }
   @State() hoverDate: Date | null = null;
   @State() currentView: 'days' | 'months' | 'years' = 'days';
-  @State() maskOptions: IInputMaskOptions = {
-    date: true,
-    delimiter: '-',
-    datePattern: ['Y', 'm', 'd'],
-  };
+  @State() maskOptions?: IInputMaskOptions;
   @State() isInvalid: boolean = false;
   @State() isOpen: boolean = false;
   @State() concealUntilMeasured: boolean = false;
@@ -91,13 +71,6 @@ export class TkDatePicker {
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
-        // Initialize default time and AM/PM when time UI is shown and no time set yet
-        if (this.showTimePicker && !this.internalStartTime) {
-          const def = this.getDefaultTime();
-          this.internalStartTime = def;
-          if (this.mode !== 'range') this.internalEndTime = def;
-          if (this.timeFormat === '12') this.internalAmPm = def.hour >= 12 ? 'PM' : 'AM';
-        }
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
@@ -107,6 +80,10 @@ export class TkDatePicker {
           });
         }
       } else {
+        // Kullanıcı değişikliklerini uygulamadan paneli kapatırsa, geçici seçimleri temizle
+        if (this.allowApplyButton) {
+          this.processDateValue(this.value, true);
+        }
         this.currentView = 'days';
         this.calendarTableHeightPx = undefined;
         this.concealUntilMeasured = false;
@@ -217,6 +194,13 @@ export class TkDatePicker {
   @Prop() inline: boolean = false;
 
   /**
+   * Whether to require manual confirmation (Apply button) before committing changes.
+   * If true, changes are only applied when apply() is called.
+   * @defaultValue false
+   */
+  @Prop() allowApplyButton: boolean = false;
+
+  /**
    * The selection mode of the date picker: 'single' for single date selection, 'range' for date range selection.
    * @defaultValue single
    */
@@ -240,9 +224,9 @@ export class TkDatePicker {
    */
   @Prop() dateFormat: string = 'yyyy-MM-dd';
   @Watch('dateFormat')
-  dateFormatChanged(newFormat: string) {
-    if (this.timeOnly) return; // keep time mask in timeOnly mode
-    this.maskOptions = this.getMaskOptionsFromDateFormat(newFormat);
+  dateFormatChanged() {
+    if (this.timeOnly) return;
+    this.updateMaskOptions();
   }
 
   /**
@@ -278,6 +262,10 @@ export class TkDatePicker {
    * @defaultValue false
    */
   @Prop() showTimePicker: boolean = false;
+  @Watch('showTimePicker')
+  showTimePickerChanged() {
+    this.updateMaskOptions();
+  }
 
   /**
    * Enables time-only mode. In this mode, no date selection is required and the input shows a time mask.
@@ -315,15 +303,15 @@ export class TkDatePicker {
   @Prop() timeFormat: '12' | '24' = '24';
 
   @Watch('timeOnly')
-  timeOnlyChanged(newValue: boolean) {
+  timeOnlyChanged() {
     // Update mask according to the active mode
-    this.maskOptions = newValue ? { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat } : this.getMaskOptionsFromDateFormat(this.dateFormat);
+    this.updateMaskOptions();
   }
 
   @Watch('timeFormat')
   timeFormatChanged() {
     if (this.timeOnly || this.showTimePicker) {
-      this.maskOptions = { time: true, timePattern: ['h', 'm'], timeFormat: this.timeFormat };
+      this.updateMaskOptions();
       // Sync AM/PM with the current hour when switching to 12h
       if (this.timeFormat === '12' && this.internalStartTime) {
         this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
@@ -347,10 +335,10 @@ export class TkDatePicker {
   /**
    * Emitted on date selection changes
    */
-  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<IDateSelection | string>;
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<IDateSelection | string | null>;
 
   componentWillLoad() {
-    this.maskOptions = this.timeOnly ? { time: true, timePattern: ['h', 'm'] } : this.getMaskOptionsFromDateFormat(this.dateFormat);
+    this.updateMaskOptions();
 
     if (this.allowedDates) {
       this.allowedDates = this.allowedDates.filter(date => {
@@ -443,23 +431,14 @@ export class TkDatePicker {
       this.internalStartTime = null;
       this.internalEndTime = null;
     }
+  }
 
-    const emitValue = this.formatDateOrDateTime(today, 'start');
-
-    if (this.mode === 'range') {
-      this.tkChange.emit({
-        start: emitValue,
-        end: null,
-      });
-    } else {
-      this.tkChange.emit(emitValue);
-    }
-
-    this.currentView = 'days';
-    if (!this.inline && this.isOpen && !this.showTimePicker) {
-      this.isOpen = false;
-    }
-    this.inputValue = this.formatInputValue();
+  /**
+   * Applies the current internal selection and emits tk-change
+   */
+  @Method()
+  async apply() {
+    this.handleApply();
   }
 
   /**
@@ -501,7 +480,6 @@ export class TkDatePicker {
     } else if (newAmPm === 'AM' && currentHour >= 12) {
       currentHour -= 12;
       needsUpdate = true;
-    } else {
     }
 
     // Only update if the hour actually changed
@@ -513,7 +491,6 @@ export class TkDatePicker {
       }
 
       this.emitTimeChange();
-    } else {
     }
 
     this.isUpdatingAmPm = false;
@@ -604,32 +581,51 @@ export class TkDatePicker {
     return newDate;
   }
 
-  private getMaskOptionsFromDateFormat(format: string): IInputMaskOptions {
+  private getMaskOptionsFromDateFormat(format: string): void {
     const delimiter = format.match(/[^a-zA-Z]/)?.[0] || '';
     const datePattern: string[] = [];
+    const blockSizes: number[] = [];
     const parts = format.split(/[^a-zA-Z]/);
 
     parts.forEach(part => {
       switch (part.toLowerCase()) {
         case 'yyyy':
+          datePattern.push('Y');
+          blockSizes.push(4);
+          break;
         case 'yy':
           datePattern.push('Y');
+          blockSizes.push(2);
           break;
         case 'mm':
-        case 'M':
+        case 'm':
+          datePattern.push('m');
+          blockSizes.push(2);
+          break;
         case 'dd':
         case 'd':
-          datePattern.push(part.startsWith('M') ? 'm' : 'd');
+          datePattern.push('d');
+          blockSizes.push(2);
           break;
       }
     });
-    return {
-      date: true,
-      delimiter,
-      datePattern,
-    };
-  }
 
+    const dateDelimiters = Array(blockSizes.length - 1).fill(delimiter);
+
+    if (this.showTimePicker) {
+      this.maskOptions = {
+        blocks: [...blockSizes, 2, 2], // date blocks + HH:MM
+        delimiters: [...dateDelimiters, ' ', ':'],
+        numericOnly: true,
+      };
+    } else {
+      this.maskOptions = {
+        date: true,
+        delimiter,
+        datePattern,
+      };
+    }
+  }
   private processDateValue(value: string | IDateSelection, updateCurrentMonth: boolean = false): void {
     if (this.timeOnly) {
       // In time-only mode, value is expected to be a time string (e.g., HH:mm or hh:mm a)
@@ -822,8 +818,7 @@ export class TkDatePicker {
         return parsedAlt;
       }
     }
-    // Fallback to date only
-    return this.parseInputDate(dateTimeString.split(' ')[0]);
+    return null;
   }
 
   private parseTimeString(timeString: string): Date | null {
@@ -984,6 +979,8 @@ export class TkDatePicker {
   }
 
   private emitTimeChange() {
+    // Apply buttona basılmadıkça anlık değişiklikleri emit etmesin diye
+    if (this.allowApplyButton) return;
     if (this.timeOnly) {
       if (!this.internalStartTime) return;
       const temp = new Date();
@@ -1018,7 +1015,18 @@ export class TkDatePicker {
     this.tkChange.emit(emitValue);
     this.inputValue = this.formatInputValue();
   }
-
+  private updateMaskOptions() {
+    if (this.timeOnly) {
+      // timeformat'a göre mask options'ları belirle
+      this.maskOptions = {
+        time: true,
+        timePattern: ['h', 'm'],
+        timeFormat: this.timeFormat,
+      };
+    } else {
+      this.getMaskOptionsFromDateFormat(this.dateFormat);
+    }
+  }
   /**
    * Click outside handler implementation - called by the mixin
    */
@@ -1045,11 +1053,42 @@ export class TkDatePicker {
     return { time: timeState, type: targetType };
   }
 
+  private handleApply = () => {
+    const { start, end } = this.internalSelectedDates;
+    let emitValue: IDateSelection | string | null = null;
+
+    if (this.timeOnly) {
+      if (this.internalStartTime) {
+        const tempDate = new Date();
+        tempDate.setHours(this.internalStartTime.hour, this.internalStartTime.minute, 0, 0);
+        emitValue = format(tempDate, this.getOnlyTimeFormat());
+      }
+    } else {
+      const formattedStart = start ? this.formatDateOrDateTime(start, 'start') : null;
+      if (this.mode === 'range') {
+        emitValue = {
+          start: formattedStart || '',
+          end: end ? this.formatDateOrDateTime(end, 'end') : undefined,
+        };
+      } else {
+        emitValue = formattedStart;
+      }
+    }
+
+    this.inputValue = this.formatInputValue();
+    this.value = emitValue;
+    this.tkChange.emit(emitValue);
+
+    if (!this.inline && this.isOpen) {
+      this.isOpen = false;
+    }
+    this.isInvalid = false;
+    this.currentView = 'days';
+  };
+
   private handleIncreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
-
-    this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
       const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
@@ -1092,15 +1131,12 @@ export class TkDatePicker {
       }
     }
 
-    this.isUpdatingTime = false;
     this.emitTimeChange();
   };
 
   private handleDecreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
-
-    this.isUpdatingTime = true;
 
     if (this.timeFormat === '12') {
       const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
@@ -1143,7 +1179,6 @@ export class TkDatePicker {
       }
     }
 
-    this.isUpdatingTime = false;
     this.emitTimeChange();
   };
 
@@ -1151,15 +1186,12 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
-    this.isUpdatingTime = true;
-
     if (targetTimeState.type === 'start') {
       this.internalStartTime = { ...targetTimeState.time, hour: hour };
     } else {
       this.internalEndTime = { ...targetTimeState.time, hour: hour };
     }
 
-    this.isUpdatingTime = false;
     this.emitTimeChange();
   };
 
@@ -1244,7 +1276,6 @@ export class TkDatePicker {
     if (this.disabled || this.readonly || this.isDateDisabled(date)) return;
 
     const normalizedDate = this.normalizeDate(date);
-    let emitValue: string | IDateSelection;
     const defaultTime = this.getDefaultTime();
 
     if (this.mode === 'single') {
@@ -1259,9 +1290,7 @@ export class TkDatePicker {
       }
       this.internalEndTime = this.internalStartTime;
 
-      emitValue = this.formatDateOrDateTime(normalizedDate, 'start');
-
-      if (!this.inline && !this.showTimePicker) {
+      if (!this.inline && !this.showTimePicker && !this.allowApplyButton) {
         this.isOpen = false;
       }
     } else if (this.mode === 'range') {
@@ -1279,10 +1308,6 @@ export class TkDatePicker {
           this.internalStartTime = null;
           this.internalEndTime = null;
         }
-        emitValue = {
-          start: this.formatDateOrDateTime(normalizedDate, 'start'),
-          end: null,
-        };
         this.hoverDate = null;
       } else {
         let newStart: Date;
@@ -1305,13 +1330,9 @@ export class TkDatePicker {
         }
         this.internalSelectedDates = { start: newStart, end: newEnd };
 
-        emitValue = {
-          start: this.formatDateOrDateTime(newStart, 'start'),
-          end: this.formatDateOrDateTime(newEnd, 'end'),
-        };
         this.hoverDate = null;
 
-        if (!this.inline && !this.showTimePicker) {
+        if (!this.inline && !this.showTimePicker && !this.allowApplyButton) {
           this.isOpen = false;
         }
       }
@@ -1321,8 +1342,9 @@ export class TkDatePicker {
       return;
     }
     this.remeasureCalendarOnNextFrame();
-    this.tkChange.emit(emitValue);
-    this.inputValue = this.formatInputValue();
+    if (!this.allowApplyButton) {
+      this.handleApply();
+    }
     this.isInvalid = false;
   };
 
@@ -1365,8 +1387,10 @@ export class TkDatePicker {
             this.internalStartTime = { hour: parsedTime.getHours(), minute: parsedTime.getMinutes() };
             this.internalEndTime = this.internalStartTime;
             this.isInvalid = false;
-            this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
-          } else {
+            if (!this.allowApplyButton) {
+              this.tkChange.emit(format(parsedTime, this.getOnlyTimeFormat()));
+            }
+          } else if (!this.allowApplyButton) {
             this.isInvalid = true;
             this.tkChange.emit(undefined);
           }
@@ -1380,19 +1404,21 @@ export class TkDatePicker {
               start: normalized,
               end: null,
             };
+            let formattedValue;
             if (this.showTimePicker) {
               const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
               this.internalStartTime = time;
               this.internalEndTime = time;
+              formattedValue = format(parsedDate, this.getFullDateTimeFormat());
             } else {
               this.internalStartTime = null;
               this.internalEndTime = null;
+              formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
             }
 
             this.isInvalid = false;
-            const formattedValue = this.formatDateOrDateTime(parsedDate, 'start');
             this.tkChange.emit(formattedValue);
-          } else {
+          } else if (!this.allowApplyButton) {
             this.isInvalid = true;
           }
         }
@@ -1401,9 +1427,10 @@ export class TkDatePicker {
         this.internalSelectedDates = { start: null, end: null };
         this.internalStartTime = null;
         this.internalEndTime = null;
-        this.tkChange.emit(undefined);
+        if (!this.allowApplyButton) {
+          this.tkChange.emit(undefined);
+        }
       }
-      this.inputValue = this.formatInputValue();
     }, 300);
   };
 
@@ -1786,7 +1813,6 @@ export class TkDatePicker {
             this.timeOnly && 'tk-datepicker-timepicker-body-only',
           )}
           style={{
-            borderBottomRightRadius: (this.hasFooterSlot || this.hasFooterActionsSlot) && !this.timeOnly ? '0' : '12px',
             height: this.calendarTableHeightPx ? `${this.calendarTableHeightPx}px` : undefined,
           }}
         >
@@ -1921,8 +1947,7 @@ export class TkDatePicker {
   private renderInput() {
     if (this.inline) return null;
 
-    const displayValue = this.formatInputValue();
-    const shouldUseMask = !this.disableMask && (this.timeOnly ? this.timeFormat === '24' : this.mode === 'single' && !this.showTimePicker);
+    const shouldUseMask = !this.disableMask && this.mode !== 'range';
     const maskOptionsToPass = shouldUseMask ? this.maskOptions : undefined;
 
     return (
@@ -1942,7 +1967,7 @@ export class TkDatePicker {
         readonly={this.readonly}
         error={this.error}
         placeholder={this.placeholder || (this.timeOnly ? this.getOnlyTimeFormat() : this.showTimePicker ? this.getFullDateTimeFormat() : this.dateFormat).toUpperCase()}
-        value={displayValue}
+        value={this.inputValue}
         maskOptions={maskOptionsToPass}
         onTk-change={this.handleInputChange}
         onTk-clear-click={this.handleInputClearClick}
@@ -1970,8 +1995,15 @@ export class TkDatePicker {
     // Time-only mode: render only time picker
     if (this.timeOnly) {
       return (
-        <div class={panelClasses} ref={el => (this.panelRef = el as HTMLDivElement)} role={!this.inline ? 'dialog' : null} aria-modal="true" data-tk-datepicker-id={this.uniqueId}>
+        <div
+          class={panelClasses}
+          ref={el => (this.panelRef = el as HTMLDivElement)}
+          role={!this.inline ? 'dialog' : undefined}
+          aria-modal="true"
+          data-tk-datepicker-id={this.uniqueId}
+        >
           <div class="tk-datepicker-panel-inner">{this.createTimePicker()}</div>
+          {this.createFooter()}
         </div>
       );
     }
@@ -1981,7 +2013,7 @@ export class TkDatePicker {
       <div
         class={panelClasses}
         ref={el => (this.panelRef = el as HTMLDivElement)}
-        role={!this.inline ? 'dialog' : null}
+        role={!this.inline ? 'dialog' : undefined}
         aria-modal="true"
         data-tk-datepicker-id={this.uniqueId}
         style={{ visibility: this.concealUntilMeasured ? 'hidden' : undefined }}
