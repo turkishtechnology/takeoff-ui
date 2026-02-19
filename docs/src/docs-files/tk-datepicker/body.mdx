@@ -97,13 +97,19 @@ Illustrates different header styles available via the `headerType` property.
 ## Footer Customization
 
 Demonstrates how to customize the footer using the `footerType` and
-`footerVariant` properties. When the footer is in `triple` mode, a `Today`
-button appears alongside the 'Cancel' and 'Continue' buttons.
+`footerVariant` properties.
+
+You can set `Today` by passing `setToday()` function to the footer slot and
+trigger it on button click.
+
+Additionally, you can manually set the value by `allowApplyButton` property.
+When `allowApplyButton` is enabled, changes are only committed when the
+`apply()` method is called.
 
 <TkAlert
   header="Note"
   variant="info"
-  message="Clicking the 'Today' button selects the current date, updates the input field, and highlights today's date in the calendar view."
+  message="You can use the 'footer-actions' slot to provide your own action buttons and trigger component methods like 'apply()' or 'setToday()'."
   filledlight
 />
 <br />
