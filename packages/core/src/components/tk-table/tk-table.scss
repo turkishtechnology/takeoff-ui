@@ -19,28 +19,6 @@
     border-style: hidden;
     box-shadow: 0 0 0 1px var(--border-light);
 
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-      background: var(--background-lightest);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      border-radius: 2px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      border-radius: 3px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;

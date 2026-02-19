@@ -333,44 +333,6 @@
       align-self: stretch;
       background-color: var(--static-light);
       overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-        background: transparent;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-        border-radius: 2px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 3px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &:hover {
-        &::-webkit-scrollbar {
-          background: var(--background-lightest);
-          opacity: 1;
-        }
-
-        &::-webkit-scrollbar-track {
-          background: var(--background-lightest);
-          opacity: 1;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: var(--secondary-sub-base);
-          opacity: 1;
-        }
-      }
     }
 
     .tk-editor-footer {

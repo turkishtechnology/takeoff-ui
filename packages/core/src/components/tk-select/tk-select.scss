@@ -6,7 +6,7 @@ tk-select {
   .tk-select-panel {
     position: fixed;
     max-height: 320px;
-    overflow-y: auto;
+    overflow: hidden;
     border-radius: 16px;
     border: 1px solid var(--border-light);
     background: var(--static-light);
@@ -15,6 +15,9 @@ tk-select {
 
     .dropdown-item-holder {
       margin: 8px;
+      padding: 1px;
+      max-height: 304px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -78,24 +81,6 @@ tk-select {
           outline: 1px solid var(--background-light);
         }
       }
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 2px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: var(--secondary-sub-base);
-      opacity: 1;
     }
   }
 

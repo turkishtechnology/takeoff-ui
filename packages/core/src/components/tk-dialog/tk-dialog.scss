@@ -185,27 +185,6 @@ tk-dialog {
     align-self: stretch;
     overflow-y: auto;
     flex: 1;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      border-radius: 2px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      border-radius: 3px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
   }
 
   .tk-dialog-footer {

@@ -309,24 +309,6 @@
         }
       }
     }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 2px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: var(--secondary-sub-base);
-      opacity: 1;
-    }
   }
 
   &.drag-drop-enabled {
