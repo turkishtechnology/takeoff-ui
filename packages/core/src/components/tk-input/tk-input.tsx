@@ -641,7 +641,7 @@ export class TkInput implements ComponentInterface {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
 
       hint = (
-        <span class="hint">
+        <span class="hint error">
           {hintIcon}
           {this.error}
         </span>
