@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
 
   &::-webkit-scrollbar {
     display: none;
