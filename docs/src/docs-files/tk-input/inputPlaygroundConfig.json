@@ -1,0 +1,113 @@
+{
+  "name": "TkInput",
+  "componentName": "TkInput",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Label"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "type": "text",
+      "defaultValue": "Enter text..."
+    },
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "text",
+      "options": [
+        { "label": "Text", "value": "text" },
+        { "label": "Password", "value": "password" },
+        { "label": "Number", "value": "number" },
+        { "label": "Counter", "value": "counter" },
+        { "label": "Chips", "value": "chips" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "iconPosition",
+      "label": "Icon Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "pre",
+      "label": "Prefix",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "clearable",
+      "label": "Clearable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "readonly",
+      "label": "Readonly",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showAsterisk",
+      "label": "Show Asterisk",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

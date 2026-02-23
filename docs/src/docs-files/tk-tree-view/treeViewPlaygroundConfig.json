@@ -1,0 +1,115 @@
+{
+  "name": "TkTreeView",
+  "componentName": "TkTreeView",
+  "hasChildren": false,
+  "fullWidth": true,
+  "props": [
+    {
+      "key": "items",
+      "label": "Items",
+      "type": "json",
+      "defaultValue": [
+        {
+          "key": "1",
+          "label": "Documents",
+          "children": [
+            { "key": "1-1", "label": "Report.pdf" },
+            { "key": "1-2", "label": "Summary.docx" }
+          ]
+        },
+        {
+          "key": "2",
+          "label": "Images",
+          "children": [
+            { "key": "2-1", "label": "Photo.png" },
+            { "key": "2-2", "label": "Logo.svg" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mode",
+      "label": "Mode",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Stepper", "value": "stepper" }
+      ]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "selectionStrategy",
+      "label": "Selection Strategy",
+      "type": "select",
+      "defaultValue": "all",
+      "options": [
+        { "label": "All", "value": "all" },
+        { "label": "Leaf", "value": "leaf" }
+      ]
+    },
+    {
+      "key": "branchIcon",
+      "label": "Branch Icon",
+      "type": "text",
+      "defaultValue": "category"
+    },
+    {
+      "key": "leafIcon",
+      "label": "Leaf Icon",
+      "type": "text",
+      "defaultValue": "label"
+    },
+    {
+      "key": "selectable",
+      "label": "Selectable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "expandAll",
+      "label": "Expand All",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showBadge",
+      "label": "Show Badge",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showPointer",
+      "label": "Show Pointer",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

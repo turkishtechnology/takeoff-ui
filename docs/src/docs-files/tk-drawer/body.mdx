@@ -1,9 +1,16 @@
+import Playground from '../../components/Playground';
+import drawerConfigData from './drawerPlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import Position from './Examples/Position';
 import DrawerWithFooter from './Examples/DrawerWithFooter';
 import Templating from './Examples/Templating';
 import PreventDismiss from './Examples/PreventDismiss';
 import Customization from './Examples/Customization';
+import { TkDrawer } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground configs={[drawerConfigData]} componentMap={{ TkDrawer }} />
 
 ## Basic
 

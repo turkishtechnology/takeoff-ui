@@ -446,7 +446,7 @@ export class TkUpload implements ComponentInterface {
 
     if (this.error?.length > 0) {
       hint = (
-        <span class="hint">
+        <span class="hint error">
           <i class="material-symbols-outlined">info</i>
           {this.error}
         </span>

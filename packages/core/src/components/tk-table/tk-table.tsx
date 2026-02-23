@@ -58,6 +58,8 @@ export class TkTable implements ComponentInterface {
   @State() groupedData: ITableGroup[] = [];
   @State() groupByColumnField: string = null;
   @State() isControlledGrouping: boolean = false;
+  @State() expandedGroups: any[] = [];
+  @State() internalRowsPerPage: number;
 
   /**
    * The column definitions (Array of Objects)
@@ -120,8 +122,8 @@ export class TkTable implements ComponentInterface {
       const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
         this.currentPage = 1;
-        const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-        const endIndex = startIndex + this.rowsPerPage;
+        const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+        const endIndex = startIndex + this.internalRowsPerPage;
         this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
         this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
@@ -154,7 +156,13 @@ export class TkTable implements ComponentInterface {
   /**
    * Number of items per page.
    */
-  @Prop({ mutable: true }) rowsPerPage: number = 6;
+  @Prop() rowsPerPage: number = 6;
+  @Watch('rowsPerPage')
+  rowsPerPageChanged(newValue: number, oldValue: number) {
+    if (oldValue !== newValue) {
+      this.internalRowsPerPage = newValue;
+    }
+  }
 
   /**
    * Number of rows per page options
@@ -246,6 +254,12 @@ export class TkTable implements ComponentInterface {
   }
 
   /**
+   * If true, group headers will have an expand/collapse button to show/hide the rows in that group.
+   * @defaultValue false
+   */
+  @Prop() collapsibleGroups: boolean = false;
+
+  /**
    *
    */
   @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<any[] | any>;
@@ -304,6 +318,8 @@ export class TkTable implements ComponentInterface {
 
     // Determine if this is a controlled component based on initial groupBy prop
     this.isControlledGrouping = this.groupBy !== undefined;
+
+    this.internalRowsPerPage = this.rowsPerPage;
 
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
@@ -412,7 +428,7 @@ export class TkTable implements ComponentInterface {
   async serverRequest() {
     const requestData = {
       currentPage: this.currentPage,
-      rowsPerPage: this.rowsPerPage,
+      rowsPerPage: this.internalRowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
@@ -742,6 +758,9 @@ export class TkTable implements ComponentInterface {
 
     this.groupByColumnField = columnField;
 
+    // Başlangıçta tüm gruplar genişletilmiş olarak gösterilir
+    this.expandedGroups = this.groupedData.map(group => group.groupValue);
+
     // Generate render data from grouped data
     const flatRenderData = [];
     this.groupedData.forEach(group => {
@@ -749,8 +768,8 @@ export class TkTable implements ComponentInterface {
     });
 
     if (this.paginationMethod === 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = flatRenderData.slice(startIndex, endIndex);
     } else {
       this.renderData = flatRenderData;
@@ -769,6 +788,7 @@ export class TkTable implements ComponentInterface {
   private clearGroupingInternal() {
     this.groupByColumnField = null;
     this.groupedData = [];
+    this.expandedGroups = [];
     this.generateRenderData(this.data, this.currentPage, true);
   }
 
@@ -785,7 +805,7 @@ export class TkTable implements ComponentInterface {
     if (!isWillLoad) {
       const requestData = {
         currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
+        rowsPerPage: this.internalRowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
@@ -801,8 +821,8 @@ export class TkTable implements ComponentInterface {
     }
 
     if (this.paginationMethod == 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = _data.slice(startIndex, endIndex);
       this.totalItems = _data?.length;
     } else {
@@ -829,6 +849,22 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = newExpandedRows;
 
     this.tkExpandedRowsChange.emit(this.expandedRows);
+
+    // After state change, recalc shadows on next frame
+    requestAnimationFrame(() => this.refreshStickyShadows());
+  }
+
+  private toggleExpandGroup(groupValue: any) {
+    if (!this.collapsibleGroups) return;
+    const existingIndex = this.expandedGroups.indexOf(groupValue);
+
+    if (existingIndex > -1) {
+      // collapse the group
+      this.expandedGroups = [...this.expandedGroups.slice(0, existingIndex), ...this.expandedGroups.slice(existingIndex + 1)];
+    } else {
+      // expand the group
+      this.expandedGroups = [...this.expandedGroups, groupValue];
+    }
 
     // After state change, recalc shadows on next frame
     requestAnimationFrame(() => this.refreshStickyShadows());
@@ -1633,13 +1669,20 @@ export class TkTable implements ComponentInterface {
     const rows = [];
     let globalIndex = 0;
 
+    // Group headerın olduğu cellden sonra oluşan boşluk için genişlik hesaplaması
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder') as HTMLElement;
+    if (tableHolder) {
+      const tableHolderWidth = tableHolder.clientWidth;
+      tableHolder.style.setProperty('--table-holder-width', `${tableHolderWidth}px`);
+    }
+
     // For pagination, we need to determine which groups and rows to show
     let startIndex = 0;
     let endIndex = this.renderData.length;
 
     if (this.paginationMethod === 'client') {
-      startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      endIndex = startIndex + this.rowsPerPage;
+      startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      endIndex = startIndex + this.internalRowsPerPage;
     }
 
     let currentRowIndex = 0;
@@ -1649,14 +1692,24 @@ export class TkTable implements ComponentInterface {
       const groupStartIndex = currentRowIndex;
       const groupEndIndex = currentRowIndex + group.rows.length;
 
+      const isGroupExpanded = this.expandedGroups.includes(group.groupValue);
+
       // If this group overlaps with the visible range, show it
       if (groupEndIndex > startIndex && groupStartIndex < endIndex) {
         // Create group header row
         const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
         const groupHeaderRow = (
-          <tr class="tk-table-group-header">
+          <tr
+            class={classNames(
+              'tk-table-group-header',
+              { 'tk-table-collapsible-group-header': this.collapsibleGroups },
+              { 'tk-table-group-collapsed': this.collapsibleGroups && !isGroupExpanded },
+            )}
+            onClick={() => this.toggleExpandGroup(group.groupValue)}
+          >
             <td colSpan={totalColumns} class="tk-table-group-header-cell">
               <div class="tk-table-group-header-content">
+                {this.collapsibleGroups && <tk-icon icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} variant="neutral" />}
                 <span class="tk-table-group-value">{group.groupValue}</span>
                 <span class="tk-table-group-count">({group.groupCount})</span>
               </div>
@@ -1664,17 +1717,18 @@ export class TkTable implements ComponentInterface {
           </tr>
         );
         rows.push(groupHeaderRow);
+        if (isGroupExpanded) {
+          // Show only the visible rows from this group
+          group.rows.forEach((row, groupRowIndex) => {
+            const absoluteRowIndex = currentRowIndex + groupRowIndex;
 
-        // Show only the visible rows from this group
-        group.rows.forEach((row, groupRowIndex) => {
-          const absoluteRowIndex = currentRowIndex + groupRowIndex;
-
-          // Only show rows that are in the visible range
-          if (absoluteRowIndex >= startIndex && absoluteRowIndex < endIndex) {
-            const dataRow = this.createDataRow(row, globalIndex + groupRowIndex);
-            rows.push(dataRow);
-          }
-        });
+            // Only show rows that are in the visible range
+            if (absoluteRowIndex >= startIndex && absoluteRowIndex < endIndex) {
+              const dataRow = this.createDataRow(row, globalIndex + groupRowIndex);
+              rows.push(dataRow);
+            }
+          });
+        }
       }
 
       currentRowIndex += group.rows.length;
@@ -2203,14 +2257,14 @@ export class TkTable implements ComponentInterface {
         <tk-pagination
           type={this.paginationType}
           totalItems={this.totalItems}
-          rowsPerPage={this.rowsPerPage}
+          rowsPerPage={this.internalRowsPerPage}
           rowsPerPageOptions={this.rowsPerPageOptions}
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
-            this.rowsPerPage = e.detail;
+            this.internalRowsPerPage = e.detail;
             const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;

@@ -81,6 +81,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Disables the input field if set to true.
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isDropdownOpen = false;
+  }
 
   /**
    * Marks the input field as invalid if set to true.
@@ -694,12 +698,12 @@ export class TkCurrencyInput implements ComponentInterface {
     }
 
     if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-error-icon', variant: null })} />;
 
       hint = (
-        <span class="tk-currency-input-hint">
+        <span class="tk-currency-input-error">
           {hintIcon}
-          <span class="tk-currency-input-hint-text">{this.error}</span>
+          <span class="tk-currency-input-error-text">{this.error}</span>
         </span>
       );
     }
