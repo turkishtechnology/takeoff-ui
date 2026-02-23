@@ -11,7 +11,7 @@
 
   .header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     cursor: pointer;
     color: var(--text-darkest);
 
@@ -78,6 +78,9 @@
   }
 
   &.base {
+    &.open {
+      gap: var(--accordion-base-content-gap);
+    }
     .header {
       font-size: var(--desktop-body-s-size);
       line-height: var(--desktop-body-s-line-height);
@@ -95,6 +98,9 @@
   }
 
   &.large {
+    &.open {
+      gap: var(--accordion-large-gap);
+    }
     .header {
       font-size: var(--desktop-body-m-size);
       line-height: var(--desktop-body-m-line-height);
