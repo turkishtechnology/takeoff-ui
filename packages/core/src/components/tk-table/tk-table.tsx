@@ -347,8 +347,8 @@ export class TkTable implements ComponentInterface {
     const hasSelectionMode = !!this.selectionMode;
     if (stickyColumns.length > 0 || hasSelectionMode) {
       this.updateStickyOffsets();
-      this.setupScrollListener();
     }
+    this.setupScrollListener();
   }
 
   componentDidRender(): void {
@@ -1657,6 +1657,15 @@ export class TkTable implements ComponentInterface {
       rightStickyElements.forEach((el: HTMLElement) => {
         el.style.setProperty('--shadow-opacity', hasOverflow && !atRight ? '1' : '0');
       });
+    }
+
+    // Header bottom shadow visibility on vertical scroll
+    const scrollTop = target.scrollTop;
+    const atTop = scrollTop <= EPS;
+
+    const theadElement = this.el.shadowRoot?.querySelector('thead') as HTMLElement;
+    if (theadElement) {
+      theadElement.style.setProperty('--header-shadow-opacity', !atTop ? '1' : '0');
     }
   };
 
