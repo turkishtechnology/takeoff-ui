@@ -210,7 +210,7 @@
               border-inline-end: 0;
             }
 
-            &.tk-editor-button-active {
+            &.tk-editor-button-active:not(.tk-editor-button-readonly):not(.tk-editor-button-disabled) {
               background-color: var(--primary-sub-base);
               border-color: var(--primary-sub-base);
               color: var(--static-light);
@@ -271,6 +271,10 @@
                 }
               }
 
+              &.tk-editor-button-active svg {
+                stroke: var(--primary-base);
+              }
+
               &:not(:last-of-type) {
                 border-right: none;
               }
@@ -297,25 +301,6 @@
                   &[fill]:not([fill='none']) {
                     fill: currentColor;
                   }
-                }
-              }
-
-              &:not(.tk-editor-button-readonly),
-              &:not(.tk-editor-button-disabled) {
-                &.tk-editor-button-active {
-                  svg {
-                    color: var(--static-light);
-                  }
-                }
-
-                &:hover {
-                  svg {
-                    color: var(--text-darkest);
-                  }
-                }
-
-                &:focus {
-                  box-shadow: var(--secondary-light-focus);
                 }
               }
             }

@@ -1053,6 +1053,7 @@ export class TkSelect implements ComponentInterface {
         chipLabelKey={this.optionLabelKey}
         readonly={this.readonly}
         disabled={this.disabled}
+        loading={this.loading}
         clearable={this.clearable}
         chipOptions={this.chipOptions}
         chipDisabled={this.optionDisabled}
