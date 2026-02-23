@@ -54,6 +54,7 @@
 
     &.filled {
       background-color: var(--states-success-base);
+      border-color: var(--states-success-base);
     }
 
     &.filledlight {
@@ -74,6 +75,7 @@
 
     &.filled {
       background-color: var(--states-info-base);
+      border-color: var(--states-info-base);
     }
 
     &.filledlight {
@@ -94,6 +96,7 @@
 
     &.filled {
       background-color: var(--states-danger-base);
+      border-color: var(--states-info-base);
     }
 
     &.filledlight {
@@ -114,6 +117,7 @@
 
     &.filled {
       background-color: var(--states-warning-base);
+      border-color: var(--states-warning-base);
     }
 
     &.filledlight {
