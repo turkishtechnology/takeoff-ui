@@ -33,6 +33,13 @@
       height: var(--size-base);
       color: var(--icon-base);
     }
+
+    &.error {
+      color: var(--states-danger-base);
+      & i {
+        color: var(--states-danger-base);
+      }
+    }
   }
 
   &[aria-invalid] {
