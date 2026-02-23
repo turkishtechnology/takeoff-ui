@@ -500,7 +500,7 @@ export class TkEditor {
     return (
       <button
         class={classNames('tk-editor-button', `tk-editor-button-${button.action}`, `tk-editor-button-${button.behavior}`, {
-          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button) && !this.disabled,
+          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button),
           'tk-editor-button-disabled': this.disabled,
           'tk-editor-button-readonly': this.readonly,
           [`tk-editor-button-${button.action}-disabled`]: (button.action === 'undo' || button.action === 'redo') && this.isHistoryButtonDisabled(button.action),
