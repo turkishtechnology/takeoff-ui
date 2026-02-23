@@ -345,10 +345,12 @@ export class TkTable implements ComponentInterface {
   componentDidLoad() {
     const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
     const hasSelectionMode = !!this.selectionMode;
-    if (stickyColumns.length > 0 || hasSelectionMode) {
+    const hasScrollableContainer = !!(this.containerStyle?.height || this.containerStyle?.maxHeight);
+
+    if (stickyColumns.length > 0 || hasSelectionMode || hasScrollableContainer) {
       this.updateStickyOffsets();
+      this.setupScrollListener();
     }
-    this.setupScrollListener();
   }
 
   componentDidRender(): void {
