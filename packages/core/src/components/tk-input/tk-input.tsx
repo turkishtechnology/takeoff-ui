@@ -169,6 +169,12 @@ export class TkInput implements ComponentInterface {
   @Prop() chipDisabled: Function;
 
   /**
+   * Shows a loading spinner on the right side of the input.
+   * @defaultValue false
+   */
+  @Prop() loading: boolean = false;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -762,6 +768,7 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
+          {this.loading && <tk-spinner size="xxsmall"></tk-spinner>}
           {showClearButton && (
             <tk-button
               variant="neutral"
