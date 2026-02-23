@@ -1079,7 +1079,8 @@ export class TkDatePicker {
     this.value = emitValue;
     this.tkChange.emit(emitValue);
 
-    if (!this.inline && this.isOpen) {
+    const isEndSelected = this.mode === 'range' ? !!this.internalSelectedDates.end : true;
+    if (!this.inline && this.isOpen && !this.showTimePicker && isEndSelected) {
       this.isOpen = false;
     }
     this.isInvalid = false;
