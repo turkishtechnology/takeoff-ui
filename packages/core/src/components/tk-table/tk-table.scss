@@ -21,7 +21,7 @@
     overflow-x: auto;
     border-radius: var(--radius-m-base);
     border-style: hidden;
-    box-shadow: 0 0 0 1px var(--border-light);
+    outline: 2px solid var(--border-light);
     @include takeoff-scrollbar;
 
     table {
@@ -255,6 +255,9 @@
                 }
               }
             }
+          }
+          &:not(:has(+ tr)) {
+            border-bottom: none;
           }
         }
 
