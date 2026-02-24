@@ -3,41 +3,21 @@
   &::-webkit-scrollbar {
     width: 4px;
     height: 4px;
-    opacity: 0;
   }
 
   &::-webkit-scrollbar-track {
+    background: var(--background-lightest);
     border-radius: 2px;
-    opacity: 0;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    opacity: 0;
+    background: var(--secondary-sub-base);
+    &:hover {
+      background: var(--secondary-dark);
+    }
   }
-
   &::-webkit-scrollbar-corner {
-    opacity: 0;
-  }
-
-  &:hover {
-    &::-webkit-scrollbar,
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      opacity: 1;
-
-      &:hover {
-        background: var(--secondary-dark);
-      }
-    }
-    &::-webkit-scrollbar-corner {
-      background: var(--background-lightest);
-      opacity: 1;
-    }
+    background: var(--background-lightest);
   }
 }
