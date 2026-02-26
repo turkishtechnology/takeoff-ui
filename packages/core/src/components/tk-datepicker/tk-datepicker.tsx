@@ -6,11 +6,8 @@ import { IInputMaskOptions } from '../tk-input/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import type { IDateSelection } from './interfaces';
 
-export interface IDateSelection {
-  start: string;
-  end?: string;
-}
 /**
  * The `TkDatepicker` component is a versatile and customizable date picker that supports `single` date and date `range` selection. It offers various display modes, localization, and customizable date formatting.
  * @slot footer - Custom footer template.
@@ -1079,7 +1076,8 @@ export class TkDatePicker {
     this.value = emitValue;
     this.tkChange.emit(emitValue);
 
-    if (!this.inline && this.isOpen) {
+    const isEndSelected = this.mode === 'range' ? !!this.internalSelectedDates.end : true;
+    if (!this.inline && this.isOpen && !this.showTimePicker && isEndSelected) {
       this.isOpen = false;
     }
     this.isInvalid = false;
