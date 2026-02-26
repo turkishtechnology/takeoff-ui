@@ -56,22 +56,18 @@ tk-input.tk-table-input {
     background-color: var(--static-light);
     box-sizing: border-box;
     width: -webkit-fill-available;
-
     .tk-input-clear-button {
       margin-left: auto;
     }
 
-    i,
-    tk-icon {
+    i {
       color: var(--icon-base);
       user-select: none;
-      &.clickable:not(.disabled) {
-        cursor: pointer;
-      }
-      &.disabled {
-        color: var(--icon--sub);
-      }
     }
+    tk-icon.clickable:not(.disabled) {
+      cursor: pointer;
+    }
+
     .counter-icon {
       width: 20px;
       height: 20px;
