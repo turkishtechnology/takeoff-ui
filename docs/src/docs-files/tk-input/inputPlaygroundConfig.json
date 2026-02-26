@@ -98,6 +98,12 @@
       "defaultValue": false
     },
     {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
       "key": "showAsterisk",
       "label": "Show Asterisk",
       "type": "checkbox",

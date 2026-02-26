@@ -1,4 +1,4 @@
-import { Separator } from './types';
+import type { Separator } from './interfaces';
 
 const validSeparators: Separator[] = [',', '.', ' '] as const;
 
