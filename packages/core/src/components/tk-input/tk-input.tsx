@@ -519,6 +519,7 @@ export class TkInput implements ComponentInterface {
   }
 
   private handleClearButtonClick = (e: Event) => {
+    if (this.readonly || this.disabled) return;
     e.stopPropagation();
     this.handleFormReset();
     this.tkClearClick.emit();
@@ -772,10 +773,10 @@ export class TkInput implements ComponentInterface {
           {showClearButton && (
             <tk-icon
               {...getIconElementProps('close', {
-                class: 'tk-input-clear-button clickable',
+                class: classNames('tk-input-clear-button clickable', { disabled: this.disabled || this.readonly }),
                 onClick: this.handleClearButtonClick,
                 onKeyDown: this.handleClearButtonKeyDown,
-                tabindex: 0,
+                tabindex: this.disabled || this.readonly ? -1 : 0,
               })}
             />
           )}
