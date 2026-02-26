@@ -271,10 +271,6 @@
                 }
               }
 
-              &.tk-editor-button-active svg {
-                stroke: var(--primary-base);
-              }
-
               &:not(:last-of-type) {
                 border-right: none;
               }
