@@ -650,7 +650,6 @@ export class TkSelect implements ComponentInterface {
 
   private async handleSelectAllClick() {
     if (this.readonly) return;
-    this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue;
       const checking = this.isAllSelected();
@@ -681,7 +680,6 @@ export class TkSelect implements ComponentInterface {
 
   private async handleItemClick(item) {
     if (this.readonly || this.optionDisabled?.(item)) return;
-    this.isItemClickFlag = true;
     if (this.multiple) {
       const tmpValue = Array.isArray(this.value) ? [...this.value] : [];
 
@@ -974,6 +972,7 @@ export class TkSelect implements ComponentInterface {
           class={classNames('dropdown-item', { multiple: this.multiple }, { disabled: isDisabled })}
           data-option-index={startIndex + index}
           data-selected={this.multiple && checking ? 'true' : this.value === this.getOptionValue(item) ? 'true' : 'false'}
+          onPointerDown={() => (this.isItemClickFlag = true)}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
         >
@@ -992,6 +991,7 @@ export class TkSelect implements ComponentInterface {
           <div
             class={classNames('dropdown-item', { multiple: this.multiple })}
             data-selected={this.multiple && checking ? 'true' : 'false'}
+            onPointerDown={() => (this.isItemClickFlag = true)}
             onClick={() => this.handleSelectAllClick()}
             data-option-index="-1"
           >
@@ -1064,7 +1064,7 @@ export class TkSelect implements ComponentInterface {
           e.stopPropagation();
           this.handleInputChange(e.detail);
         }}
-        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 150)}
+        onTk-blur={() => this.handleInputBlur()}
         onTk-clear-click={() => this.handleInputClearClick()}
         onKeyDown={e => this.handleInputKeydown(e)}
       ></tk-input>
