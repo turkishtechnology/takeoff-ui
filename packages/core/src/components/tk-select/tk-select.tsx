@@ -642,42 +642,29 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
-  private getNextEnabledItemIndex(currentIndex: number, direction: 'up' | 'down'): number | null {
+  private getNextEnabledItemIndex(currentIndex: number, direction: 'up' | 'down', visited: number = 0): number | null {
     const totalItems = this.flatOptions.length;
+    const maxSteps = this.selectAll && this.multiple ? totalItems + 1 : totalItems;
+
+    if (visited >= maxSteps) return null;
+
     const startIndex = this.selectAll && this.multiple ? -1 : 0;
     const endIndex = totalItems - 1;
 
     let nextIndex = direction === 'down' ? currentIndex + 1 : currentIndex - 1;
-    let visited = 0;
-    const maxVisits = totalItems + (this.selectAll && this.multiple ? 1 : 0);
-
-    // bütün itemler disabled ise sonsuz döngüye girmemesi için visited sayısı eklenmiştir. visited, toplam item sayısı + selectAll itemi (varsa) kadar olabilir.
-    while (visited < maxVisits) {
-      //circular navigation için
-      if (nextIndex > endIndex) {
-        nextIndex = startIndex;
-      } else if (nextIndex < startIndex) {
-        nextIndex = endIndex;
-      }
-      //select all item için
-      if (nextIndex === -1 && this.selectAll && this.multiple) {
-        return -1;
-      }
-      //kalan disabled olmayan itemleri gezmek için
-      if (nextIndex >= 0 && nextIndex < totalItems) {
-        const item = this.flatOptions[nextIndex];
-        const isDisabled = this.optionDisabled ? this.optionDisabled(item) : false;
-
-        if (!isDisabled) {
-          return nextIndex;
-        }
-      }
-
-      nextIndex = direction === 'down' ? nextIndex + 1 : nextIndex - 1;
-      visited++;
+    if (nextIndex > endIndex) {
+      nextIndex = startIndex;
+    } else if (nextIndex < startIndex) {
+      nextIndex = endIndex;
+    }
+    if (nextIndex === -1 && this.selectAll && this.multiple) {
+      return -1;
     }
 
-    return null;
+    const item = this.flatOptions[nextIndex];
+    const isDisabled = this.optionDisabled ? this.optionDisabled(item) : false;
+    if (isDisabled) return this.getNextEnabledItemIndex(nextIndex, direction, visited + 1);
+    else return nextIndex;
   }
 
   private navigateToItem(direction: 'up' | 'down') {
