@@ -90,6 +90,10 @@ export class TkSelect implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() disabled = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isOpen = false;
+  }
 
   /**
    * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
@@ -793,8 +797,9 @@ export class TkSelect implements ComponentInterface {
     const path = e.composedPath();
     const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
     const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
+    const isChipsClearButton = path.some((el: any) => el.classList?.contains('tk-chips-clear-button'));
 
-    if (isClearButton) return;
+    if (isClearButton || isChipsClearButton) return;
 
     if (isChevron) {
       this.isOpen = !this.isOpen;
@@ -1048,6 +1053,7 @@ export class TkSelect implements ComponentInterface {
         chipLabelKey={this.optionLabelKey}
         readonly={this.readonly}
         disabled={this.disabled}
+        loading={this.loading}
         clearable={this.clearable}
         chipOptions={this.chipOptions}
         chipDisabled={this.optionDisabled}

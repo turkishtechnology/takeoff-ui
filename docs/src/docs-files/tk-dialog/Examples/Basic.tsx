@@ -60,16 +60,16 @@ const handleClick = () => {
 </script>
 
 <template>
-  <>
+  <div>
     <TkButton label="Open Dialog" @tk-click="handleClick" />
     <TkDialog
       header="Welcome"
       subheader="Basic Dialog Example"
-      :visible.prop="showDialog"
+      :visible="showDialog"
       @tk-visible-change="(e) => {
         showDialog = e.detail;
       }"
-      containerStyle="{ width: '450px' }"
+      :container-style="{ width: '450px' }"
     >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
@@ -78,7 +78,7 @@ const handleClick = () => {
         cupiditate neque quas!
       </p>
     </TkDialog>
-  </>
+  </div>
 </template>
 `;
 

@@ -157,14 +157,14 @@ const column = [
 
 <template>
   <TkTable
-    :columns.prop="column"
-    :data.prop="basicData"
-    :cellStyle.prop="(row, col) => {
+    :columns="column"
+    :data="basicData"
+    :cellStyle="(row, col) => {
       if (col.field == 'name' && row.name == 'Blue Band') {
         return { background: 'var(--primary-base)', color: 'white' };
       }
     }"
-    :rowStyle.prop="(row, index) => {
+    :rowStyle="(row, index) => {
       if (row.quantity > 50) {
         return {
           background: 'var(--states-success-sub-base)',

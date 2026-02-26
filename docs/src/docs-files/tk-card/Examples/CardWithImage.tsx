@@ -27,18 +27,26 @@ const CardWithImage = () => {
   showAvatar 
   showMenuButton 
 >
-    <p>Card with top image in windowed mode.</p>
+  <p>Card with top image in windowed mode.</p>
+  <div slot="footer-actions">
+    <TkButton label="Cancel" variant="neutral" type="text"></TkButton>
+    <TkButton label="Submit" variant="primary"></TkButton>
+  </div>
 </TkCard>`;
 
   const angularCode = `<tk-card
   header="Top Image"
   image="path/to/image.jpg"
-  [imageOptions]="{ position: 'top', windowed: true }"
-  [containerStyle]="{ width: '312px' }"
-  showAvatar
-  showMenuButton
+  [image-options]="{ position: 'top', windowed: true }"
+  [container-style]="{ width: '312px' }"
+  show-avatar
+  show-menu-button
 >
   <p>Card with top image in windowed mode.</p>
+  <div slot="footer-actions">
+    <tk-button label="Cancel" variant="neutral" type="text"></tk-button>
+    <tk-button label="Submit" variant="primary"></tk-button>
+  </div>
 </tk-card>`;
 
   const demo = (

@@ -100,7 +100,7 @@ export class TkChips implements ComponentInterface {
         {icon}
         {this.label}
         {this.removable && (
-          <i onClick={() => this.handleClick()} class="material-symbols-outlined">
+          <i onClick={() => this.handleClick()} class="material-symbols-outlined tk-chips-clear-button">
             close
           </i>
         )}

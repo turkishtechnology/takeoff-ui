@@ -21,17 +21,17 @@ const Visibility = () => {
     if (!showAlphaSlider) {
       props.push('showAlphaSlider={false}');
       vueProps.push(':showAlphaSlider="false"');
-      angularProps.push('[showAlphaSlider]="false"');
+      angularProps.push('[show-alpha-slider]="false"');
     }
     if (!showPresets) {
       props.push('showPresets={false}');
       vueProps.push(':showPresets="false"');
-      angularProps.push('[showPresets]="false"');
+      angularProps.push('[show-presets]="false"');
     }
     if (!showFormatSelector) {
       props.push('showFormatSelector={false}');
       vueProps.push(':showFormatSelector="false"');
-      angularProps.push('[showFormatSelector]="false"');
+      angularProps.push('[show-format-selector]="false"');
     }
 
     const propsStr = props.length > 0 ? '\n  ' + props.join('\n  ') : '';
@@ -46,7 +46,9 @@ const Visibility = () => {
   inline ${vuePropsStr} 
 />`;
 
-    const angularCode = ``;
+    const angularCode = `<tk-color-picker
+  inline ${angularPropsStr}
+></tk-color-picker>`;
 
     setCodeSampleReact(reactCode);
     setCodeSampleVue(vueCode);

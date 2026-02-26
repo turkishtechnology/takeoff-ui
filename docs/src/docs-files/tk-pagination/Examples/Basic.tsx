@@ -5,7 +5,7 @@ import React from 'react';
 const Basic = () => {
   const reactCode = `<TkPagination totalItems={50} rowsPerPage={10} />`;
 
-  const vueCode = `<TkPagination totalItems="50" rowsPerPage="10" />`;
+  const vueCode = `<TkPagination :totalItems="50" :rowsPerPage="10" />`;
 
   const angularCode = `<tk-pagination [totalItems]="50" [rowsPerPage]="10" />`;
 

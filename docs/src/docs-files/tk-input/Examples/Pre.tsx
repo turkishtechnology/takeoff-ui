@@ -4,20 +4,20 @@ import React, { useState } from 'react';
 
 const Pre = () => {
   const reactCode = `<TkInput 
-    label="Prepend Text"  
+    label="Prefix Text"  
     value={value}
     pre="TK"
     onTkChange={(e) => setValue(e.detail)}
   />`;
 
   const vueCode = `<TkInput 
-    label="Prepend Text" 
+    label="Prefix Text" 
     v-model="value" 
     pre="TK"
   />`;
 
   const angularCode = `<tk-input 
-    label="Prepend Text" 
+    label="Prefix Text" 
     [(ngModel)]="value" 
     pre="TK"
   ></tk-input>`;

@@ -56,7 +56,7 @@ const handleUpload= (e) => {
 
 <template>
   <TkUpload
-    :autoUpload.prop="true"
+    :autoUpload="true"
     multiple
     @tkUpload="handleUpload"
   >

@@ -3,12 +3,13 @@ import FeatureDemo from '../../../components/FeatureDemo';
 
 const Orientation = () => {
   const reactCode = `<TkColorPicker inline orientation="vertical" />
-      <TkColorPicker inline orientation="horizontal" />`;
+<TkColorPicker inline orientation="horizontal" />`;
 
   const vueCode = `<TkColorPicker inline orientation="vertical" />
-      <TkColorPicker inline orientation="horizontal" />`;
+<TkColorPicker inline orientation="horizontal" />`;
 
-  const angularCode = ``;
+  const angularCode = `<tk-color-picker inline orientation="vertical"></tk-color-picker>
+<tk-color-picker inline orientation="horizontal"></tk-color-picker>`;
 
   const demo = (
     <div className="flex gap-4 justify-center ">

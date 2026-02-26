@@ -1,9 +1,13 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-table-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 1px;
   position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-m-base);
 
   .tk-table-header {
     display: flex;
@@ -17,29 +21,8 @@
     overflow-x: auto;
     border-radius: var(--radius-m-base);
     border-style: hidden;
-    box-shadow: 0 0 0 1px var(--border-light);
-
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-      background: var(--background-lightest);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      border-radius: 2px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      border-radius: 3px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
+    outline: 2px solid var(--border-light);
+    @include takeoff-scrollbar;
 
     table {
       width: 100%;
@@ -169,9 +152,6 @@
 
       tbody {
         tr {
-          &.tk-table-group-header + tr {
-            border-top: 1px solid var(--border-light);
-          }
           &:last-child {
             border-bottom: none;
           }
@@ -236,14 +216,26 @@
 
           &.tk-table-group-header {
             display: block;
-            border-bottom: none;
             position: sticky;
             left: var(--tk-table-sticky-left-offset, 0);
-
+            &.tk-table-collapsible-group-header {
+              cursor: pointer;
+            }
             .tk-table-group-header-cell {
               font-weight: var(--font-weight-semibold);
               color: var(--text-dark);
               border: none;
+              position: relative;
+              &::after {
+                content: '';
+                position: absolute;
+                left: 100%;
+                top: 0;
+                bottom: -1px;
+                width: calc(var(--table-holder-width) - 100%);
+                background-color: inherit;
+                border-bottom: 1px solid var(--border-light);
+              }
 
               .tk-table-group-header-content {
                 display: flex;
@@ -263,6 +255,9 @@
                 }
               }
             }
+          }
+          &:not(:has(+ tr)) {
+            border-bottom: none;
           }
         }
 
@@ -403,8 +398,24 @@
         background-color: var(--background-lightest);
       }
 
+      &:nth-child(even).tk-table-group-header {
+        background-color: var(--background-lightest);
+
+        .tk-table-group-header-cell::after {
+          background-color: var(--background-lightest);
+        }
+      }
+
       &:hover td {
         background-color: var(--states-info-light);
+      }
+
+      &.tk-table-group-header:hover {
+        background-color: var(--states-info-light);
+
+        .tk-table-group-header-cell::after {
+          background-color: var(--states-info-light);
+        }
       }
 
       &.selected td {

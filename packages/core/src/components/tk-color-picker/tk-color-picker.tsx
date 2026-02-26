@@ -127,6 +127,10 @@ export class TkColorPicker implements ComponentInterface {
    * @defaultValue false
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isOpen = false;
+  }
 
   /**
    * Sets size for the component.

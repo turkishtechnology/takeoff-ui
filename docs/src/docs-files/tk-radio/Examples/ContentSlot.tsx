@@ -20,13 +20,13 @@ const ContentSlot = () => {
 
   const vueCode = `<TkRadioGroup type="card" value="0" spread>
   <TkRadio value="0">
-    <div slot="content" className="flex items-center gap-2">
+    <div slot="content" class="flex items-center gap-2">
       <div>Label</div>
       <TkBadge icon="info" variant="info" label="İnformation" />
     </div>
   </TkRadio>
   <TkRadio value="1">
-    <div slot="content" className="flex items-center gap-2">
+    <div slot="content" class="flex items-center gap-2">
       <div>Label</div>
       <TkBadge icon="info" variant="info" label="İnformation" />
     </div>

@@ -5,25 +5,11 @@ import CardWithImage from './Examples/CardWithImage';
 import CardWithFooter from './Examples/CardWithFooter';
 import Playground from '../../components/Playground';
 import cardConfigData from './cardPlaygroundConfig.json';
-import { TkCard } from '@takeoff-ui/react';
-
-export const TkCardWithContent = props => {
-  return (
-    <TkCard {...props}>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-    </TkCard>
-  );
-};
+import { TkCard, TkButton } from '@takeoff-ui/react';
 
 ### Playground
 
-<Playground
-  configs={[cardConfigData]}
-  componentMap={{ TkCard: TkCardWithContent }}
-/>
+<Playground configs={[cardConfigData]} componentMap={{ TkCard, TkButton }} />
 
 ## Basic
 

@@ -1,5 +1,15 @@
+import Playground from '../../components/Playground';
+import tooltipConfigData from './tooltipPlaygroundConfig.json';
+import { TkTooltip, TkButton } from '@takeoff-ui/react';
 import Variants from './Examples/Variants';
 import Position from './Examples/Position';
+
+### Playground
+
+<Playground
+  configs={[tooltipConfigData]}
+  componentMap={{ TkTooltip, TkButton }}
+/>
 
 ## Variants
 

@@ -51,15 +51,15 @@ const Example = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-2 items-center">
         <TkButton label="Show/Hide Toast" icon="visibility" variant="info" onTkClick={handlePersistentToast} />
         <TkButton label="Check Status" icon="help" variant="neutral" type="outlined" onTkClick={handleCheckStatus} />
         <TkButton label="Dismiss All" icon="close" variant="danger" type="text" onTkClick={handleDismissAll} />
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <span style={{ marginRight: '8px' }}>Multiple Persistent:</span>
+      <div className="flex gap-2 items-center">
+        <span className="mr-2">Multiple Persistent:</span>
         <TkButton icon="north_west" variant="success" onTkClick={() => handleMultiplePersistent('top-left', 'success', 'persistent-success')} />
         <TkButton icon="north_east" variant="info" onTkClick={() => handleMultiplePersistent('top-right', 'info', 'persistent-info')} />
         <TkButton icon="south_west" variant="warning" onTkClick={() => handleMultiplePersistent('bottom-left', 'warning', 'persistent-warning')} />

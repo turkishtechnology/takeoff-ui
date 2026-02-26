@@ -1,8 +1,18 @@
+import Playground from '../../components/Playground';
+import popoverConfigData from './popoverPlaygroundConfig.json';
+import { TkPopover, TkButton } from '@takeoff-ui/react';
 import Types from './Examples/Types';
 import Position from './Examples/Position';
 import Trigger from './Examples/Trigger';
 import Basic from './Examples/Basic';
 import CloseMethod from './Examples/CloseMethod';
+
+### Playground
+
+<Playground
+  configs={[popoverConfigData]}
+  componentMap={{ TkPopover, TkButton }}
+/>
 
 ## Basic
 

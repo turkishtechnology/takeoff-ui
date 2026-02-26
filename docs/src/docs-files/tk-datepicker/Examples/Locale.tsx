@@ -40,7 +40,7 @@ const trDate = ref();
     label="English (US)"
     placeholder="Select date"
     locale="en-US"
-    dateFormat="MMM d, yyyy"
+    date-format="MMM d, yyyy"
     v-model="enDate"
 />
 <TkDatepicker

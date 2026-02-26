@@ -20,7 +20,7 @@ const DateFormat = () => {
   const vueCode = `<TkDatepicker
   label="Custom Format"
   placeholder="DD.MM.YYYY"
-  dateFormat="dd.MM.yyyy"
+  date-format="dd.MM.yyyy"
   v-model="selectedDate"
 />`;
 

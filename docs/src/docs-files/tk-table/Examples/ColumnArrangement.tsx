@@ -326,7 +326,7 @@ const handleCheckboxChange = (e: any, col: ITableColumn) => {
         </div>
       </div>
     </TkPopover>
-    <TkTable :columns.prop="selectedColumns" :data.prop="data" />
+    <TkTable :columns="selectedColumns" :data="data" />
   </div>
 </template>
 `;

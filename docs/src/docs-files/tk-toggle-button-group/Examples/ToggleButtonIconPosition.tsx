@@ -21,9 +21,9 @@ const ToggleButtonIconPosition = () => {
   // Update Vue code when icon position changes
   useEffect(() => {
     setReactCode(`<TkToggleButtonGroup value="1" type="basic" onTkChange={(e) => setValue(e.detail)}>
-    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="1" value="1" icon="{ name: 'bolt', fill: true }"  size="large" label="One"/>
-    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="2" value="2" icon="{ name: 'bolt', fill: true }"  size="large" label="Two"/>
-    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="3" value="3" icon="{ name: 'bolt', fill: true }"  size="large" label="Three"/>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="1" value="1" icon={{ name: 'bolt', fill: true }}  size="large" label="One"/>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="2" value="2" icon={{ name: 'bolt', fill: true }}  size="large" label="Two"/>
+    <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="3" value="3" icon={{ name: 'bolt', fill: true }}  size="large" label="Three"/>
    </TkToggleButtonGroup >`);
     setVueCode(`<TkToggleButtonGroup value="1" type="basic" :rounded="true" @tk-change="(e) => value = e.detail">
   <TkToggleButton iconPosition="${iconPosition}" type="outlined" variant="neutral" key="1" value="1" :icon="{ name: 'bolt', fill: true }"  size="large" label="One"/>

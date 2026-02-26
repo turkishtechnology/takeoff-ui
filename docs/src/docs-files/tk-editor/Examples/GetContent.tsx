@@ -36,36 +36,24 @@ const GetContent = () => {
   };
 
   useEffect(() => {
-    const newCodeSampleReact = `import { TkEditor } from "@takeoff-ui/react";
-const editorRef = useRef<HTMLTkEditorElement>(null);
-
+    const newCodeSampleReact = `const editorRef = useRef<HTMLTkEditorElement>(null);
 const getContent = async () => {
 const content = await editorRef.current?.getContent("${outputFormat}");
 console.log(content);
 };
 
-return (
-    <>
-    <TkEditor ref={editorRef} value={content} />
-    <TkButton label="Get Content" onTkClick={() => getContent()} />
-    </>
-  );
+<TkEditor ref={editorRef} value={content} />
+<TkButton label="Get Content" onTkClick={() => getContent()} />;
 `;
-    const newCodeSampleVue = `<script setup>
-import { ref } from 'vue';
-import { TkEditor } from "@takeoff-ui/vue";
-
-const editorRef = ref();
-
+    const newCodeSampleVue = `const editorRef = ref();
+  
 const getContent = async () => {
 const content = await editorRef.value?.getContent("${outputFormat}");
 console.log(content);
 };
 
-</script>
-<template>
-    <TkEditor ref="editorRef" v-model="content" />
-</template>`;
+<TkEditor ref="editorRef" v-model="content" />`;
+
     setCodeSampleReact(newCodeSampleReact);
     setCodeSampleVue(newCodeSampleVue);
   }, [outputFormat]);
