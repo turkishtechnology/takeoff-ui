@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -11,6 +13,7 @@
 
   &.tk-stepper-horizontal {
     overflow-x: auto;
+    @include takeoff-scrollbar;
 
     .tk-step-item {
       flex: 1;
