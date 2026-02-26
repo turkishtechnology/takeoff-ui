@@ -65,13 +65,13 @@ tk-input.tk-table-input {
     tk-icon {
       color: var(--icon-base);
       user-select: none;
-      cursor: pointer;
-
-      &.clickable {
+      &.clickable:not(.disabled) {
         cursor: pointer;
       }
+      &.disabled {
+        color: var(--icon--sub);
+      }
     }
-
     .counter-icon {
       width: 20px;
       height: 20px;
