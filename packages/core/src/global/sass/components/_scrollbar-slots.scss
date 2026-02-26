@@ -1,0 +1,27 @@
+@use '../mixins' as *;
+
+/* ===== Custom Scrollbar Styles for slots ===== */
+tk-accordion,
+tk-accordion-item,
+tk-alert,
+tk-badge,
+tk-breadcrumb,
+tk-card,
+tk-carousel,
+tk-checkbox,
+tk-color-picker,
+tk-currency-input,
+tk-datepicker,
+tk-dialog,
+tk-drawer,
+tk-popover,
+tk-radio,
+tk-select,
+tk-stepper,
+tk-table,
+tk-timeline-item,
+tk-tooltip {
+  * {
+    @include takeoff-scrollbar;
+  }
+}

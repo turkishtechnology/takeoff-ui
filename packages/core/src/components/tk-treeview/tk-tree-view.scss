@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-tree-view {
   display: inline-flex;
   flex-direction: column;
@@ -10,6 +12,7 @@
     align-items: flex-start;
     gap: var(--tree-gap, 12px);
     overflow-x: auto;
+    @include takeoff-scrollbar;
 
     .column .node .tk-tree-view.pointer {
       height: 100%;
