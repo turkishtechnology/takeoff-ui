@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -465,6 +467,8 @@
   height: 260px;
   overflow-y: auto;
   position: relative;
+  @include takeoff-scrollbar;
+
   &.tk-datepicker-timepicker-body-only {
     border-left: 0;
     border-bottom-left-radius: var(--radius-xl);
