@@ -336,8 +336,11 @@ export class TkSelect implements ComponentInterface {
         // Panel açıldığında ilk itemin active olmasını sağlamak için
         const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
         if (!activeItem && !this.allowCustomValue) {
-          const firstItem = this.el.querySelector('.dropdown-item[data-option-index="0"]') as HTMLDivElement;
-          firstItem?.setAttribute('data-active', 'true');
+          const firstEnabledIndex = this.getNextEnabledItemIndex(-1, 'down');
+          if (firstEnabledIndex !== null) {
+            const firstItem = this.el.querySelector(`.dropdown-item[data-option-index="${firstEnabledIndex}"]`) as HTMLDivElement;
+            firstItem?.setAttribute('data-active', 'true');
+          }
         }
       }
     } else {
@@ -639,6 +642,48 @@ export class TkSelect implements ComponentInterface {
     });
   }
 
+  private getNextEnabledItemIndex(currentIndex: number, direction: 'up' | 'down', visited: number = 0): number | null {
+    const totalItems = this.flatOptions.length;
+    const maxSteps = this.selectAll && this.multiple ? totalItems + 1 : totalItems;
+
+    if (visited >= maxSteps) return null;
+
+    const startIndex = this.selectAll && this.multiple ? -1 : 0;
+    const endIndex = totalItems - 1;
+
+    let nextIndex = direction === 'down' ? currentIndex + 1 : currentIndex - 1;
+    if (nextIndex > endIndex) {
+      nextIndex = startIndex;
+    } else if (nextIndex < startIndex) {
+      nextIndex = endIndex;
+    }
+    if (nextIndex === -1 && this.selectAll && this.multiple) {
+      return -1;
+    }
+
+    const item = this.flatOptions[nextIndex];
+    const isDisabled = this.optionDisabled ? this.optionDisabled(item) : false;
+    if (isDisabled) return this.getNextEnabledItemIndex(nextIndex, direction, visited + 1);
+    else return nextIndex;
+  }
+
+  private navigateToItem(direction: 'up' | 'down') {
+    const activeItem = this.el.querySelector('.dropdown-item[data-active="true"]') as HTMLDivElement;
+    const activeIndex = activeItem ? Number(activeItem.getAttribute('data-option-index')) : null;
+
+    // activeindex varsa o indexten başlayarak yönüne göre sonraki enabled itemi bul, yoksa aşağı yönünde ilk enabled itemi bul
+    const nextIndex = activeIndex !== null ? this.getNextEnabledItemIndex(activeIndex, direction) : this.getNextEnabledItemIndex(-1, 'down');
+
+    if (nextIndex !== null) {
+      const newActiveItem = this.el.querySelector(`.dropdown-item[data-option-index='${nextIndex}']`) as HTMLDivElement;
+      if (newActiveItem) {
+        activeItem?.setAttribute('data-active', 'false');
+        newActiveItem.setAttribute('data-active', 'true');
+        this.scrollItem(newActiveItem);
+      }
+    }
+  }
+
   private handleFormReset() {
     if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
       this.value = this.value.filter(item => this.optionDisabled(item));
@@ -650,7 +695,6 @@ export class TkSelect implements ComponentInterface {
 
   private async handleSelectAllClick() {
     if (this.readonly) return;
-    this.isItemClickFlag = true;
     if (this.multiple) {
       let tmpValue;
       const checking = this.isAllSelected();
@@ -681,7 +725,6 @@ export class TkSelect implements ComponentInterface {
 
   private async handleItemClick(item) {
     if (this.readonly || this.optionDisabled?.(item)) return;
-    this.isItemClickFlag = true;
     if (this.multiple) {
       const tmpValue = Array.isArray(this.value) ? [...this.value] : [];
 
@@ -872,42 +915,12 @@ export class TkSelect implements ComponentInterface {
         return;
       }
       if (e.key === 'ArrowDown') {
-        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-        if (activeItem) {
-          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex + 1}']`);
-          if (newActiveItem) {
-            activeItem.setAttribute('data-active', 'false');
-            newActiveItem.setAttribute('data-active', 'true');
-            this.scrollItem(newActiveItem);
-          }
-        } else {
-          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-          if (firstItem) {
-            firstItem.setAttribute('data-active', 'true');
-            this.scrollItem(firstItem);
-          }
-        }
+        this.navigateToItem('down');
         return;
       }
 
       if (e.key === 'ArrowUp') {
-        const activeItem: HTMLDivElement = this.el.querySelector('.dropdown-item[data-active="true"]');
-        const activeIndex = Number(activeItem?.getAttribute('data-option-index'));
-        if (activeItem) {
-          const newActiveItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='${activeIndex - 1}']`);
-          if (newActiveItem) {
-            activeItem.setAttribute('data-active', 'false');
-            newActiveItem.setAttribute('data-active', 'true');
-            this.scrollItem(newActiveItem);
-          }
-        } else {
-          const firstItem: HTMLDivElement = this.el.querySelector(`.dropdown-item[data-option-index='0']`);
-          if (firstItem) {
-            firstItem.setAttribute('data-active', 'true');
-            this.scrollItem(firstItem);
-          }
-        }
+        this.navigateToItem('up');
         return;
       }
 
@@ -974,6 +987,7 @@ export class TkSelect implements ComponentInterface {
           class={classNames('dropdown-item', { multiple: this.multiple }, { disabled: isDisabled })}
           data-option-index={startIndex + index}
           data-selected={this.multiple && checking ? 'true' : this.value === this.getOptionValue(item) ? 'true' : 'false'}
+          onPointerDown={() => (this.isItemClickFlag = true)}
           onClick={() => this.handleItemClick(item)}
           {...itemProps}
         >
@@ -992,6 +1006,7 @@ export class TkSelect implements ComponentInterface {
           <div
             class={classNames('dropdown-item', { multiple: this.multiple })}
             data-selected={this.multiple && checking ? 'true' : 'false'}
+            onPointerDown={() => (this.isItemClickFlag = true)}
             onClick={() => this.handleSelectAllClick()}
             data-option-index="-1"
           >
@@ -1053,6 +1068,7 @@ export class TkSelect implements ComponentInterface {
         chipLabelKey={this.optionLabelKey}
         readonly={this.readonly}
         disabled={this.disabled}
+        loading={this.loading}
         clearable={this.clearable}
         chipOptions={this.chipOptions}
         chipDisabled={this.optionDisabled}
@@ -1063,7 +1079,7 @@ export class TkSelect implements ComponentInterface {
           e.stopPropagation();
           this.handleInputChange(e.detail);
         }}
-        onTk-blur={() => setTimeout(() => this.handleInputBlur(), 150)}
+        onTk-blur={() => this.handleInputBlur()}
         onTk-clear-click={() => this.handleInputClearClick()}
         onKeyDown={e => this.handleInputKeydown(e)}
       ></tk-input>

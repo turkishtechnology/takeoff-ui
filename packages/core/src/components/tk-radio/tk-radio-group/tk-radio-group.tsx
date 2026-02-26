@@ -139,7 +139,7 @@ export class TkRadioGroup implements ComponentInterface {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
 
       error = (
-        <span class="hint">
+        <span class="hint error">
           {hintIcon}
           {this.error}
         </span>
