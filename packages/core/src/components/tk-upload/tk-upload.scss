@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-upload-container {
   display: flex;
   flex-direction: column;
@@ -32,6 +34,13 @@
       width: var(--size-base);
       height: var(--size-base);
       color: var(--icon-base);
+    }
+
+    &.error {
+      color: var(--states-danger-base);
+      & i {
+        color: var(--states-danger-base);
+      }
     }
   }
 
@@ -183,6 +192,7 @@
     gap: 8px;
     max-height: 500px;
     overflow-y: auto;
+    @include takeoff-scrollbar;
 
     .tk-upload-file-item {
       display: flex;
@@ -308,24 +318,6 @@
           gap: 4px;
         }
       }
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 2px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: var(--secondary-sub-base);
-      opacity: 1;
     }
   }
 
