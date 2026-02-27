@@ -1099,6 +1099,7 @@ export class TkDatePicker {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
+    let increasedHour;
     if (this.timeFormat === '12') {
       const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
       let displayHour = targetTimeState.time.hour % 12;
@@ -1108,19 +1109,16 @@ export class TkDatePicker {
       const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
 
       const idx = hoursList.indexOf(closestHour);
-      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
-      const newDisplayHour = hoursList[nextIdx];
-
-      // Convert back to 24-hour format
-      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
-      if (this.internalAmPm === 'PM') {
-        newHour24 += 12;
-      }
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: newHour24 };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
+      // Find the first valid hour after the current hour
+      for (let i = idx + 1; i < hoursList.length; i++) {
+        const newDisplayHour = hoursList[i];
+        // Convert back to 24-hour format
+        let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
+        if (this.internalAmPm === 'PM') newHour24 += 12;
+        if (!this.isTimeDisabled(newHour24, targetTimeState.time.minute)) {
+          increasedHour = newHour24;
+          break;
+        }
       }
     } else {
       // 24h mode - move to next hour in step list
@@ -1130,23 +1128,29 @@ export class TkDatePicker {
       const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
 
       const idx = hoursList.indexOf(closestHour);
-      const nextIdx = Math.min(idx + 1, hoursList.length - 1);
-      const hour = hoursList[nextIdx];
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: hour };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: hour };
+      for (let i = idx + 1; i < hoursList.length; i++) {
+        if (!this.isTimeDisabled(hoursList[i], targetTimeState.time.minute)) {
+          increasedHour = hoursList[i];
+          break;
+        }
       }
     }
+    if (increasedHour !== undefined) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, hour: increasedHour };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, hour: increasedHour };
+      }
 
-    this.emitTimeChange();
+      this.emitTimeChange();
+    }
   };
 
   private handleDecreaseHour = () => {
     const targetTimeState = this.getTimeStateToModify();
     if (!targetTimeState) return;
 
+    let decreasedHour;
     if (this.timeFormat === '12') {
       const hoursList = Array.from({ length: Math.ceil(12 / this.hourStep) }, (_, i) => i * this.hourStep + 1);
       let displayHour = targetTimeState.time.hour % 12;
@@ -1156,19 +1160,16 @@ export class TkDatePicker {
       const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - displayHour) < Math.abs(prev - displayHour) ? curr : prev));
 
       const idx = hoursList.indexOf(closestHour);
-      const prevIdx = Math.max(idx - 1, 0);
-      const newDisplayHour = hoursList[prevIdx];
-
-      // Convert back to 24-hour format
-      let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
-      if (this.internalAmPm === 'PM') {
-        newHour24 += 12;
-      }
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: newHour24 };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: newHour24 };
+      // Find the first valid hour before the current hour
+      for (let i = idx - 1; i >= 0; i--) {
+        const newDisplayHour = hoursList[i];
+        // Convert back to 24-hour format
+        let newHour24 = newDisplayHour === 12 ? 0 : newDisplayHour;
+        if (this.internalAmPm === 'PM') newHour24 += 12;
+        if (!this.isTimeDisabled(newHour24, targetTimeState.time.minute)) {
+          decreasedHour = newHour24;
+          break;
+        }
       }
     } else {
       // 24h mode - move to previous hour in step list
@@ -1178,17 +1179,21 @@ export class TkDatePicker {
       const closestHour = hoursList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.hour) < Math.abs(prev - targetTimeState.time.hour) ? curr : prev));
 
       const idx = hoursList.indexOf(closestHour);
-      const prevIdx = Math.max(idx - 1, 0);
-      const hour = hoursList[prevIdx];
-
-      if (targetTimeState.type === 'start') {
-        this.internalStartTime = { ...targetTimeState.time, hour: hour };
-      } else {
-        this.internalEndTime = { ...targetTimeState.time, hour: hour };
+      for (let i = idx - 1; i >= 0; i--) {
+        if (!this.isTimeDisabled(hoursList[i], targetTimeState.time.minute)) {
+          decreasedHour = hoursList[i];
+          break;
+        }
       }
     }
-
-    this.emitTimeChange();
+    if (decreasedHour !== undefined) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, hour: decreasedHour };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, hour: decreasedHour };
+      }
+      this.emitTimeChange();
+    }
   };
 
   private handleHourClick = (hour: number) => {
@@ -1214,15 +1219,22 @@ export class TkDatePicker {
     const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
 
     const idx = minutesList.indexOf(closestMinute);
-    const nextIdx = Math.min(idx + 1, minutesList.length - 1);
-    const minute = minutesList[nextIdx];
-
-    if (targetTimeState.type === 'start') {
-      this.internalStartTime = { ...targetTimeState.time, minute: minute };
-    } else {
-      this.internalEndTime = { ...targetTimeState.time, minute: minute };
+    // Find the first valid minute after the current minute
+    let increasedMinute;
+    for (let i = idx + 1; i < minutesList.length; i++) {
+      if (!this.isTimeDisabled(targetTimeState.time.hour, minutesList[i])) {
+        increasedMinute = minutesList[i];
+        break;
+      }
     }
-    this.emitTimeChange();
+    if (increasedMinute !== undefined) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, minute: increasedMinute };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, minute: increasedMinute };
+      }
+      this.emitTimeChange();
+    }
   };
 
   private handleDecreaseMinute = () => {
@@ -1235,15 +1247,22 @@ export class TkDatePicker {
     const closestMinute = minutesList.reduce((prev, curr) => (Math.abs(curr - targetTimeState.time.minute) < Math.abs(prev - targetTimeState.time.minute) ? curr : prev));
 
     const idx = minutesList.indexOf(closestMinute);
-    const prevIdx = Math.max(idx - 1, 0);
-    const minute = minutesList[prevIdx];
-
-    if (targetTimeState.type === 'start') {
-      this.internalStartTime = { ...targetTimeState.time, minute: minute };
-    } else {
-      this.internalEndTime = { ...targetTimeState.time, minute: minute };
+    // Find the first valid minute before the current minute
+    let decreasedMinute;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (!this.isTimeDisabled(targetTimeState.time.hour, minutesList[i])) {
+        decreasedMinute = minutesList[i];
+        break;
+      }
     }
-    this.emitTimeChange();
+    if (decreasedMinute !== undefined) {
+      if (targetTimeState.type === 'start') {
+        this.internalStartTime = { ...targetTimeState.time, minute: decreasedMinute };
+      } else {
+        this.internalEndTime = { ...targetTimeState.time, minute: decreasedMinute };
+      }
+      this.emitTimeChange();
+    }
   };
 
   private handleMinuteClick = (min: number) => {
