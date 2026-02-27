@@ -34,6 +34,7 @@ export class TkPhoneInput implements ComponentInterface {
   private cleanup;
   private panelRef?: HTMLDivElement;
   private uniqueId = uuidv4();
+  private menuListRef?: HTMLUListElement;
 
   /**
    * The list of countries to display in the dropdown.
@@ -218,6 +219,8 @@ export class TkPhoneInput implements ComponentInterface {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
+      // After the panel is positioned, calculate and apply the 6-item height cap
+      this.applyHeightConstraint();
     } else {
       // Remove floating UI listeners when dropdown closes
       this.cleanup?.();
@@ -250,6 +253,27 @@ export class TkPhoneInput implements ComponentInterface {
         },
       },
     });
+  }
+
+  /**
+   * Define and apply height contraint so that every dropdown menu is
+   * 6 item tall
+   */
+  private applyHeightConstraint() {
+    const firstItem = this.menuListRef?.querySelector<HTMLLIElement>('.tk-phone-input-menu-item');
+    if (!firstItem || !this.menuListRef || !this.panelRef) return;
+
+    const itemHeight = firstItem.getBoundingClientRect().height;
+    const listMargin = 8 * 2;
+    const itemMargin = 5 * 4;
+    const listMaxHeight = itemHeight * 6 + itemMargin;
+
+    const searchbarHeight = this.searchInput.getBoundingClientRect().height ?? 0;
+
+    const panelMaxHeight = listMaxHeight + searchbarHeight + listMargin;
+
+    this.menuListRef.style.maxHeight = `${listMaxHeight}px`;
+    this.panelRef.style.maxHeight = `${panelMaxHeight}px`;
   }
 
   /**
@@ -490,7 +514,8 @@ export class TkPhoneInput implements ComponentInterface {
   }
 
   /**
-   * Create the search input for filtering countries in the dropdown.
+   * Create the
+   *  input for filtering countries in the dropdown.
    */
   private createDropdownSearch() {
     return (
@@ -513,7 +538,7 @@ export class TkPhoneInput implements ComponentInterface {
    */
   private createDropdownList() {
     return (
-      <ul class="tk-phone-input-menu">
+      <ul class="tk-phone-input-menu" ref={el => (this.menuListRef = el as HTMLUListElement)}>
         {this.getFilteredCountries().map(country => (
           <li
             class="tk-phone-input-menu-item"
@@ -530,7 +555,6 @@ export class TkPhoneInput implements ComponentInterface {
       </ul>
     );
   }
-
   /**
    * Create the phone number input field.
    */

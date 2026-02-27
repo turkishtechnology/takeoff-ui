@@ -7,7 +7,6 @@ tk-select {
 .tk-select-container {
   .tk-select-panel {
     position: fixed;
-    max-height: 320px;
     overflow: hidden;
     border-radius: 16px;
     border: 1px solid var(--border-light);
@@ -18,7 +17,6 @@ tk-select {
     .dropdown-item-holder {
       margin: 8px;
       padding: 1px;
-      max-height: 304px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;

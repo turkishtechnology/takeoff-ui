@@ -33,6 +33,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
+  private menuListRef?: HTMLUListElement;
 
   /**
    * The currently selected currency object.
@@ -229,6 +230,8 @@ export class TkCurrencyInput implements ComponentInterface {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
+      // After the panel is positioned, calculate and apply the 6-item height cap
+      this.applyHeightConstraint();
     } else {
       // Remove floating UI listeners when dropdown closes
       this.cleanup?.();
@@ -601,6 +604,23 @@ export class TkCurrencyInput implements ComponentInterface {
       this.tkChange.emit(eventData);
     }
   };
+  /*
+   * Define and apply
+   */
+  private applyHeightConstraint() {
+    const firstItem = this.menuListRef?.querySelector<HTMLLIElement>('.tk-currency-input-dropdown-menu-list-item');
+    if (!firstItem || !this.menuListRef || !this.dropdownEl) return;
+
+    const itemHeight = firstItem.getBoundingClientRect().height;
+    const listMargin = 8 * 2;
+    const itemMargin = 5 * 4;
+    const listMaxHeight = itemHeight * 6 + itemMargin;
+
+    const panelMaxHeight = listMaxHeight + listMargin;
+
+    this.menuListRef.style.maxHeight = `${listMaxHeight}px`;
+    this.dropdownEl.style.maxHeight = `${panelMaxHeight}px`;
+  }
 
   private renderLabel() {
     if (this.label) {
@@ -665,7 +685,7 @@ export class TkCurrencyInput implements ComponentInterface {
     const currencies = this.getCurrencies();
 
     return (
-      <ul class="tk-currency-input-dropdown-menu-list">
+      <ul class="tk-currency-input-dropdown-menu-list" ref={el => (this.menuListRef = el as HTMLUListElement)}>
         {currencies.map(currency => (
           <li
             class="tk-currency-input-dropdown-menu-list-item"

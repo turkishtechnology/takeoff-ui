@@ -75,7 +75,6 @@
 
       .tk-phone-input-menu {
         list-style: none;
-        max-height: var(--spacing-56xl);
         overflow-y: auto;
         margin: 8px;
         @include takeoff-scrollbar;

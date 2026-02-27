@@ -13,7 +13,6 @@ tk-dropdown {
     left: 0;
     z-index: 800;
     width: max-content;
-    max-height: 300px;
     overflow: hidden;
     border-radius: 16px;
     border: 1px solid var(--border-light);
@@ -22,7 +21,6 @@ tk-dropdown {
 
     .tk-dropdown-item-holder {
       margin: 8px;
-      max-height: 284px;
       overflow-y: auto;
       @include takeoff-scrollbar;
 

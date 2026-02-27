@@ -21,6 +21,7 @@ export class TkDropdown implements ComponentInterface {
   private uniqueId = uuidv4();
   private triggerRef?: HTMLElement;
   private panelRef?: HTMLDivElement;
+  private itemHolderRef?: HTMLDivElement;
   private cleanup;
   private clickOutsideMixin?: ClickOutsideMixin;
 
@@ -137,6 +138,8 @@ export class TkDropdown implements ComponentInterface {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
+      // After the panel is positioned, calculate and apply the 6-item height cap
+      this.applyHeightConstraint();
     } else {
       // Remove floating UI listeners when dropdown closes
       this.cleanup?.();
@@ -159,6 +162,26 @@ export class TkDropdown implements ComponentInterface {
     this.cleanup = floatingElementAutoUpdate(this.triggerRef, this.panelRef, undefined, {
       placement: this.position,
     });
+  }
+
+  /**
+   * Reads the real rendered height of the first dropdown item from the DOM,
+   * then applies max-height constraints so exactly 6 items are visible.
+   */
+  private applyHeightConstraint() {
+    // Get first item that dropdown-item-holder wraps
+    const firstItem = this.itemHolderRef?.querySelector<HTMLDivElement>('.tk-dropdown-item');
+    if (!firstItem || !this.itemHolderRef || !this.panelRef) return;
+
+    const itemHeight = firstItem.getBoundingClientRect().height;
+
+    const holderMaxHeight = itemHeight * 6;
+
+    const holderMargin = 8 * 2; // top + bottom margin
+    const panelMaxHeight = holderMaxHeight + holderMargin;
+
+    this.itemHolderRef.style.maxHeight = `${holderMaxHeight}px`;
+    this.panelRef.style.maxHeight = `${panelMaxHeight}px`;
   }
 
   private isGrouped(): boolean {
@@ -217,7 +240,9 @@ export class TkDropdown implements ComponentInterface {
 
     return (
       <div class="tk-dropdown-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-dropdown-id={this.uniqueId}>
-        <div class="tk-dropdown-item-holder">{this.options?.length > 0 ? this.createOptions() : this.hasEmptyDataSlot ? <slot name="empty-data"></slot> : this.emptyMessage}</div>
+        <div class="tk-dropdown-item-holder" ref={el => (this.itemHolderRef = el as HTMLDivElement)}>
+          {this.options?.length > 0 ? this.createOptions() : this.hasEmptyDataSlot ? <slot name="empty-data"></slot> : this.emptyMessage}
+        </div>
       </div>
     );
   }

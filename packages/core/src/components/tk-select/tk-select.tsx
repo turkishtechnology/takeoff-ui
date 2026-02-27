@@ -27,6 +27,7 @@ export class TkSelect implements ComponentInterface {
   private inputRef?: HTMLTkInputElement;
   private nativeInputRef?: HTMLInputElement;
   private panelRef?: HTMLDivElement;
+  private itemHolderRef?: HTMLDivElement;
   private uniqueId = uuidv4();
   private filterDebounceTimeout;
   private boundRunFilterForMultiple: (event: Event) => void;
@@ -333,6 +334,8 @@ export class TkSelect implements ComponentInterface {
         this.cleanup?.();
         this.updatePosition();
         this.setFlatOptions();
+        // After the panel is positioned, calculate and apply the 6-item height cap
+        this.applyHeightConstraint();
         // Panel açıldığında ilk itemin active olmasını sağlamak için
         const activeItem = this.el.querySelector('.dropdown-item[data-active]') as HTMLDivElement;
         if (!activeItem && !this.allowCustomValue) {
@@ -952,6 +955,26 @@ export class TkSelect implements ComponentInterface {
     this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
   }
 
+  /**
+   * Reads the real rendered height of the first dropdown item from the DOM,
+   * then applies max-height constraints so exactly 6 items are visible.
+   */
+  private applyHeightConstraint() {
+    // Get first item that dropdown-item-holder wraps
+    const firstItem = this.itemHolderRef?.querySelector<HTMLDivElement>('.dropdown-item');
+    if (!firstItem || !this.itemHolderRef || !this.panelRef) return;
+
+    const itemHeight = firstItem.getBoundingClientRect().height;
+    const itemGap = 5 * 6;
+    const holderMaxHeight = itemHeight * 6 + itemGap;
+
+    const holderMargin = 8 * 2; // top + bottom margin
+    const panelMaxHeight = holderMaxHeight + holderMargin;
+
+    this.itemHolderRef.style.maxHeight = `${holderMaxHeight}px`;
+    this.panelRef.style.maxHeight = `${panelMaxHeight}px`;
+  }
+
   private createOptionItem(options: any[], startIndex: number = 0) {
     return options?.map((item, index) => {
       const isDisabled = this.optionDisabled ? this.optionDisabled?.(item) : false;
@@ -1090,7 +1113,7 @@ export class TkSelect implements ComponentInterface {
     if (!this.isOpen) return null;
     return (
       <div class="tk-select-panel" ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-select-id={this.uniqueId}>
-        <div class="dropdown-item-holder">
+        <div class="dropdown-item-holder" ref={el => (this.itemHolderRef = el as HTMLDivElement)}>
           {this.loading ? (
             <tk-spinner size={this.size}></tk-spinner>
           ) : this.renderOptions?.length > 0 ? (
