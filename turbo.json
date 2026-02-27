@@ -1,9 +1,17 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "generate:interfaces": {
+      "cache": true,
+      "outputs": ["src/interfaces.ts"],
+      "inputs": ["scripts/generate-interfaces.js", "src/components/**/interfaces.ts", "src/global/interfaces/**/*.ts"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "lib/**", "build/**"]
+    },
+    "@takeoff-ui/core#build": {
+      "dependsOn": ["^build", "generate:interfaces"]
     },
     "dev": {
       "cache": false

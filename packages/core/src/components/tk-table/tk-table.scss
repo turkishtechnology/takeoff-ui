@@ -1,9 +1,13 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-table-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 1px;
   position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-m-base);
 
   .tk-table-header {
     display: flex;
@@ -17,29 +21,8 @@
     overflow-x: auto;
     border-radius: var(--radius-m-base);
     border-style: hidden;
-    box-shadow: 0 0 0 1px var(--border-light);
-
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-      background: var(--background-lightest);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      border-radius: 2px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      border-radius: 3px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
+    outline: 2px solid var(--border-light);
+    @include takeoff-scrollbar;
 
     table {
       width: 100%;
@@ -272,6 +255,9 @@
                 }
               }
             }
+          }
+          &:not(:has(+ tr)) {
+            border-bottom: none;
           }
         }
 

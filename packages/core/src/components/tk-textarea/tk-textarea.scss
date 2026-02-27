@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -41,6 +43,7 @@
       width: 100%;
       line-height: var(--desktop-body-m-base-line-height);
       resize: vertical;
+      @include takeoff-scrollbar;
 
       &::placeholder {
         color: var(--text-sub-base);
