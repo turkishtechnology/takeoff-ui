@@ -1789,7 +1789,13 @@ export class TkDatePicker {
         : Array.from({ length: Math.ceil(24 / this.hourStep) }, (_, i) => i * this.hourStep);
     const minutes = Array.from({ length: Math.ceil(60 / this.minuteStep) }, (_, i) => i * this.minuteStep);
 
-    const isHourDisabled = (hour: number) => this.isTimeDisabled(hour, displayMinute);
+    const isHourDisabled = (hour: number) => {
+      // If any minute option is available for the hour, the hour should be enabled
+      for (const minute of minutes) {
+        if (!this.isTimeDisabled(hour, minute)) return false;
+      }
+      return true;
+    };
     const isMinuteDisabled = (minute: number) => this.isTimeDisabled(displayHour, minute);
 
     // Find closest hour in the hours array
