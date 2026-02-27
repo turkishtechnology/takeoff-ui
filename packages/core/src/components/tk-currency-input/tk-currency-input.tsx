@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getIconElementProps } from '../../utils/icon-utils';
-import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
+import type { Separator, ICurrency, CurrencyInputChangeEvent } from './interfaces';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
@@ -698,12 +698,12 @@ export class TkCurrencyInput implements ComponentInterface {
     }
 
     if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
+      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-error-icon', variant: null })} />;
 
       hint = (
-        <span class="tk-currency-input-hint">
+        <span class="tk-currency-input-error">
           {hintIcon}
-          <span class="tk-currency-input-hint-text">{this.error}</span>
+          <span class="tk-currency-input-error-text">{this.error}</span>
         </span>
       );
     }
