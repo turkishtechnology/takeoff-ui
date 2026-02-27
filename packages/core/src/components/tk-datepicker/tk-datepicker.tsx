@@ -1817,13 +1817,10 @@ export class TkDatePicker {
           <div class="tk-datepicker-timepicker-col">
             <div>
               <tk-button
-                variant="neutral"
+                variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
                 type="text"
                 size="base"
-                icon={{
-                  name: 'expand_less',
-                  color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
-                }}
+                icon="expand_less"
                 onTk-click={this.handleDecreaseHour}
                 disabled={isMinHour || isDisabled}
               ></tk-button>
@@ -1868,13 +1865,10 @@ export class TkDatePicker {
                 })}
               ></div>
               <tk-button
-                variant="neutral"
+                variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
                 type="text"
                 size="base"
-                icon={{
-                  name: 'expand_more',
-                  color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
-                }}
+                icon="expand_more"
                 onTk-click={this.handleIncreaseHour}
                 disabled={isMaxHour || isDisabled}
               ></tk-button>
@@ -1883,13 +1877,10 @@ export class TkDatePicker {
           <div class="tk-datepicker-timepicker-col">
             <div>
               <tk-button
-                variant="neutral"
+                variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
                 type="text"
                 size="base"
-                icon={{
-                  name: 'expand_less',
-                  color: this.headerType === 'dark' ? 'var(--icon-base)' : this.headerType === 'primary' ? 'var(--primary-100)' : 'var(--icon-sub-base)',
-                }}
+                icon="expand_less"
                 onTk-click={this.handleDecreaseMinute}
                 disabled={isMinMinute || isDisabled}
               ></tk-button>
@@ -1925,13 +1916,10 @@ export class TkDatePicker {
                 })}
               ></div>
               <tk-button
-                variant="neutral"
+                variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
                 type="text"
                 size="base"
-                icon={{
-                  name: 'expand_more',
-                  color: this.headerType === 'dark' ? 'var(--icon-sub-base)' : this.headerType === 'primary' ? 'var(--primary-50)' : 'var(--icon-base)',
-                }}
+                icon="expand_more"
                 onTk-click={this.handleIncreaseMinute}
                 disabled={isMaxMinute || isDisabled}
               ></tk-button>
