@@ -1,0 +1,41 @@
+@use '../mixins' as *;
+
+.tk-table-filter-panel {
+  width: 220px;
+  position: fixed;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background-color: var(--static-light);
+  z-index: 800;
+  box-shadow: var(--effect-1-default-base);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+
+  .tk-table-filter-checkbox-container,
+  .tk-table-filter-radio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    @include takeoff-scrollbar;
+
+    .tk-table-filter-checkbox-item,
+    .tk-table-filter-radio-item {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+  }
+
+  .tk-table-filter-panel-buttons {
+    display: flex;
+    gap: 8px;
+
+    tk-button {
+      flex: 1;
+    }
+  }
+}
