@@ -63,6 +63,11 @@ const Example = () => {
       sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
       searchable: true,
       filterType: 'treeview',
+      filterElements: {
+        optionsSearchInput: {
+          show: true,
+        },
+      },
       filterOptions: [
         {
           key: 'low-stock',
@@ -231,6 +236,11 @@ const FilterAndSort = () => {
         Number(a.quantity) > Number(b.quantity) ? 1 : -1,
       searchable: true,
       filterType: 'treeview',
+      filterElements: {
+        optionsSearchInput: {
+          show: true,
+        },
+      },
       filterOptions: [
         {
           key: 'low-stock',
@@ -401,6 +411,11 @@ const column = [
     sorter: (a, b) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
     searchable: true,
     filterType: 'treeview',
+    filterElements: {
+      optionsSearchInput: {
+        show: true,
+      },
+    },
     filterOptions: [
       {
         key: 'low-stock',

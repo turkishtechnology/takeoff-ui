@@ -1305,6 +1305,42 @@ export class TkTable implements ComponentInterface {
       treeview.addEventListener('tk-change', (e: CustomEvent) => {
         treeview.value = e.detail;
       });
+      if (column?.filterElements?.optionsSearchInput?.show) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
+
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+
+          // Recursive function to filter tree items including nested children
+          const filterTreeItems = (items: ITreeItem[]): ITreeItem[] => {
+            return items
+              .map(item => {
+                // Check if current item matches, at start its the parent node
+                const itemMatches = item.label.toLowerCase().includes(searchText);
+
+                // Recursively filter children
+                const filteredChildren = item.children ? filterTreeItems(item.children) : [];
+
+                // Include both parent and children if children match, or if parent matches
+                if (itemMatches || filteredChildren.length > 0) {
+                  return {
+                    ...item,
+                    children: filteredChildren.length > 0 ? filteredChildren : item.children,
+                  };
+                }
+
+                return null;
+              })
+              .filter(item => item !== null);
+          };
+
+          treeview.items = filterTreeItems(column.filterOptions as ITreeItem[]);
+        });
+        optionsSearchInput.style.marginBottom = '0.75rem';
+        filterContainer.appendChild(optionsSearchInput);
+      }
+
       filterContainer.appendChild(treeview);
       this.elFilterPanelElement.appendChild(filterContainer);
     } else {
