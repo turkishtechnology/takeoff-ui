@@ -1303,7 +1303,7 @@ export class TkTable implements ComponentInterface {
       treeview.badgeOptions = treeviewConfig?.badgeOptions;
       treeview.showPointer = treeviewConfig?.showPointer ?? false;
       treeview.selectionStrategy = treeviewConfig?.selectionStrategy ?? 'leaf';
-      treeview.containerStyle = treeviewConfig?.containerStyle;
+      treeview.containerStyle = treeviewConfig?.containerStyle ?? { width: '100%' };
       treeview.stepStyle = treeviewConfig?.stepStyle;
       treeview.expandAll = treeviewConfig?.expandAll ?? true;
       treeview.expandedKeys = treeviewConfig?.expandedKeys;
