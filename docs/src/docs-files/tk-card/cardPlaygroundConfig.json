@@ -2,6 +2,7 @@
   "name": "TkCard",
   "componentName": "TkCard",
   "hasChildren": true,
+  "height": 800,
   "children": [
     {
       "type": "component",
