@@ -158,7 +158,20 @@ interface ITableColumn {
       showTimePicker?: boolean;
       size?: 'small' | 'base' | 'large';
     };
-    treeviewSelectionStrategy?: 'all' | 'leaf';
+    treeViewOptions?: {
+      size?: 'small' | 'base' | 'large';
+      branchIcon?: string;
+      leafIcon?: string;
+      showBadge?: boolean;
+      showZeroCountBadges?: boolean;
+      badgeOptions?: IBadgeOptions;
+      showPointer?: boolean;
+      selectionStrategy?: 'all' | 'leaf';
+      containerStyle?: CSSStyleProperties;
+      stepStyle?: CSSStyleProperties;
+      expandAll?: boolean;
+      expandedKeys?: string[];
+    };
   };
   headerActionsOptions?: {
     direction?: 'vertical' | 'horizontal';

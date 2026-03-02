@@ -15,7 +15,8 @@
   padding: 8px;
   gap: 8px;
 
-  .tk-table-filter-checkbox-container {
+  .tk-table-filter-checkbox-container,
+  .tk-table-filter-treeview-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
