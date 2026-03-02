@@ -1293,14 +1293,23 @@ export class TkTable implements ComponentInterface {
 
       // Create treeview component first
       const treeview = document.createElement('tk-tree-view') as any;
+      const treeviewConfig = column?.filterElements?.treeViewOptions ?? {};
       treeview.selectable = true;
-      treeview.size = 'small';
-      treeview.expandAll = true;
-      treeview.selectionStrategy = column?.filterElements?.treeviewSelectionStrategy;
+      treeview.size = treeviewConfig?.size ?? 'small';
+      treeview.branchIcon = treeviewConfig?.branchIcon;
+      treeview.leafIcon = treeviewConfig?.leafIcon;
+      treeview.showBadge = treeviewConfig?.showBadge;
+      treeview.showZeroCountBadges = treeviewConfig?.showZeroCountBadges;
+      treeview.badgeOptions = treeviewConfig?.badgeOptions;
+      treeview.showPointer = treeviewConfig?.showPointer ?? false;
+      treeview.selectionStrategy = treeviewConfig?.selectionStrategy ?? 'leaf';
+      treeview.containerStyle = treeviewConfig?.containerStyle;
+      treeview.stepStyle = treeviewConfig?.stepStyle;
+      treeview.expandAll = treeviewConfig?.expandAll ?? true;
+      treeview.expandedKeys = treeviewConfig?.expandedKeys;
+
       treeview.items = column.filterOptions as ITreeItem[];
       treeview.value = selectedValue;
-      treeview.showPointer = false;
-      treeview.containerStyle = { width: '100%', maxHeight: '200px', overflowY: 'auto' };
 
       treeview.addEventListener('tk-change', (e: CustomEvent) => {
         treeview.value = e.detail;
@@ -1337,7 +1346,6 @@ export class TkTable implements ComponentInterface {
 
           treeview.items = filterTreeItems(column.filterOptions as ITreeItem[]);
         });
-        optionsSearchInput.style.marginBottom = '0.75rem';
         filterContainer.appendChild(optionsSearchInput);
       }
 

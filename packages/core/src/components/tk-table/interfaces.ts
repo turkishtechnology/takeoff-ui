@@ -3,6 +3,7 @@ import { CSSStyleProperties } from '../../global/types';
 import { IDateSelection } from '../tk-datepicker/interfaces';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { ITreeItem } from '../tk-treeview/interfaces';
+import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 /**
  * Defines the columns for the table
@@ -87,7 +88,20 @@ export interface ITableColumn {
       showTimePicker?: boolean;
       size?: 'small' | 'base' | 'large';
     };
-    treeviewSelectionStrategy?: 'all' | 'leaf';
+    treeViewOptions?: {
+      size?: 'small' | 'base' | 'large';
+      branchIcon?: string;
+      leafIcon?: string;
+      showBadge?: boolean;
+      showZeroCountBadges?: boolean;
+      badgeOptions?: IBadgeOptions;
+      showPointer?: boolean;
+      selectionStrategy?: 'all' | 'leaf';
+      containerStyle?: CSSStyleProperties;
+      stepStyle?: CSSStyleProperties;
+      expandAll?: boolean;
+      expandedKeys?: string[];
+    };
   };
   headerActionsOptions?: {
     direction?: 'vertical' | 'horizontal';
