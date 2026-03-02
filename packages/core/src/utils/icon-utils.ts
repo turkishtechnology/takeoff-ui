@@ -89,18 +89,21 @@ export const renderIcons = (
     if (leftIconConfig) {
       leftIcon = h('tk-icon', {
         ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        ...((leftIconConfig as IIconOptions)?.click ? { onClick: (leftIconConfig as IIconOptions).click } : {}),
       });
     }
 
     if (rightIconConfig) {
       rightIcon = h('tk-icon', {
         ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+        ...((rightIconConfig as IIconOptions)?.click ? { onClick: (rightIconConfig as IIconOptions).click } : {}),
       });
     }
   } else {
     // Single icon with position control
     const iconElement = h('tk-icon', {
       ...getIconElementProps(icon as string | IIconOptions, { variant, sign, size, fill, ...additionalProps }, iconStyle, iconTag),
+      ...((icon as IIconOptions)?.click ? { onClick: (icon as IIconOptions)?.click } : {}),
     });
 
     if (position === 'left') {
