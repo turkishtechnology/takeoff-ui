@@ -61,6 +61,48 @@ const Example = () => {
       header: 'Quantity',
       sortable: true,
       sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
+      searchable: true,
+      filterType: 'treeview',
+      filterOptions: [
+        {
+          key: 'low-stock',
+          label: 'Low Stock (0-25)',
+          children: [
+            {
+              key: '12',
+              label: '12 units',
+            },
+            {
+              key: '24',
+              label: '24 units',
+            },
+          ],
+        },
+        {
+          key: 'medium-stock',
+          label: 'Medium Stock (26-75)',
+          children: [
+            {
+              key: '42',
+              label: '42 units',
+            },
+            {
+              key: '45',
+              label: '45 units',
+            },
+          ],
+        },
+        {
+          key: 'high-stock',
+          label: 'High Stock (76+)',
+          children: [
+            {
+              key: '87',
+              label: '87 units',
+            },
+          ],
+        },
+      ],
     },
     {
       field: 'date',
@@ -140,7 +182,7 @@ const FilterAndSort = () => {
         row.name
           .toString()
           .toLowerCase()
-          .indexOf(value?.toString().toLowerCase() as string) > -1,
+          .indexOf(value?.toString().toLowerCase()) > -1,
       filterElements: {
         searchInput: {
           placeholder: 'Filter',
@@ -187,6 +229,48 @@ const FilterAndSort = () => {
       sortable: true,
       sorter: (a: any, b: any) =>
         Number(a.quantity) > Number(b.quantity) ? 1 : -1,
+      searchable: true,
+      filterType: 'treeview',
+      filterOptions: [
+        {
+          key: 'low-stock',
+          label: 'Low Stock (0-25)',
+          children: [
+            {
+              key: '12',
+              label: '12 units',
+            },
+            {
+              key: '24',
+              label: '24 units',
+            },
+          ],
+        },
+        {
+          key: 'medium-stock',
+          label: 'Medium Stock (26-75)',
+          children: [
+            {
+              key: '42',
+              label: '42 units',
+            },
+            {
+              key: '45',
+              label: '45 units',
+            },
+          ],
+        },
+        {
+          key: 'high-stock',
+          label: 'High Stock (76+)',
+          children: [
+            {
+              key: '87',
+              label: '87 units',
+            },
+          ],
+        },
+      ],
     },
     {
       field: 'date',
@@ -202,7 +286,7 @@ const FilterAndSort = () => {
           size: 'small',
         },
       },
-  },
+    },
   ];
 
 
@@ -315,22 +399,64 @@ const column = [
     header: 'Quantity',
     sortable: true,
     sorter: (a, b) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
+    searchable: true,
+    filterType: 'treeview',
+    filterOptions: [
+      {
+        key: 'low-stock',
+        label: 'Low Stock (0-25)',
+        children: [
+          {
+            key: '12',
+            label: '12 units',
+          },
+          {
+            key: '24',
+            label: '24 units',
+          },
+        ],
+      },
+      {
+        key: 'medium-stock',
+        label: 'Medium Stock (26-75)',
+        children: [
+          {
+            key: '42',
+            label: '42 units',
+          },
+          {
+            key: '45',
+            label: '45 units',
+          },
+        ],
+      },
+      {
+        key: 'high-stock',
+        label: 'High Stock (76+)',
+        children: [
+          {
+            key: '87',
+            label: '87 units',
+          },
+        ],
+      },
+    ],
   },
   {
     field: 'date',
     header: 'Date',
     sortable: true,
     searchable: true,
-    sorter: (a: any, b: any) => (a.date > b.date ? 1 : -1),
+    sorter: (a, b) => (a.date > b.date ? 1 : -1),
     filterType: 'datepicker',
     filterElements: {
-        optionsSearchDatepicker: {
-          label: 'Choose a date',
-          dateFormat: 'yyyy-MM-dd',
-          size: 'small',
-        },
+      optionsSearchDatepicker: {
+        label: 'Choose a date',
+        dateFormat: 'yyyy-MM-dd',
+        size: 'small',
       },
     },
+  },
 ];
   const data = [
     {
