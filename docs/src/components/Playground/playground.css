@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--static-light);
-  height: 600px;
   gap: 16px;
 }
 
@@ -107,6 +106,7 @@
 
 .playground-component-wrapper.full-width > * {
   width: 100%;
+  align-self: center;
 }
 
 .playground-stats {
@@ -136,10 +136,6 @@
 
 .playground-tabs::part(.tab-content) {
   padding: 20px 0 0;
-}
-
-tk-slider {
-  width: 100%;
 }
 
 /* Syntax highlighting styles */

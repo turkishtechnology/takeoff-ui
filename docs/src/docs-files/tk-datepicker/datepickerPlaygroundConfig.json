@@ -2,6 +2,7 @@
   "name": "TkDatepicker",
   "componentName": "TkDatepicker",
   "hasChildren": false,
+  "height": 800,
   "props": [
     {
       "key": "mode",
@@ -219,7 +220,7 @@
       "key": "inline",
       "label": "Inline",
       "type": "checkbox",
-      "defaultValue": false
+      "defaultValue": true
     },
     {
       "key": "showTimePicker",

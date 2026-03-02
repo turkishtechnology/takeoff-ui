@@ -759,8 +759,9 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
   }
 
   function renderPlayground() {
+    const height = currentConfig.height ?? 600;
     return (
-      <div className="playground-container">
+      <div className="playground-container" style={{ height: `${height}px` }}>
         <div className="playground-container-left-side">
           {renderPreview()}
 

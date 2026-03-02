@@ -2,6 +2,7 @@
   "name": "TkAccordion",
   "componentName": "TkAccordion",
   "hasChildren": true,
+  "fullWidth": true,
   "children": [
     {
       "type": "component",
