@@ -325,6 +325,12 @@ export class TkDatePicker {
   @Prop() firstDayOfWeekIndex?: number;
 
   /**
+   * Defines the default month to display when the panel is opened.
+   * Accepts a zero-based month index (0 for January, 1 for February, ..., 11 for December).
+   */
+  @Prop() defaultMonthIndex?: number;
+
+  /**
    * Emitted on input value changes
    */
   @Event({ eventName: 'tk-input-change' }) tkInputChange: EventEmitter<string>;
@@ -730,7 +736,44 @@ export class TkDatePicker {
   }
 
   private initializeDates(): void {
-    this.currentMonth = new Date();
+    // Initialize currentMonth with priority: defaultMonthIndex > first allowedDate > first non-disabled month > now
+    const now = new Date();
+
+    if (typeof this.defaultMonthIndex === 'number' && this.defaultMonthIndex >= 0 && this.defaultMonthIndex <= 11) {
+      // Use defaultMonthIndex if provided and valid
+      this.currentMonth = new Date(now.getFullYear(), this.defaultMonthIndex);
+    } else if (this.allowedDates && this.allowedDates.length > 0) {
+      // Use first allowed date if available and not disabled
+      const firstAllowedDate = this.parseInputDate(this.allowedDates[0]);
+      if (firstAllowedDate && !this.isDateDisabled(firstAllowedDate)) {
+        this.currentMonth = new Date(firstAllowedDate.getFullYear(), firstAllowedDate.getMonth());
+      } else {
+        this.currentMonth = new Date(now);
+      }
+    } else {
+      // Check if current month has any non-disabled days
+      const isCurrentMonthFullyDisabled = this.isMonthFullyDisabled(now.getFullYear(), now.getMonth());
+
+      if (isCurrentMonthFullyDisabled) {
+        // Try to find first month with non-disabled dates in the year
+        let foundValidMonth = false;
+        for (let i = 1; i < 12; i++) {
+          const testDate = new Date(now.getFullYear(), now.getMonth() + i, 1);
+          if (!this.isMonthFullyDisabled(testDate.getFullYear(), testDate.getMonth())) {
+            this.currentMonth = new Date(testDate.getFullYear(), testDate.getMonth());
+            foundValidMonth = true;
+            break;
+          }
+        }
+        if (!foundValidMonth) {
+          // If no valid month found, use current month anyway
+          this.currentMonth = new Date(now);
+        }
+      } else {
+        this.currentMonth = new Date(now);
+      }
+    }
+
     this.processDateValue(this.value, true);
 
     if (this.showTimePicker && !this.internalStartTime && this.internalSelectedDates.start) {
@@ -888,6 +931,20 @@ export class TkDatePicker {
     }
 
     return false;
+  }
+
+  private isMonthFullyDisabled(year: number, month: number): boolean {
+    // Check if the entire month has all days disabled
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      if (!this.isDateDisabled(date)) {
+        return false; // Found at least one enabled date
+      }
+    }
+
+    return true; // All days in the month are disabled
   }
 
   private formatInputValue(): string {
