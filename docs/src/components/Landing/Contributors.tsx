@@ -1,6 +1,18 @@
 import { TkAvatar, TkTooltip } from '@takeoff-ui/react';
 import React from 'react';
 
+const contributors = [
+  { name: 'Harun Demir', role: 'Frontend Developer', image: 'img/contributors/harun-demir.jpg' },
+  { name: 'Ulaş Turan', role: 'Frontend Developer', image: 'img/contributors/ulas-turan.jpeg' },
+  { name: 'Pınar Yalçınduran', role: 'Frontend Developer', image: 'img/contributors/pinar-yalcinduran.png' },
+  { name: 'Kıvanç Eski', role: 'Frontend Developer', image: 'img/contributors/kivanc-eski.png' },
+  { name: 'Atakan Erhan Bayil', role: 'Frontend Developer', image: 'img/contributors/atakan-bayil.JPG' },
+  { name: 'Hayrunnisa Çiko', role: 'Frontend Developer', image: 'img/contributors/hayrunnisa-ciko.jpg' },
+  { name: 'İbrahim Agah Gürer', role: 'Frontend Developer', image: '' },
+  { name: 'Onur Palaz', role: 'Frontend Developer', image: 'img/contributors/onur-palaz.jfif' },
+  { name: 'Efe Özdemir', role: 'Full Stack Developer', image: 'img/contributors/efe-ozdemir.jpg' },
+];
+
 export default function Contributors() {
   return (
     <section>
@@ -11,33 +23,11 @@ export default function Contributors() {
           us grow and improve! <a href="docs/CONTRIBUTING">Click here</a> to contribute.
         </p>
         <div className="flex gap-2">
-          <TkTooltip header="Harun Demir" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/harun-demir.jpg" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Ulaş Turan" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/ulas-turan.jpeg" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Onur Palaz" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/onur-palaz.jfif" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Efe Özdemir" description="Full Stack Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/efe-ozdemir.jpg" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Pınar Yalçınduran" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/pinar-yalcinduran.png" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="İbrahim Agah Gürer" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Atakan Erhan Bayil" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/atakan-bayil.JPG" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Kıvanç Eski" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/kivanc-eski.png" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
-          <TkTooltip header="Hayrunnisa Çiko" description="Frontend Developer" position="top" variant="dark">
-            <TkAvatar image="img/contributors/hayrunnisa-ciko.jpg" size="xlarge" rounded slot="trigger" />
-          </TkTooltip>
+          {contributors.map(contributor => (
+            <TkTooltip key={contributor.name} header={contributor.name} description={contributor.role} position="top" variant="dark">
+              <TkAvatar image={contributor.image} size="base" rounded slot="trigger" />
+            </TkTooltip>
+          ))}
         </div>
       </div>
     </section>
