@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 tk-dialog {
   display: none;
 
@@ -123,11 +125,11 @@ tk-dialog {
       color: var(--icon-sub-base);
       width: var(--dialog-header-base-close-icon-size);
       height: var(--dialog-header-base-close-icon-size);
-      padding: var(--sizes-small-full-padding, 6px);
+      padding: var(--button-sizes-small-full-padding);
       justify-content: center;
       align-items: center;
       gap: var(--dialog-header-small-gap);
-      border-radius: var(--sizes-small-radius, 8px);
+      border-radius: var(--button-sizes-small-radius);
 
       &:focus {
         box-shadow: var(--neutral-focus);
@@ -185,27 +187,7 @@ tk-dialog {
     align-self: stretch;
     overflow-y: auto;
     flex: 1;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--background-lightest);
-      border-radius: 2px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--secondary-sub-base);
-      border-radius: 3px;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
+    @include takeoff-scrollbar;
   }
 
   .tk-dialog-footer {

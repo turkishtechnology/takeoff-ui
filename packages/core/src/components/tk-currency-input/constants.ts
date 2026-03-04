@@ -1,4 +1,4 @@
-import type { ICurrency } from './types';
+import type { ICurrency } from './interfaces';
 
 export const INTERNAL_CURRENCY_LIST: ICurrency[] = [
   { code: 'USD', id: 'US', symbol: '$', name: 'US Dollar', decimalSeparator: '.', thousandsSeparator: ',' },
