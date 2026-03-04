@@ -651,11 +651,17 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderDropdownButton() {
     return (
-      <button type="button" class="tk-currency-input-dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
+      <button
+        type="button"
+        class="tk-currency-input-dropdown-button"
+        onClick={event => this.toggleDropdown(event)}
+        disabled={this.currencyDisabled || this.disabled}
+        aria-disabled={this.currencyDisabled || this.disabled}
+      >
         <div class="tk-currency-input-dropdown-button-selected">
           {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
           <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
+          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, undefined, 'span')} />}
         </div>
       </button>
     );
