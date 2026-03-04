@@ -18,7 +18,7 @@
       /* 142.857% */
     }
 
-    .tk-breadcrumb-item-icon {
+    .tk-breadcrumb-item-icon span {
       color: var(--icon-sub-base);
       font-size: var(--basic-item-icon-size);
       width: var(--basic-item-icon-size);
@@ -27,7 +27,7 @@
   }
 
   &.tk-breadcrumb-item-current {
-    .tk-breadcrumb-item-icon {
+    .tk-breadcrumb-item-icon span {
       color: var(--icon-dark);
     }
 
@@ -58,7 +58,7 @@
   .tk-breadcrumb-item {
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon {
+      .tk-breadcrumb-item-icon span {
         color: var(--icon-dark);
       }
 
@@ -81,7 +81,7 @@
       padding: var(--backgrounded-item-v-padding, 2px) 4px;
     }
 
-    .tk-breadcrumb-item-icon {
+    .tk-breadcrumb-item-icon span {
       font-size: var(--backgrounded-item-icon-size);
       width: var(--backgrounded-item-icon-size);
       height: var(--backgrounded-item-icon-size);
@@ -106,7 +106,7 @@
 
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon {
+      .tk-breadcrumb-item-icon span {
         color: var(--icon-dark);
       }
 
