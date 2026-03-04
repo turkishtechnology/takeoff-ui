@@ -16,7 +16,8 @@
         { "label": "Success", "value": "success" },
         { "label": "Warning", "value": "warning" },
         { "label": "Danger", "value": "danger" },
-        { "label": "White", "value": "white" }
+        { "label": "White", "value": "white" },
+        { "label": "Black", "value": "black" }
       ]
     },
     {
@@ -36,8 +37,8 @@
       "type": "select",
       "defaultValue": "filled",
       "options": [
-        { "label": "Elevated", "value": "elevated" },
         { "label": "Filled", "value": "filled" },
+        { "label": "FilledLight", "value": "filledLight" },
         { "label": "Outlined", "value": "outlined" },
         { "label": "Text", "value": "text" }
       ]
