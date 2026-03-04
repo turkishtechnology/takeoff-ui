@@ -3,6 +3,7 @@
   "componentName": "TkTable",
   "hasChildren": false,
   "fullWidth": true,
+  "height": 800,
   "staticProps": {
     "data": [
       { "id": "f230fh0g3", "name": "Bamboo Watch", "category": "Accessories", "quantity": 24 },
