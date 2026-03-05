@@ -175,6 +175,12 @@ export class TkInput implements ComponentInterface {
   @Prop() loading: boolean = false;
 
   /**
+   * Hides the password lock icon.
+   * @defaultValue false
+   */
+  @Prop() hidePasswordIcon: boolean = false;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -710,7 +716,9 @@ export class TkInput implements ComponentInterface {
     let passwordRightIcon: HTMLTkIconElement;
 
     if (this.inputType == 'password') {
-      passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
+      if (!this.hidePasswordIcon) {
+        passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
+      }
       passwordRightIcon = (
         <tk-icon
           {...getIconElementProps('visibility', {

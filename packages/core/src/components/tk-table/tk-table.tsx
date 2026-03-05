@@ -1228,7 +1228,6 @@ export class TkTable implements ComponentInterface {
             wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
           });
         });
-        optionsSearchInput.style.marginBottom = '0.75rem';
         filterContainer.appendChild(optionsSearchInput);
       }
       // Create radio buttons for each option
