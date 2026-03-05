@@ -344,7 +344,10 @@ export class TkTable implements ComponentInterface {
 
   componentDidLoad() {
     const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
-    if (stickyColumns.length > 0) {
+    const hasSelectionMode = !!this.selectionMode;
+    const hasScrollableContainer = !!(this.containerStyle?.height || this.containerStyle?.maxHeight);
+
+    if (stickyColumns.length > 0 || hasSelectionMode || hasScrollableContainer) {
       this.updateStickyOffsets();
       this.setupScrollListener();
     }
@@ -1656,6 +1659,15 @@ export class TkTable implements ComponentInterface {
         el.style.setProperty('--shadow-opacity', hasOverflow && !atRight ? '1' : '0');
       });
     }
+
+    // Header bottom shadow visibility on vertical scroll
+    const scrollTop = target.scrollTop;
+    const atTop = scrollTop <= EPS;
+
+    const theadElement = this.el.shadowRoot?.querySelector('thead') as HTMLElement;
+    if (theadElement) {
+      theadElement.style.setProperty('--header-shadow-opacity', !atTop ? '1' : '0');
+    }
   };
 
   private refreshStickyShadows() {
@@ -1739,6 +1751,7 @@ export class TkTable implements ComponentInterface {
 
   private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
     let styleRowObject;
+    const leftColumns = this.columns.filter(c => c.fixed === 'left');
 
     if (typeof this.rowStyle == 'function') {
       const stylesRow = this.rowStyle(row, index);
@@ -1753,7 +1766,10 @@ export class TkTable implements ComponentInterface {
     let selectionTd;
     if (this.selectionMode === 'checkbox') {
       selectionTd = (
-        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+        <td
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+          style={this.getSelectionStickyStyle(index)}
+        >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
             value={some(this.selection, itemValue => isEqual(itemValue, row))}
@@ -1765,7 +1781,10 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.selectionMode === 'radio') {
       selectionTd = (
-        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+        <td
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+          style={this.getSelectionStickyStyle(index)}
+        >
           <tk-radio
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
             value={row}
