@@ -212,13 +212,7 @@ export class TkTabs implements ComponentInterface {
   }
   private getIconVariant = (index: number) => {
     if (index === this.activeIndex && (this.type === 'divided' || this.type === 'compact')) {
-      if (this.variant === 'primary') {
-        return 'primary';
-      } else if (this.variant === 'info') {
-        return 'info';
-      } else {
-        return 'neutral';
-      }
+      return this.variant;
     } else {
       return 'neutral';
     }
