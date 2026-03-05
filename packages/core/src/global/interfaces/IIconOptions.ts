@@ -21,6 +21,11 @@ export interface IIconOptions {
    * Indicates whether the icon is a sign
    */
   sign?: boolean;
+
+  /**
+   * Callback function to handle click events on the icon.
+   */
+  click?: Function;
 }
 
 /** Interface for multi-position icon configuration */
