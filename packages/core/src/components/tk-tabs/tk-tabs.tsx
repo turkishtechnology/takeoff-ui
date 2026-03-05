@@ -1,7 +1,6 @@
 import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../components';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -211,6 +210,19 @@ export class TkTabs implements ComponentInterface {
       this.internalTabItems = [...this.internalTabItems];
     }
   }
+  private getIconVariant = (index: number) => {
+    if (index === this.activeIndex && (this.type === 'divided' || this.type === 'compact')) {
+      if (this.variant === 'primary') {
+        return 'primary';
+      } else if (this.variant === 'info') {
+        return 'info';
+      } else {
+        return 'neutral';
+      }
+    } else {
+      return 'neutral';
+    }
+  };
 
   private handleTabClick(index: number) {
     if (!this.controlled) {
@@ -220,14 +232,11 @@ export class TkTabs implements ComponentInterface {
     }
   }
 
-  private renderTabItemIcon(tab: HTMLTkTabsItemElement) {
-    if (tab.icon && typeof tab.icon === 'string') {
-      return <span class="material-symbols-outlined tk-tabs-item-icon">{tab.icon}</span>;
-    } else if (tab.icon && typeof tab.icon === 'object') {
-      const icon: IIconOptions = tab.icon;
-      return <tk-icon {...getIconElementProps(icon, { class: classNames('tk-tabs-item-icon') })} />;
-    }
-  }
+  private createTabIcons = (tab: HTMLTkTabsItemElement, index: number) =>
+    renderIcons(tab.icon, {
+      variant: this.getIconVariant(index),
+      size: this.size === 'xxsmall' || this.size === 'xsmall' ? 'base' : 'medium',
+    });
 
   private renderTabBadge(tab: HTMLTkTabsItemElement, index: number) {
     if (tab.badged) {
@@ -296,29 +305,29 @@ export class TkTabs implements ComponentInterface {
         <div {...headersProps}>
           {this.internalTabItems.map((tab, index) => {
             const headerClasses = classNames('tab-header', { 'active': this.internalActiveIndex === index, 'tk-tab-header-disabled': tab.disabled });
+            const tabIcons = this.createTabIcons(tab, index);
             return (
               <div class={headerClasses} onClick={() => this.handleTabClick(index)}>
-                {this.renderTabItemIcon(tab)}
+                {tabIcons.leftIcon}
                 <div class="tk-tabs-item-label-container">
                   <span class="tk-tabs-item-label">{tab.label}</span>
                   {this.renderTabBadge(tab, index)}
                   {this.renderTabTooltip(tab)}
                 </div>
+                {tabIcons.rightIcon}
                 {this.isClosable && (
-                  <span
-                    class="material-symbols-outlined tk-tabs-item-close-icon"
+                  <tk-icon
+                    {...getIconElementProps('close', { variant: this.getIconVariant(index) })}
                     onClick={e => {
                       e.stopPropagation();
                       this.closeTab(index);
                     }}
-                  >
-                    close
-                  </span>
+                  />
                 )}
               </div>
             );
           })}
-          {this.isExtendable && <tk-icon {...getIconElementProps('add', { class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })} />}
+          {this.isExtendable && <tk-icon {...getIconElementProps('add', { variant: 'neutral', class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })} />}
         </div>
         <div {...contentProps}>
           {this.internalTabItems.map((_tab, index) => (
