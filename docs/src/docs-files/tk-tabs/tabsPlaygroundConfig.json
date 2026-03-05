@@ -92,6 +92,12 @@
       "label": "Closable",
       "type": "checkbox",
       "defaultValue": false
+    },
+    {
+      "key": "isExtendable",
+      "label": "Extendable",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }

@@ -36,15 +36,15 @@ tk-icon {
   }
 
   &.tk-icon-primary {
-    color: var(--primary-dark);
+    color: var(--primary-base);
   }
 
   &.tk-icon-secondary {
-    color: var(--secondary-dark);
+    color: var(--secondary-base);
   }
 
   &.tk-icon-neutral {
-    color: var(--background-dark);
+    color: var(--background-base);
   }
 
   &.tk-icon-info {
