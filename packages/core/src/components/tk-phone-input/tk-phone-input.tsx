@@ -16,7 +16,7 @@ import { applyStyles } from '../../utils/style-utils';
  */
 @Component({
   tag: 'tk-phone-input',
-  styleUrls: ['tk-phone-input.scss', 'flag.scss'],
+  styleUrls: ['tk-phone-input.scss'],
   formAssociated: true,
 })
 export class TkPhoneInput implements ComponentInterface {
