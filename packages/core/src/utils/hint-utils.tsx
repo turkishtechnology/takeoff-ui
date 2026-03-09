@@ -14,7 +14,7 @@ export function renderHint(hint?: string, error?: string, invalid?: boolean): JS
     return null;
   }
   return (
-    <div className={classNames('tk-hint-wrapper', { invalid: invalid, error: isError })}>
+    <div class={classNames('tk-hint-wrapper', { invalid: invalid, error: isError })}>
       <tk-icon {...getIconElementProps('info', { color: isError || invalid ? 'var(--states-danger-base)' : 'var(--text-base)' })} /> <span>{isError ? error : hint}</span>
     </div>
   );
