@@ -89,20 +89,34 @@ export class TkChips implements ComponentInterface {
     if (this.autoSelfDestroy) this.el?.remove();
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.handleClick();
+    }
+  }
+
   render() {
     const rootClasses = classNames('tk-chips', this.variant, this.size, this.type, {
       removable: this.removable,
       disabled: this.disabled,
     });
-    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
+    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null, size: this.size === 'large' ? 'medium' : this.size })} />;
     return (
       <div class={rootClasses} style={this.containerStyle}>
         {icon}
         {this.label}
         {this.removable && (
-          <i onClick={() => this.handleClick()} class="material-symbols-outlined tk-chips-clear-button">
-            close
-          </i>
+          <tk-icon
+            {...getIconElementProps('close', {
+              variant: this.type === 'filled' ? null : this.variant,
+              size: this.size === 'large' ? 'medium' : this.size,
+              class: classNames({ disabled: this.disabled }),
+              onClick: () => this.handleClick(),
+              onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
+              tabIndex: this.disabled ? -1 : 0,
+            })}
+          />
         )}
       </div>
     );
