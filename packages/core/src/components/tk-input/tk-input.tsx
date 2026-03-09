@@ -9,6 +9,7 @@ import { CleaveOptions } from 'cleave.js/options';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -637,32 +638,6 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint error">
-          {hintIcon}
-          {this.error}
-        </span>
-      );
-    }
-    return hint;
-  }
-
   private renderLabel(): HTMLLabelElement {
     let label;
     if (this.label?.length > 0) {
@@ -793,7 +768,7 @@ export class TkInput implements ComponentInterface {
           {this.renderAlignmentButtons().right}
         </div>
         {safetyStatus}
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }
