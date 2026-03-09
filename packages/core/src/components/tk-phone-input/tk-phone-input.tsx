@@ -7,6 +7,7 @@ import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -552,32 +553,6 @@ export class TkPhoneInput implements ComponentInterface {
     );
   }
 
-  private renderHint() {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-hint-icon', variant: null })} />;
-      hint = (
-        <span class="tk-phone-input-hint">
-          {hintIcon}
-          <span class="tk-phone-input-hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-error-icon', variant: null })} />;
-      hint = (
-        <span class="tk-phone-input-error">
-          {hintIcon}
-          <span class="tk-phone-input-error-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
-  }
-
   /**
    * Render the component.
    */
@@ -590,7 +565,7 @@ export class TkPhoneInput implements ComponentInterface {
           {this.renderPhoneInput()}
         </div>
 
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }
