@@ -1,6 +1,7 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkTextarea component enables multi-line text input with customizable size, validation, and styling options.
@@ -200,7 +201,7 @@ export class TkTextarea implements ComponentInterface {
     if (this.hint?.length > 0) {
       hint = (
         <span class="hint">
-          <i class="material-symbols-outlined">info</i>
+          <tk-icon {...getIconElementProps('info')} />
           {this.hint}
         </span>
       );
@@ -209,7 +210,7 @@ export class TkTextarea implements ComponentInterface {
     if (this.error?.length > 0) {
       hint = (
         <span class="hint error">
-          <i class="material-symbols-outlined">info</i>
+          <tk-icon {...getIconElementProps('info')} />
           {this.error}
         </span>
       );

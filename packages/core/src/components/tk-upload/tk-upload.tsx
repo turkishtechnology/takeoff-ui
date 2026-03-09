@@ -438,7 +438,7 @@ export class TkUpload implements ComponentInterface {
     if (this.hint?.length > 0) {
       hint = (
         <span class="hint">
-          <i class="material-symbols-outlined">info</i>
+          <tk-icon {...getIconElementProps('info')} />
           {this.hint}
         </span>
       );
@@ -447,7 +447,7 @@ export class TkUpload implements ComponentInterface {
     if (this.error?.length > 0) {
       hint = (
         <span class="hint error">
-          <i class="material-symbols-outlined">info</i>
+          <tk-icon {...getIconElementProps('info')} />
           {this.error}
         </span>
       );
