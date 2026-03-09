@@ -135,6 +135,13 @@ export class TkDatePicker {
   @Prop() clearable: boolean = false;
 
   /**
+   * Represents whether the datepicker is in a loading state.
+   * If true, renders a spinner inside the input and panel.
+   * @defaultValue false
+   */
+  @Prop() loading: boolean = false;
+
+  /**
    * Error message to display
    */
   @Prop() error: string;
@@ -1948,6 +1955,18 @@ export class TkDatePicker {
     );
   }
 
+  private createLoading() {
+    return (
+      <tbody class="tk-datepicker-loading">
+        <tr>
+          <td colSpan={7}>
+            <tk-spinner size={this.size} />
+          </td>
+        </tr>
+      </tbody>
+    );
+  }
+
   private renderInput() {
     if (this.inline) return null;
 
@@ -1966,6 +1985,7 @@ export class TkDatePicker {
         name={this.name}
         hint={this.hint}
         clearable={this.clearable}
+        loading={this.loading}
         disabled={this.disabled}
         invalid={this.invalid || this.isInvalid}
         readonly={this.readonly}
@@ -2030,7 +2050,7 @@ export class TkDatePicker {
                 {this.currentView === 'days' && (
                   <Fragment>
                     {this.createWeekDayNames()}
-                    {this.createWeekDays()}
+                    {this.loading ? this.createLoading() : this.createWeekDays()}
                   </Fragment>
                 )}
                 {this.currentView === 'months' && this.createMonths()}
