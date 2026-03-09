@@ -1367,6 +1367,13 @@ export class TkDatePicker {
     this.tkInputChange.emit(this.inputValue);
   };
 
+  private handleInputBlur = () => {
+    if (this.timeOnly && this.timeFormat === '12' && this.internalStartTime) {
+      this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
+      this.inputValue = this.formatInputValue();
+    }
+  };
+
   private handleInputClearClick = () => {
     if (this.clearable) {
       this.inputValue = '';
@@ -1978,6 +1985,7 @@ export class TkDatePicker {
         onInput={this.handleInputInput}
         onKeyDown={this.handleInputKeyDown}
         onClick={this.handleInputClick}
+        onTk-blur={this.handleInputBlur}
         aria-expanded={!!this.isOpen}
         aria-haspopup="true"
         data-tk-datepicker-id={this.uniqueId}
