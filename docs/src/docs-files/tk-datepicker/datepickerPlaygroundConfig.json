@@ -234,6 +234,12 @@
       "type": "checkbox",
       "defaultValue": false,
       "tooltip": "This feature works only when the `showTimePicker` prop is enabled."
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }

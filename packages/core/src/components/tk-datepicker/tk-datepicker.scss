@@ -598,3 +598,9 @@
     background-color: var(--primary-300);
   }
 }
+
+.tk-datepicker-loading td {
+  text-align: center;
+  vertical-align: middle;
+  height: 260px;
+}
