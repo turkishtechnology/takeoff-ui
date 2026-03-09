@@ -1,7 +1,7 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkTextarea component enables multi-line text input with customizable size, validation, and styling options.
@@ -196,28 +196,6 @@ export class TkTextarea implements ComponentInterface {
     return label;
   }
 
-  private renderHintError(): HTMLSpanElement {
-    let hint;
-    if (this.hint?.length > 0) {
-      hint = (
-        <span class="hint">
-          <tk-icon {...getIconElementProps('info')} />
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      hint = (
-        <span class="hint error">
-          <tk-icon {...getIconElementProps('info')} />
-          {this.error}
-        </span>
-      );
-    }
-    return hint;
-  }
-
   render() {
     const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
@@ -253,7 +231,7 @@ export class TkTextarea implements ComponentInterface {
           />
           {counter}
         </div>
-        {this.renderHintError()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }
