@@ -61,7 +61,6 @@ export class TkBreadcrumb implements ComponentInterface {
 
   private renderSeparator() {
     const separatorClasses = classNames('tk-breadcrumb-separator-icon', {
-      'material-symbols-outlined': this.separator === 'icon',
       'tk-breadcrumb-dot-separator': this.separator === 'dot',
       'tk-breadcrumb-slash-separator': this.separator === 'slash',
       'tk-breadcrumb-vertical-separator': this.separator === 'vertical',
