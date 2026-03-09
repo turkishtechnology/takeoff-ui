@@ -8,6 +8,7 @@ import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
 import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -689,34 +690,6 @@ export class TkCurrencyInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-hint">
-          {hintIcon}
-          <span class="tk-currency-input-hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-error-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-error">
-          {hintIcon}
-          <span class="tk-currency-input-error-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
-  }
-
   render() {
     return (
       <div
@@ -730,7 +703,7 @@ export class TkCurrencyInput implements ComponentInterface {
           {this.renderCurrencyInput()}
           {this.renderCurrencySelector()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }
