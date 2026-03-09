@@ -1,6 +1,7 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkToggle component is another basic element for user input. You can use this for turning settings, features or true/false inputs on and off.
@@ -178,7 +179,16 @@ export class TkToggle implements ComponentInterface {
         <label htmlFor={this.uniqueId}>
           <div class="tk-toggle-input-container">
             {this.renderInput()}
-            <span class="tk-toggle-thumb">{this.showIcon && <span class="material-symbols-outlined tk-toggle-thumb-icon">{this.icon}</span>}</span>
+            <span class="tk-toggle-thumb">
+              {this.showIcon && (
+                <tk-icon
+                  {...getIconElementProps(this.checked ? this.icon : null, {
+                    variant: this.invalid ? 'danger' : this.variant,
+                    size: this.size === 'large' || this.size === 'xlarge' ? 'medium' : this.size,
+                  })}
+                />
+              )}
+            </span>
           </div>
           {this.hasDefaultSlot ? <slot></slot> : this.label && <span class="tk-toggle-label">{this.label}</span>}
         </label>
