@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkUpload component is an interface element that allows users to select and upload files from their devices to a server or a target location. It typically includes a "Choose File" button and a field displaying the selected file's name. This component simplifies the process of file selection and uploading.
@@ -419,7 +420,6 @@ export class TkUpload implements ComponentInterface {
 
   render() {
     let label: HTMLLabelElement;
-    let hint: HTMLSpanElement;
 
     const rootClasses = classNames('tk-upload-container', {
       'drag-drop-enabled': this.dragDrop,
@@ -435,29 +435,11 @@ export class TkUpload implements ComponentInterface {
       );
     }
 
-    if (this.hint?.length > 0) {
-      hint = (
-        <span class="hint">
-          <tk-icon {...getIconElementProps('info')} />
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      hint = (
-        <span class="hint error">
-          <tk-icon {...getIconElementProps('info')} />
-          {this.error}
-        </span>
-      );
-    }
-
     return (
       <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         {label}
         {this.renderDropzone()}
-        {hint}
+        {renderHint(this.hint, this.error, this.invalid)}
         {this.showFiles && this.renderFileholder()}
       </div>
     );
