@@ -110,10 +110,6 @@
     .tk-phone-input-wrapper {
       border-color: var(--states-danger-base);
     }
-
-    .tk-phone-input-hint {
-      color: var(--states-danger-base);
-    }
   }
 
   &[aria-disabled],
@@ -125,8 +121,6 @@
 
     .tk-phone-input-label,
     .tk-phone-input-label-asterisk,
-    .tk-phone-input-hint-text,
-    .tk-phone-input-hint-icon,
     .tk-phone-input-dropdown-button {
       color: var(--text-sub-base);
     }
@@ -190,19 +184,5 @@
     font-size: var(--desktop-label-s-size);
     line-height: var(--desktop-label-s-line-height);
     font-weight: var(--weight-medium);
-  }
-  .tk-phone-input-hint,
-  .tk-phone-input-error {
-    color: var(--text-base);
-    line-height: var(--desktop-label-s-line-height);
-    font-size: var(--desktop-label-s-size);
-    font-weight: var(--weight-medium);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding-left: var(--spacing-xs);
-  }
-  .tk-phone-input-error {
-    color: var(--states-danger-base);
   }
 }
