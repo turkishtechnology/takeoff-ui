@@ -20,9 +20,6 @@
 
     .tk-breadcrumb-item-icon {
       color: var(--icon-sub-base);
-      font-size: var(--basic-item-icon-size);
-      width: var(--basic-item-icon-size);
-      height: var(--basic-item-icon-size);
     }
   }
 
@@ -79,12 +76,6 @@
 
     &.tk-breadcrumb-item-icon-only {
       padding: var(--backgrounded-item-v-padding, 2px) 4px;
-    }
-
-    .tk-breadcrumb-item-icon {
-      font-size: var(--backgrounded-item-icon-size);
-      width: var(--backgrounded-item-icon-size);
-      height: var(--backgrounded-item-icon-size);
     }
 
     &.tk-breadcrumb-item-current {
