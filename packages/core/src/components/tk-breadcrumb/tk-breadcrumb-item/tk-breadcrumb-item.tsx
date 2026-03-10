@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../../utils/icon-utils';
-import { IIconOptions } from '../../../global/interfaces/IIconOptions';
+import { renderIcons } from '../../../utils/icon-utils';
+import { IIconOptions, IMultiIconOptions } from '../../../global/interfaces/IIconOptions';
 
 @Component({
   tag: 'tk-breadcrumb-item',
@@ -18,7 +18,7 @@ export class TkBreadcrumbItem implements ComponentInterface {
   /**
    * Icon to display alongside the label
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Label text for the breadcrumb item
@@ -45,18 +45,22 @@ export class TkBreadcrumbItem implements ComponentInterface {
       href: this.href,
       ...(this.isExternal && { target: '_blank', rel: 'noopener noreferrer' }),
     };
-
-    const icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-breadcrumb-item-icon', variant: null }, undefined, 'span')} />;
+    const { leftIcon, rightIcon } = renderIcons(this.icon, {
+      variant: null,
+      iconTag: 'span',
+      additionalProps: { class: 'tk-breadcrumb-item-icon' },
+    });
 
     return (
       <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null}>
         <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0}>
-          {icon}
+          {leftIcon}
           {this.label && (
             <span class="tk-breadcrumb-item-label">
               <slot>{this.label}</slot>
             </span>
           )}
+          {rightIcon}
         </a>
       </li>
     );
