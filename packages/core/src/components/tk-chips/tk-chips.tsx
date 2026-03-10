@@ -1,7 +1,7 @@
 import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -33,7 +33,7 @@ export class TkChips implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * The label to display inside the chip.
@@ -101,11 +101,13 @@ export class TkChips implements ComponentInterface {
       removable: this.removable,
       disabled: this.disabled,
     });
-    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null, size: this.size === 'large' ? 'medium' : this.size })} />;
+    const { leftIcon, rightIcon } = renderIcons(this.icon, { variant: null, size: this.size === 'large' ? 'medium' : this.size });
+
     return (
       <div class={rootClasses} style={this.containerStyle}>
-        {icon}
+        {leftIcon}
         {this.label}
+        {rightIcon}
         {this.removable && (
           <tk-icon
             {...getIconElementProps('close', {
