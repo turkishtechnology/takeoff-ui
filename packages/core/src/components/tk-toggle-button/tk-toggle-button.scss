@@ -154,29 +154,6 @@
     }
   }
 
-  .tk-toggle-button-icon {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-base);
-
-    &.small {
-      width: 20px;
-      height: 20px;
-    }
-
-    &.base {
-      width: 24px;
-      height: 24px;
-    }
-
-    &.large {
-      width: 24px;
-      height: 24px;
-    }
-  }
-
   &.small {
     height: 0px;
     padding: var(--button-sizes-large-v-padding) var(--button-sizes-small-h-padding);
@@ -197,7 +174,6 @@
   }
 
   &:hover {
-    .tk-toggle-button-icon,
     .tk-toggle-button-label {
       color: var(--text-darkest);
     }
