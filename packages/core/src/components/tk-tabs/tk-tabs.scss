@@ -405,6 +405,9 @@
       &:hover,
       &.active {
         color: var(--text-darkest);
+        tk-icon i {
+          color: inherit;
+        }
       }
     }
 
