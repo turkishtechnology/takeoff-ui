@@ -1,6 +1,6 @@
 import { Component, h, Element, Prop, ComponentInterface, Watch, Event, type EventEmitter, State } from '@stencil/core';
 import { isEqual } from 'lodash-es';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import type { IAccordionItemSelect } from './interfaces';
 
 /**
@@ -63,13 +63,13 @@ export class TkAccordion implements ComponentInterface {
    * Sets the expand icon
    * @defaultValue 'keyboard_arrow_down'
    */
-  @Prop() expandIcon: string | IIconOptions = 'keyboard_arrow_down';
+  @Prop() expandIcon: string | IIconOptions | IMultiIconOptions = 'keyboard_arrow_down';
 
   /**
    * Sets the collapse icon
    * @defaultValue 'keyboard_arrow_up'
    */
-  @Prop() collapseIcon: string | IIconOptions = 'keyboard_arrow_up';
+  @Prop() collapseIcon: string | IIconOptions | IMultiIconOptions = 'keyboard_arrow_up';
 
   /**
    * Whether to hide the arrow icons.
