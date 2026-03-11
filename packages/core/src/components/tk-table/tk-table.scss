@@ -34,6 +34,7 @@
         position: sticky;
         top: 0;
         z-index: 100;
+        --header-shadow-opacity: 0;
 
         tr {
           background: none;
@@ -132,6 +133,20 @@
                 width: min-content;
               }
             }
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 11px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
+            pointer-events: none;
+            opacity: var(--header-shadow-opacity, 0);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
           }
         }
 
@@ -286,40 +301,30 @@
         z-index: 11;
       }
 
-      .tk-table-sticky-shadow-right {
-        --shadow-opacity: 0;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: -10px;
-          bottom: 0;
-          width: 10px;
-          background: linear-gradient(to right, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
-          pointer-events: none;
-          opacity: var(--shadow-opacity, 0);
-          transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: 1;
-        }
-      }
-
+      .tk-table-sticky-shadow-right,
       .tk-table-sticky-shadow-left {
         --shadow-opacity: 0;
+      }
 
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -10px;
-          bottom: 0;
-          width: 10px;
-          background: linear-gradient(to left, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
-          pointer-events: none;
-          opacity: var(--shadow-opacity, 0);
-          transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: 1;
-        }
+      .tk-table-sticky-shadow-right::after,
+      .tk-table-sticky-shadow-left::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 11px;
+        pointer-events: none;
+        opacity: var(--shadow-opacity, 0);
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+      }
+      .tk-table-sticky-shadow-right::after {
+        right: -10px;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
+      }
+      .tk-table-sticky-shadow-left::before {
+        left: -10px;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.06) 30%, rgba(0, 0, 0, 0.02) 70%, transparent 100%);
       }
     }
   }
