@@ -28,6 +28,7 @@ export interface ComponentConfig {
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
   fullWidth?: boolean; // Stretch component to fill preview width
+  height?: number; // Custom playground height in px (default: 600)
   staticProps?: Record<string, any>; // Props always passed to the component but not shown as controls
   triggerProp?: string; // Boolean prop key toggled by a trigger button (e.g. "visible", "open")
   triggerLabel?: string; // Label for the trigger button (e.g. "Open Dialog")
@@ -55,6 +56,7 @@ export interface ConfigWithComponentName {
   hasChildren?: boolean; // Indicates if the component can have children
   children?: ChildConfig[];
   fullWidth?: boolean; // Stretch component to fill preview width
+  height?: number; // Custom playground height in px (default: 600)
   staticProps?: Record<string, any>; // Props always passed to the component but not shown as controls
   triggerProp?: string;
   triggerLabel?: string;

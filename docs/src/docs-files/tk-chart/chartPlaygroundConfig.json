@@ -3,6 +3,7 @@
   "componentName": "TkChart",
   "hasChildren": false,
   "fullWidth": true,
+  "height": 800,
   "props": [
     {
       "key": "type",

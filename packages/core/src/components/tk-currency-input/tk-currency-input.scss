@@ -56,12 +56,15 @@
 
   .tk-currency-input-dropdown {
     .tk-currency-input-dropdown-button {
-      cursor: pointer;
       display: flex;
       align-items: center;
       border: none;
       background-color: transparent;
       padding: 0;
+
+      &:not([aria-disabled]) {
+        cursor: pointer;
+      }
 
       .tk-currency-input-dropdown-button-selected {
         display: flex;
