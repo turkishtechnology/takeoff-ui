@@ -576,9 +576,27 @@ export class TkDatePicker {
     hour = Math.floor(hour / hourStep) * hourStep;
 
     // Align minutes to the configured step (floor to nearest step)
-    const step = Math.max(1, this.minuteStep || 1);
-    minute = Math.floor(minute / step) * step;
+    const minuteStep = Math.max(1, this.minuteStep || 1);
+    minute = Math.floor(minute / minuteStep) * minuteStep;
 
+    if (!this.isTimeDisabled(hour, minute)) {
+      return { hour, minute };
+    }
+    const hours =
+      this.timeFormat === '12'
+        ? Array.from({ length: Math.ceil(12 / hourStep) }, (_, i) => Math.min(i * hourStep + 1, 12))
+        : Array.from({ length: Math.ceil(24 / hourStep) }, (_, i) => i * hourStep);
+    const minutes = Array.from({ length: Math.ceil(60 / minuteStep) }, (_, i) => i * minuteStep);
+
+    for (const h of hours) {
+      for (const m of minutes) {
+        if (!this.isTimeDisabled(h, m)) {
+          return { hour: h, minute: m };
+        }
+      }
+    }
+    // No valid time found, log warning
+    console.warn('TkDatepicker: No valid time slots available for the current configuration.');
     return { hour, minute };
   }
 
