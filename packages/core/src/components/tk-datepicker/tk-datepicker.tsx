@@ -1828,6 +1828,18 @@ export class TkDatePicker {
 
     const prevMinuteDisabled = isMinuteDisabled(minutes[minutes.indexOf(currentMinute) - 1]);
 
+    let AMDisabled = false;
+    let PMDisabled = false;
+    if (this.timeFormat === '12') {
+      if (this.minTime?.toLowerCase().includes('pm')) {
+        this.internalAmPm = 'PM';
+        AMDisabled = true;
+      }
+      if (this.maxTime?.toLowerCase().includes('am')) {
+        this.internalAmPm = 'AM';
+        PMDisabled = true;
+      }
+    }
     return (
       <div class={classNames('tk-datepicker-timepicker-panel', this.timeOnly && 'tk-datepicker-timepicker-panel-only')}>
         <div class={classNames('tk-datepicker-timepicker-header', `tk-datepicker-timepicker-header-${this.headerType}`, this.timeOnly && 'tk-datepicker-timepicker-header-only')}>
@@ -1845,7 +1857,7 @@ export class TkDatePicker {
                 value="AM"
                 label="AM"
                 size="small"
-                disabled={isDisabled}
+                disabled={isDisabled || AMDisabled}
               />
               <tk-toggle-button
                 key="PM"
@@ -1854,7 +1866,7 @@ export class TkDatePicker {
                 value="PM"
                 label="PM"
                 size="small"
-                disabled={isDisabled}
+                disabled={isDisabled || PMDisabled}
               />
             </tk-toggle-button-group>
           )}
