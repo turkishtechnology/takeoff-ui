@@ -134,6 +134,9 @@ function Components() {
         <Link to="color-picker" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
           Color Picker
         </Link>
+        <Link to="currency-input" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
+          Currency Input
+        </Link>
       </div>
     </TkCard>
   );
