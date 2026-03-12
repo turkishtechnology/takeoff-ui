@@ -35,6 +35,12 @@ export class TkCurrencyInput implements ComponentInterface {
   private uniqueId = uuidv4();
 
   /**
+   * Previous separator values for change detection in componentDidUpdate.
+   */
+  private prevDecimalSeparator: Separator | undefined;
+  private prevThousandsSeparator: Separator | undefined;
+
+  /**
    * The currently selected currency object.
    * This is initialized based on the defaultCurrency prop and can be changed by the user.
    */
@@ -219,12 +225,24 @@ export class TkCurrencyInput implements ComponentInterface {
    */
   componentWillLoad() {
     this.setSelectedCurrency(this.defaultCurrency);
+
+    // Store initial separator values for change detection
+    this.prevDecimalSeparator = this.decimalSeparator;
+    this.prevThousandsSeparator = this.thousandsSeparator;
   }
 
   /**
    * Update the component when properties change.
    */
   componentDidUpdate() {
+    // Handle separator changes
+    if (this.decimalSeparator !== this.prevDecimalSeparator || this.thousandsSeparator !== this.prevThousandsSeparator) {
+      this.prevDecimalSeparator = this.decimalSeparator;
+      this.prevThousandsSeparator = this.thousandsSeparator;
+      this.updateDisplayValue();
+    }
+
+    // Handle dropdown positioning
     if (this.isDropdownOpen) {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
