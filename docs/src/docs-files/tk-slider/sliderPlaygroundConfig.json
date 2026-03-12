@@ -2,6 +2,7 @@
   "name": "TkSlider",
   "componentName": "TkSlider",
   "hasChildren": false,
+  "fullWidth": true,
   "props": [
     {
       "key": "type",
