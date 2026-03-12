@@ -17,7 +17,7 @@ import { applyStyles } from '../../utils/style-utils';
  */
 @Component({
   tag: 'tk-currency-input',
-  styleUrls: ['tk-currency-input.scss', 'flag.scss'],
+  styleUrls: ['tk-currency-input.scss'],
   formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
