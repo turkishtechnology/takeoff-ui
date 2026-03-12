@@ -92,6 +92,9 @@ tk-select {
       .dropdown-item {
         font-size: var(--desktop-body-m-base-size);
       }
+      tk-spinner {
+        min-height: 48px;
+      }
     }
   }
 
@@ -100,6 +103,9 @@ tk-select {
       .dropdown-item {
         font-size: var(--desktop-body-s-size);
       }
+      tk-spinner {
+        min-height: 38px;
+      }
     }
   }
 
@@ -107,6 +113,9 @@ tk-select {
     .dropdown-item-holder {
       .dropdown-item {
         font-size: var(--desktop-body-xs-size);
+      }
+      tk-spinner {
+        min-height: 28px;
       }
     }
   }

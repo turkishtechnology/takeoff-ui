@@ -340,6 +340,10 @@ export class TkDatePicker {
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<IDateSelection | string | null>;
 
+  /**
+   * Emitted when the input is invalid
+   */
+  @Event({ eventName: 'tk-invalid' }) tkInvalid: EventEmitter<{ message: string; value: string }>;
   componentWillLoad() {
     this.updateMaskOptions();
 
@@ -1447,6 +1451,7 @@ export class TkDatePicker {
             }
           } else if (!this.allowApplyButton) {
             this.isInvalid = true;
+            this.tkInvalid.emit({ message: 'Invalid time format', value: this.inputValue });
             this.tkChange.emit(undefined);
           }
         } else {
@@ -1475,6 +1480,7 @@ export class TkDatePicker {
             this.tkChange.emit(formattedValue);
           } else if (!this.allowApplyButton) {
             this.isInvalid = true;
+            this.tkInvalid.emit({ message: 'Invalid date format', value: this.inputValue });
           }
         }
       } else {
