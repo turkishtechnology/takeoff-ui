@@ -1,5 +1,5 @@
 import { Element, Component, Prop, Host, h, ComponentInterface, Watch } from '@stencil/core';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { ITooltipOptions } from '../../global/interfaces/ITooltipOptions';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
@@ -14,7 +14,7 @@ export class TkTabsItem implements ComponentInterface {
   /**
    * Icon for tabs item component.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
   @Watch('icon')
   iconChanged() {
     this.emitUpdate();

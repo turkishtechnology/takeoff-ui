@@ -59,13 +59,13 @@ tk-input.tk-table-input {
     .tk-input-clear-button {
       margin-left: auto;
     }
+
     i {
       color: var(--icon-base);
       user-select: none;
-
-      &.clickable {
-        cursor: pointer;
-      }
+    }
+    tk-icon.clickable:not(.disabled) {
+      cursor: pointer;
     }
 
     .counter-icon {
