@@ -25,6 +25,55 @@
   --ifm-z-index-dropdown: 1000;
   --ifm-z-index-fixed: 1000;
   --ifm-z-index-overlay: 1000;
+
+  /* Typography Overrides */
+  --ifm-font-family-base: 'Geologica', sans-serif;
+  --ifm-heading-font-family: 'Geologica', sans-serif;
+  --ifm-heading-color: var(--text-darkest);
+  --ifm-heading-font-weight: 400;
+
+  /* Headings */
+  --ifm-h1-font-size: var(--desktop-title-h3-size) !important;
+  --ifm-h1-line-height: var(--desktop-title-h3-line-height) !important;
+  --ifm-h1-font-weight: 400;
+  --ifm-h1-color: var(--text-darkest, #222530);
+
+  --ifm-h2-font-size: 36px;
+  --ifm-h2-line-height: 45px;
+  --ifm-h2-font-weight: 400;
+  --ifm-h2-color: var(--text-darkest, #222530);
+
+  --ifm-h3-font-size: 24px !important;
+  --ifm-h3-line-height: 32px;
+  --ifm-h3-font-weight: 400;
+  --ifm-h3-color: var(--text-darkest, #222530);
+
+  /* Body Text */
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.5;
+  --ifm-color-content: var(--text-base, #717784);
+
+  strong,
+  b {
+    color: var(--text-dark) !important;
+  }
+
+  code {
+    color: var(--text-dark) !important;
+  }
+
+  ::marker {
+    color: var(--text-dark) !important;
+  }
+
+  /* Docs Sidebar */
+  --doc-sidebar-width: 248px !important;
+  --ifm-menu-color: var(--text-base) !important;
+  --ifm-menu-color-active: var(--text-darkest) !important;
+  --ifm-menu-color-background-active: var(--background-lightest) !important;
+  --ifm-menu-color-background-hover: var(--background-lightest) !important;
+  --ifm-menu-link-padding-vertical: 8px !important;
+  --ifm-menu-link-padding-horizontal: 10px !important;
 }
 
 /* ===== DocSearch / Algolia Custom Styles ===== */
@@ -608,11 +657,11 @@ body {
 .page-header .container h1 {
   color: var(--text-darkest, #222530);
 
-  /* Title/H1-60 */
+  /* Title/H3-36 */
   font-family: 'Geologica';
-  font-size: 60px;
+  font-size: 36px;
   font-weight: 400;
-  line-height: 100%;
+  line-height: 45px;
 }
 
 .page-header .container .description {
@@ -768,6 +817,52 @@ body {
 }
 .code-block-new-usage {
   background-color: var(--states-success-darkest);
+}
+
+/* Page Title Margin Override */
+.markdown h1:first-child {
+  --ifm-h1-font-size: var(--desktop-title-h3-size) !important;
+  margin-bottom: 12px !important;
+  --ifm-heading-line-height: var(--desktop-title-h3-line-height) !important;
+}
+
+/* Sidebar Menu Spacing */
+.menu__link {
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 4px;
+  position: relative;
+
+  &.menu__link--active:not(.menu__link--sublist) {
+    border-left: none !important;
+  }
+
+  &.menu__link--active:not(.menu__link--sublist)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    width: 4px;
+    background-color: var(--primary-base);
+    border-radius: 4px 0 0 4px;
+  }
+
+  &:hover {
+    background-color: var(--background-lightest);
+    color: var(--text-darkest);
+  }
+}
+
+/* Custom padding for main documentation content on wide screens */
+@media (min-width: 1440px) {
+  main[class*='docMainContainer_'] .container {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 }
 
 tk-phone-input ul,

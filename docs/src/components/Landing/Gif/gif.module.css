@@ -24,18 +24,16 @@
   color: var(--text-base, #99a0ae);
   line-height: 100%;
 
-  margin-left: '8px';
-  position: 'relative';
-  display: 'inline-block';
-  transition: 'opacity 0.5s ease-in-out';
-}
+  position: relative;
+  width: 80px;
+  text-align: left;
 
-.shuffleLetter {
-  display: 'inline-block';
-  transition: 'transform 0.2s ease-in-out';
-  transform: 'rotate(360deg)';
-}
-.normalLetter {
-  display: 'inline-block';
-  transition: 'transform 0.2s ease-in-out';
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  height: 1.5em;
+  vertical-align: bottom;
+
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
 }
