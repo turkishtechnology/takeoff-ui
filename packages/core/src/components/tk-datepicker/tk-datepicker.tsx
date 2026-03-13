@@ -325,10 +325,14 @@ export class TkDatePicker {
   @Prop() firstDayOfWeekIndex?: number;
 
   /**
-   * Defines the default month to display when the panel is opened.
-   * Accepts a zero-based month index (0 for January, 1 for February, ..., 11 for December).
+   * Defines the default year/month to display when the panel is opened.
+   * Accepted formats:
+   * - yyyy-MM
+   * - MM-yyyy
+   * - yyyy
+   * - MM
    */
-  @Prop() defaultMonthIndex?: number;
+  @Prop() defaultDate?: string;
 
   /**
    * Emitted on input value changes
@@ -769,42 +773,24 @@ export class TkDatePicker {
   }
 
   private initializeDates(): void {
-    // Initialize currentMonth with priority: defaultMonthIndex > first allowedDate > first non-disabled month > now
+    // Initialize currentMonth with priority: defaultDate > first allowedDate month > first non-disabled month > now
     const now = new Date();
-
-    if (typeof this.defaultMonthIndex === 'number' && this.defaultMonthIndex >= 0 && this.defaultMonthIndex <= 11) {
-      // Use defaultMonthIndex if provided and valid
-      this.currentMonth = new Date(now.getFullYear(), this.defaultMonthIndex);
+    const parsedDefaultDate = this.parseDefaultDate(this.defaultDate);
+    if (parsedDefaultDate) {
+      this.currentMonth = parsedDefaultDate;
     } else if (this.allowedDates && this.allowedDates.length > 0) {
-      // Use first allowed date if available and not disabled
-      const firstAllowedDate = this.parseInputDate(this.allowedDates[0]);
-      if (firstAllowedDate && !this.isDateDisabled(firstAllowedDate)) {
-        this.currentMonth = new Date(firstAllowedDate.getFullYear(), firstAllowedDate.getMonth());
-      } else {
-        this.currentMonth = new Date(now);
-      }
+      this.currentMonth = this.getFirstAvailableAllowedMonth() ?? now;
     } else {
-      // Check if current month has any non-disabled days
-      const isCurrentMonthFullyDisabled = this.isMonthFullyDisabled(now.getFullYear(), now.getMonth());
-
-      if (isCurrentMonthFullyDisabled) {
-        // Try to find first month with non-disabled dates in the year
-        let foundValidMonth = false;
-        for (let i = 1; i < 12; i++) {
-          const testDate = new Date(now.getFullYear(), now.getMonth() + i, 1);
-          if (!this.isMonthFullyDisabled(testDate.getFullYear(), testDate.getMonth())) {
-            this.currentMonth = new Date(testDate.getFullYear(), testDate.getMonth());
-            foundValidMonth = true;
-            break;
-          }
+      let candidateMonth = now;
+      if (this.disabledDates && this.disabledDates.length > 0) {
+        let limit = 12; // Prevent infinite loop by limiting to 12 months of searching
+        while (this.isMonthFullyDisabled(candidateMonth.getFullYear(), candidateMonth.getMonth()) && limit > 0) {
+          candidateMonth = new Date(candidateMonth.getFullYear(), candidateMonth.getMonth() + 1, 1);
+          limit--;
         }
-        if (!foundValidMonth) {
-          // If no valid month found, use current month anyway
-          this.currentMonth = new Date(now);
-        }
-      } else {
-        this.currentMonth = new Date(now);
       }
+
+      this.currentMonth = candidateMonth;
     }
 
     this.processDateValue(this.value, true);
@@ -978,6 +964,52 @@ export class TkDatePicker {
     }
 
     return true; // All days in the month are disabled
+  }
+
+  private parseDefaultDate(value?: string): Date | null {
+    if (!value) return null;
+
+    const now = new Date();
+    const delimiters = ['.', '/', '_', '-'];
+    const delimiterRegex = new RegExp(`[${delimiters.join('')}]`);
+    const parts = value.trim().split(delimiterRegex);
+    if (parts.length === 2) {
+      const [first, second] = parts;
+      if (/^\d{4}$/.test(first) && /^\d{2}$/.test(second)) {
+        // yyyy-MM
+        const year = Number.parseInt(first, 10);
+        const month = Number.parseInt(second, 10);
+        if (month >= 1 && month <= 12) return new Date(year, month - 1, 1);
+      } else if (/^\d{2}$/.test(first) && /^\d{4}$/.test(second)) {
+        // MM-yyyy
+        const month = Number.parseInt(first, 10);
+        const year = Number.parseInt(second, 10);
+        if (month >= 1 && month <= 12) return new Date(year, month - 1, 1);
+      }
+      return null;
+    }
+
+    // (yyyy)
+    if (parts.length === 1 && /^\d{4}$/.test(parts[0])) {
+      const year = Number.parseInt(parts[0], 10);
+      return new Date(year, now.getMonth(), 1);
+    }
+
+    //  (MM)
+    if (parts.length === 1 && /^\d{2}$/.test(parts[0])) {
+      const month = Number.parseInt(parts[0], 10);
+      if (month >= 1 && month <= 12) return new Date(now.getFullYear(), month - 1, 1);
+    }
+
+    return null;
+  }
+
+  private getFirstAvailableAllowedMonth(): Date | null {
+    if (!this.allowedDates?.length) return null;
+    const parsedAllowedDates = this.allowedDates.map(date => this.parseInputDate(date)).filter((date): date is Date => date !== null);
+    if (!parsedAllowedDates.length) return null;
+    const minDate = parsedAllowedDates.reduce((min, curr) => (curr.getTime() < min.getTime() ? curr : min), parsedAllowedDates[0]);
+    return new Date(minDate.getFullYear(), minDate.getMonth(), 1);
   }
 
   private formatInputValue(): string {
