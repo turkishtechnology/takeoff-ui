@@ -6,7 +6,7 @@
   gap: 0;
 
   &.open {
-    gap: var(--accordion-large-gap);
+    gap: var(--accordion-base-content-gap);
   }
 
   .header {
@@ -14,8 +14,6 @@
     align-items: center;
     cursor: pointer;
     color: var(--text-darkest);
-    border-radius: var(--accordion-base-radius);
-    padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
 
     &:hover {
       background: var(--background-lightest) !important;
@@ -23,10 +21,6 @@
 
     .tk-accordion-item-icon-collapse {
       color: var(--primary-base);
-    }
-
-    &:has(.tk-accordion-item-icon) {
-      gap: var(--accordion-base-gap);
     }
   }
 
@@ -84,9 +78,18 @@
   }
 
   &.base {
+    &.open {
+      gap: var(--accordion-base-content-gap);
+    }
     .header {
       font-size: var(--desktop-body-s-size);
       line-height: var(--desktop-body-s-line-height);
+      padding: var(--accordion-base-v-padding) var(--accordion-base-h-padding);
+      border-radius: var(--accordion-base-radius);
+
+      &:has(.tk-accordion-item-icon) {
+        gap: var(--accordion-base-gap);
+      }
     }
     .content {
       font-size: var(--desktop-body-xs-size);
@@ -95,9 +98,18 @@
   }
 
   &.large {
+    &.open {
+      gap: var(--accordion-large-gap);
+    }
     .header {
       font-size: var(--desktop-body-m-size);
       line-height: var(--desktop-body-m-line-height);
+      padding: var(--accordion-large-v-padding) var(--accordion-large-h-padding);
+      border-radius: var(--accordion-large-radius);
+
+      &:has(.tk-accordion-item-icon) {
+        gap: var(--accordion-large-gap);
+      }
     }
     .content {
       font-size: var(--desktop-body-s-size);

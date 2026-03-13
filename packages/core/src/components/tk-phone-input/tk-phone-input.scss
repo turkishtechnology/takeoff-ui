@@ -137,7 +137,7 @@
     }
   }
 
-  &.tk-phone-input-large {
+  &.tk-phone-input-container-large {
     font-size: var(--desktop-label-l-size);
     line-height: var(--desktop-label-l-line-height);
     .tk-phone-input-wrapper {
@@ -153,7 +153,7 @@
     }
   }
 
-  &.tk-phone-input-base {
+  &.tk-phone-input-container-base {
     font-size: var(--desktop-label-m-base-size);
     line-height: var(--desktop-label-m-base-line-height);
     .tk-phone-input-wrapper {
@@ -169,7 +169,7 @@
     }
   }
 
-  &.tk-phone-input-small {
+  &.tk-phone-input-container-small {
     font-size: var(--desktop-label-s-size);
     line-height: var(--desktop-label-s-line-height);
     .tk-phone-input-wrapper {

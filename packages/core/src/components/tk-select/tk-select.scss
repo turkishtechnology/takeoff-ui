@@ -25,6 +25,12 @@ tk-select {
       gap: 6px;
       @include takeoff-scrollbar;
 
+      .dropdown-item-top {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
       .dropdown-group {
         display: flex;
         flex-direction: column;
