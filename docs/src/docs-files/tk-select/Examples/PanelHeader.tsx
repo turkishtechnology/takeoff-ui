@@ -11,7 +11,7 @@ const PanelHeader = () => {
     { value: "other", label: "Other" },
   ]}
   panelTopHtml={() => {
-    return \`<div style="display: flex; align-items:center; gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
+    return \`<div style="display: flex; align-items:center; background-color: var(--background-lightest); gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
               <tk-icon icon="person"></tk-icon>
               <span style="font-size:14px">Choose your gender</span>
             </div>\`;
@@ -34,7 +34,9 @@ const PanelHeader = () => {
     tkButton.addEventListener('tk-click', () => {
       setSecondValue('male');
     });
+    tkButton.fullWidth = true;
     div.style.justifySelf = 'center';
+    div.style.width = '100%';
     div.style.padding = '2px';
     div.appendChild(tkButton);
     return div;
@@ -52,7 +54,7 @@ const PanelHeader = () => {
     { value: 'other', label: 'Other' },
   ]"
   :panelTopHtml="() => {
-    return \`<div style="display: flex; align-items:center; gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
+    return \`<div style="display: flex; align-items:center; background-color: var(--background-lightest); gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
               <tk-icon icon="person"></tk-icon>
               <span style="font-size:14px">Choose your gender</span>
             </div>\`;
@@ -73,7 +75,9 @@ const PanelHeader = () => {
     tkButton.addEventListener('tk-click', () => {
       setSecondValue('male');
     });
+    tkButton.fullWidth = true;
     div.style.justifySelf = 'center';
+    div.style.width = '100%';
     div.style.padding = '2px';
     div.appendChild(tkButton);
     return div;
@@ -96,7 +100,7 @@ const PanelHeader = () => {
           { value: 'other', label: 'Other' },
         ]}
         panelTopHtml={() => {
-          return `<div style="display: flex; align-items:center; gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
+          return `<div style="display: flex; align-items:center; background-color: var(--background-lightest); gap:4px; padding: 10px 10px; border: 1px solid var(--border-light, #E1E4EA); border-radius: 8px;">
               <tk-icon icon="person"></tk-icon>
               <span style="font-size:14px">Choose your gender</span>
             </div>`;
@@ -119,7 +123,9 @@ const PanelHeader = () => {
           tkButton.addEventListener('tk-click', () => {
             setSecondValue('male');
           });
+          tkButton.fullWidth = true;
           div.style.justifySelf = 'center';
+          div.style.width = '100%';
           div.style.padding = '2px';
           div.appendChild(tkButton);
           return div;

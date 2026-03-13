@@ -123,6 +123,7 @@ export class TkBadge implements ComponentInterface {
       'icon-only': this.icon && !this.label && !this.dot && !hasMultipleIcons,
       'dot': this.dot,
       'count': isCountOnly,
+      [`icon-${this.iconPosition}`]: !!this.icon && !this.dot,
     });
 
     // Handle icon rendering using utility function

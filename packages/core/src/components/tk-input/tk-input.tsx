@@ -524,11 +524,12 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  private handleClearButtonClick(e) {
+  private handleClearButtonClick = (e: Event) => {
+    if (this.readonly || this.disabled) return;
     e.stopPropagation();
     this.handleFormReset();
     this.tkClearClick.emit();
-  }
+  };
 
   private handleClearButtonKeyDown = (e: KeyboardEvent) => {
     // Make clear button accessible via Space and Enter keys
@@ -778,16 +779,14 @@ export class TkInput implements ComponentInterface {
           {this.renderInput()}
           {this.loading && <tk-spinner size="xxsmall"></tk-spinner>}
           {showClearButton && (
-            <tk-button
-              variant="neutral"
-              type="text"
-              icon="close"
-              size="small"
-              onTk-click={e => this.handleClearButtonClick(e)}
-              onKeyDown={this.handleClearButtonKeyDown}
-              class="tk-input-clear-button"
-              disabled={this.disabled}
-            ></tk-button>
+            <tk-icon
+              {...getIconElementProps('close', {
+                class: classNames('tk-input-clear-button clickable', { disabled: this.disabled || this.readonly }),
+                onClick: this.handleClearButtonClick,
+                onKeyDown: this.handleClearButtonKeyDown,
+                tabindex: this.disabled || this.readonly ? -1 : 0,
+              })}
+            />
           )}
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
