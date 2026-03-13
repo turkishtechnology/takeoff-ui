@@ -16,7 +16,7 @@ import { applyStyles } from '../../utils/style-utils';
  */
 @Component({
   tag: 'tk-phone-input',
-  styleUrls: ['tk-phone-input.scss', 'flag.scss'],
+  styleUrls: ['tk-phone-input.scss'],
   formAssociated: true,
 })
 export class TkPhoneInput implements ComponentInterface {
@@ -583,7 +583,12 @@ export class TkPhoneInput implements ComponentInterface {
    */
   render() {
     return (
-      <div class={classNames('tk-phone-input-container', `tk-phone-input-${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+      <div
+        class={classNames('tk-phone-input-container', `tk-phone-input-container-${this.size}`)}
+        aria-invalid={this.invalid}
+        aria-disabled={this.disabled}
+        aria-readonly={this.readonly}
+      >
         {this.renderLabel()}
         <div class="tk-phone-input-wrapper">
           {this.renderCountrySelector()}

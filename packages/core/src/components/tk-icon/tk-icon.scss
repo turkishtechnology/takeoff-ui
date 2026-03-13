@@ -3,48 +3,56 @@ tk-icon {
 }
 
 .tk-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  &[class*='material-symbols'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+  }
+
+  &.tk-icon-xxsmall {
+    font-size: var(--sign-xxsmall-icon-size);
+  }
 
   &.tk-icon-xsmall {
-    font-size: var(--size-xs);
+    font-size: var(--sign-xsmall-icon-size);
   }
 
   &.tk-icon-small {
-    font-size: var(--size-sm);
+    font-size: var(--sign-small-icon-size);
   }
 
   &.tk-icon-base {
-    font-size: var(--size-base);
+    font-size: var(--sign-base-icon-size);
   }
 
   &.tk-icon-medium {
-    font-size: var(--size-xl);
+    font-size: var(--sign-base-icon-size);
   }
 
   &.tk-icon-large {
-    font-size: var(--size-2xl);
+    font-size: var(--sign-large-icon-size);
   }
 
   &.tk-icon-xlarge {
-    font-size: var(--size-3xl);
+    font-size: var(--sign-xlarge-icon-size);
   }
 
   &.tk-icon-xxlarge {
-    font-size: var(--size-4xl);
+    font-size: var(--sign-2xlarge-icon-size);
   }
 
   &.tk-icon-primary {
-    color: var(--primary-dark);
+    color: var(--primary-base);
   }
 
   &.tk-icon-secondary {
-    color: var(--secondary-dark);
+    color: var(--secondary-base);
   }
 
   &.tk-icon-neutral {
-    color: var(--background-dark);
+    color: var(--background-base);
   }
 
   &.tk-icon-info {
@@ -69,47 +77,64 @@ tk-icon {
 
   &.tk-icon-sign {
     background-color: var(--background-lightest);
+    border: 1px solid;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &.tk-icon-xxsmall {
+      width: calc(var(--sign-xxsmall-icon-size) + var(--sign-xxsmall-h-padding) * 2);
+      height: calc(var(--sign-xxsmall-icon-size) + var(--sign-xxsmall-v-padding) * 2);
+      border-radius: var(--sign-xxsmall-radius);
+      padding: var(--sign-xxsmall-v-padding) var(--sign-xxsmall-h-padding);
+    }
 
     &.tk-icon-xsmall {
-      border: 1px solid;
-      border-radius: var(--radius-xs);
-      padding: 1px;
+      width: calc(var(--sign-xsmall-icon-size) + var(--sign-xsmall-h-padding) * 2);
+      height: calc(var(--sign-xsmall-icon-size) + var(--sign-xsmall-v-padding) * 2);
+      border-radius: var(--sign-xsmall-radius);
+      padding: var(--sign-xsmall-v-padding) var(--sign-xsmall-h-padding);
     }
 
     &.tk-icon-small {
-      border: 1px solid;
-      border-radius: var(--radius-s);
-      padding: 2px;
+      width: calc(var(--sign-small-icon-size) + var(--sign-small-h-padding) * 2);
+      height: calc(var(--sign-small-icon-size) + var(--sign-small-v-padding) * 2);
+      border-radius: var(--sign-small-radius);
+      padding: var(--sign-small-v-padding) var(--sign-small-h-padding);
     }
 
     &.tk-icon-base {
-      border: 1px solid;
-      border-radius: var(--radius-m-base);
-      padding: 4px;
+      width: calc(var(--sign-base-icon-size) + var(--sign-base-h-padding) * 2);
+      height: calc(var(--sign-base-icon-size) + var(--sign-base-v-padding) * 2);
+      border-radius: var(--sign-base-radius);
+      padding: var(--sign-base-v-padding) var(--sign-base-h-padding);
     }
 
     &.tk-icon-medium {
-      border: 1px solid;
-      border-radius: var(--radius-m-base);
-      padding: 4px;
+      width: calc(var(--sign-base-icon-size) + var(--sign-base-h-padding) * 2);
+      height: calc(var(--sign-base-icon-size) + var(--sign-base-v-padding) * 2);
+      border-radius: var(--sign-base-radius);
+      padding: var(--sign-base-v-padding) var(--sign-base-h-padding);
     }
 
     &.tk-icon-large {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 6px;
+      width: calc(var(--sign-large-icon-size) + var(--sign-large-h-padding) * 2);
+      height: calc(var(--sign-large-icon-size) + var(--sign-large-v-padding) * 2);
+      border-radius: var(--sign-large-radius);
+      padding: var(--sign-large-v-padding) var(--sign-large-h-padding);
     }
 
     &.tk-icon-xlarge {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 6px;
+      width: calc(var(--sign-xlarge-icon-size) + var(--sign-xlarge-h-padding) * 2);
+      height: calc(var(--sign-xlarge-icon-size) + var(--sign-xlarge-v-padding) * 2);
+      border-radius: var(--sign-xlarge-radius);
+      padding: var(--sign-xlarge-v-padding) var(--sign-xlarge-h-padding);
     }
 
     &.tk-icon-xxlarge {
-      border: 1px solid;
-      border-radius: var(--radius-l);
-      padding: 8px;
+      width: calc(var(--sign-2xlarge-icon-size) + var(--sign-2xlarge-h-padding) * 2);
+      height: calc(var(--sign-2xlarge-icon-size) + var(--sign-2xlarge-v-padding) * 2);
+      border-radius: var(--sign-2xlarge-radius);
+      padding: var(--sign-2xlarge-v-padding) var(--sign-2xlarge-h-padding);
     }
 
     &.tk-icon-primary {

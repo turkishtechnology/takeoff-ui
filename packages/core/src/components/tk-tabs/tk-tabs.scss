@@ -33,12 +33,11 @@
           /* 142.857% */
         }
       }
-
-      .tk-tabs-item-close-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
-      }
+    }
+    .tk-tabs-item-add-icon {
+      cursor: pointer;
+      align-self: center;
+      margin: 4px;
     }
   }
 
@@ -51,12 +50,6 @@
       .tab-header {
         padding: var(--tabs-items-xxsmall-v-padding) var(--tabs-items-xxsmall-h-padding);
         gap: var(--tabs-items-xxsmall-tab-content-gap);
-
-        .tk-tabs-item-icon {
-          font-size: var(--tabs-items-xxsmall-icon-size);
-          width: var(--tabs-items-xxsmall-icon-size);
-          height: var(--tabs-items-xxsmall-icon-size);
-        }
 
         .tk-tabs-item-label-container {
           gap: var(--tabs-items-xxsmall-tab-label-gap);
@@ -82,12 +75,6 @@
         padding: var(--tabs-items-xsmall-v-padding) var(--tabs-items-xsmall-h-padding);
         gap: var(--tabs-items-xsmall-tab-content-gap);
 
-        .tk-tabs-item-icon {
-          font-size: var(--tabs-items-xsmall-icon-size);
-          width: var(--tabs-items-xsmall-icon-size);
-          height: var(--tabs-items-xsmall-icon-size);
-        }
-
         .tk-tabs-item-label-container {
           gap: var(--tabs-items-xsmall-tab-label-gap);
           .tk-tabs-item-label {
@@ -112,12 +99,6 @@
         padding: var(--tabs-items-small-v-padding) var(--tabs-items-small-h-padding);
         gap: var(--tabs-items-small-tab-content-gap);
 
-        .tk-tabs-item-icon {
-          font-size: var(--tabs-items-small-icon-size);
-          width: var(--tabs-items-small-icon-size);
-          height: var(--tabs-items-small-icon-size);
-        }
-
         .tk-tabs-item-label-container {
           gap: var(--tabs-items-small-tab-label-gap);
         }
@@ -138,12 +119,6 @@
       .tab-header {
         padding: var(--tabs-items-base-v-padding) var(--tabs-items-base-h-padding);
         gap: var(--tabs-items-base-tab-content-gap);
-
-        .tk-tabs-item-icon {
-          font-size: var(--tabs-items-base-icon-size);
-          width: var(--tabs-items-base-icon-size);
-          height: var(--tabs-items-base-icon-size);
-        }
 
         .tk-tabs-item-label-container {
           gap: var(--tabs-items-base-tab-label-gap);
@@ -166,12 +141,6 @@
         padding: var(--tabs-items-large-v-padding) var(--tabs-items-large-h-padding);
         gap: var(--tabs-items-large-tab-content-gap);
 
-        .tk-tabs-item-icon {
-          font-size: var(--tabs-items-large-icon-size);
-          width: var(--tabs-items-large-icon-size);
-          height: var(--tabs-items-large-icon-size);
-        }
-
         .tk-tabs-item-label-container {
           gap: var(--tabs-items-large-tab-label-gap);
         }
@@ -189,20 +158,6 @@
     .tab-headers {
       flex-direction: row;
       align-items: center;
-
-      .tab-header {
-        .tk-tabs-item-close-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
-      }
-
-      .tk-tabs-item-add-icon {
-        font-size: 18px;
-        width: 16px;
-        height: 16px;
-      }
 
       &.spread .tab-header {
         flex: 1 0 auto;
@@ -237,14 +192,8 @@
         border-left: var(--spacing-px) solid var(--border-light);
         background: var(--background-lightest);
 
+        &.active,
         &:hover {
-          color: var(--text-darkest);
-        }
-
-        &.active {
-          border-top: var(--spacing-px) solid var(--border-light);
-          border-right: var(--spacing-px) solid var(--border-light);
-          border-left: var(--spacing-px) solid var(--border-light);
           background: var(--static-light);
           position: relative;
         }
@@ -288,13 +237,8 @@
         &:only-of-type {
           border-radius: 8px;
         }
-
+        &.active,
         &:hover {
-          color: var(--text-darkest);
-          background: var(--background-lightest);
-        }
-
-        &.active {
           background: var(--background-lightest);
         }
       }
@@ -334,13 +278,6 @@
 
     .tab-headers {
       flex-direction: column;
-
-      .tk-tabs-item-add-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        margin: 0 auto;
-      }
     }
 
     .tab-content {
@@ -371,14 +308,8 @@
         background: var(--background-lightest);
         right: -1px;
 
+        &.active,
         &:hover {
-          color: var(--text-darkest);
-        }
-
-        &.active {
-          border-top: var(--spacing-px) solid var(--border-light);
-          border-bottom: var(--spacing-px) solid var(--border-light);
-          border-left: var(--spacing-px) solid var(--border-light);
           background: var(--static-light);
           position: relative;
         }
@@ -422,11 +353,7 @@
           border-radius: 8px;
         }
 
-        &:hover {
-          color: var(--text-darkest);
-          background: var(--background-lightest);
-        }
-
+        &:hover,
         &.active {
           background: var(--background-lightest);
         }
