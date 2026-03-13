@@ -98,6 +98,10 @@ alanları kullanır:
 | `angularCode` | Evet    | Aynı örneğin Angular implementasyon kodu (string)              |
 | `Example`     | Hayır   | Daha uzun / karmaşık senaryolar için ek bileşen                |
 
+Return type olarak kesinlikle featureDemo'ya dönmelidir. FeatureDemo içerisinde:
+(demo veya Example), reactCode, vueCode ve angularCode alanlarının tümü
+kullanılarak gösterilmelidir.
+
 ### Örnek TSX dosyası
 
 Aşağıda `tk-avatar` bileşeni için bir `Sizes.tsx` örneği bulunmaktadır:
