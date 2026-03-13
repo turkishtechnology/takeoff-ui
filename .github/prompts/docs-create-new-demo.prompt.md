@@ -35,9 +35,13 @@ Bu bilgiler netleştikten sonra aşağıdaki adımlara göre çıktı üret.
 
 ## Yapılacak işler
 
-`docs-structure.instructions.md` kurallarına uygun olarak, aşağıdaki çıktıları üret:
+`docs-structure.instructions.md` kurallarına uygun olarak, verilen örneklerle
+paralel şekilde aşağıdaki çıktıları üret:
 
-1. `docs/src/docs-files/tk-{{componentName}}/Examples/` altında, `{{feature}}` özelliğini gösteren yeni bir TSX demo dosyası tasarla.
-2. İlgili `tk-{{componentName}}/{{componentName}}PlaygroundConfig.json` dosyasına, `{{feature}}` için yeni bir demo girdisi ekle.
-3. `docs/src/docs-files/tk-{{componentName}}/body.mdx` içinde bu yeni demoyu, `{{feature}}` özelliğini açıklayan kısa bir metin ile birlikte ekle.
-4. `generate-mdx` komutunun build sırasında otomatik çalıştığını ve `head.mdx` ile `api.mdx` dosyalarının **elle düzenlenmemesi** gerektiğini hatırlat.
+1. `docs/src/docs-files/tk-{{componentName}}/Examples/` altında, `{{feature}}`
+   özelliğini gösteren yeni bir TSX demo dosyası tasarla, dosya yapısını doğru
+   kurguladığından emin ol.
+2. `docs/src/docs-files/tk-{{componentName}}/body.mdx` içinde bu yeni demoyu,
+   `{{feature}}` özelliğini açıklayan kısa bir metin ile birlikte ekle.
+3. `generate-mdx` komutunun build sırasında otomatik çalıştığını ve `head.mdx`
+   ile `api.mdx` dosyalarının **elle düzenlenmemesi** gerektiğini hatırlat.
