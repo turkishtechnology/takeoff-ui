@@ -66,7 +66,7 @@ dosyalar bulunur:
 
 - **Kullanım örnekleri**: Bileşenin farklı kullanım senaryolarını gösteren
   örnekler. Bu örnekler `Examples` klasöründeki TSX dosyalarından import edilir
-  ve `body.mdx` içinde kullanılır.
+  ve `body.mdx` içinde doğrudan çağrılır; `<FeatureDemo>` kullanılmaz.
 
 - **Açıklamalar**: Bileşenin özellikleri, kullanım ipuçları ve dikkat edilmesi
   gereken noktalar burada yer alır.
@@ -85,18 +85,36 @@ body.mdx dosyası şu sırada yapılandırılır:
 - Import'ların ardından `### Playground` bölümü gelir; her zaman ilk içerik
   bölümüdür.
 - Playground'dan sonra kullanım örnekleri sıralanır. Genel sıralama: Basic →
-  Sizes → Variants → diğer özellikler.
+  (Her bileşende ortak olan prop'ların örnekleri) → Diğer prop'lar → Daha
+  karmaşık senaryolar → Alt bileşen örnekleri.
 
 ## Examples içindeki TSX dosyaları
 
 `docs/src/docs-files/tk-[component-name]/Examples/*.tsx` dosyaları, aşağıdaki
 alanları kullanır:
 
-| Alan          | Zorunlu | Açıklama                                                       |
-| ------------- | ------- | -------------------------------------------------------------- |
-| `featureDemo` | Evet    | Sayfada render edilen ana React bileşeni                       |
-| `demo`        | Hayır   | Kısa, odaklı kullanım örneği bileşeni                          |
-| `reactCode`   | Evet    | `Demo`daki örneğin React'ta çalışacak halinin string karşılığı |
-| `vueCode`     | Evet    | Aynı örneğin Vue implementasyon kodu (string)                  |
-| `angularCode` | Evet    | Aynı örneğin Angular implementasyon kodu (string)              |
-| `Example`     | Hayır   | Daha uzun / karmaşık senaryolar için ek bileşen                |
+| Alan          | Zorunlu | Açıklama                                                    |
+| ------------- | ------- | ----------------------------------------------------------- |
+| `featureDemo` | Evet    | Sayfada render edilen ana React bileşeni                    |
+| `demo`        | Hayır   | Kısa, odaklı kullanım örneği bileşeni (`@takeoff-ui/react`) |
+| `reactCode`   | Evet    | `demo`'daki örneğin React karşılığı (string)                |
+| `vueCode`     | Evet    | Aynı örneğin Vue karşılığı (string)                         |
+| `angularCode` | Evet    | Aynı örneğin Angular karşılığı (string)                     |
+| `Example`     | Hayır   | Daha uzun / karmaşık senaryolar için ek bileşen             |
+
+- Default export zorunludur.
+- Harici hook (`useState`, `useEffect` vb.) gerekirse eklenebilir.
+- `angularCode` içinde camelCase prop'lar dash-case'e dönüştürülür
+  (`badgeStatus` → `badge-status`, `[dot]="true"` gibi binding söz dizimi).
+- `featureDemo`ya return ederek tüm örnekler `demo`, `reactCode`, `vueCode` ve
+  `angularCode` alanlarını içermelidir.
+
+## Dosya isimlendirme kuralları
+
+| Dosya                          | Format                             | Örnek                          |
+| ------------------------------ | ---------------------------------- | ------------------------------ |
+| PlaygroundConfig JSON          | `[camelCase]PlaygroundConfig.json` | `dialogPlaygroundConfig.json`  |
+| Example TSX                    | PascalCase, prop veya özellik adı  | `Variant.tsx`, `FullWidth.tsx` |
+| Component MDX                  | PascalCase                         | `Button.mdx`                   |
+| docs-files klasörü             | `tk-[dash-case]`                   | `tk-button`, `tk-color-picker` |
+| Alt bileşen docs-files klasörü | `tk-[parent]-[child]`              | `tk-accordion-item`            |
