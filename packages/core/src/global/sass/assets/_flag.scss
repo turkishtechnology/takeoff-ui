@@ -28,7 +28,6 @@ tk-phone-input {
     border-radius: 100%;
     background-position-x: 50%;
     align-self: center;
-    background-position-y: -1%;
 
     &.flag-ad {
       background-position-y: 0%;
@@ -792,6 +791,13 @@ tk-phone-input {
     }
     &.flag-zw {
       background-position-y: 99.991217%;
+    }
+
+    &.flag-none {
+      background: var(--background-sub-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

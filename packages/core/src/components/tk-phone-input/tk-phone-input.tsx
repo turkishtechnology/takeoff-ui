@@ -316,7 +316,7 @@ export class TkPhoneInput implements ComponentInterface {
    * Get the flag class based on the country object.
    */
   private getFlagClass(country: ICountry): string {
-    return classNames('flag', { [`flag-${country.id.toLowerCase()}`]: !!country.dialCode });
+    return classNames('flag', country?.dialCode ? `flag-${country?.id.toLowerCase()}` : 'flag-none');
   }
 
   /**
@@ -482,7 +482,7 @@ export class TkPhoneInput implements ComponentInterface {
       <button class="tk-phone-input-dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
           <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
-          {!this.hideFlag && <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />}
+          {!this.hideFlag && this.renderFlag(this.selectedCountry)}
           {this.selectedCountry.dialCode && <span class="tk-phone-input-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
@@ -522,7 +522,7 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
+            {!this.hideFlag && this.renderFlag(country)}
             {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
             {country.dialCode && <span class="tk-phone-input-menu-dial-id">{country.dialCode}</span>}
           </li>
@@ -576,6 +576,20 @@ export class TkPhoneInput implements ComponentInterface {
     }
 
     return hint;
+  }
+
+  /**
+   * Render the flag element for a country. Shows a close icon for countries without a dial code.
+   */
+  private renderFlag(country: ICountry) {
+    const flagClass = this.getFlagClass(country);
+    return country.dialCode ? (
+      <div class={flagClass} aria-label={`${country.label} flag`} />
+    ) : (
+      <div class={flagClass}>
+        <tk-icon {...getIconElementProps('close', { color: 'var(--static-white)' })} />
+      </div>
+    );
   }
 
   /**
