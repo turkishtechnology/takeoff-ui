@@ -31,10 +31,11 @@ Bu dosyada aşağıdaki bölümler bulunur:
 - **Alt bileşen API'leri**: Alt bileşenleri olan bileşenlerde kullanılır. Alt
   bileşenlerin API'ları burada yer alır.
 
-### `generate-mdx` komutu
+### `generate-docs` komutu
 
 `docs/src/docs-files/tk-[component-name]/` içinde yer alan `head.mdx` ve
-`api.mdx` dosyaları otomatik olarak üretilir. Kesinlikle elle düzenlenmez.
+`api.mdx` dosyaları otomatik olarak üretilir. `head.mdx` içerisindeki açıklama
+kısmı hariç bu dosyalar kesinlikle elle düzenlenmez.
 
 ## `tk-[component-name]` klasör yapısı
 

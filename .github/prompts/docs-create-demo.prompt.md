@@ -3,25 +3,29 @@
 Mevcut bir bileşene yeni bir demo (FeatureDemo + örnek TSX) ekler veya yeni bir
 bileşenin doküman iskeletini sıfırdan kurar.
 
-## Parametreler
+## Kullanıcı girdisinden çıkarım
 
-| Parametre       | Açıklama                                           |
-| --------------- | -------------------------------------------------- |
-| `componentName` | Stencil bileşen adı, ör. `tk-avatar` veya `avatar` |
-| `feature`       | Eklenecek özellik / demo adı, ör. `WithBadges`     |
+Kullanıcının mesajından aşağıdaki iki bilgi çıkarılır:
 
-## Parametre normalizasyonu
+- **componentName** — Stencil bileşen adı (ör. `tk-avatar`, `avatar`, `button`)
+- **feature** — Eklenecek özellik / demo adı (ör. `WithBadges`, `Sizes`)
 
-`componentName` değeri `tk-` prefix'i olmadan verilebilir (ör. `avatar`,
-`button`, `accordion`). Dosya yollarında kullanmadan önce aşağıdaki
-normalizasyon uygulanır:
+### Örnekler
 
-1. Değer `tk-` ile **başlamıyorsa** → başına `tk-` ekle (ör. `avatar` →
-   `tk-avatar`, `date-picker` → `tk-date-picker`).
-2. Değer zaten `tk-` ile **başlıyorsa** → olduğu gibi kullan.
+| Kullanıcı mesajı                                | componentName   | feature             |
+| ----------------------------------------------- | --------------- | ------------------- |
+| "avatar bileşenine badge demo'su ekle"          | `tk-avatar`     | `WithBadges`        |
+| "tk-button'a size varyantlarını belgele"        | `tk-button`     | `Sizes`             |
+| "datepicker için yeni doküman iskeleti oluştur" | `tk-datepicker` | _(kullanıcıya sor)_ |
 
-Normalizasyon sonrası elde edilen değer, belgenin geri kalanındaki tüm
-`{{componentName}}` yer tutucularında kullanılır.
+- `feature` mesajdan net çıkarılamıyorsa kullanıcıya sorulur.
+- `componentName` mesajdan net çıkarılamıyorsa kullanıcıya sorulur.
+
+### componentName normalizasyonu
+
+Değer `tk-` ile başlamıyorsa başına `tk-` eklenir (ör. `avatar` → `tk-avatar`).
+Zaten `tk-` ile başlıyorsa olduğu gibi kullanılır. Belgenin geri kalanındaki tüm
+`{{componentName}}` yer tutucuları bu normalize değeri ifade eder.
 
 ## Bağlam toplama
 
@@ -31,21 +35,14 @@ Kod yazmaya başlamadan önce bileşen kaynağı okunur:
 
 ## Ön kontrol — ne yapılacağına karar ver
 
-Aşağıdaki kontroller sırayla yapılır:
+### Kontrol 1 — Doküman dosyası var mı?
 
-### Kontrol 1 — Doküman dosyaları var mı?
+`docs/docs/Components/{{ComponentName}}.mdx` dosyasını kontrol et (PascalCase;
+ör. `Avatar.mdx`).
 
-Aşağıdaki iki yolu kontrol et:
-
-1. `docs/docs/Components/{{ComponentName}}.mdx` (ana sayfa, PascalCase; ör.
-   `Avatar.mdx`)
-2. `docs/src/docs-files/{{componentName}}/body.mdx`
-
-- **İkisi de yoksa** → Bileşen ilk kez belgeleniyor demektir. "Sıfırdan bileşen
-  iskeleti kur" bölümüne git.
-- **Ana sayfa var ama body.mdx yoksa** → "Sıfırdan bileşen iskeleti kur"
-  bölümünün 2. adımından devam et.
-- **İkisi de varsa** → Kontrol 2'ye geç.
+- **Yoksa** → Bileşen ilk kez belgeleniyor. "Sıfırdan bileşen iskeleti kur"
+  bölümüne git.
+- **Varsa** → Kontrol 2'ye geç.
 
 ### Kontrol 2 — Feature ile eşleşen örnek TSX var mı?
 
@@ -79,7 +76,7 @@ Kurallar:
 `docs/src/docs-files/{{componentName}}/Examples/{{feature}}.tsx` dosyası
 oluşturulur.
 
-Her örnek TSX dosyası FeatureDemo bileşenini kendi içinde kullanır.
+Her örnek TSX dosyası `FeatureDemo` bileşenini kendi içinde kullanır.
 
 Kurallar:
 
@@ -93,19 +90,6 @@ Kurallar:
 
 ### Adım 2 — body.mdx'i güncelle
 
-body.mdx dosyasının üst kısmına import satırı, uygun sıraya başlık ve bileşen
-çağrısı eklenir.
-
-```mdx
-import {{feature}} from './Examples/{{feature}}';
-
-## Alt Başlık
-
-Özelliğin kısa açıklaması.
-
-<{{feature}} />
-```
-
 - Import satırı, mevcut import'ların hemen altına eklenir.
 - Başlık + açıklama + bileşen çağrısı, mevcut demoların altına eklenir.
 - body.mdx'te `<FeatureDemo>` kullanılmaz; TSX dosyası doğrudan çağrılır.
@@ -114,16 +98,29 @@ import {{feature}} from './Examples/{{feature}}';
 
 ## Sıfırdan bileşen iskeleti kur
 
-`body.mdx` dosyası yoksa bileşen ilk kez belgeleniyor demektir. Bu durumda
-sırasıyla:
+Sırasıyla:
 
-1. `docs/src/docs-files/{{componentName}}/` klasörünü oluştur.
-2. `body.mdx` dosyasını oluştur; ilk satıra bileşeni tanıtan bir paragraf yaz.
-3. `Examples/` alt klasörünü oluştur.
-4. İlk demo TSX dosyasını oluştur ("Yeni örnek ekle" → Adım 1).
-5. body.mdx'e import, başlık ve bileşen çağrısını ekle ("Yeni örnek ekle" → Adım
-   2).
-6. PlaygroundConfig dosyasını oluştur. Referans →
+1. `docs/docs/Components/{{ComponentName}}.mdx` ana sayfa dosyasını oluştur.
+
+2. `docs/src/docs-files/{{componentName}}/` klasörünü oluştur.
+
+3. `docs/` dizininde `pnpm run generate-docs` komutunu çalıştır; `head.mdx` ve
+   `api.mdx` otomatik oluşur. Ardından `head.mdx` içindeki bileşen açıklaması
+   paragrafını bileşenin amacına uygun şekilde doldur.
+
+4. `body.mdx` dosyasını oluştur. İlk satırlarda Playground import'u ve
+   konfigürasyonu yer almalı.
+
+5. PlaygroundConfig JSON dosyasını oluştur
+   (`{{componentName}}PlaygroundConfig.json`). Referans →
    `docs/src/components/Playground/Playground.types.ts`
-7. `pnpm run generate-mdx` komutunu çalıştır; head.mdx ve api.mdx otomatik
-   oluşur.
+
+6. `Examples/` alt klasörünü oluştur.
+
+7. İlk demo TSX dosyasını oluştur — basic kullanım olmalı ("Yeni örnek ekle" →
+   Adım 1).
+
+8. body.mdx'e import, başlık ve bileşen çağrısını ekle ("Yeni örnek ekle" → Adım
+   2).
+
+9. Ana dizinde `pnpm run format` çalıştırarak formatlama yap.
