@@ -19,6 +19,8 @@ yaz.
 
 `styling` instructions'ına göre `tk-{{component-name}}.scss` dosyasını yaz.
 
+- Ortak mixinleri gerekliyse kullan.
+
 ## Adım 4: Unit Test
 
 `component-tests` instructions'ına göre `test/tk-{{component-name}}.spec.tsx`
