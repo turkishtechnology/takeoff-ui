@@ -1,6 +1,6 @@
 # New Component
 
-Component adı: `${{component-name}}`
+Component adı: `{{component-name}}`
 
 Önce `packages/core/src/components/` altında aynı işlevi karşılayan bir
 component olup olmadığını kontrol et. Varsa oluşturma, kullanıcıyı bilgilendir.
@@ -12,16 +12,16 @@ component gerekip gerekmediğine bileşenin doğasına göre karar ver.
 
 ## Adım 2: TSX Dosyası
 
-`stencil-components` instructions'ına göre `tk-${{component-name}}.tsx`
-dosyasını yaz.
+`stencil-components` instructions'ına göre `tk-{{component-name}}.tsx` dosyasını
+yaz.
 
 ## Adım 3: SCSS Dosyası
 
-`styling` instructions'ına göre `tk-${{component-name}}.scss` dosyasını yaz.
+`styling` instructions'ına göre `tk-{{component-name}}.scss` dosyasını yaz.
 
 ## Adım 4: Unit Test
 
-`component-tests` instructions'ına göre `test/tk-${{component-name}}.spec.tsx`
+`component-tests` instructions'ına göre `test/tk-{{component-name}}.spec.tsx`
 dosyasını yaz.
 
 ## Adım 5: Ek Dosyalar (gerekirse)
