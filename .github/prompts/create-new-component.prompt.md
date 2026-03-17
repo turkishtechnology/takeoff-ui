@@ -35,9 +35,3 @@ dosyasını yaz.
 
 `component-file-structure` instructions'ındaki kurallara göre `interfaces.ts`,
 `defaults.ts`, `helpers.ts` ve child component dosyalarını oluştur.
-
-## Adım 6: Doğrulama
-
-```bash
-pnpm run build
-```
