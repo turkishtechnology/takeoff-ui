@@ -17,7 +17,8 @@ Figma variable'ları kullan. Kaynak:
 
 - Component class'ları `tk-` prefix ile: `.tk-button`, `.tk-accordion`,
   `.tk-accordion-item`
-- Modifier'lar: `.tk-button--large`, `.tk-component-active`
+- Modifier'lar: `.tk-component-large`, `.tk-component-active`,
+  `.tk-component-label`
 - Shadow olmayan componentlerde class isimleri açıklayıcı olmalı (stil
   ezilmemesi için)
 
