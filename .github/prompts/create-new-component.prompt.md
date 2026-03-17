@@ -15,6 +15,11 @@ component gerekip gerekmediğine bileşenin doğasına göre karar ver.
 `stencil-components` instructions'ına göre `tk-{{component-name}}.tsx` dosyasını
 yaz.
 
+- Type oluşturmadan önce mevcutta benzer bir type var ise onu kullan.
+
+- Başta @Element() el: HTMLElement; olarak tanımla build al sonrasında
+  HTMLTk{{ComponentName}}Element olarak düzelt.
+
 ## Adım 3: SCSS Dosyası
 
 `styling` instructions'ına göre `tk-{{component-name}}.scss` dosyasını yaz.
