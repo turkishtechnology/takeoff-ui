@@ -792,5 +792,12 @@ tk-phone-input {
     &.flag-zw {
       background-position-y: 99.991217%;
     }
+
+    &.flag-none {
+      background: var(--background-sub-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
