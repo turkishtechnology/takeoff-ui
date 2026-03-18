@@ -34,8 +34,8 @@ Bu dosyada aşağıdaki bölümler bulunur:
 ### `generate-docs` komutu
 
 `docs/src/docs-files/tk-[component-name]/` içinde yer alan `head.mdx` ve
-`api.mdx` dosyaları otomatik olarak üretilir. `head.mdx` içerisindeki açıklama
-kısmı hariç bu dosyalar kesinlikle elle düzenlenmez.
+`api.mdx` dosyaları otomatik olarak üretilir. Bu dosyalar kesinlikle elle
+düzenlenmez.
 
 ## `tk-[component-name]` klasör yapısı
 
