@@ -19,13 +19,13 @@ Kullanıcının mesajından aşağıdaki iki bilgi çıkarılır:
 
 Kod yazmaya başlamadan önce bileşen kaynağı okunur:
 
-- `packages/core/src/components/{{componentName}}/{{componentName}}.tsx`
+- `packages/core/src/components/${componentName}/${componentName}.tsx`
 
 ## Ön kontrol — ne yapılacağına karar ver
 
 ### Doküman iskeleti var mı?
 
-`docs/docs/Components/{{ComponentName}}.mdx` dosyasını kontrol et (PascalCase;
+`docs/docs/Components/${ComponentName}.mdx` dosyasını kontrol et (PascalCase;
 ör. `Avatar.mdx`).
 
 - **Yoksa** → Bileşen ilk kez belgeleniyor. "Sıfırdan bileşen iskeleti kur"
@@ -34,16 +34,16 @@ Kod yazmaya başlamadan önce bileşen kaynağı okunur:
 
 ### Eşleşen örnek TSX var mı?
 
-`docs/src/docs-files/{{componentName}}/Examples/` klasörünü listele.
+`docs/src/docs-files/${componentName}/Examples/` klasörünü listele.
 
-- Aynı kavramı karşılayan bir örnek olabilir (ör. `{{feature}}` = `WithBadges`
+- Aynı kavramı karşılayan bir örnek olabilir (ör. `${feature}` = `WithBadges`
   iken `Badges.tsx` veya `Badge.tsx` zaten varsa bu dosya eşleşir).
 - **Eşleşen TSX varsa** → "Mevcut örneği güncelle" bölümüne git.
 - **Eşleşen TSX yoksa** → "Yeni örnek ekle" bölümüne git.
 
 ## Mevcut örneği güncelle
 
-`{{feature}}.tsx` zaten mevcut olduğunda yeni bir dosya oluşturulmaz. Mevcut TSX
+`${feature}.tsx` zaten mevcut olduğunda yeni bir dosya oluşturulmaz. Mevcut TSX
 dosyası açılır ve istenen değişiklik (yeni varyant, ek prop gösterimi vb.)
 dosyanın içindeki `demo`, `reactCode`, `vueCode`, `angularCode` değişkenlerine
 eklenir.
@@ -52,7 +52,7 @@ eklenir.
 
 ### Adım 1 — Örnek TSX dosyasını oluştur
 
-`docs/src/docs-files/{{componentName}}/Examples/{{feature}}.tsx` dosyası
+`docs/src/docs-files/${componentName}/Examples/${feature}.tsx` dosyası
 oluşturulur ve içi doldurulur.
 
 ### Adım 2 — body.mdx'i güncelle
@@ -61,9 +61,9 @@ oluşturulur ve içi doldurulur.
 
 Aşağıdaki adımlar sırasıyla uygulanır:
 
-1. `docs/docs/Components/{{ComponentName}}.mdx` ana sayfa dosyasını oluştur
+1. `docs/docs/Components/${ComponentName}.mdx` ana sayfa dosyasını oluştur
 
-2. `docs/src/docs-files/{{componentName}}/` klasörünü oluştur
+2. `docs/src/docs-files/${componentName}/` klasörünü oluştur
 
 3. `docs/` dizininde `pnpm run generate-docs` komutunu çalıştır; `head.mdx` ve
    `api.mdx` otomatik olarak oluşur. Ardından `head.mdx` içindeki bileşen
