@@ -22,6 +22,13 @@ Figma variable'ları kullan. Kaynak:
 - Shadow olmayan componentlerde class isimleri açıklayıcı olmalı (stil
   ezilmemesi için)
 
+## Mixinler
+
+- Ortak mixinler `packages/core/src/global/sass/mixins/` altındadır
+- Kullanım: dosyanın en üstüne `@use '../../global/sass/mixins' as *;` ekle
+- Yeni mixin eklerken `mixins/` altına `_isim.scss` dosyası oluştur ve
+  `mixins/index.scss`'e `@forward` ile ekle
+
 ## Örnek
 
 ```scss
