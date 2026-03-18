@@ -1,6 +1,6 @@
 # New Component
 
-Component adı: `{{component-name}}`
+Component adı: `${component-name}`
 
 Önce `packages/core/src/components/` altında aynı işlevi karşılayan bir
 component olup olmadığını kontrol et. Varsa oluşturma, kullanıcıyı bilgilendir.
@@ -12,23 +12,23 @@ component gerekip gerekmediğine bileşenin doğasına göre karar ver.
 
 ## Adım 2: TSX Dosyası
 
-`stencil-components` instructions'ına göre `tk-{{component-name}}.tsx` dosyasını
+`stencil-components` instructions'ına göre `tk-${component-name}.tsx` dosyasını
 yaz.
 
 - Type oluşturmadan önce mevcutta benzer bir type var ise onu kullan.
 
 - Başta @Element() el: HTMLElement; olarak tanımla build al sonrasında
-  HTMLTk{{ComponentName}}Element olarak düzelt.
+  HTMLTk${ComponentName}Element olarak düzelt.
 
 ## Adım 3: SCSS Dosyası
 
-`styling` instructions'ına göre `tk-{{component-name}}.scss` dosyasını yaz.
+`styling` instructions'ına göre `tk-${component-name}.scss` dosyasını yaz.
 
 - Ortak mixinleri gerekliyse kullan.
 
 ## Adım 4: Unit Test
 
-`component-tests` instructions'ına göre `test/tk-{{component-name}}.spec.tsx`
+`component-tests` instructions'ına göre `test/tk-${component-name}.spec.tsx`
 dosyasını yaz.
 
 ## Adım 5: Ek Dosyalar (gerekirse)
