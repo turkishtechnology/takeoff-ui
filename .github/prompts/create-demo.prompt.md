@@ -65,9 +65,7 @@ Aşağıdaki adımlar sırasıyla uygulanır:
 
 2. `docs/src/docs-files/${componentName}/` klasörünü oluştur
 
-3. `docs/` dizininde `pnpm run generate-docs` komutunu çalıştır; `head.mdx` ve
-   `api.mdx` otomatik olarak oluşur. Ardından `head.mdx` içindeki bileşen
-   açıklaması paragrafını bileşenin amacına uygun şekilde doldur.
+3. `docs/` dizininde `pnpm run generate-docs` komutunu çalıştır.
 
 4. `body.mdx` dosyasını oluştur.
 
