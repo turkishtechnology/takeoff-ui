@@ -31,8 +31,8 @@ packages/core/src/
 - **utils/**: Birden fazla component'in kullandığı metodlar (örn: icon-utils.ts)
 - **global/interfaces/**: Birden fazla component'in paylaştığı type ve
   interface'ler
-- **components/tk-[component]/interfaces.ts**: Sadece o component'e özel
-  type'lar
+- **components/tk-[component]/interfaces.ts**: Sadece o component'e özel export
+  edilen type'lar ve interface'ler
 - **components/tk-[component]/defaults.ts**: Uzun varsayılan değerler
 - **components/tk-[component]/helpers.ts**: Sadece o component'te kullanılan
   yardımcı metodlar

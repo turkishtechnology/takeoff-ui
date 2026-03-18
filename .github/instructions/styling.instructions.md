@@ -17,9 +17,17 @@ Figma variable'ları kullan. Kaynak:
 
 - Component class'ları `tk-` prefix ile: `.tk-button`, `.tk-accordion`,
   `.tk-accordion-item`
-- Modifier'lar: `.tk-button--large`, `.tk-component-active`
+- Modifier'lar: `.tk-component-large`, `.tk-component-active`,
+  `.tk-component-label`
 - Shadow olmayan componentlerde class isimleri açıklayıcı olmalı (stil
   ezilmemesi için)
+
+## Mixinler
+
+- Ortak mixinler `packages/core/src/global/sass/mixins/` altındadır
+- Kullanım: dosyanın en üstüne `@use '../../global/sass/mixins' as *;` ekle
+- Yeni mixin eklerken `mixins/` altına `_isim.scss` dosyası oluştur ve
+  `mixins/index.scss`'e `@forward` ile ekle
 
 ## Örnek
 
