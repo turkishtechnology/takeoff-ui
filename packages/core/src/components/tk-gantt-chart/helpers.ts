@@ -129,7 +129,7 @@ export function getTaskBarPosition(task: IGanttTask, minDate: Date, viewType: Ga
   const start = toDateOnly(task.startDate);
   const end = toDateOnly(task.endDate);
   const left = daysBetween(minDate, start) * dayWidth;
-  const width = Math.max(daysBetween(start, end) * dayWidth, dayWidth);
+  const width = Math.max((daysBetween(start, end) + 1) * dayWidth, dayWidth);
   return { left, width };
 }
 
@@ -139,7 +139,7 @@ export function getBarPositionFromDates(startDate: string, endDate: string, minD
   const start = toDateOnly(startDate);
   const end = toDateOnly(endDate);
   const left = daysBetween(minDate, start) * dayWidth;
-  const width = Math.max(daysBetween(start, end) * dayWidth, dayWidth);
+  const width = Math.max((daysBetween(start, end) + 1) * dayWidth, dayWidth);
   return { left, width };
 }
 

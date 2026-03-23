@@ -1,0 +1,78 @@
+import Basic from './Examples/Basic';
+import ViewType from './Examples/ViewType';
+import Indicators from './Examples/Indicators';
+import Holidays from './Examples/Holidays';
+import NestedTasks from './Examples/NestedTasks';
+import Segments from './Examples/Segments';
+import Columns from './Examples/Columns';
+import HidePanel from './Examples/HidePanel';
+import Playground from '../../components/Playground';
+import ganttChartConfigData from './ganttChartPlaygroundConfig.json';
+import { TkGanttChart } from '@takeoff-ui/react';
+
+### Playground
+
+<Playground
+  configs={[ganttChartConfigData]}
+  componentMap={{ TkGanttChart: TkGanttChart }}
+/>
+
+## Basic
+
+A basic Gantt chart with simple tasks showing name, start/end dates, and
+progress.
+
+<Basic />
+
+## View Type
+
+The `viewType` prop controls the timeline zoom level. Available options are
+`weekly`, `monthly`, `quarterly`, and `yearly`. When not set, the component
+auto-fits based on the task date range.
+
+<ViewType />
+
+## Nested Tasks
+
+Tasks can have nested `children` to create expandable sub-task hierarchies.
+Click the expand button to toggle child task visibility.
+
+<NestedTasks />
+
+## Segments
+
+A task can display multiple time segments on the same row using the `segments`
+property. Each segment has its own `startDate`, `endDate`, `label`, and
+`progress`.
+
+<Segments />
+
+## Indicators
+
+Use the `indicators` prop to render vertical lines on the timeline for important
+dates like milestones or deadlines. The `showTodayIndicator` prop automatically
+adds a today marker.
+
+<Indicators />
+
+## Holidays
+
+The `holidays` prop highlights specific dates on the timeline. Combined with
+`highlightWeekends`, non-working days are visually distinguished.
+
+<Holidays />
+
+## Columns
+
+Customise the left-side panel columns using the `columns` prop. Each column
+definition includes `field`, `header`, optional `width`, and an optional `html`
+render function.
+
+<Columns />
+
+## Hide Panel
+
+Set `hidePanel` to `true` to hide the left-side task list panel and show only
+the timeline.
+
+<HidePanel />

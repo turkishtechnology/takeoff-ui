@@ -55,8 +55,6 @@ export class TkGanttChart implements ComponentInterface {
   // ---------------------------------------------------------------------------
 
   @State() expandedIds: Set<string> = new Set();
-  @State() hoveredTask: IGanttTask | null = null;
-  @State() tooltipPosition: { x: number; y: number } | null = null;
   @State() computedViewType: GanttViewType = 'monthly';
 
   // ---------------------------------------------------------------------------
@@ -128,13 +126,13 @@ export class TkGanttChart implements ComponentInterface {
    * Custom tooltip render function. Receives the hovered task and should return
    * an HTMLElement or an HTML string.
    */
-  @Prop() customTooltip: GanttTooltipFunction;
+  @Prop() tooltipHtml: GanttTooltipFunction;
 
   /**
    * Custom task bar render function. Receives the task and should return
    * an HTMLElement or an HTML string.
    */
-  @Prop() taskBarTemplate: GanttTaskBarFunction;
+  @Prop() taskBarHtml: GanttTaskBarFunction;
 
   /**
    * Row height in pixels.
@@ -217,23 +215,6 @@ export class TkGanttChart implements ComponentInterface {
     this.tkTaskClick.emit(task);
   }
 
-  private handleTaskMouseEnter(task: IGanttTask, e: MouseEvent) {
-    this.hoveredTask = task;
-    const rect = this.el.getBoundingClientRect();
-    this.tooltipPosition = { x: e.clientX - rect.left + 12, y: e.clientY - rect.top + 12 };
-  }
-
-  private handleTaskMouseMove(e: MouseEvent) {
-    if (!this.hoveredTask) return;
-    const rect = this.el.getBoundingClientRect();
-    this.tooltipPosition = { x: e.clientX - rect.left + 12, y: e.clientY - rect.top + 12 };
-  }
-
-  private handleTaskMouseLeave() {
-    this.hoveredTask = null;
-    this.tooltipPosition = null;
-  }
-
   private handleTimelineScroll(e: Event) {
     const target = e.target as HTMLElement;
     if (this.panelRef) {
@@ -265,38 +246,37 @@ export class TkGanttChart implements ComponentInterface {
       ...(barStyle as Record<string, string>),
     };
 
-    if (this.taskBarTemplate) {
-      const content = this.taskBarTemplate(task);
-      const html = typeof content === 'string' ? content : (content as HTMLElement).outerHTML;
+    const tooltipContent = this.createTooltipContent(task);
+
+    if (this.taskBarHtml) {
+      const content = this.taskBarHtml(task);
+      const barContent = typeof content === 'string' ? <div innerHTML={content}></div> : <div ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)}></div>;
       return (
-        <div
-          class="tk-gantt-chart-task-bar tk-gantt-chart-task-bar-custom"
-          data-testid={testId}
-          style={commonStyle}
-          onClick={() => this.handleTaskClick(task)}
-          onMouseEnter={(e: MouseEvent) => this.handleTaskMouseEnter(task, e)}
-          onMouseMove={(e: MouseEvent) => this.handleTaskMouseMove(e)}
-          onMouseLeave={() => this.handleTaskMouseLeave()}
-          innerHTML={html}
-        ></div>
+        <tk-tooltip position="top" variant="dark">
+          <div slot="trigger" class="tk-gantt-chart-task-bar tk-gantt-chart-task-bar-custom" data-testid={testId} style={commonStyle} onClick={() => this.handleTaskClick(task)}>
+            {barContent}
+          </div>
+          <div slot="content">{tooltipContent}</div>
+        </tk-tooltip>
       );
     }
 
     return (
-      <div
-        class={classNames('tk-gantt-chart-task-bar', { 'tk-gantt-chart-task-bar-segment': segmentIndex != null })}
-        data-testid={testId}
-        style={commonStyle}
-        onClick={() => this.handleTaskClick(task)}
-        onMouseEnter={(e: MouseEvent) => this.handleTaskMouseEnter(task, e)}
-        onMouseMove={(e: MouseEvent) => this.handleTaskMouseMove(e)}
-        onMouseLeave={() => this.handleTaskMouseLeave()}
-      >
-        {progress != null && progress > 0 && (
-          <div class="tk-gantt-chart-task-bar-progress" data-testid={`task-progress-${testId}`} style={{ width: `${Math.min(progress, 100)}%` }}></div>
-        )}
-        <span class="tk-gantt-chart-task-bar-label">{barLabel}</span>
-      </div>
+      <tk-tooltip position="top" variant="dark">
+        <div
+          slot="trigger"
+          class={classNames('tk-gantt-chart-task-bar', { 'tk-gantt-chart-task-bar-segment': segmentIndex != null })}
+          data-testid={testId}
+          style={commonStyle}
+          onClick={() => this.handleTaskClick(task)}
+        >
+          {progress != null && progress > 0 && (
+            <div class="tk-gantt-chart-task-bar-progress" data-testid={`task-progress-${testId}`} style={{ width: `${Math.min(progress, 100)}%` }}></div>
+          )}
+          <span class="tk-gantt-chart-task-bar-label">{barLabel}</span>
+        </div>
+        <div slot="content">{tooltipContent}</div>
+      </tk-tooltip>
     );
   }
 
@@ -320,7 +300,15 @@ export class TkGanttChart implements ComponentInterface {
     );
   }
 
-  private createDefaultTooltipContent(task: IGanttTask) {
+  private createTooltipContent(task: IGanttTask) {
+    if (this.tooltipHtml) {
+      const content = this.tooltipHtml(task);
+      if (typeof content === 'string') {
+        return <div innerHTML={content}></div>;
+      }
+      return <div ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)}></div>;
+    }
+
     const startLabel = toDateOnly(task.startDate).toLocaleDateString(this.locale);
     const endLabel = toDateOnly(task.endDate).toLocaleDateString(this.locale);
     return (
@@ -496,36 +484,6 @@ export class TkGanttChart implements ComponentInterface {
     );
   }
 
-  private renderTooltip() {
-    if (!this.hoveredTask || !this.tooltipPosition) return null;
-
-    const task = this.hoveredTask;
-
-    if (this.customTooltip) {
-      const content = this.customTooltip(task);
-      const html = typeof content === 'string' ? content : (content as HTMLElement).outerHTML;
-      return (
-        <tk-tooltip header={task.name} position="top">
-          <div slot="trigger" style={{ position: 'absolute', left: `${this.tooltipPosition.x}px`, top: `${this.tooltipPosition.y}px`, width: '1px', height: '1px' }}></div>
-          <div slot="content" innerHTML={html}></div>
-        </tk-tooltip>
-      );
-    }
-
-    return (
-      <div
-        class="tk-gantt-chart-tooltip"
-        data-testid="gantt-tooltip"
-        style={{
-          left: `${this.tooltipPosition.x}px`,
-          top: `${this.tooltipPosition.y}px`,
-        }}
-      >
-        {this.createDefaultTooltipContent(task)}
-      </div>
-    );
-  }
-
   private renderEmptyState() {
     return (
       <div class="tk-gantt-chart-empty" data-testid="gantt-empty">
@@ -562,8 +520,6 @@ export class TkGanttChart implements ComponentInterface {
           {this.renderTimelineHeader(start, end, totalWidth)}
           {this.renderTimelineBody(flatRows, start, totalWidth, totalDays)}
         </div>
-
-        {this.renderTooltip()}
       </div>
     );
   }

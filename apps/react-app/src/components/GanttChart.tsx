@@ -236,13 +236,13 @@ function GanttChart() {
         <TkGanttChart
           tasks={sampleTasks}
           viewType="monthly"
-          customTooltip={(task: IGanttTask) =>
-            `<div style="padding:8px;background:#1e293b;color:#fff;border-radius:6px;">
-              <div style="font-weight:700;font-size:14px;margin-bottom:4px;">📋 ${task.name}</div>
-              <div>📅 ${task.startDate} → ${task.endDate}</div>
-              ${task.progress != null ? `<div>🔄 Progress: ${task.progress}%</div>` : ''}
-            </div>`
-          }
+          tooltipHtml={(task: IGanttTask) => {
+            const h1 = document.createElement('h1');
+
+            h1.innerHTML = 'harun demir';
+
+            return h1;
+          }}
         />
       </TkCard>
 
@@ -254,7 +254,7 @@ function GanttChart() {
         <TkGanttChart
           tasks={sampleTasks}
           viewType="monthly"
-          taskBarTemplate={(task: IGanttTask) =>
+          taskBarHtml={(task: IGanttTask) =>
             `<div style="display:flex;align-items:center;height:100%;padding:0 6px;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:4px;color:#fff;font-size:11px;">
               <span>${task.name} (${task.progress ?? 0}%)</span>
             </div>`
