@@ -93,6 +93,8 @@ tk-checkbox {
 
   &[aria-disabled],
   &[disabled] {
+    pointer-events: none;
+
     label {
       color: var(--text-sub-base);
 
