@@ -36,6 +36,22 @@ export type { IDateSelection } from './components/tk-datepicker/interfaces';
 // tk-editor
 export type { HeadingLevel, TkEditorToolbarButtonBehavior, TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig } from './components/tk-editor/interfaces';
 
+// tk-gantt-chart
+export type {
+  IGanttTaskSegment,
+  IGanttTask,
+  GanttViewType,
+  GanttSecondaryHeaderMode,
+  GanttWeekStartDay,
+  IGanttIndicator,
+  IGanttHoliday,
+  IGanttColumn,
+  GanttTooltipFunction,
+  GanttTaskBarFunction,
+  IGanttHeaderCell,
+  IGanttFlatRow,
+} from './components/tk-gantt-chart/interfaces';
+
 // tk-input
 export type { IInputMaskOptions } from './components/tk-input/interfaces';
 
