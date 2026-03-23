@@ -369,17 +369,17 @@ export class TkInput implements ComponentInterface {
           const matches = _value.match(regex);
           _value = matches ? matches.join('') : '';
           input.value = _value;
-        }
+        } else {
+          if (this.maskOptions.letterOnly) {
+            // If letterOnly option is enabled, filter out non-letters
+            _value = _value.replace(/[^a-zA-Z]/g, '');
+            input.value = _value;
+          }
 
-        if (this.maskOptions.letterOnly) {
-          // If letterOnly option is enabled, filter out non-letters
-          _value = _value.replace(/[^a-zA-Z]/g, '');
-          input.value = _value;
-        }
-
-        if (this.cleaveInstance) {
-          this.cleaveInstance?.setRawValue(_value);
-          _value = this.cleaveInstance?.getFormattedValue();
+          if (this.cleaveInstance) {
+            this.cleaveInstance?.setRawValue(_value);
+            _value = this.cleaveInstance?.getFormattedValue();
+          }
         }
       }
 
