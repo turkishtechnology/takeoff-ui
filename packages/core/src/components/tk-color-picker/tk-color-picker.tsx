@@ -857,6 +857,7 @@ export class TkColorPicker implements ComponentInterface {
       'tk-color-picker-inline': this.inline,
       'tk-color-picker-horizontal': this.orientation === 'horizontal',
       'tk-color-picker-disabled': this.disabled,
+      'tk-color-picker-readonly': this.readonly,
     });
 
     return (

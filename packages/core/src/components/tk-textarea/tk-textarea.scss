@@ -167,6 +167,8 @@
   }
 
   &[aria-readonly] {
+    pointer-events: none;
+
     & .label,
     & .hint {
       color: var(--text-sub-base);

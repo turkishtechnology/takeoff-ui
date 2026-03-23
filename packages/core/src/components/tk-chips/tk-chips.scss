@@ -17,6 +17,7 @@
   &.disabled {
     color: var(--text-sub-base) !important;
     background-color: var(--frames-light) !important;
+    pointer-events: none;
 
     .tk-icon {
       color: var(--icon-sub-base) !important;

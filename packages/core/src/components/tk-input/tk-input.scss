@@ -271,6 +271,7 @@ tk-input.tk-table-input {
   }
 
   &[aria-disabled] {
+    pointer-events: none;
     & .label,
     & .hint,
     .tk-input input {
@@ -292,6 +293,7 @@ tk-input.tk-table-input {
   }
 
   &[aria-readonly] {
+    pointer-events: none;
     & .label,
     & .hint {
       color: var(--text-sub-base);
