@@ -2,26 +2,26 @@
 applyTo: 'packages/core/**/*.tsx'
 ---
 
-# Stencil Component Standartları
+# Stencil Component Standards
 
-## İsimlendirme
+## Naming Conventions
 
-- **Tag**: `tk-[component]` (dash-case), örn: `tk-button`, `tk-accordion-item`
-- **Class**: `Tk[Component]` (PascalCase), örn: `TkButton`, `TkAccordionItem`
+- **Tag**: `tk-[component]` (dash-case), e.g: `tk-button`, `tk-accordion-item`
+- **Class**: `Tk[Component]` (PascalCase), e.g: `TkButton`, `TkAccordionItem`
 - **Element ref**: `@Element() el: HTMLTk[Component]Element`
 - **Props/State**: camelCase
-- **@Watch**: `[prop]Changed` isimlendirmesi, ilgili @Prop'in hemen ardından
-- **@Event**: `tk-[eventType]`, örn: `tk-change`, `tk-selection-change`,
+- **@Watch**: `[prop]Changed` naming, right after the related @Prop
+- **@Event**: `tk-[eventType]`, e.g: `tk-change`, `tk-selection-change`,
   `tk-active-index-change`
-- **Handler metodları**: Tag/component event'lerine bağlanan metodlar.
-  İsimlendirme: `handle{elementAdı}{eventAdı}`, örn: `handleButtonClick`,
-  `handleInputChange`. Render içinde
-  `<button onClick={this.handleButtonClick} />` şeklinde kullanılır.
+- **Handler methods**: Methods that are bound to tag/component events. Naming:
+  `handle{elementName}{eventName}`, e.g: `handleButtonClick`,
+  `handleInputChange`. Inside the render, it is used as
+  `<button onClick={this.handleButtonClick} />`.
 
 ## Component Header
 
-Component decorator üstünde kısa açıklama, slot bilgileri ve framework import
-bilgileri bulunmalı:
+The component decorator should contain a brief description, slot information,
+and framework import information:
 
 ```typescript
 /**
@@ -33,34 +33,35 @@ bilgileri bulunmalı:
  */
 ```
 
-## Kod Hiyerarşisi (Sıra)
+## Code Hierarchy (Order)
 
 1. Component decorator + metadata (`@Component({ tag, styleUrl, shadow })`)
 2. @Element()
 3. constructor()
-4. @AttachInternals() (form-associated ise)
-5. Statik sabitler / file-level constants
-6. Private instance değişkenleri
+4. @AttachInternals() (if form-associated)
+5. Static constants / file-level constants
+6. Private instance variables
 7. @State()
 8. @Prop()
-9. @Watch() (ilgili Prop'ın hemen ardından)
+9. @Watch() (right after the relevant @Prop)
 10. @Event()
 11. @Listen()
 12. Public @Method()
-13. Lifecycle metodları (componentWillLoad, componentDidLoad, vb.)
-14. Private instance metodları
-15. handle\* event handler'lar — Tag/component event'lerine bağlanan metodlar.
-    İsimlendirme: `handle{elementAdı}{eventAdı}` (örn: `handleButtonClick`).
-16. create* factory metodlar — JSX parça döndüren metodlar. İsimlendirme:
-    `create{renderEdilecekElement}` (örn: `createOptions`). render* metodları
-    içinden çağrılır.
-17. render* yardımcı metodlar — render() içinden doğrudan çağrılan, component'in
-    ana parçalarını ifade eden metodlar. Prefix olarak `render` içermeli (örn:
-    `renderHeader`, `renderBody`). create* metodlar bu render\* metodların
-    içinden çağrılır.
+13. Lifecycle methods (componentWillLoad, componentDidLoad, etc.)
+14. Private instance methods
+15. handle\* event handlers — Methods that are bound to tag/component events.
+    Naming convention: `handle{elementName}{eventName}` (e.g:
+    `handleButtonClick`).
+16. create* factory methods — Methods that return JSX fragments. Naming
+    convention: `create{elementToRender}` (e.g: `createOptions`). Called inside
+    render* methods.
+17. render* helper methods — Methods called directly from render() and represent
+    the main parts of the component. They must include the prefix `render`
+    (e.g., `renderHeader`, `renderBody`). The create* methods are called from
+    within these render\* methods.
 18. render()
 
-## Örnek Yapı
+## Example Structure
 
 ```typescript
 @Component({ tag: 'tk-button', styleUrl: 'tk-button.scss', shadow: true })

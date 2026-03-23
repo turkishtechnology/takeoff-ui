@@ -1,56 +1,60 @@
 # New Component
 
-Component adı: `${component-name}`
+Component name: `${component-name}`
 
-Açıklama: ${description}
+Description: ${description}
 
-## Adım 1: Dizin & Dosyaları Oluştur
+## Step 1: Create directory and Folders
 
-`component-file-structure` instructions'ına göre dizin yapısını oluştur. Child
-component gerekip gerekmediğine bileşenin doğasına göre karar ver.
+Create the directory structure according to `component-file-structure`
+instruction. Decide whether a child component is required based on the nature of
+the component.
 
-## Adım 2: TSX Dosyası
+## Step 2: TSX File
 
-`stencil-components` instructions'ına göre `tk-${component-name}.tsx` dosyasını
-yaz.
+According to `stencil-components` instruction, write the
+`tk-${component-name}.tsx` file.
 
-- Type oluşturmadan önce `/global/interfaces/` içerisinde benzer bir type var
-  ise onu kullan.
+- Before creating the type, if a similar type exists in `/global/interfaces/`,
+  use that.
 
-- TSX içerisinde: @Element() el: HTMLElement; olarak tanımla.
+Within TSX: define @Element() as el: HTMLElement
 
-- Bileşen API oluştururken mevcuttaki bileşenlerin API'ları ile paralele ilerle.
+- When creating the component API, proceed in parallel with the APIs of existing
+  components.
 
-- `component-file-structure` instructions'ındaki kurallara göre `interfaces.ts`,
-  `defaults.ts`, `helpers.ts` ve child component dosyalarını oluştur.
+- Create the `interfaces.ts`, `defaults.ts`, `helpers.ts`, and child component
+  files according to the rules in the `component-file-structure` instructions.
 
-## Adım 3: SCSS Dosyası
+## Step 3: SCSS File
 
-`styling` instructions'ına göre `tk-${component-name}.scss` dosyasını yaz.
+According to the `styling` instructions, 'tk-${component-name}.write the `scss'
+file.
 
-## Adım 4: Unit Test
+## Step 4: Unit Testing
 
-`component-tests` instructions'ına göre `test/tk-${component-name}.spec.tsx`
-dosyasını yaz.
+According to `component-tests` instructions, write the
+`test/tk-${component-name}.spec.tsx` file.
 
-## Adım 5: Child Component
+## Step 5: Child Component
 
-Child component varsa Adım 2–4'ü child component için tekrarla.
+If there is a child component, repeat Steps 2–4 for the child component.
 
-## Adım 6: Stencil Config
+## Step 6: Stencil Config
 
-Component two-way binding gerektiriyorsa (form elemanı, v-model desteği vb.)
-`packages/core/stencil.config.ts` içindeki `vueComponentModels` ve
-`angularValueAccessorBindings` dizilerine yeni component'i ekle.
+If the component requires two-way binding (form element, v-model support, etc.);
+Add the new component to `vueComponentModels` and `angularValueAccessorBindings`
+directories in `packages/core/stencil.config.ts`,.
 
-## Adım 7: Build & Doğrulama
+## Step 7: Build & Verification
 
 ```bash
 cd packages/core && pnpm run build
 ```
 
-Build başarılı olduktan sonra TSX'teki `@Element() el: HTMLElement;` tanımını
-`@Element() el: HTMLTk${ComponentName}Element;` olarak güncelle.
+After the build is succesful, update the `@Element() el: HTMLElement;`
+definition in TSX to `@Element() el: HTMLTk${ComponentName}Element;` olarak
+güncelle.
 
 ```bash
 pnpm run test
