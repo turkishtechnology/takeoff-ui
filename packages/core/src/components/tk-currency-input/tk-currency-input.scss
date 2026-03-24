@@ -12,7 +12,7 @@
   gap: var(--input-external-label-small-container-gap);
 
   .tk-currency-input-label {
-    font-weight: var(--weight-medium);
+    font-weight: 400;
 
     .tk-currency-input-label-title {
       color: var(--text-darkest);
@@ -22,6 +22,7 @@
       color: var(--states-danger-base);
       font-size: var(--desktop-label-l-size);
       line-height: var(--line-height-xs-none);
+      font-weight: 300;
     }
   }
 
@@ -154,6 +155,7 @@
     .tk-currency-input-wrapper {
       padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
       gap: var(--input-external-label-large-input-gap);
+      height: 48px;
 
       .tk-currency-input-input,
       .tk-currency-input-dropdown-button,
@@ -177,6 +179,7 @@
     .tk-currency-input-wrapper {
       padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
       gap: var(--input-external-label-base-input-gap);
+      height: 40px;
 
       .tk-currency-input-input,
       .tk-currency-input-dropdown-button,
@@ -199,6 +202,7 @@
     .tk-currency-input-wrapper {
       padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
       gap: var(--input-external-label-small-input-gap);
+      height: 32px;
 
       .tk-currency-input-input,
       .tk-currency-input-dropdown-button,
@@ -214,7 +218,7 @@
     color: var(--text-base);
     line-height: var(--desktop-label-s-line-height);
     font-size: var(--desktop-label-s-size);
-    font-weight: var(--weight-medium);
+    font-weight: 300;
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
