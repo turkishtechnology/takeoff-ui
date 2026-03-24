@@ -542,8 +542,8 @@ export class TkDatePicker {
 
     try {
       const resolvedLocale = this.locale || 'en';
-      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Intl.Locale.prototype.hasOwnProperty('weekInfo')) {
-        // @ts-ignore: Accessing weekInfo from potentially unknown Intl.Locale type
+      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Object.prototype.hasOwnProperty.call(Intl.Locale, 'weekInfo')) {
+        // @ts-expect-error: Accessing weekInfo from potentially unknown Intl.Locale type
         const localeInfo = new Intl.Locale(resolvedLocale).getWeekInfo();
         if (localeInfo && localeInfo.firstDay !== undefined) {
           // Formula: (IntlDay + 6) % 7 maps 1(Mon) to 0, 7(Sun) to 6
@@ -1443,7 +1443,7 @@ export class TkDatePicker {
               start: normalized,
               end: null,
             };
-            let formattedValue;
+            let formattedValue: string;
             if (this.showTimePicker) {
               const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
               this.internalStartTime = time;

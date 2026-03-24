@@ -588,7 +588,7 @@ export class TkInput implements ComponentInterface {
         let isRemovable;
         if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
           isRemovable = false;
-        } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
+        } else if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'removable')) {
           isRemovable = item.removable;
         } else {
           isRemovable = true;
