@@ -572,6 +572,18 @@ export class TkInput implements ComponentInterface {
   };
 
   /**
+   * Handles hint area click:
+   * - stopPropagation() prevents the click from bubbling up to parent
+   *   components (e.g. tk-select's handleInputClick) so clicking on the
+   *   hint text won't open/close the dropdown.
+   *   ClickOutsideMixin still sees the event because it listens in the
+   *   capture phase, which runs before stopPropagation.
+   */
+  private handleHintClick = (e: MouseEvent): void => {
+    e.stopPropagation();
+  };
+
+  /**
    * Renders the password strength indicator lines.
    *
    * The strength lines visually indicate the password strength:
@@ -653,7 +665,7 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
+  private renderHint(): HTMLDivElement | undefined {
     let hint;
     if (this.hint?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
@@ -676,7 +688,15 @@ export class TkInput implements ComponentInterface {
         </span>
       );
     }
-    return hint;
+
+    if (hint) {
+      return (
+        <div class="tk-input-hint-container" onClick={this.handleHintClick}>
+          {hint}
+        </div>
+      );
+    }
+    return undefined;
   }
 
   private renderLabel(): HTMLDivElement | undefined {
