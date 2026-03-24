@@ -364,8 +364,9 @@ export class TkDatePicker {
     });
     // Initialize click outside mixin only if not inline mode
     if (!this.inline) {
+      const tkInputArea = this.inputRef?.querySelector('.tk-input') as HTMLElement;
       this.clickOutsideMixin = new ClickOutsideMixin({
-        referenceElement: this.el,
+        referenceElement: tkInputArea || this.el,
         handler: this.closeHandler,
         disabled: this.disabled || this.readonly || !this.isOpen,
       });
@@ -383,6 +384,7 @@ export class TkDatePicker {
     // Update click outside mixin configuration based on current state
     this.clickOutsideMixin?.updateConfig({
       disabled: this.disabled || this.readonly || this.inline || !this.isOpen,
+      ignoredElements: this.panelRef ? [this.panelRef] : [],
     });
 
     if (this.isOpen) {
