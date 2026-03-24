@@ -957,7 +957,9 @@ export class TkSelect implements ComponentInterface {
       this.value = null;
     }
     this.tkChange.emit(this.value);
-    this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
+    if (this.selectAll && this.multiple && this.isAllSelected()) {
+      this.tkSelectAll.emit(false);
+    }
   }
 
   private createOptionItem(options: any[], startIndex: number = 0) {

@@ -121,7 +121,7 @@ describe('tk-alert', () => {
 
         const icon = page.root.shadowRoot.querySelector('.icon');
 
-        expect(icon.classList.contains(size)).toBeTruthy;
+        expect(icon.classList.contains(size)).toBeTruthy();
       }
     });
     it('renders multiple messages', async () => {
@@ -163,13 +163,13 @@ describe('tk-alert', () => {
 
       const button = page.root.shadowRoot.querySelector('tk-button');
 
-      expect(button).toBeTruthy;
+      expect(button).toBeTruthy();
       expect(button.getAttribute('icon')).toBe('close');
 
       button.dispatchEvent(new Event('click'));
 
       await page.waitForChanges();
-      expect(page.root).toBeNull;
+      expect(page.root).toBeNull();
     });
     it('should call handleCloseButtonClick when close button is clicked', async () => {
       const page = await newSpecPage({
@@ -182,19 +182,19 @@ describe('tk-alert', () => {
 
       const instance = page.rootInstance;
 
-      expect(instance).toBeTruthy;
+      expect(instance).toBeTruthy();
 
       const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
       const button = page.root.shadowRoot.querySelector('tk-button');
 
-      expect(button).toBeTruthy;
+      expect(button).toBeTruthy();
 
       button.dispatchEvent(new Event('click'));
 
       await page.waitForChanges();
 
-      expect(spy).toHaveBeenCalled;
-      expect(page.root).toBeNull;
+      expect(spy).toHaveBeenCalled();
+      expect(page.root).toBeNull();
     });
   });
 });

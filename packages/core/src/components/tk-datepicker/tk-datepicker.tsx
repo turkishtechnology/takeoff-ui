@@ -1515,7 +1515,7 @@ export class TkDatePicker {
     if (initialValueAttr) {
       try {
         initialValue = JSON.parse(initialValueAttr);
-      } catch (e) {
+      } catch {
         initialValue = initialValueAttr;
       }
     }
@@ -1884,7 +1884,7 @@ export class TkDatePicker {
         <div
           class={classNames(
             'tk-datepicker-timepicker-body',
-            ['primary', 'light', 'dark'].includes(this.headerType as any) && `tk-datepicker-timepicker-body-${this.headerType}`,
+            ['primary', 'light', 'dark'].includes(this.headerType) && `tk-datepicker-timepicker-body-${this.headerType}`,
             this.weeksLength === 4 && 'tk-datepicker-timepicker-body-4-weeks',
             this.timeOnly && 'tk-datepicker-timepicker-body-only',
           )}
