@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkButton } from '../tk-button';
-import { h } from '@stencil/core';
 
 describe('tk-button', () => {
   //Basic Rendering

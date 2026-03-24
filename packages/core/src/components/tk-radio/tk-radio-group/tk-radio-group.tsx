@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h, AttachInternals } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../../utils/icon-utils';
 import { isEqual } from 'lodash-es';

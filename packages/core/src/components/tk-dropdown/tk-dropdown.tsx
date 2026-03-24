@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, h, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Event, EventEmitter, Watch } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';

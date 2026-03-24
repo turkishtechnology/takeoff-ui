@@ -29,6 +29,7 @@
     "build": "turbo run build --filter=!./apps/angular-app --filter=!./apps/react-app --filter=!./apps/vue-app --filter=!./docs && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build && cd .. && pnpm run format",
     "build:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run generate-docs && pnpm run generate-llms-txt && pnpm run build && cd .. && pnpm run format",
     "check-types": "pnpm exec tsc -p packages/core/tsconfig.json --noEmit",
+    "check-lint": "eslint packages/core/src",
     "test": "pnpm --dir packages/core run test",
     "dev:vue": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/vue && cd apps/vue-app && pnpm run dev",
     "dev:react": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react && cd apps/react-app && pnpm run dev",

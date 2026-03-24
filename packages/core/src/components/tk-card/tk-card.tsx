@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Fragment, Prop, State, h } from '@stencil/core';
+import { Component, ComponentInterface, Element, Fragment, Prop, State } from '@stencil/core';
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
 

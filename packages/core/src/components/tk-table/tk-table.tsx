@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './interfaces';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
@@ -2151,16 +2151,14 @@ export class TkTable implements ComponentInterface {
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
             let refSearchIcon: HTMLTkIconElement;
-            let _sortIcon;
             let _searchIcon;
-            let _headerStructure;
             let _customHeader;
 
             if (typeof col?.headerHtml == 'function') {
               _customHeader = col.headerHtml();
             }
 
-            _headerStructure = (
+            const _headerStructure = (
               <div
                 class="header-container"
                 ref={el => {
@@ -2216,7 +2214,7 @@ export class TkTable implements ComponentInterface {
             const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
-            _sortIcon = showBadge ? (
+            const _sortIcon = showBadge ? (
               <tk-badge count={sortIndex + 1} type="text" rounded size="small">
                 <tk-icon
                   {...getIconElementProps(iconType, {

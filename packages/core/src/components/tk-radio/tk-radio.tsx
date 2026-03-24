@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 

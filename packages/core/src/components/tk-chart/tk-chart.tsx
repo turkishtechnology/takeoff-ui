@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
+import { Component, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
 import Chart, { ChartType, ChartOptions, ChartData } from 'chart.js/auto';
 import { getDefaultOptionsForType } from './defaults';
 import { merge } from 'lodash-es';

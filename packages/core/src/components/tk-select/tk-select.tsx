@@ -1,4 +1,4 @@
-import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Method, Prop, State, Watch, h } from '@stencil/core';
+import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Fragment, Method, Prop, State, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { isEqual, some, remove } from 'lodash-es';

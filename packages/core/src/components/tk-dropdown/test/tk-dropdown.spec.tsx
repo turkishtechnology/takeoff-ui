@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkDropdown } from '../tk-dropdown';
-import { h } from '@stencil/core';
 
 // Basic Rendering
 describe('tk-dropdown', () => {

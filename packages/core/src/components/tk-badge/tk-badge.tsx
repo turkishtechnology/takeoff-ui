@@ -1,4 +1,4 @@
-import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, State, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';

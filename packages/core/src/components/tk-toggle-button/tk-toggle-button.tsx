@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';

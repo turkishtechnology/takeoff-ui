@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Method, Watch, State, Event, EventEmitter, ComponentInterface } from '@stencil/core';
+import { Component, Element, Prop, Method, Watch, State, Event, EventEmitter, ComponentInterface } from '@stencil/core';
 import { merge } from 'lodash-es';
 import { OrgChart } from 'd3-org-chart';
 

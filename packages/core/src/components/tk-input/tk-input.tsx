@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, h, AttachInternals, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, AttachInternals, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
