@@ -12,7 +12,7 @@
   gap: var(--input-external-label-small-container-gap);
 
   .tk-phone-input-label {
-    font-weight: var(--weight-medium);
+    font-weight: 400;
     gap: var(--input-external-label-small-container-gap);
   }
 
@@ -141,6 +141,7 @@
     font-size: var(--desktop-label-l-size);
     line-height: var(--desktop-label-l-line-height);
     .tk-phone-input-wrapper {
+      height: 48px;
       padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
       .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
@@ -157,6 +158,7 @@
     font-size: var(--desktop-label-m-base-size);
     line-height: var(--desktop-label-m-base-line-height);
     .tk-phone-input-wrapper {
+      height: 40px;
       padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
       .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
@@ -173,6 +175,7 @@
     font-size: var(--desktop-label-s-size);
     line-height: var(--desktop-label-s-line-height);
     .tk-phone-input-wrapper {
+      height: 32px;
       padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
       .tk-phone-input-dropdown-button,
       .tk-phone-input-input {
@@ -189,14 +192,14 @@
     color: var(--states-danger-base);
     font-size: var(--desktop-label-s-size);
     line-height: var(--desktop-label-s-line-height);
-    font-weight: var(--weight-medium);
+    font-weight: 300;
   }
   .tk-phone-input-hint,
   .tk-phone-input-error {
     color: var(--text-base);
     line-height: var(--desktop-label-s-line-height);
     font-size: var(--desktop-label-s-size);
-    font-weight: var(--weight-medium);
+    font-weight: 300;
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
