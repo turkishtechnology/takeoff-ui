@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { IStep, IStepClickDetail } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';

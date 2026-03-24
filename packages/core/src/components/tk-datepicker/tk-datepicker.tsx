@@ -1,4 +1,4 @@
-import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
 import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
@@ -854,7 +854,7 @@ export class TkDatePicker {
   private parseTimeString(timeString: string): Date | null {
     const base = new Date();
     const primaryFmt = this.getOnlyTimeFormat();
-    let parsed = parse(timeString, primaryFmt, base);
+    const parsed = parse(timeString, primaryFmt, base);
     if (isValid(parsed) && format(parsed, primaryFmt) === timeString) {
       return parsed;
     }
@@ -1584,7 +1584,7 @@ export class TkDatePicker {
     const startOfWeekForGetDay = (resolvedStartOfWeekIndex + 1) % 7;
 
     const firstDayOfWeek = firstDayOfMonth.getDay();
-    let emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
+    const emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
 
     // Previous month's days
     for (let i = emptyCells - 1; i >= 0; i--) {

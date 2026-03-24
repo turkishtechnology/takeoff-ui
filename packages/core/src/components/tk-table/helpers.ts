@@ -69,7 +69,7 @@ export const handleInputKeydown = (event: KeyboardEvent, el: HTMLTkTableElement)
 
 export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sorts?: ITableSort[]) => {
   let sortAndFilterData;
-  let _data = [...data];
+  const _data = [...data];
 
   //#region filter
   sortAndFilterData = _data.filter(row =>

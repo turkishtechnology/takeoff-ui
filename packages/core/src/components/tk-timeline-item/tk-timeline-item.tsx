@@ -1,4 +1,4 @@
-import { Component, h, Element, Host } from '@stencil/core';
+import { Component, Element, Host } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 
 /**

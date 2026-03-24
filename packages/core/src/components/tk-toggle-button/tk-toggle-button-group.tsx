@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
 

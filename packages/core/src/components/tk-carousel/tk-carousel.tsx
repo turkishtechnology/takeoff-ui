@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 
 /**

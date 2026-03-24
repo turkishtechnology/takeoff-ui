@@ -1,7 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAccordion } from '../tk-accordion';
 import { TkAccordionItem } from '../tk-accordion-item';
-import { h } from '@stencil/core';
 
 describe('tk-accordion', () => {
   //Basic Rendering

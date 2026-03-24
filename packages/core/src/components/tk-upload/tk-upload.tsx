@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';

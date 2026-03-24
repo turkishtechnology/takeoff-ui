@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Fragment } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, Fragment } from '@stencil/core';
 import classNames from 'classnames';
 import {
   IGanttTask,

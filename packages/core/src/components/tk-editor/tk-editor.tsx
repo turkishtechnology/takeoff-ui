@@ -1,4 +1,4 @@
-import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';

@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, Fragment, State } from '@stencil/core';
+import { Component, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { TimelineItem } from './interfaces';
