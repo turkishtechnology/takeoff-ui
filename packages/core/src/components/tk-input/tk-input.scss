@@ -170,26 +170,30 @@ tk-input.tk-table-input {
     }
   }
 
-  .hint {
-    color: var(--text-base);
-    line-height: var(--desktop-label-s-line-height);
-    font-size: var(--desktop-label-s-size);
-    font-weight: 300;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
+  .tk-input-hint-container {
+    width: 100%;
 
-    & i {
-      font-size: var(--size-base);
-      width: var(--size-base);
-      height: var(--size-base);
-      color: var(--icon-base);
-    }
+    .hint {
+      color: var(--text-base);
+      line-height: var(--desktop-label-s-line-height);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
 
-    &.error {
-      color: var(--states-danger-base);
       & i {
+        font-size: var(--size-base);
+        width: var(--size-base);
+        height: var(--size-base);
+        color: var(--icon-base);
+      }
+
+      &.error {
         color: var(--states-danger-base);
+        & i {
+          color: var(--states-danger-base);
+        }
       }
     }
   }
