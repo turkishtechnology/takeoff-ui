@@ -556,6 +556,22 @@ export class TkInput implements ComponentInterface {
   };
 
   /**
+   * Handles label click:
+   * - preventDefault() stops the browser from dispatching a synthetic click
+   *   on the associated <input> (caused by htmlFor).
+   * - stopPropagation() prevents the click from bubbling up to parent
+   *   components (e.g. tk-select's handleInputClick) so it won't re-open
+   *   the dropdown. ClickOutsideMixin still sees the event because it
+   *   listens in the capture phase, which runs before stopPropagation.
+   * - Manual focus() preserves the label-click-to-focus UX.
+   */
+  private handleLabelClick = (e: MouseEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.nativeInput?.focus();
+  };
+
+  /**
    * Renders the password strength indicator lines.
    *
    * The strength lines visually indicate the password strength:
@@ -663,15 +679,17 @@ export class TkInput implements ComponentInterface {
     return hint;
   }
 
-  private renderLabel(): HTMLLabelElement {
+  private renderLabel(): HTMLDivElement | undefined {
     let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label htmlFor={this.uniqueId} class="label">
-          {this.label}
-          {this.showAsterisk ? asterisk : ''}
-        </label>
+        <div class="tk-input-label-container" onClick={this.handleLabelClick}>
+          <label htmlFor={this.uniqueId} class="label">
+            {this.label}
+            {this.showAsterisk ? asterisk : ''}
+          </label>
+        </div>
       );
     }
     return label;
