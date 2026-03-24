@@ -375,7 +375,7 @@ export class TkColorPicker implements ComponentInterface {
     this.stopDragging();
   };
 
-  private handleClickOutside = (_: MouseEvent) => {
+  private handleClickOutside = () => {
     this.handleApply();
   };
 

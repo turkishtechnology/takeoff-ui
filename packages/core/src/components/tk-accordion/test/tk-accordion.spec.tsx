@@ -34,8 +34,8 @@ describe('tk-accordion', () => {
       const accordion = page.root.querySelector('tk-accordion');
       const hasHeader = page.root.shadowRoot.querySelector('[slot="header"]');
 
-      expect(accordion).toBeTruthy;
-      expect(hasHeader).toBeTruthy;
+      expect(accordion).toBeTruthy();
+      expect(hasHeader).toBeTruthy();
     });
     it('item should set content slot', async () => {
       const page = await newSpecPage({
@@ -45,8 +45,8 @@ describe('tk-accordion', () => {
       const accordion = page.root.querySelector('tk-accordion');
       const hasContent = page.root.shadowRoot.querySelector('[slot="content"]');
 
-      expect(accordion).toBeTruthy;
-      expect(hasContent).toBeTruthy;
+      expect(accordion).toBeTruthy();
+      expect(hasContent).toBeTruthy();
     });
   });
   describe('state handling', () => {
@@ -72,8 +72,8 @@ describe('tk-accordion', () => {
         `,
       });
       const accordionItem = page.body.querySelector('tk-accordion-item');
-      expect(accordionItem).not.toBeNull;
-      expect(accordionItem.shadowRoot.querySelector('.tk-accordion-item').classList.contains('grouped')).toBeTruthy;
+      expect(accordionItem).not.toBeNull();
+      expect(accordionItem.shadowRoot.querySelector('.tk-accordion-item').classList.contains('grouped')).toBeTruthy();
     });
     it('activeIndex returns all items if allowMultiple is true', async () => {
       const page = await newSpecPage({
@@ -101,9 +101,9 @@ describe('tk-accordion', () => {
 
       const accordionItems = page.body.querySelectorAll('tk-accordion-item');
 
-      expect(accordionItems[0].active).toBeFalsy;
-      expect(accordionItems[1].active).toBeFalsy;
-      expect(accordionItems[2].active).toBeTruthy;
+      expect(accordionItems[0].active).toBeFalsy();
+      expect(accordionItems[1].active).toBeFalsy();
+      expect(accordionItems[2].active).toBeTruthy();
     });
   });
   describe('icons', () => {
@@ -163,7 +163,7 @@ describe('tk-accordion', () => {
       await page.waitForChanges();
 
       const icon = accordionItem.shadowRoot.querySelector('.material-symbols-outlined') as HTMLElement;
-      expect(icon).not.toBeNull;
+      expect(icon).not.toBeNull();
       expect(icon.textContent).toBe('search');
       expect(icon.classList.contains('fill')).toBe(false);
 

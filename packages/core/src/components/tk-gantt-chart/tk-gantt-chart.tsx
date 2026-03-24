@@ -393,7 +393,7 @@ export class TkGanttChart implements ComponentInterface {
     const vt = this.computedViewType;
     const dayWidth = VIEW_TYPE_DAY_WIDTH[vt];
 
-    const primaryCells = generatePrimaryHeaders(start, end, vt, this.locale, this.weekStartDay);
+    const primaryCells = generatePrimaryHeaders(start, end, vt, this.locale);
     const secondaryCells = generateSecondaryHeaders(start, end, vt, this.locale, this.weekStartDay, this.secondaryHeaderMode);
 
     return (
