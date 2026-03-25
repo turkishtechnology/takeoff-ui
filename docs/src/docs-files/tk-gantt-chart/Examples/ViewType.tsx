@@ -1,4 +1,4 @@
-import { TkGanttChart } from '@takeoff-ui/react';
+import { TkGanttChart, TkRadioGroup, TkRadio } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React, { useState } from 'react';
 
@@ -14,12 +14,12 @@ const Example = () => {
 
   return (
     <div>
-      <div className="flex gap-2 mb-4">
-        {['weekly', 'monthly', 'quarterly', 'yearly'].map(vt => (
-          <button key={vt} className={`px-3 py-1 rounded text-sm ${viewType === vt ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`} onClick={() => setViewType(vt)}>
-            {vt.charAt(0).toUpperCase() + vt.slice(1)}
-          </button>
-        ))}
+      <div className="mb-4">
+        <TkRadioGroup label="View Type" value={viewType} direction="horizontal" onTkChange={e => setViewType(e.detail)}>
+          {['weekly', 'monthly', 'quarterly', 'yearly'].map(vt => (
+            <TkRadio key={vt} value={vt} label={vt.charAt(0).toUpperCase() + vt.slice(1)} />
+          ))}
+        </TkRadioGroup>
       </div>
       <TkGanttChart tasks={tasks} viewType={viewType} />
     </div>
