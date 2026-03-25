@@ -1,5 +1,6 @@
-import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 import { h } from '@stencil/core';
+import type { JSX } from '@stencil/core';
+import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 export interface IconRendererOptions {
   variant?: string;
   sign?: boolean;
@@ -11,8 +12,8 @@ export interface IconRendererOptions {
 }
 
 export interface IconRendererResult {
-  leftIcon?: any;
-  rightIcon?: any;
+  leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
 }
 /**
  * Generates the properties object for a tk-icon element based on Material Symbols.
@@ -76,8 +77,8 @@ export const renderIcons = (
 ): IconRendererResult => {
   const { variant, sign = false, fill = false, size = 'base', iconStyle = 'outlined', iconTag = 'i', additionalProps = {} } = options;
 
-  let leftIcon: any;
-  let rightIcon: any;
+  let leftIcon: JSX.Element | undefined;
+  let rightIcon: JSX.Element | undefined;
 
   if (!icon) {
     return { leftIcon, rightIcon };
