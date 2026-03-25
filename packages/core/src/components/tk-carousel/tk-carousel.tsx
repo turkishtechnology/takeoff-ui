@@ -61,7 +61,9 @@ export class TkCarousel implements ComponentInterface {
   @Prop() navigationPlacement: 'inside' | 'outside' = 'inside';
 
   /**
-   * Position of the navigation indicators
+   * Position of the navigation indicators.
+   * For horizontal orientation: 'distributed' | 'top' | 'bottom'
+   * For vertical orientation: 'left' | 'right'
    * @defaultValue 'distributed'
    */
   @Prop() navigationPosition: 'distributed' | 'top' | 'bottom' | 'left' | 'right' = 'distributed';
@@ -110,6 +112,21 @@ export class TkCarousel implements ComponentInterface {
   disconnectedCallback() {
     this.stopAutoplay();
     this.el.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  /**
+   * Returns a valid navigation position based on orientation.
+   * Horizontal: 'distributed' | 'top' | 'bottom'
+   * Vertical: 'left' | 'right'
+   */
+  private get validNavigationPosition(): 'distributed' | 'top' | 'bottom' | 'left' | 'right' {
+    const horizontalPositions = ['distributed', 'top', 'bottom'];
+    const verticalPositions = ['left', 'right'];
+
+    if (this.orientation === 'vertical') {
+      return verticalPositions.includes(this.navigationPosition) ? this.navigationPosition : 'right';
+    }
+    return horizontalPositions.includes(this.navigationPosition) ? this.navigationPosition : 'distributed';
   }
 
   private startAutoplay = () => {
@@ -265,12 +282,13 @@ export class TkCarousel implements ComponentInterface {
   }
 
   private renderNavigationElement() {
+    const navPosition = this.validNavigationPosition;
     return (
       <div
         class={classNames(
           'tk-carousel-navigation-holder',
-          { 'tk-carousel-navigation': this.navigationPosition !== 'distributed' },
-          { 'vertical-navigation': this.navigationPosition === 'left' || this.navigationPosition === 'right' },
+          { 'tk-carousel-navigation': navPosition !== 'distributed' },
+          { 'vertical-navigation': navPosition === 'left' || navPosition === 'right' },
         )}
       >
         {this.createPrevButton()}
@@ -281,10 +299,11 @@ export class TkCarousel implements ComponentInterface {
   }
 
   render() {
+    const navPosition = this.validNavigationPosition;
     const rootClasses = classNames(
       'tk-carousel',
       this.navigationPlacement,
-      this.navigationPosition,
+      navPosition,
       { vertical: this.orientation === 'vertical' },
       { 'show-arrows': this.showArrows },
       { 'show-indicators': this.showIndicators },

@@ -76,7 +76,7 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
     filters.every(filter => {
       const filterableColumn = columns.find(col => col.field == filter.field && col.searchable && typeof col.filter == 'function');
 
-      if (filter.type === 'checkbox' && Array.isArray(filter.value) && (filter.value as string[]).length > 0) {
+      if ((filter.type === 'checkbox' || filter.type === 'treeview') && Array.isArray(filter.value) && (filter.value as string[]).length > 0) {
         // If the column has a custom filter function, use it
         if (filterableColumn) {
           return filterableColumn.filter(filter.value, row);
@@ -135,7 +135,6 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
           }
         }
       }
-
       const result = filterableColumn?.filter(filter.value, row);
       if (result == undefined) return true;
       else return result;

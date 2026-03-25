@@ -1101,7 +1101,7 @@ export class TkSelect implements ComponentInterface {
         <div class="dropdown-item-holder">
           {this.loading ? (
             <tk-spinner size={this.size}></tk-spinner>
-          ) : this.renderOptions?.length > 0 ? (
+          ) : (
             <Fragment>
               {this.panelTopHtml && (
                 <div
@@ -1119,14 +1119,17 @@ export class TkSelect implements ComponentInterface {
                   }}
                 ></div>
               )}
-
-              {this.createSelectAllOption()}
-              {this.createOptions()}
+              {this.renderOptions?.length > 0 ? (
+                <Fragment>
+                  {this.createSelectAllOption()}
+                  {this.createOptions()}
+                </Fragment>
+              ) : this.hasEmptyDataSlot ? (
+                <slot name="empty-data"></slot>
+              ) : (
+                this.emptyMessage
+              )}
             </Fragment>
-          ) : this.hasEmptyDataSlot ? (
-            <slot name="empty-data"></slot>
-          ) : (
-            this.emptyMessage
           )}
         </div>
       </div>

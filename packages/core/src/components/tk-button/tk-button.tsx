@@ -31,7 +31,7 @@ export class TkButton implements ComponentInterface {
    * This field specifies the design type of the component.
    * @defaultValue filled
    */
-  @Prop({ mutable: true }) type: 'filled' | 'elevated' | 'outlined' | 'text' = 'filled';
+  @Prop({ mutable: true }) type: 'filled' | 'filledLight' | 'outlined' | 'text' = 'filled';
 
   /**
    * Specifies a material icon name to be displayed.
@@ -89,7 +89,7 @@ export class TkButton implements ComponentInterface {
   /**
    * Determines the button's variant for different styles.
    */
-  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' | 'black' = 'primary';
 
   /**
    * Emitted when the button click.
@@ -148,7 +148,11 @@ export class TkButton implements ComponentInterface {
     if (this.loading) {
       _leftIcon = spinnerElement;
     } else if (this.icon) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, { variant: null, additionalProps: { class: 'tk-button-icon' } }, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(
+        this.icon,
+        { variant: null, additionalProps: { class: 'tk-button-icon' }, size: this.size === 'small' ? 'medium' : 'large' },
+        this.iconPosition,
+      );
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }

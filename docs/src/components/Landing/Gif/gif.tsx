@@ -1,57 +1,60 @@
 import styles from './gif.module.css';
 import React, { useEffect, useState } from 'react';
 
-const shuffleArray = (array: string[]) => {
-  const shuffledArray = [...array];
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-  }
-  return shuffledArray;
-};
+const WORDS = ['core', 'react', 'vue', 'angular'];
+// Unique characters derived from the words themselves
+const CHARS = 'aceglnortuv';
 
 export default function Gif() {
-  const words = ['core', 'react', 'vue', 'angular'];
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [displayedWord, setDisplayedWord] = useState<string[]>([]);
-  const [shuffling, setShuffling] = useState(true);
+  const [text, setText] = useState(WORDS[0]);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const word = words[currentWordIndex];
-    const wordArray = word.split('');
+    let scrambleInterval: NodeJS.Timeout;
 
-    // İlk olarak kelimenin harflerini karışık göster
-    setDisplayedWord(shuffleArray(wordArray));
-    setShuffling(true);
+    const cycleInterval = setInterval(() => {
+      const nextIndex = (index + 1) % WORDS.length;
+      const nextWord = WORDS[nextIndex];
+      let frame = 0;
+      const totalFrames = 16; // Duration of the reveal effect
 
-    // Harfleri karıştırdıktan sonra düzgün sırayla göster
-    const shuffleTimeout = setTimeout(() => {
-      setShuffling(false);
-      setDisplayedWord(wordArray); // Düzgün sıralı hali
-    }, 50); // 1 saniye boyunca harfler karışık kalacak
+      scrambleInterval = setInterval(() => {
+        frame++;
+        const progress = frame / totalFrames;
 
-    // 2 saniyede bir kelime değiştir
-    const wordTimeout = setTimeout(() => {
-      setCurrentWordIndex(prevIndex => (prevIndex + 1) % words.length);
-    }, 1000);
+        // Calculate how many characters to reveal from the start (Left -> Right)
+        // Ensure we reveal at least 1 char eventually, but start completely scrambled
+        const revealCount = Math.floor(progress * nextWord.length);
+
+        if (frame >= totalFrames) {
+          // Finish: set exact word
+          setText(nextWord);
+          setIndex(nextIndex);
+          clearInterval(scrambleInterval);
+        } else {
+          // Construct string: Correct part + Scrambled part
+          const revealedPart = nextWord.slice(0, revealCount);
+          let scrambledPart = '';
+
+          for (let i = revealCount; i < nextWord.length; i++) {
+            scrambledPart += CHARS[Math.floor(Math.random() * CHARS.length)];
+          }
+
+          setText(revealedPart + scrambledPart);
+        }
+      }, 40); // Slightly faster frame rate for smoother flow
+    }, 2500);
 
     return () => {
-      clearTimeout(shuffleTimeout);
-      clearTimeout(wordTimeout);
+      clearInterval(cycleInterval);
+      clearInterval(scrambleInterval);
     };
-  }, [currentWordIndex]);
-
+  }, [index]);
   return (
     <div className={styles.container}>
       <span className={styles.scope}>@takeoff-ui</span>
       <span className={styles.slash}>/</span>
-      <span className={styles.package}>
-        {displayedWord.map((letter, index) => (
-          <span key={index} className={shuffling ? styles.shuffleLetter : styles.normalLetter}>
-            {letter}
-          </span>
-        ))}
-      </span>
+      <span className={styles.package}>{text}</span>
     </div>
   );
 }

@@ -7,8 +7,8 @@ tk-checkbox {
     border-radius: var(--radius-m-base);
     border: 1px solid var(--border-light);
     background: var(--static-Light);
-    gap: var(--card-radio-container-gap);
-    padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
+    gap: var(--card-switcher-container-gap);
+    padding: var(--card-switcher-container-v-padding) var(--card-switcher-container-h-padding);
 
     &:hover {
       background-color: var(--background-lightest);
@@ -38,7 +38,7 @@ tk-checkbox {
 
     .mask {
       background-color: var(--static-light);
-      border: 2px solid var(--border-light);
+      border: 2px solid var(--border-sub-base);
       border-radius: var(--radius-s);
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -77,7 +77,6 @@ tk-checkbox {
 
   label input:focus-visible + .mask {
     border-color: var(--states-info-base);
-    background-color: var(--static-light);
   }
 
   label input:checked + .mask,
@@ -98,11 +97,13 @@ tk-checkbox {
 
   &[aria-disabled],
   &[disabled] {
+    pointer-events: none;
+
     label {
       color: var(--text-sub-base);
 
       input + .mask {
-        border: 2px solid var(--border-light);
+        border: 2px solid var(--border-sub-base);
         background-color: var(--background-light);
 
         .inner-mask {
