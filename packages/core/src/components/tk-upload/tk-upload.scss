@@ -63,6 +63,7 @@
 
     &.default {
       display: flex;
+      flex-wrap: wrap;
 
       .tk-upload-icon .icon i {
         font-size: 40px;
@@ -72,6 +73,7 @@
       .tk-upload-content {
         display: flex;
         flex-direction: column;
+        min-width: 0;
         gap: 8px;
 
         .tk-upload-text-holder {
@@ -101,6 +103,7 @@
 
         .tk-upload-input {
           display: flex;
+          flex-wrap: wrap;
           gap: 8px;
         }
       }
@@ -165,6 +168,8 @@
 
         .tk-upload-input {
           display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
           gap: 8px;
           padding: 8px;
         }
@@ -196,7 +201,7 @@
 
     .tk-upload-file-item {
       display: flex;
-      gap: 8px;
+      gap: 12px;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid var(--border-sub-base);
@@ -206,10 +211,12 @@
         width: 50px;
         height: 50px;
         position: relative;
+        flex-shrink: 0;
 
         svg {
           width: 50px;
           height: 50px;
+          flex-shrink: 0;
         }
 
         .extension-text {
@@ -262,59 +269,67 @@
         }
 
         img {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
           border-radius: 8px;
+          flex-shrink: 0;
+          max-width: none;
         }
-      }
-
-      .tk-upload-file-icon {
       }
 
       .tk-upload-file-content {
         display: flex;
         justify-content: space-between;
         flex-grow: 1;
-
-        .tk-upload-file-name {
-          color: var(--text-darkest);
-          font-size: var(--desktop-body-s-size);
-          line-height: var(--desktop-body-s-line-height);
-          word-break: break-word;
-        }
-
-        .tk-upload-file-size-state {
+        min-width: 0;
+        gap: 12px;
+        .tk-upload-file-info {
           display: flex;
-          gap: 8px;
-          color: var(--text-base);
-          font-size: var(--desktop-label-s-size, 12px);
-          font-weight: 300;
-          margin-top: 6px;
+          flex-direction: column;
+          gap: 2px;
+          align-items: flex-start;
+          min-width: 0;
 
-          .tk-upload-size {
+          .tk-upload-file-name {
+            color: var(--text-darkest);
+            font-size: var(--desktop-body-s-size);
+            line-height: var(--desktop-body-s-line-height);
+            word-break: break-word;
           }
 
-          .tk-upload-state {
+          .tk-upload-file-size-state {
             display: flex;
-            align-items: center;
-            gap: 4px;
+            gap: 8px;
+            color: var(--text-base);
+            font-size: var(--desktop-label-s-size, 12px);
+            font-weight: 300;
 
-            .icon {
-              font-size: 16px;
-              width: 16px;
-              height: 16px;
-            }
+            .tk-upload-state {
+              display: flex;
+              align-items: center;
+              gap: 4px;
 
-            &.added .icon {
-              color: var(--states-success-base);
-            }
+              .icon {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+              }
 
-            &.failed .icon {
-              color: var(--states-danger-base);
+              &.added .icon {
+                color: var(--states-success-base);
+              }
+
+              &.failed .icon {
+                color: var(--states-danger-base);
+              }
             }
           }
         }
 
         .tk-upload-file-buttons {
           display: flex;
+          align-self: center;
           gap: 4px;
         }
       }
