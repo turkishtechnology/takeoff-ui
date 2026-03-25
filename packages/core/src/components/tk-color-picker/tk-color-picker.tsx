@@ -243,16 +243,22 @@ export class TkColorPicker implements ComponentInterface {
     this.hasHeaderActionsSlot = !!this.el.querySelector(':scope > [slot="header-actions"]');
     this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
     this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+  }
 
+  componentDidLoad() {
+    const tkInputArea = this.inputRef?.querySelector('.tk-input') as HTMLElement;
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElement: tkInputArea || this.el,
       handler: this.handleClickOutside,
       disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss,
     });
   }
 
   componentDidUpdate() {
-    this.clickOutsideMixin?.updateConfig({ disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss });
+    this.clickOutsideMixin?.updateConfig({
+      disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss,
+      ignoredElements: this.panelRef ? [this.panelRef] : [],
+    });
 
     if (this.isOpen && this.inputRef && this.panelRef) {
       // Clean up old floating UI listeners before setting up new ones

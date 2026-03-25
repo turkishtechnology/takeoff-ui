@@ -557,6 +557,17 @@ export class TkInput implements ComponentInterface {
   };
 
   /**
+   * Handles label click:
+   * - preventDefault() stops the browser from dispatching a synthetic click
+   *   on the associated <input> (caused by htmlFor).
+   * - Manual focus() preserves the label-click-to-focus UX.
+   */
+  private handleLabelClick = (e: MouseEvent): void => {
+    e.preventDefault();
+    this.nativeInput?.focus();
+  };
+
+  /**
    * Renders the password strength indicator lines.
    *
    * The strength lines visually indicate the password strength:
@@ -643,7 +654,7 @@ export class TkInput implements ComponentInterface {
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label htmlFor={this.uniqueId} class="label">
+        <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick}>
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
