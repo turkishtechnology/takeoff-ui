@@ -195,18 +195,4 @@
     line-height: var(--desktop-label-s-line-height);
     font-weight: var(--weight-light);
   }
-  .tk-phone-input-hint,
-  .tk-phone-input-error {
-    color: var(--text-base);
-    line-height: var(--desktop-label-s-line-height);
-    font-size: var(--desktop-label-s-size);
-    font-weight: var(--weight-light);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding-left: var(--spacing-xs);
-  }
-  .tk-phone-input-error {
-    color: var(--states-danger-base);
-  }
 }
