@@ -851,6 +851,7 @@ export class TkSelect implements ComponentInterface {
     const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
     const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
     const isChipsClearButton = path.some((el: any) => el.classList?.contains('tk-chips-clear-button'));
+    const isInputElement = path.some((el: Element) => (el as Element).classList?.contains('tk-input'));
 
     if (isClearButton || isChipsClearButton) return;
 
@@ -859,7 +860,7 @@ export class TkSelect implements ComponentInterface {
       return;
     }
 
-    if (!this.isOpen) {
+    if (isInputElement && !this.isOpen) {
       this.isOpen = true;
     }
   }
