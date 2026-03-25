@@ -19,8 +19,8 @@ export class TkAccordionItem implements ComponentInterface {
 
   @State() type: 'grouped' | 'divided' = 'grouped';
   @State() arrowPosition: 'left' | 'right' = 'right';
-  @State() expandIcon: string | IIconOptions | IMultiIconOptions;
-  @State() collapseIcon: string | IIconOptions | IMultiIconOptions;
+  @State() expandIcon: string | IIconOptions;
+  @State() collapseIcon: string | IIconOptions;
   @State() hideArrows: boolean = false;
   @State() hasHeaderSlot = false;
   @State() mode: 'default' | 'compact' = 'default';
@@ -78,7 +78,7 @@ export class TkAccordionItem implements ComponentInterface {
   }
   private createIcon() {
     if (this.hideArrows) return null;
-    let _renderIcon: string | IIconOptions | IMultiIconOptions;
+    let _renderIcon: string | IIconOptions;
 
     if (this.active) {
       _renderIcon = this.collapseIcon;
