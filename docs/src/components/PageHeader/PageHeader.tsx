@@ -10,8 +10,8 @@ export default function PageHeader(): JSX.Element {
 
         {colorMode === 'dark' ? <img src="img/hero/hero-logo-dark.svg" /> : <img src="img/hero/hero-logo.svg" />}
         <p className={'description'}>
-          TakeOff simplifies the process of building web applications. It provides comprehensive and flexible design system and ui library that ensures high performance,
-          scalability, and ease of use.{' '}
+          Takeoff UI is a design system of framework-agnostic web components built with Stencil.js. Use the same UI foundation across React, Vue, and Angular so teams ship faster
+          with consistent UX.{' '}
         </p>
       </div>
     </header>

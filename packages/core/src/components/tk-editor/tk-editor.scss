@@ -401,10 +401,21 @@
 
   ul {
     list-style-type: disc;
+  }
 
-    li {
-      display: list-item;
-    }
+  ul ul,
+  ol ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul,
+  ol ul ul,
+  ol ol ul {
+    list-style-type: square;
+  }
+
+  ul li {
+    display: list-item;
   }
 
   ol {

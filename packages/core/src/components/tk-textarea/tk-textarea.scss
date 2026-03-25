@@ -128,7 +128,9 @@
   }
 
   &[aria-disabled] {
+    pointer-events: none;
     .label,
+    .hint,
     .tk-textarea textarea {
       color: var(--text-sub-base);
       pointer-events: none;

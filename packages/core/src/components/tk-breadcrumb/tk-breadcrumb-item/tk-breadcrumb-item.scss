@@ -18,13 +18,13 @@
       /* 142.857% */
     }
 
-    .tk-breadcrumb-item-icon {
+    .tk-breadcrumb-item-icon span {
       color: var(--icon-sub-base);
     }
   }
 
   &.tk-breadcrumb-item-current {
-    .tk-breadcrumb-item-icon {
+    .tk-breadcrumb-item-icon span {
       color: var(--icon-dark);
     }
 
@@ -55,7 +55,7 @@
   .tk-breadcrumb-item {
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon {
+      .tk-breadcrumb-item-icon span {
         color: var(--icon-dark);
       }
 
@@ -78,6 +78,12 @@
       padding: var(--backgrounded-item-v-padding, 2px) 4px;
     }
 
+    .tk-breadcrumb-item-icon span {
+      font-size: var(--backgrounded-item-icon-size);
+      width: var(--backgrounded-item-icon-size);
+      height: var(--backgrounded-item-icon-size);
+    }
+
     &.tk-breadcrumb-item-current {
       border: var(--spacing-px) solid var(--border-sub-base);
       background: var(--background-lightest);
@@ -97,7 +103,7 @@
 
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon {
+      .tk-breadcrumb-item-icon span {
         color: var(--icon-dark);
       }
 

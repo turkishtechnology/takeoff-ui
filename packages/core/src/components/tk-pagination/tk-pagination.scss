@@ -89,6 +89,8 @@ tk-pagination {
       }
 
       &:disabled {
+        pointer-events: none;
+
         .tk-pagination-page-label,
         .tk-pagination-cell-icon i {
           color: var(--text-sub-base, #99a0ae);
