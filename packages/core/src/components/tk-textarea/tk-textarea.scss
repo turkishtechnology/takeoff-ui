@@ -151,6 +151,7 @@
   }
 
   &[aria-disabled] {
+    pointer-events: none;
     & .label,
     & .hint,
     .tk-textarea textarea {
@@ -167,7 +168,6 @@
   }
 
   &[aria-readonly] {
-    & .label,
     & .hint {
       color: var(--text-sub-base);
       &.error {

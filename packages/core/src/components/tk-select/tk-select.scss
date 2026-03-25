@@ -76,6 +76,7 @@ tk-select {
           outline: 1px solid var(--states-info-light);
         }
         &.disabled {
+          pointer-events: none;
           cursor: not-allowed;
           background: var(--background-lightest);
           color: var(--text-sub-base);
