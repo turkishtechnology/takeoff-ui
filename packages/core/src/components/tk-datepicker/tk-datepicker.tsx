@@ -325,6 +325,16 @@ export class TkDatePicker {
   @Prop() firstDayOfWeekIndex?: number;
 
   /**
+   * Defines the default year/month to display when the panel is opened.
+   * Accepted formats:
+   * - yyyy-MM
+   * - MM-yyyy
+   * - yyyy
+   * - MM
+   */
+  @Prop() defaultDate?: string;
+
+  /**
    * Emitted on input value changes
    */
   @Event({ eventName: 'tk-input-change' }) tkInputChange: EventEmitter<string>;
@@ -763,7 +773,26 @@ export class TkDatePicker {
   }
 
   private initializeDates(): void {
-    this.currentMonth = new Date();
+    // Initialize currentMonth with priority: defaultDate > first allowedDate month > first non-disabled month > now
+    const now = new Date();
+    const parsedDefaultDate = this.parseDefaultDate(this.defaultDate);
+    if (parsedDefaultDate) {
+      this.currentMonth = parsedDefaultDate;
+    } else if (this.allowedDates && this.allowedDates.length > 0) {
+      this.currentMonth = this.getFirstAvailableAllowedMonth() ?? now;
+    } else {
+      let candidateMonth = now;
+      if (this.disabledDates && this.disabledDates.length > 0) {
+        let limit = 12; // Prevent infinite loop by limiting to 12 months of searching
+        while (this.isMonthFullyDisabled(candidateMonth.getFullYear(), candidateMonth.getMonth()) && limit > 0) {
+          candidateMonth = new Date(candidateMonth.getFullYear(), candidateMonth.getMonth() + 1, 1);
+          limit--;
+        }
+      }
+
+      this.currentMonth = candidateMonth;
+    }
+
     this.processDateValue(this.value, true);
 
     if (this.showTimePicker && !this.internalStartTime && this.internalSelectedDates.start) {
@@ -921,6 +950,66 @@ export class TkDatePicker {
     }
 
     return false;
+  }
+
+  private isMonthFullyDisabled(year: number, month: number): boolean {
+    // Check if the entire month has all days disabled
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      if (!this.isDateDisabled(date)) {
+        return false; // Found at least one enabled date
+      }
+    }
+
+    return true; // All days in the month are disabled
+  }
+
+  private parseDefaultDate(value?: string): Date | null {
+    if (!value) return null;
+
+    const now = new Date();
+    const delimiters = ['.', '/', '_', '-'];
+    const delimiterRegex = new RegExp(`[${delimiters.join('')}]`);
+    const parts = value.trim().split(delimiterRegex);
+    if (parts.length === 2) {
+      const [first, second] = parts;
+      if (/^\d{4}$/.test(first) && /^\d{2}$/.test(second)) {
+        // yyyy-MM
+        const year = Number.parseInt(first, 10);
+        const month = Number.parseInt(second, 10);
+        if (month >= 1 && month <= 12) return new Date(year, month - 1, 1);
+      } else if (/^\d{2}$/.test(first) && /^\d{4}$/.test(second)) {
+        // MM-yyyy
+        const month = Number.parseInt(first, 10);
+        const year = Number.parseInt(second, 10);
+        if (month >= 1 && month <= 12) return new Date(year, month - 1, 1);
+      }
+      return null;
+    }
+
+    // (yyyy)
+    if (parts.length === 1 && /^\d{4}$/.test(parts[0])) {
+      const year = Number.parseInt(parts[0], 10);
+      return new Date(year, now.getMonth(), 1);
+    }
+
+    //  (MM)
+    if (parts.length === 1 && /^\d{2}$/.test(parts[0])) {
+      const month = Number.parseInt(parts[0], 10);
+      if (month >= 1 && month <= 12) return new Date(now.getFullYear(), month - 1, 1);
+    }
+
+    return null;
+  }
+
+  private getFirstAvailableAllowedMonth(): Date | null {
+    if (!this.allowedDates?.length) return null;
+    const parsedAllowedDates = this.allowedDates.map(date => this.parseInputDate(date)).filter((date): date is Date => date !== null);
+    if (!parsedAllowedDates.length) return null;
+    const minDate = parsedAllowedDates.reduce((min, curr) => (curr.getTime() < min.getTime() ? curr : min), parsedAllowedDates[0]);
+    return new Date(minDate.getFullYear(), minDate.getMonth(), 1);
   }
 
   private formatInputValue(): string {
