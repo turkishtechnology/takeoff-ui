@@ -559,28 +559,11 @@ export class TkInput implements ComponentInterface {
    * Handles label click:
    * - preventDefault() stops the browser from dispatching a synthetic click
    *   on the associated <input> (caused by htmlFor).
-   * - stopPropagation() prevents the click from bubbling up to parent
-   *   components (e.g. tk-select's handleInputClick) so it won't re-open
-   *   the dropdown. ClickOutsideMixin still sees the event because it
-   *   listens in the capture phase, which runs before stopPropagation.
    * - Manual focus() preserves the label-click-to-focus UX.
    */
   private handleLabelClick = (e: MouseEvent): void => {
     e.preventDefault();
-    e.stopPropagation();
     this.nativeInput?.focus();
-  };
-
-  /**
-   * Handles hint area click:
-   * - stopPropagation() prevents the click from bubbling up to parent
-   *   components (e.g. tk-select's handleInputClick) so clicking on the
-   *   hint text won't open/close the dropdown.
-   *   ClickOutsideMixin still sees the event because it listens in the
-   *   capture phase, which runs before stopPropagation.
-   */
-  private handleHintClick = (e: MouseEvent): void => {
-    e.stopPropagation();
   };
 
   /**
@@ -665,7 +648,7 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLDivElement | undefined {
+  private renderHint(): HTMLSpanElement | undefined {
     let hint;
     if (this.hint?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
@@ -690,26 +673,20 @@ export class TkInput implements ComponentInterface {
     }
 
     if (hint) {
-      return (
-        <div class="tk-input-hint-container" onClick={this.handleHintClick}>
-          {hint}
-        </div>
-      );
+      return hint;
     }
     return undefined;
   }
 
-  private renderLabel(): HTMLDivElement | undefined {
+  private renderLabel(): HTMLLabelElement | undefined {
     let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <div class="tk-input-label-container" onClick={this.handleLabelClick}>
-          <label htmlFor={this.uniqueId} class="label">
-            {this.label}
-            {this.showAsterisk ? asterisk : ''}
-          </label>
-        </div>
+        <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick}>
+          {this.label}
+          {this.showAsterisk ? asterisk : ''}
+        </label>
       );
     }
     return label;

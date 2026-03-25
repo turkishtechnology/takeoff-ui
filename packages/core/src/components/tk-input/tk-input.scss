@@ -36,19 +36,15 @@ tk-input.tk-table-input {
   gap: var(--input-external-label-large-container-gap);
   width: 100%;
 
-  .tk-input-label-container {
-    width: 100%;
+  .label {
+    color: var(--text-darkest);
+    font-weight: 400;
 
-    .label {
-      color: var(--text-darkest);
-      font-weight: 400;
-
-      .asterisk {
-        color: var(--states-danger-base);
-        font-size: var(--desktop-label-s-size);
-        font-weight: 300;
-        line-height: var(--desktop-label-s-line-height);
-      }
+    .asterisk {
+      color: var(--states-danger-base);
+      font-size: var(--desktop-label-s-size);
+      font-weight: 300;
+      line-height: var(--desktop-label-s-line-height);
     }
   }
 
@@ -170,30 +166,26 @@ tk-input.tk-table-input {
     }
   }
 
-  .tk-input-hint-container {
-    width: 100%;
+  .hint {
+    color: var(--text-base);
+    line-height: var(--desktop-label-s-line-height);
+    font-size: var(--desktop-label-s-size);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
 
-    .hint {
-      color: var(--text-base);
-      line-height: var(--desktop-label-s-line-height);
-      font-size: var(--desktop-label-s-size);
-      font-weight: 300;
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
+    & i {
+      font-size: var(--size-base);
+      width: var(--size-base);
+      height: var(--size-base);
+      color: var(--icon-base);
+    }
 
+    &.error {
+      color: var(--states-danger-base);
       & i {
-        font-size: var(--size-base);
-        width: var(--size-base);
-        height: var(--size-base);
-        color: var(--icon-base);
-      }
-
-      &.error {
         color: var(--states-danger-base);
-        & i {
-          color: var(--states-danger-base);
-        }
       }
     }
   }
