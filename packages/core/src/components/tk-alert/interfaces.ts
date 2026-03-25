@@ -10,5 +10,5 @@ export interface IAlertActionButton {
   /** Sets size for the component. */
   size?: 'small' | 'base' | 'large';
   /** Function to be executed on click event.*/
-  action?: Function;
+  action?: () => void;
 }

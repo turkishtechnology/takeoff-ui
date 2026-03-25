@@ -96,7 +96,7 @@ export class TkTable implements ComponentInterface {
   /**
    * A function that returns true if the row should be disabled
    */
-  @Prop() selectionRowDisabled: Function;
+  @Prop() selectionRowDisabled?: (row: Record<string, unknown>) => boolean;
 
   /**
    * Style to apply to header of table

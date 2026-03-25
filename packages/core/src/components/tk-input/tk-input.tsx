@@ -11,6 +11,8 @@ import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 
+type TkInputChipItem = string | number | boolean | Record<string, unknown>;
+
 /**
  * The TkInput component is used to capture text input from the user.
  * @react `import { TkInput } from '@takeoff-ui/react'`
@@ -167,7 +169,7 @@ export class TkInput implements ComponentInterface {
   /**
    * A function that determines whether a chip is disabled.
    */
-  @Prop() chipDisabled: Function;
+  @Prop() chipDisabled?: (item: TkInputChipItem) => boolean;
 
   /**
    * Shows a loading spinner on the right side of the input.
