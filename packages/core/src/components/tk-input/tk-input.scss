@@ -16,12 +16,6 @@ tk-input.tk-table-input {
     padding-bottom: 0px;
     border-radius: var(--spacing-xs);
 
-    i {
-      font-size: var(--spacing-2xl);
-      width: var(--spacing-2xl);
-      height: var(--spacing-2xl);
-    }
-
     input {
       font-size: var(--desktop-body-s-size);
       line-height: 100%;
@@ -59,27 +53,13 @@ tk-input.tk-table-input {
     .tk-input-clear-button {
       margin-left: auto;
     }
-
-    i {
-      color: var(--icon-base);
+    tk-icon {
       user-select: none;
-    }
-    tk-icon.clickable:not(.disabled) {
-      cursor: pointer;
-    }
-
-    .counter-icon {
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
-      color: var(--icon-base);
-      user-select: none;
-
-      &:hover {
-        color: var(--icon-dark);
+      &.clickable:not(.disabled) {
         cursor: pointer;
       }
     }
+
     .tk-input-prefix-container {
       display: inline-flex;
       font-weight: 300;
@@ -178,13 +158,6 @@ tk-input.tk-table-input {
       height: 48px;
       padding: var(--input-external-label-large-input-v-padding) var(--input-external-label-large-input-h-padding);
 
-      i,
-      .counter-icon {
-        font-size: var(--input-external-label-large-icon-size);
-        width: var(--input-external-label-large-icon-size);
-        height: var(--input-external-label-large-icon-size);
-      }
-
       input {
         font-size: var(--desktop-body-m-base-size);
         line-height: var(--desktop-body-m-base-line-height);
@@ -204,12 +177,6 @@ tk-input.tk-table-input {
       height: 40px;
       padding: var(--input-external-label-base-input-v-padding) var(--input-external-label-base-input-h-padding);
 
-      i {
-        font-size: var(--input-external-label-base-icon-size);
-        width: var(--input-external-label-base-icon-size);
-        height: var(--input-external-label-base-icon-size);
-      }
-
       input {
         font-size: var(--desktop-body-s-size);
         line-height: var(--desktop-body-s-line-height);
@@ -228,12 +195,6 @@ tk-input.tk-table-input {
       gap: var(--input-external-label-small-input-gap);
       height: 32px;
       padding: var(--input-external-label-small-input-v-padding) var(--input-external-label-small-input-h-padding);
-
-      i {
-        font-size: var(--input-external-label-small-icon-size);
-        width: var(--input-external-label-small-icon-size);
-        height: var(--input-external-label-small-icon-size);
-      }
 
       input {
         font-size: var(--desktop-body-xs-size);
@@ -256,11 +217,6 @@ tk-input.tk-table-input {
 
     .tk-input {
       background-color: var(--background-lightest);
-
-      i,
-      .counter-icon {
-        color: var(--icon-sub-base);
-      }
     }
   }
 
@@ -271,9 +227,6 @@ tk-input.tk-table-input {
 
     .tk-input {
       background-color: var(--background-lightest);
-      i {
-        color: var(--icon-light);
-      }
     }
   }
 
