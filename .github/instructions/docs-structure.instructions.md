@@ -6,115 +6,114 @@ applyTo:
 
 # Takeoff UI Docs Structure
 
-## Genel yapı
+## General Structure
 
-- Bileşen dokümantasyonları `docs/docs/Components/` altında yer alır. Örn:
+- Component documentations are under the `docs/docs/Components`. e.g.:
   `docs/docs/Components/Button.mdx`, `docs/docs/Components/Accordion.mdx`.
-- Bileşen dokümantasyonunda kullanılan alanlar
-  `docs/src/docs-files/tk-[component-name]/` altında bulunur.
+- The fields used in component documentation are located under
+  `docs/src/docs-files/tk-[component-name]/`.
 
-## Bileşen dokümantasyonu yapısı
+## Component documentation structure
 
-Her bileşen için `docs/docs/Components/[ComponentName].mdx` dosyası oluşturulur.
-Bu dosyada aşağıdaki bölümler bulunur:
+For each component, a `docs/docs/Components/[ComponentName].mdx` file is
+created. This file contains the following sections:
 
-- **Sidebar position**: Bileşenin dokümantasyonda hangi sırada görüneceğini
-  belirten `sidebar_position` meta verisi.
+- **Sidebar position**: The `sidebar_position` metadata that specifies the order
+  in which the component appears in the documentation.
 
-- **HeadContent**: Bileşenin genel tanıtımı ve framework’lere özel import
-  örnekleri
+- **HeadContent**: The component's general introduction and framework-specific
+  import examples
 
-- **BodyContent**: Playground, kullanım örnekleri ve açıklamaları içerir.
+- **BodyContent**: Contains playground, usage examples, and explanations.
 
-- **API**: Bileşenin props ve özelliklerinin detaylı açıklaması.
+- **API**: Detailed description of the component's props and properties.
 
-- **Alt bileşen API'leri**: Alt bileşenleri olan bileşenlerde kullanılır. Alt
-  bileşenlerin API'ları burada yer alır.
+- **Subcomponent APIs**: Used in components with subcomponents. The APIs of the
+  sub-components are located here.
 
-### `generate-docs` komutu
+### `generate-docs` command
 
-`docs/src/docs-files/tk-[component-name]/` içinde yer alan `head.mdx` ve
-`api.mdx` dosyaları otomatik olarak üretilir. Bu dosyalar kesinlikle elle
-düzenlenmez.
+`head.mdx` and `api.mdx` files that are in the
+`docs/src/docs-files/tk-[component-name]/` are created automatically. These
+files should definitely not be edited manually.
 
-## `tk-[component-name]` klasör yapısı
+## `tk-[component-name]` directory structure
 
-Her bileşen için `docs/src/docs-files/tk-[component-name]/` klasöründe şu
-dosyalar bulunur:
+For each component, the following files are located in the
+`docs/src/docs-files/tk-[component-name]/` folder:
 
-- **`Examples/` klasörü**: Bileşenin kullanım örneklerini içeren TSX dosyaları.
+- **`Examples/` folder**: TSX files containing examples of the component's use.
 
-- **`[componentName]PlaygroundConfig.json`**: Bileşene özgü playground
-  yapılandırmasını içeren JSON dosyası
+- **`[ComponentName]PlaygroundConfig.json`**: JSON file containing the
+  component-specific playground configuration
 
-- **`api.mdx`**: Bileşenin API dokümantasyonunu içerir.
+- **`api.mdx`**: Contains the component's API documentation.
 
-- **`head.mdx`**: Bileşenin tanıtımını ve import örneklerini içerir.
+- **`head.mdx`**: Contains the component's introduction and import examples.
 
-- **`body.mdx`**: Bileşenin playground ve kullanım örneklerini içeren ana içerik
-  dosyası.
+- **`body.mdx`**: The main content file containing the playground and use cases
+  of the component.
 
-- **Alt bileşen klasörleri**: Alt bileşenler için yalnızca `api.mdx` ve
-  `head.mdx` dosyaları bulunur; `body.mdx` yoktur.
+-**Child component folders**: For child components only `api.mdx` and `head.mdx`
+files are present; `body.mdx` is not.
 
-## `body.mdx` içeriği
+## Content of `body.mdx`
 
-`body.mdx`, komponent dokümanının "kullanım" tarafını tanımlar:
+`body.mdx` defines the "usage" side of the component documentation:
 
-- **Playground**: Bileşenin interaktif olarak deneyimlenebileceği alan.
-  Playground config dosyasındaki örnekler burada gösterilir.
+- **Playground**: The area where the component can be interactively experienced.
+  Examples in the Playground configuration file are shown here.
 
-- **Kullanım örnekleri**: Bileşenin farklı kullanım senaryolarını gösteren
-  örnekler. Bu örnekler `Examples` klasöründeki TSX dosyalarından import edilir
-  ve `body.mdx` içinde doğrudan çağrılır; `<FeatureDemo>` kullanılmaz.
+- **Usage examples**: Examples demonstrating different usage scenarios of the
+  component. These examples are imported from TSX files in the `Examples` folder
+  and called directly within `body.mdx`; `<FeatureDemo>` is not used.
 
-- **Açıklamalar**: Bileşenin özellikleri, kullanım ipuçları ve dikkat edilmesi
-  gereken noktalar burada yer alır.
+- **Descriptions**: The component's features, usage tips, and important points
+  to note are listed here.
 
-- **Uyarılar / bilgilendirici bileşenler**: Belirli özellikler veya kullanım
-  durumları hakkında kullanıcıyı bilgilendirmek için `TkAlert` ve benzeri
-  bileşenler kullanılabilir. Uyarı ile ilgili örnek arasında `<br />` etiketi
-  kullanılarak boşluk bırakılır.
+- **Alerts / informational components**: `TkAlert` and similar components can be
+  used to inform the user about specific features or usage cases. A space is
+  left between the alert and the example using the `<br />` tag.
 
-### body.mdx'de sıralama
+### Order in body.mdx
 
-body.mdx dosyası şu sırada yapılandırılır:
+The body.mdx file is structured in the following order:
 
-- En üstte import'lar yer alır (Examples, Playground, config JSON,
-  `@takeoff-ui/react` component'leri).
-- Import'ların ardından `### Playground` bölümü gelir; her zaman ilk içerik
-  bölümüdür.
-- Playground'dan sonra kullanım örnekleri sıralanır. Genel sıralama: Basic →
-  (Her bileşende ortak olan prop'ların örnekleri) → Diğer prop'lar → Daha
-  karmaşık senaryolar → Alt bileşen örnekleri.
+- Imports are at the top (Examples, Playground, config JSON, `@takeoff-ui/react'
+  components).
+- Imports are followed by the `### Playground' section; it is always the first
+  content section
 
-## Examples içindeki TSX dosyaları
+- After Playground, usage examples are listed. General order: Basic → (Examples
+  of props common to every component) → Other props → More complex scenarios →
+  Subcomponent examples.
 
-`docs/src/docs-files/tk-[component-name]/Examples/*.tsx` dosyaları, aşağıdaki
-alanları kullanır:
+## TSX files in Examples
 
-| Alan          | Zorunlu | Açıklama                                                    |
-| ------------- | ------- | ----------------------------------------------------------- |
-| `featureDemo` | Evet    | Sayfada render edilen ana React bileşeni                    |
-| `demo`        | Hayır   | Kısa, odaklı kullanım örneği bileşeni (`@takeoff-ui/react`) |
-| `reactCode`   | Evet    | `demo`'daki örneğin React karşılığı (string)                |
-| `vueCode`     | Evet    | Aynı örneğin Vue karşılığı (string)                         |
-| `angularCode` | Evet    | Aynı örneğin Angular karşılığı (string)                     |
-| `Example`     | Hayır   | Daha uzun / karmaşık senaryolar için ek bileşen             |
+`docs/src/docs-files/tk-[component-name]/Examples/*.tsx` files use fields below:
 
-- Default export zorunludur.
-- Harici hook (`useState`, `useEffect` vb.) gerekirse eklenebilir.
-- `angularCode` içinde camelCase prop'lar dash-case'e dönüştürülür
-  (`badgeStatus` → `badge-status`, `[dot]="true"` gibi binding söz dizimi).
-- `featureDemo`ya return ederek tüm örnekler `demo`, `reactCode`, `vueCode` ve
-  `angularCode` alanlarını içermelidir.
+| Field         | Required | Description                                        |
+| ------------- | -------- | -------------------------------------------------- |
+| `featureDemo` | Yes      | Main react component rendered on the page          |
+| `demo`        | No       | Short examples (`@takeoff-ui/react`)               |
+| `reactCode`   | Yes      | React equivalent of the example in `demo` (string) |
+| `vueCode`     | Yes      | Vue equivalent of same example (string)            |
+| `angularCode` | Yes      | Angular equivalent of same example (string)        |
+| `Example`     | No       | Longer / complex examples                          |
+
+- Default export is mandatory.
+- External hooks (`useState`, `useEffect` etc.) can be added if needed.
+- camelCase props in `angularCode` are converted to dash-case. (such as
+  `badgeStatus` → `badge-status`, `[dot]="true"` binding syntax).
+- return syntax with feature demo is: return
+  <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 
 ## Dosya isimlendirme kuralları
 
-| Dosya                          | Format                             | Örnek                          |
-| ------------------------------ | ---------------------------------- | ------------------------------ |
-| PlaygroundConfig JSON          | `[camelCase]PlaygroundConfig.json` | `dialogPlaygroundConfig.json`  |
-| Example TSX                    | PascalCase, prop veya özellik adı  | `Variant.tsx`, `FullWidth.tsx` |
-| Component MDX                  | PascalCase                         | `Button.mdx`                   |
-| docs-files klasörü             | `tk-[dash-case]`                   | `tk-button`, `tk-color-picker` |
-| Alt bileşen docs-files klasörü | `tk-[parent]-[child]`              | `tk-accordion-item`            |
+| File                                 | Format                             | Example                        |
+| ------------------------------------ | ---------------------------------- | ------------------------------ |
+| PlaygroundConfig JSON                | `[camelCase]PlaygroundConfig.json` | `dialogPlaygroundConfig.json`  |
+| Example TSX                          | PascalCase, prop or feature name   | `Variant.tsx`, `FullWidth.tsx` |
+| Component MDX                        | PascalCase                         | `Button.mdx`                   |
+| docs-files directory                 | `tk-[dash-case]`                   | `tk-button`, `tk-color-picker` |
+| Child component docs-files directory | `tk-[parent]-[child]`              | `tk-accordion-item`            |
