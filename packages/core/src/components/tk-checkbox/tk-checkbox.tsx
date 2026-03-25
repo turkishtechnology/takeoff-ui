@@ -144,9 +144,13 @@ export class TkCheckbox implements ComponentInterface {
         <label htmlFor={this.uniqueId}>
           {this.renderInput()}
           <div class="mask">
-            <div class="inner-mask">
-              <tk-icon {...getIconElementProps(this.indeterminate ? 'remove' : this.value ? 'check' : null, { size: this.size === 'small' ? 'xsmall' : 'small' })} />
-            </div>
+            <tk-icon
+              class="inner-mask"
+              {...getIconElementProps(this.indeterminate ? 'remove' : this.value ? 'check' : null, {
+                color: 'var(--static-light)',
+                size: this.size === 'small' ? 'xxsmall' : 'xsmall',
+              })}
+            />
           </div>
           {this.hasContentSlot ? (
             <slot name="content" />
