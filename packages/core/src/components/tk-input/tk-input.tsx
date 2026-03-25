@@ -648,7 +648,7 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement | undefined {
+  private renderHint(): HTMLSpanElement {
     let hint;
     if (this.hint?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
@@ -671,14 +671,10 @@ export class TkInput implements ComponentInterface {
         </span>
       );
     }
-
-    if (hint) {
-      return hint;
-    }
-    return undefined;
+    return hint;
   }
 
-  private renderLabel(): HTMLLabelElement | undefined {
+  private renderLabel(): HTMLLabelElement {
     let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
