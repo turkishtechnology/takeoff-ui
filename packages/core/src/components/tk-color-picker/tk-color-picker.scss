@@ -11,12 +11,6 @@
     width: auto;
     display: flex;
   }
-
-  &.tk-color-picker-disabled,
-  &.tk-color-picker-readonly {
-    opacity: 0.6;
-    pointer-events: none;
-  }
 }
 
 .tk-color-picker-panel {
