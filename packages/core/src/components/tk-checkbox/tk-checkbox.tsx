@@ -1,4 +1,5 @@
 import { Component, Prop, State, Element, Watch, EventEmitter, Event, ComponentInterface, AttachInternals } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -122,12 +123,14 @@ export class TkCheckbox implements ComponentInterface {
     }
   }
 
-  private renderInput(): HTMLInputElement {
+  private renderInput(): JSX.Element {
     return (
       <input
         id={this.uniqueId}
         type="checkbox"
-        ref={el => (this.inputElement = el)}
+        ref={el => {
+          this.inputElement = el;
+        }}
         checked={this.value}
         indeterminate={this.indeterminate}
         disabled={this.disabled}

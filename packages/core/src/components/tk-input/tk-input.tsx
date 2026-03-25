@@ -1,4 +1,5 @@
 import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, AttachInternals, Watch } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -567,8 +568,8 @@ export class TkInput implements ComponentInterface {
    *
    * @returns An array of JSX elements representing the strength indicator lines.
    */
-  private renderStrengthLines(): HTMLElement[] {
-    const lines: HTMLElement[] = [];
+  private renderStrengthLines(): JSX.Element[] {
+    const lines: JSX.Element[] = [];
     for (let i = 0; i < 4; i++) {
       let className = 'line';
       if (i < this.passwordStrength) {
@@ -612,11 +613,13 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  private renderInput(): HTMLInputElement {
+  private renderInput(): JSX.Element {
     return (
       <input
         id={this.uniqueId}
-        ref={el => (this.nativeInput = el)}
+        ref={el => {
+          this.nativeInput = el;
+        }}
         disabled={this.disabled}
         autoComplete="off"
         type={this.inputType}
@@ -637,8 +640,8 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
+  private renderHint(): JSX.Element | undefined {
+    let hint: JSX.Element | undefined;
     if (this.hint?.length > 0) {
       const hintIcon = <tk-icon {...getIconElementProps('info')} />;
 
@@ -663,8 +666,8 @@ export class TkInput implements ComponentInterface {
     return hint;
   }
 
-  private renderLabel(): HTMLLabelElement {
-    let label;
+  private renderLabel(): JSX.Element | undefined {
+    let label: JSX.Element | undefined;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
@@ -678,8 +681,8 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderAlignmentButtons() {
-    let leftButton: HTMLTkButtonElement;
-    let rightButton: HTMLTkButtonElement;
+    let leftButton: JSX.Element | undefined;
+    let rightButton: JSX.Element | undefined;
     if (this.isCounter) {
       leftButton = (
         <tk-icon
@@ -713,8 +716,8 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderPasswordIcons() {
-    let passwordLeftIcon: HTMLTkIconElement;
-    let passwordRightIcon: HTMLTkIconElement;
+    let passwordLeftIcon: JSX.Element | undefined;
+    let passwordRightIcon: JSX.Element | undefined;
 
     if (this.inputType == 'password') {
       if (!this.hidePasswordIcon) {
@@ -734,9 +737,9 @@ export class TkInput implements ComponentInterface {
   }
 
   render() {
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
-    let safetyStatus: HTMLElement;
+    let _leftIcon: JSX.Element | undefined;
+    let _rightIcon: JSX.Element | undefined;
+    let safetyStatus: JSX.Element | undefined;
 
     if (this.showSafetyStatus) {
       safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;

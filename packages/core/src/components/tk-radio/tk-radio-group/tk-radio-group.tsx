@@ -1,4 +1,5 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, AttachInternals } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../../utils/icon-utils';
 import { isEqual } from 'lodash-es';
@@ -149,7 +150,7 @@ export class TkRadioGroup implements ComponentInterface {
   }
 
   render() {
-    let _label: HTMLLabelElement;
+    let _label: JSX.Element | undefined;
 
     const rootClasses = classNames('tk-radio-group-container', {
       vertical: this.direction === 'vertical',
