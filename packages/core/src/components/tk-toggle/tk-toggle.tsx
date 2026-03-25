@@ -188,7 +188,7 @@ export class TkToggle implements ComponentInterface {
             <span class="tk-toggle-thumb">
               {this.showIcon && (
                 <tk-icon
-                  {...getIconElementProps(this.checked ? this.icon : null, {
+                  {...getIconElementProps(this.getActiveIcon(), {
                     variant: this.invalid ? 'danger' : this.variant,
                     size: this.size === 'large' || this.size === 'xlarge' ? 'medium' : this.size,
                   })}
