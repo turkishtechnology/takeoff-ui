@@ -5,6 +5,14 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { ITreeItem } from '../tk-treeview/interfaces';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
+type TableRowData = Record<string, unknown>;
+type TableFilterValue = ITableFilter['value'];
+type TableSorter = (a: TableRowData, b: TableRowData) => number;
+type TableFilterFn = (value: TableFilterValue, row: TableRowData) => boolean | undefined;
+type TableHeaderRenderer = () => string | HTMLElement;
+type TableCellRenderer = (row: TableRowData, index: number) => string | HTMLElement;
+type TableExportFormatter = (row: TableRowData) => string | number | boolean | null | undefined;
+
 /**
  * Defines the columns for the table
  */
@@ -20,9 +28,9 @@ export interface ITableColumn {
   /** Indicates if the column supports sorting */
   sortable?: boolean;
   /** Custom sort function for the column, mandatory when using client-side sorting. */
-  sorter?: Function;
+  sorter?: TableSorter;
   /** Custom filter function for the column, mandatory when using client-side filtering. */
-  filter?: Function;
+  filter?: TableFilterFn;
   /** Indicates if the column is searchable */
   searchable?: boolean;
   /** Indicates if the column is editable */
@@ -34,11 +42,11 @@ export interface ITableColumn {
   /** Indicates if the column acts as an expander */
   expander?: boolean;
   /** Custom rendering function for HTML content in the column header */
-  headerHtml?: Function;
+  headerHtml?: TableHeaderRenderer;
   /** Custom rendering function for HTML content in the column cells */
-  html?: Function;
+  html?: TableCellRenderer;
   /** Custom formatting function for exporting column data */
-  exportFormat?: Function;
+  exportFormat?: TableExportFormatter;
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */

@@ -9,6 +9,12 @@ import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
+type TkSelectOption = string | number | boolean | Record<string, unknown>;
+type TkSelectFilter = (text: string | null | undefined, options: TkSelectOption[]) => Promise<TkSelectOption[]> | TkSelectOption[];
+type TkSelectOptionRenderer = (item: TkSelectOption) => string;
+type TkSelectOptionPredicate = (item: TkSelectOption) => boolean;
+type TkSelectPanelRenderer = () => string | HTMLElement;
+
 /**
  * TkSelect component description.
  * @slot empty-data - Set how the dropdown will appear when there is no data
@@ -120,7 +126,7 @@ export class TkSelect implements ComponentInterface {
   /**
    *  Function used to filter current options based on the input value. Comes with a default filter function, but can be overridden with a custom function.
    */
-  @Prop() filter: Function = this.defaultFilter;
+  @Prop() filter: TkSelectFilter = this.defaultFilter;
 
   /**
    * Sets the delay (in ms) before triggering the filter function.
@@ -188,7 +194,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Provides a function to customize the panel top content.
    */
-  @Prop() panelTopHtml: Function;
+  @Prop() panelTopHtml?: TkSelectPanelRenderer;
 
   /**
    * The list of options to be displayed in the select box.
@@ -206,7 +212,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * Provides a function to customize the options.
    */
-  @Prop() optionHtml: Function;
+  @Prop() optionHtml?: TkSelectOptionRenderer;
 
   /**
    * The key to use for option labels
@@ -235,7 +241,7 @@ export class TkSelect implements ComponentInterface {
   /**
    * A function to determine whether an option should be disabled.
    */
-  @Prop() optionDisabled: Function;
+  @Prop() optionDisabled?: TkSelectOptionPredicate;
 
   /**
    * The value of the input.

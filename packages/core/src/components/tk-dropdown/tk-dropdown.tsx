@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
+type TkDropdownOption = string | number | boolean | Record<string, unknown>;
+
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
  * @slot trigger - The trigger slot defines the element that will trigger the dropdown
@@ -46,7 +48,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Provides a function to customize the options.
    */
-  @Prop() optionHtml: Function;
+  @Prop() optionHtml?: (item: TkDropdownOption) => string;
 
   /**
    * The key to use for option labels

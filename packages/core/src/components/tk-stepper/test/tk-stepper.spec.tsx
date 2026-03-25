@@ -34,7 +34,13 @@ global.MutationObserver = MockMutationObserver as any;
 
 // Mock setTimeout to execute immediately
 const originalSetTimeout = global.setTimeout;
-global.setTimeout = ((callback: Function) => callback()) as any;
+global.setTimeout = ((callback: Parameters<typeof global.setTimeout>[0]) => {
+  if (typeof callback === 'function') {
+    callback();
+  }
+
+  return 0 as unknown as ReturnType<typeof global.setTimeout>;
+}) as typeof global.setTimeout;
 
 // Restore setTimeout after tests
 afterAll(() => {
@@ -754,8 +760,8 @@ describe('tk-stepper', () => {
       const page = await newSpecPage({
         components: [TkStepper, TkStep],
         html: `
-          <tk-stepper 
-            active="1" 
+          <tk-stepper
+            active="1"
             complete-icon="check"
             active-icon="edit"
             inactive-icon="dot"
