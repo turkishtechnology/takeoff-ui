@@ -11,7 +11,8 @@ import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 
-type TkInputChipItem = string | number | boolean | Record<string, unknown>;
+export type TkInputChipItem = string | number | boolean | Record<string, unknown>;
+export type TkInputValue = string | string[] | number | TkInputChipItem[] | null;
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -186,14 +187,14 @@ export class TkInput implements ComponentInterface {
   /**
    * The value of the input.
    */
-  @Prop({ mutable: true }) value?: string | string[] | number | any[];
+  @Prop({ mutable: true }) value?: TkInputValue;
   @Watch('value')
-  protected valueChanged(newValue, oldValue) {
+  protected valueChanged(newValue: TkInputValue, oldValue: TkInputValue) {
     if (!isEqual(newValue, oldValue) && this.mode !== 'chips') {
       if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
+        this.nativeInput.value = getNestedValue(newValue as unknown as Record<string, unknown>, this.chipLabelKey) as unknown as string;
       } else {
-        this.nativeInput.value = newValue;
+        this.nativeInput.value = newValue as unknown as string;
       }
     }
   }
@@ -201,7 +202,7 @@ export class TkInput implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<TkInputValue>;
 
   /**
    * Emitted when the input loses focus.
@@ -217,6 +218,11 @@ export class TkInput implements ComponentInterface {
    * Emitted when the clear button has click.
    */
   @Event({ eventName: 'tk-clear-click' }) tkClearClick: EventEmitter<void>;
+
+  private getChipDisplayLabel(value: Record<string, unknown>): string {
+    const label = getNestedValue(value, this.chipLabelKey);
+    return label != null ? String(label) : '';
+  }
 
   componentWillLoad() {
     // If the tk-input has a tabindex attribute we get the value
@@ -518,7 +524,7 @@ export class TkInput implements ComponentInterface {
   }
 
   private handleChipsRemove(index: number) {
-    const chipsArr = [...(this.value as any[])];
+    const chipsArr = [...(this.value as TkInputChipItem[])];
 
     if (index >= 0 && index < chipsArr.length) {
       chipsArr.splice(index, 1);
@@ -585,8 +591,8 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderChips() {
-    if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
-      return (this.value as any[]).map((item, index) => {
+    if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as TkInputChipItem[])?.length > 0) {
+      return (this.value as TkInputChipItem[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
         let isRemovable;
         if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
@@ -608,7 +614,7 @@ export class TkInput implements ComponentInterface {
           disabled: this.disabled || this.readonly,
         };
         const label =
-          typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
+          typeof item === 'object' && item !== null && item.__isOthersIndicator ? String(item.label) : typeof item === 'object' ? this.getChipDisplayLabel(item) : String(item);
 
         return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps}></tk-chips>;
       });
@@ -632,7 +638,13 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly || !this.editable}
         tabindex={this.tabindex}
-        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
+        value={
+          (this.mode === 'chips'
+            ? undefined
+            : typeof this.value === 'object' && this.value !== null
+              ? getNestedValue(this.value as unknown as Record<string, unknown>, this.chipLabelKey)
+              : this.value) as unknown as string | number | string[] | undefined
+        }
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}

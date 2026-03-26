@@ -21,8 +21,8 @@ export class TkTimelineItem implements ComponentInterface {
     // Timeline item parent'a slot ismi ata
     const timeline = this.el.closest('tk-timeline');
     if (timeline) {
-      const siblings = Array.from(timeline.querySelectorAll('tk-timeline-item'));
-      const index = siblings.indexOf(this.el as any);
+      const siblings = Array.from(timeline.querySelectorAll('tk-timeline-item')) as HTMLElement[];
+      const index = siblings.indexOf(this.el);
       this.el.slot = `item-${index}`;
     }
   }

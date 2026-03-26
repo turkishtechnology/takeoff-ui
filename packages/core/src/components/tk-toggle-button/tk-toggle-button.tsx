@@ -3,6 +3,9 @@ import classNames from 'classnames';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
 
+export type TkToggleButtonValue = string | number | boolean | Record<string, unknown> | null;
+export type TkToggleEventDetail = { value?: TkToggleButtonValue; selected: boolean };
+
 @Component({
   tag: 'tk-toggle-button',
   styleUrl: 'tk-toggle-button.scss',
@@ -55,7 +58,7 @@ export class TkToggleButton implements ComponentInterface {
   /**
    * The value of the toggle button.
    */
-  @Prop() value?: any;
+  @Prop() value?: TkToggleButtonValue;
 
   /**
    * Whether the button is selected.
@@ -64,7 +67,7 @@ export class TkToggleButton implements ComponentInterface {
   /**
    * Emitted when the toggle button is toggled.
    */
-  @Event({ eventName: 'tk-toggle' }) tkToggle!: EventEmitter<any>;
+  @Event({ eventName: 'tk-toggle' }) tkToggle!: EventEmitter<TkToggleEventDetail>;
 
   private handleClick = (e: MouseEvent) => {
     if (this.disabled) {

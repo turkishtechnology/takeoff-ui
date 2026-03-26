@@ -5,8 +5,8 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { ITreeItem } from '../tk-treeview/interfaces';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
-type TableRowData = Record<string, unknown>;
 type TableFilterValue = ITableFilter['value'];
+type TableRowData = Record<string, unknown>;
 type TableSorter = (a: TableRowData, b: TableRowData) => number;
 type TableFilterFn = (value: TableFilterValue, row: TableRowData) => boolean | undefined;
 type TableHeaderRenderer = () => string | HTMLElement;
@@ -149,7 +149,7 @@ export interface ITableRequest {
   /** A list of filters applied to the table */
   filters: ITableFilter[];
   /** A list of data */
-  data?: any[];
+  data?: TableRowData[];
 }
 
 /** Represents a filter applied to a table */
@@ -188,7 +188,7 @@ export interface ITableExportOptions {
   /** Columns for only excel export */
   columns?: ITableExportExcelColumn[];
   /** */
-  externalData?: any[];
+  externalData?: TableRowData[];
 }
 
 export interface ITableExportExcelColumn {
@@ -202,9 +202,9 @@ export interface ITableExportExcelColumn {
  */
 export interface ITableGroup {
   /** The value that this group represents (e.g., "Active", "Completed") */
-  groupValue: any;
+  groupValue: unknown;
   /** The number of rows in this group */
   groupCount: number;
   /** The array of row data objects belonging to this group */
-  rows: any[];
+  rows: TableRowData[];
 }

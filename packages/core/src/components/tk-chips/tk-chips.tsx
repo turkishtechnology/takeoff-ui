@@ -4,6 +4,8 @@ import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 
+export type TkChipsValue = string | number | boolean | Record<string, unknown>;
+
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
  * @react `import { TkChips } from '@takeoff-ui/react'`
@@ -68,7 +70,7 @@ export class TkChips implements ComponentInterface {
    * The value of the chips
    * @defaultValue this.label
    */
-  @Prop() value: any;
+  @Prop() value: TkChipsValue;
 
   /**
    * Custom style to apply to the chip component.
@@ -78,7 +80,7 @@ export class TkChips implements ComponentInterface {
   /**
    * When an element is deleted, it is triggered. It returns the label.
    */
-  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
+  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<TkChipsValue>;
 
   componentWillLoad(): void {
     if (this.value == null) this.value = this.label;

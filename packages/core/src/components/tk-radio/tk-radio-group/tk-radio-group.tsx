@@ -3,6 +3,7 @@ import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../../utils/icon-utils';
 import { isEqual } from 'lodash-es';
+import type { TkRadioValue } from '../tk-radio';
 
 @Component({
   tag: 'tk-radio-group',
@@ -49,7 +50,7 @@ export class TkRadioGroup implements ComponentInterface {
   /**
    * The value of the input.
    */
-  @Prop({ mutable: true }) value?: any;
+  @Prop({ mutable: true }) value?: TkRadioValue;
 
   /**
    * Watches for changes in the selected value and emits a custom event when the value changes.
@@ -87,7 +88,7 @@ export class TkRadioGroup implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
+  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<TkRadioValue>;
 
   formResetCallback() {
     this.handleFormReset();
@@ -107,7 +108,7 @@ export class TkRadioGroup implements ComponentInterface {
     this.updateTkRadio();
   }
 
-  private handleChange(e) {
+  private handleChange(e: CustomEvent<TkRadioValue>) {
     this.value = e.detail;
     this.tkChange.emit(this.value);
     this.updateTkRadio();

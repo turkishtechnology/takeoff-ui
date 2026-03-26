@@ -210,7 +210,7 @@ export class TkStepper implements ComponentInterface {
     return false;
   }
 
-  private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}): JSX.Element {
+  private getIconElement(icon: string | IIconOptions, props: Record<string, unknown> = {}): JSX.Element {
     const iconSizes = {
       large: 'xxlarge',
       base: 'medium',
