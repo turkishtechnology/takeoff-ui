@@ -1,7 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, h, State, Fragment, Watch } from '@stencil/core';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
-import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
@@ -117,19 +116,13 @@ export class TkTooltip implements ComponentInterface {
   };
 
   render() {
-    let iconVariant;
-
-    if (this.variant == 'dark') iconVariant = 'neutral';
-    else iconVariant = this.variant;
-
     let _leftIcon: HTMLTkIconElement;
     let _rightIcon: HTMLTkIconElement;
     if (this.icon) {
       const { leftIcon, rightIcon } = renderIcons(this.icon, {
-        variant: iconVariant,
+        variant: this.variant === 'dark' ? 'neutral' : this.variant,
         sign: true,
         size: 'small',
-        additionalProps: { class: classNames('tk-tooltip-item-icon') },
       });
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
