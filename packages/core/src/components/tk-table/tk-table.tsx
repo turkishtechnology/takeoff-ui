@@ -2221,7 +2221,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
@@ -2231,7 +2231,7 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  variant: null,
+                  color: 'var(--icon-darkest)',
                   ref: (el: any) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
@@ -2252,7 +2252,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
