@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, type EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { renderIcons } from '../../utils/icon-utils';
+import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -76,7 +76,7 @@ export class TkAccordionItem implements ComponentInterface {
     }
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
   }
-  private createIcon() {
+  private renderCollapseIcon() {
     if (this.hideArrows) return null;
     let _renderIcon: string | IIconOptions;
 
@@ -85,15 +85,7 @@ export class TkAccordionItem implements ComponentInterface {
     } else {
       _renderIcon = this.expandIcon;
     }
-
-    return renderIcons(
-      _renderIcon,
-      {
-        size: 'large',
-        variant: this.active ? 'primary' : 'neutral',
-      },
-      this.arrowPosition,
-    );
+    return <tk-icon {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}></tk-icon>;
   }
 
   private createHeader() {
@@ -107,17 +99,16 @@ export class TkAccordionItem implements ComponentInterface {
     const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
-    const collapseIcon = this.createIcon();
     const icon = renderIcons(this.icon, { sign: true, variant: 'neutral', additionalProps: { class: 'tk-accordion-item-icon' } });
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
-            {collapseIcon?.leftIcon}
+            {this.arrowPosition === 'left' && this.renderCollapseIcon()}
             {icon.leftIcon}
             <span class="title">{this.createHeader()}</span>
             {icon.rightIcon}
-            {collapseIcon?.rightIcon}
+            {this.arrowPosition === 'right' && this.renderCollapseIcon()}
           </div>
           <div class={`content ${this.active ? 'open' : ''}`}>
             <slot name="content" />
