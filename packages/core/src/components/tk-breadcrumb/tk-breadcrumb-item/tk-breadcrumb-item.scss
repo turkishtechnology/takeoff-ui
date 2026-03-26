@@ -9,7 +9,7 @@
     text-decoration: none;
 
     .tk-breadcrumb-item-label {
-      color: var(--text-sub-base);
+      color: var(--background-base);
       font-family: var(--desktop-label-s-font);
       font-size: var(--desktop-label-m-base-size);
       font-style: normal;
@@ -50,7 +50,7 @@
       }
 
       tk-icon span {
-        color: var(--icon-dark);
+        color: var(--text-dark);
       }
     }
   }
@@ -81,14 +81,14 @@
 
     &:active {
       .tk-breadcrumb-item-label {
-        color: var(--text-darkest);
+        color: var(--text-dark);
       }
     }
 
     &:hover,
     &:active {
       tk-icon span {
-        color: var(--icon-dark);
+        color: var(--text-dark);
       }
 
       border: var(--spacing-px) solid var(--border-sub-base);
