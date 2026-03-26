@@ -75,9 +75,24 @@ export class TkToggleButton implements ComponentInterface {
     this.tkToggle.emit({ value: this.value, selected: !this.selected });
   };
 
+  private getIconColor(): string | null {
+    if (this.disabled) return 'var(--icon-sub-base)';
+    if ((this.type === 'filled' || this.type === 'raised') && this.selected) return 'var(--static-white)';
+    if (this.variant === 'neutral' && this.selected) return 'var(--icon-darkest)';
+    if (this.variant === 'primary' && this.selected) return 'var(--primary-base)';
+    return null;
+  }
+
   private createIcons() {
-    const iconClass = `tk-toggle-button-icon`;
-    return renderIcons(this.icon, { size: this.size, variant: null, additionalProps: { class: iconClass } }, this.iconPosition);
+    return renderIcons(
+      this.icon,
+      {
+        size: this.size,
+        variant: 'neutral',
+        additionalProps: { color: this.getIconColor() },
+      },
+      this.iconPosition,
+    );
   }
 
   private renderLabel() {
