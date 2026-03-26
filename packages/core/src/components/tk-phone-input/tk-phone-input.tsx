@@ -482,7 +482,7 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <button class="tk-phone-input-dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
+          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, 'rounded', 'span')} />
           {!this.hideFlag && this.renderFlag(this.selectedCountry)}
           {this.selectedCountry.dialCode && <span class="tk-phone-input-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>

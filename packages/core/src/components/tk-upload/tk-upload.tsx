@@ -357,7 +357,7 @@ export class TkUpload implements ComponentInterface {
     return (
       <div class={dropzoneClasses} {...dropzoneProps}>
         <div class="tk-upload-icon">
-          <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xxlarge' }, undefined, 'span')} />
+          <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xxlarge' }, 'rounded', 'span')} />
         </div>
         <div class="tk-upload-content">
           <div class="tk-upload-text-holder">
