@@ -101,7 +101,11 @@ export class TkChips implements ComponentInterface {
       removable: this.removable,
       disabled: this.disabled,
     });
-    const { leftIcon, rightIcon } = renderIcons(this.icon, { variant: null, size: this.size === 'large' ? 'medium' : this.size });
+    const { leftIcon, rightIcon } = renderIcons(this.icon, {
+      variant: this.variant,
+      size: this.size === 'large' ? 'medium' : this.size,
+      additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {} },
+    });
 
     return (
       <div class={rootClasses} style={this.containerStyle}>
@@ -111,9 +115,9 @@ export class TkChips implements ComponentInterface {
         {this.removable && (
           <tk-icon
             {...getIconElementProps('close', {
-              variant: this.type === 'filled' ? null : this.variant,
+              variant: this.variant,
+              color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {},
               size: this.size === 'large' ? 'medium' : this.size,
-              class: classNames({ disabled: this.disabled }),
               onClick: () => this.handleClick(),
               onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
               tabIndex: this.disabled ? -1 : 0,
