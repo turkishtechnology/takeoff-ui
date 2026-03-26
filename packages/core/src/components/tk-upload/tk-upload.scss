@@ -36,11 +36,6 @@
       display: flex;
       flex-wrap: wrap;
 
-      .tk-upload-icon .icon i {
-        font-size: 40px;
-        color: var(--primary-base);
-      }
-
       .tk-upload-content {
         display: flex;
         flex-direction: column;
@@ -78,30 +73,20 @@
           gap: 8px;
         }
       }
-
-      .tk-upload-icon .icon i {
-        font-size: 40px;
-        color: var(--primary-base);
-      }
     }
 
     &.centered {
       flex-direction: column;
       align-items: center;
 
-      .tk-upload-icon {
-        text-align: center;
+      // .tk-upload-icon {
+      //   text-align: center;
 
-        .icon {
-          justify-content: center;
+      //   .icon {
+      //     justify-content: center;
 
-          i {
-            font-size: 40px;
-            color: var(--primary-base);
-            padding: 8px;
-          }
-        }
-      }
+      //   }
+      // }
 
       .tk-upload-content {
         display: flex;
@@ -150,10 +135,6 @@
     &.drag-over {
       border-color: var(--primary-color);
       background-color: rgba(var(--primary-color-rgb), 0.05);
-
-      .tk-upload-icon {
-        color: var(--primary-color);
-      }
     }
 
     &.disabled {
@@ -280,20 +261,6 @@
               display: flex;
               align-items: center;
               gap: 4px;
-
-              .icon {
-                font-size: 16px;
-                width: 16px;
-                height: 16px;
-              }
-
-              &.added .icon {
-                color: var(--states-success-base);
-              }
-
-              &.failed .icon {
-                color: var(--states-danger-base);
-              }
             }
           }
         }
