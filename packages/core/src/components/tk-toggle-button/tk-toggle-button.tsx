@@ -77,9 +77,11 @@ export class TkToggleButton implements ComponentInterface {
 
   private getIconColor(): string | null {
     if (this.disabled) return 'var(--icon-sub-base)';
-    if ((this.type === 'filled' || this.type === 'raised') && this.selected) return 'var(--static-white)';
-    if (this.variant === 'neutral' && this.selected) return 'var(--icon-darkest)';
-    if (this.variant === 'primary' && this.selected) return 'var(--primary-base)';
+    if (this.selected) {
+      if (this.type === 'filled' || this.type === 'raised') return 'var(--static-white)';
+      if (this.variant === 'neutral') return 'var(--icon-darkest)';
+      if (this.variant === 'primary') return 'var(--primary-base)';
+    }
     return null;
   }
 
