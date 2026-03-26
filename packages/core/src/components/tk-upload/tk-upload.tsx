@@ -320,6 +320,7 @@ export class TkUpload implements ComponentInterface {
   private renderState() {
     let iconName = 'check_circle';
     let state = 'added';
+    let iconVariant: string = 'success';
 
     if (this.loading) {
       state = 'loading';
@@ -327,12 +328,16 @@ export class TkUpload implements ComponentInterface {
     } else if (this.invalid) {
       state = 'failed';
       iconName = 'dangerous';
+      iconVariant = 'danger';
     }
 
     return (
       <label class={classNames('tk-upload-state', state)}>
-        {state == 'loading' ? <tk-spinner type="three-dots" size="xsmall"></tk-spinner> : <tk-icon {...getIconElementProps(iconName, { class: 'fill' }, undefined, 'span')} />}
-
+        {state == 'loading' ? (
+          <tk-spinner type="three-dots" size="xsmall"></tk-spinner>
+        ) : (
+          <tk-icon {...getIconElementProps(iconName, { variant: iconVariant }, 'rounded', 'span')} />
+        )}
         {state}
       </label>
     );
@@ -357,7 +362,7 @@ export class TkUpload implements ComponentInterface {
     return (
       <div class={dropzoneClasses} {...dropzoneProps}>
         <div class="tk-upload-icon">
-          <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xxlarge' }, 'rounded', 'span')} />
+          <tk-icon {...getIconElementProps('file_upload', { size: 'xxlarge' }, 'rounded', 'span')} />
         </div>
         <div class="tk-upload-content">
           <div class="tk-upload-text-holder">
