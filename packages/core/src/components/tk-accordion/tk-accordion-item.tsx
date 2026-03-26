@@ -90,7 +90,7 @@ export class TkAccordionItem implements ComponentInterface {
       _renderIcon,
       {
         size: 'large',
-        variant: this.active ? 'primary' : 'secondary',
+        variant: this.active ? 'primary' : 'neutral',
       },
       this.arrowPosition,
     );
