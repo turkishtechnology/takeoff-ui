@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
 import { renderIcons } from '../../../utils/icon-utils';
-import { IIconOptions, IMultiIconOptions } from '../../../global/interfaces/IIconOptions';
+import { IIconOptions } from '../../../global/interfaces/IIconOptions';
 
 @Component({
   tag: 'tk-breadcrumb-item',
@@ -18,7 +18,7 @@ export class TkBreadcrumbItem implements ComponentInterface {
   /**
    * Icon to display alongside the label
    */
-  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
+  @Prop() icon?: string | IIconOptions;
 
   /**
    * Label text for the breadcrumb item
@@ -46,9 +46,8 @@ export class TkBreadcrumbItem implements ComponentInterface {
       ...(this.isExternal && { target: '_blank', rel: 'noopener noreferrer' }),
     };
     const { leftIcon, rightIcon } = renderIcons(this.icon, {
-      variant: null,
+      variant: this.isCurrent ? 'secondary' : 'neutral',
       iconTag: 'span',
-      additionalProps: { class: 'tk-breadcrumb-item-icon' },
     });
 
     return (

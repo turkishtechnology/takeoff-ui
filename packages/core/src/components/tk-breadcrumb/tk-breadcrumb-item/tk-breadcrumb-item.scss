@@ -17,20 +17,10 @@
       line-height: var(--desktop-label-m-base-line-height);
       /* 142.857% */
     }
-
-    .tk-breadcrumb-item-icon span {
-      color: var(--icon-sub-base);
-    }
   }
 
-  &.tk-breadcrumb-item-current {
-    .tk-breadcrumb-item-icon span {
-      color: var(--icon-dark);
-    }
-
-    .tk-breadcrumb-item-label {
-      color: var(--text-dark);
-    }
+  &.tk-breadcrumb-item-current .tk-breadcrumb-item-label {
+    color: var(--text-dark);
   }
 
   &:hover {
@@ -55,12 +45,12 @@
   .tk-breadcrumb-item {
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon span {
-        color: var(--icon-dark);
-      }
-
       .tk-breadcrumb-item-label {
         color: var(--text-dark);
+      }
+
+      tk-icon span {
+        color: var(--icon-dark);
       }
     }
   }
@@ -76,12 +66,6 @@
 
     &.tk-breadcrumb-item-icon-only {
       padding: var(--backgrounded-item-v-padding, 2px) 4px;
-    }
-
-    .tk-breadcrumb-item-icon span {
-      font-size: var(--backgrounded-item-icon-size);
-      width: var(--backgrounded-item-icon-size);
-      height: var(--backgrounded-item-icon-size);
     }
 
     &.tk-breadcrumb-item-current {
@@ -103,7 +87,7 @@
 
     &:hover,
     &:active {
-      .tk-breadcrumb-item-icon span {
+      tk-icon span {
         color: var(--icon-dark);
       }
 

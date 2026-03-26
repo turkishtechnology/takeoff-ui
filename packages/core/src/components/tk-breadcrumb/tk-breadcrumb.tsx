@@ -66,7 +66,7 @@ export class TkBreadcrumb implements ComponentInterface {
       'tk-breadcrumb-vertical-separator': this.separator === 'vertical',
     });
     if (this.separator === 'icon') {
-      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, variant: null }, undefined, 'span')} />;
+      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, undefined, 'span')} />;
     }
     return <span class={separatorClasses} />;
   }
