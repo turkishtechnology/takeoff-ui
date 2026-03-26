@@ -1,7 +1,7 @@
 import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 import { h } from '@stencil/core';
 export interface IconRendererOptions {
-  variant?: string;
+  variant?: string | null;
   sign?: boolean;
   size?: string;
   fill?: boolean;
