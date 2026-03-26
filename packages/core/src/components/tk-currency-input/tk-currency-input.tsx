@@ -669,7 +669,7 @@ export class TkCurrencyInput implements ComponentInterface {
         <div class="tk-currency-input-dropdown-button-selected">
           {!this.hideFlag && this.renderFlag(this.selectedCurrency)}
           <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
-          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, undefined, 'span')} />}
+          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, 'rounded', 'span')} />}
         </div>
       </button>
     );
