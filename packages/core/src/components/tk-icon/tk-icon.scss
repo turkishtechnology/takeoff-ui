@@ -1,3 +1,7 @@
+tk-icon {
+  display: inline-flex;
+}
+
 .tk-icon {
   &[class*='material-symbols'] {
     display: inline-flex;
@@ -164,33 +168,5 @@
     &.tk-icon-white {
       border-color: var(--secondary-light);
     }
-  }
-}
-
-tk-icon {
-  display: inline-flex;
-
-  &.icon-lightest {
-    color: var(--icon-lightest);
-  }
-
-  &.icon-light {
-    color: var(--icon-light);
-  }
-
-  &.icon-sub-base {
-    color: var(--icon-sub-base);
-  }
-
-  &.icon-base {
-    color: var(--icon-base);
-  }
-
-  &.icon-dark {
-    color: var(--icon-dark);
-  }
-
-  &.icon-darkest {
-    color: var(--icon-darkest);
   }
 }
