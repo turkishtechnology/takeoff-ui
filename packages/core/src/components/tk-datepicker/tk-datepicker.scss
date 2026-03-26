@@ -599,8 +599,10 @@
   }
 }
 
-.tk-datepicker-loading td {
-  text-align: center;
-  vertical-align: middle;
+.tk-datepicker-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 260px;
 }

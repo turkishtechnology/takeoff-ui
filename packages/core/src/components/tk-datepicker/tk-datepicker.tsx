@@ -1676,7 +1676,7 @@ export class TkDatePicker {
               icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1684,14 +1684,20 @@ export class TkDatePicker {
               icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
           </div>
           <div class="tk-datepicker-select-container">
-            <div class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'months')}>
+            <div
+              class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled || this.loading })}
+              onClick={e => !this.loading && this.handleViewChange(e, 'months')}
+            >
               {monthName}
             </div>
-            <div class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'years')}>
+            <div
+              class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled || this.loading })}
+              onClick={e => !this.loading && this.handleViewChange(e, 'years')}
+            >
               {year}
             </div>
           </div>
@@ -1701,7 +1707,7 @@ export class TkDatePicker {
               icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1709,7 +1715,7 @@ export class TkDatePicker {
               icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
           </div>
         </div>
@@ -1957,13 +1963,9 @@ export class TkDatePicker {
 
   private createLoading() {
     return (
-      <tbody class="tk-datepicker-loading">
-        <tr>
-          <td colSpan={7}>
-            <tk-spinner size={this.size} />
-          </td>
-        </tr>
-      </tbody>
+      <div class="tk-datepicker-loading">
+        <tk-spinner size={this.size} />
+      </div>
     );
   }
 
@@ -2046,16 +2048,20 @@ export class TkDatePicker {
           <div class="tk-datepicker-calendar-container">
             {this.createHeader()}
             <div class={bodyClasses}>
-              <table class="tk-datepicker-table">
-                {this.currentView === 'days' && (
-                  <Fragment>
-                    {this.createWeekDayNames()}
-                    {this.loading ? this.createLoading() : this.createWeekDays()}
-                  </Fragment>
-                )}
-                {this.currentView === 'months' && this.createMonths()}
-                {this.currentView === 'years' && this.createYears()}
-              </table>
+              {this.loading ? (
+                this.createLoading()
+              ) : (
+                <table class="tk-datepicker-table">
+                  {this.currentView === 'days' && (
+                    <Fragment>
+                      {this.createWeekDayNames()}
+                      {this.createWeekDays()}
+                    </Fragment>
+                  )}
+                  {this.currentView === 'months' && this.createMonths()}
+                  {this.currentView === 'years' && this.createYears()}
+                </table>
+              )}
             </div>
           </div>
           {this.showTimePicker && this.createTimePicker()}
