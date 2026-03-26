@@ -46,7 +46,7 @@ export class TkBreadcrumbItem implements ComponentInterface {
       ...(this.isExternal && { target: '_blank', rel: 'noopener noreferrer' }),
     };
     const { leftIcon, rightIcon } = renderIcons(this.icon, {
-      variant: this.isCurrent ? 'secondary' : 'neutral',
+      additionalProps: { color: this.isCurrent ? 'var(--icon-dark)' : 'var(--icon-sub-base)' },
       iconTag: 'span',
     });
 
