@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkUpload component is an interface element that allows users to select and upload files from their devices to a server or a target location. It typically includes a "Choose File" button and a field displaying the selected file's name. This component simplifies the process of file selection and uploading.
@@ -319,6 +320,7 @@ export class TkUpload implements ComponentInterface {
   private renderState() {
     let iconName = 'check_circle';
     let state = 'added';
+    let iconVariant: string = 'success';
 
     if (this.loading) {
       state = 'loading';
@@ -326,12 +328,16 @@ export class TkUpload implements ComponentInterface {
     } else if (this.invalid) {
       state = 'failed';
       iconName = 'dangerous';
+      iconVariant = 'danger';
     }
 
     return (
       <label class={classNames('tk-upload-state', state)}>
-        {state == 'loading' ? <tk-spinner type="three-dots" size="xsmall"></tk-spinner> : <tk-icon {...getIconElementProps(iconName, { class: 'fill' }, undefined, 'span')} />}
-
+        {state == 'loading' ? (
+          <tk-spinner type="three-dots" size="xsmall"></tk-spinner>
+        ) : (
+          <tk-icon {...getIconElementProps(iconName, { variant: iconVariant }, 'rounded', 'span')} />
+        )}
         {state}
       </label>
     );
@@ -356,7 +362,7 @@ export class TkUpload implements ComponentInterface {
     return (
       <div class={dropzoneClasses} {...dropzoneProps}>
         <div class="tk-upload-icon">
-          <tk-icon {...getIconElementProps('file_upload', { class: 'icon', size: 'xxlarge' }, undefined, 'span')} />
+          <tk-icon {...getIconElementProps('file_upload', { size: 'xxlarge' }, 'rounded', 'span')} />
         </div>
         <div class="tk-upload-content">
           <div class="tk-upload-text-holder">
@@ -419,7 +425,6 @@ export class TkUpload implements ComponentInterface {
 
   render() {
     let label: HTMLLabelElement;
-    let hint: HTMLSpanElement;
 
     const rootClasses = classNames('tk-upload-container', {
       'drag-drop-enabled': this.dragDrop,
@@ -435,29 +440,11 @@ export class TkUpload implements ComponentInterface {
       );
     }
 
-    if (this.hint?.length > 0) {
-      hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      hint = (
-        <span class="hint error">
-          <i class="material-symbols-outlined">info</i>
-          {this.error}
-        </span>
-      );
-    }
-
     return (
       <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
         {label}
         {this.renderDropzone()}
-        {hint}
+        {renderHint(this.hint, this.error, this.invalid)}
         {this.showFiles && this.renderFileholder()}
       </div>
     );

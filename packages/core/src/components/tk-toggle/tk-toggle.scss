@@ -18,12 +18,6 @@
       .tk-toggle-thumb {
         width: 28px;
         height: 28px;
-
-        .tk-toggle-thumb-icon {
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
       }
 
       .tk-toggle-input:checked + .tk-toggle-thumb {
@@ -40,12 +34,6 @@
       .tk-toggle-thumb {
         width: 24px;
         height: 24px;
-
-        .tk-toggle-thumb-icon {
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
       }
 
       .tk-toggle-input:checked + .tk-toggle-thumb {
@@ -62,12 +50,6 @@
       .tk-toggle-thumb {
         width: 20px;
         height: 20px;
-
-        .tk-toggle-thumb-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
       }
 
       .tk-toggle-input:checked + .tk-toggle-thumb {
@@ -84,12 +66,6 @@
       .tk-toggle-thumb {
         width: 16px;
         height: 16px;
-
-        .tk-toggle-thumb-icon {
-          font-size: 12px;
-          width: 12px;
-          height: 12px;
-        }
       }
 
       .tk-toggle-input:checked + .tk-toggle-thumb {
@@ -106,12 +82,6 @@
       .tk-toggle-thumb {
         width: 12px;
         height: 12px;
-
-        .tk-toggle-thumb-icon {
-          font-size: 8px;
-          width: 8px;
-          height: 8px;
-        }
       }
 
       .tk-toggle-input:checked + .tk-toggle-thumb {
@@ -157,18 +127,10 @@
 
     &:checked + .tk-toggle-thumb {
       transform: translateX(28px);
-
-      .tk-toggle-thumb-icon {
-        display: flex;
-      }
     }
 
     &:disabled + .tk-toggle-thumb {
       background-color: var(--background-light);
-
-      .tk-toggle-thumb-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -185,10 +147,6 @@
     border-radius: var(--radius-full);
     background: var(--background-lightest);
     box-shadow: var(--effect-1-default-base);
-
-    .tk-toggle-thumb-icon {
-      display: none;
-    }
   }
 
   &:not(.tk-toggle-disabled) {
@@ -237,10 +195,6 @@
     &.tk-toggle-info {
       .tk-toggle-input-container:has(.tk-toggle-input:checked) {
         background-color: var(--states-info-base);
-
-        .tk-toggle-thumb-icon {
-          color: var(--states-info-dark);
-        }
       }
 
       .tk-toggle-input:hover:checked + .tk-toggle-thumb {
@@ -251,10 +205,6 @@
     &.tk-toggle-success {
       .tk-toggle-input-container:has(.tk-toggle-input:checked) {
         background-color: var(--states-success-base);
-
-        .tk-toggle-thumb-icon {
-          color: var(--states-success-dark);
-        }
       }
 
       .tk-toggle-input:hover:checked + .tk-toggle-thumb {
@@ -432,10 +382,6 @@
 
           .tk-toggle-thumb {
             background: var(--background-lightest);
-          }
-
-          .tk-toggle-thumb-icon {
-            color: var(--states-danger-base);
           }
         }
       }

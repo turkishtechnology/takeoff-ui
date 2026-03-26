@@ -120,10 +120,6 @@
     .tk-currency-input-wrapper {
       border-color: var(--states-danger-base);
     }
-
-    .tk-currency-input-hint {
-      color: var(--states-danger-base);
-    }
   }
 
   &[aria-disabled],
@@ -135,8 +131,6 @@
 
     .tk-currency-input-label-title,
     .tk-currency-input-label-asterisk,
-    .tk-currency-input-hint-text,
-    .tk-currency-input-hint-icon,
     .tk-currency-input-dropdown-button {
       color: var(--text-sub-base);
     }
@@ -217,21 +211,5 @@
         line-height: var(--desktop-line-height-xs-normal);
       }
     }
-  }
-
-  .tk-currency-input-hint,
-  .tk-currency-input-error {
-    color: var(--text-base);
-    line-height: var(--desktop-label-s-line-height);
-    font-size: var(--desktop-label-s-size);
-    font-weight: var(--weight-light);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding-left: var(--spacing-xs);
-    cursor: default;
-  }
-  .tk-currency-input-error {
-    color: var(--states-danger-base);
   }
 }
