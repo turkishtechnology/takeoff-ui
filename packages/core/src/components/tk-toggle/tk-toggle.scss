@@ -131,10 +131,6 @@
 
     &:disabled + .tk-toggle-thumb {
       background-color: var(--background-light);
-
-      tk-icon i {
-        color: var(--icon-lightest);
-      }
     }
   }
 

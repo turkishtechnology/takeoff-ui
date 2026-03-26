@@ -134,7 +134,7 @@ export class TkToggle implements ComponentInterface {
   }
 
   private getActiveIcon(): string {
-    return this.invalid ? 'close' : this.icon;
+    return this.checked ? (this.invalid ? 'close' : this.icon) : '';
   }
 
   private handleFormReset() {
@@ -191,6 +191,7 @@ export class TkToggle implements ComponentInterface {
                   {...getIconElementProps(this.getActiveIcon(), {
                     variant: this.invalid ? 'danger' : this.variant,
                     size: this.size === 'large' || this.size === 'xlarge' ? 'medium' : this.size,
+                    color: this.disabled ? 'var(--icon-lightest)' : '',
                   })}
                 />
               )}
