@@ -123,6 +123,17 @@ export class TkButton implements ComponentInterface {
       }
     }
   }
+  private getButtonIconColor(): string {
+    if (this.disabled) {
+      return this.type === 'filled' || this.type === 'filledLight' ? 'var(--static-white)' : 'var(--icon-sub-base)';
+    }
+
+    if (this.type === 'filled') {
+      return this.variant === 'white' ? 'var(--text-darkest)' : 'var(--static-white)';
+    }
+
+    return 'currentColor';
+  }
 
   render() {
     const hasMultipleIcons = isMultiIconOptions(this.icon);
@@ -150,7 +161,12 @@ export class TkButton implements ComponentInterface {
     } else if (this.icon) {
       const { leftIcon, rightIcon } = renderIcons(
         this.icon,
-        { variant: null, additionalProps: { class: 'tk-button-icon' }, size: this.size === 'small' ? 'medium' : 'large' },
+        {
+          variant: null,
+          additionalProps: {
+            color: this.getButtonIconColor(),
+          },
+        },
         this.iconPosition,
       );
       _leftIcon = leftIcon;

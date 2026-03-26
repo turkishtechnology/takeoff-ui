@@ -335,12 +335,6 @@
         gap: var(--badge-small-right-icon-gap);
       }
 
-      i {
-        font-size: var(--badge-small-left-icon-icon-size);
-        width: var(--badge-small-left-icon-icon-size);
-        height: var(--badge-small-left-icon-icon-size);
-      }
-
       &.icon-only,
       &.count {
         width: 16px;
@@ -362,12 +356,6 @@
         gap: var(--badge-base-right-icon-gap);
       }
 
-      i {
-        font-size: var(--badge-base-left-icon-icon-size);
-        width: var(--badge-base-left-icon-icon-size);
-        height: var(--badge-base-left-icon-icon-size);
-      }
-
       &.icon-only,
       &.count {
         width: 20px;
@@ -387,13 +375,6 @@
 
       &.icon-right {
         gap: var(--badge-large-right-icon-gap);
-      }
-
-      i {
-        font-size: var(--badge-large-left-icon-icon-size);
-        width: var(--badge-large-left-icon-icon-size);
-        height: var(--badge-large-left-icon-icon-size);
-        line-height: unset;
       }
 
       &.icon-only,

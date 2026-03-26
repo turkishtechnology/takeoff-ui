@@ -9,6 +9,7 @@ import { CleaveOptions } from 'cleave.js/options';
 import { IChipOptions } from '../tk-chips/interfaces';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -648,32 +649,6 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint error">
-          {hintIcon}
-          {this.error}
-        </span>
-      );
-    }
-    return hint;
-  }
-
   private renderLabel(): HTMLLabelElement {
     let label;
     if (this.label?.length > 0) {
@@ -697,7 +672,7 @@ export class TkInput implements ComponentInterface {
           {...getIconElementProps(
             'remove',
             {
-              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
+              class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
               onClick: this.handleMinusButtonClick.bind(this),
             },
             undefined,
@@ -711,7 +686,7 @@ export class TkInput implements ComponentInterface {
           {...getIconElementProps(
             'add',
             {
-              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
+              class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
               onClick: this.handlePlusButtonClick.bind(this),
             },
             undefined,
@@ -729,12 +704,13 @@ export class TkInput implements ComponentInterface {
 
     if (this.inputType == 'password') {
       if (!this.hidePasswordIcon) {
-        passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
+        passwordLeftIcon = <tk-icon {...getIconElementProps('lock', { color: 'var(--icon-base)' })} />;
       }
       passwordRightIcon = (
         <tk-icon
           {...getIconElementProps('visibility', {
             class: 'clickable',
+            color: 'var(--icon-base)',
             onMouseDown: this.handleMouseDown,
             onMouseUp: this.handleMouseUp,
           })}
@@ -758,7 +734,7 @@ export class TkInput implements ComponentInterface {
 
     // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, {}, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(this.icon, { additionalProps: { color: 'var(--icon-base)' } }, this.iconPosition);
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }
@@ -793,6 +769,7 @@ export class TkInput implements ComponentInterface {
             <tk-icon
               {...getIconElementProps('close', {
                 class: classNames('tk-input-clear-button clickable', { disabled: this.disabled || this.readonly }),
+                color: 'var(--icon-base)',
                 onClick: this.handleClearButtonClick,
                 onKeyDown: this.handleClearButtonKeyDown,
                 tabindex: this.disabled || this.readonly ? -1 : 0,
@@ -804,7 +781,7 @@ export class TkInput implements ComponentInterface {
           {this.renderAlignmentButtons().right}
         </div>
         {safetyStatus}
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

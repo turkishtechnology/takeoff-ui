@@ -19,18 +19,10 @@
     background-color: var(--frames-light) !important;
     pointer-events: none;
 
-    .tk-icon {
-      color: var(--icon-sub-base) !important;
-    }
-
     &.avatar,
     &.outlined {
       border: 1px solid var(--border-sub-base) !important;
       background-color: var(--static-light) !important;
-
-      .tk-icon {
-        color: var(--border-sub-base) !important;
-      }
     }
 
     &:active {
@@ -44,10 +36,6 @@
     &.filled {
       color: var(--text-lightest);
       background-color: var(--primary-base);
-
-      .tk-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--primary-dark);
@@ -134,10 +122,6 @@
     &.filled {
       background-color: var(--background-darkest);
       color: var(--text-lightest);
-
-      .tk-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--background-dark);
@@ -265,10 +249,6 @@
       color: var(--text-lightest);
       background-color: var(--states-danger-dark);
 
-      .tk-icon {
-        color: var(--icon-lightest);
-      }
-
       &:hover {
         background-color: var(--states-danger-darkest);
       }
@@ -310,10 +290,6 @@
     &.filled {
       background-color: var(--states-warning-dark);
       color: var(--text-lightest);
-
-      .tk-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--states-warning-darkest);
@@ -398,10 +374,6 @@
     font-weight: 400;
     line-height: var(--desktop-body-xs-line-height);
     gap: 2px;
-
-    i {
-      font-size: 14px;
-    }
   }
 
   &.base {
@@ -411,10 +383,6 @@
     font-weight: 400;
     line-height: var(--desktop-body-s-line-height);
     gap: 4px;
-
-    i {
-      font-size: 16px;
-    }
   }
 
   &.large {
@@ -424,9 +392,5 @@
     font-weight: 400;
     line-height: var(--desktop-body-s-line-height);
     gap: 6px;
-
-    i {
-      font-size: 20px;
-    }
   }
 }
