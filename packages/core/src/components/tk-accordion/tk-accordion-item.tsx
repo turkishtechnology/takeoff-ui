@@ -88,7 +88,10 @@ export class TkAccordionItem implements ComponentInterface {
 
     return renderIcons(
       _renderIcon,
-      { size: 'large', variant: null, additionalProps: { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }) } },
+      {
+        size: 'large',
+        variant: this.active ? 'primary' : 'secondary',
+      },
       this.arrowPosition,
     );
   }
