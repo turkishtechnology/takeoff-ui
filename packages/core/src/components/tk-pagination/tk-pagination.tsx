@@ -341,9 +341,10 @@ export class TkPagination implements ComponentInterface {
         value={this.rowsPerPage}
         options={this.rowsPerPageOptions}
         onTk-change={e => {
-          if (e.detail !== this.rowsPerPage) {
-            this.rowsPerPage = e.detail;
-            this.tkRowsPerPageChange.emit(e.detail);
+          const selectedRowsPerPage = e.detail as number;
+          if (selectedRowsPerPage !== this.rowsPerPage) {
+            this.rowsPerPage = selectedRowsPerPage;
+            this.tkRowsPerPageChange.emit(selectedRowsPerPage);
           }
         }}
       ></tk-select>

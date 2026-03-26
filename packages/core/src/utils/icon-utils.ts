@@ -1,6 +1,15 @@
 import { h } from '@stencil/core';
 import type { JSX } from '@stencil/core';
 import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
+
+type IconElementProps = Record<string, unknown> & {
+  iconType?: IIconOptions['style'];
+  iconTag?: 'i' | 'span';
+  color?: string;
+  fill?: boolean;
+  onClick?: (event: MouseEvent) => void;
+};
+
 export interface IconRendererOptions {
   variant?: string;
   sign?: boolean;
@@ -8,7 +17,7 @@ export interface IconRendererOptions {
   fill?: boolean;
   iconStyle?: 'outlined' | 'rounded' | 'sharp';
   iconTag?: 'i' | 'span';
-  additionalProps?: Record<string, any>;
+  additionalProps?: IconElementProps;
 }
 
 export interface IconRendererResult {
@@ -26,13 +35,13 @@ export interface IconRendererResult {
  */
 export const getIconElementProps = (
   icon: string | IIconOptions | undefined | null,
-  props: Record<string, any> = {},
+  props: IconElementProps = {},
   iconStyle: 'outlined' | 'rounded' | 'sharp' = 'outlined',
   iconTag: 'i' | 'span' = 'i',
-): Record<string, any> | null => {
+): IconElementProps | null => {
   if (!icon) return null;
 
-  let mergedProps: Record<string, any> = {
+  let mergedProps: IconElementProps = {
     iconType: iconStyle,
     iconTag,
     ...props,
@@ -49,7 +58,7 @@ export const getIconElementProps = (
       iconTag: props.iconTag || iconTag,
       color: icon.color || props.color,
       fill: icon.fill !== undefined ? icon.fill : props.fill,
-      ...((icon as IIconOptions)?.click ? { onClick: (icon as IIconOptions).click } : {}),
+      ...(icon.click ? { onClick: icon.click } : {}),
     };
 
     delete mergedProps?.style;
@@ -59,7 +68,7 @@ export const getIconElementProps = (
   return mergedProps;
 };
 
-export const isMultiIconOptions = (icon: any): icon is IMultiIconOptions => {
+export const isMultiIconOptions = (icon: unknown): icon is IMultiIconOptions => {
   return icon && typeof icon === 'object' && ('left' in icon || 'right' in icon);
 };
 

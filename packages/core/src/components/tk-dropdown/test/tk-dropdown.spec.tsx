@@ -1,6 +1,11 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkDropdown } from '../tk-dropdown';
 
+type DropdownOptionTemplateItem = { name: string; code: string };
+type TkDropdownWithResizeObserver = TkDropdown & {
+  resizeObserver: { disconnect: jest.Mock };
+};
+
 // Basic Rendering
 describe('tk-dropdown', () => {
   beforeAll(() => {
@@ -89,7 +94,7 @@ describe('tk-dropdown', () => {
               { code: 'ESB', name: 'Esenboğa Havalimanı' },
               { code: 'AYT', name: 'Antalya Havalimanı' },
             ]}
-            optionHtml={(item: { name: any; code: any }) => {
+            optionHtml={(item: DropdownOptionTemplateItem) => {
               return `<div class="flex justify-between gap-4">
                           <div style="font-weight: bold;">${item.name}</div>
                           <div style="color: var(--primary-base)">${item.code}</div>
@@ -217,8 +222,8 @@ describe('tk-dropdown', () => {
         components: [TkDropdown],
         html: `<tk-dropdown> <button slot="trigger" /></tk-dropdown>`,
       });
-      const dropdown = page.rootInstance;
-      dropdown.resizeObserver = { disconnect: jest.fn() } as any;
+      const dropdown = page.rootInstance as TkDropdownWithResizeObserver;
+      dropdown.resizeObserver = { disconnect: jest.fn() };
 
       dropdown.disconnectedCallback();
 

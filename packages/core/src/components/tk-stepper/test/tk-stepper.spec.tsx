@@ -1,6 +1,24 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkStepper } from '../tk-stepper';
 import { TkStep } from '../tk-step';
+import type { IStep } from '../interfaces';
+
+type StepperTestAccess = {
+  mutationObserver?: MockMutationObserver | null;
+  internalActive?: number;
+  internalActiveChanged?: (value: number) => void;
+  createStepIcon?: (step: Partial<IStep>, index: number) => unknown;
+  activeChanged?: (value: number) => void;
+  updateStepsState?: (value: number) => void;
+  handleStepClick?: (index: number) => void;
+  getIconElement?: (icon: string | Record<string, unknown>) => unknown;
+  createDefaultInactiveIcon?: () => unknown;
+  createDefaultActiveIcon?: () => unknown;
+  createDefaultCompleteIcon?: () => unknown;
+  createDefaultErrorIcon?: () => unknown;
+};
+
+const getStepperAccess = (stepper: TkStepper): StepperTestAccess => stepper as unknown as StepperTestAccess;
 
 // Mock MutationObserver
 class MockMutationObserver {
@@ -19,8 +37,8 @@ class MockMutationObserver {
     this.callback(
       [
         {
-          addedNodes: [] as any,
-          removedNodes: [] as any,
+          addedNodes: [] as unknown as NodeList,
+          removedNodes: [] as unknown as NodeList,
           type: 'childList',
         } as MutationRecord,
       ] as MutationRecord[],
@@ -30,7 +48,7 @@ class MockMutationObserver {
 }
 
 // Set up the mock before tests
-global.MutationObserver = MockMutationObserver as any;
+global.MutationObserver = MockMutationObserver as unknown as typeof MutationObserver;
 
 // Mock setTimeout to execute immediately
 const originalSetTimeout = global.setTimeout;
@@ -48,19 +66,19 @@ afterAll(() => {
 });
 
 // Helper functions to implement missing methods
-async function next(stepper) {
+async function next(stepper: TkStepper) {
   const currentActive = stepper.active;
   const nextActive = currentActive + 1;
   await stepper.setActive(nextActive);
 }
 
-async function prev(stepper) {
+async function prev(stepper: TkStepper) {
   const currentActive = stepper.active;
   const prevActive = currentActive - 1;
   await stepper.setActive(prevActive);
 }
 
-async function reset(stepper) {
+async function reset(stepper: TkStepper) {
   await stepper.setActive(0);
 }
 
@@ -187,13 +205,13 @@ describe('tk-stepper', () => {
 
       await stepper.setActive(1);
       expect(stepper.active).toBe(0);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
 
       await stepper.setActive(-1);
-      expect((stepper as any).internalActive).toBe(1); // Should not change to invalid index
+      expect(getStepperAccess(stepper).internalActive).toBe(1); // Should not change to invalid index
 
       await stepper.setActive(10);
-      expect((stepper as any).internalActive).toBe(1); // Should not change to invalid index
+      expect(getStepperAccess(stepper).internalActive).toBe(1); // Should not change to invalid index
     });
 
     it('should handle linear mode correctly', async () => {
@@ -211,10 +229,10 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(0); // Can't jump in linear mode
+      expect(getStepperAccess(stepper).internalActive).toBe(0); // Can't jump in linear mode
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
     });
 
     it('should handle disabled steps', async () => {
@@ -232,7 +250,7 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(0); // Can't select disabled step
+      expect(getStepperAccess(stepper).internalActive).toBe(0); // Can't select disabled step
     });
 
     it('should handle showCompleteState properly', async () => {
@@ -267,7 +285,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const createStepIconSpy = jest.spyOn(stepper as any, 'createStepIcon');
+      const createStepIconSpy = jest.spyOn(getStepperAccess(stepper), 'createStepIcon');
 
       await page.waitForChanges();
 
@@ -296,10 +314,10 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
     });
 
     it('should prevent selecting disabled steps', async () => {
@@ -317,7 +335,7 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
     });
 
     it('should handle active step changes with activeChanged method', async () => {
@@ -333,7 +351,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const activeChangedSpy = jest.spyOn(stepper as any, 'activeChanged');
+      const activeChangedSpy = jest.spyOn(getStepperAccess(stepper), 'activeChanged');
 
       // Update via attribute to avoid immutability warnings
       page.root.setAttribute('active', '1');
@@ -357,10 +375,10 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await stepper.setActive(-1);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
 
       await stepper.setActive(10);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
     });
 
     it('should observe and react to changes in tk-step elements', async () => {
@@ -375,7 +393,7 @@ describe('tk-stepper', () => {
 
       // Access the mutation observer instance
       const stepper = page.rootInstance;
-      const observer = (stepper as any).mutationObserver;
+      const observer = getStepperAccess(stepper).mutationObserver;
 
       // Add a new step
       const newStep = document.createElement('tk-step');
@@ -407,11 +425,11 @@ describe('tk-stepper', () => {
 
       // Going backward in linear mode is allowed
       await stepper.setActive(0);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
 
       // Return to step 1
       await stepper.setActive(1);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
 
       // Error state should prevent next step in linear mode
       const steps = page.root.querySelectorAll('tk-step');
@@ -422,7 +440,7 @@ describe('tk-stepper', () => {
 
       // Check the actual behavior - the component seems to allow step 2
       // even when error is set (this matches the actual implementation)
-      expect((stepper as any).internalActive).toBe(2);
+      expect(getStepperAccess(stepper).internalActive).toBe(2);
 
       // Set back to step 1 for further testing
       await stepper.setActive(1);
@@ -433,11 +451,11 @@ describe('tk-stepper', () => {
       await page.waitForChanges();
 
       await stepper.setActive(2);
-      expect((stepper as any).internalActive).toBe(2);
+      expect(getStepperAccess(stepper).internalActive).toBe(2);
 
       // Disabled steps should never be selectable
       await stepper.setActive(3);
-      expect((stepper as any).internalActive).toBe(2);
+      expect(getStepperAccess(stepper).internalActive).toBe(2);
     });
 
     it('should handle activeChanged with various edge conditions', async () => {
@@ -458,7 +476,7 @@ describe('tk-stepper', () => {
       await page.waitForChanges();
 
       // Should revert the change in internalActive
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
 
       // Create a new page for testing with no steps
       const emptyPage = await newSpecPage({
@@ -483,10 +501,10 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const updateStepsStateSpy = jest.spyOn(stepper as any, 'updateStepsState');
+      const updateStepsStateSpy = jest.spyOn(getStepperAccess(stepper), 'updateStepsState');
 
       // Directly call the watcher methods for testing
-      (stepper as any).internalActiveChanged(2);
+      getStepperAccess(stepper).internalActiveChanged(2);
       await page.waitForChanges();
 
       expect(updateStepsStateSpy).toHaveBeenCalledWith(2);
@@ -495,7 +513,7 @@ describe('tk-stepper', () => {
       page.root.setAttribute('show-complete-state', 'false');
       await page.waitForChanges();
 
-      expect(updateStepsStateSpy).toHaveBeenCalledWith((stepper as any).internalActive);
+      expect(updateStepsStateSpy).toHaveBeenCalledWith(getStepperAccess(stepper).internalActive);
     });
   });
 
@@ -561,7 +579,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const handleStepClickSpy = jest.spyOn(stepper as any, 'handleStepClick');
+      const handleStepClickSpy = jest.spyOn(getStepperAccess(stepper), 'handleStepClick');
 
       // Get initial activeIndex and update value after click
       const stepItems = page.root.shadowRoot.querySelectorAll('.tk-step-item');
@@ -570,7 +588,7 @@ describe('tk-stepper', () => {
       expect(handleStepClickSpy).toHaveBeenCalled();
       // The component behavior allows clicking even non-clickable steps
       // Test that the expected behavior matches the implementation
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
     });
 
     it('should handle click on non-clickable steps', async () => {
@@ -585,7 +603,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const handleStepClickSpy = jest.spyOn(stepper as any, 'handleStepClick');
+      const handleStepClickSpy = jest.spyOn(getStepperAccess(stepper), 'handleStepClick');
 
       const steps = page.root.shadowRoot.querySelectorAll('.tk-step-item');
       (steps[1] as HTMLElement).click();
@@ -594,7 +612,7 @@ describe('tk-stepper', () => {
       expect(handleStepClickSpy).toHaveBeenCalled();
       // The component behavior allows clicking even non-clickable steps
       // Test that the expected behavior matches the implementation
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
     });
 
     it('should handle clicks on steps in different states', async () => {
@@ -616,7 +634,7 @@ describe('tk-stepper', () => {
       // Click on completed step
       (stepItems[0] as HTMLElement).click();
       await page.waitForChanges();
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
 
       // Reset active step
       page.root.setAttribute('active', '1');
@@ -625,7 +643,7 @@ describe('tk-stepper', () => {
       // Click on active step
       (stepItems[1] as HTMLElement).click();
       await page.waitForChanges();
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
 
       // Click on error step
       (stepItems[2] as HTMLElement).click();
@@ -654,14 +672,14 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await next(stepper);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
 
       // Set active via attribute
       page.root.setAttribute('active', '2');
       await page.waitForChanges();
 
       await next(stepper);
-      expect((stepper as any).internalActive).toBe(2); // Can't go beyond last step
+      expect(getStepperAccess(stepper).internalActive).toBe(2); // Can't go beyond last step
     });
 
     it('should navigate to previous step with prev() method', async () => {
@@ -679,14 +697,14 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await prev(stepper);
-      expect((stepper as any).internalActive).toBe(1);
+      expect(getStepperAccess(stepper).internalActive).toBe(1);
 
       // Set active via attribute
       page.root.setAttribute('active', '0');
       await page.waitForChanges();
 
       await prev(stepper);
-      expect((stepper as any).internalActive).toBe(0); // Can't go below first step
+      expect(getStepperAccess(stepper).internalActive).toBe(0); // Can't go below first step
     });
 
     it('should reset to first step with reset() method', async () => {
@@ -704,7 +722,7 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       await reset(stepper);
-      expect((stepper as any).internalActive).toBe(0);
+      expect(getStepperAccess(stepper).internalActive).toBe(0);
     });
 
     it('should handle disconnectedCallback', async () => {
@@ -718,7 +736,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const observer = (stepper as any).mutationObserver;
+      const observer = getStepperAccess(stepper).mutationObserver;
       const disconnectSpy = jest.spyOn(observer, 'disconnect');
 
       // Trigger disconnectedCallback
@@ -743,16 +761,16 @@ describe('tk-stepper', () => {
       const stepper = page.rootInstance;
 
       // Call methods directly to test
-      const defaultInactiveIcon = (stepper as any).createDefaultInactiveIcon();
+      const defaultInactiveIcon = getStepperAccess(stepper).createDefaultInactiveIcon();
       expect(defaultInactiveIcon).toBeTruthy();
 
-      const defaultActiveIcon = (stepper as any).createDefaultActiveIcon();
+      const defaultActiveIcon = getStepperAccess(stepper).createDefaultActiveIcon();
       expect(defaultActiveIcon).toBeTruthy();
 
-      const defaultCompleteIcon = (stepper as any).createDefaultCompleteIcon();
+      const defaultCompleteIcon = getStepperAccess(stepper).createDefaultCompleteIcon();
       expect(defaultCompleteIcon).toBeTruthy();
 
-      const defaultErrorIcon = (stepper as any).createDefaultErrorIcon();
+      const defaultErrorIcon = getStepperAccess(stepper).createDefaultErrorIcon();
       expect(defaultErrorIcon).toBeTruthy();
     });
 
@@ -774,7 +792,7 @@ describe('tk-stepper', () => {
       });
 
       const stepper = page.rootInstance;
-      const getIconElementSpy = jest.spyOn(stepper as any, 'getIconElement');
+      const getIconElementSpy = jest.spyOn(getStepperAccess(stepper), 'getIconElement');
 
       // Force re-initialization by setting an attribute
       page.root.setAttribute('step-mode', 'icon');
@@ -829,16 +847,16 @@ describe('tk-stepper', () => {
 
       const stepper = page.rootInstance;
 
-      const defaultInactiveIcon = (stepper as any).createDefaultInactiveIcon();
+      const defaultInactiveIcon = getStepperAccess(stepper).createDefaultInactiveIcon();
       expect(defaultInactiveIcon).toBeTruthy();
 
-      const defaultActiveIcon = (stepper as any).createDefaultActiveIcon();
+      const defaultActiveIcon = getStepperAccess(stepper).createDefaultActiveIcon();
       expect(defaultActiveIcon).toBeTruthy();
 
-      const defaultCompleteIcon = (stepper as any).createDefaultCompleteIcon();
+      const defaultCompleteIcon = getStepperAccess(stepper).createDefaultCompleteIcon();
       expect(defaultCompleteIcon).toBeTruthy();
 
-      const defaultErrorIcon = (stepper as any).createDefaultErrorIcon();
+      const defaultErrorIcon = getStepperAccess(stepper).createDefaultErrorIcon();
       expect(defaultErrorIcon).toBeTruthy();
     });
 
@@ -850,11 +868,11 @@ describe('tk-stepper', () => {
 
       const stepper = page.rootInstance;
 
-      const stringIcon = (stepper as any).getIconElement('check');
+      const stringIcon = getStepperAccess(stepper).getIconElement('check');
       expect(stringIcon).toBeTruthy();
 
       const iconObject = { name: 'warning', size: 20 };
-      const objectIcon = (stepper as any).getIconElement(iconObject);
+      const objectIcon = getStepperAccess(stepper).getIconElement(iconObject);
       expect(objectIcon).toBeTruthy();
     });
 
@@ -885,7 +903,7 @@ describe('tk-stepper', () => {
 
       // Test each step state directly
       for (let i = 0; i < mockSteps.length; i++) {
-        const icon = (stepper as any).createStepIcon(mockSteps[i], i);
+        const icon = getStepperAccess(stepper).createStepIcon(mockSteps[i], i);
         expect(icon).toBeTruthy();
       }
     });
@@ -907,10 +925,10 @@ describe('tk-stepper', () => {
 
       // Directly test getIconElement with different inputs
       const complexIconObj = { name: 'check-circle', style: 'rounded', fill: true, color: 'blue' };
-      const complexIconEl = (stepper as any).getIconElement(complexIconObj);
+      const complexIconEl = getStepperAccess(stepper).getIconElement(complexIconObj);
       expect(complexIconEl).toBeTruthy();
 
-      const stringIconEl = (stepper as any).getIconElement('check');
+      const stringIconEl = getStepperAccess(stepper).getIconElement('check');
       expect(stringIconEl).toBeTruthy();
 
       // Test step-specific icon overrides by settings attributes

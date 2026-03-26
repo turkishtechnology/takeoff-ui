@@ -202,7 +202,7 @@ export class TkCurrencyInput implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<CurrencyInputChangeEvent>;
 
   /**
    * Emitted when the input loses focus.

@@ -1,6 +1,10 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAlert } from '../tk-alert';
 
+type TkAlertWithCloseHandler = TkAlert & {
+  handleCloseButtonClick: () => void;
+};
+
 describe('tk-alert', () => {
   // Basic Rendering
   describe('basic rendering', () => {
@@ -184,7 +188,7 @@ describe('tk-alert', () => {
 
       expect(instance).toBeTruthy();
 
-      const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
+      const spy = jest.spyOn(instance as TkAlertWithCloseHandler, 'handleCloseButtonClick');
       const button = page.root.shadowRoot.querySelector('tk-button');
 
       expect(button).toBeTruthy();

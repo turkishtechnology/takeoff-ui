@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
-type TkDropdownOption = string | number | boolean | Record<string, unknown>;
+export type TkDropdownOption = string | number | boolean | Record<string, unknown>;
+export type TkDropdownGroup = Record<string, unknown>;
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.
@@ -77,7 +78,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * The list of options to be displayed in the select box.
    */
-  @Prop() options: any[];
+  @Prop() options: Array<TkDropdownOption | TkDropdownGroup>;
 
   /**
    * Indicates the alignment of options.
@@ -101,7 +102,7 @@ export class TkDropdown implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<any>;
+  @Event({ eventName: 'tk-item-click' }) tkItemClick!: EventEmitter<TkDropdownOption>;
 
   /**
    * Click outside handler implementation - called by the mixin
@@ -167,16 +168,21 @@ export class TkDropdown implements ComponentInterface {
     return this.options?.length > 0 && Object.prototype.hasOwnProperty.call(this.options[0], this.groupNameKey);
   }
 
-  private getOptionLabel(item: any): string {
-    return typeof item === 'object' ? item[this.optionLabelKey] : item;
+  private getOptionLabel(item: TkDropdownOption): string {
+    if (typeof item === 'object' && item !== null) {
+      const value = item[this.optionLabelKey];
+      return value != null ? String(value) : '';
+    }
+
+    return item != null ? String(item) : '';
   }
 
-  private handleItemClick(item) {
+  private handleItemClick(item: TkDropdownOption) {
     this.isOpen = false;
     this.tkItemClick.emit(item);
   }
 
-  private createOptionItem(options: any[]) {
+  private createOptionItem(options: TkDropdownOption[]) {
     return options?.map((item, index) => {
       let optionItem;
       if (this.optionHtml != undefined) {
@@ -186,7 +192,7 @@ export class TkDropdown implements ComponentInterface {
       }
       return (
         <div
-          class={classNames('tk-dropdown-item', this.optionsAlign, { disabled: item?.disabled })}
+          class={classNames('tk-dropdown-item', this.optionsAlign, { disabled: typeof item === 'object' && item !== null && !!item.disabled })}
           data-option-index={index}
           data-active={index == 0 ? 'true' : 'false'}
           onClick={() => this.handleItemClick(item)}
@@ -205,7 +211,7 @@ export class TkDropdown implements ComponentInterface {
               <label>{group[this.groupNameKey]}</label>
               <div class="line"></div>
             </div>
-            {this.createOptionItem(group[this.groupOptionsKey])}
+            {this.createOptionItem((group[this.groupOptionsKey] as TkDropdownOption[]) || [])}
           </div>
         );
       });
