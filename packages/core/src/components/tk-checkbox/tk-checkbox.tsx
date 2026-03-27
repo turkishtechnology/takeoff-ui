@@ -1,6 +1,7 @@
 import { Component, Prop, State, h, Element, Watch, EventEmitter, Event, ComponentInterface, AttachInternals } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkCheckbox component is another basic element for user input. You can use this to supply a way for the user to toggle an option.
@@ -143,7 +144,13 @@ export class TkCheckbox implements ComponentInterface {
         <label htmlFor={this.uniqueId}>
           {this.renderInput()}
           <div class="mask">
-            <i class="material-symbols-outlined">{this.indeterminate ? 'remove' : 'check'}</i>
+            <tk-icon
+              class="inner-mask"
+              {...getIconElementProps(this.indeterminate ? 'remove' : this.value ? 'check' : null, {
+                color: 'var(--static-light)',
+                size: this.size === 'small' ? 'xxsmall' : 'xsmall',
+              })}
+            />
           </div>
           {this.hasContentSlot ? (
             <slot name="content" />

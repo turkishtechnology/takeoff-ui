@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './interfaces';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -13,6 +13,7 @@ import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { ITreeItem } from '../tk-treeview/interfaces';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -119,14 +120,14 @@ export class TkTable implements ComponentInterface {
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
     if (!isEqual(oldValue, newValue)) {
-      const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
+        const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
         this.currentPage = 1;
         const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
         const endIndex = startIndex + this.internalRowsPerPage;
         this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
-        this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
+        this.renderData = newValue?.length > 0 ? [...newValue] : [];
       }
 
       // Re-apply grouping if it was previously set
@@ -939,6 +940,8 @@ export class TkTable implements ComponentInterface {
       this.handleRadioFilterApply(columnField);
     } else if (this.columns.find(col => col.field === columnField)?.filterType === 'datepicker') {
       this.handleDatepickerFilterApply(columnField);
+    } else if (this.columns.find(col => col.field === columnField)?.filterType === 'treeview') {
+      this.handleTreeviewFilterApply(columnField);
     } else {
       this.handleInputFilterApply(columnField);
     }
@@ -1281,6 +1284,75 @@ export class TkTable implements ComponentInterface {
       });
       filterContainer.appendChild(datepicker);
       this.elFilterPanelElement.appendChild(filterContainer);
+    } else if (column?.filterType === 'treeview' && column.filterOptions?.length > 0) {
+      // Create treeview filter
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-treeview-container');
+
+      // Get current filter value for this field
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const selectedValue = (currentFilter?.value as string[]) || [];
+
+      // Create treeview component first
+      const treeview = document.createElement('tk-tree-view') as any;
+      const treeviewConfig = column?.filterElements?.treeViewOptions ?? {};
+      treeview.selectable = true;
+      treeview.size = treeviewConfig?.size ?? 'small';
+      treeview.branchIcon = treeviewConfig?.branchIcon;
+      treeview.leafIcon = treeviewConfig?.leafIcon;
+      treeview.showBadge = treeviewConfig?.showBadge;
+      treeview.showZeroCountBadges = treeviewConfig?.showZeroCountBadges;
+      treeview.badgeOptions = treeviewConfig?.badgeOptions;
+      treeview.showPointer = treeviewConfig?.showPointer ?? false;
+      treeview.selectionStrategy = treeviewConfig?.selectionStrategy ?? 'leaf';
+      treeview.containerStyle = treeviewConfig?.containerStyle ?? { width: '100%' };
+      treeview.stepStyle = treeviewConfig?.stepStyle;
+      treeview.expandAll = treeviewConfig?.expandAll ?? true;
+      treeview.expandedKeys = treeviewConfig?.expandedKeys;
+
+      treeview.items = column.filterOptions as ITreeItem[];
+      treeview.value = selectedValue;
+
+      treeview.addEventListener('tk-change', (e: CustomEvent) => {
+        treeview.value = e.detail;
+      });
+      if (column?.filterElements?.optionsSearchInput?.show) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
+
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+
+          // Recursive function to filter tree items including nested children
+          const filterTreeItems = (items: ITreeItem[]): ITreeItem[] => {
+            return items
+              .map(item => {
+                // Check if current item matches, at start its the parent node
+                const itemMatches = item.label.toLowerCase().includes(searchText);
+
+                // Recursively filter children
+                const filteredChildren = item.children ? filterTreeItems(item.children) : [];
+
+                // Include both parent and children if children match, or if parent matches
+                if (itemMatches || filteredChildren.length > 0) {
+                  return {
+                    ...item,
+                    children: filteredChildren.length > 0 ? filteredChildren : item.children,
+                  };
+                }
+
+                return null;
+              })
+              .filter(item => item !== null);
+          };
+
+          treeview.items = filterTreeItems(column.filterOptions as ITreeItem[]);
+        });
+        filterContainer.appendChild(optionsSearchInput);
+      }
+
+      filterContainer.appendChild(treeview);
+      this.elFilterPanelElement.appendChild(filterContainer);
     } else {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
@@ -1346,10 +1418,11 @@ export class TkTable implements ComponentInterface {
 
     // Get selected values
     const selectedValues = [];
+    const filterOptions = column.filterOptions as IFilterOption[];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index] && checkbox.style.display !== 'none') {
-        selectedValues.push(column.filterOptions[index].value);
+      if (checkbox.value && filterOptions[index] && checkbox.style.display !== 'none') {
+        selectedValues.push(filterOptions[index].value);
       }
     });
 
@@ -1450,6 +1523,40 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
+
+  private handleTreeviewFilterApply(columnField: string) {
+    const treeview = document.querySelector('.tk-table-filter-treeview-container tk-tree-view') as HTMLTkTreeViewElement;
+    if (!treeview) return;
+    const selectedValues = treeview.value;
+    const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
+    if (selectedValues.length > 0) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].value = selectedValues;
+        this.filters[filterIndex].type = 'treeview';
+      } else {
+        this.filters.push({
+          field: columnField,
+          value: selectedValues,
+          type: 'treeview',
+        } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if no values selected
+      this.filters.splice(filterIndex, 1);
+    }
+
+    // Apply filter
+    if (this.currentPage === 1) {
+      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+
+    // Close the filter panel
+    this.closeFilterPanel();
+  }
+
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
@@ -2114,7 +2221,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
@@ -2124,7 +2231,7 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  variant: null,
+                  color: 'var(--icon-darkest)',
                   ref: (el: any) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
@@ -2145,7 +2252,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}

@@ -25,6 +25,12 @@ tk-select {
       gap: 6px;
       @include takeoff-scrollbar;
 
+      .dropdown-item-top {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
       .dropdown-group {
         display: flex;
         flex-direction: column;
@@ -70,6 +76,7 @@ tk-select {
           outline: 1px solid var(--states-info-light);
         }
         &.disabled {
+          pointer-events: none;
           cursor: not-allowed;
           background: var(--background-lightest);
           color: var(--text-sub-base);

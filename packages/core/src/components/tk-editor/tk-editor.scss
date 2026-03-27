@@ -27,33 +27,6 @@
     }
   }
 
-  .tk-editor-supporting-text {
-    color: var(--text-base);
-    font-family: var(--desktop-label-s-font);
-    font-size: var(--desktop-label-s-size);
-    font-style: normal;
-    font-weight: 300;
-    line-height: var(--desktop-label-s-line-height);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
-
-    .tk-editor-supporting-text-icon {
-      font-size: var(--size-base);
-      width: var(--size-base);
-      height: var(--size-base);
-      color: var(--icon-base);
-    }
-
-    &.error {
-      span,
-      .tk-editor-supporting-text-icon {
-        color: var(--states-danger-base);
-      }
-    }
-  }
-
   &.tk-editor-focused {
     .tk-editor {
       border-color: var(--states-info-base);
@@ -61,13 +34,6 @@
   }
 
   &.tk-editor-invalid {
-    .tk-editor-supporting-text {
-      span,
-      .tk-editor-supporting-text-icon {
-        color: var(--states-danger-base);
-      }
-    }
-
     .tk-editor {
       border-color: var(--states-danger-base);
     }
@@ -77,23 +43,6 @@
   &.tk-editor-disabled {
     .tk-editor-label {
       color: var(--text-sub-base);
-    }
-
-    .tk-editor-supporting-text {
-      .tk-editor-supporting-text-icon {
-        color: var(--icon-sub-base);
-
-        span {
-          color: var(--text-sub-base);
-        }
-      }
-
-      &.error {
-        span,
-        .tk-editor-supporting-text-icon {
-          color: var(--states-danger-base);
-        }
-      }
     }
   }
 
@@ -452,10 +401,21 @@
 
   ul {
     list-style-type: disc;
+  }
 
-    li {
-      display: list-item;
-    }
+  ul ul,
+  ol ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul,
+  ol ul ul,
+  ol ol ul {
+    list-style-type: square;
+  }
+
+  ul li {
+    display: list-item;
   }
 
   ol {
