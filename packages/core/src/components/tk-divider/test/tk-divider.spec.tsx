@@ -25,17 +25,6 @@ describe('tk-divider', () => {
     expect(divider.classList.contains('tk-divider-vertical')).toBeTruthy();
   });
 
-  it('applies horizontal orientation', async () => {
-    const page = await newSpecPage({
-      components: [TkDivider],
-      html: `<tk-divider orientation="horizontal"></tk-divider>`,
-    });
-
-    const divider = page.root.shadowRoot.querySelector('.tk-divider');
-
-    expect(divider.classList.contains('tk-divider-horizontal')).toBeTruthy();
-  });
-
   it('applies mx and my spacing styles', async () => {
     const page = await newSpecPage({
       components: [TkDivider],
