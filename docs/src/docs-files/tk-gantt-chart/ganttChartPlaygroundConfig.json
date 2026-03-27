@@ -3,7 +3,7 @@
   "componentName": "TkGanttChart",
   "hasChildren": false,
   "fullWidth": true,
-  "height": 500,
+  "height": 800,
   "staticProps": {
     "tasks": [
       { "id": "1", "name": "Research", "startDate": "2026-04-01", "endDate": "2026-04-10", "progress": 100 },

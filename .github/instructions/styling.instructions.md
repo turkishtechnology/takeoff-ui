@@ -2,34 +2,34 @@
 applyTo: '**/*.scss'
 ---
 
-# Stil Standartları
+# Styling Standards
 
 ## Design Variables
 
-Figma variable'ları kullan. Kaynak:
+Use Figma variables. Source:
 `packages/core/src/global/sass/abstracts/_variables.scss`
 
-- Fallbacksiz kullanım: `var(--primary-sub-base)`, `var(--neutral-100)`,
+- Usage with no fallback `var(--primary-sub-base)`, `var(--neutral-100)`,
   `var(--desktop-body-m-base-size)`
-- Yeni renk veya spacing eklerken \_variables.scss'e ekle
+- When adding new colors or spacing, add them to \_variables.scss
 
-## Class İsimlendirme
+## Class Naming Convention
 
-- Component class'ları `tk-` prefix ile: `.tk-button`, `.tk-accordion`,
+- Component classes with prefix `tk-`: `.tk-button`, `.tk-accordion`,
   `.tk-accordion-item`
-- Modifier'lar: `.tk-component-large`, `.tk-component-active`,
+- Modifiers: `.tk-component-large`, `.tk-component-active`,
   `.tk-component-label`
-- Shadow olmayan componentlerde class isimleri açıklayıcı olmalı (stil
-  ezilmemesi için)
+- Class names should be descriptive in non-shadow components (to avoid styling
+  conflicts )
 
-## Mixinler
+## Mixins
 
-- Ortak mixinler `packages/core/src/global/sass/mixins/` altındadır
-- Kullanım: dosyanın en üstüne `@use '../../global/sass/mixins' as *;` ekle
-- Yeni mixin eklerken `mixins/` altına `_isim.scss` dosyası oluştur ve
-  `mixins/index.scss`'e `@forward` ile ekle
+- Common mixins are under the `packages/core/src/global/sass/mixins/`
+- Usage: Add `@use '../../global/sass/mixins' as *;` to top of the file.
+- When adding new mixin, create `name.scss` file under `mixins/`, and add it to
+  `mixins/index.scss` with `@forward`
 
-## Örnek
+## Example
 
 ```scss
 .tk-component {

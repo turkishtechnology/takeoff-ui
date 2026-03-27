@@ -1,7 +1,7 @@
 import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -33,7 +33,7 @@ export class TkChips implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * The label to display inside the chip.
@@ -89,20 +89,40 @@ export class TkChips implements ComponentInterface {
     if (this.autoSelfDestroy) this.el?.remove();
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.handleClick();
+    }
+  }
+
   render() {
     const rootClasses = classNames('tk-chips', this.variant, this.size, this.type, {
       removable: this.removable,
       disabled: this.disabled,
     });
-    const icon = this.icon && <tk-icon {...getIconElementProps(this.icon, { variant: null })} />;
+    const { leftIcon, rightIcon } = renderIcons(this.icon, {
+      variant: this.variant,
+      size: this.size === 'large' ? 'medium' : this.size,
+      additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {} },
+    });
+
     return (
       <div class={rootClasses} style={this.containerStyle}>
-        {icon}
+        {leftIcon}
         {this.label}
+        {rightIcon}
         {this.removable && (
-          <i onClick={() => this.handleClick()} class="material-symbols-outlined tk-chips-clear-button">
-            close
-          </i>
+          <tk-icon
+            {...getIconElementProps('close', {
+              variant: this.variant,
+              color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {},
+              size: this.size === 'large' ? 'medium' : this.size,
+              onClick: () => this.handleClick(),
+              onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
+              tabIndex: this.disabled ? -1 : 0,
+            })}
+          />
         )}
       </div>
     );

@@ -3,80 +3,82 @@ instructions:
   - docs-structure.instructions.md
 ---
 
-# Yeni Demo
+# New Demo
 
-Mevcut bir demoya yeni bir kullanım ekler, bileşene yeni bir demo ekler ya da
-bileşenin doküman iskeletini sıfırdan kurar.
+It adds a new usage to an existing demo, adds a new demo to a component, or
+builds the component's documentation skeleton from scratch.
 
-## Kullanıcı girdisinden çıkarım
+## User Input
 
-Kullanıcının mesajından aşağıdaki iki bilgi çıkarılır:
+Extract these 2 info from user input:
 
-- **componentName** — Stencil bileşen adı (ör. `tk-avatar`, `avatar`, `button`)
-- **feature** — Eklenecek özellik / demo adı (ör. `WithBadges`, `Sizes`)
+- **componentName** — Stencil component name (e.g. `tk-avatar`, `avatar`,
+  `button`)
+- **feature** — feature to be added / demo name (e.g. `WithBadges`, `Sizes`)
 
-## Bağlam toplama
+## Context collection
 
-Kod yazmaya başlamadan önce bileşen kaynağı okunur:
+The component source is read before starting to write code:
 
 - `packages/core/src/components/${componentName}/${componentName}.tsx`
 
-## Ön kontrol — ne yapılacağına karar ver
+## Pre-check — decide what to do
 
-### Doküman iskeleti var mı?
+### Is there a document template?
 
-`docs/docs/Components/${ComponentName}.mdx` dosyasını kontrol et (PascalCase;
-ör. `Avatar.mdx`).
+Check `docs/docs/Components/${ComponentName}.mdx` file (PascalCase; e.g.
+`Avatar.mdx`).
 
-- **Yoksa** → Bileşen ilk kez belgeleniyor. "Sıfırdan bileşen iskeleti kur"
-  bölümüne git.
-- **Varsa** → sonraki kontrole geç.
+- **If doesnt't exist** → Component is documented for the first time. Go to
+  "Build a component skeleton from scratch" section
+- **If exists** → go to next control.
 
-### Eşleşen örnek TSX var mı?
+### Is there a matching example TSX?
 
-`docs/src/docs-files/${componentName}/Examples/` klasörünü listele.
+List `docs/src/docs-files/${componentName}/Examples/` folder.
 
-- Aynı kavramı karşılayan bir örnek olabilir (ör. `${feature}` = `WithBadges`
-  iken `Badges.tsx` veya `Badge.tsx` zaten varsa bu dosya eşleşir).
-- **Eşleşen TSX varsa** → "Mevcut örneği güncelle" bölümüne git.
-- **Eşleşen TSX yoksa** → "Yeni örnek ekle" bölümüne git.
+- It could be an example that satisfies the same condition
+  (e.g.${feature}`=`WithBadges`while`Badges.tsx`or`Badge.tsx` already exist,
+  this file would match).
+- **If there is a matching TSX** → Go to the "Update existing example" section.
+- **If there is no matching TSX** → Go to the "Add new example" section.
 
-## Mevcut örneği güncelle
+## Update existing example
 
-`${feature}.tsx` zaten mevcut olduğunda yeni bir dosya oluşturulmaz. Mevcut TSX
-dosyası açılır ve istenen değişiklik (yeni varyant, ek prop gösterimi vb.)
-dosyanın içindeki `demo`, `reactCode`, `vueCode`, `angularCode` değişkenlerine
-eklenir.
+A new file is not created when the `${feature}.tsx` already exists. The existing
+TSX file is opened, and the desired change (new variant, additional property
+display, etc.) is added to the `demo`, `reactCode`, `vueCode`, `angularCode`
+variables within the file.
 
-## Yeni örnek ekle
+## Add new example
 
-### Adım 1 — Örnek TSX dosyasını oluştur
+### Step 1 — Create example TSX file
 
-`docs/src/docs-files/${componentName}/Examples/${feature}.tsx` dosyası
-oluşturulur ve içi doldurulur.
+`docs/src/docs-files/${componentName}/Examples/${feature}.tsx` file is created
+and its content is populated.
 
-### Adım 2 — body.mdx'i güncelle
+### Step 2 — Update body.mdx
 
-## Sıfırdan bileşen iskeleti kur
+## Build a component skeleton from scratch
 
-Aşağıdaki adımlar sırasıyla uygulanır:
+Following steps are applied respectively:
 
-1. `docs/docs/Components/${ComponentName}.mdx` ana sayfa dosyasını oluştur
+1. Create the main page file `docs/docs/Components/${ComponentName}.mdx`
 
-2. `docs/src/docs-files/${componentName}/` klasörünü oluştur
+2. Create the `docs/src/docs-files/${componentName}/` folder.
 
-3. `docs/` dizininde `pnpm run generate-docs` komutunu çalıştır.
+3. Run the `pnpm run generate-docs` command in the `docs/` directory.
 
-4. `body.mdx` dosyasını oluştur.
+4. Create the `body.mdx` file.
 
-5. PlaygroundConfig JSON dosyasını oluştur.
+5. Create the PlaygroundConfig JSON file.
 
-6. `Examples/` alt klasörünü oluştur.
+6. Create the `Examples/` subfolder.
 
-7. İlk demo TSX dosyasını oluştur — Basic kullanım olmalı ("Yeni örnek ekle" →
-   Adım 1).
+7. Create the first TSX demo file — it should be the basic usage ("Add new
+   example" → Step 1).
 
-8. body.mdx'e import, başlık ve bileşen çağrısını ekle ("Yeni örnek ekle" → Adım
-   2).
+8. Import the body.mdx file, don't forget to add headers and components ("Add
+   new instance" → Step 2).
 
-9. Ana dizinde `pnpm run format` çalıştırarak formatlama yap.
+9. Run the `pnpm run format` command in the root directory to format.
