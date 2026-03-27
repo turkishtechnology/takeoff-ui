@@ -119,19 +119,19 @@ export class TkTable implements ComponentInterface {
   @Prop() data: any[] = [];
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
-    if (!isEqual(oldValue, newValue)) {
-      if (this.paginationMethod == 'client') {
-        const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
-        this.currentPage = 1;
-        const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
-        const endIndex = startIndex + this.internalRowsPerPage;
-        this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
-      } else {
-        this.renderData = newValue?.length > 0 ? [...newValue] : [];
-      }
-
-      // Re-apply grouping if it was previously set
+    const isDataEqual = isEqual(oldValue, newValue);
+    if (!isDataEqual && this.paginationMethod == 'client') {
+      const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      this.currentPage = 1;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
+      this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
+    } else if (this.paginationMethod == 'server') {
+      this.renderData = newValue?.length > 0 ? [...newValue] : [];
+    }
+    if (!isDataEqual || this.paginationMethod == 'server') {
       if (this.groupBy || this.groupByColumnField) {
+        // Re-apply grouping if it was previously set
         const groupField = this.groupBy || this.groupByColumnField;
         this.applyGrouping(groupField);
       }
@@ -2221,7 +2221,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
@@ -2231,7 +2231,7 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  variant: null,
+                  color: 'var(--icon-darkest)',
                   ref: (el: any) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
@@ -2252,7 +2252,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    variant: null,
+                    color: 'var(--icon-darkest)',
                     ref: (el: any) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
