@@ -8,6 +8,7 @@ import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
 import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -17,7 +18,7 @@ import { applyStyles } from '../../utils/style-utils';
  */
 @Component({
   tag: 'tk-currency-input',
-  styleUrls: ['tk-currency-input.scss', 'flag.scss'],
+  styleUrls: ['tk-currency-input.scss'],
   formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
@@ -653,6 +654,13 @@ export class TkCurrencyInput implements ComponentInterface {
     );
   }
 
+  /**
+   * Get the flag class based on the currency's ID.
+   */
+  private getFlagClass(currency: ICurrency): string {
+    return classNames('flag', currency?.id ? `flag-${currency?.id.toLowerCase()}` : 'flag-none');
+  }
+
   private renderDropdownButton() {
     return (
       <button
@@ -663,9 +671,9 @@ export class TkCurrencyInput implements ComponentInterface {
         aria-disabled={this.currencyDisabled || this.disabled}
       >
         <div class="tk-currency-input-dropdown-button-selected">
-          {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
+          {!this.hideFlag && this.renderFlag(this.selectedCurrency)}
           <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
-          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, undefined, 'span')} />}
+          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, 'rounded', 'span')} />}
         </div>
       </button>
     );
@@ -684,7 +692,7 @@ export class TkCurrencyInput implements ComponentInterface {
             onClick={event => this.handleSelectCurrency(currency.code, event)}
             aria-selected={this.selectedCurrency.code === currency.code}
           >
-            {!this.hideFlag && <div class={`flag flag-${currency.id.toLowerCase()}`} aria-label={`${currency.code} flag`} />}
+            {!this.hideFlag && this.renderFlag(currency)}
             <span class="tk-currency-input-dropdown-menu-list-country-label">{currency.symbol}</span>
             <span class="tk-currency-input-dropdown-menu-list-dial-id">{currency.name}</span>
           </li>
@@ -693,32 +701,18 @@ export class TkCurrencyInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-hint">
-          {hintIcon}
-          <span class="tk-currency-input-hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-error-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-error">
-          {hintIcon}
-          <span class="tk-currency-input-error-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
+  /**
+   * Render the flag element for a currency. Shows a close icon for currencies without a matching currency ID.
+   */
+  private renderFlag(currency: ICurrency) {
+    const flagClass = this.getFlagClass(currency);
+    return currency?.id ? (
+      <div class={flagClass} aria-label={`${currency.code} flag`} />
+    ) : (
+      <div class={flagClass}>
+        <tk-icon {...getIconElementProps('close', { color: 'var(--static-white)' })} />
+      </div>
+    );
   }
 
   render() {
@@ -734,7 +728,7 @@ export class TkCurrencyInput implements ComponentInterface {
           {this.renderCurrencyInput()}
           {this.renderCurrencySelector()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

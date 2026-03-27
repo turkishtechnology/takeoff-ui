@@ -289,8 +289,9 @@ export class TkSelect implements ComponentInterface {
 
     this.nativeInputRef = this.inputRef.querySelector('input');
 
+    const tkInputArea = this.inputRef.querySelector('.tk-input') as HTMLElement;
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElement: tkInputArea,
       handler: this.closeHandler,
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
@@ -325,6 +326,7 @@ export class TkSelect implements ComponentInterface {
     // Update click outside mixin configuration based on current state
     this.clickOutsideMixin?.updateConfig({
       disabled: this.disabled || this.readonly || !this.isOpen,
+      ignoredElements: this.panelRef ? [this.panelRef] : [],
     });
 
     if (this.isOpen) {
@@ -849,6 +851,7 @@ export class TkSelect implements ComponentInterface {
     const isClearButton = path.some(el => el.classList?.contains('tk-input-clear-button'));
     const isChevron = path.some((el: any) => el.tagName === 'TK-ICON' && (el.icon === 'keyboard_arrow_up' || el.icon === 'keyboard_arrow_down'));
     const isChipsClearButton = path.some((el: any) => el.classList?.contains('tk-chips-clear-button'));
+    const isInputElement = path.some((el: Element) => (el as Element).classList?.contains('tk-input'));
 
     if (isClearButton || isChipsClearButton) return;
 
@@ -857,7 +860,7 @@ export class TkSelect implements ComponentInterface {
       return;
     }
 
-    if (!this.isOpen) {
+    if (isInputElement && !this.isOpen) {
       this.isOpen = true;
     }
   }
@@ -1101,7 +1104,7 @@ export class TkSelect implements ComponentInterface {
         <div class="dropdown-item-holder">
           {this.loading ? (
             <tk-spinner size={this.size}></tk-spinner>
-          ) : this.renderOptions?.length > 0 ? (
+          ) : (
             <Fragment>
               {this.panelTopHtml && (
                 <div
@@ -1119,14 +1122,17 @@ export class TkSelect implements ComponentInterface {
                   }}
                 ></div>
               )}
-
-              {this.createSelectAllOption()}
-              {this.createOptions()}
+              {this.renderOptions?.length > 0 ? (
+                <Fragment>
+                  {this.createSelectAllOption()}
+                  {this.createOptions()}
+                </Fragment>
+              ) : this.hasEmptyDataSlot ? (
+                <slot name="empty-data"></slot>
+              ) : (
+                this.emptyMessage
+              )}
             </Fragment>
-          ) : this.hasEmptyDataSlot ? (
-            <slot name="empty-data"></slot>
-          ) : (
-            this.emptyMessage
           )}
         </div>
       </div>

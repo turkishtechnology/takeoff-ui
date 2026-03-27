@@ -44,6 +44,7 @@ import Tabs from './components/Tabs';
 import TreeView from './components/TreeView';
 import Upload from './components/Upload';
 import ColorPicker from './components/ColorPicker';
+import GanttChart from './components/GanttChart';
 import FloatingElements from './examples/FloatingElements';
 
 function App() {
@@ -95,6 +96,7 @@ function App() {
         <Route path="components/tree-view" element={<TreeView />} />
         <Route path="components/upload" element={<Upload />} />
         <Route path="components/color-picker" element={<ColorPicker />} />
+        <Route path="components/gantt-chart" element={<GanttChart />} />
       </Routes>
     </Layout>
   );

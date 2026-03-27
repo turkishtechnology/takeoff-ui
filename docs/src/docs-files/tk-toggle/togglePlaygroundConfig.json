@@ -28,8 +28,20 @@
       "type": "select",
       "defaultValue": "info",
       "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
         { "label": "Info", "value": "info" },
-        { "label": "Success", "value": "success" }
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Verified", "value": "verified" },
+        { "label": "Purple", "value": "purple" },
+        { "label": "Cyan", "value": "cyan" },
+        { "label": "Business", "value": "business" },
+        { "label": "Teal", "value": "teal" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "White", "value": "white" }
       ]
     },
     {

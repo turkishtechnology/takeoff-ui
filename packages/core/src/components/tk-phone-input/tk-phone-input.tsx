@@ -7,6 +7,7 @@ import { ICountry, IPhoneInputValue } from './interfaces';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkPhoneInput component allows users to input phone numbers with country selection and validation.
@@ -16,7 +17,7 @@ import { applyStyles } from '../../utils/style-utils';
  */
 @Component({
   tag: 'tk-phone-input',
-  styleUrls: ['tk-phone-input.scss', 'flag.scss'],
+  styleUrls: ['tk-phone-input.scss'],
   formAssociated: true,
 })
 export class TkPhoneInput implements ComponentInterface {
@@ -316,7 +317,7 @@ export class TkPhoneInput implements ComponentInterface {
    * Get the flag class based on the country object.
    */
   private getFlagClass(country: ICountry): string {
-    return classNames('flag', { [`flag-${country.id.toLowerCase()}`]: !!country.dialCode });
+    return classNames('flag', country?.dialCode ? `flag-${country?.id.toLowerCase()}` : 'flag-none');
   }
 
   /**
@@ -481,8 +482,8 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <button class="tk-phone-input-dropdown-button" onClick={this.toggleDropdown} type="button">
         <div class={selectedClass}>
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
-          {!this.hideFlag && <div class={this.getFlagClass(this.selectedCountry)} aria-label={`${this.selectedCountry.label} flag`} />}
+          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, 'rounded', 'span')} />
+          {!this.hideFlag && this.renderFlag(this.selectedCountry)}
           {this.selectedCountry.dialCode && <span class="tk-phone-input-dial-code">{this.selectedCountry.dialCode}</span>}
         </div>
       </button>
@@ -522,7 +523,7 @@ export class TkPhoneInput implements ComponentInterface {
             role="option"
             aria-selected={country.id === this.selectedCountry.id}
           >
-            {!this.hideFlag && <div class={this.getFlagClass(country)} aria-label={`${country.label} flag`} />}
+            {!this.hideFlag && this.renderFlag(country)}
             {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
             {country.dialCode && <span class="tk-phone-input-menu-dial-id">{country.dialCode}</span>}
           </li>
@@ -552,30 +553,18 @@ export class TkPhoneInput implements ComponentInterface {
     );
   }
 
-  private renderHint() {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-hint-icon', variant: null })} />;
-      hint = (
-        <span class="tk-phone-input-hint">
-          {hintIcon}
-          <span class="tk-phone-input-hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-phone-input-error-icon', variant: null })} />;
-      hint = (
-        <span class="tk-phone-input-error">
-          {hintIcon}
-          <span class="tk-phone-input-error-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
+  /**
+   * Render the flag element for a country. Shows a close icon for countries without a dial code.
+   */
+  private renderFlag(country: ICountry) {
+    const flagClass = this.getFlagClass(country);
+    return country.dialCode ? (
+      <div class={flagClass} aria-label={`${country.label} flag`} />
+    ) : (
+      <div class={flagClass}>
+        <tk-icon {...getIconElementProps('close', { color: 'var(--static-white)' })} />
+      </div>
+    );
   }
 
   /**
@@ -583,14 +572,19 @@ export class TkPhoneInput implements ComponentInterface {
    */
   render() {
     return (
-      <div class={classNames('tk-phone-input-container', `tk-phone-input-${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+      <div
+        class={classNames('tk-phone-input-container', `tk-phone-input-container-${this.size}`)}
+        aria-invalid={this.invalid}
+        aria-disabled={this.disabled}
+        aria-readonly={this.readonly}
+      >
         {this.renderLabel()}
         <div class="tk-phone-input-wrapper">
           {this.renderCountrySelector()}
           {this.renderPhoneInput()}
         </div>
 
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

@@ -60,18 +60,12 @@
       .tk-toggle-button-label {
         color: var(--text-lightest);
       }
-      .tk-toggle-button-icon {
-        color: var(--text-lightest);
-      }
     }
 
     &.outlined.selected,
     &.text.selected,
     &.filled-light.selected {
       .tk-toggle-button-label {
-        color: var(--background-darkest);
-      }
-      .tk-toggle-button-icon {
         color: var(--background-darkest);
       }
     }
@@ -115,18 +109,12 @@
       .tk-toggle-button-label {
         color: var(--static-white);
       }
-      .tk-toggle-button-icon {
-        color: var(--static-white);
-      }
     }
 
     &.outlined.selected,
     &.text.selected,
     &.filled-light.selected {
       .tk-toggle-button-label {
-        color: var(--primary-base);
-      }
-      .tk-toggle-button-icon {
         color: var(--primary-base);
       }
     }
@@ -154,29 +142,6 @@
     }
   }
 
-  .tk-toggle-button-icon {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-base);
-
-    &.small {
-      width: 20px;
-      height: 20px;
-    }
-
-    &.base {
-      width: 24px;
-      height: 24px;
-    }
-
-    &.large {
-      width: 24px;
-      height: 24px;
-    }
-  }
-
   &.small {
     height: 0px;
     padding: var(--button-sizes-large-v-padding) var(--button-sizes-small-h-padding);
@@ -197,15 +162,14 @@
   }
 
   &:hover {
-    .tk-toggle-button-icon,
-    .tk-toggle-button-label {
+    .tk-toggle-button-label,
+    tk-icon i {
       color: var(--text-darkest);
     }
   }
   &.disabled {
     pointer-events: none;
     user-select: none;
-    .tk-toggle-button-icon,
     .tk-toggle-button-label {
       color: var(--text-sub-base);
     }
