@@ -740,7 +740,7 @@ export class TkTable implements ComponentInterface {
       return;
     }
 
-    const filteredData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+    const filteredData = this.getTableViewData();
 
     // Group data by the specified column
     const groups = new Map<any, any[]>();
@@ -797,7 +797,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
-    const _data = [...data];
+    const _data = [...(data ?? [])];
     this.currentPage = currentPage;
 
     // Clear grouping when generating render data with new dataset
@@ -836,6 +836,18 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = [];
     // Slice/view changed -> clear cached custom cells to avoid stale nodes
     this.customCellCache.clear();
+  }
+
+  /**
+   * Tabloda gösterilecek satırlar. Server pagination'da filtre/sıralama sunucuda uygulanır;
+   * bu yüzden client tarafında filterAndSort tekrar çalıştırılmaz (çift filtreleme ve boş tablo riski).
+   */
+  private getTableViewData(): any[] {
+    const source = Array.isArray(this.data) ? this.data : [];
+    if (this.paginationMethod === 'server') {
+      return [...source];
+    }
+    return filterAndSort(source, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
   }
 
   private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
@@ -924,7 +936,7 @@ export class TkTable implements ComponentInterface {
 
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -957,7 +969,7 @@ export class TkTable implements ComponentInterface {
 
       // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
       if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+        const tmpData = this.getTableViewData();
         this.generateRenderData(tmpData, 1);
       } else {
         this.currentPage = 1;
@@ -1015,7 +1027,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handlePageChange(e) {
-    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+    const tmpData = this.getTableViewData();
     this.generateRenderData(tmpData, Number(e.detail.page));
     // sayfa değişikliğinde seçilen değerler sıfırlanır
     if (this.refSelectAll) this.refSelectAll.value = false;
@@ -1080,7 +1092,7 @@ export class TkTable implements ComponentInterface {
 
   private applySorting() {
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1447,7 +1459,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1489,7 +1501,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1499,9 +1511,10 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
   private handleDatepickerFilterApply(columnField: string) {
-    const datepickerEl = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
+    const datepickerEl = document.querySelector('body > .tk-table-filter-panel .tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
     const selectedDate = datepickerEl?.value;
     const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+
     if (selectedDate) {
       if (filterIndex > -1) {
         this.filters[filterIndex].value = selectedDate;
@@ -1515,7 +1528,7 @@ export class TkTable implements ComponentInterface {
     }
     // Update table data
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1547,7 +1560,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -2390,7 +2403,7 @@ export class TkTable implements ComponentInterface {
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.internalRowsPerPage = e.detail;
-            const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+            const tmpData = this.getTableViewData();
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;
             if (this.selection?.length > 0) this.handleSelectAll(false);
