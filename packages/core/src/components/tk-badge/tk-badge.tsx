@@ -1,4 +1,4 @@
-import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, h, State, ComponentInterface, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
@@ -67,6 +67,12 @@ export class TkBadge implements ComponentInterface {
    * @defaultValue 'base'
    */
   @Prop() size: 'large' | 'base' | 'small' = 'base';
+
+  /**
+   * If true, the badge will take the full width of its container.
+   * @defaultValue false
+   */
+  @Prop() fullWidth: boolean = false;
 
   /**
    * Determines the badge's variant for different styles.
@@ -140,14 +146,16 @@ export class TkBadge implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses}>
-        <slot />
-        <span class={badgeClasses}>
-          {_leftIcon}
-          {this.renderContent()}
-          {_rightIcon}
-        </span>
-      </div>
+      <Host class={{ 'full-width': this.fullWidth && !this.hasSlot }}>
+        <div class={rootClasses}>
+          <slot />
+          <span class={badgeClasses}>
+            {_leftIcon}
+            {this.renderContent()}
+            {_rightIcon}
+          </span>
+        </div>
+      </Host>
     );
   }
 }
