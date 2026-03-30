@@ -31,8 +31,6 @@
 .tk-gantt-chart-panel-header {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border-light);
-  background: var(--background-lightest);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -48,6 +46,8 @@
   text-overflow: ellipsis;
   height: 100%;
   border-right: 1px solid var(--border-light);
+  background: var(--background-lightest);
+  border-bottom: 1px solid var(--border-light);
 
   &:last-child {
     border-right: none;
@@ -61,10 +61,11 @@
 .tk-gantt-chart-panel-row {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border-light);
 
   &:last-child {
-    border-bottom: none;
+    .tk-gantt-chart-panel-cell {
+      border-bottom: none;
+    }
   }
 
   &:hover {
@@ -82,6 +83,7 @@
   text-overflow: ellipsis;
   height: 100%;
   border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 
   &:last-child {
     border-right: none;
