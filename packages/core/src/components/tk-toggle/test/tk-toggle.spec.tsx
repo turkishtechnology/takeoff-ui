@@ -73,7 +73,7 @@ describe('tk-toggle', () => {
       }
     });
     it('handles variants correctly', async () => {
-      const variants = ['success', 'info'];
+      const variants = ['primary', 'secondary', 'neutral', 'success', 'info', 'warning', 'danger', 'verified', 'purple', 'cyan', 'business', 'teal', 'dark', 'white'];
       for (const variant of variants) {
         const page = await newSpecPage({
           components: [TkToggle],

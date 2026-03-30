@@ -217,7 +217,7 @@ export class TkStepper implements ComponentInterface {
       small: 'base',
       xsmall: 'xsmall',
     };
-    const defaultProps = { size: iconSizes[this.size], fill: true, color: 'var(--primary-base)', ...props, class: classNames('tk-step-icon', props?.class) };
+    const defaultProps = { size: iconSizes[this.size], fill: true, ...props, class: props?.class };
     const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
     return <tk-icon {...iconProps} />;

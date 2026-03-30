@@ -8,6 +8,7 @@ import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
 import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -668,7 +669,7 @@ export class TkCurrencyInput implements ComponentInterface {
         <div class="tk-currency-input-dropdown-button-selected">
           {!this.hideFlag && this.renderFlag(this.selectedCurrency)}
           <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
-          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, undefined, 'span')} />}
+          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, 'rounded', 'span')} />}
         </div>
       </button>
     );
@@ -694,34 +695,6 @@ export class TkCurrencyInput implements ComponentInterface {
         ))}
       </ul>
     );
-  }
-
-  private renderHint(): HTMLSpanElement {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-hint-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-hint">
-          {hintIcon}
-          <span class="tk-currency-input-hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input-error-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input-error">
-          {hintIcon}
-          <span class="tk-currency-input-error-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
   }
 
   /**
@@ -751,7 +724,7 @@ export class TkCurrencyInput implements ComponentInterface {
           {this.renderCurrencyInput()}
           {this.renderCurrencySelector()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

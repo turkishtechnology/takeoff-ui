@@ -1,9 +1,9 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, AttachInternals } from '@stencil/core';
 import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../../utils/icon-utils';
 import { isEqual } from 'lodash-es';
 import type { TkRadioValue } from '../tk-radio';
+import { renderHint } from '../../../utils/hint-utils';
 
 @Component({
   tag: 'tk-radio-group',
@@ -135,21 +135,6 @@ export class TkRadioGroup implements ComponentInterface {
     }
   }
 
-  private renderError() {
-    let error;
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      error = (
-        <span class="hint error">
-          {hintIcon}
-          {this.error}
-        </span>
-      );
-    }
-    return error;
-  }
-
   render() {
     let _label: JSX.Element | undefined;
 
@@ -173,7 +158,7 @@ export class TkRadioGroup implements ComponentInterface {
         <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>
           <slot onSlotchange={this.handleSlotChange.bind(this)} />
         </div>
-        {this.error && this.renderError()}
+        {renderHint(undefined, this.error, this.invalid)}
       </div>
     );
   }

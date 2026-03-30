@@ -12,7 +12,7 @@ import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { renderHint } from '../../utils/hint-utils';
 import type { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -535,27 +535,6 @@ export class TkEditor {
     );
   }
 
-  private renderHint(): JSX.Element | undefined {
-    let hint: JSX.Element | undefined;
-    if (this.hint?.length > 0) {
-      hint = (
-        <div class="tk-editor-supporting-text">
-          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
-          <span>{this.hint}</span>
-        </div>
-      );
-    }
-    if (this.error?.length > 0) {
-      hint = (
-        <div class="tk-editor-supporting-text error">
-          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
-          <span>{this.error}</span>
-        </div>
-      );
-    }
-    return hint;
-  }
-
   private renderFooter(): JSX.Element | null {
     if (this.showCounter || this.resizable) {
       return (
@@ -612,7 +591,7 @@ export class TkEditor {
           />
           {this.renderFooter()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

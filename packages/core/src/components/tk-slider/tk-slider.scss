@@ -180,29 +180,3 @@
   border-right: 4px solid transparent;
   border-bottom: 4px solid #191c22;
 }
-
-.tk-slider-hint,
-.tk-slider-error {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-family: var(--subheading-xs-font, Geologica);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  margin-top: 4px;
-}
-
-.tk-slider-hint {
-  color: var(--text-base, #6b7280);
-}
-
-.tk-slider-error {
-  color: var(--states-danger-base, #c90019);
-}
-
-.tk-slider-hint i,
-.tk-slider-error i {
-  font-size: 16px;
-  color: inherit;
-}

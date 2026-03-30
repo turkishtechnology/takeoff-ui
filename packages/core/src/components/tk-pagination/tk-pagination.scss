@@ -73,13 +73,6 @@ tk-pagination {
         color: var(--text-darkest);
       }
 
-      .tk-pagination-cell-icon i {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-        color: var(--icon-base);
-      }
-
       &:hover:not(:disabled):not(.tk-pagination-ellipsis) {
         background: var(--background-lightest, #f9fafc);
       }
@@ -89,8 +82,9 @@ tk-pagination {
       }
 
       &:disabled {
-        .tk-pagination-page-label,
-        .tk-pagination-cell-icon i {
+        pointer-events: none;
+
+        .tk-pagination-page-label {
           color: var(--text-sub-base, #99a0ae);
         }
       }

@@ -2,6 +2,7 @@ import { AttachInternals, Component, ComponentInterface, Element, Event, EventEm
 import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkTextarea component enables multi-line text input with customizable size, validation, and styling options.
@@ -196,28 +197,6 @@ export class TkTextarea implements ComponentInterface {
     return label;
   }
 
-  private renderHintError(): JSX.Element | undefined {
-    let hint: JSX.Element | undefined;
-    if (this.hint?.length > 0) {
-      hint = (
-        <span class="hint">
-          <i class="material-symbols-outlined">info</i>
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      hint = (
-        <span class="hint error">
-          <i class="material-symbols-outlined">info</i>
-          {this.error}
-        </span>
-      );
-    }
-    return hint;
-  }
-
   render() {
     const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
@@ -255,7 +234,7 @@ export class TkTextarea implements ComponentInterface {
           />
           {counter}
         </div>
-        {this.renderHintError()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

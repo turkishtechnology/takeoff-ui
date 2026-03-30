@@ -133,9 +133,7 @@ export class TkBadge implements ComponentInterface {
     if (this.icon && !this.dot) {
       const { leftIcon, rightIcon } = renderIcons(
         this.icon,
-        {
-          additionalProps: { variant: null },
-        },
+        { variant: this.variant, size: this.size, additionalProps: { ...(this.type === 'filled' ? { color: 'var(--static-white)' } : {}) } },
         this.iconPosition,
       );
       _leftIcon = leftIcon;
