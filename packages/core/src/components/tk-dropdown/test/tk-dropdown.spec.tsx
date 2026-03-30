@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkDropdown } from '../tk-dropdown';
-import { h } from '@stencil/core';
 
 // Basic Rendering
 describe('tk-dropdown', () => {
@@ -42,22 +41,16 @@ describe('tk-dropdown', () => {
     it('should handle isGrouped state', async () => {
       const page = await newSpecPage({
         components: [TkDropdown],
-        template: () => (
-          <tk-dropdown
-            groupNameKey="code"
-            options={[
-              {
-                code: 'SAW',
-                name: 'Sabiha Gökçen Havalimanı',
-              },
-              { code: 'ESB', name: 'Esenboğa Havalimanı' },
-              { code: 'AYT', name: 'Antalya Havalimanı' },
-            ]}
-          >
-            <button slot="trigger"></button>
-          </tk-dropdown>
-        ),
+        html: `<tk-dropdown group-name-key="code"><button slot="trigger"></button></tk-dropdown>`,
       });
+      page.root.options = [
+        {
+          code: 'SAW',
+          name: 'Sabiha Gökçen Havalimanı',
+        },
+        { code: 'ESB', name: 'Esenboğa Havalimanı' },
+        { code: 'AYT', name: 'Antalya Havalimanı' },
+      ];
       await page.waitForChanges();
 
       const button = page.root.querySelector('button');
@@ -70,22 +63,16 @@ describe('tk-dropdown', () => {
     it('should handle optionLabelKey state', async () => {
       const page = await newSpecPage({
         components: [TkDropdown],
-        template: () => (
-          <tk-dropdown
-            optionLabelKey="code"
-            options={[
-              {
-                code: 'SAW',
-                name: 'Sabiha Gökçen Havalimanı',
-              },
-              { code: 'ESB', name: 'Esenboğa Havalimanı' },
-              { code: 'AYT', name: 'Antalya Havalimanı' },
-            ]}
-          >
-            <button slot="trigger"></button>
-          </tk-dropdown>
-        ),
+        html: `<tk-dropdown option-label-key="code"><button slot="trigger"></button></tk-dropdown>`,
       });
+      page.root.options = [
+        {
+          code: 'SAW',
+          name: 'Sabiha Gökçen Havalimanı',
+        },
+        { code: 'ESB', name: 'Esenboğa Havalimanı' },
+        { code: 'AYT', name: 'Antalya Havalimanı' },
+      ];
       await page.waitForChanges();
 
       const button = page.root.querySelector('button');
