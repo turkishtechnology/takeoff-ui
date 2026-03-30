@@ -74,6 +74,11 @@ export class TkRadioGroup implements ComponentInterface {
   @Prop() type: 'default' | 'card' = 'default';
 
   /**
+   * This is the hint message that will be displayed.
+   */
+  @Prop() hint?: string;
+
+  /**
    * This is the error message that will be displayed.
    */
   @Prop() error: string;
@@ -156,7 +161,7 @@ export class TkRadioGroup implements ComponentInterface {
         <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })}>
           <slot onSlotchange={this.handleSlotChange.bind(this)} />
         </div>
-        {renderHint(undefined, this.error, this.invalid)}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }
