@@ -36,7 +36,6 @@ describe('tk-checkbox', () => {
       html: `<tk-checkbox indeterminate="true"></tk-checkbox>`,
     });
 
-    const input = page.root.querySelector('input') as HTMLInputElement;
     const mask = page.root.querySelector('.mask');
 
     expect(page.root.indeterminate).toBe(true);

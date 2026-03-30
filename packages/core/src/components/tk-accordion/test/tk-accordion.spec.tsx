@@ -2,10 +2,9 @@ jest.mock('lodash-es', () => ({
   isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right),
 }));
 
-import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAccordion } from '../tk-accordion';
-import { TkIcon } from '../../tk-icon/tk-icon';
 
 @Component({
   tag: 'tk-accordion-item',
@@ -20,19 +19,14 @@ class MockAccordionItem {
   @Event({ eventName: 'tk-active-change' }) tkActiveChange: EventEmitter<boolean>;
 
   render() {
-    return (
-      <div>
-        <span class="title">{this.header}</span>
-        {this.icon && <tk-icon icon={this.icon}></tk-icon>}
-      </div>
-    );
+    return h('div', null, h('span', { className: 'title' }, this.header));
   }
 }
 
 describe('tk-accordion', () => {
   it('renders accordion items from slotted content', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, MockAccordionItem, TkIcon],
+      components: [TkAccordion, MockAccordionItem],
       html: `
         <tk-accordion>
           <tk-accordion-item header="Item 1"></tk-accordion-item>
@@ -48,7 +42,7 @@ describe('tk-accordion', () => {
 
   it('applies numeric activeIndex to child items', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, MockAccordionItem, TkIcon],
+      components: [TkAccordion, MockAccordionItem],
       html: `
         <tk-accordion>
           <tk-accordion-item header="Item 1"></tk-accordion-item>
@@ -68,7 +62,7 @@ describe('tk-accordion', () => {
 
   it('emits active index changes from item interactions', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, MockAccordionItem, TkIcon],
+      components: [TkAccordion, MockAccordionItem],
       html: `
         <tk-accordion>
           <tk-accordion-item header="Item 1"></tk-accordion-item>
