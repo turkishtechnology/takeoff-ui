@@ -2,37 +2,35 @@
 applyTo: 'packages/core/**/*.spec.tsx,packages/core/**/*.e2e.ts'
 ---
 
-# Test Standartları
+# Test Standards
 
-## Test Türleri
+## Test Types
 
-- **Unit testler** (\*.spec.tsx): `newSpecPage()` ile virtual DOM, component
+- **Unit tests** (\*.spec.tsx): with `newSpecPage()` virtual DOM, component
   props/states
-- **E2E testler** (\*.e2e.ts): `newE2EPage()` ile gerçek tarayıcı, kullanıcı
-  etkileşimleri
+- **E2E tests** (\*.e2e.ts): Real browser, user interactions with 'newE2EPage()`
 
-## Konum
+## Location
 
-Test dosyaları component dizini altında: `components/tk-[component]/test/`
+Test files are under the component directory: `components/tk-[component]/test/`
 
 ## Best Practices
 
-- **DOM sorguları**: `data-testid` tercih et. Örn:
+- **DOM queries**: Prefer `data-testid`. e.g:
   `page.find('[data-testid="submit-button"]')`
-- **Async**: `page.waitForChanges()` kullan. `waitForTimeout` kullanma
-- **Event testi**: Kullanıcı etkileşimini simüle et (click, vb.). `callMethod`
-  tercih etme
-- **Shadow DOM**: `tk-component >>> [data-testid="element"]` syntax'ı
-  kullanılabilir
+- **Async**: Use `page.waitForChanges()`. Don't use `waitForTimeout`
+- **Event tests**: Simulate user interaction (click, etc.). Don't use
+  `callMethod`
+- **Shadow DOM**: `tk-component >>> [data-testid="element"]` syntax can be used.
 
-## Coverage Hedefleri
+## Targeted Coverage
 
 - Lines: 90%
 - Functions: 90%
 - Branches: 80%
 - Statements: 90%
 
-## Örnek Unit Test
+## Example Unit Test
 
 ```typescript
 it('renders with default props', async () => {
@@ -44,7 +42,7 @@ it('renders with default props', async () => {
 });
 ```
 
-## Örnek E2E Event Test
+## Example E2E Event Test
 
 ```typescript
 const eventSpy = await page.spyOnEvent('tkChange');

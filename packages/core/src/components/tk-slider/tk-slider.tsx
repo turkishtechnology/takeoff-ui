@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
+import { renderHint } from '../../utils/hint-utils';
 
 @Component({
   tag: 'tk-slider',
@@ -216,12 +217,7 @@ export class TkSlider implements ComponentInterface {
           </div>
         )}
 
-        {(this.hint || (this.invalid && this.error)) && (
-          <div class={classNames('tk-slider-hint', { 'tk-slider-error': this.invalid })}>
-            <tk-icon icon="info" size="small" />
-            <span>{this.invalid ? this.error : this.hint}</span>
-          </div>
-        )}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

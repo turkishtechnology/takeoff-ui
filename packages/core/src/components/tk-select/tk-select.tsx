@@ -301,8 +301,9 @@ export class TkSelect implements ComponentInterface {
 
     this.nativeInputRef = this.inputRef.querySelector('input');
 
+    const tkInputArea = this.inputRef.querySelector('.tk-input') as HTMLElement;
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: this.el,
+      referenceElement: tkInputArea,
       handler: this.closeHandler,
       disabled: this.disabled || this.readonly || !this.isOpen,
     });
@@ -337,6 +338,7 @@ export class TkSelect implements ComponentInterface {
     // Update click outside mixin configuration based on current state
     this.clickOutsideMixin?.updateConfig({
       disabled: this.disabled || this.readonly || !this.isOpen,
+      ignoredElements: this.panelRef ? [this.panelRef] : [],
     });
 
     if (this.isOpen) {
@@ -862,6 +864,7 @@ export class TkSelect implements ComponentInterface {
       return pathElement.tagName === 'TK-ICON' && (pathElement.icon === 'keyboard_arrow_up' || pathElement.icon === 'keyboard_arrow_down');
     });
     const isChipsClearButton = path.some(el => (el as TkSelectEventPathElement).classList?.contains('tk-chips-clear-button'));
+    const isInputElement = path.some(el => (el as TkSelectEventPathElement).classList?.contains('tk-input'));
 
     if (isClearButton || isChipsClearButton) return;
 
@@ -870,7 +873,7 @@ export class TkSelect implements ComponentInterface {
       return;
     }
 
-    if (!this.isOpen) {
+    if (isInputElement && !this.isOpen) {
       this.isOpen = true;
     }
   }

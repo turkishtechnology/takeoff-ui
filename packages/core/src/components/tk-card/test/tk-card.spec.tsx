@@ -49,6 +49,15 @@ describe('tk-card', () => {
         expect(element.textContent).toBe(expectedContent);
       }
     });
+
+    it('should render header-action slot in the header when provided', async () => {
+      const page = await newSpecPage({
+        components: [TkCard],
+        html: `<tk-card header="Test"><button slot="header-action">Action</button></tk-card>`,
+      });
+      const slot = page.root.shadowRoot.querySelector('slot[name="header-action"]');
+      expect(slot).toBeTruthy();
+    });
   });
 
   describe('state handling', () => {

@@ -61,13 +61,12 @@ export class TkBreadcrumb implements ComponentInterface {
 
   private renderSeparator() {
     const separatorClasses = classNames('tk-breadcrumb-separator-icon', {
-      'material-symbols-outlined': this.separator === 'icon',
       'tk-breadcrumb-dot-separator': this.separator === 'dot',
       'tk-breadcrumb-slash-separator': this.separator === 'slash',
       'tk-breadcrumb-vertical-separator': this.separator === 'vertical',
     });
     if (this.separator === 'icon') {
-      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, variant: null }, undefined, 'span')} />;
+      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, 'rounded', 'span')} />;
     }
     return <span class={separatorClasses} />;
   }

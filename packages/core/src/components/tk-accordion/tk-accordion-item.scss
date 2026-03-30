@@ -18,18 +18,10 @@
     &:hover {
       background: var(--background-lightest) !important;
     }
-
-    .tk-accordion-item-icon-collapse {
-      color: var(--primary-base);
-    }
   }
 
   .title {
     flex-grow: 1;
-  }
-
-  .icon {
-    display: contents;
   }
 
   .content {

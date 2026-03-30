@@ -17,13 +17,9 @@
   }
 }
 
-@mixin button-variant-filled($bg-color, $hover-color, $focus-bg, $focus-shadow, $disabled-bg, $text-color: var(--text-lightest), $icon-color: var(--icon-lightest)) {
+@mixin button-variant-filled($bg-color, $hover-color, $focus-bg, $focus-shadow, $disabled-bg, $text-color: var(--text-lightest)) {
   background-color: $bg-color;
   color: $text-color;
-
-  .tk-button-icon {
-    color: $icon-color;
-  }
 
   &:hover {
     background-color: $hover-color;
@@ -87,7 +83,7 @@
   }
 }
 
-@mixin button-size($height, $font-size, $radius, $v-padding, $h-padding, $gap, $icon-size, $icon-only-padding) {
+@mixin button-size($height, $font-size, $radius, $v-padding, $h-padding, $gap, $icon-only-padding) {
   min-height: $height;
   font-size: $font-size;
   border-radius: $radius;
@@ -97,10 +93,6 @@
   &.rounded {
     height: unset;
     border-radius: 100%;
-  }
-
-  i {
-    font-size: $icon-size;
   }
 
   &.icon-only {
@@ -129,12 +121,6 @@
     pointer-events: none;
   }
 
-  i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   &.primary {
     border: 0px;
     color: var(--static-white);
@@ -154,10 +140,6 @@
     &.filledLight {
       color: var(--primary-500);
       background-color: var(--primary-lightest);
-
-      .tk-button-icon {
-        color: var(--primary-500);
-      }
 
       &:hover {
         background-color: var(--primary-light);
@@ -187,10 +169,6 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--text-sub-base);
-        }
       }
     }
 
@@ -198,10 +176,6 @@
       background-color: transparent;
       color: var(--primary-base);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--primary-base);
-      }
 
       &:hover {
         background-color: var(--primary-lightest);
@@ -215,9 +189,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-sub-base);
-        .tk-button-icon {
-          color: var(--text-sub-base);
-        }
       }
     }
 
@@ -228,10 +199,6 @@
     @include tk-button-disabled {
       color: var(--static-white);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--static-white);
-      }
     }
   }
 
@@ -283,10 +250,6 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -294,10 +257,6 @@
       background-color: transparent;
       color: var(--secondary-darkest);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--secondary-darkest);
-      }
 
       &:hover {
         background-color: var(--secondary-lightest);
@@ -311,10 +270,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -325,10 +280,6 @@
     @include tk-button-disabled {
       color: var(--text-lightest);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -336,17 +287,10 @@
     border: 0px;
     color: var(--text-darkest);
 
-    .tk-button-icon {
-      color: var(--icon-darkest);
-    }
-
     &.filled {
       color: var(--text-lightest);
       background-color: var(--background-base);
 
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
       &:hover {
         background-color: var(--background-darkest);
         cursor: pointer;
@@ -387,10 +331,6 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -410,9 +350,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-sub-base);
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -423,10 +360,6 @@
     @include tk-button-disabled {
       color: var(--static-white);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--static-white);
-      }
     }
   }
 
@@ -478,10 +411,6 @@
         color: var(--text-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -489,10 +418,6 @@
       background-color: transparent;
       color: var(--states-info-dark);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--states-info-dark);
-      }
 
       &:hover {
         background-color: var(--states-info-lightest);
@@ -506,10 +431,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -520,10 +441,6 @@
     @include tk-button-disabled {
       color: var(--text-lightest);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -574,10 +491,6 @@
         color: var(--icon-sub-base);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -585,10 +498,6 @@
       background-color: transparent;
       color: var(--states-success-dark);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--states-success-dark);
-      }
 
       &:hover {
         background-color: var(--states-success-lightest);
@@ -602,10 +511,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--icon-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -616,10 +521,6 @@
     @include tk-button-disabled {
       color: var(--text-lightest);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -629,10 +530,6 @@
     background-color: var(--states-danger-dark);
 
     &.filled {
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
       &:hover {
         background-color: var(--states-danger-darkest);
         cursor: pointer;
@@ -675,10 +572,6 @@
         color: var(--background-sub-base);
         background-color: transparent;
         border-color: var(--background-sub-base);
-
-        .tk-button-icon {
-          color: var(--background-sub-base);
-        }
       }
     }
 
@@ -686,10 +579,6 @@
       background-color: transparent;
       color: var(--states-danger-dark);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--states-danger-dark);
-      }
 
       &:hover {
         background-color: var(--states-danger-lightest);
@@ -703,10 +592,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--background-sub-base);
-
-        .tk-button-icon {
-          color: var(--background-sub-base);
-        }
       }
     }
 
@@ -717,10 +602,6 @@
     @include tk-button-disabled {
       color: var(--text-lightest);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -731,10 +612,6 @@
     &.filled {
       color: var(--text-lightest);
       background-color: var(--states-warning-dark);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--states-warning-darkest);
@@ -775,10 +652,6 @@
         color: var(--text-light);
         background-color: transparent;
         border-color: var(--border-sub-base);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -798,10 +671,6 @@
       @include tk-button-disabled {
         background-color: transparent;
         color: var(--text-light);
-
-        .tk-button-icon {
-          color: var(--icon-sub-base);
-        }
       }
     }
 
@@ -812,10 +681,6 @@
     @include tk-button-disabled {
       color: var(--text-lightest);
       background-color: var(--background-sub-base);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
     }
   }
 
@@ -823,10 +688,6 @@
     border: 0px;
     background-color: var(--static-light);
     color: var(--text-darkest);
-
-    .tk-button-icon {
-      color: var(--icon-darkest);
-    }
 
     &.filled {
       &:hover {
@@ -843,10 +704,6 @@
       background-color: var(--overlay-white-lightest);
       color: var(--text-lightest);
 
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
-
       &:hover {
         background-color: var(--overlay-white-light);
         cursor: pointer;
@@ -861,10 +718,6 @@
       background-color: transparent;
       color: var(--text-lightest);
       border: 1px solid var(--text-lightest);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--overlay-white-light);
@@ -885,10 +738,6 @@
       background-color: transparent;
       color: var(--text-lightest);
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         color: var(--text-lightest);
@@ -912,9 +761,6 @@
     @include tk-button-disabled {
       background-color: var(--overlay-white-lightest);
       color: var(--overlay-white-light);
-      .tk-button-icon {
-        color: var(--overlay-white-light);
-      }
     }
   }
 
@@ -925,10 +771,6 @@
     &.filled {
       background-color: var(--background-darkest);
       color: var(--text-lightest);
-
-      .tk-button-icon {
-        color: var(--icon-lightest);
-      }
 
       &:hover {
         background-color: var(--static-dark);
@@ -943,10 +785,6 @@
     &.filledLight {
       background-color: var(--overlay-black-xlightest);
 
-      .tk-button-icon {
-        color: var(--icon-darkest);
-      }
-
       &:hover {
         background-color: var(--overlay-black-lightest);
         cursor: pointer;
@@ -960,10 +798,6 @@
     &.outlined {
       background-color: transparent;
       border: 1px solid var(--icon-darkest);
-
-      .tk-button-icon {
-        color: var(--icon-darkest);
-      }
 
       &:hover {
         background-color: var(--overlay-black-lightest);
@@ -983,10 +817,6 @@
     &.text {
       background-color: transparent;
       box-shadow: none;
-
-      .tk-button-icon {
-        color: var(--icon-darkest);
-      }
 
       &:hover {
         color: var(--text-darkest);
@@ -1010,10 +840,6 @@
     @include tk-button-disabled {
       color: var(--overlay-black-lightest);
       background-color: var(--overlay-black-xlightest);
-
-      .tk-button-icon {
-        color: var(--overlay-black-lightest);
-      }
     }
   }
 
@@ -1025,7 +851,6 @@
       var(--button-sizes-small-v-padding),
       var(--button-sizes-small-h-padding),
       var(--button-sizes-small-gap),
-      var(--button-sizes-small-icon-size),
       var(--button-sizes-small-full-padding)
     );
 
@@ -1042,7 +867,6 @@
       var(--button-sizes-base-v-padding),
       var(--button-sizes-base-h-padding),
       var(--button-sizes-base-gap),
-      var(--button-sizes-base-icon-size),
       var(--button-sizes-base-full-padding)
     );
 
@@ -1059,7 +883,6 @@
       var(--button-sizes-large-v-padding),
       var(--button-sizes-large-h-padding),
       var(--button-sizes-large-gap),
-      var(--button-sizes-large-icon-size),
       var(--button-sizes-large-full-padding)
     );
 
@@ -1079,36 +902,19 @@
 
     @include tk-button-disabled {
       color: var(--text-sub-base);
+      background-color: transparent;
     }
 
     &.small {
       height: 18px;
-
-      i {
-        font-size: var(--link-button-sizes-small-icon-size);
-        width: var(--link-button-sizes-small-icon-size);
-        height: var(--link-button-sizes-small-icon-size);
-      }
     }
 
     &.base {
       height: 20px;
-
-      i {
-        font-size: var(--link-button-sizes-base-icon-size);
-        width: var(--link-button-sizes-base-icon-size);
-        height: var(--link-button-sizes-base-icon-size);
-      }
     }
 
     &.large {
       height: 24px;
-
-      i {
-        font-size: var(--link-button-sizes-large-icon-size);
-        width: var(--link-button-sizes-large-icon-size);
-        height: var(--link-button-sizes-large-icon-size);
-      }
     }
   }
 }

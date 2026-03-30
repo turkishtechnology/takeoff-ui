@@ -11,7 +11,7 @@ type IconElementProps = Record<string, unknown> & {
 };
 
 export interface IconRendererOptions {
-  variant?: string;
+  variant?: string | null;
   sign?: boolean;
   size?: string;
   fill?: boolean;
