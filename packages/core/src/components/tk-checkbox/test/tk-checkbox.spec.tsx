@@ -55,7 +55,7 @@ describe('tk-checkbox', () => {
 
       const input = page.root.shadowRoot.querySelector('input');
 
-      expect(input.getAttribute('disabled')).toBeTruthy;
+      expect(input.getAttribute('disabled')).toBeTruthy();
     });
     it('handles invalid state', async () => {
       const page = await newSpecPage({

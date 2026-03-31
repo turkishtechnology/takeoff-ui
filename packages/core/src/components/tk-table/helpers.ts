@@ -2,6 +2,8 @@ import { getNestedValue } from '../../utils/object-utils';
 import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
 import { parse, isWithinInterval } from 'date-fns';
 
+type TableRowData = Record<string, unknown>;
+
 /**
  * Calculates the optimal starting width for column resizing
  * Handles the difference between CSS width, clientWidth, and offsetWidth
@@ -67,9 +69,9 @@ export const handleInputKeydown = (event: KeyboardEvent, el: HTMLTkTableElement)
   }
 };
 
-export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sorts?: ITableSort[]) => {
+export const filterAndSort = (data: TableRowData[], columns: ITableColumn[], filters: ITableFilter[], sortField?: string, sortOrder?: string, sorts?: ITableSort[]) => {
   let sortAndFilterData;
-  let _data = [...data];
+  const _data = [...data];
 
   //#region filter
   sortAndFilterData = _data.filter(row =>
@@ -111,7 +113,7 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
           const timeFormat = column?.filterElements?.optionsSearchDatepicker?.timeFormat;
           const formatType = dateFormat + (timeFormat === '24' ? ' HH:mm' : timeFormat === '12' ? ' hh:mm aa' : '');
 
-          const rowDate = parse(fieldValue, formatType, new Date());
+          const rowDate = parse(String(fieldValue), formatType, new Date());
           // Range mode
           if (
             typeof filter.value === 'object' &&

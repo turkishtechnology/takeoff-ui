@@ -1,4 +1,5 @@
-import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, Event, Host, EventEmitter } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
@@ -152,9 +153,9 @@ export class TkButton implements ComponentInterface {
       [this.size],
     );
 
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
-    const spinnerElement = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
+    let _leftIcon: JSX.Element | undefined;
+    let _rightIcon: JSX.Element | undefined;
+    const spinnerElement: JSX.Element = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
 
     if (this.loading) {
       _leftIcon = spinnerElement;

@@ -95,7 +95,7 @@ describe('tk-toggle', () => {
       const slot = page.root.shadowRoot.querySelector('slot');
 
       expect(instance.hasDefaultSlot).toBe(true);
-      expect(slot).not.toBeNull;
+      expect(slot).not.toBeNull();
     });
     it('should render label when no slot content is provided', async () => {
       const page = await newSpecPage({
