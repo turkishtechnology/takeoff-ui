@@ -21,6 +21,7 @@
 }
 
 .package {
+  font-family: var(--desktop-title-display1-font);
   color: var(--text-base, #99a0ae);
   line-height: 100%;
 
