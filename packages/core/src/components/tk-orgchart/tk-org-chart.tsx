@@ -226,6 +226,7 @@ export class TkOrgChart implements ComponentInterface {
       flex-direction: column;
       align-items: center;
       text-align: center;
+      font-family: tk-text, sans-serif";
       >
         <div style="
   width: 32px;
