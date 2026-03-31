@@ -214,7 +214,6 @@ export class TkOrgChart implements ComponentInterface {
       flex-direction: column;
       align-items: center;
       text-align: center;
-      font-family: Geologica, sans-serif";
       >
         <div style="
   width: 32px;
@@ -255,7 +254,7 @@ export class TkOrgChart implements ComponentInterface {
       align-items: center;
       gap: 4px;
       max-width: 90px;"
-    
+
 >
           <div style=
           "font-size:14px;

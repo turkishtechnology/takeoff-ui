@@ -13,10 +13,10 @@ export const DEFAULT_CHART_OPTIONS: any = {
     tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       bodyFont: {
-        family: 'Geologica',
+        family: 'tk-text',
       },
       titleFont: {
-        family: 'Geologica',
+        family: 'tk-display',
       },
     },
   },
@@ -37,7 +37,7 @@ export const BAR_CHART_OPTIONS: any = {
     x: {
       ticks: {
         color: '#525866',
-        font: { family: 'Geologica', size: 12 },
+        font: { family: 'tk-text', size: 12 },
       },
     },
     y: {
@@ -47,7 +47,7 @@ export const BAR_CHART_OPTIONS: any = {
       },
       ticks: {
         color: '#525866',
-        font: { family: 'Geologica', size: 12 },
+        font: { family: 'tk-text', size: 12 },
       },
     },
   },
@@ -72,13 +72,13 @@ export const HORIZONTAL_BAR_CHART_OPTIONS: any = {
       },
       ticks: {
         color: '#525866',
-        font: { family: 'Geologica', size: 12 },
+        font: { family: 'tk-text', size: 12 },
       },
     },
     y: {
       ticks: {
         color: '#525866',
-        font: { family: 'Geologica', size: 12 },
+        font: { family: 'tk-text', size: 12 },
       },
     },
   },
@@ -101,7 +101,7 @@ export const PIE_CHART_OPTIONS: any = {
       display: true,
       position: 'bottom',
       labels: {
-        font: { family: 'Geologica', size: 12 },
+        font: { family: 'tk-display', size: 12 },
       },
     },
     tooltip: {
@@ -151,7 +151,7 @@ export function getDefaultOptionsForType(type: string): any {
 }
 
 /*
-  
+
         Create and add backgroundExtender plugin directly
         const backgroundExtenderPlugin = {
           id: 'backgroundExtender',
@@ -159,7 +159,7 @@ export function getDefaultOptionsForType(type: string): any {
             const {ctx, chartArea, scales, width, height} = chart;
             const yScale = scales.y;
             const xScale = scales.x;
-            
+
             // Log dimensions for debugging
             console.log('Chart dimensions:', {
               width,
@@ -189,19 +189,19 @@ export function getDefaultOptionsForType(type: string): any {
                 labelHeight: xScale.options?.ticks?.padding || 0
               } : 'not available'
             });
-            
+
             // Draw Y-axis background - use the entire left side of the chart
             if (yScale) {
               ctx.fillStyle = '#d0d0d0';
               ctx.fillRect(0, 0, chartArea.left, height);
             }
-            
+
             // Don't draw X-axis background - leave it transparent
           }
         };
-        
+
         // Add our background extender plugin
         customPlugins.push(backgroundExtenderPlugin);
-        
+
         Debug final plugins
 */
