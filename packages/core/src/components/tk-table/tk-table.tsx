@@ -7,8 +7,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { getIconElementProps } from '../../utils/icon-utils';
-import '../../global/sass/fonts/Geologica/Geologica-Regular';
-import '../../global/sass/fonts/Geologica/Geologica-Bold';
+import '../../global/sass/fonts/tk-font/tk-text-regular';
+import '../../global/sass/fonts/tk-font/tk-text-bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
@@ -484,7 +484,7 @@ export class TkTable implements ComponentInterface {
         // styles: { halign: 'center', fontSize: 10 },
         headStyles: { fillColor: [201, 0, 25], fontStyle: 'bold' },
         bodyStyles: { fontStyle: 'normal' },
-        styles: { font: 'Geologica' },
+        styles: { font: 'tk-text' },
       });
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
