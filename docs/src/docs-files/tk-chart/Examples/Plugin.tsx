@@ -32,7 +32,7 @@ const Plugin = () => {
       // label
       const label = selected !== null ? chart.data.labels[selected] : 'Total';
       // font
-      ctx.font = 'bold 22px tk-display, sans-serif';
+      ctx.font = 'bold 22px tk-text, sans-serif';
       // text align
       ctx.textAlign = 'center';
       // text baseline
@@ -112,7 +112,7 @@ const centerTextPlugin = {
         const selected = chart.options.plugins?.centerText?.selectedIndex ?? null;
         const value = selected !== null ? data[selected] : total;
         const label = selected !== null ? chart.data.labels[selected] : 'Total';
-        ctx.font = 'bold 22px tk-display, sans-serif';
+        ctx.font = 'bold 22px tk-text, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#222530';
@@ -200,7 +200,7 @@ const centerTextPlugin = {
     const selected = chart.options.plugins?.centerText?.selectedIndex ?? null
     const value = selected !== null ? data[selected] : total
     const label = selected !== null ? chart.data.labels[selected] : 'Total'
-    ctx.font = 'bold 22px tk-display, sans-serif'
+    ctx.font = 'bold 22px tk-text, sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = '#222530'
