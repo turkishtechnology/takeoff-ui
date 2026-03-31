@@ -196,7 +196,7 @@
                 background: var(--static-light);
                 outline: none;
                 font-size: 14px;
-                font-family: 'Geologica', sans-serif;
+                font-family: var(--family-body);
                 width: 100%;
 
                 &:hover {

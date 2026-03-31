@@ -107,7 +107,7 @@ tk-input.tk-table-input {
       color: var(--text-darkest);
       padding: 0px;
       width: 100%;
-      font-family: var(--desktop-body-m-base-font, Geologica);
+      font-family: var(--desktop-body-m-base-font);
       line-height: var(--desktop-body-m-base-line-height);
 
       &::placeholder {

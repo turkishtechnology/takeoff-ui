@@ -178,10 +178,10 @@
 
   /* typography */
 
-  --family-title: 'tk-display';
-  --family-label: 'tk-text';
-  --family-body: 'tk-text';
-  --family-subheading: 'tk-text';
+  --family-title: 'tk-display', sans-serif;
+  --family-label: 'tk-text', sans-serif;
+  --family-body: 'tk-text', sans-serif;
+  --family-subheading: 'tk-text', sans-serif;
   --size-xxs: 11px;
   --size-xs: 12px;
   --size-sm: 14px;

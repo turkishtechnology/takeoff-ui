@@ -106,7 +106,7 @@
       .tk-datepicker-select-month,
       .tk-datepicker-select-year {
         text-align: center;
-        font-family: var(--desktop-body-s-font, Geologica);
+        font-family: var(--desktop-body-s-font);
         font-size: var(--desktop-body-s-size);
         font-style: normal;
         font-weight: 400;
@@ -209,7 +209,7 @@
   .tk-datepicker-week-day {
     color: var(--text-base, #717784);
     text-align: center;
-    font-family: var(--desktop-body-s-font, Geologica);
+    font-family: var(--desktop-body-s-font);
     font-size: var(--desktop-body-s-size);
     font-style: normal;
     font-weight: 400;
@@ -246,7 +246,7 @@
     z-index: 100;
     text-align: center;
     color: var(--text-darkest);
-    font-family: var(--desktop-body-s-font, Geologica);
+    font-family: var(--desktop-body-s-font);
     font-size: var(--desktop-body-s-size);
     font-style: normal;
     font-weight: 400;
@@ -375,7 +375,7 @@
 
   color: var(--text-darkest);
   text-align: center;
-  font-family: var(--desktop-body-s-font, Geologica);
+  font-family: var(--desktop-body-s-font);
   font-size: var(--desktop-body-s-size);
   font-style: normal;
   font-weight: 400;
@@ -547,7 +547,7 @@
 }
 
 .tk-datepicker-timepicker-value {
-  font-family: var(--desktop-body-s-font, Geologica);
+  font-family: var(--desktop-body-s-font);
   font-size: var(--desktop-body-s-size);
   color: var(--text-darkest);
   text-align: center;
