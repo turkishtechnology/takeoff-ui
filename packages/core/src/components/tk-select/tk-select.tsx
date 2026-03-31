@@ -2,7 +2,7 @@ import { AttachInternals, Component, ComponentInterface, Element, Event, EventEm
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { isEqual, some, remove } from 'lodash-es';
-import { IChipOptions } from '../tk-chips/interfaces';
+import { IChipOptions } from '../tk-chips/types';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';

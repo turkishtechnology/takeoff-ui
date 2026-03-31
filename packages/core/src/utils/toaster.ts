@@ -1,4 +1,4 @@
-import { IAlertActionButton } from '../components/tk-alert/interfaces';
+import { IAlertActionButton } from '../components/tk-alert/types';
 import { CSSStyleProperties } from '../global/types';
 
 export interface IToast {

@@ -1,7 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkStepper } from '../tk-stepper';
 import { TkStep } from '../tk-step';
-import type { IStep } from '../interfaces';
+import type { IStep } from '../types';
 
 type StepperTestAccess = {
   mutationObserver?: MockMutationObserver | null;

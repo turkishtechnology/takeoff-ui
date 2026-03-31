@@ -2,11 +2,11 @@ import { Component, Prop, State, Event, EventEmitter, Element, Watch, Fragment, 
 import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
-import { IInputMaskOptions } from '../tk-input/interfaces';
+import { IInputMaskOptions } from '../tk-input/types';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-import type { IDateSelection } from './interfaces';
+import type { IDateSelection } from './types';
 
 /**
  * The `TkDatepicker` component is a versatile and customizable date picker that supports `single` date and date `range` selection. It offers various display modes, localization, and customizable date formatting.

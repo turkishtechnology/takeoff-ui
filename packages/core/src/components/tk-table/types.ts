@@ -1,8 +1,8 @@
-import { IInputMaskOptions } from '../tk-input/interfaces';
+import { IInputMaskOptions } from '../tk-input/types';
 import { CSSStyleProperties } from '../../global/types';
-import { IDateSelection } from '../tk-datepicker/interfaces';
+import { IDateSelection } from '../tk-datepicker/types';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
-import { ITreeItem } from '../tk-treeview/interfaces';
+import { ITreeItem } from '../tk-treeview/types';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 type TableFilterValue = ITableFilter['value'];
