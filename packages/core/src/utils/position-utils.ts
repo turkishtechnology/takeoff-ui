@@ -6,7 +6,7 @@ import { applyStyles } from './style-utils';
 export interface FloatingElementOptions {
   placement: Placement;
   offset?: number;
-  size?: any;
+  size?: Parameters<typeof size>[0];
 }
 
 function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement?: HTMLElement, options?: FloatingElementOptions) {

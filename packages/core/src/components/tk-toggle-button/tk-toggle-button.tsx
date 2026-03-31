@@ -1,7 +1,10 @@
-import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
+
+export type TkToggleButtonValue = string | number | boolean | Record<string, unknown> | null;
+export type TkToggleEventDetail = { value?: TkToggleButtonValue; selected: boolean };
 
 @Component({
   tag: 'tk-toggle-button',
@@ -55,7 +58,7 @@ export class TkToggleButton implements ComponentInterface {
   /**
    * The value of the toggle button.
    */
-  @Prop() value?: any;
+  @Prop() value?: TkToggleButtonValue;
 
   /**
    * Whether the button is selected.
@@ -64,7 +67,7 @@ export class TkToggleButton implements ComponentInterface {
   /**
    * Emitted when the toggle button is toggled.
    */
-  @Event({ eventName: 'tk-toggle' }) tkToggle!: EventEmitter<any>;
+  @Event({ eventName: 'tk-toggle' }) tkToggle!: EventEmitter<TkToggleEventDetail>;
 
   private handleClick = (e: MouseEvent) => {
     if (this.disabled) {

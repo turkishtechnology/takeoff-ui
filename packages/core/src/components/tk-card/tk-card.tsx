@@ -1,6 +1,20 @@
-import { Component, ComponentInterface, Element, Fragment, Prop, State, h } from '@stencil/core';
+import { Component, ComponentInterface, Element, Fragment, Prop, State } from '@stencil/core';
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
+
+export type TkAvatarProps = Partial<{
+  ariaLabelledby: string | null;
+  background: 'brand' | 'solid';
+  badge: boolean;
+  badgeStatus: 'success' | 'warning' | 'info' | 'danger';
+  image: string | null;
+  label: string | null;
+  name: string | null;
+  rounded: boolean;
+  hideShadow: boolean;
+  variant: 'primary' | 'light' | 'success' | 'info' | 'warning' | 'danger';
+  size: 'xsmall' | 'small' | 'base' | 'large' | 'xlarge';
+}>;
 
 /**
  * TkCard component description.
@@ -61,8 +75,8 @@ export class TkCard implements ComponentInterface {
    * TkAvatar component properties
    * @defaultValue { severity: 'light', background: 'solid', rounded: true }
    */
-  @Prop() avatarProps: any = {
-    severity: 'light',
+  @Prop() avatarProps: TkAvatarProps = {
+    variant: 'light',
     background: 'solid',
     rounded: true,
     size: 'small',
