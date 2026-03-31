@@ -1,8 +1,9 @@
-import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { IStep, IStepClickDetail } from './interfaces';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { CSSStyleProperties } from '../../global/types';
+import type { CSSStyleProperties } from '../../global/types';
 import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
@@ -209,7 +210,7 @@ export class TkStepper implements ComponentInterface {
     return false;
   }
 
-  private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}): JSX.Element {
+  private getIconElement(icon: string | IIconOptions, props: Record<string, unknown> = {}): JSX.Element {
     const iconSizes = {
       large: 'xxlarge',
       base: 'medium',
@@ -292,7 +293,7 @@ export class TkStepper implements ComponentInterface {
     );
   }
 
-  private createRail(): JSX.Element {
+  private createRail(): JSX.Element | null {
     if (this.mode === 'compact') return null;
     else return <div class="tk-step-rail" style={this.railStyle}></div>;
   }

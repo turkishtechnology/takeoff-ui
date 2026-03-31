@@ -37,6 +37,7 @@
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache",
     "lint": "eslint --fix",
+    "lint:core": "eslint packages/core/src",
     "clean": "pnpm -r exec rimraf dist node_modules .vercel .stencil loader www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/tailwind --access public --no-git-checks",
     "clear:docs": "cd docs && pnpm run clear"
