@@ -34,6 +34,10 @@ function clearStringObject(value, tag, propName) {
     .replaceAll('{', '{ ');
 }
 
+function escapeMdxCodeText(value) {
+  return value?.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
+}
+
 // Function to create a slug from type name for anchor links
 function createSlug(typeName) {
   return typeName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -122,11 +126,12 @@ ${docs} \n
         propType = wrapTypeWithLink(propType, prop.complexType.references, tag);
       }
 
-      apiContent += `| <TkBadge label="${prop.name}" variant="primary" size="large" type="filledlight"/> | <code>${
-        propType?.indexOf('{') > -1 ? '`' + clearStringObject(propType, tag, prop.name) + '`' : clearStringObject(propType, tag, prop.name)
-      }</code> | ${
-        prop.default?.indexOf('{') > -1 ? '`' + clearStringObject(prop.default, tag) + '`' || 'null' : clearStringObject(prop.default) || 'null'
-      } | ${clearString(prop.docs)} |\n`;
+      const formattedPropType = propType?.indexOf('{') > -1 ? '`' + clearStringObject(propType, tag, prop.name) + '`' : clearStringObject(propType, tag, prop.name);
+      const formattedDefault = prop.default?.indexOf('{') > -1 ? '`' + clearStringObject(prop.default, tag) + '`' || 'null' : clearStringObject(prop.default) || 'null';
+
+      apiContent += `| <TkBadge label="${prop.name}" variant="primary" size="large" type="filledlight"/> | <code>${escapeMdxCodeText(
+        formattedPropType,
+      )}</code> | ${escapeMdxCodeText(formattedDefault)} | ${clearString(prop.docs)} |\n`;
     });
   }
 

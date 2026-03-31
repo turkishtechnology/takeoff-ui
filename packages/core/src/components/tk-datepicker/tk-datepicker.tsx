@@ -1,4 +1,4 @@
-import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Fragment, AttachInternals, Method } from '@stencil/core';
 import { format, parse, isValid } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
@@ -554,8 +554,8 @@ export class TkDatePicker {
 
     try {
       const resolvedLocale = this.locale || 'en';
-      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Intl.Locale.prototype.hasOwnProperty('weekInfo')) {
-        // @ts-ignore: Accessing weekInfo from potentially unknown Intl.Locale type
+      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Object.prototype.hasOwnProperty.call(Intl.Locale, 'weekInfo')) {
+        // @ts-expect-error: Accessing weekInfo from potentially unknown Intl.Locale type
         const localeInfo = new Intl.Locale(resolvedLocale).getWeekInfo();
         if (localeInfo && localeInfo.firstDay !== undefined) {
           // Formula: (IntlDay + 6) % 7 maps 1(Mon) to 0, 7(Sun) to 6
@@ -885,7 +885,7 @@ export class TkDatePicker {
   private parseTimeString(timeString: string): Date | null {
     const base = new Date();
     const primaryFmt = this.getOnlyTimeFormat();
-    let parsed = parse(timeString, primaryFmt, base);
+    const parsed = parse(timeString, primaryFmt, base);
     if (isValid(parsed) && format(parsed, primaryFmt) === timeString) {
       return parsed;
     }
@@ -1534,7 +1534,7 @@ export class TkDatePicker {
               start: normalized,
               end: null,
             };
-            let formattedValue;
+            let formattedValue: string;
             if (this.showTimePicker) {
               const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
               this.internalStartTime = time;
@@ -1606,7 +1606,7 @@ export class TkDatePicker {
     if (initialValueAttr) {
       try {
         initialValue = JSON.parse(initialValueAttr);
-      } catch (e) {
+      } catch {
         initialValue = initialValueAttr;
       }
     }
@@ -1675,7 +1675,7 @@ export class TkDatePicker {
     const startOfWeekForGetDay = (resolvedStartOfWeekIndex + 1) % 7;
 
     const firstDayOfWeek = firstDayOfMonth.getDay();
-    let emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
+    const emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
 
     // Previous month's days
     for (let i = emptyCells - 1; i >= 0; i--) {
@@ -1975,7 +1975,7 @@ export class TkDatePicker {
         <div
           class={classNames(
             'tk-datepicker-timepicker-body',
-            ['primary', 'light', 'dark'].includes(this.headerType as any) && `tk-datepicker-timepicker-body-${this.headerType}`,
+            ['primary', 'light', 'dark'].includes(this.headerType) && `tk-datepicker-timepicker-body-${this.headerType}`,
             this.weeksLength === 4 && 'tk-datepicker-timepicker-body-4-weeks',
             this.timeOnly && 'tk-datepicker-timepicker-body-only',
           )}

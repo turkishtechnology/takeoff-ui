@@ -36,6 +36,7 @@ describe('tk-accordion', () => {
     });
 
     const items = page.root.querySelectorAll('tk-accordion-item');
+
     expect(items).toHaveLength(2);
     expect(items[0].shadowRoot.querySelector('.title').textContent).toContain('Item 1');
   });
@@ -58,6 +59,28 @@ describe('tk-accordion', () => {
 
     expect(items[0].active).toBe(false);
     expect(items[1].active).toBe(true);
+  });
+
+  it('keeps only the last active item when allowMultiple is false', async () => {
+    const page = await newSpecPage({
+      components: [TkAccordion, MockAccordionItem],
+      html: `
+        <tk-accordion>
+          <tk-accordion-item></tk-accordion-item>
+          <tk-accordion-item></tk-accordion-item>
+          <tk-accordion-item></tk-accordion-item>
+        </tk-accordion>
+      `,
+    });
+
+    page.root.activeIndex = [0, 1, 2];
+    await page.waitForChanges();
+
+    const items = page.root.querySelectorAll('tk-accordion-item');
+
+    expect(items[0].active).toBe(false);
+    expect(items[1].active).toBe(false);
+    expect(items[2].active).toBe(true);
   });
 
   it('emits active index changes from item interactions', async () => {

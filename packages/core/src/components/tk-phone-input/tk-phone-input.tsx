@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, ComponentInterface, State, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -71,13 +71,13 @@ export class TkPhoneInput implements ComponentInterface {
    * This is a list of phone input data objects.
    * It can be mutable to allow two-way binding.
    */
-  @Prop({ mutable: true }) value?: IPhoneInputValue | any;
+  @Prop({ mutable: true }) value?: IPhoneInputValue | null;
   @Watch('value')
-  protected valueChanged(newValue): void {
+  protected valueChanged(newValue?: IPhoneInputValue | null): void {
     if (!newValue || (typeof newValue === 'object' && Object.keys(newValue).length === 0)) {
       this.handleFormReset();
     }
-    if (!newValue.rawValue && !newValue.maskedValue) {
+    if (!newValue?.rawValue && !newValue?.maskedValue) {
       this.inputValue = '';
     }
     if (newValue) {
@@ -166,7 +166,7 @@ export class TkPhoneInput implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<IPhoneInputValue>;
 
   /**
    * Emitted when the input loses focus.

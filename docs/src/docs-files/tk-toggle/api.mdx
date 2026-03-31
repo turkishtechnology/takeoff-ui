@@ -26,3 +26,16 @@ import { TkBadge } from '@takeoff-ui/react';
 | Name            | Type                                                           | Description                                               |
 | --------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
 | getInputElement | <code>getInputElement() =\> Promise\<HTMLInputElement\></code> | Returns the native `<input>` element used under the hood. |
+
+```typescript
+type TkToggleButtonValue =
+  | string
+  | number
+  | boolean
+  | Record<string, unknown>
+  | null;
+```
+
+```typescript
+{ value?: TkToggleButtonValue; selected: boolean }
+```

@@ -1,4 +1,4 @@
-import { h } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import { getIconElementProps } from './icon-utils';
 import classNames from 'classnames';
 
@@ -7,7 +7,7 @@ import classNames from 'classnames';
  * @param params - ( hint?: string, error?: string, invalid?: boolean )
  * @returns JSX.Element| null
  */
-export function renderHint(hint?: string, error?: string, invalid?: boolean): HTMLDivElement | null {
+export function renderHint(hint?: string, error?: string, invalid?: boolean): JSX.Element | null {
   const isError = error && error.length > 0;
   const isHint = hint && hint.length > 0;
   if (!isError && !isHint) {

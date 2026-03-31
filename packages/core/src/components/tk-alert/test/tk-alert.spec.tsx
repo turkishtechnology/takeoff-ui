@@ -3,6 +3,10 @@ import { TkAlert } from '../tk-alert';
 import { TkButton } from '../../tk-button/tk-button';
 import { TkIcon } from '../../tk-icon/tk-icon';
 
+type TkAlertWithCloseHandler = TkAlert & {
+  handleCloseButtonClick: () => void;
+};
+
 describe('tk-alert', () => {
   it('renders header, message and variant classes', async () => {
     const page = await newSpecPage({
@@ -30,6 +34,19 @@ describe('tk-alert', () => {
     expect(page.root.shadowRoot.querySelectorAll('.tk-alert-message')).toHaveLength(2);
   });
 
+  it('applies icon size classes', async () => {
+    for (const size of ['small', 'base', 'large'] as const) {
+      const page = await newSpecPage({
+        components: [TkAlert, TkIcon],
+        html: `<tk-alert icon="home" icon-size="${size}"></tk-alert>`,
+      });
+
+      const icon = page.root.shadowRoot.querySelector(`.tk-icon-${size === 'base' ? 'base' : size}`);
+
+      expect(icon).toBeTruthy();
+    }
+  });
+
   it('removes itself when the close button emits tk-click', async () => {
     const page = await newSpecPage({
       components: [TkAlert, TkButton],
@@ -43,5 +60,21 @@ describe('tk-alert', () => {
     await page.waitForChanges();
 
     expect(page.root.isConnected).toBe(false);
+  });
+
+  it('calls the close handler when the button is clicked', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkButton],
+      html: `<tk-alert removable></tk-alert>`,
+    });
+
+    const instance = page.rootInstance as TkAlertWithCloseHandler;
+    const spy = jest.spyOn(instance, 'handleCloseButtonClick');
+    const button = page.root.shadowRoot.querySelector('tk-button');
+
+    button.dispatchEvent(new CustomEvent('tk-click', { bubbles: true, composed: true }));
+    await page.waitForChanges();
+
+    expect(spy).toHaveBeenCalled();
   });
 });

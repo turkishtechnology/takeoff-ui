@@ -5,13 +5,13 @@
     "declaration": false,
     "experimentalDecorators": true,
     "lib": ["dom", "es2021"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "module": "esnext",
     "target": "es2017",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "jsx": "react",
-    "jsxFactory": "h"
+    "jsx": "react-jsx",
+    "jsxImportSource": "@stencil/core"
   },
   "include": ["src"],
   "exclude": ["node_modules"]
