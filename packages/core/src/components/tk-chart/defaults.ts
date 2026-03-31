@@ -101,7 +101,7 @@ export const PIE_CHART_OPTIONS: any = {
       display: true,
       position: 'bottom',
       labels: {
-        font: { family: 'tk-display', size: 12 },
+        font: { family: 'tk-text', size: 12 },
       },
     },
     tooltip: {
