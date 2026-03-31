@@ -104,7 +104,7 @@ describe('tk-breadcrumb', () => {
 
       const slot = page.root.shadowRoot.querySelector('slot');
 
-      expect(slot).not.toBeNull;
+      expect(slot).not.toBeNull();
     });
     it('should render items when no slots provided', async () => {
       const page = await newSpecPage({
@@ -119,7 +119,7 @@ describe('tk-breadcrumb', () => {
 
       const slot = page.root.shadowRoot.querySelector('slot');
 
-      expect(slot).toBeNull;
+      expect(slot).toBeNull();
 
       const label = page.root.shadowRoot.querySelector('.tk-breadcrumb-item-label');
 

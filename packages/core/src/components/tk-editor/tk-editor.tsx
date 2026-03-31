@@ -1,4 +1,5 @@
-import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -11,8 +12,8 @@ import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
-import { CSSStyleProperties } from '../../global/types';
 import { renderHint } from '../../utils/hint-utils';
+import type { CSSStyleProperties } from '../../global/types';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
@@ -534,7 +535,7 @@ export class TkEditor {
     );
   }
 
-  private renderFooter(): HTMLDivElement | null {
+  private renderFooter(): JSX.Element | null {
     if (this.showCounter || this.resizable) {
       return (
         <div class="tk-editor-footer">
@@ -582,7 +583,9 @@ export class TkEditor {
           {this.renderToolbar()}
           <div
             class={classNames('tk-editor-content', { 'tk-editor-placeholder-visible': this.isEmpty && !!this.placeholder })}
-            ref={el => (this.editorRef = el)}
+            ref={el => {
+              this.editorRef = el;
+            }}
             data-placeholder={this.placeholder}
             style={contentStyle}
           />

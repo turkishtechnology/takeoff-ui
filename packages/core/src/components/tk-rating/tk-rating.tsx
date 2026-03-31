@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State, Event, EventEmitter, h } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, Event, EventEmitter } from '@stencil/core';
 import getIcon from './rating-icons';
 import classNames from 'classnames';
 
