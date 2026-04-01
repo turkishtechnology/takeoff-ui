@@ -1,4 +1,4 @@
-import { Component, h, Prop, ComponentInterface, State, Element } from '@stencil/core';
+import { Component, Prop, ComponentInterface, State, Element } from '@stencil/core';
 import classNames from 'classnames';
 
 /**

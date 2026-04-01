@@ -75,7 +75,7 @@ export type {
 } from './components/tk-table/interfaces';
 
 // tk-timeline
-export type { TimelineItem } from './components/tk-timeline/interfaces';
+export type { ITimelineItem } from './components/tk-timeline/interfaces';
 
 // tk-treeview
 export type { ITreeItem } from './components/tk-treeview/interfaces';

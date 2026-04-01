@@ -1,6 +1,8 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+
+export type TkRadioValue = string | number | boolean | Record<string, unknown> | null;
 
 /**
  * The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.
@@ -77,12 +79,12 @@ export class TkRadio implements ComponentInterface {
   /**
    * The value of the radio button.
    */
-  @Prop() value: any;
+  @Prop() value: TkRadioValue;
 
   /**
    * Emitted when the radio button's checked state changes.
    */
-  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<any>;
+  @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<TkRadioValue>;
 
   componentWillLoad(): void {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
@@ -144,7 +146,15 @@ export class TkRadio implements ComponentInterface {
     return (
       <Host data-tk-radio-id={this.uniqueId} invalid={this.invalid} disabled={this.disabled}>
         <label htmlFor={this.uniqueId} class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
-          <input id={this.uniqueId} type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
+          <input
+            id={this.uniqueId}
+            type="radio"
+            name={this.name}
+            value={this.value as unknown as string | number | string[] | undefined}
+            checked={this.checked}
+            disabled={this.disabled}
+            onChange={() => this.handleInputChange()}
+          />
           <div class="mask">
             <div></div>
           </div>
