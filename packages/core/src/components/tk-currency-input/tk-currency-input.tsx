@@ -226,6 +226,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Update the component when properties change.
    */
   componentDidUpdate() {
+    // Handle separator changes
+    this.updateDisplayValue();
+
+    // Handle dropdown positioning
     if (this.isDropdownOpen) {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
