@@ -135,6 +135,13 @@ export class TkDatePicker {
   @Prop() clearable: boolean = false;
 
   /**
+   * Represents whether the datepicker is in a loading state.
+   * If true, renders a spinner inside the input and panel.
+   * @defaultValue false
+   */
+  @Prop() loading: boolean = false;
+
+  /**
    * Error message to display
    */
   @Prop() error: string;
@@ -1806,7 +1813,7 @@ export class TkDatePicker {
               icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1814,14 +1821,20 @@ export class TkDatePicker {
               icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
           </div>
           <div class="tk-datepicker-select-container">
-            <div class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'months')}>
+            <div
+              class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled || this.loading })}
+              onClick={e => !this.loading && this.handleViewChange(e, 'months')}
+            >
               {monthName}
             </div>
-            <div class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled })} onClick={e => this.handleViewChange(e, 'years')}>
+            <div
+              class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled || this.loading })}
+              onClick={e => !this.loading && this.handleViewChange(e, 'years')}
+            >
               {year}
             </div>
           </div>
@@ -1831,7 +1844,7 @@ export class TkDatePicker {
               icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
             <span class="tk-datepicker-divider"></span>
             <tk-button
@@ -1839,7 +1852,7 @@ export class TkDatePicker {
               icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
-              disabled={this.readonly || this.disabled}
+              disabled={this.readonly || this.disabled || this.loading}
             ></tk-button>
           </div>
         </div>
@@ -2102,6 +2115,14 @@ export class TkDatePicker {
     );
   }
 
+  private createLoading() {
+    return (
+      <div class="tk-datepicker-loading">
+        <tk-spinner size={this.size} />
+      </div>
+    );
+  }
+
   private renderInput() {
     if (this.inline) return null;
 
@@ -2120,6 +2141,7 @@ export class TkDatePicker {
         name={this.name}
         hint={this.hint}
         clearable={this.clearable}
+        loading={this.loading}
         disabled={this.disabled}
         invalid={this.invalid || this.isInvalid}
         readonly={this.readonly}
@@ -2180,16 +2202,20 @@ export class TkDatePicker {
           <div class="tk-datepicker-calendar-container">
             {this.createHeader()}
             <div class={bodyClasses}>
-              <table class="tk-datepicker-table">
-                {this.currentView === 'days' && (
-                  <Fragment>
-                    {this.createWeekDayNames()}
-                    {this.createWeekDays()}
-                  </Fragment>
-                )}
-                {this.currentView === 'months' && this.createMonths()}
-                {this.currentView === 'years' && this.createYears()}
-              </table>
+              {this.loading ? (
+                this.createLoading()
+              ) : (
+                <table class="tk-datepicker-table">
+                  {this.currentView === 'days' && (
+                    <Fragment>
+                      {this.createWeekDayNames()}
+                      {this.createWeekDays()}
+                    </Fragment>
+                  )}
+                  {this.currentView === 'months' && this.createMonths()}
+                  {this.currentView === 'years' && this.createYears()}
+                </table>
+              )}
             </div>
           </div>
           {this.showTimePicker && this.createTimePicker()}
