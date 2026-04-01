@@ -1,4 +1,4 @@
-import { TkEditorToolbarConfig } from './interfaces';
+import { TkEditorToolbarConfig } from './types';
 
 export const STARTER_KIT_EXTENSION_NAMES = [
   'blockquote',

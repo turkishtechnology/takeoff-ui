@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 import { INTERNAL_COUNTRIES } from './constants';
-import { ICountry, IPhoneInputValue } from './interfaces';
+import { ICountry, IPhoneInputValue } from './types';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { applyStyles } from '../../utils/style-utils';

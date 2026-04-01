@@ -7,10 +7,10 @@
  * DO NOT use this file to export your components. Instead, use the recommended approaches
  * to consume components of this package as outlined in the `README.md`.
  */
-export type * from './components.d.ts';
+export type { Components, JSX } from './components';
 export * from './utils/toaster';
 
 export type { CSSStyleProperties } from './global/types';
 
-// Export interfaces
-export type * from './interfaces';
+// Export shared package types
+export type * from './types';

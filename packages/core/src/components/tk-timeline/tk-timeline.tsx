@@ -1,7 +1,7 @@
 import { Component, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { ITimelineItem } from './interfaces';
+import { ITimelineItem } from './types';
 
 /**
  * The `TkTimeline` is a component that displays a vertical or horizontal timeline of events.

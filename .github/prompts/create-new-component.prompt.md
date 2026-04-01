@@ -23,8 +23,8 @@ Within TSX: define @Element() as el: HTMLElement
 - When creating the component API, proceed in parallel with the APIs of existing
   components.
 
-- Create the `interfaces.ts`, `defaults.ts`, `helpers.ts`, and child component
-  files according to the rules in the `component-file-structure` instructions.
+- Create the `types.ts`, `defaults.ts`, `helpers.ts`, and child component files
+  according to the rules in the `component-file-structure` instructions.
 
 ## Step 3: SCSS File
 
