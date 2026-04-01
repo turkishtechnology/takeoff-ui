@@ -1,4 +1,5 @@
-import { Component, Prop, Element, h, State, ComponentInterface, Host } from '@stencil/core';
+import { Component, Prop, Element, State, ComponentInterface, Host } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
@@ -133,8 +134,8 @@ export class TkBadge implements ComponentInterface {
     });
 
     // Handle icon rendering using utility function
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
+    let _leftIcon: JSX.Element | undefined;
+    let _rightIcon: JSX.Element | undefined;
     if (this.icon && !this.dot) {
       const { leftIcon, rightIcon } = renderIcons(
         this.icon,

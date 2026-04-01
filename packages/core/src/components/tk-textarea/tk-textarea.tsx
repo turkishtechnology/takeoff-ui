@@ -1,4 +1,5 @@
-import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
+import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { renderHint } from '../../utils/hint-utils';
@@ -181,8 +182,8 @@ export class TkTextarea implements ComponentInterface {
     this.tkFocus.emit();
   };
 
-  private renderLabel(): HTMLLabelElement {
-    let label: HTMLLabelElement;
+  private renderLabel(): JSX.Element | undefined {
+    let label: JSX.Element | undefined;
 
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
@@ -199,7 +200,7 @@ export class TkTextarea implements ComponentInterface {
   render() {
     const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
-    let counter: HTMLSpanElement;
+    let counter: JSX.Element | undefined;
     const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
     if (this.maxLength) {
       counter = (
@@ -215,7 +216,9 @@ export class TkTextarea implements ComponentInterface {
         <div class="tk-textarea">
           <textarea
             id={this.uniqueId}
-            ref={el => (this.nativeInput = el)}
+            ref={el => {
+              this.nativeInput = el;
+            }}
             disabled={this.disabled}
             autoComplete="off"
             name={this.name}

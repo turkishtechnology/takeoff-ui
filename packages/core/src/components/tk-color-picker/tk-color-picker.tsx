@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method, Fragment, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from './color-utils';
@@ -381,7 +381,7 @@ export class TkColorPicker implements ComponentInterface {
     this.stopDragging();
   };
 
-  private handleClickOutside = (_: MouseEvent) => {
+  private handleClickOutside = () => {
     this.handleApply();
   };
 

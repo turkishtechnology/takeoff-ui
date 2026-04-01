@@ -1,8 +1,10 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, Host } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
+
+export type TkChipsValue = string | number | boolean | Record<string, unknown>;
 
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
@@ -68,7 +70,7 @@ export class TkChips implements ComponentInterface {
    * The value of the chips
    * @defaultValue this.label
    */
-  @Prop() value: any;
+  @Prop() value: TkChipsValue;
 
   /**
    * Custom style to apply to the chip component.
@@ -84,7 +86,7 @@ export class TkChips implements ComponentInterface {
   /**
    * When an element is deleted, it is triggered. It returns the label.
    */
-  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
+  @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<TkChipsValue>;
 
   componentWillLoad(): void {
     if (this.value == null) this.value = this.label;
@@ -110,7 +112,7 @@ export class TkChips implements ComponentInterface {
     const { leftIcon, rightIcon } = renderIcons(this.icon, {
       variant: this.variant,
       size: this.size === 'large' ? 'medium' : this.size,
-      additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {} },
+      additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined },
     });
 
     return (
@@ -123,7 +125,7 @@ export class TkChips implements ComponentInterface {
             <tk-icon
               {...getIconElementProps('close', {
                 variant: this.variant,
-                color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : {},
+                color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined,
                 size: this.size === 'large' ? 'medium' : this.size,
                 onClick: () => this.handleClick(),
                 onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
