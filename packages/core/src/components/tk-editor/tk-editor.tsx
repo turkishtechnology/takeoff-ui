@@ -9,7 +9,7 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { TOOLBAR_ICONS } from './constants';
-import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
+import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './types';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
 import { renderHint } from '../../utils/hint-utils';

@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -13,7 +13,7 @@ import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-import { ITreeItem } from '../tk-treeview/interfaces';
+import { ITreeItem } from '../tk-treeview/types';
 
 export type TableRowData = Record<string, unknown>;
 export type TableSelection = TableRowData | TableRowData[];

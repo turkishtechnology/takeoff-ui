@@ -17,7 +17,7 @@ packages/core/src/
     └── tk-[component]/
         ├── tk-[component].tsx
         ├── tk-[component].scss
-        ├── interfaces.ts     # Only specific to this component
+        ├── types.ts          # Only specific to this component
         ├── defaults.ts      # Long default values
         ├── helpers.ts       # Helpers specific to this component
         ├── tk-[component]-item/   # Child/group components
@@ -31,8 +31,8 @@ packages/core/src/
 - **utils/**: Methods used by more than one component (e.g.: icon-utils.ts)
 - **global/interfaces/**: The type and interfaces shared by more than one
   component
-- **components/tk-[component]/interfaces.ts**: Types and interfaces exported
-  only for that component
+- **components/tk-[component]/types.ts**: Types and interfaces exported only for
+  that component
 - **components/tk-[component]/defaults.ts**: Long default values
 - **components/tk-[component]/helpers.ts**: Helper methods used only in that
   component

@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Prop, Element, State, Fragment } from '@stencil/core';
 import classNames from 'classnames';
-import { IBreadcrumbModel } from './interfaces';
+import { IBreadcrumbModel } from './types';
 import { getIconElementProps } from '../../utils/icon-utils';
 
 /**

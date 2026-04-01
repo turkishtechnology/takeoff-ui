@@ -15,7 +15,7 @@ Before doing anything else, read all existing files for the target component:
 
 - `tk-[component].tsx`
 - `tk-[component].scss`
-- `interfaces.ts` (if present)
+- `types.ts` (if present)
 - `test/tk-[component].spec.tsx` and `test/tk-[component].e2e.ts` (if present)
 
 ## Rules

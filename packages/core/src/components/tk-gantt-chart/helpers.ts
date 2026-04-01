@@ -1,4 +1,4 @@
-import { IGanttTask, IGanttFlatRow, IGanttHeaderCell, GanttViewType, GanttSecondaryHeaderMode, GanttWeekStartDay } from './interfaces';
+import { IGanttTask, IGanttFlatRow, IGanttHeaderCell, GanttViewType, GanttSecondaryHeaderMode, GanttWeekStartDay } from './types';
 import { VIEW_TYPE_DAY_WIDTH } from './defaults';
 
 // ---------------------------------------------------------------------------
