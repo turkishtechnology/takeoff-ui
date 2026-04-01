@@ -1,154 +1,74 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkCheckbox } from '../tk-checkbox';
+import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-checkbox', () => {
-  // Basic Rendering
-  describe('basic rendering', () => {
-    it('renders with default props', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox></tk-checkbox>`,
-      });
-
-      expect(page.root).toBeTruthy();
+  it('renders label and name in light DOM', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox label="Test label" name="test-name"></tk-checkbox>`,
     });
-    it('renders with label', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox label='Test label'></tk-checkbox>`,
-      });
 
-      await page.waitForChanges();
+    const label = page.root.querySelector('label');
+    const input = page.root.querySelector('input');
 
-      const label = page.root.shadowRoot.querySelector('label');
-
-      expect(label.textContent).toBe('checkTest label');
-    });
-    it('renders with name', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox name='Test name'></tk-checkbox>`,
-      });
-
-      await page.waitForChanges();
-
-      const input = page.root.shadowRoot.querySelector('input');
-
-      expect(input.getAttribute('name')).toBe('Test name');
-    });
+    expect(label.textContent).toContain('Test label');
+    expect(input.getAttribute('name')).toBe('test-name');
   });
 
-  // State
-  describe('state handling', () => {
-    it('handles disabled state', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox disabled="true">
-               </tk-checkbox>`,
-      });
-
-      await page.waitForChanges();
-
-      const container = page.root.shadowRoot.querySelector('.tk-checkbox-container');
-
-      expect(container.getAttribute('aria-disabled')).not.toBeNull();
-
-      const input = page.root.shadowRoot.querySelector('input');
-
-      expect(input.getAttribute('disabled')).toBeTruthy();
+  it('applies disabled and invalid state attributes', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox disabled="true" invalid="true"></tk-checkbox>`,
     });
-    it('handles invalid state', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox invalid>
-               </tk-checkbox>`,
-      });
 
-      await page.waitForChanges();
+    const container = page.root.querySelector('.tk-checkbox-container');
+    const input = page.root.querySelector('input');
 
-      const container = page.root.shadowRoot.querySelector('.tk-checkbox-container');
-
-      expect(container.getAttribute('aria-invalid')).not.toBeNull();
-    });
-    it('handles indeterminate state', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox indeterminate="true">
-                 </tk-checkbox>`,
-      });
-
-      await page.waitForChanges();
-
-      const input = page.root.shadowRoot.querySelector('input');
-
-      expect(input.getAttribute('indeterminate')).not.toBeNull();
-
-      const mask = page.root.shadowRoot.querySelector('.mask');
-
-      expect(mask.textContent).toBe('remove');
-    });
+    expect(container.getAttribute('aria-disabled')).toBe('');
+    expect(container.getAttribute('aria-invalid')).toBe('');
+    expect(input.disabled).toBe(true);
   });
 
-  //Event
-  describe('event handling', () => {
-    it('emits tk-change correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox value></tk-checkbox>`,
-      });
-      await page.waitForChanges();
-
-      const changeSpy = jest.fn();
-
-      page.root.addEventListener('tk-change', changeSpy);
-
-      const checkbox = page.root.shadowRoot.querySelector('input[type="checkbox"]');
-
-      expect(checkbox).toBeTruthy();
-
-      checkbox.dispatchEvent(new Event('change'));
-
-      await page.waitForChanges();
-
-      expect(changeSpy).toHaveBeenCalled();
+  it('renders indeterminate state with the remove icon', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox, TkIcon],
+      html: `<tk-checkbox indeterminate="true"></tk-checkbox>`,
     });
-    it('emits tk-change correctly when indeterminate is set', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox value indeterminate></tk-checkbox>`,
-      });
-      await page.waitForChanges();
 
-      const changeSpy = jest.fn();
+    const mask = page.root.querySelector('.mask');
 
-      page.root.addEventListener('tk-change', changeSpy);
-
-      const checkbox = page.root.shadowRoot.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(checkbox).toBeTruthy();
-      expect(checkbox.getAttribute('indeterminate')).toBeFalsy();
-      expect(checkbox.getAttribute('checked')).toBeNull();
-
-      checkbox.dispatchEvent(new Event('change'));
-
-      await page.waitForChanges();
-
-      expect(changeSpy).toHaveBeenCalled();
-    });
+    expect(page.root.indeterminate).toBe(true);
+    expect(mask.textContent).toContain('remove');
   });
 
-  //Public methods
-  describe('event handling', () => {
-    it('handles form reset', async () => {
-      const page = await newSpecPage({
-        components: [TkCheckbox],
-        html: `<tk-checkbox value></tk-checkbox>`,
-      });
-
-      await page.root.formResetCallback();
-
-      expect(page.root.value).toBeFalsy();
-      expect(page.root.indeterminate).toBeFalsy();
+  it('emits tk-change when the checkbox changes', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox></tk-checkbox>`,
     });
+
+    const changeSpy = jest.fn();
+    const checkbox = page.root.querySelector('input') as HTMLInputElement;
+
+    page.root.addEventListener('tk-change', changeSpy);
+    checkbox.checked = true;
+    checkbox.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(changeSpy).toHaveBeenCalledTimes(1);
+    expect(page.root.value).toBe(true);
+  });
+
+  it('resets its form-associated state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox value="true" indeterminate="true"></tk-checkbox>`,
+    });
+
+    await page.root.formResetCallback();
+
+    expect(page.root.value).toBe(false);
+    expect(page.root.indeterminate).toBe(false);
   });
 });

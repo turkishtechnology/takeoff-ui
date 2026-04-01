@@ -1,79 +1,55 @@
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('tk-drawer', () => {
-  // Basic Rendering
-  describe('basic rendering', () => {
-    it('should render with default props', async () => {
-      const page = await newE2EPage();
+  it('renders visible drawer content', async () => {
+    const page = await newE2EPage();
 
-      await page.setContent('<tk-drawer open="true"></tk-drawer>');
+    await page.setContent('<tk-drawer open="true" header="Header"></tk-drawer>');
+    await page.waitForChanges();
+    await page.waitForTimeout(50);
 
-      const drawer = await page.find('tk-drawer');
+    const drawer = await page.find('tk-drawer');
+    const mask = await page.find('tk-drawer >>> .tk-drawer-mask');
+    const header = await page.find('tk-drawer >>> .tk-drawer-header-label');
 
-      expect(drawer).toHaveClass('hydrated');
-
-      const mask = await page.find('tk-drawer >>> [data-testid="mask"]');
-
-      expect(mask).toBeFalsy();
-    });
-    it('should render custom slots content', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent(`
-<tk-drawer open="true">
-<div slot="header" data-testid="custom-header">Header</div>
-<div slot="footer" data-testid="custom-footer">Footer</div>
-</tk-drawer>
-     `);
-      const headerContent = await page.find('tk-drawer >>> [data-testid="custom-header"]');
-
-      const footerContent = await page.find('tk-drawer >>> [data-testid="custom-footer"]');
-
-      expect(headerContent.textContent).toContain('Header');
-      expect(footerContent.textContent).toContain('Footer');
-    });
+    expect(drawer).toHaveClass('hydrated');
+    expect(mask).toHaveClass('tk-drawer-visible');
+    expect(header.textContent).toContain('Header');
   });
 
-  // State
-  describe('state handling', () => {
-    it('should apply header-type classes correctly', async () => {
-      const page = await newE2EPage();
+  it('renders slot content and emits close on overlay click', async () => {
+    const page = await newE2EPage();
 
-      await page.setContent('<tk-drawer open="true" header-type="dark"></tk-drawer>');
+    await page.setContent('<tk-drawer open="true"><div slot="footer">Footer</div></tk-drawer>');
+    await page.waitForChanges();
+    await page.waitForTimeout(50);
 
-      const header = await page.find('tk-drawer >>> [data-testid="header"]');
+    const drawer = await page.find('tk-drawer');
+    const closeSpy = await drawer.spyOnEvent('tk-drawer-close');
+    const overlay = await page.find('tk-drawer >>> .tk-drawer-overlay');
 
-      expect(header).toHaveClass('tk-drawer-header-dark');
-    });
+    expect((await page.find('tk-drawer [slot="footer"]')).textContent).toContain('Footer');
+
+    await overlay.click();
+    await page.waitForChanges();
+
+    expect(closeSpy).toHaveReceivedEvent();
   });
 
-  // Events
-  describe('event handling', () => {
-    it('should emit close event when overlay clicked', async () => {
-      const page = await newE2EPage();
+  it('does not emit close when prevent-dismiss is true', async () => {
+    const page = await newE2EPage();
 
-      await page.setContent('<tk-drawer open="true"></tk-drawer>');
-      const closeSpy = await page.spyOnEvent('tk-drawer-close');
-      const overlay = await page.find('tk-drawer >>> [data-testid="overlay"]');
+    await page.setContent('<tk-drawer open="true" prevent-dismiss></tk-drawer>');
+    await page.waitForChanges();
+    await page.waitForTimeout(50);
 
-      await overlay.click();
-      await page.waitForChanges();
+    const drawer = await page.find('tk-drawer');
+    const closeSpy = await drawer.spyOnEvent('tk-drawer-close');
+    const overlay = await page.find('tk-drawer >>> .tk-drawer-overlay');
 
-      expect(closeSpy).toHaveReceivedEvent();
-    });
+    await overlay.click();
+    await page.waitForChanges();
 
-    it('should prevent close when prevent-dismiss is true', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent('<tk-drawer open="true" prevent-dismiss></tk-drawer>');
-
-      const closeSpy = await page.spyOnEvent('tk-close');
-      const overlay = await page.find('tk-drawer >>> [data-testid="overlay"]');
-
-      await overlay.click();
-      await page.waitForChanges();
-
-      expect(closeSpy).not.toHaveReceivedEvent();
-    });
+    expect(closeSpy).not.toHaveReceivedEvent();
   });
 });

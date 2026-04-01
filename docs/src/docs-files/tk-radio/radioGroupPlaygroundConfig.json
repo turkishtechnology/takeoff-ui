@@ -58,6 +58,18 @@
       ]
     },
     {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
       "key": "spread",
       "label": "Spread",
       "type": "checkbox",
