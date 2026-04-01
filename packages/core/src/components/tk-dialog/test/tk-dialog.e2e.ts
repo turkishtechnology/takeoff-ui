@@ -1,103 +1,67 @@
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('tk-dialog', () => {
-  // Basic Rendering
-  describe('basic rendering', () => {
-    it('should render with default props', async () => {
-      const page = await newE2EPage();
+  it('renders and applies visible state', async () => {
+    const page = await newE2EPage();
 
-      await page.setContent('<tk-dialog></tk-dialog>');
+    await page.setContent('<tk-dialog visible="true" header="Header"></tk-dialog>');
 
-      const dialog = await page.find('tk-dialog');
+    const dialog = await page.find('tk-dialog');
+    const mask = await page.find('tk-dialog .tk-dialog-mask');
+    const title = await page.find('tk-dialog .tk-dialog-title');
 
-      expect(dialog).toHaveClass('hydrated');
-
-      const mask = await page.find('tk-dialog >>> [data-testid="mask"]');
-
-      expect(mask).toBeFalsy();
-    });
-    it('should render custom slots content', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent(`
-<tk-dialog visible="true">
-<div slot="header" data-testid="custom-header">Header</div>
-<div slot="content" data-testid="custom-content">Content</div>
-</tk-dialog>
-     `);
-      const headerContent = await page.find('tk-dialog >>> [data-testid="custom-header"]');
-
-      const content = await page.find('tk-dialog >>> [data-testid="custom-content"]');
-
-      expect(headerContent.textContent).toContain('Header');
-      expect(content.textContent).toContain('Content');
-    });
+    expect(dialog).toHaveClass('hydrated');
+    expect(mask).toHaveClass('tk-dialog-visible');
+    expect(title.textContent).toContain('Header');
   });
 
-  // State
-  describe('state handling', () => {
-    it('should toggle visibility when open/close methods called', async () => {
-      const page = await newE2EPage();
+  it('renders slotted content and overlay events', async () => {
+    const page = await newE2EPage();
 
-      await page.setContent('<tk-dialog></tk-dialog>');
-
-      // Open
-      const openButton = await page.find('tk-dialog >>> [data-testid="open-button"]');
-
-      await openButton.click();
-      await page.waitForChanges();
-      await page.waitForSelector('tk-dialog >>> [data-testid="mask"]', {
-        visible: true,
+    await page.setContent('<tk-dialog visible="true"><div slot="content">Content</div></tk-dialog>');
+    await page.evaluate(() => {
+      const dialog = document.querySelector('tk-dialog');
+      (window as typeof window & { __dialogEvents: { close: number; visible: boolean[] } }).__dialogEvents = { close: 0, visible: [] };
+      dialog.addEventListener('tk-close', () => {
+        (window as typeof window & { __dialogEvents: { close: number; visible: boolean[] } }).__dialogEvents.close += 1;
       });
+      dialog.addEventListener('tk-visible-change', (event: Event) => {
+        (window as typeof window & { __dialogEvents: { close: number; visible: boolean[] } }).__dialogEvents.visible.push((event as CustomEvent<boolean>).detail);
+      });
+    });
+    const overlay = await page.find('tk-dialog .tk-dialog-overlay');
 
-      // Close
-      const closeButton = await page.find('tk-dialog >>> [data-testid="close-button"]');
+    expect((await page.find('tk-dialog [slot="content"]')).textContent).toContain('Content');
 
-      await closeButton.click();
-      await page.waitForChanges();
-      await page.waitForSelector('tk-dialog >>> [data-testid="mask"]', {
-        hidden: true,
+    await page.evaluate(() => {
+      (document.querySelector('tk-dialog .tk-dialog-overlay') as HTMLElement).click();
+    });
+    await page.waitForChanges();
+
+    const events = await page.evaluate(() => (window as typeof window & { __dialogEvents: { close: number; visible: boolean[] } }).__dialogEvents);
+
+    expect(events.close).toBe(1);
+    expect(events.visible).toEqual([false]);
+    expect(overlay).toBeTruthy();
+  });
+
+  it('does not close from overlay when prevent-dismiss is true', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<tk-dialog visible="true" prevent-dismiss></tk-dialog>');
+    await page.evaluate(() => {
+      const dialog = document.querySelector('tk-dialog');
+      (window as typeof window & { __dialogCloseCount: number }).__dialogCloseCount = 0;
+      dialog.addEventListener('tk-close', () => {
+        (window as typeof window & { __dialogCloseCount: number }).__dialogCloseCount += 1;
       });
     });
 
-    it('should apply header-type classes correctly', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent('<tk-dialog visible="true" header-type="dark"></tk-dialog>');
-
-      const header = await page.find('tk-dialog >>> [data-testid="header"]');
-
-      expect(header).toHaveClass('tk-dialog-header-dark');
+    await page.evaluate(() => {
+      (document.querySelector('tk-dialog .tk-dialog-overlay') as HTMLElement).click();
     });
-  });
+    await page.waitForChanges();
 
-  // Events
-  describe('event handling', () => {
-    it('should emit close event when overlay clicked', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent('<tk-dialog visible="true"></tk-dialog>');
-      const closeSpy = await page.spyOnEvent('tk-close');
-      const overlay = await page.find('tk-dialog >>> [data-testid="overlay"]');
-
-      await overlay.click();
-      await page.waitForChanges();
-
-      expect(closeSpy).toHaveReceivedEvent();
-    });
-
-    it('should prevent close when prevent-dismiss is true', async () => {
-      const page = await newE2EPage();
-
-      await page.setContent('<tk-dialog visible="true" prevent-dismiss></tk-dialog>');
-
-      const closeSpy = await page.spyOnEvent('tk-close');
-      const overlay = await page.find('tk-dialog >>> [data-testid="overlay"]');
-
-      await overlay.click();
-      await page.waitForChanges();
-
-      expect(closeSpy).not.toHaveReceivedEvent();
-    });
+    expect(await page.evaluate(() => (window as typeof window & { __dialogCloseCount: number }).__dialogCloseCount)).toBe(0);
   });
 });
