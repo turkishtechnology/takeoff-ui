@@ -1,7 +1,8 @@
 # Data Display Components Reference
 
 API reference for Takeoff UI data display components. These components present
-data in structured formats like tables, charts, trees, and visual indicators.
+data in structured formats like tables, charts, trees, visual indicators,
+timelines, and media content.
 
 ---
 
@@ -261,26 +262,107 @@ styling.
 
 ---
 
-### tk-rating
+### tk-carousel
 
-The `TkRating` component is a customizable rating input element that allows
-users to select a value from a series of icons (such as stars, hearts, or dot).
+The `TkCarousel` is a content slider component with various options.
 
 **Props**
 
-| Name            | Type                                   | Default | Description                                                                                               |
-| --------------- | -------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
-| disabled        | boolean                                | false   | The user cannot interact with the input.                                                                  |
-| maxRating       | number                                 | 5       | The maximum rating value. Possible options are 5 or 10.                                                   |
-| readonly        | boolean                                | false   | If `true`, the user cannot modify the value.                                                              |
-| showRatingValue | boolean                                | false   | Determines whether to show the numerical rating value under to the icon.                                  |
-| type            | "dot" \| "heart" \| "number" \| "star" | 'star'  | The type of icon to display for each rating element. Options include 'star', 'heart', 'dot' and 'number'. |
-| value           | number                                 | 0       | The currently selected rating value.                                                                      |
+| Name                | Type                                                    | Default       | Description                                                              |
+| ------------------- | ------------------------------------------------------- | ------------- | ------------------------------------------------------------------------ |
+| autoplay            | boolean                                                 | false         | Controls whether the carousel should autoplay                            |
+| autoplayDelay       | number                                                  | 3000          | Controls the interval of the autoplay in milliseconds                    |
+| circular            | boolean                                                 | true          | Controls whether it should loop back to the start after reaching the end |
+| itemsPerView        | number                                                  | 1             | Number of items to show per view                                         |
+| navigationPlacement | "inside" \| "outside"                                   | 'inside'      | Placement of the navigation indicators                                   |
+| navigationPosition  | "bottom" \| "distributed" \| "left" \| "right" \| "top" | 'distributed' | Position of the navigation indicators                                    |
+| orientation         | "horizontal" \| "vertical"                              | 'horizontal'  | Orientation of the carousel                                              |
+| showArrows          | boolean                                                 | true          | Controls whether the navigation arrows are shown                         |
+| showIndicators      | boolean                                                 | true          | Controls whether the carousel indicators are shown                       |
+| showPlayerButton    | boolean                                                 | false         | Controls whether the pause/play button is shown                          |
+| verticalViewHeight  | string                                                  | '300px'       | Height of the carousel when orientation is vertical                      |
 
 **Events**
 
-| Name      | Detail | Description                         |
-| --------- | ------ | ----------------------------------- |
-| tk-change | number | Emitted when the value has changed. |
+| Name      | Detail | Description                  |
+| --------- | ------ | ---------------------------- |
+| tk-change | number | Emitted when item is changed |
+
+---
+
+### tk-chips
+
+The TkChip component is basically a simple UI block entity, representing for
+example more advanced underlying data, such as a contact, in a compact way.
+
+**Props**
+
+| Name            | Type                                                                                                | Default   | Description                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------ |
+| autoSelfDestroy | boolean                                                                                             | true      | Determines whether the chip automatically removes itself when the close button is clicked. |
+| containerStyle  | CSSProperties                                                                                       | null      | Custom style to apply to the chip component.                                               |
+| disabled        | boolean                                                                                             | false     | The disabled status.                                                                       |
+| icon            | IIconOptions \| string                                                                              |           | Specifies a material icon name to be displayed.                                            |
+| label           | string                                                                                              |           | The label to display inside the chip.                                                      |
+| removable       | boolean                                                                                             | false     | This property determines whether the chip component is removable.                          |
+| size            | "base" \| "large" \| "small"                                                                        | 'base'    | Sets size for the component.                                                               |
+| type            | "avatar" \| "filled" \| "filledlight" \| "outlined"                                                 | 'filled'  | This field specifies the design type of the component.                                     |
+| value           | any                                                                                                 |           | The value of the chips                                                                     |
+| variant         | "danger" \| "info" \| "neutral" \| "primary" \| "secondary" \| "success" \| "verified" \| "warning" | 'primary' | The variant of the chip for styling.                                                       |
+
+**Events**
+
+| Name      | Detail | Description                                                        |
+| --------- | ------ | ------------------------------------------------------------------ |
+| tk-remove | any    | When an element is deleted, it is triggered. It returns the label. |
+
+---
+
+### tk-icon
+
+The TkIcon component renders icons from
+[Google Material Symbols](https://fonts.google.com/icons?icon.set=Material+Symbols).
+The `icon` prop accepts any Material Symbols icon name (e.g., `"search"`,
+`"home"`, `"settings"`). The `iconType` prop switches between the `outlined`,
+`rounded`, and `sharp` variants of the icon set. The font is bundled with
+`@takeoff-ui/core` CSS, so no extra font import is needed.
+
+**Props**
+
+| Name            | Type                                                                                             | Default    | Description                                                           |
+| --------------- | ------------------------------------------------------------------------------------------------ | ---------- | --------------------------------------------------------------------- |
+| backgroundColor | string                                                                                           |            | The background color of the sign (custom variant)                     |
+| borderColor     | string                                                                                           |            | The border color of the sign (custom variant)                         |
+| color           | string                                                                                           |            | The color of the icon                                                 |
+| fill            | boolean                                                                                          |            | Indicates whether the icon should be filled                           |
+| icon            | string                                                                                           |            | Specifies a material icon.                                            |
+| iconColor       | string                                                                                           |            | The color of the icon (custom variant)                                |
+| iconTag         | "i" \| "span"                                                                                    | 'i'        | The HTML tag to use for the icon element.                             |
+| iconType        | "outlined" \| "rounded" \| "sharp"                                                               | 'outlined' | Specifies the type of the icon to be displayed.                       |
+| sign            | boolean                                                                                          | false      | Controls whether the icon is shown as a sign (previously 'card' type) |
+| size            | "base" \| "large" \| "medium" \| "small" \| "xlarge" \| "xsmall" \| "xxlarge"                    | 'base'     | Sets size for the component.                                          |
+| variant         | "danger" \| "info" \| "neutral" \| "primary" \| "secondary" \| "success" \| "warning" \| "white" | 'primary'  | The variant of the icon.                                              |
+
+---
+
+### tk-timeline
+
+The `TkTimeline` is a component that displays a vertical or horizontal timeline
+of events. The `TkTimelineItem` is a helper component used to create customized
+content within the `TkTimeline` component.
+
+**Props**
+
+| Name        | Type                       | Default      | Description                                                                                                              |
+| ----------- | -------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| alternate   | boolean                    | true         | Whether to alternate the position of timeline items relative to the line.                                                |
+| items       | TimelineItem[]             | []           | An array of objects representing the items to display on the timeline. Each object should have at least a `title`. `d... |
+| orientation | "horizontal" \| "vertical" | 'horizontal' | The orientation of the timeline.                                                                                         |
+
+---
+
+### tk-timeline-item
+
+Individual item within a tk-timeline container.
 
 ---

@@ -238,7 +238,7 @@ Inline handler shorthand:
 Use the `slot` attribute on child elements to project content into named slots:
 
 ```html
-<tk-dialog [open]="isOpen" (tkClose)="isOpen = false">
+<tk-dialog [visible]="isOpen" (tkClose)="isOpen = false">
   <div slot="header">Dialog Title</div>
   <div slot="content">
     <p>This is the dialog body content.</p>
@@ -542,7 +542,7 @@ import { TkButton, TkDialog } from '@takeoff-ui/angular';
       Open Dialog
     </tk-button>
 
-    <tk-dialog [open]="isOpen" (tkClose)="isOpen = false">
+    <tk-dialog [visible]="isOpen" (tkClose)="isOpen = false">
       <div slot="header">Confirm Action</div>
       <div slot="content">
         <p>Are you sure you want to proceed?</p>

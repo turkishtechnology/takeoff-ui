@@ -68,13 +68,9 @@ objects and arrays directly as JSX props.
 | `type`    | `"filled"` \| `"elevated"` \| `"outlined"` \| `"text"`                                              | Visual style   |
 
 ```tsx
-<TkButton size="large" variant="primary" type="filled">
-  Submit
-</TkButton>
+<TkButton size="large" variant="primary" type="filled" label="Submit" />
 
-<TkButton size="small" variant="danger" type="outlined">
-  Delete
-</TkButton>
+<TkButton size="small" variant="danger" type="outlined" label="Delete" />
 ```
 
 ### Passing Complex Props
@@ -111,7 +107,6 @@ receives a `CustomEvent`, and data is available on `event.detail`.
 | `tk-blur`           | `onTkBlur`   |
 | `tk-focus`          | `onTkFocus`  |
 | `tk-input`          | `onTkInput`  |
-| `tk-select`         | `onTkSelect` |
 | `tk-close`          | `onTkClose`  |
 
 ### Event Handler Signature
@@ -147,7 +142,7 @@ Use the `slot` attribute on child elements to project content into named slots:
 Default slot content (no `slot` attribute) fills the unnamed default slot:
 
 ```tsx
-<TkButton>Click Me {/* default slot */}</TkButton>
+<TkButton label="Click Me">{/* default slot */}</TkButton>
 ```
 
 ---
@@ -185,17 +180,19 @@ function ButtonExample() {
 
   return (
     <div>
-      <TkButton variant="primary" type="filled" onTkClick={handleClick}>
-        Primary Action
-      </TkButton>
-
-      <TkButton variant="secondary" type="outlined" size="small">
-        Secondary
-      </TkButton>
-
-      <TkButton variant="danger" type="filled" disabled>
-        Disabled
-      </TkButton>
+      <TkButton
+        variant="primary"
+        type="filled"
+        onTkClick={handleClick}
+        label="Primary Action"
+      />
+      <TkButton
+        variant="secondary"
+        type="outlined"
+        size="small"
+        label="Secondary"
+      />
+      <TkButton variant="danger" type="filled" disabled label="Disabled" />
     </div>
   );
 }
@@ -285,7 +282,13 @@ function TableExample() {
     console.log('Selected row:', e.detail);
   };
 
-  return <TkTable columns={columns} data={data} onTkSelect={handleRowSelect} />;
+  return (
+    <TkTable
+      columns={columns}
+      data={data}
+      onTkSelectionChange={handleRowSelect}
+    />
+  );
 }
 ```
 
@@ -304,18 +307,22 @@ function DialogExample() {
         Open Dialog
       </TkButton>
 
-      <TkDialog open={open} onTkClose={() => setOpen(false)}>
+      <TkDialog visible={open} onTkClose={() => setOpen(false)}>
         <div slot="header">Confirm Action</div>
         <div slot="content">
           <p>Are you sure you want to proceed?</p>
         </div>
         <div slot="footer">
-          <TkButton variant="primary" onTkClick={() => setOpen(false)}>
-            Confirm
-          </TkButton>
-          <TkButton variant="neutral" onTkClick={() => setOpen(false)}>
-            Cancel
-          </TkButton>
+          <TkButton
+            variant="primary"
+            onTkClick={() => setOpen(false)}
+            label="Confirm"
+          />
+          <TkButton
+            variant="neutral"
+            onTkClick={() => setOpen(false)}
+            label="Cancel"
+          />
         </div>
       </TkDialog>
     </>

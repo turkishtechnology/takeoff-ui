@@ -174,32 +174,37 @@ String. Display text for buttons, inputs, and form components.
 | `tk-color-picker`        | `TkColorPicker`       | Color picker with palette and custom input               |
 | `tk-slider`              | `TkSlider`            | Range slider                                             |
 | `tk-editor`              | `TkEditor`            | Rich text editor                                         |
+| `tk-rating`              | `TkRating`            | Star rating input/display                                |
+| `tk-button`              | `TkButton`            | Action button                                            |
 
 ### Data Display Components
 
-| Tag               | Import Name     | Description                                              |
-| ----------------- | --------------- | -------------------------------------------------------- |
-| `tk-table`        | `TkTable`       | Data table with sorting, filtering, pagination, grouping |
-| `tk-pagination`   | `TkPagination`  | Page navigation control                                  |
-| `tk-chart`        | `TkChart`       | Chart component (bar, line, pie, etc.)                   |
-| `tk-org-chart`    | `TkOrgChart`    | Organization chart                                       |
-| `tk-tree-view`    | `TkTreeView`    | Hierarchical tree view                                   |
-| `tk-badge`        | `TkBadge`       | Status badge/tag                                         |
-| `tk-avatar`       | `TkAvatar`      | User avatar with image/initials                          |
-| `tk-avatar-group` | `TkAvatarGroup` | Grouped avatars with overflow                            |
-| `tk-rating`       | `TkRating`      | Star rating input/display                                |
+| Tag                | Import Name      | Description                                              |
+| ------------------ | ---------------- | -------------------------------------------------------- |
+| `tk-table`         | `TkTable`        | Data table with sorting, filtering, pagination, grouping |
+| `tk-pagination`    | `TkPagination`   | Page navigation control                                  |
+| `tk-chart`         | `TkChart`        | Chart component (bar, line, pie, etc.)                   |
+| `tk-org-chart`     | `TkOrgChart`     | Organization chart                                       |
+| `tk-tree-view`     | `TkTreeView`     | Hierarchical tree view                                   |
+| `tk-badge`         | `TkBadge`        | Status badge/tag                                         |
+| `tk-avatar`        | `TkAvatar`       | User avatar with image/initials                          |
+| `tk-avatar-group`  | `TkAvatarGroup`  | Grouped avatars with overflow                            |
+| `tk-carousel`      | `TkCarousel`     | Image/content carousel                                   |
+| `tk-chips`         | `TkChips`        | Tag/chip display                                         |
+| `tk-icon`          | `TkIcon`         | Icon display                                             |
+| `tk-timeline`      | `TkTimeline`     | Timeline container                                       |
+| `tk-timeline-item` | `TkTimelineItem` | Timeline entry                                           |
 
 ### Feedback Components
 
-| Tag           | Import Name  | Description             |
-| ------------- | ------------ | ----------------------- |
-| `tk-alert`    | `TkAlert`    | Alert message banner    |
-| `tk-dialog`   | `TkDialog`   | Modal dialog            |
-| `tk-drawer`   | `TkDrawer`   | Side panel overlay      |
-| `tk-spinner`  | `TkSpinner`  | Loading spinner         |
-| `tk-tooltip`  | `TkTooltip`  | Hover tooltip           |
-| `tk-popover`  | `TkPopover`  | Click-triggered popover |
-| `tk-carousel` | `TkCarousel` | Image/content carousel  |
+| Tag          | Import Name | Description             |
+| ------------ | ----------- | ----------------------- |
+| `tk-alert`   | `TkAlert`   | Alert message banner    |
+| `tk-dialog`  | `TkDialog`  | Modal dialog            |
+| `tk-drawer`  | `TkDrawer`  | Side panel overlay      |
+| `tk-spinner` | `TkSpinner` | Loading spinner         |
+| `tk-tooltip` | `TkTooltip` | Hover tooltip           |
+| `tk-popover` | `TkPopover` | Click-triggered popover |
 
 ### Navigation Components
 
@@ -221,11 +226,6 @@ String. Display text for buttons, inputs, and form components.
 | `tk-accordion-item` | `TkAccordionItem` | Collapsible section           |
 | `tk-card`           | `TkCard`          | Content card container        |
 | `tk-divider`        | `TkDivider`       | Visual separator line         |
-| `tk-timeline`       | `TkTimeline`      | Timeline container            |
-| `tk-timeline-item`  | `TkTimelineItem`  | Timeline entry                |
-| `tk-button`         | `TkButton`        | Action button                 |
-| `tk-chips`          | `TkChips`         | Tag/chip display              |
-| `tk-icon`           | `TkIcon`          | Icon display                  |
 
 ---
 
@@ -233,18 +233,18 @@ String. Display text for buttons, inputs, and form components.
 
 Load the appropriate reference file based on what the user needs:
 
-| User Needs                                                  | Load Reference                        |
-| ----------------------------------------------------------- | ------------------------------------- |
-| React-specific patterns, imports, events                    | `references/react-guide.md`           |
-| Vue-specific patterns, v-model, events                      | `references/vue-guide.md`             |
-| Angular-specific patterns, NgModule, events                 | `references/angular-guide.md`         |
-| Form component APIs (input, select, datepicker, etc.)       | `references/components-form.md`       |
-| Data component APIs (table, chart, pagination, etc.)        | `references/components-data.md`       |
-| Feedback component APIs (alert, dialog, drawer, etc.)       | `references/components-feedback.md`   |
-| Navigation component APIs (tabs, stepper, breadcrumb, etc.) | `references/components-navigation.md` |
-| Layout component APIs (accordion, card, button, etc.)       | `references/components-layout.md`     |
-| All components quick list                                   | `references/component-index.md`       |
-| Design tokens, colors, spacing, Tailwind classes            | `references/tailwind-tokens.md`       |
+| User Needs                                                                | Load Reference                        |
+| ------------------------------------------------------------------------- | ------------------------------------- |
+| React-specific patterns, imports, events                                  | `references/react-guide.md`           |
+| Vue-specific patterns, v-model, events                                    | `references/vue-guide.md`             |
+| Angular-specific patterns, NgModule, events                               | `references/angular-guide.md`         |
+| Form component APIs (input, select, datepicker, button, rating, etc.)     | `references/components-form.md`       |
+| Data component APIs (table, chart, carousel, chips, icon, timeline, etc.) | `references/components-data.md`       |
+| Feedback component APIs (alert, dialog, drawer, spinner, etc.)            | `references/components-feedback.md`   |
+| Navigation component APIs (tabs, stepper, breadcrumb, etc.)               | `references/components-navigation.md` |
+| Layout component APIs (accordion, card, divider)                          | `references/components-layout.md`     |
+| All components quick list                                                 | `references/component-index.md`       |
+| Design tokens, colors, spacing, Tailwind classes                          | `references/tailwind-tokens.md`       |
 
 ---
 
@@ -324,7 +324,7 @@ const [name, setName] = useState('');
 
 ```tsx
 <TkTable
-  rows={data}
+  data={data}
   columns={[
     { field: 'name', header: 'Name', sortable: true },
     { field: 'email', header: 'Email' },
@@ -339,9 +339,9 @@ const [name, setName] = useState('');
 
 ```tsx
 <TkDialog
-  open={isOpen}
+  visible={isOpen}
   header="Confirm Action"
-  onTkDialogClose={() => setIsOpen(false)}
+  onTkClose={() => setIsOpen(false)}
 >
   <p>Are you sure you want to proceed?</p>
 </TkDialog>
