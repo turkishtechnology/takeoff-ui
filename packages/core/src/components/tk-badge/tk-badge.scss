@@ -2,6 +2,17 @@
   display: inline-flex;
 }
 
+:host(.full-width) {
+  width: 100%;
+
+  .tk-badge-container {
+    width: 100%;
+    .tk-badge {
+      width: 100%;
+    }
+  }
+}
+
 .tk-badge-container.has-slot {
   display: inline-flex;
   position: relative;
