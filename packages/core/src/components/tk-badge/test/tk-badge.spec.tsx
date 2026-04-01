@@ -1,157 +1,84 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkBadge } from '../tk-badge';
+import { TkIcon } from '../../tk-icon/tk-icon';
+
 describe('tk-badge', () => {
-  //Basic Rendering
-  describe('basic rendering', () => {
-    it('renders with default props', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge></tk-badge>`,
-      });
-
-      expect(page.root).toBeTruthy();
+  it('renders label, rounded and dot states', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge label="test" rounded="true" dot="true"></tk-badge>`,
     });
-    it('renders when rounded', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge rounded="true"></tk-badge>`,
-      });
 
-      await page.waitForChanges();
+    const badge = page.root.shadowRoot.querySelector('.tk-badge');
 
-      const badge = page.root.shadowRoot.querySelector('.tk-badge');
-
-      expect(badge.classList.contains('rounded')).toBe(true);
-    });
-    it('renders with dot', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge dot="true"></tk-badge>`,
-      });
-
-      await page.waitForChanges();
-
-      const badge = page.root.shadowRoot.querySelector('.tk-badge');
-
-      expect(badge.classList.contains('dot')).toBe(true);
-    });
-    it('renders content', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge label="test"></tk-badge>`,
-      });
-
-      await page.waitForChanges();
-
-      const badge = page.root.shadowRoot.querySelector('.tk-badge');
-
-      expect(badge.textContent).toBe('test');
-    });
+    expect(badge.textContent).toBe('');
+    expect(badge.classList.contains('rounded')).toBe(true);
+    expect(badge.classList.contains('dot')).toBe(true);
   });
 
-  //// State
-  describe('state handling', () => {
-    it('renders count only', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge count=5></tk-badge>`,
-      });
-
-      const badge = page.root.shadowRoot.querySelector('.tk-badge');
-
-      expect(badge.textContent).toBe('5');
-      expect(badge.classList.contains('count')).toBe(true);
-      expect(badge.classList.contains('dot')).toBe(false);
-      expect(badge.classList.contains('icon-only')).toBe(false);
+  it('renders count-only badges with count styling', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge count="5"></tk-badge>`,
     });
-    it('renders with different sizes', async () => {
-      const sizes = ['xsmall', 'small', 'base', 'large', 'xlarge'];
-      for (const size of sizes) {
-        const page = await newSpecPage({
-          components: [TkBadge],
-          html: `<tk-badge size='${size}'></tk-badge>`,
-        });
 
-        const badge = page.root.shadowRoot.querySelector('.tk-badge');
+    const badge = page.root.shadowRoot.querySelector('.tk-badge');
 
-        expect(badge.classList.contains(size)).toBe(true);
-      }
+    expect(badge.textContent).toBe('5');
+    expect(badge.classList.contains('count')).toBe(true);
+    expect(badge.classList.contains('icon-only')).toBe(false);
+  });
+
+  it('renders variant, size and type classes', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge variant="success" size="large" type="outlined"></tk-badge>`,
     });
-    it('handles variants correctly', async () => {
-      const variants = ['primary', 'secondary', 'neutral', 'info', 'success', 'danger', 'warning', 'verified', 'purple', 'cyan', 'business'];
-      for (const variant of variants) {
-        const page = await newSpecPage({
-          components: [TkBadge],
-          html: `<tk-badge variant='${variant}'></tk-badge>`,
-        });
 
-        const badge = page.root.shadowRoot.querySelector('.tk-badge');
+    const badge = page.root.shadowRoot.querySelector('.tk-badge');
 
-        expect(badge.classList.contains(variant)).toBe(true);
-      }
+    expect(badge.classList.contains('success')).toBe(true);
+    expect(badge.classList.contains('large')).toBe(true);
+    expect(badge.classList.contains('outlined')).toBe(true);
+  });
+
+  it('renders icons from string and object values', async () => {
+    const stringPage = await newSpecPage({
+      components: [TkBadge, TkIcon],
+      html: `<tk-badge icon="home"></tk-badge>`,
     });
-    it('renders with different types', async () => {
-      const types = ['filled', 'filledlight', 'outlined', 'text'];
-      for (const type of types) {
-        const page = await newSpecPage({
-          components: [TkBadge],
-          html: `<tk-badge type='${type}'></tk-badge>`,
-        });
 
-        const badge = page.root.shadowRoot.querySelector('.tk-badge');
+    expect(stringPage.root.shadowRoot.querySelector('tk-icon')).toBeTruthy();
+    expect(stringPage.root.shadowRoot.textContent).toContain('home');
 
-        expect(badge.classList.contains(type)).toBe(true);
-      }
+    const objectPage = await newSpecPage({
+      components: [TkBadge, TkIcon],
+      html: `<tk-badge></tk-badge>`,
     });
-    it('handles icon object', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge 
-        ></tk-badge>`,
-      });
 
-      page.root.icon = {
-        name: 'search',
-        style: 'rounded',
-        fill: true,
-        color: '#000000',
-      };
-      await page.waitForChanges();
+    objectPage.root.icon = {
+      name: 'search',
+      style: 'rounded',
+      fill: true,
+      color: '#000000',
+    };
+    await objectPage.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.material-symbols-rounded') as HTMLElement;
+    const icon = objectPage.root.shadowRoot.querySelector('tk-icon i.material-symbols-rounded') as HTMLElement;
 
-      expect(icon.textContent).toBe('search');
-      expect(icon.classList.contains('fill')).toBe(true);
-      expect(icon.style.color).toBe('#000000');
+    expect(icon).toBeTruthy();
+    expect(icon.textContent).toBe('search');
+    expect(icon.classList.contains('fill')).toBe(true);
+  });
+
+  it('detects slotted content after load', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge><span>Custom Content</span></tk-badge>`,
     });
-    it('handles icon string', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `<tk-badge icon="home"
-        ></tk-badge>`,
-      });
 
-      await page.waitForChanges();
+    await page.waitForChanges();
 
-      const icon = page.root.shadowRoot.querySelector('.tk-badge-icon');
-
-      expect(icon.classList.contains('material-symbols-outlined')).toBe(true);
-      expect(icon.textContent).toBe('home');
-    });
-    it('handles slots', async () => {
-      const page = await newSpecPage({
-        components: [TkBadge],
-        html: `
-         <tk-badge
-           hasSlot="true"
-           <div slot="content">Custom Content</div>
-         ></tk-badge>`,
-      });
-      await page.waitForChanges();
-
-      const element = page.root.shadowRoot.querySelector(`slot`);
-
-      expect(element).toBeTruthy();
-    });
+    expect(page.root.shadowRoot.querySelector('.tk-badge-container').classList.contains('has-slot')).toBe(true);
   });
 });

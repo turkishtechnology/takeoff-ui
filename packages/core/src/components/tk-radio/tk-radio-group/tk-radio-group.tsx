@@ -1,6 +1,8 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h, AttachInternals } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, AttachInternals } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
+import type { TkRadioValue } from '../tk-radio';
 import { renderHint } from '../../../utils/hint-utils';
 
 @Component({
@@ -48,7 +50,7 @@ export class TkRadioGroup implements ComponentInterface {
   /**
    * The value of the input.
    */
-  @Prop({ mutable: true }) value?: any;
+  @Prop({ mutable: true }) value?: TkRadioValue;
 
   /**
    * Watches for changes in the selected value and emits a custom event when the value changes.
@@ -91,7 +93,7 @@ export class TkRadioGroup implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
+  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<TkRadioValue>;
 
   formResetCallback() {
     this.handleFormReset();
@@ -111,7 +113,7 @@ export class TkRadioGroup implements ComponentInterface {
     this.updateTkRadio();
   }
 
-  private handleChange(e) {
+  private handleChange(e: CustomEvent<TkRadioValue>) {
     this.value = e.detail;
     this.tkChange.emit(this.value);
     this.updateTkRadio();
@@ -139,7 +141,7 @@ export class TkRadioGroup implements ComponentInterface {
   }
 
   render() {
-    let _label: HTMLLabelElement;
+    let _label: JSX.Element | undefined;
 
     const rootClasses = classNames('tk-radio-group-container', {
       vertical: this.direction === 'vertical',

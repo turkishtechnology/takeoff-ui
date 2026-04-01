@@ -1,4 +1,5 @@
-import { Component, h, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, State, Fragment, Watch } from '@stencil/core';
+import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import mime from 'mime';
 import { filesize } from 'filesize';
@@ -343,7 +344,7 @@ export class TkUpload implements ComponentInterface {
     );
   }
 
-  private renderDropzone(): HTMLDivElement {
+  private renderDropzone(): JSX.Element {
     const dropzoneClasses = classNames('tk-upload-dropzone', this.type, {
       'drag-over': this.isDragOver,
       'disabled': this.disabled,
@@ -383,7 +384,9 @@ export class TkUpload implements ComponentInterface {
               ></tk-button>
             )}
             <input
-              ref={el => (this.inputRef = el)}
+              ref={el => {
+                this.inputRef = el;
+              }}
               type="file"
               accept={this.accept}
               multiple={this.multiple ? true : undefined}
@@ -396,7 +399,7 @@ export class TkUpload implements ComponentInterface {
     );
   }
 
-  private renderFileholder(): HTMLDivElement {
+  private renderFileholder(): JSX.Element {
     return (
       <div class="tk-upload-file-holder">
         {this.value?.map((item, index) => (
@@ -424,7 +427,7 @@ export class TkUpload implements ComponentInterface {
   }
 
   render() {
-    let label: HTMLLabelElement;
+    let label: JSX.Element | undefined;
 
     const rootClasses = classNames('tk-upload-container', {
       'drag-drop-enabled': this.dragDrop,
