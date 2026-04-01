@@ -2,6 +2,14 @@
   display: inline-flex;
 }
 
+:host(.full-width) {
+  width: 100%;
+
+  .tk-chips {
+    width: 100%;
+  }
+}
+
 .tk-chips {
   font-family: 'Geologica', sans-serif;
   display: inline-flex;
