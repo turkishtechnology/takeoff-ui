@@ -24,32 +24,37 @@ Quick-reference catalog of all 48 Takeoff UI components, organized by category.
 | `tk-color-picker`        | `TkColorPicker`       | Color selection interface with various input formats.                            | `value`, `label`, `format`, `presets`, `inline`               |
 | `tk-slider`              | `TkSlider`            | Slider control for selecting numeric values or ranges.                           | `value`, `min`, `max`, `step`, `range`                        |
 | `tk-editor`              | `TkEditor`            | WYSIWYG editor component wrapping Tiptap editor.                                 | `value`, `label`, `toolbar`, `placeholder`, `disabled`        |
+| `tk-rating`              | `TkRating`            | Customizable rating input element for selecting a value from a series.           | `value`, `maxRating`, `type`, `disabled`, `readonly`          |
+| `tk-button`              | `TkButton`            | Extension to standard button element with icons and theming.                     | `label`, `type`, `variant`, `icon`, `disabled`                |
 
 ## Data Display Components
 
-| Tag               | React/Vue Import | Description                                                                       | Key Props                                                    |
-| ----------------- | ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `tk-table`        | `TkTable`        | Displays data in a tabular format with sorting, pagination, and selection.        | `data`, `columns`, `selectionMode`, `rowsPerPage`, `loading` |
-| `tk-pagination`   | `TkPagination`   | Pagination control for navigating paged data.                                     | `currentPage`, `totalItems`, `rowsPerPage`, `mode`, `type`   |
-| `tk-chart`        | `TkChart`        | Visualizes data in various chart formats using Chart.js.                          | `data`, `type`, `options`, `height`, `width`                 |
-| `tk-org-chart`    | `TkOrgChart`     | Visualizes organizational data using d3-org-chart.                                | `data`, `options`, `collapsible`, `accessibilityLabel`       |
-| `tk-tree-view`    | `TkTreeView`     | Displays hierarchical data in a tree structure with expandable/collapsible nodes. | `items`, `value`, `selectable`, `expandAll`, `type`          |
-| `tk-badge`        | `TkBadge`        | Small badge for adding contextual information such as counts or labels.           | `label`, `type`, `size`, `count`, `dot`                      |
-| `tk-avatar`       | `TkAvatar`       | Represents a user or brand with an image, initials, or icon.                      | `image`, `label`, `size`, `rounded`, `badge`                 |
-| `tk-avatar-group` | `TkAvatarGroup`  | Groups multiple avatars together in a compact layout.                             | `compact`                                                    |
-| `tk-rating`       | `TkRating`       | Customizable rating input element for selecting a value from a series.            | `value`, `maxRating`, `type`, `disabled`, `readonly`         |
+| Tag                | React/Vue Import | Description                                                                                                                                   | Key Props                                                           |
+| ------------------ | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `tk-table`         | `TkTable`        | Displays data in a tabular format with sorting, pagination, and selection.                                                                    | `data`, `columns`, `selectionMode`, `rowsPerPage`, `loading`        |
+| `tk-pagination`    | `TkPagination`   | Pagination control for navigating paged data.                                                                                                 | `currentPage`, `totalItems`, `rowsPerPage`, `mode`, `type`          |
+| `tk-chart`         | `TkChart`        | Visualizes data in various chart formats using Chart.js.                                                                                      | `data`, `type`, `options`, `height`, `width`                        |
+| `tk-org-chart`     | `TkOrgChart`     | Visualizes organizational data using d3-org-chart.                                                                                            | `data`, `options`, `collapsible`, `accessibilityLabel`              |
+| `tk-tree-view`     | `TkTreeView`     | Displays hierarchical data in a tree structure with expandable/collapsible nodes.                                                             | `items`, `value`, `selectable`, `expandAll`, `type`                 |
+| `tk-badge`         | `TkBadge`        | Small badge for adding contextual information such as counts or labels.                                                                       | `label`, `type`, `size`, `count`, `dot`                             |
+| `tk-avatar`        | `TkAvatar`       | Represents a user or brand with an image, initials, or icon.                                                                                  | `image`, `label`, `size`, `rounded`, `badge`                        |
+| `tk-avatar-group`  | `TkAvatarGroup`  | Groups multiple avatars together in a compact layout.                                                                                         | `compact`                                                           |
+| `tk-carousel`      | `TkCarousel`     | Content slider component with autoplay and navigation options.                                                                                | `itemsPerView`, `autoplay`, `circular`, `showArrows`, `orientation` |
+| `tk-chips`         | `TkChips`        | Simple UI block entity representing tags, labels, or data.                                                                                    | `label`, `type`, `variant`, `removable`, `icon`                     |
+| `tk-icon`          | `TkIcon`         | Renders [Google Material Symbols](https://fonts.google.com/icons?icon.set=Material+Symbols) icons with customizable size, color, and styling. | `icon`, `size`, `color`, `fill`, `variant`                          |
+| `tk-timeline`      | `TkTimeline`     | Displays a vertical or horizontal timeline of events.                                                                                         | `items`, `orientation`, `alternate`                                 |
+| `tk-timeline-item` | `TkTimelineItem` | Individual timeline entry for custom timeline content.                                                                                        | _(slot-based)_                                                      |
 
 ## Feedback Components
 
-| Tag           | React/Vue Import | Description                                                                    | Key Props                                                           |
-| ------------- | ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| `tk-alert`    | `TkAlert`        | Displays contextual feedback messages such as success, warnings, or errors.    | `type`, `header`, `message`, `removable`, `variant`                 |
-| `tk-dialog`   | `TkDialog`       | Customizable modal dialog for displaying information or requesting user input. | `visible`, `header`, `variant`, `headerType`, `preventDismiss`      |
-| `tk-drawer`   | `TkDrawer`       | Container component displayed as a slide-in overlay panel.                     | `open`, `header`, `position`, `headerType`, `footerType`            |
-| `tk-spinner`  | `TkSpinner`      | Loading spinner indicator.                                                     | `size`, `type`, `label`, `orientation`                              |
-| `tk-tooltip`  | `TkTooltip`      | Displays additional information when an element is hovered over.               | `header`, `description`, `position`, `variant`, `icon`              |
-| `tk-popover`  | `TkPopover`      | Displays additional information or content when triggered.                     | `position`, `trigger`, `type`, `containerStyle`                     |
-| `tk-carousel` | `TkCarousel`     | Content slider component with autoplay and navigation options.                 | `itemsPerView`, `autoplay`, `circular`, `showArrows`, `orientation` |
+| Tag          | React/Vue Import | Description                                                                    | Key Props                                                      |
+| ------------ | ---------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `tk-alert`   | `TkAlert`        | Displays contextual feedback messages such as success, warnings, or errors.    | `type`, `header`, `message`, `removable`, `variant`            |
+| `tk-dialog`  | `TkDialog`       | Customizable modal dialog for displaying information or requesting user input. | `visible`, `header`, `variant`, `headerType`, `preventDismiss` |
+| `tk-drawer`  | `TkDrawer`       | Container component displayed as a slide-in overlay panel.                     | `open`, `header`, `position`, `headerType`, `footerType`       |
+| `tk-spinner` | `TkSpinner`      | Loading spinner indicator.                                                     | `size`, `type`, `label`, `orientation`                         |
+| `tk-tooltip` | `TkTooltip`      | Displays additional information when an element is hovered over.               | `header`, `description`, `position`, `variant`, `icon`         |
+| `tk-popover` | `TkPopover`      | Displays additional information or content when triggered.                     | `position`, `trigger`, `type`, `containerStyle`                |
 
 ## Navigation Components
 
@@ -71,11 +76,6 @@ Quick-reference catalog of all 48 Takeoff UI components, organized by category.
 | `tk-accordion-item` | `TkAccordionItem` | Individual collapsible item within a TkAccordion.                        | `header`, `active`, `icon`, `itemKey`, `size`                   |
 | `tk-card`           | `TkCard`          | Container component for grouping related content with header and footer. | `header`, `subheader`, `image`, `headerType`, `footerType`      |
 | `tk-divider`        | `TkDivider`       | Separates different sections, elements, and content.                     | `orientation`, `mx`, `my`                                       |
-| `tk-timeline`       | `TkTimeline`      | Displays a vertical or horizontal timeline of events.                    | `items`, `orientation`, `alternate`                             |
-| `tk-timeline-item`  | `TkTimelineItem`  | Individual timeline entry for custom timeline content.                   | _(slot-based)_                                                  |
-| `tk-button`         | `TkButton`        | Extension to standard button element with icons and theming.             | `label`, `type`, `variant`, `icon`, `disabled`                  |
-| `tk-chips`          | `TkChips`         | Simple UI block entity representing tags, labels, or data.               | `label`, `type`, `variant`, `removable`, `icon`                 |
-| `tk-icon`           | `TkIcon`          | Renders icons with customizable size, color, and styling.                | `icon`, `size`, `color`, `fill`, `variant`                      |
 
 ---
 

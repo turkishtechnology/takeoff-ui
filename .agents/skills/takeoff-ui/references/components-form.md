@@ -653,3 +653,58 @@ TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
 | setContent | setContent(content: string) => Promise<void>                                      | Sets the content of the editor         |
 
 ---
+
+### tk-rating
+
+The `TkRating` component is a customizable rating input element that allows
+users to select a value from a series of icons (such as stars, hearts, or dot).
+
+**Props**
+
+| Name            | Type                                   | Default | Description                                                                                               |
+| --------------- | -------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| disabled        | boolean                                | false   | The user cannot interact with the input.                                                                  |
+| maxRating       | number                                 | 5       | The maximum rating value. Possible options are 5 or 10.                                                   |
+| readonly        | boolean                                | false   | If `true`, the user cannot modify the value.                                                              |
+| showRatingValue | boolean                                | false   | Determines whether to show the numerical rating value under to the icon.                                  |
+| type            | "dot" \| "heart" \| "number" \| "star" | 'star'  | The type of icon to display for each rating element. Options include 'star', 'heart', 'dot' and 'number'. |
+| value           | number                                 | 0       | The currently selected rating value.                                                                      |
+
+**Events**
+
+| Name      | Detail | Description                         |
+| --------- | ------ | ----------------------------------- |
+| tk-change | number | Emitted when the value has changed. |
+
+---
+
+### tk-button
+
+TkButton is an extension to standard input element with icons and theming.
+
+**Props**
+
+| Name         | Type                                                                                             | Default   | Description                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------- |
+| disabled     | boolean                                                                                          |           | Disables the button, preventing user interaction.                                  |
+| fullWidth    | boolean                                                                                          |           | Sets the button to full-width mode, making it span the container.                  |
+| href         | string                                                                                           |           | Sets the URL the button should navigate to when clicked (for type="link" buttons). |
+| icon         | IIconOptions \| IMultiIconOptions \| string                                                      |           | Specifies a material icon name to be displayed.                                    |
+| iconPosition | "left" \| "right"                                                                                | 'left'    | Defines the position of the icon.                                                  |
+| label        | string                                                                                           | ''        | Label text displayed inside the button.                                            |
+| loading      | boolean                                                                                          |           | Shows a loading icon inside the button.                                            |
+| mode         | "button" \| "link" \| "reset" \| "submit"                                                        | 'button'  | Sets the button type.                                                              |
+| rounded      | boolean                                                                                          |           | Makes the button round with an icon-only style.                                    |
+| size         | "base" \| "large" \| "small"                                                                     | 'base'    | Sets size for the component.                                                       |
+| target       | string                                                                                           |           | Specifies where to open the linked document (for type="link" buttons).             |
+| type         | "elevated" \| "filled" \| "outlined" \| "text"                                                   | 'filled'  | This field specifies the design type of the component.                             |
+| underline    | boolean                                                                                          |           | Applies underline styling to the button label regardless of mode.                  |
+| variant      | "danger" \| "info" \| "neutral" \| "primary" \| "secondary" \| "success" \| "warning" \| "white" | 'primary' | Determines the button's variant for different styles.                              |
+
+**Events**
+
+| Name     | Detail     | Description                    |
+| -------- | ---------- | ------------------------------ |
+| tk-click | MouseEvent | Emitted when the button click. |
+
+---

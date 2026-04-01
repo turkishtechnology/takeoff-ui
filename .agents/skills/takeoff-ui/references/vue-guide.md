@@ -202,7 +202,7 @@ Use Vue's named slot syntax with `<template #slot-name>` or
 
 ```vue
 <template>
-  <tk-dialog :open="isOpen" @tk-close="isOpen = false">
+  <tk-dialog :visible="isOpen" @tk-close="isOpen = false">
     <template #header>Dialog Title</template>
     <template #content>
       <p>This is the dialog body content.</p>
@@ -391,7 +391,7 @@ const isOpen = ref(false);
     Open Dialog
   </tk-button>
 
-  <tk-dialog :open="isOpen" @tk-close="isOpen = false">
+  <tk-dialog :visible="isOpen" @tk-close="isOpen = false">
     <template #header>Confirm Action</template>
     <template #content>
       <p>Are you sure you want to proceed?</p>
