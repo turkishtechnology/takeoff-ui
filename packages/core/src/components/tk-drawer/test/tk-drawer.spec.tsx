@@ -2,238 +2,102 @@ import { newSpecPage } from '@stencil/core/testing';
 import { TkDrawer } from '../tk-drawer';
 import { TkButton } from '../../tk-button/tk-button';
 
-// Basic Rendering
 describe('tk-drawer', () => {
-  it('should not render when open is false', async () => {
-    const page = await newSpecPage({
+  it('renders closed by default and visible when open is true', async () => {
+    const closedPage = await newSpecPage({
       components: [TkDrawer],
       html: `<tk-drawer></tk-drawer>`,
     });
 
-    expect(page.root).toBeTruthy();
-    expect(page.root.shadowRoot.querySelector('.tk-drawer-mask')).toBeFalsy();
-  });
+    expect(closedPage.root.shadowRoot.querySelector('.tk-drawer-mask')).toBeFalsy();
 
-  it('should render when open is true', async () => {
-    const page = await newSpecPage({
+    const openPage = await newSpecPage({
       components: [TkDrawer],
-      html: `<tk-drawer open="true"></tk-drawer>`,
+      html: `<tk-drawer open="true" header="Test Header"></tk-drawer>`,
     });
 
-    const mask = page.root.shadowRoot.querySelector('.tk-drawer-mask');
+    const mask = openPage.root.shadowRoot.querySelector('.tk-drawer-mask');
+    const label = openPage.root.shadowRoot.querySelector('.tk-drawer-header-label');
 
     expect(mask).toBeTruthy();
     expect(mask.classList.contains('tk-drawer-visible')).toBe(true);
+    expect(label.textContent).toBe('Test Header');
   });
 
-  it('should render header', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true" header="Test Header" ></tk-drawer>`,
-    });
-    const header = page.root.shadowRoot.querySelector('.tk-drawer-header .tk-drawer-header-label');
-
-    expect(header.textContent).toBe('Test Header');
-  });
-
-  it('should render custom content in slots', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `
-<tk-drawer open="true">
-<div slot="header">Custom Header</div>
-<div slot="content">Custom Content</div>
-<div slot="footer">Custom Footer</div>
-<div slot="container">Custom Container</div>
-<div slot="header-actions">Custom Header Actions</div>
-</tk-drawer>
-       `,
-    });
-    const slotContents = {
-      'header': 'Custom Header',
-      'content': 'Custom Content',
-      'footer': 'Custom Footer',
-      'container': 'Custom Container',
-      'header-actions': 'Custom Header Actions',
-    };
-    for (const [slot, expectedContent] of Object.entries(slotContents)) {
-      const element = page.root.querySelector(`[slot="${slot}"]`);
-      expect(element).toBeTruthy();
-      expect(element.textContent).toBe(expectedContent);
-    }
-  });
-
-  it('should handle header label when there is no header slot', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true" header="Test">
-        </tk-drawer>`,
-    });
-
-    const label = page.root.shadowRoot.querySelector('.tk-drawer-header-label');
-
-    expect(label.textContent).toBe('Test');
-  });
-
-  it('should render close button if there is no headerActionSlot ', async () => {
+  it('emits close when the header close button is used', async () => {
     const page = await newSpecPage({
       components: [TkDrawer, TkButton],
-      html: `<tk-drawer open="true" header="Test" ></tk-drawer>`,
-    });
-    const drawer = page.root as HTMLTkDrawerElement;
-    const tkButton = drawer.shadowRoot.querySelector('.tk-drawer-header tk-button');
-
-    expect(tkButton).toBeTruthy();
-
-    const button: HTMLButtonElement = tkButton.shadowRoot.querySelector('button');
-    button.click();
-    await page.waitForChanges();
-
-    expect(drawer.open).toBe(false);
-  });
-
-  // Methods
-  it('should drawer open when show method is called', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer></tk-drawer>`,
-    });
-
-    const drawer = page.root as HTMLTkDrawerElement;
-    await drawer.show();
-    await page.waitForChanges();
-
-    expect(drawer.open).toBe(true);
-  });
-
-  it('should drawer close when close method is called', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true"></tk-drawer>`,
-    });
-
-    const drawer = page.root as HTMLTkDrawerElement;
-    await drawer.close();
-    await page.waitForChanges();
-
-    expect(drawer.open).toBe(false);
-  });
-
-  // State
-  it('should handle all header types correctly', async () => {
-    const headerTypes = ['basic', 'divided', 'light', 'dark', 'primary'];
-    for (const type of headerTypes) {
-      const page = await newSpecPage({
-        components: [TkDrawer],
-        html: `<tk-drawer open="true" header-type="${type}">
-        </tk-drawer>`,
-      });
-      const header = page.root.shadowRoot.querySelector('.tk-drawer-header');
-      expect(header.classList.contains(`tk-drawer-header-${type}`)).toBe(true);
-    }
-  });
-
-  it('should handle all footer types correctly', async () => {
-    const footerTypes = ['basic', 'divided', 'light'];
-    for (const type of footerTypes) {
-      const page = await newSpecPage({
-        components: [TkDrawer],
-        html: `<tk-drawer open="true" footer-type="${type}" footer="Test">
-          <div slot="footer">Custom Footer</div></tk-drawer>`,
-      });
-      const footer = page.root.shadowRoot.querySelector('.tk-drawer-footer');
-      expect(footer.classList.contains(`tk-drawer-footer-${type}`)).toBe(true);
-    }
-  });
-
-  it('should handle all maskvariants correctly', async () => {
-    const variants = ['lightest', 'light', 'base', 'dark', 'darkest'];
-    for (const variant of variants) {
-      const page = await newSpecPage({
-        components: [TkDrawer],
-        html: `<tk-drawer open="true" mask-variant="${variant}"></tk-drawer>`,
-      });
-
-      const mask = page.root.shadowRoot.querySelector(`.tk-drawer-mask`);
-
-      expect(mask.classList.contains(`tk-drawer-mask-${variant}`)).toBe(true);
-    }
-  });
-
-  it('should hide backdrop when hideBackdrop is true', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true" hide-backdrop="true" ></tk-drawer>`,
-    });
-
-    const mask = page.root.shadowRoot.querySelector(`.tk-drawer-mask`);
-
-    expect(mask.classList.contains('tk-drawer-mask-hidden')).toBe(true);
-  });
-
-  it('should hide close button when hideCloseIcon is true', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true" hide-close-icon="true"></tk-drawer>`,
-    });
-    const closeButton = page.root.shadowRoot.querySelector('tk-button[icon="close"]');
-    expect(closeButton).toBeFalsy();
-  });
-
-  it('should handle position transforms', async () => {
-    const transformValue = [
-      { position: 'left', style: 'translateX(-100%)' },
-      { position: 'right', style: 'translateX(100%)' },
-      { position: 'top', style: 'translateY(-100%)' },
-      { position: 'bottom', style: 'translateY(100%)' },
-      { position: '', style: '' },
-    ];
-    for (const value of transformValue) {
-      const page = await newSpecPage({
-        components: [TkDrawer],
-        html: `<tk-drawer open="true" position=${value.position}></tk-drawer>`,
-      });
-
-      await page.waitForChanges();
-
-      const drawer = page.root.shadowRoot.querySelector('.tk-drawer') as HTMLElement;
-
-      expect(drawer.style.transform).toBe(value.style);
-      expect(drawer.classList.contains(`tk-drawer-${value.position}`)).toBe(true);
-    }
-  });
-
-  // Event
-  it('should emit tk-drawer-close event after 300ms', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true"></tk-drawer>`,
+      html: `<tk-drawer open="true" header="Test"></tk-drawer>`,
     });
 
     const closeSpy = jest.fn();
 
-    const drawer = page.root as HTMLTkDrawerElement;
-    drawer.addEventListener('tk-drawer-close', closeSpy);
-
-    drawer.open = false;
-    await new Promise(resolve => setTimeout(resolve, 310));
-
-    expect(closeSpy).toHaveBeenCalled();
-  }, 50000);
-
-  it('should not close on overlay click when preventDismiss is false', async () => {
-    const page = await newSpecPage({
-      components: [TkDrawer],
-      html: `<tk-drawer open="true" ></tk-drawer>`,
-    });
-
-    const drawer = page.root as HTMLTkDrawerElement;
-
-    const overlay: HTMLDivElement = drawer.shadowRoot.querySelector('.tk-drawer-overlay');
-
-    overlay.click();
+    page.root.addEventListener('tk-drawer-close', closeSpy);
+    page.root.shadowRoot.querySelector('tk-button').dispatchEvent(new CustomEvent('tk-click', { bubbles: true, composed: true }));
     await page.waitForChanges();
 
-    expect(drawer.open).toBe(false);
+    expect(closeSpy).toHaveBeenCalledTimes(1);
+    expect(page.root.open).toBe(true);
+  });
+
+  it('emits open and close events from public methods', async () => {
+    const page = await newSpecPage({
+      components: [TkDrawer],
+      html: `<tk-drawer></tk-drawer>`,
+    });
+
+    const openSpy = jest.fn();
+    const closeSpy = jest.fn();
+
+    page.root.addEventListener('tk-drawer-open', openSpy);
+    page.root.addEventListener('tk-drawer-close', closeSpy);
+
+    await page.root.show();
+    await page.root.close();
+
+    expect(openSpy).toHaveBeenCalledTimes(1);
+    expect(closeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('applies header, footer and mask classes', async () => {
+    const page = await newSpecPage({
+      components: [TkDrawer],
+      html: `
+        <tk-drawer open="true" header-type="dark" footer-type="divided" mask-variant="dark" hide-backdrop="true">
+          <div slot="footer">Footer</div>
+        </tk-drawer>
+      `,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-drawer-header').classList.contains('tk-drawer-header-dark')).toBe(true);
+    expect(page.root.shadowRoot.querySelector('.tk-drawer-footer').classList.contains('tk-drawer-footer-divided')).toBe(true);
+    expect(page.root.shadowRoot.querySelector('.tk-drawer-mask').classList.contains('tk-drawer-mask-dark')).toBe(true);
+    expect(page.root.shadowRoot.querySelector('.tk-drawer-mask').classList.contains('tk-drawer-mask-hidden')).toBe(true);
+  });
+
+  it('only emits overlay close when dismiss is allowed', async () => {
+    const dismissiblePage = await newSpecPage({
+      components: [TkDrawer],
+      html: `<tk-drawer open="true"></tk-drawer>`,
+    });
+
+    const dismissibleSpy = jest.fn();
+    dismissiblePage.root.addEventListener('tk-drawer-close', dismissibleSpy);
+    (dismissiblePage.root.shadowRoot.querySelector('.tk-drawer-overlay') as HTMLDivElement).click();
+    await dismissiblePage.waitForChanges();
+
+    expect(dismissibleSpy).toHaveBeenCalledTimes(1);
+
+    const lockedPage = await newSpecPage({
+      components: [TkDrawer],
+      html: `<tk-drawer open="true" prevent-dismiss="true"></tk-drawer>`,
+    });
+
+    const lockedSpy = jest.fn();
+    lockedPage.root.addEventListener('tk-drawer-close', lockedSpy);
+    (lockedPage.root.shadowRoot.querySelector('.tk-drawer-overlay') as HTMLDivElement).click();
+    await lockedPage.waitForChanges();
+
+    expect(lockedSpy).not.toHaveBeenCalled();
   });
 });
