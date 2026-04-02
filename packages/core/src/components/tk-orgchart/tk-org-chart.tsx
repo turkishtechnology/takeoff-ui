@@ -216,6 +216,7 @@ export class TkOrgChart implements ComponentInterface {
   private defaultNodeHTML(d: OrgChartRenderNode) {
     const nameCol = '#222530';
     const titleCol = '#99A0AE';
+    const fontFamily = this.el.closest('.tk-font, [data-tk-font="true"]') ? 'tk-text' : 'Geologica';
 
     return `
       <div style="
@@ -226,8 +227,7 @@ export class TkOrgChart implements ComponentInterface {
       flex-direction: column;
       align-items: center;
       text-align: center;
-      font-family: tk-text, sans-serif";
-      >
+      font-family: ${fontFamily}>
         <div style="
   width: 32px;
   height: 32px;
