@@ -1,7 +1,7 @@
 import { Component, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
 import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
-import { IStep, IStepClickDetail } from './interfaces';
+import { IStep, IStepClickDetail } from './types';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import type { CSSStyleProperties } from '../../global/types';
 import { getIconElementProps } from '../../utils/icon-utils';

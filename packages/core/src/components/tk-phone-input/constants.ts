@@ -1,4 +1,4 @@
-import { ICountry } from './interfaces';
+import { ICountry } from './types';
 
 /**
  * Default list of countries with their dialing codes and masks

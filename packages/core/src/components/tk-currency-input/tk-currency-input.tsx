@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getIconElementProps } from '../../utils/icon-utils';
-import type { Separator, ICurrency, CurrencyInputChangeEvent } from './interfaces';
+import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
@@ -226,6 +226,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Update the component when properties change.
    */
   componentDidUpdate() {
+    // Handle separator changes
+    this.updateDisplayValue();
+
+    // Handle dropdown positioning
     if (this.isDropdownOpen) {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
