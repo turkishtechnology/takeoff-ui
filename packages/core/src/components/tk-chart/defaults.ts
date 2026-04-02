@@ -14,10 +14,10 @@ export const DEFAULT_CHART_OPTIONS: ChartOptions<ChartType> = {
     tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       bodyFont: {
-        family: 'tk-text',
+        family: 'var(--family-body)',
       },
       titleFont: {
-        family: 'tk-display',
+        family: 'var(--family-title)',
       },
     },
   },
@@ -38,7 +38,7 @@ export const BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
     x: {
       ticks: {
         color: '#525866',
-        font: { family: 'tk-text', size: 12 },
+        font: { family: 'var(--family-body)', size: 12 },
       },
     },
     y: {
@@ -48,7 +48,7 @@ export const BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
       },
       ticks: {
         color: '#525866',
-        font: { family: 'tk-text', size: 12 },
+        font: { family: 'var(--family-body)', size: 12 },
       },
     },
   },
@@ -73,13 +73,13 @@ export const HORIZONTAL_BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
       },
       ticks: {
         color: '#525866',
-        font: { family: 'tk-text', size: 12 },
+        font: { family: 'var(--family-body)', size: 12 },
       },
     },
     y: {
       ticks: {
         color: '#525866',
-        font: { family: 'tk-text', size: 12 },
+        font: { family: 'var(--family-body)', size: 12 },
       },
     },
   },
@@ -102,7 +102,7 @@ export const PIE_CHART_OPTIONS: ChartOptions<'pie'> = {
       display: true,
       position: 'bottom',
       labels: {
-        font: { family: 'tk-text', size: 12 },
+        font: { family: 'var(--family-body)', size: 12 },
       },
     },
     tooltip: {
