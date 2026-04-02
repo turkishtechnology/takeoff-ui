@@ -37,6 +37,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--tree-gap, 2px);
+    font-family: var(--family-body);
   }
 
   &.node {

@@ -11,9 +11,9 @@
   border: 1px solid var(--border-light);
   border-radius: var(--radius-m-base);
   background: var(--static-white);
-  font-family: inherit;
   font-size: var(--desktop-body-s-size);
   color: var(--text-darkest);
+  font-family: var(--family-body);
 }
 
 // ---------------------------------------------------------------------------

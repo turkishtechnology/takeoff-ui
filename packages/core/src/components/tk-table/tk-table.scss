@@ -42,6 +42,7 @@
           border: none;
 
           th {
+            font-family: var(--family-body);
             font-size: var(--desktop-body-s-size);
             color: var(--text-darkest);
             text-align: left;
@@ -175,6 +176,7 @@
           border: none;
           border-bottom: 1px solid var(--border-light);
           td {
+            font-family: var(--family-body);
             font-size: var(--desktop-body-s-size);
             color: var(--text-dark);
             font-weight: 400;
