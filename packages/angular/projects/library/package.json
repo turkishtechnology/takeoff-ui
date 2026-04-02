@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/angular",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "scripts": {
     "build": "ng-packagr -p ng-package.json"
   },
@@ -37,7 +37,7 @@
   "publishConfig": {
     "access": "public",
     "dependencies": {
-      "@takeoff-ui/core": "^0.10.2"
+      "@takeoff-ui/core": "^0.10.3"
     }
   },
   "sideEffects": false,
