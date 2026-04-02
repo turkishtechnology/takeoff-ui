@@ -32,7 +32,7 @@ const Plugin = () => {
       // label
       const label = selected !== null ? chart.data.labels[selected] : 'Total';
       // font
-      ctx.font = 'bold 22px tk-text, sans-serif';
+      ctx.font = 'bold 22px Geologica, sans-serif';
       // text align
       ctx.textAlign = 'center';
       // text baseline
@@ -43,7 +43,7 @@ const Plugin = () => {
       ctx.fillText(String(value), width / 2, height / 2.1);
 
       //label
-      ctx.font = '15px tk-text, sans-serif';
+      ctx.font = '15px Geologica, sans-serif';
       // fill style
       ctx.fillStyle = '#99A0AE';
       // fill text
@@ -112,12 +112,12 @@ const centerTextPlugin = {
         const selected = chart.options.plugins?.centerText?.selectedIndex ?? null;
         const value = selected !== null ? data[selected] : total;
         const label = selected !== null ? chart.data.labels[selected] : 'Total';
-        ctx.font = 'bold 22px tk-text, sans-serif';
+        ctx.font = 'bold 22px Geologica, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#222530';
         ctx.fillText(String(value), width / 2, height / 2.1);
-        ctx.font = '15px tk-text, sans-serif';
+        ctx.font = '15px Geologica, sans-serif';
         ctx.fillStyle = '#99A0AE';
         ctx.fillText(label, width / 2, height / 1.9);
         ctx.restore();
@@ -200,12 +200,12 @@ const centerTextPlugin = {
     const selected = chart.options.plugins?.centerText?.selectedIndex ?? null
     const value = selected !== null ? data[selected] : total
     const label = selected !== null ? chart.data.labels[selected] : 'Total'
-    ctx.font = 'bold 22px tk-text, sans-serif'
+    ctx.font = 'bold 22px Geologica, sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = '#222530'
     ctx.fillText(String(value), width / 2, height / 2.1)
-    ctx.font = '15px tk-text, sans-serif'
+    ctx.font = '15px Geologica, sans-serif'
     ctx.fillStyle = '#99A0AE'
     ctx.fillText(label, width / 2, height / 1.9)
     ctx.restore()
