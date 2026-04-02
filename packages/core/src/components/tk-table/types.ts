@@ -6,7 +6,8 @@ import { ITreeItem } from '../tk-treeview/types';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 type TableFilterValue = ITableFilter['value'];
-type TableRowData = Record<string, unknown>;
+export type TableRowData = Record<string, unknown>;
+export type TableSelection = TableRowData | TableRowData[];
 type TableSorter = (a: TableRowData, b: TableRowData) => number;
 type TableFilterFn = (value: TableFilterValue, row: TableRowData) => boolean | undefined;
 type TableHeaderRenderer = () => string | HTMLElement;

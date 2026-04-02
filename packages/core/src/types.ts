@@ -22,8 +22,14 @@ export type { IAlertActionButton } from './components/tk-alert/types';
 // tk-breadcrumb
 export type { IBreadcrumbModel } from './components/tk-breadcrumb/types';
 
+// tk-card
+export type { TkAvatarProps } from './components/tk-card/types';
+
 // tk-chips
-export type { IChipOptions } from './components/tk-chips/types';
+export type { IChipOptions, TkChipsValue } from './components/tk-chips/types';
+
+// tk-dropdown
+export type { TkDropdownGroup, TkDropdownOption } from './components/tk-dropdown/types';
 
 // tk-currency-input
 export type { ICurrency, CurrencyInputChangeEvent, Separator } from './components/tk-currency-input/types';
@@ -51,10 +57,19 @@ export type {
 } from './components/tk-gantt-chart/types';
 
 // tk-input
-export type { IInputMaskOptions } from './components/tk-input/types';
+export type { IInputMaskOptions, TkInputChipItem, TkInputValue } from './components/tk-input/types';
+
+// tk-org-chart
+export type { OrgChartNode } from './components/tk-orgchart/types';
 
 // tk-phone-input
 export type { ICountry, IPhoneInputValue } from './components/tk-phone-input/types';
+
+// tk-radio
+export type { TkRadioValue } from './components/tk-radio/types';
+
+// tk-select
+export type { TkSelectFilter, TkSelectOption, TkSelectOptionPredicate, TkSelectOptionRenderer, TkSelectPanelRenderer, TkSelectValue } from './components/tk-select/types';
 
 // tk-stepper
 export type { IStep, IStepClickDetail } from './components/tk-stepper/types';
@@ -70,6 +85,8 @@ export type {
   ITableExportOptions,
   ITableExportExcelColumn,
   ITableGroup,
+  TableRowData,
+  TableSelection,
 } from './components/tk-table/types';
 
 // tk-timeline
@@ -77,3 +94,6 @@ export type { ITimelineItem } from './components/tk-timeline/types';
 
 // tk-treeview
 export type { ITreeItem } from './components/tk-treeview/types';
+
+// tk-toggle-button
+export type { TkToggleButtonValue, TkToggleEventDetail } from './components/tk-toggle-button/types';

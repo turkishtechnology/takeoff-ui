@@ -1,4 +1,7 @@
 /** See cleave.js documentation https://nosir.github.io/cleave.js */
+export type TkInputChipItem = string | number | boolean | Record<string, unknown>;
+export type TkInputValue = string | string[] | number | TkInputChipItem[] | null;
+
 export interface IInputMaskOptions {
   backspace?: boolean;
   blocks?: number[];

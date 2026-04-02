@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Element, Prop, State, Watch, Event, Even
 import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
-import type { TkRadioValue } from '../tk-radio';
+import type { TkRadioValue } from '../types';
 import { renderHint } from '../../../utils/hint-utils';
 
 @Component({

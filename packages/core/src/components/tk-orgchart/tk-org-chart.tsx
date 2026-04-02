@@ -1,15 +1,7 @@
 import { Component, Element, Prop, Method, Watch, State, Event, EventEmitter, ComponentInterface } from '@stencil/core';
 import { merge } from 'lodash-es';
 import { OrgChart, type LayoutBinding, type NodeId, type State as OrgChartState } from 'd3-org-chart';
-
-export interface OrgChartNode {
-  id?: NodeId;
-  parentId?: NodeId | null;
-  name?: string;
-  title?: string;
-  children?: OrgChartNode[];
-  [key: string]: unknown;
-}
+import type { OrgChartNode } from './types';
 
 type OrgChartRenderNode = Parameters<OrgChartState<OrgChartNode>['nodeContent']>[0];
 type OrgChartLayoutNode = Parameters<LayoutBinding<OrgChartNode>['buttonY']>[0] & { _children?: Array<unknown> };

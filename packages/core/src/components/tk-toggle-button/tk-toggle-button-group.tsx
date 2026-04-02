@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
-import type { TkToggleButtonValue, TkToggleEventDetail } from './tk-toggle-button';
+import type { TkToggleButtonValue, TkToggleEventDetail } from './types';
 
 /**
  * TkToggleButtonGroup is a component that allows you to create a group of toggle buttons.

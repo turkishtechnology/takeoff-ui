@@ -1,8 +1,7 @@
 import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, AttachInternals, Host, State } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-
-export type TkRadioValue = string | number | boolean | Record<string, unknown> | null;
+import type { TkRadioValue } from './types';
 
 /**
  * The TkRadio component is another basic element for user input. You can use this to supply a way for the user to pick an option from multiple choices.

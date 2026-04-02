@@ -8,18 +8,13 @@ import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import type { TkSelectFilter, TkSelectOption, TkSelectOptionPredicate, TkSelectOptionRenderer, TkSelectPanelRenderer, TkSelectValue } from './types';
 
-export type TkSelectOption = string | number | boolean | Record<string, unknown>;
-export type TkSelectValue = TkSelectOption | TkSelectOption[] | null;
 type TkSelectEventPathElement = EventTarget & {
   classList?: DOMTokenList;
   tagName?: string;
   icon?: string;
 };
-export type TkSelectFilter = (text: string | null | undefined, options: TkSelectOption[]) => Promise<TkSelectOption[]> | TkSelectOption[];
-export type TkSelectOptionRenderer = (item: TkSelectOption) => string;
-export type TkSelectOptionPredicate = (item: TkSelectOption) => boolean;
-export type TkSelectPanelRenderer = () => string | HTMLElement;
 
 /**
  * TkSelect component description.

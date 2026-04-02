@@ -2,9 +2,7 @@ import { Component, ComponentInterface, Element, Prop, Event, EventEmitter } fro
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
-
-export type TkToggleButtonValue = string | number | boolean | Record<string, unknown> | null;
-export type TkToggleEventDetail = { value?: TkToggleButtonValue; selected: boolean };
+import type { TkToggleButtonValue, TkToggleEventDetail } from './types';
 
 @Component({
   tag: 'tk-toggle-button',

@@ -3,7 +3,7 @@ import type { JSX } from '@stencil/core';
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
-import { IInputMaskOptions } from './types';
+import type { IInputMaskOptions, TkInputChipItem, TkInputValue } from './types';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { isEqual, isNil } from 'lodash-es';
 import { CleaveOptions } from 'cleave.js/options';
@@ -11,9 +11,6 @@ import { IChipOptions } from '../tk-chips/types';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { renderHint } from '../../utils/hint-utils';
-
-export type TkInputChipItem = string | number | boolean | Record<string, unknown>;
-export type TkInputValue = string | string[] | number | TkInputChipItem[] | null;
 
 /**
  * The TkInput component is used to capture text input from the user.

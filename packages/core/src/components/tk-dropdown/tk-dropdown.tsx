@@ -3,9 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-
-export type TkDropdownOption = string | number | boolean | Record<string, unknown>;
-export type TkDropdownGroup = Record<string, unknown>;
+import type { TkDropdownGroup, TkDropdownOption } from './types';
 
 /**
  * TkDropdown creates a dropdown with a trigger element. Items in the options prop can be listed and templated.

@@ -23,14 +23,3 @@ import { TkBadge } from '@takeoff-ui/react';
 | fit         | <code>fit() =\> Promise\<void\></code>                  | Fit chart to screen              |
 | getOrgChart | <code>getOrgChart() =\> Promise\<unknown\></code>       | Get the chart instance           |
 | refresh     | <code>refresh() =\> Promise\<void\></code>              | Refresh the chart                |
-
-```typescript
-interface OrgChartNode {
-  id?: NodeId;
-  parentId?: NodeId | null;
-  name?: string;
-  title?: string;
-  children?: OrgChartNode[];
-  [key: string]: unknown;
-}
-```

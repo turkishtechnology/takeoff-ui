@@ -8,6 +8,7 @@
  * to consume components of this package as outlined in the `README.md`.
  */
 export type { Components, JSX } from './components';
+export type * from './events';
 export * from './utils/toaster';
 
 export type { CSSStyleProperties } from './global/types';
