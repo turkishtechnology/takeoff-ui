@@ -73,6 +73,12 @@ export class TkChips implements ComponentInterface {
   @Prop() value: TkChipsValue;
 
   /**
+   * The position of the icon relative to the label.
+   * @defaultValue 'left'
+   */
+  @Prop() iconPosition: 'left' | 'right' = 'left';
+
+  /**
    * Custom style to apply to the chip component.
    */
   @Prop() containerStyle?: CSSStyleProperties = null;
@@ -109,11 +115,15 @@ export class TkChips implements ComponentInterface {
       removable: this.removable,
       disabled: this.disabled,
     });
-    const { leftIcon, rightIcon } = renderIcons(this.icon, {
-      variant: this.variant,
-      size: this.size === 'large' ? 'medium' : this.size,
-      additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined },
-    });
+    const { leftIcon, rightIcon } = renderIcons(
+      this.icon,
+      {
+        variant: this.variant,
+        size: this.size === 'large' ? 'medium' : this.size,
+        additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined },
+      },
+      this.iconPosition,
+    );
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
