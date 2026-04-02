@@ -43,6 +43,25 @@ yarn add @takeoff-ui/core @takeoff-ui/react @takeoff-ui/vue @takeoff-ui/angular
 After installing, import the core CSS and register the component library for
 your framework of choice.
 
+## Typography Defaults
+
+Takeoff UI uses `Geologica` as the default font family.
+
+If you want to use Takeoff custom fonts (`tk-text` / `tk-display`) instead,
+enable them with an opt-in class or data attribute:
+
+```html
+<body class="tk-font">
+  <!-- app -->
+</body>
+```
+
+```html
+<body data-tk-font="true">
+  <!-- app -->
+</body>
+```
+
 ### React
 
 Add the core stylesheet in your entry point (e.g. `src/main.tsx`):

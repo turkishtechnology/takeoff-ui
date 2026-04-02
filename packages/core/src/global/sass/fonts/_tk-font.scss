@@ -3,12 +3,18 @@
   src:
     url('./assets/fonts/tk-text/tk-text.woff2') format('woff2'),
     url('./assets/fonts/tk-text/tk-text.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: 'tk-display';
   src:
     url('./assets/fonts/tk-display/tk-display.woff2') format('woff2'),
     url('./assets/fonts/tk-display/tk-display.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 .tk-text {
@@ -19,6 +25,10 @@
   font-family: 'tk-display', sans-serif;
 }
 
-* {
-  font-family: 'tk-text', sans-serif;
+.tk-font,
+[data-tk-font='true'] {
+  --family-title: 'tk-display', sans-serif;
+  --family-label: 'tk-text', sans-serif;
+  --family-body: 'tk-text', sans-serif;
+  --family-subheading: 'tk-text', sans-serif;
 }

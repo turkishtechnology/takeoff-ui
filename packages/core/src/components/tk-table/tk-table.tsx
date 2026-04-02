@@ -9,6 +9,8 @@ import ExcelJs from 'exceljs';
 import { getIconElementProps } from '../../utils/icon-utils';
 import '../../global/sass/fonts/tk-font/tk-text-regular';
 import '../../global/sass/fonts/tk-font/tk-text-bold';
+import '../../global/sass/fonts/geologica/geologica-regular';
+import '../../global/sass/fonts/geologica/geologica-bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
@@ -471,6 +473,8 @@ export class TkTable implements ComponentInterface {
 
     if (options.type == 'pdf') {
       const doc = new jsPDF(options.orientation === 'horizontal' ? 'l' : 'p');
+      const isTkFontMode = Boolean(this.el.closest('.tk-font, [data-tk-font="true"]'));
+      const pdfFontFamily = isTkFontMode ? 'tk-text' : 'Geologica';
 
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
@@ -487,7 +491,7 @@ export class TkTable implements ComponentInterface {
         // styles: { halign: 'center', fontSize: 10 },
         headStyles: { fillColor: [201, 0, 25], fontStyle: 'bold' },
         bodyStyles: { fontStyle: 'normal' },
-        styles: { font: 'tk-text' },
+        styles: { font: pdfFontFamily },
       });
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
