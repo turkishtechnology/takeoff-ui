@@ -12,7 +12,7 @@ import {
   GanttWeekStartDay,
   GanttTooltipFunction,
   GanttTaskBarFunction,
-} from './interfaces';
+} from './types';
 import { DEFAULT_COLUMNS, DEFAULT_ROW_HEIGHT, DEFAULT_PANEL_WIDTH, DEFAULT_HEADER_HEIGHT, DEFAULT_WEEK_START_DAY, VIEW_TYPE_DAY_WIDTH } from './defaults';
 import {
   autoFitViewType,

@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, ComponentInterface, EventEmitter } from '@stencil/core';
+import { Component, Prop, Element, Event, ComponentInterface, EventEmitter, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
@@ -78,6 +78,12 @@ export class TkChips implements ComponentInterface {
   @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
+   * If true, the chip will take the full width of its container.
+   * @defaultValue false
+   */
+  @Prop() fullWidth: boolean = false;
+
+  /**
    * When an element is deleted, it is triggered. It returns the label.
    */
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<TkChipsValue>;
@@ -110,23 +116,25 @@ export class TkChips implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} style={this.containerStyle}>
-        {leftIcon}
-        {this.label}
-        {rightIcon}
-        {this.removable && (
-          <tk-icon
-            {...getIconElementProps('close', {
-              variant: this.variant,
-              color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined,
-              size: this.size === 'large' ? 'medium' : this.size,
-              onClick: () => this.handleClick(),
-              onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
-              tabIndex: this.disabled ? -1 : 0,
-            })}
-          />
-        )}
-      </div>
+      <Host class={{ 'full-width': this.fullWidth }}>
+        <div class={rootClasses} style={this.containerStyle}>
+          {leftIcon}
+          {this.label}
+          {rightIcon}
+          {this.removable && (
+            <tk-icon
+              {...getIconElementProps('close', {
+                variant: this.variant,
+                color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined,
+                size: this.size === 'large' ? 'medium' : this.size,
+                onClick: () => this.handleClick(),
+                onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
+                tabIndex: this.disabled ? -1 : 0,
+              })}
+            />
+          )}
+        </div>
+      </Host>
     );
   }
 }

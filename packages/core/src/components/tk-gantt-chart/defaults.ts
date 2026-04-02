@@ -1,4 +1,4 @@
-import { IGanttColumn, GanttWeekStartDay } from './interfaces';
+import { IGanttColumn, GanttWeekStartDay } from './types';
 
 /** Default row height in pixels. */
 export const DEFAULT_ROW_HEIGHT = 40;

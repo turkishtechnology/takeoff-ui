@@ -2,6 +2,14 @@
   display: inline-flex;
 }
 
+:host(.full-width) {
+  width: 100%;
+
+  .tk-chips {
+    width: 100%;
+  }
+}
+
 .tk-chips {
   font-family: var(--family-body);
   display: inline-flex;
@@ -34,7 +42,7 @@
     color: var(--primary-base);
 
     &.filled {
-      color: var(--text-lightest);
+      color: var(--static-white);
       background-color: var(--primary-base);
 
       &:hover {

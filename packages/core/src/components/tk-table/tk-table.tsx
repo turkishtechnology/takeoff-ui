@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -15,7 +15,7 @@ import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-import { ITreeItem } from '../tk-treeview/interfaces';
+import { ITreeItem } from '../tk-treeview/types';
 
 export type TableRowData = Record<string, unknown>;
 export type TableSelection = TableRowData | TableRowData[];
@@ -2241,7 +2241,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    color: 'var(--icon-darkest)',
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
                     ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
@@ -2251,7 +2251,7 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  color: 'var(--icon-darkest)',
+                  color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
                   ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
@@ -2272,7 +2272,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    color: 'var(--icon-darkest)',
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
                     ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}

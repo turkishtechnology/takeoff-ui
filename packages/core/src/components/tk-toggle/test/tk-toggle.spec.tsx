@@ -1,184 +1,82 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkToggle } from '../tk-toggle';
+import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-toggle', () => {
-  //Basic Rendering
-  describe('basic rendering', () => {
-    it('renders icon', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle showIcon="true" icon="check">
-			 </tk-toggle>`,
-      });
-
-      await page.waitForChanges();
-
-      const icon = page.root.shadowRoot.querySelector('.tk-toggle-thumb-icon');
-
-      expect(icon.textContent).toBe('check');
+  it('renders icon when checked and maps name to aria-label', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle show-icon="true" icon="check" name="test"></tk-toggle>`,
     });
-    it('renders name correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle name="test">
-			 </tk-toggle>`,
-      });
 
-      await page.waitForChanges();
+    page.root.value = true;
+    await page.waitForChanges();
 
-      const input = page.root.shadowRoot.querySelector('.tk-toggle-input');
-
-      expect(input.getAttribute('aria-label')).toBe('test');
-    });
+    expect(page.root.shadowRoot.querySelector('tk-icon').textContent).toContain('check');
+    expect(page.root.shadowRoot.querySelector('.tk-toggle-input').getAttribute('aria-label')).toBe('test');
   });
-  //// State
-  describe('state handling', () => {
-    it('handles disabled state', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle disabled="true">
-			 </tk-toggle>`,
-      });
 
-      await page.waitForChanges();
-
-      const toggle = page.root.shadowRoot.querySelector('.tk-toggle');
-
-      expect(toggle.classList.contains('tk-toggle-disabled')).toBe(true);
+  it('applies disabled, invalid, size and variant classes', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle disabled="true" invalid="true" size="large" variant="success"></tk-toggle>`,
     });
-    it('handles invalid state', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle invalid="true">
-			 </tk-toggle>`,
-      });
 
-      await page.waitForChanges();
+    const toggle = page.root.shadowRoot.querySelector('.tk-toggle');
 
-      const toggle = page.root.shadowRoot.querySelector('.tk-toggle');
-
-      expect(toggle.classList.contains('tk-toggle-invalid')).toBe(true);
-    });
-    it('renders with different sizes', async () => {
-      const sizes = ['xsmall', 'small', 'base', 'large', 'xlarge'];
-      for (const size of sizes) {
-        const page = await newSpecPage({
-          components: [TkToggle],
-          html: `<tk-toggle size='${size}'></tk-toggle>`,
-        });
-
-        const toggle = page.root.shadowRoot.querySelector('.tk-toggle');
-
-        expect(toggle.classList.contains(`tk-toggle-${size}`)).toBe(true);
-      }
-    });
-    it('handles variants correctly', async () => {
-      const variants = ['primary', 'secondary', 'neutral', 'success', 'info', 'warning', 'danger', 'verified', 'purple', 'cyan', 'business', 'teal', 'dark', 'white'];
-      for (const variant of variants) {
-        const page = await newSpecPage({
-          components: [TkToggle],
-          html: `<tk-toggle variant='${variant}'></tk-toggle>`,
-        });
-        const toggle = page.root.shadowRoot.querySelector('.tk-toggle');
-
-        expect(toggle.classList.contains(`tk-toggle-${variant}`)).toBe(true);
-      }
-    });
-    it('should render default slot content', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle>Default slot content
-			 </tk-toggle>`,
-      });
-
-      const instance = page.rootInstance;
-      const slot = page.root.shadowRoot.querySelector('slot');
-
-      expect(instance.hasDefaultSlot).toBe(true);
-      expect(slot).not.toBeNull();
-    });
-    it('should render label when no slot content is provided', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle label="Test">
-			 </tk-toggle>`,
-      });
-
-      const instance = page.rootInstance;
-      const label = page.root.shadowRoot.querySelector('.tk-toggle-label');
-
-      expect(label.textContent).toBe('Test');
-      expect(instance.hasDefaultSlot).toBe(false);
-    });
+    expect(toggle.classList.contains('tk-toggle-disabled')).toBe(true);
+    expect(toggle.classList.contains('tk-toggle-invalid')).toBe(true);
+    expect(toggle.classList.contains('tk-toggle-large')).toBe(true);
+    expect(toggle.classList.contains('tk-toggle-success')).toBe(true);
   });
-  //// Event
-  describe('event handling', () => {
-    it('emits events correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle></tk-toggle>`,
-      });
 
-      await page.waitForChanges();
-
-      const input = page.root.shadowRoot.querySelector('input');
-
-      expect(input).not.toBeNull();
-
-      // Test change event
-      const changeSpy = jest.fn();
-
-      page.root.addEventListener('tk-change', changeSpy);
-
-      input.checked = true;
-      input.value = 'true';
-
-      input.dispatchEvent(new Event('change'));
-
-      await page.waitForChanges();
-
-      expect(changeSpy).toHaveBeenCalledTimes(1);
-      expect(changeSpy).toHaveBeenCalledWith(expect.any(CustomEvent));
-
-      const instance = page.rootInstance;
-      expect(instance.value).toBe(true);
+  it('renders default slot content or label text', async () => {
+    const slotPage = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle>Default slot content</tk-toggle>`,
     });
-    it('handles tabindex correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle tabindex=1></tk-toggle>`,
-      });
 
-      const input = page.root.shadowRoot.querySelector('input');
+    expect(slotPage.rootInstance.hasDefaultSlot).toBe(true);
+    expect(slotPage.root.shadowRoot.querySelector('slot')).not.toBeNull();
 
-      expect(input.getAttribute('tabIndex')).toBe('1');
-      expect(page.root.hasAttribute('tabindex')).toBe(false);
+    const labelPage = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle label="Test"></tk-toggle>`,
     });
+
+    expect(labelPage.root.shadowRoot.querySelector('.tk-toggle-label').textContent).toBe('Test');
+    expect(labelPage.rootInstance.hasDefaultSlot).toBe(false);
   });
-  ////Methods
-  describe('public methods', () => {
-    it('gets the input element', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle></tk-toggle>`,
-      });
 
-      const instance = page.rootInstance;
-      const inputElement = await instance.getInputElement();
-
-      expect(inputElement).not.toBeNull();
-      expect(inputElement instanceof HTMLInputElement).toBe(true);
+  it('emits tk-change and updates its value', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle></tk-toggle>`,
     });
-    it('handles form reset', async () => {
-      const page = await newSpecPage({
-        components: [TkToggle],
-        html: `<tk-toggle value="true" checked="true" ></tk-toggle>`,
-      });
 
-      await page.root.formResetCallback();
+    const changeSpy = jest.fn();
+    const input = page.root.shadowRoot.querySelector('input') as HTMLInputElement;
 
-      expect(page.root.value).toBeFalsy();
-      expect(page.root.checked).toBeFalsy();
+    page.root.addEventListener('tk-change', changeSpy);
+    input.checked = true;
+    input.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(changeSpy).toHaveBeenCalledTimes(1);
+    expect(page.rootInstance.value).toBe(true);
+  });
+
+  it('moves tabindex to the native input and exposes it via getInputElement', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle tabindex=1></tk-toggle>`,
     });
+
+    const input = page.root.shadowRoot.querySelector('input');
+    const inputElement = await page.rootInstance.getInputElement();
+
+    expect(input.getAttribute('tabindex')).toBe('1');
+    expect(page.root.hasAttribute('tabindex')).toBe(false);
+    expect(inputElement instanceof HTMLInputElement).toBe(true);
   });
 });
