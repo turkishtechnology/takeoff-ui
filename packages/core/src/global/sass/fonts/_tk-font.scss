@@ -17,7 +17,8 @@
   font-display: swap;
 }
 
-.tk-text {
+.tk-text,
+.tk-font {
   font-family: 'tk-text', sans-serif;
 }
 
@@ -25,6 +26,8 @@
   font-family: 'tk-display', sans-serif;
 }
 
+:root.tk-font,
+:root[data-tk-font='true'],
 .tk-font,
 [data-tk-font='true'] {
   --family-title: 'tk-display', sans-serif;

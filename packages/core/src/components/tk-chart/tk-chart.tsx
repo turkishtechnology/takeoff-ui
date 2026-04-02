@@ -124,12 +124,8 @@ export class TkChart implements ComponentInterface {
     }
   }
 
-  private getChartFontFamily() {
-    return this.el.closest('.tk-font, [data-tk-font="true"]') ? 'tk-text' : 'Geologica';
-  }
-
   private mergeOptions() {
-    const typeDefaults = getDefaultOptionsForType(this.type, this.getChartFontFamily());
+    const typeDefaults = getDefaultOptionsForType(this.type);
     // Merge with user options
     this.internalOptions = merge({}, typeDefaults, this.options);
   }
