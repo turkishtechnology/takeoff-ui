@@ -80,7 +80,7 @@ function Chart() {
       // label
       const label = selected !== null ? chart.data.labels[selected] : 'Total';
       // font
-      ctx.font = 'bold 22px tk-text, sans-serif';
+      ctx.font = 'bold 22px Geologica, sans-serif';
       // text align
       ctx.textAlign = 'center';
       // text baseline
@@ -91,7 +91,7 @@ function Chart() {
       ctx.fillText(`${value}`, width / 2, height / 2.1);
 
       //label
-      ctx.font = '15px tk-text, sans-serif';
+      ctx.font = '15px Geologica, sans-serif';
       // fill style
       ctx.fillStyle = '#99A0AE';
       // fill text
