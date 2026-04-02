@@ -8,6 +8,7 @@
   border-radius: 16px;
   border: 1px solid var(--border-light);
   box-shadow: var(--effect-1-default-base);
+  font-family: var(--family-body);
 
   &.has-hover-shadow {
     &:hover {

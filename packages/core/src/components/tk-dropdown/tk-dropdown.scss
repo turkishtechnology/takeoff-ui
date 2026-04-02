@@ -19,6 +19,7 @@ tk-dropdown {
     border: 1px solid var(--border-light);
     background: var(--static-light);
     box-shadow: var(--effect-1-default-sm);
+    font-family: var(--family-body);
 
     .tk-dropdown-item-holder {
       margin: 8px;
