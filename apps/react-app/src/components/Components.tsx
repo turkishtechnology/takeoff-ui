@@ -140,6 +140,9 @@ function Components() {
         <Link to="gantt-chart" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
           Gantt Chart
         </Link>
+        <Link to="upload" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
+          Upload
+        </Link>
       </div>
     </TkCard>
   );
