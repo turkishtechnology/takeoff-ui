@@ -1,8 +1,8 @@
 import Variant from './Examples/Variant';
 import Type from './Examples/Type';
+import Mode from './Examples/Mode';
 import Size from './Examples/Size';
 import Icon from './Examples/Icon';
-import Mode from './Examples/Mode';
 import FullWidth from './Examples/FullWidth';
 import Playground from '../../components/Playground';
 import buttonConfigData from './buttonPlaygroundConfig.json';
@@ -28,6 +28,13 @@ This prop specifies the design type of the component. "filled", "outlined",
 
 <Type />
 
+## Mode
+
+The mode prop can be used to set the button's behavior. The available options
+are `button`, `link`, `submit`, and `reset`. The default value is `button`.
+
+<Mode />
+
 ## Size
 
 The "size" prop can be used with one of the sizes "small", "base", and "large".
@@ -41,13 +48,6 @@ It can be used with icons. You can also specify the icon direction. You should
 use Material Symbols icons.
 
 <Icon />
-
-## Mode
-
-The mode prop can be used to set the button's behavior. The available options
-are `button`, `link`, `submit`, and `reset`. The default value is `button`.
-
-<Mode />
 
 ## Full Width
 
