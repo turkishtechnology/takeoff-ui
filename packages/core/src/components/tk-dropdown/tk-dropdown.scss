@@ -22,7 +22,6 @@ tk-dropdown {
 
     .tk-dropdown-item-holder {
       margin: 8px;
-      max-height: 284px;
       overflow-y: auto;
       @include takeoff-scrollbar;
 
@@ -79,10 +78,12 @@ tk-dropdown {
   &.large {
     .tk-dropdown-panel {
       .tk-dropdown-item-holder {
+        max-height: 240px;
+
         .tk-dropdown-item {
           font-family: var(--body-m-base-font, Geologica);
-          font-size: var(--desktop-body-m-base-size, 16px);
-          line-height: var(--body-m-base-line-height, 24px);
+          font-size: var(--desktop-body-m-base-size);
+          line-height: var(--desktop-body-m-base-line-height);
           padding: 8px 8px;
         }
       }
@@ -92,10 +93,12 @@ tk-dropdown {
   &.base {
     .tk-dropdown-panel {
       .tk-dropdown-item-holder {
+        max-height: 216px;
+
         .tk-dropdown-item {
           font-family: var(--body-s-font, Geologica);
-          font-size: var(--desktop-body-s-size, 14px);
-          line-height: var(--body-s-line-height, 20px);
+          font-size: var(--desktop-body-s-size);
+          line-height: var(--desktop-body-s-line-height);
           padding: 8px 8px;
         }
       }
@@ -105,10 +108,12 @@ tk-dropdown {
   &.small {
     .tk-dropdown-panel {
       .tk-dropdown-item-holder {
+        max-height: 180px;
+
         .tk-dropdown-item {
           font-family: var(--body-xs-font, Geologica);
-          font-size: var(--desktop-body-xs-size, 12px);
-          line-height: var(--body-xs-line-height, 18px);
+          font-size: var(--desktop-body-xs-size);
+          line-height: var(--desktop-body-xs-line-height);
           padding: 6px 8px;
         }
       }
