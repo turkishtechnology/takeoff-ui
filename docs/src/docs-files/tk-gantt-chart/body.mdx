@@ -6,6 +6,13 @@ import NestedTasks from './Examples/NestedTasks';
 import Segments from './Examples/Segments';
 import Columns from './Examples/Columns';
 import HidePanel from './Examples/HidePanel';
+import Weekend from './Examples/Weekend';
+import TaskBarHtml from './Examples/TaskBarHtml';
+import TooltipHtml from './Examples/TooltipHtml';
+import Locale from './Examples/Locale';
+import SizingLayout from './Examples/SizingLayout';
+import WeekStartDay from './Examples/WeekStartDay';
+import SecondaryHeader from './Examples/SecondaryHeader';
 import Playground from '../../components/Playground';
 import ganttChartConfigData from './ganttChartPlaygroundConfig.json';
 import { TkGanttChart } from '@takeoff-ui/react';
@@ -76,3 +83,53 @@ Set `hidePanel` to `true` to hide the left-side task list panel and show only
 the timeline.
 
 <HidePanel />
+
+## Highlight Weekends
+
+The `highlightWeekends` prop visually distinguishes weekends on the timeline. It
+is set to `true` by default.
+
+<Weekend />
+
+## Custom Task Bar
+
+The `taskBarHtml` prop allows you to fully customize the content and style of
+each task bar.
+
+<TaskBarHtml />
+
+## Custom Tooltip
+
+With the `tooltipHtml` prop, you can pass custom HTML for tooltips when hovering
+over tasks.
+
+<TooltipHtml />
+
+## Locale
+
+The `locale` prop allows you to localize the Gantt chart content, such as months
+and days. In this example, it's set to `"tr-TR"` with Turkish task data.
+
+<Locale />
+
+## Sizing & Layout
+
+You can customize the structural dimensions of the Gantt chart using the
+`rowHeight` and `panelWidth` props.
+
+<SizingLayout />
+
+## Week Start Day
+
+By default, the Gantt chart starts the week on Monday (`1`). You can change this
+using the `weekStartDay` prop.
+
+<WeekStartDay />
+
+## Secondary Header Mode
+
+The `secondaryHeaderMode` prop configures the display format of the sub-header.
+In this example, the timeline is set to `monthly` with the secondary header
+showing `weeks`.
+
+<SecondaryHeader />
