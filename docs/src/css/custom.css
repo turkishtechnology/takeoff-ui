@@ -700,6 +700,44 @@ body {
   .page-header .container .description {
     width: 100%;
   }
+
+  .bg-point {
+    width: 300px;
+    height: 300px;
+  }
+
+  .section-image .holder {
+    max-height: 160px;
+  }
+
+  .section-image .holder .image {
+    height: 160px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .page-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header .container h1 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .bg-point {
+    width: 200px;
+    height: 200px;
+    filter: blur(100px);
+  }
+
+  .section-image .holder {
+    max-height: 120px;
+  }
+
+  .section-image .holder .image {
+    height: 120px;
+  }
 }
 
 .release-notes .release-item {

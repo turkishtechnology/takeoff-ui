@@ -34,7 +34,8 @@
 }
 
 .sectionDesc {
-  width: 540px;
+  max-width: 540px;
+  width: 100%;
   font-family: var(--desktop-body-s-font, Geologica), sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -47,13 +48,14 @@
   display: flex;
   gap: 24px;
   align-items: stretch;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  flex: 1 0 0;
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 0;
   border-radius: 16px;
   border: 1px solid var(--border-light, #e1e4ea);
   background: var(--static-light, white);
@@ -110,4 +112,32 @@
   border: 1px solid var(--surface-light, #f9fafc);
   color: var(--text-darkest, #222530);
   cursor: pointer;
+}
+
+@media screen and (max-width: 996px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .card {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .sectionTitle {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .sectionDesc {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .card {
+    flex: 1 1 100%;
+  }
 }

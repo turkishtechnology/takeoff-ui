@@ -22,7 +22,7 @@ export default function Contributors() {
           This project thrives thanks to the amazing efforts of our contributors. Every feature, fix, and idea is a testament to the power of collaboration. Thank you for helping
           us grow and improve! <a href="docs/CONTRIBUTING">Click here</a> to contribute.
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2" style={{ flexWrap: 'wrap' }}>
           {contributors.map(contributor => (
             <TkTooltip key={contributor.name} header={contributor.name} description={contributor.role} position="top" variant="dark">
               <TkAvatar image={contributor.image} size="base" rounded slot="trigger" />

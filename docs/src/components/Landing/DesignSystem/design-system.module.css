@@ -26,7 +26,8 @@
 .sectionTitle {
   display: flex;
   flex-direction: column;
-  width: 540px;
+  max-width: 540px;
+  width: 100%;
   font-family: var(--desktop-body-s-font, Geologica), sans-serif;
   font-size: 36px;
   line-height: 45px;
@@ -35,7 +36,8 @@
 }
 
 .sectionDesc {
-  width: 540px;
+  max-width: 540px;
+  width: 100%;
   font-family: var(--desktop-body-s-font, Geologica), sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -152,4 +154,80 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+@media (max-width: 996px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .cardsContainer {
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+  }
+
+  .imageContainer {
+    width: 100%;
+  }
+
+  .previewImage {
+    width: 45%;
+    height: auto;
+  }
+
+  .previewImage[data-position='first'] {
+    left: 2%;
+    top: 10%;
+  }
+
+  .previewImage[data-position='second'] {
+    left: 27%;
+    top: 25%;
+  }
+
+  .previewImage[data-position='third'] {
+    left: auto;
+    right: 2%;
+    top: 40%;
+  }
+}
+
+@media (max-width: 576px) {
+  .sectionTitle {
+    font-size: 28px;
+    line-height: normal;
+  }
+
+  .sectionDesc {
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  .imageContainer {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .card {
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  html[data-theme='dark'] .card {
+    background: rgba(0, 0, 0, 0.6);
+  }
 }
