@@ -52,3 +52,17 @@
     transition: none;
   }
 }
+
+@media screen and (max-width: 576px) {
+  .container {
+    font-size: 14px;
+  }
+
+  .slash {
+    font-size: 18px;
+  }
+
+  .ticker {
+    width: 64px;
+  }
+}

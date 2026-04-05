@@ -9,7 +9,7 @@
   display: flex;
   gap: 24px;
   align-items: stretch;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   max-width: 1320px;
   margin: 0 auto;
   padding: 0 16px;
@@ -18,7 +18,8 @@
 .feature {
   display: flex;
   flex-direction: column;
-  flex: 1 0 0;
+  flex: 1 1 calc(25% - 18px);
+  min-width: 0;
   border-radius: 16px;
   border: 1px solid var(--border-light);
   background: var(--static-light);
@@ -61,4 +62,16 @@
   line-height: 20px;
   font-weight: 300;
   margin: 0;
+}
+
+@media screen and (max-width: 996px) {
+  .feature {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .feature {
+    flex: 1 1 100%;
+  }
 }
