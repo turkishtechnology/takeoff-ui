@@ -15,8 +15,8 @@ const contributors = [
 
 export default function Contributors() {
   return (
-    <section>
-      <div className="container">
+    <section style={{ padding: '2rem 0' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 16px', width: '100%' }}>
         <h1>Contributors</h1>
         <p style={{ color: 'var(--text-base)' }}>
           This project thrives thanks to the amazing efforts of our contributors. Every feature, fix, and idea is a testament to the power of collaboration. Thank you for helping

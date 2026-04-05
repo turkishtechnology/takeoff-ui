@@ -26,7 +26,6 @@
 .sectionTitle {
   display: flex;
   flex-direction: column;
-  width: 540px;
   font-family: var(--desktop-body-s-font, Geologica), sans-serif;
   font-size: 36px;
   line-height: 45px;
@@ -44,23 +43,19 @@
   margin: 0;
 }
 
-.cardsContainer {
+.cardGrid {
   display: flex;
   gap: 24px;
-  align-items: center;
-  border-radius: 8px;
-  border: 1px solid var(--border-light, #e1e4ea);
-  background: var(--static-light, white);
-  width: 100%;
+  align-items: stretch;
+  flex-wrap: nowrap;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  width: 424px;
-  min-width: 424px;
-  height: 480px;
+  flex: 1 0 0;
   border-radius: 16px;
+  border: 1px solid var(--border-light, #e1e4ea);
   background: var(--static-light, white);
   overflow: hidden;
 }
@@ -69,30 +64,16 @@
   padding: 16px;
 }
 
-.figmaLogo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
+.iconFramework {
   height: 40px;
-  padding: 8px;
-  border-radius: 999px;
-  border: 1px solid var(--surface-light, #f9fafc);
-  background: var(--static-light, white);
-}
-
-.figmaLogo img {
-  width: 100%;
-  height: 100%;
+  width: 40px;
 }
 
 .cardBody {
   display: flex;
   flex-direction: column;
-  flex: 1;
   gap: 8px;
   padding: 16px;
-  justify-content: center;
 }
 
 .cardTitle {
@@ -112,44 +93,21 @@
   margin: 0;
 }
 
-.imageContainer {
-  flex: 1;
-  height: 480px;
-  overflow: hidden;
-  position: relative;
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
 }
 
-.previewImage {
-  position: absolute;
-  width: 436px;
-  height: 581px;
+.arrowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
-  border: 1px solid var(--border-light, #e1e4ea);
-  box-shadow: 0 0 20px 3px rgba(82, 88, 102, 0.08);
-  overflow: hidden;
-}
-
-.previewImage[data-position='first'] {
-  left: 16px;
-  top: 47px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 0;
-}
-
-.previewImage[data-position='second'] {
-  left: 218px;
-  top: 115px;
-}
-
-.previewImage[data-position='third'] {
-  right: 16px;
-  top: 183px;
-}
-
-.previewImage img {
-  width: 100%;
-  height: auto;
-  display: block;
+  border: 1px solid var(--surface-light, #f9fafc);
+  color: var(--text-darkest, #222530);
+  cursor: pointer;
 }
