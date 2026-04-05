@@ -109,7 +109,7 @@
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  border: 1px solid var(--surface-light, #f9fafc);
+  border: 1px solid var(--border-lightest);
   color: var(--text-darkest, #222530);
   cursor: pointer;
 }

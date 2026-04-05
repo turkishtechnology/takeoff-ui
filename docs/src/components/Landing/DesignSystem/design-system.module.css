@@ -79,7 +79,7 @@
   height: 40px;
   padding: 8px;
   border-radius: 999px;
-  border: 1px solid var(--surface-light, #f9fafc);
+  border: 1px solid var(--border-lightest);
   background: var(--static-light, white);
 }
 
@@ -127,7 +127,8 @@
   height: 581px;
   border-radius: 8px;
   border: 1px solid var(--border-light, #e1e4ea);
-  box-shadow: 0 0 20px 3px rgba(82, 88, 102, 0.08);
+  box-shadow: 0 0 20px 3px var(--shadow-black-alpha-light);
+  background-color: var(--frames-lightest);
   overflow: hidden;
 }
 
@@ -222,12 +223,8 @@
 
   .card {
     z-index: 1;
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--overlay-white-darkest);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-  }
-
-  html[data-theme='dark'] .card {
-    background: rgba(0, 0, 0, 0.6);
   }
 }
