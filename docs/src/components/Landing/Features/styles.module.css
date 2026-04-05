@@ -35,7 +35,7 @@
   width: 64px;
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid var(--surface-light);
+  border: 1px solid var(--border-lightest);
   background: var(--static-light);
   box-shadow: none;
 }
