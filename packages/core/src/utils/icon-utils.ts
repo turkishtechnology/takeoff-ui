@@ -1,15 +1,5 @@
-import { h } from '@stencil/core';
-import type { JSX } from '@stencil/core';
 import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
-
-type IconElementProps = Record<string, unknown> & {
-  iconType?: IIconOptions['style'];
-  iconTag?: 'i' | 'span';
-  color?: string;
-  fill?: boolean;
-  onClick?: (event: MouseEvent) => void;
-};
-
+import { h } from '@stencil/core';
 export interface IconRendererOptions {
   variant?: string | null;
   sign?: boolean;
@@ -17,12 +7,12 @@ export interface IconRendererOptions {
   fill?: boolean;
   iconStyle?: 'outlined' | 'rounded' | 'sharp';
   iconTag?: 'i' | 'span';
-  additionalProps?: IconElementProps;
+  additionalProps?: Record<string, any>;
 }
 
 export interface IconRendererResult {
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  leftIcon?: any;
+  rightIcon?: any;
 }
 /**
  * Generates the properties object for a tk-icon element based on Material Symbols.
@@ -35,13 +25,13 @@ export interface IconRendererResult {
  */
 export const getIconElementProps = (
   icon: string | IIconOptions | undefined | null,
-  props: IconElementProps = {},
+  props: Record<string, any> = {},
   iconStyle: 'outlined' | 'rounded' | 'sharp' = 'outlined',
   iconTag: 'i' | 'span' = 'i',
-): IconElementProps | null => {
+): Record<string, any> | null => {
   if (!icon) return null;
 
-  let mergedProps: IconElementProps = {
+  let mergedProps: Record<string, any> = {
     iconType: iconStyle,
     iconTag,
     ...props,
@@ -58,7 +48,7 @@ export const getIconElementProps = (
       iconTag: props.iconTag || iconTag,
       color: icon.color || props.color,
       fill: icon.fill !== undefined ? icon.fill : props.fill,
-      ...(icon.click ? { onClick: icon.click } : {}),
+      ...((icon as IIconOptions)?.click ? { onClick: (icon as IIconOptions).click } : {}),
     };
 
     delete mergedProps?.style;
@@ -68,7 +58,7 @@ export const getIconElementProps = (
   return mergedProps;
 };
 
-export const isMultiIconOptions = (icon: unknown): icon is IMultiIconOptions => {
+export const isMultiIconOptions = (icon: any): icon is IMultiIconOptions => {
   return icon && typeof icon === 'object' && ('left' in icon || 'right' in icon);
 };
 
@@ -86,8 +76,8 @@ export const renderIcons = (
 ): IconRendererResult => {
   const { variant, sign = false, fill = false, size = 'base', iconStyle = 'outlined', iconTag = 'i', additionalProps = {} } = options;
 
-  let leftIcon: JSX.Element | undefined;
-  let rightIcon: JSX.Element | undefined;
+  let leftIcon: any;
+  let rightIcon: any;
 
   if (!icon) {
     return { leftIcon, rightIcon };

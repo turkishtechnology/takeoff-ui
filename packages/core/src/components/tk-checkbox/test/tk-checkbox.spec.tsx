@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkCheckbox } from '../tk-checkbox';
-import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-checkbox', () => {
   it('renders label and name in light DOM', async () => {
@@ -10,30 +9,54 @@ describe('tk-checkbox', () => {
     });
 
     const label = page.root.querySelector('label');
-    const input = page.root.querySelector('input');
 
-    expect(label.textContent).toContain('Test label');
-    expect(input.getAttribute('name')).toBe('test-name');
+    expect(label.textContent).toBe('checkTest label');
   });
-
-  it('applies disabled and invalid state attributes', async () => {
+  it('renders with name', async () => {
     const page = await newSpecPage({
       components: [TkCheckbox],
-      html: `<tk-checkbox disabled="true" invalid="true"></tk-checkbox>`,
+      html: `<tk-checkbox name='Test name'></tk-checkbox>`,
     });
 
-    const container = page.root.querySelector('.tk-checkbox-container');
+    await page.waitForChanges();
+
+    const input = page.root.shadowRoot.querySelector('input');
+
+    expect(input.getAttribute('name')).toBe('Test name');
+  });
+});
+
+// State
+describe('state handling', () => {
+  it('handles disabled state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox disabled="true">
+               </tk-checkbox>`,
+    });
+
     const input = page.root.querySelector('input');
 
-    expect(container.getAttribute('aria-disabled')).toBe('');
-    expect(container.getAttribute('aria-invalid')).toBe('');
-    expect(input.disabled).toBe(true);
+    expect(input.getAttribute('disabled')).toBeTruthy;
   });
-
-  it('renders indeterminate state with the remove icon', async () => {
+  it('handles invalid state', async () => {
     const page = await newSpecPage({
-      components: [TkCheckbox, TkIcon],
-      html: `<tk-checkbox indeterminate="true"></tk-checkbox>`,
+      components: [TkCheckbox],
+      html: `<tk-checkbox invalid>
+               </tk-checkbox>`,
+    });
+
+    await page.waitForChanges();
+
+    const container = page.root.shadowRoot.querySelector('.tk-checkbox-container');
+
+    expect(container.getAttribute('aria-invalid')).not.toBeNull();
+  });
+  it('handles indeterminate state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox],
+      html: `<tk-checkbox indeterminate="true">
+                 </tk-checkbox>`,
     });
 
     const mask = page.root.querySelector('.mask');

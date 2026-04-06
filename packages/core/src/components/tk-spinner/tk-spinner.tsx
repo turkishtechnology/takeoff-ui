@@ -1,4 +1,4 @@
-import { Component, Prop, Element } from '@stencil/core';
+import { Component, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
 
 /**

@@ -1,5 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, AttachInternals, Watch } from '@stencil/core';
-import type { JSX } from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, h, AttachInternals, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,9 +10,6 @@ import { IChipOptions } from '../tk-chips/types';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { renderHint } from '../../utils/hint-utils';
-
-export type TkInputChipItem = string | number | boolean | Record<string, unknown>;
-export type TkInputValue = string | string[] | number | TkInputChipItem[] | null;
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -171,7 +167,7 @@ export class TkInput implements ComponentInterface {
   /**
    * A function that determines whether a chip is disabled.
    */
-  @Prop() chipDisabled?: (item: TkInputChipItem) => boolean;
+  @Prop() chipDisabled: Function;
 
   /**
    * Shows a loading spinner on the right side of the input.
@@ -188,14 +184,14 @@ export class TkInput implements ComponentInterface {
   /**
    * The value of the input.
    */
-  @Prop({ mutable: true }) value?: TkInputValue;
+  @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
-  protected valueChanged(newValue: TkInputValue, oldValue: TkInputValue) {
+  protected valueChanged(newValue, oldValue) {
     if (!isEqual(newValue, oldValue) && this.mode !== 'chips') {
       if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.nativeInput.value = getNestedValue(newValue as unknown as Record<string, unknown>, this.chipLabelKey) as unknown as string;
+        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
       } else {
-        this.nativeInput.value = newValue as unknown as string;
+        this.nativeInput.value = newValue;
       }
     }
   }
@@ -203,7 +199,7 @@ export class TkInput implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<TkInputValue>;
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
 
   /**
    * Emitted when the input loses focus.
@@ -219,11 +215,6 @@ export class TkInput implements ComponentInterface {
    * Emitted when the clear button has click.
    */
   @Event({ eventName: 'tk-clear-click' }) tkClearClick: EventEmitter<void>;
-
-  private getChipDisplayLabel(value: Record<string, unknown>): string {
-    const label = getNestedValue(value, this.chipLabelKey);
-    return label != null ? String(label) : '';
-  }
 
   componentWillLoad() {
     // If the tk-input has a tabindex attribute we get the value
@@ -525,7 +516,7 @@ export class TkInput implements ComponentInterface {
   }
 
   private handleChipsRemove(index: number) {
-    const chipsArr = [...(this.value as TkInputChipItem[])];
+    const chipsArr = [...(this.value as any[])];
 
     if (index >= 0 && index < chipsArr.length) {
       chipsArr.splice(index, 1);
@@ -588,8 +579,8 @@ export class TkInput implements ComponentInterface {
    *
    * @returns An array of JSX elements representing the strength indicator lines.
    */
-  private renderStrengthLines(): JSX.Element[] {
-    const lines: JSX.Element[] = [];
+  private renderStrengthLines(): HTMLElement[] {
+    const lines: HTMLElement[] = [];
     for (let i = 0; i < 4; i++) {
       let className = 'line';
       if (i < this.passwordStrength) {
@@ -603,13 +594,13 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderChips() {
-    if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as TkInputChipItem[])?.length > 0) {
-      return (this.value as TkInputChipItem[]).map((item, index) => {
+    if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
+      return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
         let isRemovable;
         if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
           isRemovable = false;
-        } else if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'removable')) {
+        } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
           isRemovable = item.removable;
         } else {
           isRemovable = true;
@@ -626,20 +617,18 @@ export class TkInput implements ComponentInterface {
           disabled: this.disabled || this.readonly,
         };
         const label =
-          typeof item === 'object' && item !== null && item.__isOthersIndicator ? String(item.label) : typeof item === 'object' ? this.getChipDisplayLabel(item) : String(item);
+          typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
         return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps}></tk-chips>;
       });
     }
   }
 
-  private renderInput(): JSX.Element {
+  private renderInput(): HTMLInputElement {
     return (
       <input
         id={this.uniqueId}
-        ref={el => {
-          this.nativeInput = el;
-        }}
+        ref={el => (this.nativeInput = el)}
         disabled={this.disabled}
         autoComplete="off"
         type={this.inputType}
@@ -650,13 +639,7 @@ export class TkInput implements ComponentInterface {
         placeholder={this.placeholder || ''}
         readOnly={this.readOnly || !this.editable}
         tabindex={this.tabindex}
-        value={
-          (this.mode === 'chips'
-            ? undefined
-            : typeof this.value === 'object' && this.value !== null
-              ? getNestedValue(this.value as unknown as Record<string, unknown>, this.chipLabelKey)
-              : this.value) as unknown as string | number | string[] | undefined
-        }
+        value={this.mode === 'chips' ? undefined : typeof this.value === 'object' && this.value !== null ? getNestedValue(this.value, this.chipLabelKey) : this.value}
         onInput={this.handleInput}
         onBlur={this.handleInputBlur}
         onFocus={this.handleInputFocus}
@@ -666,8 +649,8 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderLabel(): JSX.Element | undefined {
-    let label: JSX.Element | undefined;
+  private renderLabel(): HTMLLabelElement {
+    let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
@@ -681,8 +664,8 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderAlignmentButtons() {
-    let leftButton: JSX.Element | undefined;
-    let rightButton: JSX.Element | undefined;
+    let leftButton: HTMLTkButtonElement;
+    let rightButton: HTMLTkButtonElement;
     if (this.isCounter) {
       leftButton = (
         <tk-icon
@@ -716,8 +699,8 @@ export class TkInput implements ComponentInterface {
   }
 
   private renderPasswordIcons() {
-    let passwordLeftIcon: JSX.Element | undefined;
-    let passwordRightIcon: JSX.Element | undefined;
+    let passwordLeftIcon: HTMLTkIconElement;
+    let passwordRightIcon: HTMLTkIconElement;
 
     if (this.inputType == 'password') {
       if (!this.hidePasswordIcon) {
@@ -738,9 +721,9 @@ export class TkInput implements ComponentInterface {
   }
 
   render() {
-    let _leftIcon: JSX.Element | undefined;
-    let _rightIcon: JSX.Element | undefined;
-    let safetyStatus: JSX.Element | undefined;
+    let _leftIcon: HTMLTkIconElement;
+    let _rightIcon: HTMLTkIconElement;
+    let safetyStatus: HTMLElement;
 
     if (this.showSafetyStatus) {
       safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;

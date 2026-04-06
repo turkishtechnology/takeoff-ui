@@ -8,22 +8,16 @@
  * @param path - The dot-separated path to the desired property (e.g., 'user.profile.name')
  * @returns The value at the specified path, or undefined if not found
  */
-export const getNestedValue = <T extends Record<string, unknown>>(obj: T | null | undefined, path: string): unknown => {
+export const getNestedValue = (obj: any, path: string): any => {
   if (!obj || !path) return undefined;
 
-  return path.split('.').reduce<unknown>((acc, key) => {
-    if (acc && typeof acc === 'object') {
-      const value = (acc as Record<string, unknown>)[key];
-
-      if (value !== undefined && value !== null) {
-        if (typeof value === 'boolean') {
-          return value.toString();
-        }
-
-        return value;
-      }
+  return path.split('.').reduce((acc, key) => {
+    if (acc && acc[key] !== undefined && acc[key] !== null) {
+      if (typeof acc[key] === 'boolean') {
+        return acc[key].toString();
+      } else return acc[key];
+    } else {
+      return undefined;
     }
-
-    return undefined;
   }, obj);
 };

@@ -1,7 +1,7 @@
-import { Component, Prop, Element, Fragment, State } from '@stencil/core';
+import { Component, h, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { ITimelineItem } from './types';
+import { TimelineItem } from './types';
 
 /**
  * The `TkTimeline` is a component that displays a vertical or horizontal timeline of events.
@@ -26,7 +26,7 @@ export class TkTimeline implements ComponentInterface {
    * An array of objects representing the items to display on the timeline.
    * Each object should have at least a `title`. `description` and `date` are optional.
    */
-  @Prop() items: ITimelineItem[] = [];
+  @Prop() items: TimelineItem[] = [];
 
   /**
    * The orientation of the timeline.
@@ -77,7 +77,7 @@ export class TkTimeline implements ComponentInterface {
     return isEvenItem ? 'end' : 'start';
   }
 
-  private createItemContent(item: ITimelineItem) {
+  private createItemContent(item: TimelineItem) {
     return (
       <Fragment>
         <div class="tk-timeline-item-content-inner">
@@ -89,7 +89,7 @@ export class TkTimeline implements ComponentInterface {
     );
   }
 
-  private renderTimelineItem(item: ITimelineItem, index: number) {
+  private renderTimelineItem(item: TimelineItem, index: number) {
     const contentPlacement = this.determineContentPlacement(index);
     const isFirst = index === 0;
     const isLast = index === this.items.length - 1;
