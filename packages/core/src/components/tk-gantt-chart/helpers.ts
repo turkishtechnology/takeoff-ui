@@ -204,7 +204,7 @@ export function getTimelineRange(tasks: IGanttTask[], viewType: GanttViewType, w
 // ---------------------------------------------------------------------------
 
 /** Generate primary (upper) header cells. */
-export function generatePrimaryHeaders(start: Date, end: Date, viewType: GanttViewType, locale: string): IGanttHeaderCell[] {
+export function generatePrimaryHeaders(start: Date, end: Date, viewType: GanttViewType, locale: string, _weekStartDay: GanttWeekStartDay): IGanttHeaderCell[] {
   const cells: IGanttHeaderCell[] = [];
 
   switch (viewType) {

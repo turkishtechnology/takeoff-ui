@@ -1,4 +1,4 @@
-import { Element, Component, Prop, Host, ComponentInterface, Watch } from '@stencil/core';
+import { Element, Component, Prop, Host, h, ComponentInterface, Watch } from '@stencil/core';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { ITooltipOptions } from '../../global/interfaces/ITooltipOptions';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';

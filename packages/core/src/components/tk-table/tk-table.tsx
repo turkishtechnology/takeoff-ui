@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
+import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
@@ -14,9 +14,6 @@ import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { ITreeItem } from '../tk-treeview/types';
-
-export type TableRowData = Record<string, unknown>;
-export type TableSelection = TableRowData | TableRowData[];
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -62,7 +59,7 @@ export class TkTable implements ComponentInterface {
   @State() groupedData: ITableGroup[] = [];
   @State() groupByColumnField: string = null;
   @State() isControlledGrouping: boolean = false;
-  @State() expandedGroups: ITableGroup['groupValue'][] = [];
+  @State() expandedGroups: any[] = [];
   @State() internalRowsPerPage: number;
 
   /**
@@ -94,12 +91,12 @@ export class TkTable implements ComponentInterface {
   /**
    * List of the selected
    */
-  @Prop({ mutable: true }) selection: TableSelection = [];
+  @Prop({ mutable: true }) selection: any[] | any = [];
 
   /**
    * A function that returns true if the row should be disabled
    */
-  @Prop() selectionRowDisabled?: (row: Record<string, unknown>) => boolean;
+  @Prop() selectionRowDisabled: Function;
 
   /**
    * Style to apply to header of table
@@ -119,9 +116,9 @@ export class TkTable implements ComponentInterface {
   /**
    * Rows of data to display
    */
-  @Prop() data: TableRowData[] = [];
+  @Prop() data: any[] = [];
   @Watch('data')
-  dataChanged(newValue: TableRowData[], oldValue: TableRowData[]) {
+  dataChanged(newValue: any[], oldValue: any[]) {
     if (!isEqual(oldValue, newValue)) {
       if (this.paginationMethod == 'client') {
         const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
@@ -211,7 +208,7 @@ export class TkTable implements ComponentInterface {
   /**
    * Specifies which rows are expanded to show additional content.
    */
-  @Prop({ mutable: true }) expandedRows: TableRowData[] = [];
+  @Prop({ mutable: true }) expandedRows: any[] = [];
 
   /**
    * Enables multi-column sorting.
@@ -223,19 +220,19 @@ export class TkTable implements ComponentInterface {
    * Provides a function to customize cell styles.
    * This function takes the row and column information and returns the style object for a specific cell.
    */
-  @Prop() cellStyle: (row: TableRowData, column: ITableColumn) => CSSStyleProperties;
+  @Prop() cellStyle: (row: any, column: ITableColumn) => any;
 
   /**
    * Provides a function to customize row styles.
    * This function takes row information and row index, and returns the style object for a specific  row.
    */
-  @Prop() rowStyle: (row: TableRowData, index?: number) => CSSStyleProperties;
+  @Prop() rowStyle: (row: any, index?: number) => any;
 
   /**
    * Provides a function to customize expanded row styles.
    * This function takes row information and returns the style object for the expanded row content.
    */
-  @Prop() expandedRowStyle: (row: TableRowData) => CSSStyleProperties;
+  @Prop() expandedRowStyle: (row: any) => any;
 
   /**
    * Column field name to group the table data by.
@@ -266,7 +263,7 @@ export class TkTable implements ComponentInterface {
   /**
    *
    */
-  @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<TableSelection>;
+  @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<any[] | any>;
 
   /**
    * Emitted when a request needs to be made to the server.
@@ -276,7 +273,7 @@ export class TkTable implements ComponentInterface {
   /**
    * Emitted when the expanded rows change.
    */
-  @Event({ eventName: 'tk-expanded-rows-change' }) tkExpandedRowsChange: EventEmitter<TableRowData[]>;
+  @Event({ eventName: 'tk-expanded-rows-change' }) tkExpandedRowsChange: EventEmitter<any[]>;
 
   /**
    * Emitted when a cell is edited.
@@ -287,7 +284,7 @@ export class TkTable implements ComponentInterface {
    * Emitted when a row is clicked.
    * @param row The row data that was clicked
    */
-  @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<TableRowData>;
+  @Event({ eventName: 'tk-row-click' }) tkRowClick: EventEmitter<any>;
 
   /**
    * Emitted when the groupBy value changes.
@@ -746,7 +743,7 @@ export class TkTable implements ComponentInterface {
     const filteredData = this.getTableViewData();
 
     // Group data by the specified column
-    const groups = new Map<unknown, TableRowData[]>();
+    const groups = new Map<any, any[]>();
 
     filteredData.forEach(row => {
       const groupValue = getNestedValue(row, columnField);
@@ -799,7 +796,7 @@ export class TkTable implements ComponentInterface {
     this.generateRenderData(this.data, this.currentPage, true);
   }
 
-  private generateRenderData(data: TableRowData[] = [], currentPage: number, isWillLoad: boolean = false) {
+  private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
     const _data = [...(data ?? [])];
     this.currentPage = currentPage;
 
@@ -845,7 +842,7 @@ export class TkTable implements ComponentInterface {
    * Tabloda gösterilecek satırlar. Server pagination'da filtre/sıralama sunucuda uygulanır;
    * bu yüzden client tarafında filterAndSort tekrar çalıştırılmaz (çift filtreleme ve boş tablo riski).
    */
-  private getTableViewData(): TableRowData[] {
+  private getTableViewData(): any[] {
     const source = Array.isArray(this.data) ? this.data : [];
     if (this.paginationMethod === 'server') {
       return [...source];
@@ -853,7 +850,7 @@ export class TkTable implements ComponentInterface {
     return filterAndSort(source, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
   }
 
-  private toggleExpandRow(row: TableRowData, tdExpanderButtonRef: HTMLTkButtonElement) {
+  private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
     const newExpandedRows = this.expandedRows;
 
     const findIndex = newExpandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]);
@@ -873,7 +870,7 @@ export class TkTable implements ComponentInterface {
     requestAnimationFrame(() => this.refreshStickyShadows());
   }
 
-  private toggleExpandGroup(groupValue: unknown) {
+  private toggleExpandGroup(groupValue: any) {
     if (!this.collapsibleGroups) return;
     const existingIndex = this.expandedGroups.indexOf(groupValue);
 
@@ -909,11 +906,10 @@ export class TkTable implements ComponentInterface {
   // Checks if all selectable rows are selected
   private isAllRowsSelected(): boolean {
     if (!Array.isArray(this.selection)) return false;
-    const selection = this.selection;
     const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
     if (selectableRows.length === 0) return false;
-    if (selection.length < selectableRows.length) return false;
-    return selectableRows.every(row => selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
+    if (this.selection.length < selectableRows.length) return false;
+    return selectableRows.every(row => this.selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
   }
 
   private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
@@ -949,7 +945,7 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
-  private handleSearchButtonClick(columnField: string) {
+  private handleSearchButtonClick(columnField: any) {
     if (this.columns.find(col => col.field === columnField)?.filterType === 'checkbox') {
       this.handleCheckboxFilterApply(columnField);
     } else if (this.columns.find(col => col.field === columnField)?.filterType === 'radio') {
@@ -984,9 +980,9 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
 
-  private handleInputBlur(row: TableRowData, index: number, colField: string, editableInputRef: HTMLInputElement) {
+  private handleInputBlur(row, index: number, colField: string, editableInputRef) {
     const cellEdit: ITableCellEdit = {
-      rowId: String(row[this.dataKey] ?? ''),
+      rowId: row[this.dataKey],
       rowIndex: index,
       field: colField,
       value: editableInputRef.value,
@@ -1004,7 +1000,7 @@ export class TkTable implements ComponentInterface {
     this.tkSelectionChange.emit(this.selection);
   }
 
-  private handleCheckboxSelectChange(isSelect: boolean, row: TableRowData) {
+  private handleCheckboxSelectChange(isSelect: boolean, row) {
     this.isSelectionUpdating = true;
     let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
     const hasSelect = some(tmpSelection, item => isEqual(item, row));
@@ -1024,7 +1020,7 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private handleRadioSelectChange(row: TableRowData) {
+  private handleRadioSelectChange(row: any) {
     this.isSelectionUpdating = true;
     this.selection = row;
     this.tkSelectionChange.emit(this.selection);
@@ -1135,8 +1131,8 @@ export class TkTable implements ComponentInterface {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
-        optionsSearchInput.addEventListener('tk-change', (e: Event) => {
-          const searchText = String((e as CustomEvent<string>).detail).toLowerCase();
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
           const checkboxWrappers = filterContainer.querySelectorAll('.tk-table-filter-checkbox-item');
           checkboxWrappers.forEach((wrapper: HTMLElement) => {
             const checkbox = wrapper.querySelector('tk-checkbox:not(.select-all)') as HTMLTkCheckboxElement;
@@ -1174,13 +1170,12 @@ export class TkTable implements ComponentInterface {
           allCheckbox.indeterminate = true;
         }
         checkboxWrapper.appendChild(allCheckbox);
-        allCheckbox.addEventListener('tk-change', (e: Event) => {
-          const checked = Boolean((e as CustomEvent<boolean>).detail);
+        allCheckbox.addEventListener('tk-change', (e: any) => {
           const allCheckboxes = filterContainer.querySelectorAll('tk-checkbox:not(.select-all)');
           allCheckboxes.forEach((cb: HTMLTkCheckboxElement) => {
-            cb.value = checked;
+            cb.value = e.detail;
           });
-          if (checked) {
+          if (e.detail) {
             selectedValues.length = 0;
             selectedValues.push(...column.filterOptions.map(option => option.value));
           } else {
@@ -1242,8 +1237,8 @@ export class TkTable implements ComponentInterface {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
-        optionsSearchInput.addEventListener('tk-change', (e: Event) => {
-          const searchText = String((e as CustomEvent<string>).detail).toLowerCase();
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
           const radioWrappers = filterContainer.querySelectorAll('.tk-table-filter-radio-item');
           radioWrappers.forEach((wrapper: HTMLElement) => {
             const radio = wrapper.querySelector('tk-radio');
@@ -1311,7 +1306,7 @@ export class TkTable implements ComponentInterface {
       const selectedValue = (currentFilter?.value as string[]) || [];
 
       // Create treeview component first
-      const treeview = document.createElement('tk-tree-view') as HTMLTkTreeViewElement;
+      const treeview = document.createElement('tk-tree-view') as any;
       const treeviewConfig = column?.filterElements?.treeViewOptions ?? {};
       treeview.selectable = true;
       treeview.size = treeviewConfig?.size ?? 'small';
@@ -1337,8 +1332,8 @@ export class TkTable implements ComponentInterface {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
 
-        optionsSearchInput.addEventListener('tk-change', (e: Event) => {
-          const searchText = String((e as CustomEvent<string>).detail).toLowerCase();
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
 
           // Recursive function to filter tree items including nested children
           const filterTreeItems = (items: ITreeItem[]): ITreeItem[] => {
@@ -1487,7 +1482,7 @@ export class TkTable implements ComponentInterface {
     const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
 
     if (selectedRadio) {
-      const selectedValue = selectedRadio.value as string;
+      const selectedValue = selectedRadio.value;
 
       if (filterIndex > -1) {
         this.filters[filterIndex].value = selectedValue;
@@ -1575,7 +1570,7 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
 
-  private handleRowClick = (e: MouseEvent, row: TableRowData) => {
+  private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
 
@@ -2017,7 +2012,7 @@ export class TkTable implements ComponentInterface {
                 >
                   <input
                     ref={el => (editableInputRef = el)}
-                    value={String(getNestedValue(row, col.field) ?? '')}
+                    value={getNestedValue(row, col.field)}
                     type="text"
                     onKeyDown={e => handleInputKeydown(e, this.el)}
                     onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
@@ -2033,7 +2028,7 @@ export class TkTable implements ComponentInterface {
                     ...styleRowObject,
                     ...styleCellObject,
                   }}
-                  ref={el => el?.replaceChildren(String(getNestedValue(row, col.field) ?? ''))}
+                  ref={el => el?.replaceChildren(getNestedValue(row, col.field) ?? '')}
                 ></td>
               );
             }
@@ -2084,7 +2079,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private getStickyColumnStyle(col: ITableColumn, rowIndex?: number) {
-    const style: Record<string, string | number | undefined> = {
+    const style: any = {
       width: this.columnWidths[col.field] || col.width,
       minWidth: this.columnWidths[col.field] || col.width,
       maxWidth: this.columnWidths[col.field] || col.width,
@@ -2118,14 +2113,14 @@ export class TkTable implements ComponentInterface {
   }
 
   private getSelectionStickyStyle(rowIndex?: number) {
-    const style: Record<string, string | undefined> = {};
+    const style: any = {};
 
     // Selection column is always the left-most sticky column
     style['--tk-table-sticky-left-offset'] = `0px`;
     style['left'] = `0px`;
 
     if (rowIndex !== undefined) {
-      style['zIndex'] = String(Math.max(99 - (rowIndex ?? 0), 0));
+      style['zIndex'] = Math.max(99 - (rowIndex ?? 0), 0);
     }
 
     return style;
@@ -2169,14 +2164,16 @@ export class TkTable implements ComponentInterface {
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
             let refSearchIcon: HTMLTkIconElement;
+            let _sortIcon;
             let _searchIcon;
+            let _headerStructure;
             let _customHeader;
 
             if (typeof col?.headerHtml == 'function') {
               _customHeader = col.headerHtml();
             }
 
-            const _headerStructure = (
+            _headerStructure = (
               <div
                 class="header-container"
                 ref={el => {
@@ -2232,7 +2229,7 @@ export class TkTable implements ComponentInterface {
             const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
-            const _sortIcon = showBadge ? (
+            _sortIcon = showBadge ? (
               <tk-badge count={sortIndex + 1} type="text" rounded size="small">
                 <tk-icon
                   {...getIconElementProps(iconType, {
@@ -2409,7 +2406,7 @@ export class TkTable implements ComponentInterface {
             const tmpData = this.getTableViewData();
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;
-            if (Array.isArray(this.selection) && this.selection.length > 0) this.handleSelectAll(false);
+            if (this.selection?.length > 0) this.handleSelectAll(false);
           }}
         ></tk-pagination>
       );
