@@ -34,7 +34,7 @@ describe('state handling', () => {
   it('should render items when no slots provided', async () => {
     const page = await newSpecPage({
       components: [TkBreadcrumb, TkBreadcrumbItem],
-      html: `<tk-breadcrumb>
+      html: `<tk-breadcrumb type="outlined">
         </tk-breadcrumb>`,
     });
 
@@ -53,7 +53,7 @@ describe('state handling', () => {
   it('correctly assign the last item as isCurrent ', async () => {
     const page = await newSpecPage({
       components: [TkBreadcrumb, TkBreadcrumbItem],
-      html: `<tk-breadcrumb>
+      html: `<tk-breadcrumb type="outlined">
         </tk-breadcrumb>`,
     });
 
