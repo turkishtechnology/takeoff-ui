@@ -75,7 +75,7 @@ const Type = () => {
     </TkTabsItem>
   </TkTabs>
 
-  <TkTabs type="dvided">
+  <TkTabs type="divided">
     <TkTabsItem label="Tab label" icon="flight">
       <p>Adipisicing aliqua nulla cupidatat proident.</p>
     </TkTabsItem>

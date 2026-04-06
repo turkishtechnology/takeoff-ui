@@ -59,16 +59,16 @@ const weekdays = [1, 2, 3, 4, 5]; // 1 is Monday, 5 is Friday
 <TkDatepicker
   label="Weekends Disabled"
   placeholder="Select a weekday"
-  dateFormat="dd/MM/yyyy"
-  :disabledWeekDays="weekendDays"
+  date-format="dd/MM/yyyy"
+  :disabled-week-days="weekendDays"
   v-model="selectedDate1"
 />
 
 <TkDatepicker
   label="Only Weekends Allowed"
   placeholder="Select a weekend day"
-  dateFormat="dd/MM/yyyy"
-  :disabledWeekDays="weekdays"
+  date-format="dd/MM/yyyy"
+  :disabled-week-days="weekdays"
   v-model="selectedDate2"
 />`;
 

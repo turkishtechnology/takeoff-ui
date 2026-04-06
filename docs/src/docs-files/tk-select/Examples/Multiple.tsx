@@ -24,7 +24,7 @@ const selectValue = ref([{ value: 'female', label: 'Female' }]);
   <TkSelect
     label="Multiple Input"
     v-model="selectValue"
-    :options.prop="[
+    :options="[
       { value: 'female', label: 'Female' },
       { value: 'male', label: 'Male' },
       { value: 'other', label: 'Other' },

@@ -4,37 +4,28 @@ import React from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 const Floating = () => {
-  const reactCode = `<TkBadge variant="danger" type="filled" dot>
-  <div
-    style={{ width: "24px", height: "24px", background: "lightgrey" }}
-  ></div>
+  const reactCode = `<TkBadge variant="danger" type="filled" dot={true}>
+  <div className="w-6 h-6 bg-[lightgrey]"></div>
 </TkBadge>
-<TkBadge variant="secondary" size="small" type="filled" count="4" rounded>
-  <div
-    style={{ width: "24px", height: "24px", background: "lightgrey" }}
-  ></div>
+
+<TkBadge variant="secondary" size="small" type="filled" count="4" rounded={true}>
+  <div className="w-6 h-6 bg-[lightgrey]"></div>
 </TkBadge>`;
 
-  const vueCode = `<TkBadge variant="danger" type="filled" dot>
-  <div style="width: 24px; height: 24px; background-color: lightgray">
-    &nbsp;
-  </div>
+  const vueCode = `<TkBadge variant="danger" type="filled" :dot="true">
+  <div class="w-6 h-6 bg-[lightgrey]"></div>
 </TkBadge>
-<TkBadge variant="secondary" size="small" type="filled" count="4" rounded>
-  <div style="width: 24px; height: 24px; background-color: lightgray">
-    &nbsp;
-  </div>
+
+<TkBadge variant="secondary" size="small" type="filled" count="4" :rounded="true">
+  <div class="w-6 h-6 bg-[lightgrey]"></div>
 </TkBadge>`;
 
-  const angularCode = `<tk-badge variant="danger" type="filled" dot>
-  <div
-    style="width: 24px; height: 24px; background: lightgrey"
-  ></div>
+  const angularCode = `<tk-badge variant="danger" type="filled" [dot]="true">
+  <div class="w-6 h-6 bg-[lightgrey]"></div>
 </tk-badge>
-<tk-badge variant="secondary" size="small" type="filled" count="4" rounded>
-  <div
-    style="width: 24px; height: 24px; background: lightgrey"
-  ></div>
+
+<tk-badge variant="secondary" size="small" type="filled" count="4" [rounded]="true">
+  <div class="w-6 h-6 bg-[lightgrey]"></div>
 </tk-badge>`;
 
   const demo = (

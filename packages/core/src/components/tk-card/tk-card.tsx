@@ -10,6 +10,7 @@ import { CSSStyleProperties } from '../../global/types';
  * @slot content - Custom content template.
  * @slot footer - Custom footer template.
  * @slot footer-actions - Custom actions template to default footer.
+ * @slot header-action - Custom action template on the right side of the card header.
  * @react `import { TkCard } from '@takeoff-ui/react'`
  * @vue `import { TkCard } from '@takeoff-ui/vue'`
  * @angular `import { TkCard } from '@takeoff-ui/angular'`
@@ -27,6 +28,7 @@ export class TkCard implements ComponentInterface {
   @State() hasContentSlot: boolean;
   @State() hasFooterSlot: boolean;
   @State() hasFooterActionsSlot: boolean;
+  @State() hasHeaderActionSlot: boolean;
   @State() hasDefaultSlotBody: boolean;
 
   /**
@@ -63,6 +65,7 @@ export class TkCard implements ComponentInterface {
     severity: 'light',
     background: 'solid',
     rounded: true,
+    size: 'small',
   };
 
   /**
@@ -139,6 +142,7 @@ export class TkCard implements ComponentInterface {
     this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
     this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
     this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+    this.hasHeaderActionSlot = !!this.el.querySelector(':scope > [slot="header-action"]');
     this.hasDefaultSlotBody = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
     });
@@ -174,7 +178,11 @@ export class TkCard implements ComponentInterface {
               {this.header && <span class="tk-card-title">{this.header}</span>}
             </div>
           </div>
-          {this.showMenuButton && <tk-button variant="neutral" icon="more_vert" size="base" type="text" aria-label="TkCard Header Menu Button"></tk-button>}
+          {this.hasHeaderActionSlot ? (
+            <slot name="header-action"></slot>
+          ) : (
+            this.showMenuButton && <tk-button variant="neutral" icon="more_vert" size="base" type="text" aria-label="TkCard Header Menu Button"></tk-button>
+          )}
         </div>
       );
     }

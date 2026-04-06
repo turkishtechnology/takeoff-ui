@@ -7,6 +7,8 @@ import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
 import { INTERNAL_CURRENCY_LIST } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
+import { applyStyles } from '../../utils/style-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkCurrencyInput component allows users to input phone numbers with country selection and validation.
@@ -16,7 +18,7 @@ import { getValidSeparator } from './helpers';
  */
 @Component({
   tag: 'tk-currency-input',
-  styleUrls: ['tk-currency-input.scss', 'flag.scss'],
+  styleUrls: ['tk-currency-input.scss'],
   formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
@@ -80,6 +82,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Disables the input field if set to true.
    */
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  protected disabledChanged(newValue: boolean) {
+    if (newValue) this.isDropdownOpen = false;
+  }
 
   /**
    * Marks the input field as invalid if set to true.
@@ -189,6 +195,12 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() hideFlag: boolean = false;
 
   /**
+   * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
+   * @defaultValue match-parent
+   */
+  @Prop() dropdownWidthMode: 'match-parent' | 'auto' | string = 'match-parent';
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
@@ -214,6 +226,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Update the component when properties change.
    */
   componentDidUpdate() {
+    // Handle separator changes
+    this.updateDisplayValue();
+
+    // Handle dropdown positioning
     if (this.isDropdownOpen) {
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
@@ -240,9 +256,23 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   private updatePosition() {
-    const tkInputRootEl = this.el.querySelector('.tk-currency-input__wrapper') as HTMLTkInputElement;
+    const dropdownWidthMode = this.dropdownWidthMode;
+    const tkInputRootEl = this.el.querySelector('.tk-currency-input-wrapper') as HTMLTkInputElement;
     this.cleanup = floatingElementAutoUpdate(tkInputRootEl, this.dropdownEl, undefined, {
       placement: 'bottom-start',
+      size: {
+        apply({ rects, elements }) {
+          if (dropdownWidthMode === 'match-parent') {
+            applyStyles(elements.floating, {
+              width: `${rects.reference.width}px`,
+            });
+          } else if (dropdownWidthMode !== 'auto' && dropdownWidthMode.length > 0) {
+            applyStyles(elements.floating, {
+              width: dropdownWidthMode,
+            });
+          }
+        },
+      },
     });
   }
 
@@ -580,9 +610,9 @@ export class TkCurrencyInput implements ComponentInterface {
   private renderLabel() {
     if (this.label) {
       return (
-        <label class="tk-currency-input__label" htmlFor={this.uniqueId}>
-          <span class="tk-currency-input__label-title">{this.label}</span>
-          {this.showAsterisk && <span class="tk-currency-input__label-red-asterisk">*</span>}
+        <label class="tk-currency-input-label" htmlFor={this.uniqueId}>
+          <span class="tk-currency-input-label-title">{this.label}</span>
+          {this.showAsterisk && <span class="tk-currency-input-label-asterisk">*</span>}
         </label>
       );
     }
@@ -595,7 +625,7 @@ export class TkCurrencyInput implements ComponentInterface {
         id={this.uniqueId}
         ref={el => (this.inputElement = el)}
         type="text"
-        class="tk-currency-input__input"
+        class="tk-currency-input-input"
         autoComplete="off"
         value={this.displayValue}
         placeholder={this.placeholder}
@@ -612,11 +642,11 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private renderCurrencySelector() {
     return (
-      <div class="tk-currency-input__dropdown">
+      <div class="tk-currency-input-dropdown">
         {this.renderDropdownButton()}
 
         {this.isDropdownOpen && (
-          <div class="tk-currency-input__dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
+          <div class="tk-currency-input-dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
             {this.renderCurrencyList()}
           </div>
         )}
@@ -624,13 +654,26 @@ export class TkCurrencyInput implements ComponentInterface {
     );
   }
 
+  /**
+   * Get the flag class based on the currency's ID.
+   */
+  private getFlagClass(currency: ICurrency): string {
+    return classNames('flag', currency?.id ? `flag-${currency?.id.toLowerCase()}` : 'flag-none');
+  }
+
   private renderDropdownButton() {
     return (
-      <button type="button" class="tk-currency-input__dropdown-button" onClick={event => this.toggleDropdown(event)} disabled={this.currencyDisabled || this.disabled}>
-        <div class="tk-currency-input__dropdown-button-selected">
-          {!this.hideFlag && <div class={`flag flag-${this.selectedCurrency.id.toLowerCase()}`} aria-label={`${this.selectedCurrency.name} flag`} />}
-          <span class="tk-currency-input__dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
-          <tk-icon {...getIconElementProps('stat_minus_1', { variant: null, size: 'large' }, undefined, 'span')} />
+      <button
+        type="button"
+        class="tk-currency-input-dropdown-button"
+        onClick={event => this.toggleDropdown(event)}
+        disabled={this.currencyDisabled || this.disabled}
+        aria-disabled={this.currencyDisabled || this.disabled}
+      >
+        <div class="tk-currency-input-dropdown-button-selected">
+          {!this.hideFlag && this.renderFlag(this.selectedCurrency)}
+          <span class="tk-currency-input-dropdown-button-currency-code">{this.selectedCurrency?.code}</span>
+          {!this.currencyDisabled && <tk-icon {...getIconElementProps('keyboard_arrow_down', { variant: null, size: 'large' }, 'rounded', 'span')} />}
         </div>
       </button>
     );
@@ -640,61 +683,52 @@ export class TkCurrencyInput implements ComponentInterface {
     const currencies = this.getCurrencies();
 
     return (
-      <ul class="tk-currency-input__dropdown-menu-list">
+      <ul class="tk-currency-input-dropdown-menu-list">
         {currencies.map(currency => (
           <li
-            class="tk-currency-input__dropdown-menu-list-item"
+            class="tk-currency-input-dropdown-menu-list-item"
             key={currency.code}
             role="option"
             onClick={event => this.handleSelectCurrency(currency.code, event)}
             aria-selected={this.selectedCurrency.code === currency.code}
           >
-            {!this.hideFlag && <div class={`flag flag-${currency.id.toLowerCase()}`} aria-label={`${currency.code} flag`} />}
-            <span class="tk-currency-input__dropdown-menu-list-country-label">{currency.symbol}</span>
-            <span class="tk-currency-input__dropdown-menu-list-dial-id">{currency.name}</span>
+            {!this.hideFlag && this.renderFlag(currency)}
+            <span class="tk-currency-input-dropdown-menu-list-country-label">{currency.symbol}</span>
+            <span class="tk-currency-input-dropdown-menu-list-dial-id">{currency.name}</span>
           </li>
         ))}
       </ul>
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input__hint">
-          {hintIcon}
-          <span class="tk-currency-input__hint-text">{this.hint}</span>
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info', { class: 'tk-currency-input__hint-icon', variant: null })} />;
-
-      hint = (
-        <span class="tk-currency-input__hint">
-          {hintIcon}
-          <span class="tk-currency-input__hint-text">{this.error}</span>
-        </span>
-      );
-    }
-
-    return hint;
+  /**
+   * Render the flag element for a currency. Shows a close icon for currencies without a matching currency ID.
+   */
+  private renderFlag(currency: ICurrency) {
+    const flagClass = this.getFlagClass(currency);
+    return currency?.id ? (
+      <div class={flagClass} aria-label={`${currency.code} flag`} />
+    ) : (
+      <div class={flagClass}>
+        <tk-icon {...getIconElementProps('close', { color: 'var(--static-white)' })} />
+      </div>
+    );
   }
 
   render() {
     return (
-      <div class={classNames('tk-currency-input', `tk-currency-input--${this.size}`)} aria-invalid={this.invalid} aria-disabled={this.disabled} aria-readonly={this.readonly}>
+      <div
+        class={classNames('tk-currency-input-container', `tk-currency-input-container-${this.size}`)}
+        aria-invalid={this.invalid}
+        aria-disabled={this.disabled}
+        aria-readonly={this.readonly}
+      >
         {this.renderLabel()}
-        <div class="tk-currency-input__wrapper">
+        <div class="tk-currency-input-wrapper">
           {this.renderCurrencyInput()}
           {this.renderCurrencySelector()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

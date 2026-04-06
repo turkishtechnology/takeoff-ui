@@ -17,9 +17,9 @@ const Separator = () => {
   ];
 
   const reactCode = `const items = [
- { label: 'Home', href: '/', isExternal: true  },
- { label: 'Library', href: '/library', isExternal: true  },
- { label: 'Data' },
+  { label: 'Home', href: '/', isExternal: true },
+  { label: 'Library', href: '/library', isExternal: true },
+  { label: 'Data', href: '/takeoffui/docs/components/Breadcrumb' },
 ];
 <TkBreadcrumb model={items} separator="${separator}" />`;
 
@@ -30,7 +30,7 @@ import { ref } from 'vue';
 const items = [
   { label: 'Home', href: '/', isExternal: true },
   { label: 'Library', href: '/library', isExternal: true },
-  { label: 'Data' },
+  { label: 'Data', href: '/takeoffui/docs/components/Breadcrumb' },
 ];
 const separator = ref('${separator}');
 </script>
@@ -38,10 +38,10 @@ const separator = ref('${separator}');
   <TkBreadcrumb :model.prop="items" :separator="separator" />
 </template>`;
 
-  const angularCode = `<tk-breadcrumb [model]="[  
+  const angularCode = `<tk-breadcrumb [model]="[
     { label: 'Home', href: '/', isExternal: true },
     { label: 'Library', href: '/library', isExternal: true },
-    { label: 'Data' }
+    { label: 'Data', href: '/takeoffui/docs/components/Breadcrumb' }
   ]" separator="${separator}" />`;
 
   const demo = (

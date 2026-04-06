@@ -6,9 +6,9 @@ const Type = () => {
   const items = [{ label: 'Home', href: '/', isExternal: true }, { label: 'Library', href: '/library', isExternal: true }, { label: 'Data' }];
 
   const reactCode = `const items = [
- { label: 'Home', href: '/', isExternal: true  },
- { label: 'Library', href: '/library', isExternal: true  },
- { label: 'Data' },
+  { label: 'Home', href: '/', isExternal: true },
+  { label: 'Library', href: '/library', isExternal: true },
+  { label: 'Data' },
 ];
 <TkBreadcrumb model={items} type="outlined" />`;
 

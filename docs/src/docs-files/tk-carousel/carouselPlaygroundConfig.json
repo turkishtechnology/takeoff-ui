@@ -1,0 +1,107 @@
+{
+  "name": "TkCarousel",
+  "componentName": "TkCarousel",
+  "hasChildren": true,
+  "fullWidth": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "img",
+      "props": { "src": "https://picsum.photos/800/400?random=1", "alt": "Slide 1" }
+    },
+    {
+      "type": "component",
+      "componentName": "img",
+      "props": { "src": "https://picsum.photos/800/400?random=2", "alt": "Slide 2" }
+    },
+    {
+      "type": "component",
+      "componentName": "img",
+      "props": { "src": "https://picsum.photos/800/400?random=3", "alt": "Slide 3" }
+    }
+  ],
+  "props": [
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "navigationPlacement",
+      "label": "Nav Placement",
+      "type": "select",
+      "defaultValue": "inside",
+      "options": [
+        { "label": "Inside", "value": "inside" },
+        { "label": "Outside", "value": "outside" }
+      ]
+    },
+    {
+      "key": "navigationPosition",
+      "label": "Nav Position",
+      "type": "select",
+      "defaultValue": "distributed",
+      "options": [
+        { "label": "Distributed", "value": "distributed" },
+        { "label": "Bottom", "value": "bottom" },
+        { "label": "Top", "value": "top" },
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
+      "key": "itemsPerView",
+      "label": "Items Per View",
+      "type": "text",
+      "defaultValue": "1"
+    },
+    {
+      "key": "autoplayDelay",
+      "label": "Autoplay Delay (ms)",
+      "type": "text",
+      "defaultValue": "3000"
+    },
+    {
+      "key": "verticalViewHeight",
+      "label": "Vertical Height",
+      "type": "text",
+      "defaultValue": "300px",
+      "tooltip": "Height when orientation is vertical."
+    },
+    {
+      "key": "circular",
+      "label": "Circular",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "autoplay",
+      "label": "Autoplay",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showArrows",
+      "label": "Show Arrows",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showIndicators",
+      "label": "Show Indicators",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showPlayerButton",
+      "label": "Show Player Button",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

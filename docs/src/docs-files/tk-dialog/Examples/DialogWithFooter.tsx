@@ -71,16 +71,16 @@ const setShowDialog = (value) => {
 </script>
 
 <template>
-  <>
+  <div>
     <TkButton label="Open Dialog" @tk-click="setShowDialog(true)" />
     <TkDialog
       header="Dialog with Footer"
       subheader="This dialog uses the footer-actions slot"
-      :visible.prop="showDialog"
+      :visible="showDialog"
       @tk-visible-change="(e) => {
         showDialog = e.detail;
       }"
-      :containerStyle="{ width: '450px' }"
+      :container-style="{ width: '450px' }"
     >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
@@ -92,13 +92,13 @@ const setShowDialog = (value) => {
         <TkButton
           label="Cancel"
           variant="neutral"
-          @tkClick="showDialog = false"
+          @tk-click="showDialog = false"
           type="text"
         />
-        <TkButton label="Save" variant="primary" @tkClick="saveAction" />
+        <TkButton label="Save" variant="primary" @tk-click="saveAction" />
       </div>
     </TkDialog>
-  </>
+  </div>
 </template>
 
 `;

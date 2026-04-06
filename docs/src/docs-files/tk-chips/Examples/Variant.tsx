@@ -12,14 +12,14 @@ const Variant = () => {
 <TkChips variant="danger" label="danger" removable />
 <TkChips variant="verified" label="verified" removable />`;
 
-  const vueCode = `<TkChips variant="primary" label="primary" removable/>
+  const vueCode = `<TkChips variant="primary" label="primary" removable />
 <TkChips variant="secondary" label="secondary" removable />
-<TkChips variant="neutral" label="neutral" removable/>
-<TkChips variant="info" label="info" removable/>
-<TkChips variant="warning" label="warning" removable/>
-<TkChips variant="success" label="success" removable/>
-<TkChips variant="danger" label="danger" removable/>
-<TkChips variant="verified" label="verified" removable/>`;
+<TkChips variant="neutral" label="neutral" removable />
+<TkChips variant="info" label="info" removable />
+<TkChips variant="warning" label="warning" removable />
+<TkChips variant="success" label="success" removable />
+<TkChips variant="danger" label="danger" removable />
+<TkChips variant="verified" label="verified" removable />`;
 
   const angularCode = `<tk-chips variant="primary" label="primary" removable />
 <tk-chips variant="secondary" label="secondary" removable />

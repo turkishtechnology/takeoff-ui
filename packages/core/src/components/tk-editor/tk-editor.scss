@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -25,33 +27,6 @@
     }
   }
 
-  .tk-editor-supporting-text {
-    color: var(--text-base);
-    font-family: var(--desktop-label-s-font);
-    font-size: var(--desktop-label-s-size);
-    font-style: normal;
-    font-weight: 300;
-    line-height: var(--desktop-label-s-line-height);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
-
-    .tk-editor-supporting-text-icon {
-      font-size: var(--size-base);
-      width: var(--size-base);
-      height: var(--size-base);
-      color: var(--icon-base);
-    }
-
-    &.error {
-      span,
-      .tk-editor-supporting-text-icon {
-        color: var(--states-danger-base);
-      }
-    }
-  }
-
   &.tk-editor-focused {
     .tk-editor {
       border-color: var(--states-info-base);
@@ -59,13 +34,6 @@
   }
 
   &.tk-editor-invalid {
-    .tk-editor-supporting-text {
-      span,
-      .tk-editor-supporting-text-icon {
-        color: var(--states-danger-base);
-      }
-    }
-
     .tk-editor {
       border-color: var(--states-danger-base);
     }
@@ -75,23 +43,6 @@
   &.tk-editor-disabled {
     .tk-editor-label {
       color: var(--text-sub-base);
-    }
-
-    .tk-editor-supporting-text {
-      .tk-editor-supporting-text-icon {
-        color: var(--icon-sub-base);
-
-        span {
-          color: var(--text-sub-base);
-        }
-      }
-
-      &.error {
-        span,
-        .tk-editor-supporting-text-icon {
-          color: var(--states-danger-base);
-        }
-      }
     }
   }
 
@@ -118,6 +69,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    background-color: var(--static-light);
 
     .tk-editor-toolbar {
       display: flex;
@@ -210,7 +162,7 @@
               border-inline-end: 0;
             }
 
-            &.tk-editor-button-active {
+            &.tk-editor-button-active:not(.tk-editor-button-readonly):not(.tk-editor-button-disabled) {
               background-color: var(--primary-sub-base);
               border-color: var(--primary-sub-base);
               color: var(--static-light);
@@ -299,25 +251,6 @@
                   }
                 }
               }
-
-              &:not(.tk-editor-button-readonly),
-              &:not(.tk-editor-button-disabled) {
-                &.tk-editor-button-active {
-                  svg {
-                    color: var(--static-light);
-                  }
-                }
-
-                &:hover {
-                  svg {
-                    color: var(--text-darkest);
-                  }
-                }
-
-                &:focus {
-                  box-shadow: var(--secondary-light-focus);
-                }
-              }
             }
           }
         }
@@ -328,49 +261,12 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: var(--editor-body-v-padding) var(--editor-body-h-padding);
+      margin: var(--editor-body-v-padding) var(--editor-body-h-padding);
       gap: var(--editor-body-gap);
       align-self: stretch;
       background-color: var(--static-light);
       overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-        background: transparent;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-        border-radius: 2px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 3px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &:hover {
-        &::-webkit-scrollbar {
-          background: var(--background-lightest);
-          opacity: 1;
-        }
-
-        &::-webkit-scrollbar-track {
-          background: var(--background-lightest);
-          opacity: 1;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: var(--secondary-sub-base);
-          opacity: 1;
-        }
-      }
+      @include takeoff-scrollbar;
     }
 
     .tk-editor-footer {
@@ -505,10 +401,21 @@
 
   ul {
     list-style-type: disc;
+  }
 
-    li {
-      display: list-item;
-    }
+  ul ul,
+  ol ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul,
+  ol ul ul,
+  ol ol ul {
+    list-style-type: square;
+  }
+
+  ul li {
+    display: list-item;
   }
 
   ol {

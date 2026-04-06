@@ -1,0 +1,78 @@
+{
+  "name": "TkToggle",
+  "componentName": "TkToggle",
+  "hasChildren": false,
+  "props": [
+    {
+      "key": "label",
+      "label": "Label",
+      "type": "text",
+      "defaultValue": "Toggle me"
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XSmall", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" },
+        { "label": "XLarge", "value": "xlarge" }
+      ]
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "info",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Verified", "value": "verified" },
+        { "label": "Purple", "value": "purple" },
+        { "label": "Cyan", "value": "cyan" },
+        { "label": "Business", "value": "business" },
+        { "label": "Teal", "value": "teal" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "White", "value": "white" }
+      ]
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": "check"
+    },
+    {
+      "key": "value",
+      "label": "Value",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "showIcon",
+      "label": "Show Icon",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "disabled",
+      "label": "Disabled",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "invalid",
+      "label": "Invalid",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

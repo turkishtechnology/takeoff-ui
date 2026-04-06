@@ -1,8 +1,11 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-tree-view {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
   background: transparent;
+  @include takeoff-scrollbar;
 
   &.stepper {
     display: flex;
@@ -111,23 +114,14 @@
 
     &.large {
       padding: var(--items-tree-large-v-padding, 10px) var(--items-tree-large-h-padding, 12px);
-      & .tk-icon {
-        font-size: 20px;
-      }
     }
 
     &.base {
       padding: var(--items-tree-base-v-padding, 6px) var(--items-tree-base-h-padding, 8px);
-      & .tk-icon {
-        font-size: 20px;
-      }
     }
 
     &.small {
       padding: var(--items-tree-small-v-padding, 4px) var(--items-tree-small-h-padding, 6px);
-      & .tk-icon {
-        font-size: 16px;
-      }
     }
 
     &.selected {

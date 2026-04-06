@@ -27,6 +27,16 @@
       "defaultValue": "TRY"
     },
     {
+      "key": "dropdownWidthMode",
+      "label": "Dropdown Width",
+      "type": "select",
+      "defaultValue": "match-parent",
+      "options": [
+        { "label": "Match Parent", "value": "match-parent" },
+        { "label": "Auto", "value": "auto" }
+      ]
+    },
+    {
       "key": "label",
       "label": "Label",
       "type": "text",
@@ -62,6 +72,16 @@
       "label": "Precision",
       "type": "text",
       "defaultValue": 2
+    },
+    {
+      "key": "currencyList",
+      "label": "Currency List",
+      "type": "json",
+      "defaultValue": [
+        { "code": "GBP", "id": "GB", "symbol": "£", "name": "British Pound", "decimalSeparator": ".", "thousandsSeparator": "," },
+        { "code": "TRY", "id": "TR", "symbol": "₺", "name": "Turkish Lira", "decimalSeparator": ",", "thousandsSeparator": "." },
+        { "code": "JPY", "id": "JP", "symbol": "¥", "name": "Japanese Yen", "decimalSeparator": ".", "thousandsSeparator": "," }
+      ]
     },
     {
       "key": "disabled",

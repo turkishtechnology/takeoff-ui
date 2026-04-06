@@ -11,7 +11,7 @@ const ContentSlot = () => {
 </TkCheckbox>`;
 
   const vueCode = `<TkCheckbox type="card">
-  <div slot="content" className="flex items-center gap-2">
+  <div slot="content" class="flex items-center gap-2">
     <div>Label</div>
     <TkBadge icon="info" variant="info" label="İnformation" size="small" />
   </div>

@@ -17,9 +17,9 @@ const Size = () => {
 
   const demo = (
     <div className="flex items-end gap-2 flex-wrap justify-center">
-      <TkChips variant="primary" size="small" type="filled" label="primary" removable />
+      <TkChips variant="primary" size="small" label="primary" removable />
       <TkChips variant="primary" size="base" label="primary" removable />
-      <TkChips variant="primary" size="large" type="filled" label="primary" removable />
+      <TkChips variant="primary" size="large" label="primary" removable />
     </div>
   );
 

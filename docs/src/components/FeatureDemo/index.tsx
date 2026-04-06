@@ -11,6 +11,7 @@ const FeatureDemo = ({ demo, reactCode, vueCode, angularCode, cssCode = '', data
         style={{
           border: '1px solid var(--border-light)',
           background: 'var(--background-lightest)',
+          borderRadius: '8px',
         }}
         className="p-4 rounded-lg"
       >
@@ -19,7 +20,7 @@ const FeatureDemo = ({ demo, reactCode, vueCode, angularCode, cssCode = '', data
       <TkAccordion>
         <TkAccordionItem>
           <span slot="header">View Code</span>
-          <div slot="content">
+          <div slot="content" style={{ fontSize: '16px' }}>
             <Tabs>
               <TabItem value="react" label="React" default>
                 <CodeBlock className="m-0" language="tsx" showLineNumbers>

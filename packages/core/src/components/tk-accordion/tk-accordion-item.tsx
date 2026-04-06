@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, type EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -23,6 +23,7 @@ export class TkAccordionItem implements ComponentInterface {
   @State() collapseIcon: string | IIconOptions;
   @State() hideArrows: boolean = false;
   @State() hasHeaderSlot = false;
+  @State() mode: 'default' | 'compact' = 'default';
 
   /**
    * Sets if the accordion is active.
@@ -55,7 +56,7 @@ export class TkAccordionItem implements ComponentInterface {
   /**
    * Icon for accordion component.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Emitted when an active index is changed
@@ -71,11 +72,11 @@ export class TkAccordionItem implements ComponentInterface {
       this.expandIcon = this.parentEl.expandIcon;
       this.collapseIcon = this.parentEl.collapseIcon;
       this.hideArrows = this.parentEl.hideArrows;
+      this.mode = this.parentEl.mode;
     }
     this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
   }
-
-  private createIcon() {
+  private renderCollapseIcon() {
     if (this.hideArrows) return null;
     let _renderIcon: string | IIconOptions;
 
@@ -84,14 +85,7 @@ export class TkAccordionItem implements ComponentInterface {
     } else {
       _renderIcon = this.expandIcon;
     }
-
-    const icon = (
-      <tk-icon
-        {...getIconElementProps(_renderIcon, { class: classNames({ 'tk-accordion-item-icon-collapse': this.active }), variant: null, size: 'large' }, 'outlined', 'span')}
-      ></tk-icon>
-    );
-
-    return <span class="icon">{icon}</span>;
+    return <tk-icon {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}></tk-icon>;
   }
 
   private createHeader() {
@@ -102,20 +96,19 @@ export class TkAccordionItem implements ComponentInterface {
   }
 
   render() {
-    const rootClasses = classNames('tk-accordion-item', this.size, this.type, {
+    const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
-
-    const icon = <tk-icon {...getIconElementProps(this.icon, { variant: 'neutral', sign: true })}></tk-icon>;
-
+    const icon = renderIcons(this.icon, { sign: true, variant: 'neutral', additionalProps: { class: 'tk-accordion-item-icon' } });
     return (
       <Host>
         <div class={rootClasses}>
           <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
-            {this.arrowPosition === 'left' && this.createIcon()}
-            {icon}
+            {this.arrowPosition === 'left' && this.renderCollapseIcon()}
+            {icon.leftIcon}
             <span class="title">{this.createHeader()}</span>
-            {this.arrowPosition === 'right' && this.createIcon()}
+            {icon.rightIcon}
+            {this.arrowPosition === 'right' && this.renderCollapseIcon()}
           </div>
           <div class={`content ${this.active ? 'open' : ''}`}>
             <slot name="content" />

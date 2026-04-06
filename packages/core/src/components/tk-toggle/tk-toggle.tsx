@@ -1,6 +1,7 @@
 import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
+import { getIconElementProps } from '../../utils/icon-utils';
 
 /**
  * The TkToggle component is another basic element for user input. You can use this for turning settings, features or true/false inputs on and off.
@@ -73,10 +74,11 @@ export class TkToggle implements ComponentInterface {
   @Prop() size: 'xlarge' | 'large' | 'base' | 'small' | 'xsmall' = 'base';
 
   /**
-   * The type of the toggle.
+   * The variant of the toggle.
    * @defaultValue info
    */
-  @Prop() variant: 'info' | 'success' = 'info';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'verified' | 'purple' | 'cyan' | 'business' | 'teal' | 'dark' | 'white' =
+    'info';
 
   /**
    * Whether the toggle is in an invalid state.
@@ -130,6 +132,11 @@ export class TkToggle implements ComponentInterface {
   getInputElement(): Promise<HTMLInputElement> {
     return Promise.resolve(this.nativeInput);
   }
+
+  private getActiveIcon(): string {
+    return this.checked ? (this.invalid ? 'close' : this.icon) : '';
+  }
+
   private handleFormReset() {
     this.value = false;
     this.checked = false;
@@ -178,7 +185,17 @@ export class TkToggle implements ComponentInterface {
         <label htmlFor={this.uniqueId}>
           <div class="tk-toggle-input-container">
             {this.renderInput()}
-            <span class="tk-toggle-thumb">{this.showIcon && <span class="material-symbols-outlined tk-toggle-thumb-icon">{this.icon}</span>}</span>
+            <span class="tk-toggle-thumb">
+              {this.showIcon && (
+                <tk-icon
+                  {...getIconElementProps(this.getActiveIcon(), {
+                    variant: this.invalid ? 'danger' : this.variant,
+                    size: this.size === 'large' || this.size === 'xlarge' ? 'medium' : this.size,
+                    color: this.disabled ? 'var(--icon-lightest)' : '',
+                  })}
+                />
+              )}
+            </span>
           </div>
           {this.hasDefaultSlot ? <slot></slot> : this.label && <span class="tk-toggle-label">{this.label}</span>}
         </label>

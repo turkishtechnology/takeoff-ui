@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 .tk-upload-container {
   display: flex;
   flex-direction: column;
@@ -18,31 +20,9 @@
     }
   }
 
-  .hint {
-    color: var(--text-base);
-    line-height: var(--desktop-label-s-line-height);
-    font-size: var(--desktop-label-s-size);
-    font-weight: 300;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-
-    & i {
-      font-size: var(--size-base);
-      width: var(--size-base);
-      height: var(--size-base);
-      color: var(--icon-base);
-    }
-  }
-
   &[aria-invalid] {
     .tk-upload-dropzone {
       border-color: var(--states-danger-base);
-    }
-
-    .hint,
-    .hint i {
-      color: var(--states-danger-base);
     }
   }
 
@@ -54,15 +34,12 @@
 
     &.default {
       display: flex;
-
-      .tk-upload-icon .icon i {
-        font-size: 40px;
-        color: var(--primary-base);
-      }
+      flex-wrap: wrap;
 
       .tk-upload-content {
         display: flex;
         flex-direction: column;
+        min-width: 0;
         gap: 8px;
 
         .tk-upload-text-holder {
@@ -92,13 +69,9 @@
 
         .tk-upload-input {
           display: flex;
+          flex-wrap: wrap;
           gap: 8px;
         }
-      }
-
-      .tk-upload-icon .icon i {
-        font-size: 40px;
-        color: var(--primary-base);
       }
     }
 
@@ -108,16 +81,6 @@
 
       .tk-upload-icon {
         text-align: center;
-
-        .icon {
-          justify-content: center;
-
-          i {
-            font-size: 40px;
-            color: var(--primary-base);
-            padding: 8px;
-          }
-        }
       }
 
       .tk-upload-content {
@@ -156,6 +119,8 @@
 
         .tk-upload-input {
           display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
           gap: 8px;
           padding: 8px;
         }
@@ -165,10 +130,6 @@
     &.drag-over {
       border-color: var(--primary-color);
       background-color: rgba(var(--primary-color-rgb), 0.05);
-
-      .tk-upload-icon {
-        color: var(--primary-color);
-      }
     }
 
     &.disabled {
@@ -183,10 +144,11 @@
     gap: 8px;
     max-height: 500px;
     overflow-y: auto;
+    @include takeoff-scrollbar;
 
     .tk-upload-file-item {
       display: flex;
-      gap: 8px;
+      gap: 12px;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid var(--border-sub-base);
@@ -196,10 +158,12 @@
         width: 50px;
         height: 50px;
         position: relative;
+        flex-shrink: 0;
 
         svg {
           width: 50px;
           height: 50px;
+          flex-shrink: 0;
         }
 
         .extension-text {
@@ -252,80 +216,56 @@
         }
 
         img {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
           border-radius: 8px;
+          flex-shrink: 0;
+          max-width: none;
         }
-      }
-
-      .tk-upload-file-icon {
       }
 
       .tk-upload-file-content {
         display: flex;
         justify-content: space-between;
         flex-grow: 1;
-
-        .tk-upload-file-name {
-          color: var(--text-darkest);
-          font-size: var(--desktop-body-s-size);
-          line-height: var(--desktop-body-s-line-height);
-          word-break: break-word;
-        }
-
-        .tk-upload-file-size-state {
+        min-width: 0;
+        gap: 12px;
+        .tk-upload-file-info {
           display: flex;
-          gap: 8px;
-          color: var(--text-base);
-          font-size: var(--desktop-label-s-size, 12px);
-          font-weight: 300;
-          margin-top: 6px;
+          flex-direction: column;
+          gap: 2px;
+          align-items: flex-start;
+          min-width: 0;
 
-          .tk-upload-size {
+          .tk-upload-file-name {
+            color: var(--text-darkest);
+            font-size: var(--desktop-body-s-size);
+            line-height: var(--desktop-body-s-line-height);
+            word-break: break-word;
           }
 
-          .tk-upload-state {
+          .tk-upload-file-size-state {
             display: flex;
-            align-items: center;
-            gap: 4px;
+            gap: 8px;
+            color: var(--text-base);
+            font-size: var(--desktop-label-s-size, 12px);
+            font-weight: 300;
 
-            .icon {
-              font-size: 16px;
-              width: 16px;
-              height: 16px;
-            }
-
-            &.added .icon {
-              color: var(--states-success-base);
-            }
-
-            &.failed .icon {
-              color: var(--states-danger-base);
+            .tk-upload-state {
+              display: flex;
+              align-items: center;
+              gap: 4px;
             }
           }
         }
 
         .tk-upload-file-buttons {
           display: flex;
+          align-self: center;
           gap: 4px;
         }
       }
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 2px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: var(--secondary-sub-base);
-      opacity: 1;
     }
   }
 

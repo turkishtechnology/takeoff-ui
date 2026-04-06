@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 tk-select {
   display: block;
 }
@@ -6,7 +8,7 @@ tk-select {
   .tk-select-panel {
     position: fixed;
     max-height: 320px;
-    overflow-y: auto;
+    overflow: hidden;
     border-radius: 16px;
     border: 1px solid var(--border-light);
     background: var(--static-light);
@@ -15,9 +17,19 @@ tk-select {
 
     .dropdown-item-holder {
       margin: 8px;
+      padding: 1px;
+      max-height: 304px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      @include takeoff-scrollbar;
+
+      .dropdown-item-top {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
 
       .dropdown-group {
         display: flex;
@@ -61,13 +73,14 @@ tk-select {
         &[data-selected='true'] {
           cursor: pointer;
           background: var(--states-info-lightest);
-          border: 1px solid var(--states-info-light);
+          outline: 1px solid var(--states-info-light);
         }
         &.disabled {
+          pointer-events: none;
           cursor: not-allowed;
           background: var(--background-lightest);
-          border: 1px solid var(--border-light);
           color: var(--text-sub-base);
+          outline: none;
         }
         &:hover {
           cursor: pointer;
@@ -75,27 +88,9 @@ tk-select {
         }
         &[data-active='true'] {
           cursor: pointer;
-          border: 1px solid var(--states-info-base);
+          outline: 1px solid var(--background-light);
         }
       }
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 2px;
-      background: var(--background-lightest);
-      opacity: 1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: var(--secondary-sub-base);
-      opacity: 1;
     }
   }
 
@@ -103,6 +98,9 @@ tk-select {
     .dropdown-item-holder {
       .dropdown-item {
         font-size: var(--desktop-body-m-base-size);
+      }
+      tk-spinner {
+        min-height: 48px;
       }
     }
   }
@@ -112,6 +110,9 @@ tk-select {
       .dropdown-item {
         font-size: var(--desktop-body-s-size);
       }
+      tk-spinner {
+        min-height: 38px;
+      }
     }
   }
 
@@ -119,6 +120,9 @@ tk-select {
     .dropdown-item-holder {
       .dropdown-item {
         font-size: var(--desktop-body-xs-size);
+      }
+      tk-spinner {
+        min-height: 28px;
       }
     }
   }

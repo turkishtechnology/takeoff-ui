@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
-import { IIconOptions } from '../../global/interfaces/IIconOptions';
-import { getIconElementProps } from '../../utils/icon-utils';
+import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { renderIcons } from '../../utils/icon-utils';
 
 @Component({
   tag: 'tk-toggle-button',
@@ -18,7 +18,7 @@ export class TkToggleButton implements ComponentInterface {
   /**
    * Specifies a material icon name to be displayed.
    */
-  @Prop() icon?: string | IIconOptions;
+  @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
    * Defines the position of the icon.
@@ -75,13 +75,26 @@ export class TkToggleButton implements ComponentInterface {
     this.tkToggle.emit({ value: this.value, selected: !this.selected });
   };
 
-  private renderIcon() {
-    const iconClass = `tk-toggle-button-icon ${this.size}`;
-    if (this.icon) {
-      const iconProps = getIconElementProps(this.icon, { size: this.size, class: iconClass, variant: null });
-      return <tk-icon {...iconProps} />;
+  private getIconColor(): string | null {
+    if (this.disabled) return 'var(--icon-sub-base)';
+    if (this.selected) {
+      if (this.type === 'filled' || this.type === 'raised') return 'var(--static-white)';
+      if (this.variant === 'neutral') return 'var(--icon-darkest)';
+      if (this.variant === 'primary') return 'var(--primary-base)';
     }
     return null;
+  }
+
+  private createIcons() {
+    return renderIcons(
+      this.icon,
+      {
+        size: this.size,
+        variant: 'neutral',
+        additionalProps: { color: this.getIconColor() },
+      },
+      this.iconPosition,
+    );
   }
 
   private renderLabel() {
@@ -97,12 +110,13 @@ export class TkToggleButton implements ComponentInterface {
       selected: this.selected && !this.disabled,
       disabled: this.disabled,
     });
+    const icon = this.createIcons();
 
     return (
       <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick}>
-        {this.iconPosition === 'left' && this.renderIcon()}
+        {icon.leftIcon}
         {this.renderLabel()}
-        {this.iconPosition === 'right' && this.renderIcon()}
+        {icon.rightIcon}
       </button>
     );
   }

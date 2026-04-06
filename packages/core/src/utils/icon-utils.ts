@@ -1,7 +1,7 @@
 import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 import { h } from '@stencil/core';
 export interface IconRendererOptions {
-  variant?: string;
+  variant?: string | null;
   sign?: boolean;
   size?: string;
   fill?: boolean;
@@ -48,6 +48,7 @@ export const getIconElementProps = (
       iconTag: props.iconTag || iconTag,
       color: icon.color || props.color,
       fill: icon.fill !== undefined ? icon.fill : props.fill,
+      ...((icon as IIconOptions)?.click ? { onClick: (icon as IIconOptions).click } : {}),
     };
 
     delete mergedProps?.style;

@@ -37,7 +37,7 @@ const Example = () => {
 const Striped = () => {
   const reactCode = `<TkTable columns={column} data={basicData} striped />`;
 
-  const vueCode = `<TkTable :columns.prop="column" :data.prop="basicData" striped />`;
+  const vueCode = `<TkTable :columns="column" :data="basicData" striped />`;
 
   const angularCode = `<tk-table
   [columns]="[

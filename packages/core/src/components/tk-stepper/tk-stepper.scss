@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -11,6 +13,7 @@
 
   &.tk-stepper-horizontal {
     overflow-x: auto;
+    @include takeoff-scrollbar;
 
     .tk-step-item {
       flex: 1;
@@ -145,10 +148,6 @@
         .tk-step-sign {
           border-color: var(--primary-base);
           color: var(--primary-base);
-
-          .tk-step-icon {
-            color: var(--primary-base);
-          }
         }
 
         .tk-step-rail::after {
@@ -206,11 +205,15 @@
     .tk-step-sign {
       width: 16px;
       height: 16px;
+      .tk-step-number {
+        font-size: var(--desktop-body-2xs-size);
+        line-height: var(--desktop-body-2xs-line-height);
+      }
     }
     .tk-step-content {
       .tk-step-header {
         font-size: var(--desktop-body-2xs-size);
-        line-height: var(--desktop-line-height-2xs-normal);
+        line-height: var(--desktop-body-2xs-line-height);
       }
 
       .tk-step-subheader {
@@ -261,6 +264,10 @@
     .tk-step-sign {
       width: 24px;
       height: 24px;
+      .tk-step-number {
+        font-size: var(--desktop-body-xs-size);
+        line-height: var(--desktop-body-xs-line-height);
+      }
     }
     .tk-step-content {
       .tk-step-header {
@@ -270,7 +277,7 @@
 
       .tk-step-subheader {
         font-size: var(--desktop-body-2xs-size);
-        line-height: var(--desktop-line-height-2xs-normal);
+        line-height: var(--desktop-body-2xs-line-height);
       }
     }
     &.tk-stepper-horizontal {
@@ -318,6 +325,10 @@
     .tk-step-sign {
       width: 32px;
       height: 32px;
+      .tk-step-number {
+        font-size: var(--desktop-body-s-size);
+        line-height: var(--desktop-body-s-line-height);
+      }
     }
     .tk-step-content {
       .tk-step-header {
@@ -376,6 +387,10 @@
     .tk-step-sign {
       width: 40px;
       height: 40px;
+      .tk-step-number {
+        font-size: var(--desktop-body-m-size);
+        line-height: var(--desktop-body-m-line-height);
+      }
     }
     .tk-step-content {
       .tk-step-header {

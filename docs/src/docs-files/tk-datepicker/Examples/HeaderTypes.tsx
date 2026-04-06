@@ -20,11 +20,13 @@ const HeaderTypes = () => {
   };
 
   useEffect(() => {
-    const attributes = `headerType="${headerType}"`;
-    const newCodeSample = `<TkDatepicker ${attributes} inline />`;
+    const attributes = `header-type="${headerType}"`;
+    const reactAttributes = `headerType="${headerType}"`;
+    const reactCode = `<TkDatepicker ${reactAttributes} inline />`;
+    const vueCode = `<TkDatepicker ${attributes} inline />`;
 
-    setCodeSampleReact(newCodeSample);
-    setCodeSampleVue(newCodeSample);
+    setCodeSampleReact(reactCode);
+    setCodeSampleVue(vueCode);
   }, [headerType]);
 
   const demo = (

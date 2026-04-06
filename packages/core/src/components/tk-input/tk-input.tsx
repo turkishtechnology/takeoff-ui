@@ -2,13 +2,14 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Pr
 import classNames from 'classnames';
 import Cleave from 'cleave.js';
 import { v4 as uuidv4 } from 'uuid';
-import { IInputMaskOptions } from './interfaces';
+import { IInputMaskOptions } from './types';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { isEqual, isNil } from 'lodash-es';
 import { CleaveOptions } from 'cleave.js/options';
-import { IChipOptions } from '../tk-chips/interfaces';
+import { IChipOptions } from '../tk-chips/types';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -91,6 +92,15 @@ export class TkInput implements ComponentInterface {
    * The maskOptions prop is used to define masking configurations supported by the Cleave.js library. With this prop, you can specify any masking options described in the Cleave.js documentation (https://nosir.github.io/cleave.js/). For example, you can configure it for formatting dates, phone numbers, or credit card numbers as needed.
    */
   @Prop() maskOptions: IInputMaskOptions;
+  @Watch('maskOptions')
+  protected maskOptionsChanged(newValue: IInputMaskOptions, oldValue: IInputMaskOptions) {
+    if (!isEqual(newValue, oldValue)) {
+      this.cleaveInstance?.destroy();
+      this.cleaveInstance = new Cleave(this.nativeInput, {
+        ...this.maskOptions,
+      } as CleaveOptions);
+    }
+  }
 
   /**
    * Maximum value for number inputs
@@ -158,6 +168,18 @@ export class TkInput implements ComponentInterface {
    * A function that determines whether a chip is disabled.
    */
   @Prop() chipDisabled: Function;
+
+  /**
+   * Shows a loading spinner on the right side of the input.
+   * @defaultValue false
+   */
+  @Prop() loading: boolean = false;
+
+  /**
+   * Hides the password lock icon.
+   * @defaultValue false
+   */
+  @Prop() hidePasswordIcon: boolean = false;
 
   /**
    * The value of the input.
@@ -348,17 +370,17 @@ export class TkInput implements ComponentInterface {
           const matches = _value.match(regex);
           _value = matches ? matches.join('') : '';
           input.value = _value;
-        }
+        } else {
+          if (this.maskOptions.letterOnly) {
+            // If letterOnly option is enabled, filter out non-letters
+            _value = _value.replace(/[^a-zA-Z]/g, '');
+            input.value = _value;
+          }
 
-        if (this.maskOptions.letterOnly) {
-          // If letterOnly option is enabled, filter out non-letters
-          _value = _value.replace(/[^a-zA-Z]/g, '');
-          input.value = _value;
-        }
-
-        if (this.cleaveInstance) {
-          this.cleaveInstance?.setRawValue(_value);
-          _value = this.cleaveInstance?.getFormattedValue();
+          if (this.cleaveInstance) {
+            this.cleaveInstance?.setRawValue(_value);
+            _value = this.cleaveInstance?.getFormattedValue();
+          }
         }
       }
 
@@ -503,11 +525,12 @@ export class TkInput implements ComponentInterface {
     }
   }
 
-  private handleClearButtonClick(e) {
+  private handleClearButtonClick = (e: Event) => {
+    if (this.readonly || this.disabled) return;
     e.stopPropagation();
     this.handleFormReset();
     this.tkClearClick.emit();
-  }
+  };
 
   private handleClearButtonKeyDown = (e: KeyboardEvent) => {
     // Make clear button accessible via Space and Enter keys
@@ -531,6 +554,17 @@ export class TkInput implements ComponentInterface {
 
   private handleMouseUp = (event: MouseEvent) => {
     this.visiblePassword(event, false);
+  };
+
+  /**
+   * Handles label click:
+   * - preventDefault() stops the browser from dispatching a synthetic click
+   *   on the associated <input> (caused by htmlFor).
+   * - Manual focus() preserves the label-click-to-focus UX.
+   */
+  private handleLabelClick = (e: MouseEvent): void => {
+    e.preventDefault();
+    this.nativeInput?.focus();
   };
 
   /**
@@ -615,38 +649,12 @@ export class TkInput implements ComponentInterface {
     );
   }
 
-  private renderHint(): HTMLSpanElement {
-    let hint;
-    if (this.hint?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.hint}
-        </span>
-      );
-    }
-
-    if (this.error?.length > 0) {
-      const hintIcon = <tk-icon {...getIconElementProps('info')} />;
-
-      hint = (
-        <span class="hint">
-          {hintIcon}
-          {this.error}
-        </span>
-      );
-    }
-    return hint;
-  }
-
   private renderLabel(): HTMLLabelElement {
     let label;
     if (this.label?.length > 0) {
       const asterisk = <span class="asterisk">*</span>;
       label = (
-        <label htmlFor={this.uniqueId} class="label">
+        <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick}>
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -664,7 +672,7 @@ export class TkInput implements ComponentInterface {
           {...getIconElementProps(
             'remove',
             {
-              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
+              class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
               onClick: this.handleMinusButtonClick.bind(this),
             },
             undefined,
@@ -678,7 +686,7 @@ export class TkInput implements ComponentInterface {
           {...getIconElementProps(
             'add',
             {
-              class: classNames('counter-icon', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
+              class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
               onClick: this.handlePlusButtonClick.bind(this),
             },
             undefined,
@@ -695,11 +703,14 @@ export class TkInput implements ComponentInterface {
     let passwordRightIcon: HTMLTkIconElement;
 
     if (this.inputType == 'password') {
-      passwordLeftIcon = <tk-icon {...getIconElementProps('lock')} />;
+      if (!this.hidePasswordIcon) {
+        passwordLeftIcon = <tk-icon {...getIconElementProps('lock', { color: 'var(--icon-base)' })} />;
+      }
       passwordRightIcon = (
         <tk-icon
           {...getIconElementProps('visibility', {
             class: 'clickable',
+            color: 'var(--icon-base)',
             onMouseDown: this.handleMouseDown,
             onMouseUp: this.handleMouseUp,
           })}
@@ -723,7 +734,7 @@ export class TkInput implements ComponentInterface {
 
     // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, {}, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(this.icon, { additionalProps: { color: 'var(--icon-base)' } }, this.iconPosition);
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }
@@ -753,24 +764,24 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
+          {this.loading && <tk-spinner size="xxsmall"></tk-spinner>}
           {showClearButton && (
-            <tk-button
-              variant="neutral"
-              type="text"
-              icon="close"
-              size="small"
-              onTk-click={e => this.handleClearButtonClick(e)}
-              onKeyDown={this.handleClearButtonKeyDown}
-              class="tk-input-clear-button"
-              disabled={this.disabled}
-            ></tk-button>
+            <tk-icon
+              {...getIconElementProps('close', {
+                class: classNames('tk-input-clear-button clickable', { disabled: this.disabled || this.readonly }),
+                color: 'var(--icon-base)',
+                onClick: this.handleClearButtonClick,
+                onKeyDown: this.handleClearButtonKeyDown,
+                tabindex: this.disabled || this.readonly ? -1 : 0,
+              })}
+            />
           )}
           {_rightIcon}
           {!_rightIcon && this.renderPasswordIcons().right}
           {this.renderAlignmentButtons().right}
         </div>
         {safetyStatus}
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

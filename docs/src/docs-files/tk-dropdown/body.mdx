@@ -1,9 +1,19 @@
+import Playground from '../../components/Playground';
+import dropdownConfigData from './dropdownPlaygroundConfig.json';
+import { TkDropdown, TkButton } from '@takeoff-ui/react';
 import Basic from './Examples/Basic';
 import Position from './Examples/Position';
 import State from './Examples/State';
 import CustomItem from './Examples/CustomItem';
 import ItemClick from './Examples/ItemClick';
 import Size from './Examples/Size';
+
+### Playground
+
+<Playground
+  configs={[dropdownConfigData]}
+  componentMap={{ TkDropdown, TkButton }}
+/>
 
 ## Basic
 

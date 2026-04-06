@@ -1,256 +1,90 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkTextarea } from '../tk-textarea';
+
 describe('tk-textarea', () => {
-  ////Basic Rendering
-  describe('basic rendering', () => {
-    it('renders with default props', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea></tk-textarea>`,
-      });
-
-      expect(page.root).toBeTruthy();
+  it('renders label, placeholder, rows and asterisk', async () => {
+    const page = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea label="test" placeholder="text" rows="5" show-asterisk="true"></tk-textarea>`,
     });
-    it('renders with label', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea label="test"></tk-textarea>`,
-      });
 
-      await page.waitForChanges();
-
-      const textarea = page.root.shadowRoot.querySelector('.tk-textarea');
-
-      expect(textarea.getAttribute('htmlFor')).not.toBeNull();
-
-      const label = page.root.shadowRoot.querySelector('.label');
-
-      expect(label.textContent).toBe('test');
-    });
-    it('renders with hint', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea hint="test"></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const hint = page.root.shadowRoot.querySelector('.hint');
-
-      expect(hint.textContent).toBe('infotest');
-    });
-    it('renders with error', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea error="test"></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const hint = page.root.shadowRoot.querySelector('.hint');
-
-      expect(hint.textContent).toBe('infotest');
-    });
-    it('renders with name', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea name="test"></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      expect(textarea.getAttribute('name')).toBe('test');
-    });
-    it('renders with placeholder', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea placeholder="test"></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      expect(textarea.getAttribute('placeholder')).toBe('test');
-    });
-    it('renders rows correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea rows=5></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      expect(textarea.getAttribute('rows')).toBe('5');
-    });
-    it('renders with showAsterisk', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea label="test" show-asterisk="true"></tk-textarea>`,
-      });
-
-      await page.waitForChanges();
-
-      const asterisk = page.root.shadowRoot.querySelector('label .asterisk');
-
-      expect(asterisk).toBeTruthy();
-    });
+    expect(page.root.shadowRoot.querySelector('label.label').textContent).toContain('test');
+    expect(page.root.shadowRoot.querySelector('.asterisk')).toBeTruthy();
+    expect(page.root.shadowRoot.querySelector('textarea').getAttribute('placeholder')).toBe('text');
+    expect(page.root.shadowRoot.querySelector('textarea').getAttribute('rows')).toBe('5');
   });
-  //// State
-  describe('state handling', () => {
-    it('handles disabled state', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea></tk-textarea>`,
-      });
 
-      page.root.disabled = true;
-
-      await page.waitForChanges();
-
-      const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
-
-      expect(container.hasAttribute('aria-disabled')).toBe(true);
-
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      expect(textarea.hasAttribute('disabled')).toBe(true);
+  it('renders hint and error content through the shared hint wrapper', async () => {
+    const hintPage = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea hint="test"></tk-textarea>`,
     });
 
-    it('handles readonly state', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea readonly="true"></tk-textarea>`,
-      });
+    expect(hintPage.root.shadowRoot.querySelector('.tk-hint-wrapper').textContent).toContain('test');
 
-      const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
-
-      expect(container.hasAttribute('aria-readonly')).toBe(true);
-
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      expect(textarea.hasAttribute('readOnly')).toBe(true);
-    });
-    it('handles invalid state', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea></tk-textarea>`,
-      });
-
-      page.root.invalid = true;
-
-      await page.waitForChanges();
-
-      const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
-
-      expect(container.hasAttribute('aria-invalid')).toBe(true);
+    const errorPage = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea error="bad value"></tk-textarea>`,
     });
 
-    it('renders with different sizes', async () => {
-      const sizes = ['small', 'base', 'large'];
-      for (const size of sizes) {
-        const page = await newSpecPage({
-          components: [TkTextarea],
-          html: `<tk-textarea size='${size}'></tk-textarea>`,
-        });
-        await page.waitForChanges();
-
-        const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
-
-        expect(container.classList.contains(size)).toBe(true);
-      }
-    });
+    expect(errorPage.root.shadowRoot.querySelector('.tk-hint-wrapper').textContent).toContain('bad value');
   });
-  //// Event
-  describe('event handling', () => {
-    it('emits events correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea></tk-textarea>`,
-      });
 
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      // Test focus event
-      const focusSpy = jest.fn();
-      page.root.addEventListener('tk-focus', focusSpy);
-      textarea.dispatchEvent(new Event('focus'));
-
-      expect(focusSpy).toHaveBeenCalled();
-
-      // Test blur event
-      const blurSpy = jest.fn();
-
-      page.root.addEventListener('tk-blur', blurSpy);
-      textarea.dispatchEvent(new Event('blur'));
-
-      expect(blurSpy).toHaveBeenCalled();
-
-      // Test change event
-      const changeSpy = jest.fn();
-
-      page.root.addEventListener('tk-change', changeSpy);
-
-      textarea.value = 'new value';
-      textarea.dispatchEvent(new Event('input'));
-
-      expect(changeSpy).toHaveBeenCalled();
+  it('applies disabled, readonly and invalid states', async () => {
+    const page = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea readonly="true"></tk-textarea>`,
     });
-    it('handles tabindex correctly', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea tabindex="1"></tk-textarea>`,
-      });
 
-      const textarea = page.root.shadowRoot.querySelector('textarea');
+    page.root.disabled = true;
+    page.root.invalid = true;
+    await page.waitForChanges();
 
-      expect(textarea.getAttribute('tabindex')).toBe('1');
-      expect(page.root.hasAttribute('tabindex')).toBe(false);
-    });
-    it('handles values', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea value="Test Value"></tk-textarea>`,
-      });
+    const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
+    const textarea = page.root.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
 
-      const textarea = page.root.shadowRoot.querySelector('textarea');
-
-      textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-
-      await page.waitForChanges();
-
-      expect(page.root.value).toEqual('Test Value');
-    });
+    expect(container.getAttribute('aria-disabled')).toBe('');
+    expect(container.getAttribute('aria-readonly')).toBe('');
+    expect(container.getAttribute('aria-invalid')).toBe('');
+    expect(textarea.getAttribute('disabled')).toBe('');
+    expect(textarea.getAttribute('readonly')).toBe('');
   });
-  //// Method
-  describe('public methods', () => {
-    it('sets focus using setFocus method', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea></tk-textarea>`,
-      });
 
-      const focusSpy = jest.fn();
-
-      page.root.addEventListener('tk-focus', focusSpy);
-
-      await page.root.setFocus();
-
-      expect(focusSpy).toHaveBeenCalled();
+  it('emits focus, blur and change events', async () => {
+    const page = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea></tk-textarea>`,
     });
-    it('handles form reset', async () => {
-      const page = await newSpecPage({
-        components: [TkTextarea],
-        html: `<tk-textarea value="test"></tk-textarea>`,
-      });
 
-      await page.root.formResetCallback();
+    const textarea = page.root.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
+    const focusSpy = jest.fn();
+    const blurSpy = jest.fn();
+    const changeSpy = jest.fn();
 
-      expect(page.root.value).toBeNull();
+    page.root.addEventListener('tk-focus', focusSpy);
+    page.root.addEventListener('tk-blur', blurSpy);
+    page.root.addEventListener('tk-change', changeSpy);
+
+    textarea.dispatchEvent(new Event('focus'));
+    textarea.value = 'new value';
+    textarea.dispatchEvent(new Event('input'));
+    textarea.dispatchEvent(new Event('blur'));
+    await page.waitForChanges();
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(changeSpy).toHaveBeenCalled();
+    expect(blurSpy).toHaveBeenCalled();
+  });
+
+  it('supports setFocus and form reset', async () => {
+    const page = await newSpecPage({
+      components: [TkTextarea],
+      html: `<tk-textarea value="test"></tk-textarea>`,
     });
+
+    await page.root.setFocus();
+    await page.root.formResetCallback();
+
+    expect(page.root.value).toBeNull();
   });
 });

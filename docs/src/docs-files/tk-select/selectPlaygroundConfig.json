@@ -4,6 +4,16 @@
   "hasChildren": false,
   "props": [
     {
+      "key": "options",
+      "label": "Options",
+      "type": "json",
+      "defaultValue": [
+        { "label": "Option 1", "value": "1" },
+        { "label": "Option 2", "value": "2" },
+        { "label": "Option 3", "value": "3" }
+      ]
+    },
+    {
       "key": "label",
       "label": "Label",
       "type": "text",
@@ -29,12 +39,9 @@
     {
       "key": "dropdownWidthMode",
       "label": "Dropdown Width Mode",
-      "type": "select",
+      "type": "text",
       "defaultValue": "match-parent",
-      "options": [
-        { "label": "Match Parent", "value": "match-parent" },
-        { "label": "Auto", "value": "auto" }
-      ]
+      "tooltip": "Accepts 'match-parent', 'auto', or a pixel value (e.g. '200px')."
     },
     {
       "key": "icon",

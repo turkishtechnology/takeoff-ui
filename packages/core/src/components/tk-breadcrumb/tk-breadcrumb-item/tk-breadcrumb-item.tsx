@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../../utils/icon-utils';
+import { renderIcons } from '../../../utils/icon-utils';
 import { IIconOptions } from '../../../global/interfaces/IIconOptions';
 
 @Component({
@@ -45,18 +45,21 @@ export class TkBreadcrumbItem implements ComponentInterface {
       href: this.href,
       ...(this.isExternal && { target: '_blank', rel: 'noopener noreferrer' }),
     };
-
-    const icon = <tk-icon {...getIconElementProps(this.icon, { class: 'tk-breadcrumb-item-icon', variant: null }, undefined, 'span')} />;
+    const { leftIcon, rightIcon } = renderIcons(this.icon, {
+      additionalProps: { color: this.isCurrent ? 'var(--icon-dark)' : 'var(--icon-sub-base)' },
+      iconTag: 'span',
+    });
 
     return (
       <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null}>
         <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0}>
-          {icon}
+          {leftIcon}
           {this.label && (
             <span class="tk-breadcrumb-item-label">
               <slot>{this.label}</slot>
             </span>
           )}
+          {rightIcon}
         </a>
       </li>
     );

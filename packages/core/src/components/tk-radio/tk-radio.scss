@@ -59,17 +59,6 @@ tk-radio {
     }
   }
 
-  &:hover {
-    .mask {
-      background-color: var(--background-lightest);
-    }
-  }
-
-  input:focus-visible + .mask {
-    border-color: var(--states-info-base);
-    background-color: var(--static-light);
-  }
-
   input:checked + .mask {
     border-color: var(--states-info-lightest);
     background-color: var(--static-light);
@@ -78,10 +67,24 @@ tk-radio {
       display: block;
     }
   }
+}
 
-  &:hover input:checked + .mask {
-    border-color: var(--states-info-light);
-    background-color: var(--states-info-lightest);
+tk-radio:not([disabled]) {
+  .tk-radio-container {
+    &:hover {
+      .mask {
+        background-color: var(--background-lightest);
+      }
+    }
+
+    input:focus-visible + .mask {
+      border-color: var(--states-info-base);
+    }
+
+    &:hover input:checked + .mask {
+      border-color: var(--states-info-light);
+      background-color: var(--states-info-lightest);
+    }
   }
 }
 
@@ -89,6 +92,8 @@ tk-radio[disabled] {
   .tk-radio-container {
     cursor: not-allowed;
     color: var(--text-sub-base);
+    pointer-events: none;
+
     input + .mask {
       border: 2px solid var(--border-light);
       background-color: var(--background-light);
@@ -100,7 +105,7 @@ tk-radio[disabled] {
   }
 }
 
-tk-radio[invalid] {
+tk-radio[invalid]:not([disabled]) {
   .tk-radio-container {
     .mask {
       border: 2px solid var(--states-danger-base);
@@ -121,11 +126,13 @@ tk-radio[data-type='card'] {
   border-radius: var(--radius-m-base);
   border: 1px solid var(--border-light);
 
+  .tk-radio-container {
+    padding: var(--card-switcher-container-v-padding) var(--card-switcher-container-h-padding);
+  }
+}
+
+tk-radio[data-type='card']:not([disabled]) {
   &:hover {
     background-color: var(--background-lightest);
-  }
-
-  .tk-radio-container {
-    padding: var(--card-radio-container-v-padding) var(--card-radio-container-h-padding);
   }
 }

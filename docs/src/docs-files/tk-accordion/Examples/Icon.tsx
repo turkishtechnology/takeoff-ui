@@ -5,27 +5,27 @@ import React from 'react';
 const Icon = () => {
   const reactCode = `<TkAccordion>
   <TkAccordionItem header="Panel 1" icon="home">
-    <div slot="content">hello</div>
+    <div slot="content">Panel 1 Content</div>
   </TkAccordionItem>
   <TkAccordionItem header="Panel 2" icon={{ name: 'home', fill: true, color: 'red' }}>
-    <div slot="content">merhaba</div>
+    <div slot="content">Panel 2 Content</div>
   </TkAccordionItem>
   <TkAccordionItem header="Panel 3">
-    <div slot="content">hallo</div>
+    <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>`;
 
-  const vueCode = `<tk-accordion>
-  <tk-accordion-item header="Panel 1" icon="home">
+  const vueCode = `<TkAccordion>
+  <TkAccordionItem header="Panel 1" icon="home">
     <div slot="content">Panel 1 Content</div>
-  </tk-accordion-item>
-  <tk-accordion-item header="Panel 2" :icon="{ name: 'home', fill: true, color: 'red' }">
+  </TkAccordionItem>
+  <TkAccordionItem header="Panel 2" :icon="{ name: 'home', fill: true, color: 'red' }">
     <div slot="content">Panel 2 Content</div>
-  </tk-accordion-item>
-  <tk-accordion-item header="Panel 3">
+  </TkAccordionItem>
+  <TkAccordionItem header="Panel 3">
     <div slot="content">Panel 3 Content</div>
-  </tk-accordion-item>
-</tk-accordion>`;
+  </TkAccordionItem>
+</TkAccordion>`;
 
   const angularCode = `<tk-accordion>
   <tk-accordion-item header="Panel 1" icon="home">

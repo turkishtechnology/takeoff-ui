@@ -16,7 +16,7 @@ const Basic = () => {
 
   const vueCode = `<TkSelect
   label="Text Input"
-  :options.prop="[
+  :options="[
     { value: 'female', label: 'Female' },
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },
