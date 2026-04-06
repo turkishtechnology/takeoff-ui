@@ -1,22 +1,24 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAlert } from '../tk-alert';
+import { TkIcon } from '../../tk-icon/tk-icon';
+import { TkButton } from '../../tk-button/tk-button';
 
 describe('tk-alert', () => {
   it('renders header, message and variant classes', async () => {
     const page = await newSpecPage({
-      components: [TkAlert],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert header="Test header" message="Test message" variant="success"></tk-alert>`,
     });
 
     expect(page.root.shadowRoot.querySelector('.tk-alert-content').textContent).toContain('Test header');
     expect(page.root.shadowRoot.querySelector('.tk-alert-content').textContent).toContain('Test message');
     expect(page.root.shadowRoot.querySelector('.tk-alert-container').classList.contains('success')).toBe(true);
-    expect(page.root.shadowRoot.querySelector('tk-icon').textContent).toContain('check_circle');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.textContent).toContain('check_circle');
   });
 
   it('renders custom icon objects and multiple messages', async () => {
     const page = await newSpecPage({
-      components: [TkAlert],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert></tk-alert>`,
     });
 
@@ -24,14 +26,14 @@ describe('tk-alert', () => {
     page.root.message = ['First', 'Second'];
     await page.waitForChanges();
 
-    expect(page.root.shadowRoot.querySelector('tk-icon i.material-symbols-rounded').textContent).toBe('search');
+    expect(page.root.shadowRoot.querySelector('tk-icon .material-symbols-rounded')?.textContent).toBe('search');
     expect(page.root.shadowRoot.querySelectorAll('.tk-alert-message')).toHaveLength(2);
   });
 
   it('applies icon size classes', async () => {
     for (const size of ['small', 'base', 'large'] as const) {
       const page = await newSpecPage({
-        components: [TkAlert],
+        components: [TkAlert, TkIcon, TkButton],
         html: `<tk-alert icon="home" icon-size="${size}"></tk-alert>`,
       });
 
@@ -49,7 +51,7 @@ describe('tk-alert', () => {
       'Ligula turpis id netus himenaeos magna semper netus elit.',
     ];
     const page = await newSpecPage({
-      components: [TkAlert],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert></tk-alert>`,
     });
     page.root.message = message;
@@ -71,7 +73,7 @@ describe('tk-alert', () => {
 describe('event handling', () => {
   it('should remove the alert when close button is clicked', async () => {
     const page = await newSpecPage({
-      components: [TkAlert],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert removable
               ></tk-alert>`,
     });
@@ -80,17 +82,17 @@ describe('event handling', () => {
 
     const button = page.root.shadowRoot.querySelector('tk-button');
 
-    expect(button).toBeTruthy;
-    expect(button.getAttribute('icon')).toBe('close');
+    expect(button).toBeTruthy();
+    expect(button.shadowRoot.querySelector('tk-icon')?.textContent).toContain('close');
 
-    button.dispatchEvent(new Event('click'));
+    (button.shadowRoot.querySelector('button') as HTMLButtonElement).click();
 
     await page.waitForChanges();
     expect(page.root).toBeNull;
   });
   it('should call handleCloseButtonClick when close button is clicked', async () => {
     const page = await newSpecPage({
-      components: [TkAlert],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert removable
                 ></tk-alert>`,
     });
@@ -104,13 +106,13 @@ describe('event handling', () => {
     const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
     const button = page.root.shadowRoot.querySelector('tk-button');
 
-    expect(button).toBeTruthy;
+    expect(button).toBeTruthy();
 
-    button.dispatchEvent(new Event('click'));
+    (button.shadowRoot.querySelector('button') as HTMLButtonElement).click();
 
     await page.waitForChanges();
 
-    expect(spy).toHaveBeenCalled;
+    expect(spy).toHaveBeenCalled();
     expect(page.root).toBeNull;
   });
 });
