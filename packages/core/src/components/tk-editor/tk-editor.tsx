@@ -8,11 +8,11 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { TOOLBAR_ICONS } from './constants';
-import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './interfaces';
+import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './types';
 import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
-import { getIconElementProps } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
@@ -500,7 +500,7 @@ export class TkEditor {
     return (
       <button
         class={classNames('tk-editor-button', `tk-editor-button-${button.action}`, `tk-editor-button-${button.behavior}`, {
-          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button) && !this.disabled,
+          'tk-editor-button-active': button.behavior === 'toggle' && this.isButtonActive(button),
           'tk-editor-button-disabled': this.disabled,
           'tk-editor-button-readonly': this.readonly,
           [`tk-editor-button-${button.action}-disabled`]: (button.action === 'undo' || button.action === 'redo') && this.isHistoryButtonDisabled(button.action),
@@ -532,27 +532,6 @@ export class TkEditor {
         </div>
       </div>
     );
-  }
-
-  private renderHint(): HTMLDivElement {
-    let hint: HTMLDivElement;
-    if (this.hint?.length > 0) {
-      hint = (
-        <div class="tk-editor-supporting-text">
-          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
-          <span>{this.hint}</span>
-        </div>
-      );
-    }
-    if (this.error?.length > 0) {
-      hint = (
-        <div class="tk-editor-supporting-text error">
-          <tk-icon {...getIconElementProps('info', { class: classNames('tk-editor-supporting-text-icon'), variant: null })} />
-          <span>{this.error}</span>
-        </div>
-      );
-    }
-    return hint;
   }
 
   private renderFooter(): HTMLDivElement | null {
@@ -609,7 +588,7 @@ export class TkEditor {
           />
           {this.renderFooter()}
         </div>
-        {this.renderHint()}
+        {renderHint(this.hint, this.error, this.invalid)}
       </div>
     );
   }

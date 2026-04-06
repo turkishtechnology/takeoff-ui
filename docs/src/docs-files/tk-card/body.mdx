@@ -3,27 +3,14 @@ import CardWithContent from './Examples/CardWithContent';
 import CardWithHeaderMode from './Examples/CardWithHeaderMode';
 import CardWithImage from './Examples/CardWithImage';
 import CardWithFooter from './Examples/CardWithFooter';
+import CardWithHeaderAction from './Examples/CardWithHeaderAction';
 import Playground from '../../components/Playground';
 import cardConfigData from './cardPlaygroundConfig.json';
-import { TkCard } from '@takeoff-ui/react';
-
-export const TkCardWithContent = props => {
-  return (
-    <TkCard {...props}>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-    </TkCard>
-  );
-};
+import { TkCard, TkButton } from '@takeoff-ui/react';
 
 ### Playground
 
-<Playground
-  configs={[cardConfigData]}
-  componentMap={{ TkCard: TkCardWithContent }}
-/>
+<Playground configs={[cardConfigData]} componentMap={{ TkCard, TkButton }} />
 
 ## Basic
 
@@ -59,3 +46,10 @@ Illustrates how to add a footer using the `footer-actions` slot or customize it
 with the `footerType` property.
 
 <CardWithFooter />
+
+## Header Action
+
+Shows how to place a custom action on the right side of the card header using
+the `header-action` slot.
+
+<CardWithHeaderAction />

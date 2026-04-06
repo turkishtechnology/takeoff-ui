@@ -160,7 +160,6 @@ const treeData = [
   items={treeData}
   branchIcon="category"
   leafIcon="label"
-  onTkItemClick={(e) => console.log('Clicked item:', e.detail)}
 />
 <TkTreeView 
   mode="stepper" 
@@ -169,7 +168,6 @@ const treeData = [
   items={treeData}
   branchIcon="category"
   leafIcon="label"
-  onTkItemClick={(e) => console.log('Clicked item:', e.detail)}
 />
 `);
     setVueCode(`
@@ -216,18 +214,16 @@ const treeData = [
     type="divided" 
     size="base" 
     :items="treeData"
-    branch-icon="category"
-    leaf-icon="label"
-    @tkItemClick="(e) => console.log('Clicked item:', e.detail)"
+    branchIcon="category"
+    leafIcon="label"
   />
   <TkTreeView 
     mode="stepper" 
     type="divided" 
     size="base" 
     :items="treeData"
-    branch-icon="category"
-    leaf-icon="label"
-    @tkItemClick="(e) => console.log('Clicked item:', e.detail)"
+    branchIcon="category"
+    leafIcon="label"
   />
 </template>
 `);

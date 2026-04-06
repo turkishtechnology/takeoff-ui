@@ -237,14 +237,14 @@ const handleExpandedRowsChange = (rows) => {
 
 <template>
  <TkTable
-    :columns.prop="column"
-    :data.prop="data"
+    :columns="column"
+    :data="data"
     dataKey="id"
     paginationMethod="client"
     :rowsPerPage="5"
     :totalItems="data.length"
     :expandedRows="expandedRows"
-    @tkExpandedRowsChange="(e) => handleExpandedRowsChange(e.detail)"
+    @tk-expanded-rows-change="(e) => handleExpandedRowsChange(e.detail)"
   >
       <div v-for="item, index in expandedRows" :slot="\`expand-content-\${item.id}\`" :key="'expanded-row-' + index">
         <div :style="{ display: 'flex', gap: '8px' }">content</div>

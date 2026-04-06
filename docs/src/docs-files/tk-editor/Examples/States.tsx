@@ -8,16 +8,16 @@ const States = () => {
 ${content}
 \`;
 
-<TkEditor value={content} readonly showAsterisk />
-<TkEditor value={content} disabled />
+<TkEditor label="Readonly" value={content} readonly showAsterisk />
+<TkEditor label="Disabled" value={content} disabled />
 `;
 
   const vueCode = `const content = ref(\`
 ${content}
 \`);
 
-<TkEditor v-model="content" readonly showAsterisk />
-<TkEditor v-model="content" disabled />
+<TkEditor label="Readonly" v-model="content" readonly showAsterisk />
+<TkEditor label="Disabled" v-model="content" disabled />
 `;
 
   const demo = (

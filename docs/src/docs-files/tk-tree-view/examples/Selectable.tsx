@@ -225,10 +225,10 @@ const treeData = [
     size="base"
     :items="treeData"
     :selectable="true"
-    :selection-strategy="${selectionStrategy}"
+    :selectionStrategy="selectionStrategy"
     v-model="selectedItems"
-    branch-icon="folder"
-    leaf-icon="insert_drive_file"
+    branchIcon="folder"
+    leafIcon="insert_drive_file"
   />
   
   <div>

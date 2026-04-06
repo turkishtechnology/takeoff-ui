@@ -126,7 +126,7 @@ const CustomStyles = () => {
   type="divided"
   size="base"
   :items="sampleData"
-  branch-icon="folder"
+  branchIcon="folder"
 ></tk-tree-view>`;
 
   const demo = (

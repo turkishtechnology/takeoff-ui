@@ -1,0 +1,91 @@
+{
+  "name": "TkTable",
+  "componentName": "TkTable",
+  "hasChildren": false,
+  "fullWidth": true,
+  "height": 800,
+  "staticProps": {
+    "data": [
+      { "id": "f230fh0g3", "name": "Bamboo Watch", "category": "Accessories", "quantity": 24 },
+      { "id": "nvklal433", "name": "Black Watch", "category": "Onyama", "quantity": 42 },
+      { "id": "zz21cz3c1", "name": "Blue Band", "category": "Accessories", "quantity": 87 },
+      { "id": "244wgerg2", "name": "Blue T-Shirt", "category": "Fitness", "quantity": 12 },
+      { "id": "h456wer53", "name": "Bracelet", "category": "Clothing", "quantity": 45 }
+    ]
+  },
+  "props": [
+    {
+      "key": "columns",
+      "label": "Columns",
+      "type": "json",
+      "defaultValue": [
+        { "field": "id", "header": "Id" },
+        { "field": "name", "header": "Name" },
+        { "field": "category", "header": "Category" },
+        { "field": "quantity", "header": "Quantity" }
+      ]
+    },
+    {
+      "key": "headerType",
+      "label": "Header Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Dark", "value": "dark" },
+        { "label": "Primary", "value": "primary" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "X Small", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" }
+      ]
+    },
+    {
+      "key": "selectionMode",
+      "label": "Selection Mode",
+      "type": "select",
+      "defaultValue": "",
+      "options": [
+        { "label": "None", "value": "" },
+        { "label": "Checkbox", "value": "checkbox" },
+        { "label": "Radio", "value": "radio" }
+      ]
+    },
+    {
+      "key": "paginationType",
+      "label": "Pagination Type",
+      "type": "select",
+      "defaultValue": "outlined",
+      "options": [
+        { "label": "Grouped", "value": "grouped" },
+        { "label": "Outlined", "value": "outlined" },
+        { "label": "Text", "value": "text" }
+      ]
+    },
+    {
+      "key": "striped",
+      "label": "Striped",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "loading",
+      "label": "Loading",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "multiSort",
+      "label": "Multi Sort",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

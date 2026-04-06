@@ -31,7 +31,7 @@ export class TkIcon implements ComponentInterface {
    * Sets size for the component.
    * @defaultValue 'base'
    */
-  @Prop() size: 'xxlarge' | 'xlarge' | 'large' | 'medium' | 'base' | 'small' | 'xsmall' = 'base';
+  @Prop() size: 'xxlarge' | 'xlarge' | 'large' | 'medium' | 'base' | 'small' | 'xsmall' | 'xxsmall' = 'base';
 
   /**
    * Indicates whether the icon should be filled
@@ -107,18 +107,6 @@ export class TkIcon implements ComponentInterface {
 
     const iconElement = <IconTag {...iconProps}>{this.icon}</IconTag>;
 
-    if (this.sign) {
-      return (
-        <div
-          class="tk-icon-sign-container"
-          style={{
-            borderColor: this.borderColor,
-          }}
-        >
-          {iconElement}
-        </div>
-      );
-    }
     return iconElement;
   }
 }

@@ -1,6 +1,6 @@
 import { Component, h, Prop, State, Event, EventEmitter, Element, Watch, Method, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { IStep, IStepClickDetail } from './interfaces';
+import { IStep, IStepClickDetail } from './types';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { CSSStyleProperties } from '../../global/types';
 import { getIconElementProps } from '../../utils/icon-utils';
@@ -216,7 +216,7 @@ export class TkStepper implements ComponentInterface {
       small: 'base',
       xsmall: 'xsmall',
     };
-    const defaultProps = { size: iconSizes[this.size], fill: true, color: 'var(--primary-base)', ...props, class: classNames('tk-step-icon', props?.class) };
+    const defaultProps = { size: iconSizes[this.size], fill: true, ...props, class: props?.class };
     const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
     return <tk-icon {...iconProps} />;

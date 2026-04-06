@@ -1,0 +1,51 @@
+{
+  "name": "TkToggleButtonGroup",
+  "componentName": "TkToggleButtonGroup",
+  "hasChildren": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkToggleButton",
+      "props": { "label": "Option 1", "value": "1" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkToggleButton",
+      "props": { "label": "Option 2", "value": "2" }
+    },
+    {
+      "type": "component",
+      "componentName": "TkToggleButton",
+      "props": { "label": "Option 3", "value": "3" }
+    }
+  ],
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "divided",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Light", "value": "light" }
+      ]
+    },
+    {
+      "key": "direction",
+      "label": "Direction",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "rounded",
+      "label": "Rounded",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

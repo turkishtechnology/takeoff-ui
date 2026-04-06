@@ -23,7 +23,7 @@ const State = () => {
   const vueCode = `<TkCurrencyInput
   label="Error"
   placeholder="Error"
-  invalid={true}
+  :invalid="true"
   error="Bu alan zorunludur"
 />
 <TkCurrencyInput

@@ -1,4 +1,4 @@
-import { Component, Prop, Element, h, State, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, h, State, ComponentInterface, Host } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
@@ -69,6 +69,12 @@ export class TkBadge implements ComponentInterface {
   @Prop() size: 'large' | 'base' | 'small' = 'base';
 
   /**
+   * If true, the badge will take the full width of its container.
+   * @defaultValue false
+   */
+  @Prop() fullWidth: boolean = false;
+
+  /**
    * Determines the badge's variant for different styles.
    * @defaultValue 'primary'
    */
@@ -123,6 +129,7 @@ export class TkBadge implements ComponentInterface {
       'icon-only': this.icon && !this.label && !this.dot && !hasMultipleIcons,
       'dot': this.dot,
       'count': isCountOnly,
+      [`icon-${this.iconPosition}`]: !!this.icon && !this.dot,
     });
 
     // Handle icon rendering using utility function
@@ -131,9 +138,7 @@ export class TkBadge implements ComponentInterface {
     if (this.icon && !this.dot) {
       const { leftIcon, rightIcon } = renderIcons(
         this.icon,
-        {
-          additionalProps: { variant: null },
-        },
+        { variant: this.variant, size: this.size, additionalProps: { ...(this.type === 'filled' ? { color: 'var(--static-white)' } : {}) } },
         this.iconPosition,
       );
       _leftIcon = leftIcon;
@@ -141,14 +146,16 @@ export class TkBadge implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses}>
-        <slot />
-        <span class={badgeClasses}>
-          {_leftIcon}
-          {this.renderContent()}
-          {_rightIcon}
-        </span>
-      </div>
+      <Host class={{ 'full-width': this.fullWidth && !this.hasSlot }}>
+        <div class={rootClasses}>
+          <slot />
+          <span class={badgeClasses}>
+            {_leftIcon}
+            {this.renderContent()}
+            {_rightIcon}
+          </span>
+        </div>
+      </Host>
     );
   }
 }

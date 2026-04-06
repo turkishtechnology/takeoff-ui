@@ -1,7 +1,9 @@
-import { IInputMaskOptions } from '../tk-input/interfaces';
+import { IInputMaskOptions } from '../tk-input/types';
 import { CSSStyleProperties } from '../../global/types';
-import { IDateSelection } from '../tk-datepicker/tk-datepicker';
+import { IDateSelection } from '../tk-datepicker/types';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { ITreeItem } from '../tk-treeview/types';
+import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
 /**
  * Defines the columns for the table
@@ -43,10 +45,10 @@ export interface ITableColumn {
   style?: CSSStyleProperties;
   /** When true, search and sort icons will only be displayed when hovering over the th element */
   showIconsOnHover?: boolean;
-  /** Defines the filter type for this column (text, checkbox or radio) */
-  filterType?: 'text' | 'checkbox' | 'radio' | 'datepicker';
-  /** Defines options for checkbox or radio filter type */
-  filterOptions?: IFilterOption[];
+  /** Defines the filter type for this column (text, checkbox, radio, datepicker or treeview) */
+  filterType?: 'text' | 'checkbox' | 'radio' | 'datepicker' | 'treeview';
+  /** Defines options for checkbox, radio or treeview filter type */
+  filterOptions?: IFilterOption[] | ITreeItem[];
   /** Defines the label of the buttons */
   filterButtons?: {
     searchButton?: { label?: string };
@@ -85,6 +87,20 @@ export interface ITableColumn {
       locale?: string;
       showTimePicker?: boolean;
       size?: 'small' | 'base' | 'large';
+    };
+    treeViewOptions?: {
+      size?: 'small' | 'base' | 'large';
+      branchIcon?: string;
+      leafIcon?: string;
+      showBadge?: boolean;
+      showZeroCountBadges?: boolean;
+      badgeOptions?: IBadgeOptions;
+      showPointer?: boolean;
+      selectionStrategy?: 'all' | 'leaf';
+      containerStyle?: CSSStyleProperties;
+      stepStyle?: CSSStyleProperties;
+      expandAll?: boolean;
+      expandedKeys?: string[];
     };
   };
   headerActionsOptions?: {
@@ -130,12 +146,12 @@ export interface ITableRequest {
 
 /** Represents a filter applied to a table */
 export interface ITableFilter {
-  /** The value of the filter - string for text/radio/datepciker filter, string array for checkbox filter, IDateSelection for datepicker filter */
+  /** The value of the filter - string for text/radio/datepicker filter, string array for checkbox and treeview filter, IDateSelection for datepicker filter */
   value?: string | string[] | IDateSelection;
   /** The field to which the filter is applied */
   field: string;
-  /** The type of the filter (text, checkbox, radio, or datepicker) */
-  type?: 'text' | 'checkbox' | 'radio' | 'datepicker';
+  /** The type of the filter (text, checkbox, radio, datepicker, or treeview) */
+  type?: 'text' | 'checkbox' | 'radio' | 'datepicker' | 'treeview';
 }
 
 /** It is the return type of the tkCellEdit event. */

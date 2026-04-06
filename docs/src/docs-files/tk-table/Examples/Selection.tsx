@@ -130,12 +130,12 @@ const selectionList = ref([
 <template>
   <div :style="{ padding: '8px' }">
     <TkTable
-      :columns.prop="column"
-      :data.prop="basicData"
+      :columns="column"
+      :data="basicData"
       dataKey="id"
       :selection="selectionList"
-      selectionMode.prop="mode"
-      @tkSelectionChange="e => (selectionList.value = e.detail)"
+      :selectionMode="mode"
+      @tk-selection-change="e => (selectionList.value = e.detail)"
     />
     <p>{{ JSON.stringify(selectionList) }}</p>
   </div>

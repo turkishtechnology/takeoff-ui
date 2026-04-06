@@ -7,7 +7,7 @@ const FullWidth = () => {
 
   const vueCode = `<TkButton variant="primary" label="Full Width Button" fullWidth />`;
 
-  const angularCode = `<tk-button variant="primary" label="Full Width Button" fullWidth />`;
+  const angularCode = `<tk-button variant="primary" label="Full Width Button" full-width />`;
 
   const demo = <TkButton variant="primary" label="Full Width Button" fullWidth />;
 

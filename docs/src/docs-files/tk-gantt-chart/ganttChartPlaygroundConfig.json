@@ -1,0 +1,82 @@
+{
+  "name": "TkGanttChart",
+  "componentName": "TkGanttChart",
+  "hasChildren": false,
+  "fullWidth": true,
+  "height": 800,
+  "staticProps": {
+    "tasks": [
+      { "id": "1", "name": "Research", "startDate": "2026-04-01", "endDate": "2026-04-10", "progress": 100 },
+      { "id": "2", "name": "Design", "startDate": "2026-04-08", "endDate": "2026-04-18", "progress": 75 },
+      { "id": "3", "name": "Development", "startDate": "2026-04-15", "endDate": "2026-05-05", "progress": 40 },
+      { "id": "4", "name": "Testing", "startDate": "2026-05-01", "endDate": "2026-05-12", "progress": 0 },
+      { "id": "5", "name": "Deployment", "startDate": "2026-05-10", "endDate": "2026-05-15", "progress": 0 }
+    ]
+  },
+  "props": [
+    {
+      "key": "viewType",
+      "label": "View Type",
+      "type": "select",
+      "defaultValue": "",
+      "options": [
+        { "label": "Auto", "value": "" },
+        { "label": "Weekly", "value": "weekly" },
+        { "label": "Monthly", "value": "monthly" },
+        { "label": "Quarterly", "value": "quarterly" },
+        { "label": "Yearly", "value": "yearly" }
+      ]
+    },
+    {
+      "key": "secondaryHeaderMode",
+      "label": "Secondary Header Mode",
+      "type": "select",
+      "defaultValue": "days",
+      "options": [
+        { "label": "Days", "value": "days" },
+        { "label": "Weeks", "value": "weeks" }
+      ]
+    },
+    {
+      "key": "weekStartDay",
+      "label": "Week Start Day",
+      "type": "select",
+      "defaultValue": "1",
+      "options": [
+        { "label": "Sunday", "value": "0" },
+        { "label": "Monday", "value": "1" },
+        { "label": "Saturday", "value": "6" }
+      ]
+    },
+    {
+      "key": "rowHeight",
+      "label": "Row Height",
+      "type": "text",
+      "defaultValue": "40"
+    },
+    {
+      "key": "panelWidth",
+      "label": "Panel Width",
+      "type": "text",
+      "defaultValue": "320"
+    },
+    {
+      "key": "hidePanel",
+      "label": "Hide Panel",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "highlightWeekends",
+      "label": "Highlight Weekends",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "key": "showTodayIndicator",
+      "label": "Show Today Indicator",
+      "type": "checkbox",
+      "defaultValue": true
+    }
+  ]
+}

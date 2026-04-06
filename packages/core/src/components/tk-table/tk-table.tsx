@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup } from './interfaces';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -13,6 +13,7 @@ import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { ITreeItem } from '../tk-treeview/types';
 
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
@@ -58,11 +59,24 @@ export class TkTable implements ComponentInterface {
   @State() groupedData: ITableGroup[] = [];
   @State() groupByColumnField: string = null;
   @State() isControlledGrouping: boolean = false;
+  @State() expandedGroups: any[] = [];
+  @State() internalRowsPerPage: number;
 
   /**
    * The column definitions (Array of Objects)
    */
   @Prop() columns: ITableColumn[] = [];
+  // columns prop'u değiştiğinde sticky column'lar varsa offset'leri güncellemek ve scroll listener'ı kurmak için watch eklenmiştir.
+  @Watch('columns')
+  columnsChanged() {
+    const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
+    if (stickyColumns.length > 0) {
+      setTimeout(() => {
+        this.updateStickyOffsets();
+        this.setupScrollListener();
+      }, 0);
+    }
+  }
 
   /**
    * The style attribute of container element
@@ -106,14 +120,14 @@ export class TkTable implements ComponentInterface {
   @Watch('data')
   dataChanged(newValue: any[], oldValue: any[]) {
     if (!isEqual(oldValue, newValue)) {
-      const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
       if (this.paginationMethod == 'client') {
+        const tmpData = filterAndSort(newValue, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
         this.currentPage = 1;
-        const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-        const endIndex = startIndex + this.rowsPerPage;
+        const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+        const endIndex = startIndex + this.internalRowsPerPage;
         this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
       } else {
-        this.renderData = tmpData?.length > 0 ? [...tmpData] : [];
+        this.renderData = newValue?.length > 0 ? [...newValue] : [];
       }
 
       // Re-apply grouping if it was previously set
@@ -143,7 +157,13 @@ export class TkTable implements ComponentInterface {
   /**
    * Number of items per page.
    */
-  @Prop({ mutable: true }) rowsPerPage: number = 6;
+  @Prop() rowsPerPage: number = 6;
+  @Watch('rowsPerPage')
+  rowsPerPageChanged(newValue: number, oldValue: number) {
+    if (oldValue !== newValue) {
+      this.internalRowsPerPage = newValue;
+    }
+  }
 
   /**
    * Number of rows per page options
@@ -235,6 +255,12 @@ export class TkTable implements ComponentInterface {
   }
 
   /**
+   * If true, group headers will have an expand/collapse button to show/hide the rows in that group.
+   * @defaultValue false
+   */
+  @Prop() collapsibleGroups: boolean = false;
+
+  /**
    *
    */
   @Event({ eventName: 'tk-selection-change' }) tkSelectionChange: EventEmitter<any[] | any>;
@@ -294,6 +320,8 @@ export class TkTable implements ComponentInterface {
     // Determine if this is a controlled component based on initial groupBy prop
     this.isControlledGrouping = this.groupBy !== undefined;
 
+    this.internalRowsPerPage = this.rowsPerPage;
+
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
     }
@@ -317,7 +345,10 @@ export class TkTable implements ComponentInterface {
 
   componentDidLoad() {
     const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
-    if (stickyColumns.length > 0) {
+    const hasSelectionMode = !!this.selectionMode;
+    const hasScrollableContainer = !!(this.containerStyle?.height || this.containerStyle?.maxHeight);
+
+    if (stickyColumns.length > 0 || hasSelectionMode || hasScrollableContainer) {
       this.updateStickyOffsets();
       this.setupScrollListener();
     }
@@ -401,7 +432,7 @@ export class TkTable implements ComponentInterface {
   async serverRequest() {
     const requestData = {
       currentPage: this.currentPage,
-      rowsPerPage: this.rowsPerPage,
+      rowsPerPage: this.internalRowsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       sorts: this.sorts,
@@ -709,7 +740,7 @@ export class TkTable implements ComponentInterface {
       return;
     }
 
-    const filteredData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+    const filteredData = this.getTableViewData();
 
     // Group data by the specified column
     const groups = new Map<any, any[]>();
@@ -731,6 +762,9 @@ export class TkTable implements ComponentInterface {
 
     this.groupByColumnField = columnField;
 
+    // Başlangıçta tüm gruplar genişletilmiş olarak gösterilir
+    this.expandedGroups = this.groupedData.map(group => group.groupValue);
+
     // Generate render data from grouped data
     const flatRenderData = [];
     this.groupedData.forEach(group => {
@@ -738,8 +772,8 @@ export class TkTable implements ComponentInterface {
     });
 
     if (this.paginationMethod === 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = flatRenderData.slice(startIndex, endIndex);
     } else {
       this.renderData = flatRenderData;
@@ -758,11 +792,12 @@ export class TkTable implements ComponentInterface {
   private clearGroupingInternal() {
     this.groupByColumnField = null;
     this.groupedData = [];
+    this.expandedGroups = [];
     this.generateRenderData(this.data, this.currentPage, true);
   }
 
   private generateRenderData(data: any[], currentPage: number, isWillLoad: boolean = false) {
-    const _data = [...data];
+    const _data = [...(data ?? [])];
     this.currentPage = currentPage;
 
     // Clear grouping when generating render data with new dataset
@@ -774,7 +809,7 @@ export class TkTable implements ComponentInterface {
     if (!isWillLoad) {
       const requestData = {
         currentPage: this.currentPage,
-        rowsPerPage: this.rowsPerPage,
+        rowsPerPage: this.internalRowsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         sorts: this.sorts,
@@ -790,8 +825,8 @@ export class TkTable implements ComponentInterface {
     }
 
     if (this.paginationMethod == 'client') {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
+      const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      const endIndex = startIndex + this.internalRowsPerPage;
       this.renderData = _data.slice(startIndex, endIndex);
       this.totalItems = _data?.length;
     } else {
@@ -801,6 +836,18 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = [];
     // Slice/view changed -> clear cached custom cells to avoid stale nodes
     this.customCellCache.clear();
+  }
+
+  /**
+   * Tabloda gösterilecek satırlar. Server pagination'da filtre/sıralama sunucuda uygulanır;
+   * bu yüzden client tarafında filterAndSort tekrar çalıştırılmaz (çift filtreleme ve boş tablo riski).
+   */
+  private getTableViewData(): any[] {
+    const source = Array.isArray(this.data) ? this.data : [];
+    if (this.paginationMethod === 'server') {
+      return [...source];
+    }
+    return filterAndSort(source, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
   }
 
   private toggleExpandRow(row: any, tdExpanderButtonRef: HTMLTkButtonElement) {
@@ -818,6 +865,22 @@ export class TkTable implements ComponentInterface {
     this.expandedRows = newExpandedRows;
 
     this.tkExpandedRowsChange.emit(this.expandedRows);
+
+    // After state change, recalc shadows on next frame
+    requestAnimationFrame(() => this.refreshStickyShadows());
+  }
+
+  private toggleExpandGroup(groupValue: any) {
+    if (!this.collapsibleGroups) return;
+    const existingIndex = this.expandedGroups.indexOf(groupValue);
+
+    if (existingIndex > -1) {
+      // collapse the group
+      this.expandedGroups = [...this.expandedGroups.slice(0, existingIndex), ...this.expandedGroups.slice(existingIndex + 1)];
+    } else {
+      // expand the group
+      this.expandedGroups = [...this.expandedGroups, groupValue];
+    }
 
     // After state change, recalc shadows on next frame
     requestAnimationFrame(() => this.refreshStickyShadows());
@@ -873,7 +936,7 @@ export class TkTable implements ComponentInterface {
 
     // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
     if (this.currentPage == 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -889,6 +952,8 @@ export class TkTable implements ComponentInterface {
       this.handleRadioFilterApply(columnField);
     } else if (this.columns.find(col => col.field === columnField)?.filterType === 'datepicker') {
       this.handleDatepickerFilterApply(columnField);
+    } else if (this.columns.find(col => col.field === columnField)?.filterType === 'treeview') {
+      this.handleTreeviewFilterApply(columnField);
     } else {
       this.handleInputFilterApply(columnField);
     }
@@ -904,7 +969,7 @@ export class TkTable implements ComponentInterface {
 
       // current page değiştiğinde pagination componenti 'handlePageChange' eventini tetiklediğinden 2 defa emit edilmesin diye buraya bu kontrol eklendi
       if (this.currentPage == 1) {
-        const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+        const tmpData = this.getTableViewData();
         this.generateRenderData(tmpData, 1);
       } else {
         this.currentPage = 1;
@@ -962,7 +1027,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private handlePageChange(e) {
-    const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+    const tmpData = this.getTableViewData();
     this.generateRenderData(tmpData, Number(e.detail.page));
     // sayfa değişikliğinde seçilen değerler sıfırlanır
     if (this.refSelectAll) this.refSelectAll.value = false;
@@ -1027,7 +1092,7 @@ export class TkTable implements ComponentInterface {
 
   private applySorting() {
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1181,7 +1246,6 @@ export class TkTable implements ComponentInterface {
             wrapper.style.display = label.includes(searchText) ? 'block' : 'none';
           });
         });
-        optionsSearchInput.style.marginBottom = '0.75rem';
         filterContainer.appendChild(optionsSearchInput);
       }
       // Create radio buttons for each option
@@ -1231,6 +1295,75 @@ export class TkTable implements ComponentInterface {
         datepicker.value = (e as CustomEvent).detail;
       });
       filterContainer.appendChild(datepicker);
+      this.elFilterPanelElement.appendChild(filterContainer);
+    } else if (column?.filterType === 'treeview' && column.filterOptions?.length > 0) {
+      // Create treeview filter
+      const filterContainer = document.createElement('div');
+      filterContainer.classList.add('tk-table-filter-treeview-container');
+
+      // Get current filter value for this field
+      const currentFilter = this.filters.find(filter => filter.field === field);
+      const selectedValue = (currentFilter?.value as string[]) || [];
+
+      // Create treeview component first
+      const treeview = document.createElement('tk-tree-view') as any;
+      const treeviewConfig = column?.filterElements?.treeViewOptions ?? {};
+      treeview.selectable = true;
+      treeview.size = treeviewConfig?.size ?? 'small';
+      treeview.branchIcon = treeviewConfig?.branchIcon;
+      treeview.leafIcon = treeviewConfig?.leafIcon;
+      treeview.showBadge = treeviewConfig?.showBadge;
+      treeview.showZeroCountBadges = treeviewConfig?.showZeroCountBadges;
+      treeview.badgeOptions = treeviewConfig?.badgeOptions;
+      treeview.showPointer = treeviewConfig?.showPointer ?? false;
+      treeview.selectionStrategy = treeviewConfig?.selectionStrategy ?? 'leaf';
+      treeview.containerStyle = treeviewConfig?.containerStyle ?? { width: '100%' };
+      treeview.stepStyle = treeviewConfig?.stepStyle;
+      treeview.expandAll = treeviewConfig?.expandAll ?? true;
+      treeview.expandedKeys = treeviewConfig?.expandedKeys;
+
+      treeview.items = column.filterOptions as ITreeItem[];
+      treeview.value = selectedValue;
+
+      treeview.addEventListener('tk-change', (e: CustomEvent) => {
+        treeview.value = e.detail;
+      });
+      if (column?.filterElements?.optionsSearchInput?.show) {
+        const optionsSearchInput = document.createElement('tk-input');
+        optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
+
+        optionsSearchInput.addEventListener('tk-change', (e: any) => {
+          const searchText = e.detail.toLowerCase();
+
+          // Recursive function to filter tree items including nested children
+          const filterTreeItems = (items: ITreeItem[]): ITreeItem[] => {
+            return items
+              .map(item => {
+                // Check if current item matches, at start its the parent node
+                const itemMatches = item.label.toLowerCase().includes(searchText);
+
+                // Recursively filter children
+                const filteredChildren = item.children ? filterTreeItems(item.children) : [];
+
+                // Include both parent and children if children match, or if parent matches
+                if (itemMatches || filteredChildren.length > 0) {
+                  return {
+                    ...item,
+                    children: filteredChildren.length > 0 ? filteredChildren : item.children,
+                  };
+                }
+
+                return null;
+              })
+              .filter(item => item !== null);
+          };
+
+          treeview.items = filterTreeItems(column.filterOptions as ITreeItem[]);
+        });
+        filterContainer.appendChild(optionsSearchInput);
+      }
+
+      filterContainer.appendChild(treeview);
       this.elFilterPanelElement.appendChild(filterContainer);
     } else {
       // Default text input filter
@@ -1297,10 +1430,11 @@ export class TkTable implements ComponentInterface {
 
     // Get selected values
     const selectedValues = [];
+    const filterOptions = column.filterOptions as IFilterOption[];
 
     checkboxes.forEach((checkbox: HTMLTkCheckboxElement, index) => {
-      if (checkbox.value && column.filterOptions[index] && checkbox.style.display !== 'none') {
-        selectedValues.push(column.filterOptions[index].value);
+      if (checkbox.value && filterOptions[index] && checkbox.style.display !== 'none') {
+        selectedValues.push(filterOptions[index].value);
       }
     });
 
@@ -1325,7 +1459,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1367,7 +1501,7 @@ export class TkTable implements ComponentInterface {
 
     // Apply filter
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1377,9 +1511,10 @@ export class TkTable implements ComponentInterface {
     this.closeFilterPanel();
   }
   private handleDatepickerFilterApply(columnField: string) {
-    const datepickerEl = document.querySelector('.tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
+    const datepickerEl = document.querySelector('body > .tk-table-filter-panel .tk-table-filter-datepicker-container tk-datepicker') as HTMLTkDatepickerElement;
     const selectedDate = datepickerEl?.value;
     const filterIndex = this.filters.findIndex(filter => filter.field == columnField);
+
     if (selectedDate) {
       if (filterIndex > -1) {
         this.filters[filterIndex].value = selectedDate;
@@ -1393,7 +1528,7 @@ export class TkTable implements ComponentInterface {
     }
     // Update table data
     if (this.currentPage === 1) {
-      const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+      const tmpData = this.getTableViewData();
       this.generateRenderData(tmpData, 1);
     } else {
       this.currentPage = 1;
@@ -1401,6 +1536,40 @@ export class TkTable implements ComponentInterface {
     // Close the filter panel
     this.closeFilterPanel();
   }
+
+  private handleTreeviewFilterApply(columnField: string) {
+    const treeview = document.querySelector('.tk-table-filter-treeview-container tk-tree-view') as HTMLTkTreeViewElement;
+    if (!treeview) return;
+    const selectedValues = treeview.value;
+    const filterIndex = this.filters.findIndex(filter => filter.field === columnField);
+    if (selectedValues.length > 0) {
+      if (filterIndex > -1) {
+        this.filters[filterIndex].value = selectedValues;
+        this.filters[filterIndex].type = 'treeview';
+      } else {
+        this.filters.push({
+          field: columnField,
+          value: selectedValues,
+          type: 'treeview',
+        } as ITableFilter);
+      }
+    } else if (filterIndex > -1) {
+      // Remove filter if no values selected
+      this.filters.splice(filterIndex, 1);
+    }
+
+    // Apply filter
+    if (this.currentPage === 1) {
+      const tmpData = this.getTableViewData();
+      this.generateRenderData(tmpData, 1);
+    } else {
+      this.currentPage = 1;
+    }
+
+    // Close the filter panel
+    this.closeFilterPanel();
+  }
+
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
     const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
@@ -1610,6 +1779,15 @@ export class TkTable implements ComponentInterface {
         el.style.setProperty('--shadow-opacity', hasOverflow && !atRight ? '1' : '0');
       });
     }
+
+    // Header bottom shadow visibility on vertical scroll
+    const scrollTop = target.scrollTop;
+    const atTop = scrollTop <= EPS;
+
+    const theadElement = this.el.shadowRoot?.querySelector('thead') as HTMLElement;
+    if (theadElement) {
+      theadElement.style.setProperty('--header-shadow-opacity', !atTop ? '1' : '0');
+    }
   };
 
   private refreshStickyShadows() {
@@ -1622,13 +1800,20 @@ export class TkTable implements ComponentInterface {
     const rows = [];
     let globalIndex = 0;
 
+    // Group headerın olduğu cellden sonra oluşan boşluk için genişlik hesaplaması
+    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder') as HTMLElement;
+    if (tableHolder) {
+      const tableHolderWidth = tableHolder.clientWidth;
+      tableHolder.style.setProperty('--table-holder-width', `${tableHolderWidth}px`);
+    }
+
     // For pagination, we need to determine which groups and rows to show
     let startIndex = 0;
     let endIndex = this.renderData.length;
 
     if (this.paginationMethod === 'client') {
-      startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      endIndex = startIndex + this.rowsPerPage;
+      startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
+      endIndex = startIndex + this.internalRowsPerPage;
     }
 
     let currentRowIndex = 0;
@@ -1638,14 +1823,24 @@ export class TkTable implements ComponentInterface {
       const groupStartIndex = currentRowIndex;
       const groupEndIndex = currentRowIndex + group.rows.length;
 
+      const isGroupExpanded = this.expandedGroups.includes(group.groupValue);
+
       // If this group overlaps with the visible range, show it
       if (groupEndIndex > startIndex && groupStartIndex < endIndex) {
         // Create group header row
         const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
         const groupHeaderRow = (
-          <tr class="tk-table-group-header">
+          <tr
+            class={classNames(
+              'tk-table-group-header',
+              { 'tk-table-collapsible-group-header': this.collapsibleGroups },
+              { 'tk-table-group-collapsed': this.collapsibleGroups && !isGroupExpanded },
+            )}
+            onClick={() => this.toggleExpandGroup(group.groupValue)}
+          >
             <td colSpan={totalColumns} class="tk-table-group-header-cell">
               <div class="tk-table-group-header-content">
+                {this.collapsibleGroups && <tk-icon icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} variant="neutral" />}
                 <span class="tk-table-group-value">{group.groupValue}</span>
                 <span class="tk-table-group-count">({group.groupCount})</span>
               </div>
@@ -1653,17 +1848,18 @@ export class TkTable implements ComponentInterface {
           </tr>
         );
         rows.push(groupHeaderRow);
+        if (isGroupExpanded) {
+          // Show only the visible rows from this group
+          group.rows.forEach((row, groupRowIndex) => {
+            const absoluteRowIndex = currentRowIndex + groupRowIndex;
 
-        // Show only the visible rows from this group
-        group.rows.forEach((row, groupRowIndex) => {
-          const absoluteRowIndex = currentRowIndex + groupRowIndex;
-
-          // Only show rows that are in the visible range
-          if (absoluteRowIndex >= startIndex && absoluteRowIndex < endIndex) {
-            const dataRow = this.createDataRow(row, globalIndex + groupRowIndex);
-            rows.push(dataRow);
-          }
-        });
+            // Only show rows that are in the visible range
+            if (absoluteRowIndex >= startIndex && absoluteRowIndex < endIndex) {
+              const dataRow = this.createDataRow(row, globalIndex + groupRowIndex);
+              rows.push(dataRow);
+            }
+          });
+        }
       }
 
       currentRowIndex += group.rows.length;
@@ -1675,6 +1871,7 @@ export class TkTable implements ComponentInterface {
 
   private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
     let styleRowObject;
+    const leftColumns = this.columns.filter(c => c.fixed === 'left');
 
     if (typeof this.rowStyle == 'function') {
       const stylesRow = this.rowStyle(row, index);
@@ -1689,7 +1886,10 @@ export class TkTable implements ComponentInterface {
     let selectionTd;
     if (this.selectionMode === 'checkbox') {
       selectionTd = (
-        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+        <td
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+          style={this.getSelectionStickyStyle(index)}
+        >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
             value={some(this.selection, itemValue => isEqual(itemValue, row))}
@@ -1701,7 +1901,10 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.selectionMode === 'radio') {
       selectionTd = (
-        <td class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first')} style={this.getSelectionStickyStyle(index)}>
+        <td
+          class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
+          style={this.getSelectionStickyStyle(index)}
+        >
           <tk-radio
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
             value={row}
@@ -2031,8 +2234,8 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    variant: null,
-                    ref: (el: any) => (refSortIcon = el),
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                    ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
                 />
@@ -2041,8 +2244,8 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  variant: null,
-                  ref: (el: any) => (refSortIcon = el),
+                  color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                  ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
               />
@@ -2062,8 +2265,8 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    variant: null,
-                    ref: (el: any) => (refSearchIcon = el),
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                    ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
                 />
@@ -2192,15 +2395,15 @@ export class TkTable implements ComponentInterface {
         <tk-pagination
           type={this.paginationType}
           totalItems={this.totalItems}
-          rowsPerPage={this.rowsPerPage}
+          rowsPerPage={this.internalRowsPerPage}
           rowsPerPageOptions={this.rowsPerPageOptions}
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
-            this.rowsPerPage = e.detail;
-            const tmpData = filterAndSort(this.data, this.columns, this.filters, this.sortField, this.sortOrder, this.sorts);
+            this.internalRowsPerPage = e.detail;
+            const tmpData = this.getTableViewData();
             this.generateRenderData(tmpData, 1);
             if (this.refSelectAll) this.refSelectAll.value = false;
             if (this.selection?.length > 0) this.handleSelectAll(false);

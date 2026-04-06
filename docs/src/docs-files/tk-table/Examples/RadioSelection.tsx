@@ -95,11 +95,11 @@ const column = [
 <template>
   <div :style="{ padding: '8px' }">
     <TkTable 
-      :columns.prop="column" 
-      :data.prop="basicData" 
+      :columns="column" 
+      :data="basicData" 
       dataKey="id" 
       selectionMode="radio"
-      @tkSelectionChange="(e) => setSelectionList({ ...e.detail })" 
+      @tk-selection-change="(e) => setSelectionList({ ...e.detail })" 
     />
     <p>{{ JSON.stringify(selectionList) }}</p>
   </div>

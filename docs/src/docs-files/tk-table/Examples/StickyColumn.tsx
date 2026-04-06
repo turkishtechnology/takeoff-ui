@@ -209,7 +209,7 @@ const column = [
 
 <template>
    <div :style="{ padding: '8px' }">
-    <TkTable ref="tableRef" cardTitle="Sticky" :columns.prop="column" :data.prop="stickyData">
+    <TkTable ref="tableRef" cardTitle="Sticky" :columns="column" :data="stickyData">
     </TkTable>
   </div>
 </template>

@@ -2,7 +2,7 @@ import { TkAccordion, TkAccordionItem } from '@takeoff-ui/react';
 import FeatureDemo from '../../../components/FeatureDemo';
 import React from 'react';
 
-const Styles = () => {
+const Type = () => {
   const reactCode = `<TkAccordion type="grouped">
   <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
@@ -47,6 +47,7 @@ const Styles = () => {
     <div slot="content">Panel 3 Content</div>
   </TkAccordionItem>
 </TkAccordion>
+
 <TkAccordion type="divided">
   <TkAccordionItem>
     <span slot="header">Panel 1 Title</span>
@@ -63,39 +64,39 @@ const Styles = () => {
 </TkAccordion>`;
 
   const angularCode = `<tk-accordion type="grouped">
-    <tk-accordion-item>
-      <span slot="header">Panel 1 Title</span>
-      <div slot="content">Panel 1 Content</div>
-    </tk-accordion-item>
-    <tk-accordion-item>
-      <span slot="header">Panel 2 Title</span>
-      <div slot="content">Panel 2 Content</div>
-    </tk-accordion-item>
-    <tk-accordion-item>
-      <span slot="header">Panel 3 Title</span>
-      <div slot="content">Panel 3 Content</div>
-    </tk-accordion-item>
-  </tk-accordion>
-  
-  <tk-accordion type="divided">
-    <tk-accordion-item>
-      <span slot="header">Panel 1 Title</span>
-      <div slot="content">Panel 1 Content</div>
-    </tk-accordion-item>
-    <tk-accordion-item>
-      <span slot="header">Panel 2 Title</span>
-      <div slot="content">Panel 2 Content</div>
-    </tk-accordion-item>
-    <tk-accordion-item>
-      <span slot="header">Panel 3 Title</span>
-      <div slot="content">Panel 3 Content</div>
-    </tk-accordion-item>
-  </tk-accordion>`;
+  <tk-accordion-item>
+    <span slot="header">Panel 1 Title</span>
+    <div slot="content">Panel 1 Content</div>
+  </tk-accordion-item>
+  <tk-accordion-item>
+    <span slot="header">Panel 2 Title</span>
+    <div slot="content">Panel 2 Content</div>
+  </tk-accordion-item>
+  <tk-accordion-item>
+    <span slot="header">Panel 3 Title</span>
+    <div slot="content">Panel 3 Content</div>
+  </tk-accordion-item>
+</tk-accordion>
+
+<tk-accordion type="divided">
+  <tk-accordion-item>
+    <span slot="header">Panel 1 Title</span>
+    <div slot="content">Panel 1 Content</div>
+  </tk-accordion-item>
+  <tk-accordion-item>
+    <span slot="header">Panel 2 Title</span>
+    <div slot="content">Panel 2 Content</div>
+  </tk-accordion-item>
+  <tk-accordion-item>
+    <span slot="header">Panel 3 Title</span>
+    <div slot="content">Panel 3 Content</div>
+  </tk-accordion-item>
+</tk-accordion>`;
 
   const demo = (
-    <>
-      <div className="container">
-        <div>Grouped</div>
+    <div className="flex flex-col gap-4">
+      <div>
+        <div className="mb-2">Grouped</div>
         <TkAccordion type="grouped">
           <TkAccordionItem>
             <span slot="header">Panel 1 Title</span>
@@ -111,10 +112,9 @@ const Styles = () => {
           </TkAccordionItem>
         </TkAccordion>
       </div>
-      <br />
 
-      <div className="container">
-        <div>Divided</div>
+      <div>
+        <div className="mb-2">Divided</div>
         <TkAccordion type="divided">
           <TkAccordionItem>
             <span slot="header">Panel 1 Title</span>
@@ -130,13 +130,10 @@ const Styles = () => {
           </TkAccordionItem>
         </TkAccordion>
       </div>
-    </>
+    </div>
   );
-  return (
-    <>
-      <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>
-    </>
-  );
+
+  return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
 
-export default Styles;
+export default Type;

@@ -26,35 +26,29 @@ const MediaAndUrl = () => {
     const getCodeSamples = () => {
       const reactSample = `import { TkEditor } from "@takeoff-ui/react";
 
-const content = \`
-${initialContent}
-\`;
-// The toolbar includes built-in ${feature === 'link' ? 'link' : 'image'} handling
-<TkEditor
- value={content}
- toolbar={[
-   ['bold', 'italic'],
-   ['${feature}']  // ${feature === 'link' ? 'URL link' : 'Image'} button
- ]}
-/>`;
-      const vueSample = `<script setup>
-import { ref } from 'vue';
-import { TkEditor } from "@takeoff-ui/vue";
+        const content = \`
+        ${initialContent}
+        \`;
+        // The toolbar includes built-in ${feature === 'link' ? 'link' : 'image'} handling
+        <TkEditor
+        value={content}
+        toolbar={[
+          ['bold', 'italic'],
+          ['${feature}']  // ${feature === 'link' ? 'URL link' : 'Image'} button
+        ]}
+        />`;
 
-const content = ref(\`
-${initialContent}
-\`);  
-</script>
-<template>
-<TkEditor
-   v-model="content"
-   :toolbar="[
-     ['bold', 'italic'],
-     ['${feature}']  // ${feature === 'link' ? 'URL link' : 'Image'} button
-   ]"
- />
-</template>
-`;
+      const vueSample = `const content = ref(\`
+        ${initialContent}
+        \`);  
+        <TkEditor
+          v-model="content"
+          :toolbar="[
+            ['bold', 'italic'],
+            ['${feature}']  // ${feature === 'link' ? 'URL link' : 'Image'} button
+          ]"
+        />`;
+
       setCodeSampleReact(reactSample);
       setCodeSampleVue(vueSample);
     };

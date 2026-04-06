@@ -1,3 +1,5 @@
+@use '../../global/sass/mixins' as *;
+
 :host {
   display: block;
 }
@@ -282,6 +284,7 @@
       border-radius: var(--datepicker-items-base-radius);
       border: var(--spacing-px) solid var(--states-info-sub-base);
       background: var(--background-lightest);
+      box-sizing: border-box;
     }
   }
 
@@ -465,6 +468,8 @@
   height: 260px;
   overflow-y: auto;
   position: relative;
+  @include takeoff-scrollbar;
+
   &.tk-datepicker-timepicker-body-only {
     border-left: 0;
     border-bottom-left-radius: var(--radius-xl);
@@ -546,7 +551,7 @@
   font-size: var(--desktop-body-s-size);
   color: var(--text-darkest);
   text-align: center;
-  width: 100%;
+  width: 40px;
   height: 40px;
   line-height: 40px;
   position: relative;
@@ -593,4 +598,12 @@
   &.tk-datepicker-timepicker-separator-primary {
     background-color: var(--primary-300);
   }
+}
+
+.tk-datepicker-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 260px;
 }

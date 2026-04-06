@@ -49,7 +49,7 @@ const options = {
     },
   },
 };
-<TkChart type="pie" data={data} options={options} />
+<TkChart type="pie" width="450px" data={data} options={options} />
 `;
   const vueCode = `const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -77,11 +77,12 @@ const options = {
     },
   },
 };
-<TkChart type="pie" :data.prop="data" :options.prop="options" />
+<TkChart type="pie" width="450px" :data.prop="data" :options.prop="options" />
     `;
 
   const angularCode = `<tk-chart
   type="pie"
+  width="450px"
   [data]="{
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [

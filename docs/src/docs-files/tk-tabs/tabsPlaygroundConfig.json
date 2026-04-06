@@ -1,0 +1,103 @@
+{
+  "name": "TkTabs",
+  "componentName": "TkTabs",
+  "hasChildren": true,
+  "fullWidth": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkTabsItem",
+      "props": { "label": "Tab 1", "icon": "flight" },
+      "children": [{ "type": "text", "content": "Tab 1 Content" }]
+    },
+    {
+      "type": "component",
+      "componentName": "TkTabsItem",
+      "props": { "label": "Tab 2", "icon": "hotel" },
+      "children": [{ "type": "text", "content": "Tab 2 Content" }]
+    },
+    {
+      "type": "component",
+      "componentName": "TkTabsItem",
+      "props": { "label": "Tab 3", "icon": "luggage" },
+      "children": [{ "type": "text", "content": "Tab 3 Content" }]
+    }
+  ],
+  "props": [
+    {
+      "key": "type",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "basic",
+      "options": [
+        { "label": "Basic", "value": "basic" },
+        { "label": "Divided", "value": "divided" },
+        { "label": "Compact", "value": "compact" },
+        { "label": "Expanded", "value": "expanded" }
+      ]
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "primary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Info", "value": "info" },
+        { "label": "Neutral", "value": "neutral" }
+      ]
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "select",
+      "defaultValue": "base",
+      "options": [
+        { "label": "XX Small", "value": "xxsmall" },
+        { "label": "X Small", "value": "xsmall" },
+        { "label": "Small", "value": "small" },
+        { "label": "Base", "value": "base" },
+        { "label": "Large", "value": "large" }
+      ]
+    },
+    {
+      "key": "orientation",
+      "label": "Orientation",
+      "type": "select",
+      "defaultValue": "horizontal",
+      "options": [
+        { "label": "Horizontal", "value": "horizontal" },
+        { "label": "Vertical", "value": "vertical" }
+      ]
+    },
+    {
+      "key": "alignHeaders",
+      "label": "Align Headers",
+      "type": "select",
+      "defaultValue": "start",
+      "options": [
+        { "label": "Start", "value": "start" },
+        { "label": "Center", "value": "center" },
+        { "label": "End", "value": "end" }
+      ]
+    },
+    {
+      "key": "spreadHeaders",
+      "label": "Spread Headers",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "isClosable",
+      "label": "Closable",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "isExtendable",
+      "label": "Extendable",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ]
+}

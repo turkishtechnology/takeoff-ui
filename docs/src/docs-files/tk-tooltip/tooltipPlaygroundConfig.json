@@ -1,0 +1,68 @@
+{
+  "name": "TkTooltip",
+  "componentName": "TkTooltip",
+  "hasChildren": true,
+  "children": [
+    {
+      "type": "component",
+      "componentName": "TkButton",
+      "props": { "label": "Hover Me!" },
+      "slot": "trigger"
+    }
+  ],
+  "props": [
+    {
+      "key": "header",
+      "label": "Header",
+      "type": "text",
+      "defaultValue": "Tooltip Header"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "text",
+      "defaultValue": "Tooltip Explanation Here"
+    },
+    {
+      "key": "icon",
+      "label": "Icon",
+      "type": "text",
+      "defaultValue": "flight"
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "dark",
+      "options": [
+        { "label": "Dark", "value": "dark" },
+        { "label": "White", "value": "white" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Danger", "value": "danger" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Neutral", "value": "neutral" }
+      ]
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "defaultValue": "top",
+      "options": [
+        { "label": "Top", "value": "top" },
+        { "label": "Top Start", "value": "top-start" },
+        { "label": "Top End", "value": "top-end" },
+        { "label": "Bottom", "value": "bottom" },
+        { "label": "Bottom Start", "value": "bottom-start" },
+        { "label": "Bottom End", "value": "bottom-end" },
+        { "label": "Left", "value": "left" },
+        { "label": "Left Start", "value": "left-start" },
+        { "label": "Left End", "value": "left-end" },
+        { "label": "Right", "value": "right" },
+        { "label": "Right Start", "value": "right-start" },
+        { "label": "Right End", "value": "right-end" }
+      ]
+    }
+  ]
+}

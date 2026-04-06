@@ -1,0 +1,115 @@
+import { TkBadge } from '@takeoff-ui/react';
+
+### Props {#gantt-chart-props}
+
+| Name                                                                                     | Type                                                    | Default                | Description                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <TkBadge label="columns" variant="primary" size="large" type="filledlight"/>             | <code>IGanttColumn[]</code>                             | DEFAULT_COLUMNS        | Column definitions for the left-side task list panel. Columns are fed from the task data.                                                                   |
+| <TkBadge label="containerStyle" variant="primary" size="large" type="filledlight"/>      | <code>CSSStyleProperties</code>                         | null                   | Custom CSS style applied to the root container element.                                                                                                     |
+| <TkBadge label="hidePanel" variant="primary" size="large" type="filledlight"/>           | <code>boolean</code>                                    | false                  | Whether to hide the left-side task list panel.                                                                                                              |
+| <TkBadge label="highlightWeekends" variant="primary" size="large" type="filledlight"/>   | <code>boolean</code>                                    | true                   | Whether to highlight weekend columns with a different background.                                                                                           |
+| <TkBadge label="holidays" variant="primary" size="large" type="filledlight"/>            | <code>IGanttHoliday[]</code>                            | []                     | Array of holiday dates to highlight on the timeline.                                                                                                        |
+| <TkBadge label="indicators" variant="primary" size="large" type="filledlight"/>          | <code>IGanttIndicator[]</code>                          | []                     | Array of indicator lines rendered on the timeline (e.g. today, startDate, freezeDate).                                                                      |
+| <TkBadge label="locale" variant="primary" size="large" type="filledlight"/>              | <code>string</code>                                     | 'default'              | Locale string for date formatting (e.g. 'tr-TR', 'en-US'). Uses native `toLocaleString` under the hood.                                                     |
+| <TkBadge label="panelWidth" variant="primary" size="large" type="filledlight"/>          | <code>number</code>                                     | DEFAULT_PANEL_WIDTH    | Width of the left-side task list panel in pixels.                                                                                                           |
+| <TkBadge label="rowHeight" variant="primary" size="large" type="filledlight"/>           | <code>number</code>                                     | DEFAULT_ROW_HEIGHT     | Row height in pixels.                                                                                                                                       |
+| <TkBadge label="secondaryHeaderMode" variant="primary" size="large" type="filledlight"/> | <code>"days", "weeks"</code>                            | 'days'                 | Secondary header display mode. - `'days'` shows individual day numbers or day names - `'weeks'` shows week numbers (W1, W2 … / H1, H2 … for Turkish locale) |
+| <TkBadge label="showTodayIndicator" variant="primary" size="large" type="filledlight"/>  | <code>boolean</code>                                    | true                   | Whether to automatically show a today indicator line.                                                                                                       |
+| <TkBadge label="taskBarHtml" variant="primary" size="large" type="filledlight"/>         | <code>(task: IGanttTask)=>string, HTMLElement</code>    | null                   | Custom task bar render function. Receives the task and should return an HTMLElement or an HTML string.                                                      |
+| <TkBadge label="tasks" variant="primary" size="large" type="filledlight"/>               | <code>IGanttTask[]</code>                               | []                     | Array of tasks to display. Each task may contain nested children for sub-tasks.                                                                             |
+| <TkBadge label="tooltipHtml" variant="primary" size="large" type="filledlight"/>         | <code>(task: IGanttTask)=>string, HTMLElement</code>    | null                   | Custom tooltip render function. Receives the hovered task and should return an HTMLElement or an HTML string.                                               |
+| <TkBadge label="viewType" variant="primary" size="large" type="filledlight"/>            | <code>"monthly", "quarterly", "weekly", "yearly"</code> | null                   | Timeline view type. When not set the component auto-fits based on the task date range.                                                                      |
+| <TkBadge label="weekStartDay" variant="primary" size="large" type="filledlight"/>        | <code>0, 1, 2, 3, 4, 5, 6</code>                        | DEFAULT_WEEK_START_DAY | Day the week starts on (0 = Sunday … 6 = Saturday).                                                                                                         |
+
+### Events {#gantt-chart-events}
+
+| Name           | Description                                                           |
+| -------------- | --------------------------------------------------------------------- |
+| tk-task-click  | Emitted when a task bar is clicked. Detail contains the clicked task. |
+| tk-task-toggle | Emitted when a task row is expanded or collapsed.                     |
+
+### Slots {#gantt-chart-slots}
+
+| Name  | Description                             |
+| ----- | --------------------------------------- |
+| empty | Content to show when there are no tasks |
+
+### Interfaces {#gantt-chart-interfaces}
+
+#### <span id="igantttask">IGanttTask</span>
+
+Represents a single task in the Gantt chart.
+
+```typescript
+interface IGanttTask {
+  /** Unique identifier for the task */
+  id: string;
+  /** Display name of the task */
+  name: string;
+  /** Start date of the task (ISO string or Date-parseable string) */
+  startDate: string;
+  /** End date of the task (ISO string or Date-parseable string) */
+  endDate: string;
+  /** Progress percentage (0–100) */
+  progress?: number;
+  /** Nested child tasks */
+  children?: IGanttTask[];
+  /** Custom inline styles for the task bar */
+  style?: CSSStyleProperties;
+  /** Arbitrary additional data attached to the task */
+  additionalData?: unknown;
+  /**
+   * Multiple time segments rendered on the same row.
+   * When provided, the task's own startDate/endDate are used only for
+   * positioning reference; actual bars are drawn per segment.
+   */
+  segments?: IGanttTaskSegment[];
+}
+```
+
+#### <span id="iganttcolumn">IGanttColumn</span>
+
+Column definition for the left-side task-list panel.
+
+```typescript
+interface IGanttColumn {
+  /** Property key on IGanttTask (or nested path) to read data from */
+  field: string;
+  /** Column header label */
+  header: string;
+  /** Fixed width (CSS value, e.g. '120px') */
+  width?: string;
+  /** Custom HTML render function – receives the task, returns HTML string */
+  html?: (task: IGanttTask) => string;
+}
+```
+
+#### <span id="iganttindicator">IGanttIndicator</span>
+
+An indicator line drawn on the timeline (e.g. today, freeze-date).
+
+```typescript
+interface IGanttIndicator {
+  /** Date of the indicator (ISO string or Date-parseable string) */
+  date: string;
+  /** Label shown above the indicator line */
+  label?: string;
+  /** CSS colour for the indicator line */
+  color?: string;
+  /** Line style */
+  lineStyle?: 'solid' | 'dashed';
+}
+```
+
+#### <span id="iganttholiday">IGanttHoliday</span>
+
+Holiday entry used to highlight non-working days.
+
+```typescript
+interface IGanttHoliday {
+  /** Date of the holiday (ISO string or Date-parseable string) */
+  date: string;
+  /** Optional display label */
+  label?: string;
+}
+```

@@ -24,10 +24,10 @@ const Type = () => {
   onTkChange={(e) => setValue(e.detail)}
 />`;
 
-  const vueCode = `<TkRating type="star" v-model="2" />
-<TkRating type="heart" v-model="2.5" />
-<TkRating type="dot" v-model="4" />
-<TKRating type="number" v-model="3"`;
+  const vueCode = `<TkRating type="star" v-model="value" />
+<TkRating type="heart" v-model="value" />
+<TkRating type="dot" v-model="value" />
+<TkRating type="number" v-model="value" />`;
 
   const angularCode = `<tk-rating type="star" [value]="2" />
 <tk-rating type="heart" [value]="2.5" />

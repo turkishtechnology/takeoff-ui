@@ -281,7 +281,7 @@ export class TkPagination implements ComponentInterface {
       content = (
         <Fragment>
           <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
-            <tk-icon {...getIconElementProps('chevron_left', { class: 'tk-pagination-cell-icon', variant: null })} />
+            <tk-icon {...getIconElementProps('chevron_left', { color: 'var(--icon-base)' })} />
           </button>
           <tk-input
             mode="text"
@@ -293,7 +293,7 @@ export class TkPagination implements ComponentInterface {
           />
           <span class="tk-pagination-current-label">{compactLabel}</span>
           <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
-            <tk-icon {...getIconElementProps('chevron_right', { class: 'tk-pagination-cell-icon', variant: null })} />
+            <tk-icon {...getIconElementProps('chevron_right', { color: 'var(--icon-base)' })} />
           </button>
         </Fragment>
       );
@@ -307,21 +307,21 @@ export class TkPagination implements ComponentInterface {
         <Fragment>
           <div class="tk-pagination-prev-actions">
             <button class="tk-pagination-cell tk-pagination-first" type="button" onClick={() => this.handlePageClick(1)} disabled={this.internalCurrentPage === 1}>
-              <tk-icon {...getIconElementProps('keyboard_double_arrow_left', { class: 'tk-pagination-cell-icon', variant: null })} />
+              <tk-icon {...getIconElementProps('keyboard_double_arrow_left', { color: 'var(--icon-base)' })} />
             </button>
             {this.type === 'grouped' && <span class="tk-pagination-divider"></span>}
             <button class="tk-pagination-cell tk-pagination-prev" type="button" onClick={this.handlePrevClick} disabled={this.internalCurrentPage === 1}>
-              <tk-icon {...getIconElementProps('chevron_left', { class: 'tk-pagination-cell-icon', variant: null })} />{' '}
+              <tk-icon {...getIconElementProps('chevron_left', { color: 'var(--icon-base)' })} />{' '}
             </button>
           </div>
           {this.createPageNumbers()}
           <div class="tk-pagination-next-actions">
             <button class="tk-pagination-cell tk-pagination-next" type="button" onClick={this.handleNextClick} disabled={this.internalCurrentPage === totalPages}>
-              <tk-icon {...getIconElementProps('chevron_right', { class: 'tk-pagination-cell-icon', variant: null })} />
+              <tk-icon {...getIconElementProps('chevron_right', { color: 'var(--icon-base)' })} />
             </button>
             {this.type === 'grouped' && <span class="tk-pagination-divider"></span>}
             <button class="tk-pagination-cell tk-pagination-last" type="button" onClick={() => this.handlePageClick(totalPages)} disabled={this.internalCurrentPage === totalPages}>
-              <tk-icon {...getIconElementProps('keyboard_double_arrow_right', { class: 'tk-pagination-cell-icon', variant: null })} />
+              <tk-icon {...getIconElementProps('keyboard_double_arrow_right', { color: 'var(--icon-base)' })} />
             </button>
           </div>
         </Fragment>

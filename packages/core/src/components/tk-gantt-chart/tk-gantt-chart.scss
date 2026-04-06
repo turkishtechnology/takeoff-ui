@@ -1,0 +1,327 @@
+@use '../../global/sass/mixins' as *;
+
+// ---------------------------------------------------------------------------
+// Root
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-m-base);
+  background: var(--static-white);
+  font-family: inherit;
+  font-size: var(--desktop-body-s-size);
+  color: var(--text-darkest);
+}
+
+// ---------------------------------------------------------------------------
+// Panel (left side)
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-panel {
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-light);
+  overflow-y: auto;
+  overflow-x: auto;
+  @include takeoff-scrollbar;
+}
+
+.tk-gantt-chart-panel-header {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.tk-gantt-chart-panel-header-cell {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+  border-right: 1px solid var(--border-light);
+  background: var(--background-lightest);
+  border-bottom: 1px solid var(--border-light);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.tk-gantt-chart-panel-body {
+  position: relative;
+}
+
+.tk-gantt-chart-panel-row {
+  display: flex;
+  align-items: center;
+
+  &:last-child {
+    .tk-gantt-chart-panel-cell {
+      border-bottom: none;
+    }
+  }
+
+  &:hover {
+    background: var(--background-lightest);
+  }
+}
+
+.tk-gantt-chart-panel-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Expand button
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 4px;
+  transition: transform 0.2s ease;
+  color: var(--icon-base);
+
+  &:hover {
+    color: var(--icon-darkest);
+  }
+}
+
+.tk-gantt-chart-expand-btn-open {
+  transform: rotate(90deg);
+}
+
+// ---------------------------------------------------------------------------
+// Timeline (right side)
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-timeline {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  @include takeoff-scrollbar;
+}
+
+// ---------------------------------------------------------------------------
+// Timeline headers
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-timeline-headers {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--background-lightest);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.tk-gantt-chart-timeline-header {
+  display: flex;
+}
+
+.tk-gantt-chart-timeline-header-primary {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.tk-gantt-chart-timeline-header-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-light);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--desktop-body-xs-size, 11px);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.tk-gantt-chart-timeline-header-cell-weekend {
+  background: var(--neutral-100);
+  color: var(--text-light);
+}
+
+.tk-gantt-chart-timeline-header-cell-holiday {
+  background: var(--primary-100, #fff0f0);
+  color: var(--primary-base);
+}
+
+// ---------------------------------------------------------------------------
+// Timeline body
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-timeline-body {
+  position: relative;
+}
+
+.tk-gantt-chart-timeline-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Weekend & holiday column highlights
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-column-highlight {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+.tk-gantt-chart-weekend {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.tk-gantt-chart-holiday {
+  background: rgba(201, 0, 25, 0.06);
+}
+
+// ---------------------------------------------------------------------------
+// Task bar
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-task-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: var(--radius-s-base, 4px);
+  background: var(--primary-base);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 0.15s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.tk-gantt-chart-task-bar-custom {
+  background: none;
+}
+
+.tk-gantt-chart-task-bar-segment {
+  border-radius: var(--radius-s-base, 4px);
+}
+
+.tk-gantt-chart-task-bar-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-s-base, 4px) 0 0 var(--radius-s-base, 4px);
+  pointer-events: none;
+}
+
+.tk-gantt-chart-task-bar-label {
+  position: relative;
+  z-index: 1;
+  padding: 0 6px;
+  color: var(--static-white);
+  font-size: var(--desktop-body-xs-size, 11px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ---------------------------------------------------------------------------
+// Indicator
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-indicator {
+  position: absolute;
+  top: 0;
+  width: 0;
+  border-left-width: 2px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tk-gantt-chart-indicator-label {
+  position: absolute;
+  top: -18px;
+  left: 4px;
+  font-size: var(--desktop-body-xs-size, 10px);
+  white-space: nowrap;
+  color: inherit;
+  font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// Tooltip
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-tooltip {
+  position: absolute;
+  z-index: 10;
+  padding: 8px 12px;
+  border-radius: var(--radius-s-base, 4px);
+  background: var(--frames-darkest);
+  color: var(--static-white);
+  font-size: var(--desktop-body-xs-size, 11px);
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 140px;
+}
+
+.tk-gantt-chart-tooltip-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tk-gantt-chart-tooltip-row {
+  line-height: 1.6;
+}
+
+.tk-gantt-chart-tooltip-label {
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+// ---------------------------------------------------------------------------
+// Empty state
+// ---------------------------------------------------------------------------
+
+.tk-gantt-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  color: var(--text-light);
+}

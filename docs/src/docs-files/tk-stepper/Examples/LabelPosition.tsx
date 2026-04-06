@@ -11,7 +11,7 @@ const LabelPosition = () => {
   };
 
   React.useEffect(() => {
-    const newCodeSample = `<TkStepper labelPosition="${labelPosition}">
+    const newCodeSample = `<TkStepper>
   <TkStep header="General Information" subheader="Basic campaign details" complete />
   <TkStep header="Category Details" subheader="Campaign categorization" complete />
   <TkStep header="Communication" subheader="Communication strategies" isActive />

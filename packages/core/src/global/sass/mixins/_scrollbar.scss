@@ -1,0 +1,23 @@
+/* ===== Scrollbar Mixin ===== */
+@mixin takeoff-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-lightest);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: var(--secondary-sub-base);
+    &:hover {
+      background: var(--secondary-dark);
+    }
+  }
+  &::-webkit-scrollbar-corner {
+    background: var(--background-lightest);
+  }
+}
