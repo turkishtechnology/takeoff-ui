@@ -50,7 +50,7 @@ export class TkSpinner {
         if (this.isButton) {
           const button = this.el.closest('button');
           const borderColor = window.getComputedStyle(button).color;
-          return <div style={{ border: '3px solid ' + borderColor, borderTop: '3px solid transparent' }} class="spinner-rounded"></div>;
+          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded"></div>;
         }
         return <div class="spinner-rounded"></div>;
       case 'dots':
