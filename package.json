@@ -97,7 +97,8 @@
       "ajv": ">=8.18.0",
       "smol-toml": ">=1.6.1",
       "srvx": ">=0.11.13",
-      "@tootallnate/once": ">=3.0.1"
+      "@tootallnate/once": ">=3.0.1",
+      "vite": "^7.3.2"
     }
   }
 }
