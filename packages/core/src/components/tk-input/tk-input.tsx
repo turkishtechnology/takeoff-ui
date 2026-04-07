@@ -764,7 +764,7 @@ export class TkInput implements ComponentInterface {
             </div>
           )}
           {this.renderInput()}
-          {this.loading && <tk-spinner size="xxsmall"></tk-spinner>}
+          {this.loading && <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>}
           {showClearButton && (
             <tk-icon
               {...getIconElementProps('close', {
