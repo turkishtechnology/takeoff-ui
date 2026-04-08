@@ -1,10 +1,9 @@
 /**
  * Base default chart options that apply to all chart types
  */
-import type { ChartOptions, ChartType, TooltipItem } from 'chart.js';
 import { merge } from 'lodash-es';
 
-export const DEFAULT_CHART_OPTIONS: ChartOptions<ChartType> = {
+export const DEFAULT_CHART_OPTIONS: any = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -26,7 +25,7 @@ export const DEFAULT_CHART_OPTIONS: ChartOptions<ChartType> = {
 /**
  * Default options specific to bar charts
  */
-export const BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
+export const BAR_CHART_OPTIONS: any = {
   indexAxis: 'x',
   elements: {
     bar: {
@@ -57,7 +56,7 @@ export const BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
 /**
  * Default options specific to horizontal bar charts
  */
-export const HORIZONTAL_BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
+export const HORIZONTAL_BAR_CHART_OPTIONS: any = {
   indexAxis: 'y',
   elements: {
     bar: {
@@ -88,7 +87,7 @@ export const HORIZONTAL_BAR_CHART_OPTIONS: ChartOptions<'bar'> = {
 /**
  * Default options specific to pie charts
  */
-export const PIE_CHART_OPTIONS: ChartOptions<'pie'> = {
+export const PIE_CHART_OPTIONS: any = {
   cutout: '0%',
   scales: undefined,
   elements: {
@@ -107,10 +106,10 @@ export const PIE_CHART_OPTIONS: ChartOptions<'pie'> = {
     },
     tooltip: {
       callbacks: {
-        label: function (context: TooltipItem<'pie'>) {
+        label: function (context) {
           const label = context.label || '';
-          const value = (context.raw || 0) as number;
-          const total = ((context.chart.data.datasets[0]?.data || []) as number[]).reduce((a, b) => a + b, 0);
+          const value = context.raw || 0;
+          const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
           const percentage = Math.round((value / total) * 10000) / 100;
           return `${label}: ${value} (${percentage.toFixed(2)}%)`;
         },
@@ -122,12 +121,12 @@ export const PIE_CHART_OPTIONS: ChartOptions<'pie'> = {
 /**
  * Default options specific to doughnut charts
  */
-export const DOUGHNUT_CHART_OPTIONS: ChartOptions<'doughnut'> = {
-  ...(PIE_CHART_OPTIONS as unknown as ChartOptions<'doughnut'>),
+export const DOUGHNUT_CHART_OPTIONS: any = {
+  ...PIE_CHART_OPTIONS,
   cutout: '50%',
 };
 
-export function getDefaultOptionsForType(type: string): ChartOptions<ChartType> {
+export function getDefaultOptionsForType(type: string): any {
   // Get base options
   let options;
 

@@ -14,7 +14,22 @@
         { "label": "Lines", "value": "lines" },
         { "label": "Pulse", "value": "pulse" },
         { "label": "Three Dots", "value": "three-dots" },
-        { "label": "Loader", "value": "loader" }
+        { "label": "Loader", "value": "loader" },
+        { "label": "Logo", "value": "logo" }
+      ]
+    },
+    {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "neutral",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" }
       ]
     },
     {

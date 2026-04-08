@@ -1,4 +1,4 @@
-import { Component, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
+import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';

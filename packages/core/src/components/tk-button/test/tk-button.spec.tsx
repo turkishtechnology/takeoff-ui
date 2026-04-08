@@ -1,11 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkButton } from '../tk-button';
 import { TkIcon } from '../../tk-icon/tk-icon';
-import { TkSpinner } from '../../tk-spinner/tk-spinner';
-
-type HTMLFormElementWithSubmit = HTMLFormElement & {
-  requestSubmit: () => void;
-};
 
 describe('tk-button', () => {
   it('renders its label and host full-width class', async () => {
@@ -38,7 +33,7 @@ describe('tk-button', () => {
 
   it('renders a spinner while loading', async () => {
     const page = await newSpecPage({
-      components: [TkButton, TkSpinner],
+      components: [TkButton],
       html: `<tk-button loading="true"></tk-button>`,
     });
 
@@ -56,7 +51,7 @@ describe('tk-button', () => {
     });
 
     expect(stringPage.root.shadowRoot.querySelector('tk-icon')).toBeTruthy();
-    expect(stringPage.root.shadowRoot.textContent).toContain('home');
+    expect(stringPage.root.shadowRoot.querySelector('tk-icon')?.textContent).toContain('home');
 
     const objectPage = await newSpecPage({
       components: [TkButton, TkIcon],
@@ -111,7 +106,7 @@ describe('tk-button', () => {
 
     const clickSpy = jest.fn();
     page.body.querySelector('tk-button').addEventListener('tk-click', clickSpy);
-    (page.body.querySelector('form') as HTMLFormElementWithSubmit).requestSubmit = jest.fn();
+    (page.body.querySelector('form') as any).requestSubmit = jest.fn();
 
     (page.body.querySelector('tk-button').shadowRoot.querySelector('button') as HTMLButtonElement).click();
     await page.waitForChanges();

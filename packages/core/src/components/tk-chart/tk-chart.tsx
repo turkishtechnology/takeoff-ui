@@ -1,6 +1,5 @@
-import { Component, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
+import { Component, h, Element, Prop, Method, Watch, State, ComponentInterface } from '@stencil/core';
 import Chart, { ChartType, ChartOptions, ChartData } from 'chart.js/auto';
-import type { Plugin } from 'chart.js';
 import { getDefaultOptionsForType } from './defaults';
 import { merge } from 'lodash-es';
 import classNames from 'classnames';
@@ -19,11 +18,11 @@ import classNames from 'classnames';
 })
 export class TkChart implements ComponentInterface {
   private chartRef?: HTMLCanvasElement;
-  private chartInstance?: Chart<ChartType>;
+  private chartInstance?: Chart;
 
   @Element() el: HTMLTkChartElement;
 
-  @State() private internalOptions: ChartOptions<ChartType>;
+  @State() private internalOptions: any;
 
   /**
    * The type of chart to render
@@ -38,7 +37,7 @@ export class TkChart implements ComponentInterface {
   /**
    * Chart options prop is used to define chart options supported by the Chart.js library. With this prop, you can specify any chart options described in the Chart.js documentation (https://www.chartjs.org/docs/latest/general/options.html).
    */
-  @Prop() options?: ChartOptions<ChartType>;
+  @Prop() options?: ChartOptions;
 
   /**
    * Width of the chart container
@@ -53,7 +52,7 @@ export class TkChart implements ComponentInterface {
   /**
    * Custom plugins to use with chart
    */
-  @Prop() plugins?: Plugin<ChartType>[] = [];
+  @Prop() plugins?: any[] = [];
 
   /**
    * Accessibility label for the chart
@@ -94,7 +93,7 @@ export class TkChart implements ComponentInterface {
    * Get the chart instance
    */
   @Method()
-  async getChart(): Promise<unknown> {
+  async getChart(): Promise<any> {
     return this.chartInstance;
   }
 
