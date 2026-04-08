@@ -28,8 +28,10 @@
 
 :root.tk-font,
 :root[data-tk-font='true'],
+:root[data-tk-font],
 .tk-font,
-[data-tk-font='true'] {
+[data-tk-font='true'],
+[data-tk-font] {
   --family-title: 'tk-display', sans-serif;
   --family-label: 'tk-text', sans-serif;
   --family-body: 'tk-text', sans-serif;
