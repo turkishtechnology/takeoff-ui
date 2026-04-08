@@ -15,7 +15,7 @@ const Weekend = () => {
   { id: '3', name: 'Task C', startDate: '2026-04-20', endDate: '2026-05-05', progress: 20 },
 ];
 
-<TkGanttChart tasks={tasks} highlightWeekends={true} />`;
+<TkGanttChart tasks={tasks} highlightWeekends={false} />`;
 
   const vueCode = `<script setup>
 import { TkGanttChart } from '@takeoff-ui/vue'
@@ -28,12 +28,12 @@ const tasks = [
 </script>
 
 <template>
-  <TkGanttChart :tasks="tasks" :highlight-weekends="true" />
+  <TkGanttChart :tasks="tasks" :highlight-weekends="false" />
 </template>`;
 
   const angularCode = `<tk-gantt-chart
   [tasks]="tasks"
-  [highlightWeekends]="true"
+  [highlightWeekends]="false"
 ></tk-gantt-chart>
 
 // component.ts
@@ -43,7 +43,7 @@ tasks = [
   { id: '3', name: 'Task C', startDate: '2026-04-20', endDate: '2026-05-05', progress: 20 },
 ];`;
 
-  const demo = <TkGanttChart tasks={tasks} highlightWeekends={true} />;
+  const demo = <TkGanttChart tasks={tasks} highlightWeekends={false} />;
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
