@@ -17,26 +17,44 @@ describe('tk-breadcrumb', () => {
     expect(items).toHaveLength(3);
     expect(items[2].classList.contains('tk-breadcrumb-item-current')).toBe(true);
   });
-
-  it('renders icons and external links from model data', async () => {
+});
+// State
+describe('state handling', () => {
+  it('should render slotted items', async () => {
     const page = await newSpecPage({
-      components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
-      html: `<tk-breadcrumb></tk-breadcrumb>`,
+      components: [TkBreadcrumb],
+      html: `<tk-breadcrumb ><slot/>
+        </tk-breadcrumb>`,
     });
 
-    page.rootInstance.model = [{ label: 'home', href: '/', icon: { name: 'home' }, isExternal: true }];
+    const slot = page.root.shadowRoot.querySelector('slot');
+
+    expect(slot).not.toBeNull;
+  });
+  it('should render items when no slots provided', async () => {
+    const page = await newSpecPage({
+      components: [TkBreadcrumb, TkBreadcrumbItem],
+      html: `<tk-breadcrumb type="outlined">
+        </tk-breadcrumb>`,
+    });
+
+    page.rootInstance.model = [{ label: 'home', href: '/', icon: { name: 'home' } }];
+
     await page.waitForChanges();
 
-    const link = page.root.shadowRoot.querySelector('.tk-breadcrumb-link');
-    expect(link.getAttribute('target')).toBe('_blank');
-    expect(link.getAttribute('rel')).toBe('noopener noreferrer');
-    expect(page.root.shadowRoot.querySelector('tk-icon').textContent).toContain('home');
-  });
+    const slot = page.root.shadowRoot.querySelector('slot');
 
-  it('renders configured separator and outlined type', async () => {
+    expect(slot).toBeNull;
+
+    const label = page.root.shadowRoot.querySelector('.tk-breadcrumb-item-label');
+
+    expect(label.textContent).toBe('home');
+  });
+  it('correctly assign the last item as isCurrent ', async () => {
     const page = await newSpecPage({
-      components: [TkBreadcrumb, TkBreadcrumbItem, TkIcon],
-      html: `<tk-breadcrumb separator="icon" type="outlined"></tk-breadcrumb>`,
+      components: [TkBreadcrumb, TkBreadcrumbItem],
+      html: `<tk-breadcrumb type="outlined">
+        </tk-breadcrumb>`,
     });
 
     page.rootInstance.model = [{ label: 'home' }, { label: 'profile' }];

@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { ITreeItem } from './types';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';

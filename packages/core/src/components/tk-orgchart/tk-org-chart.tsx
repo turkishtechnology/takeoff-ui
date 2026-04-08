@@ -1,18 +1,6 @@
-import { Component, Element, Prop, Method, Watch, State, Event, EventEmitter, ComponentInterface } from '@stencil/core';
+import { Component, h, Element, Prop, Method, Watch, State, Event, EventEmitter, ComponentInterface } from '@stencil/core';
 import { merge } from 'lodash-es';
-import { OrgChart, type LayoutBinding, type NodeId, type State as OrgChartState } from 'd3-org-chart';
-
-export interface OrgChartNode {
-  id?: NodeId;
-  parentId?: NodeId | null;
-  name?: string;
-  title?: string;
-  children?: OrgChartNode[];
-  [key: string]: unknown;
-}
-
-type OrgChartRenderNode = Parameters<OrgChartState<OrgChartNode>['nodeContent']>[0];
-type OrgChartLayoutNode = Parameters<LayoutBinding<OrgChartNode>['buttonY']>[0] & { _children?: Array<unknown> };
+import { OrgChart } from 'd3-org-chart';
 
 /**
  * The TkOrgChart component allows users to visualize organizational data using d3-org-chart.
@@ -28,8 +16,8 @@ type OrgChartLayoutNode = Parameters<LayoutBinding<OrgChartNode>['buttonY']>[0] 
 })
 export class TkOrgChart implements ComponentInterface {
   private orgChartContainerRef?: HTMLDivElement;
-  private orgChartInstance?: OrgChart<OrgChartNode>;
-  private buttonUpdateTimeout?: ReturnType<typeof setTimeout>;
+  private orgChartInstance?: any;
+  private buttonUpdateTimeout?: any;
   private nodeWidth = 160;
   private nodeHeight = 90;
   private nodeButtonWidth = 28.5;
@@ -41,12 +29,12 @@ export class TkOrgChart implements ComponentInterface {
 
   @Element() el: HTMLElement;
 
-  @State() internalOptions: Record<string, unknown>;
+  @State() internalOptions: any;
 
   /**
    * Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties.
    */
-  @Prop() data!: OrgChartNode[];
+  @Prop() data!: any[];
   @Watch('data')
   dataChanged() {
     this.updateOrgChart();
@@ -55,7 +43,7 @@ export class TkOrgChart implements ComponentInterface {
   /**
    * Chart options for d3-org-chart customization
    */
-  @Prop() options?: Record<string, unknown>;
+  @Prop() options?: any;
   @Watch('options')
   optionsChanged() {
     this.mergeOptions();
@@ -79,7 +67,7 @@ export class TkOrgChart implements ComponentInterface {
   /**
    * Node click event
    */
-  @Event({ eventName: 'tk-node-click' }) tkNodeClick: EventEmitter<OrgChartNode>;
+  @Event({ eventName: 'tk-node-click' }) tkNodeClick: EventEmitter<any>;
 
   componentWillLoad() {
     this.mergeOptions();
@@ -89,10 +77,10 @@ export class TkOrgChart implements ComponentInterface {
     if (this.orgChartContainerRef) {
       const flatData = this.normaliseData(this.data);
 
-      this.orgChartInstance = new OrgChart<OrgChartNode>();
+      this.orgChartInstance = new OrgChart();
 
-      this.orgChartInstance
-        .container(this.orgChartContainerRef as unknown as string)
+      (this.orgChartInstance as any)
+        .container(this.orgChartContainerRef)
         .data(flatData)
         .layout('top')
         .initialExpandLevel(Infinity)
@@ -103,13 +91,13 @@ export class TkOrgChart implements ComponentInterface {
         .nodeButtonX(() => this.nodeButtonX)
         .childrenMargin(() => this.childrenMargin)
         .compact(this.compact)
-        .nodeContent(node => this.defaultNodeHTML(node))
+        .nodeContent((d: any) => this.defaultNodeHTML(d))
         .buttonContent(() => this.defaultButtonHTML());
 
-      this.orgChartInstance.onNodeClick(node => this.tkNodeClick.emit(node.data));
+      this.orgChartInstance.onNodeClick((nd: any) => this.tkNodeClick.emit(nd));
 
       const lb = this.orgChartInstance.layoutBindings();
-      lb.top.diagonal = (s, t) => {
+      lb.top.diagonal = (s: any, t: any) => {
         const x = s.x;
         const y = s.y;
 
@@ -120,8 +108,8 @@ export class TkOrgChart implements ComponentInterface {
 
         return `M ${x} ${y} L ${x} ${midY} L ${ex} ${midY} L ${ex} ${ey}`;
       };
-      lb.top.buttonY = n => n.height + this.nodeButtonHeight; // button y position
-      lb.top.linkParentY = n => n.parent.y + n.parent.height + this.nodeButtonHeight + 14; // parent side connection
+      lb.top.buttonY = (n: any) => n.height + this.nodeButtonHeight; // button y position
+      lb.top.linkParentY = (n: any) => n.parent.y + n.parent.height + this.nodeButtonHeight + 14; // parent side connection
       this.updateButtonsState();
 
       this.orgChartInstance.layoutBindings(lb).render();
@@ -146,7 +134,7 @@ export class TkOrgChart implements ComponentInterface {
    * Get the chart instance
    */
   @Method()
-  async getOrgChart(): Promise<unknown> {
+  async getOrgChart(): Promise<any> {
     return this.orgChartInstance;
   }
 
@@ -161,9 +149,9 @@ export class TkOrgChart implements ComponentInterface {
    * Add node to organizational chart
    */
   @Method()
-  async addNode(node: unknown): Promise<void> {
+  async addNode(node: any): Promise<void> {
     if (this.orgChartInstance) {
-      this.orgChartInstance.addNode(node as OrgChartNode);
+      this.orgChartInstance.addNode(node);
     }
   }
 
@@ -177,7 +165,7 @@ export class TkOrgChart implements ComponentInterface {
     }
   }
 
-  private needsNormalising(value: OrgChartNode[] | OrgChartNode | null | undefined): boolean {
+  private needsNormalising(value: any): boolean {
     if (Array.isArray(value)) {
       if (!value.length) return false;
       const first = value[0];
@@ -186,19 +174,19 @@ export class TkOrgChart implements ComponentInterface {
     return !!value?.children;
   }
 
-  private flattenTree(node: OrgChartNode, parentId: NodeId | null, store: OrgChartNode[], idCounter: { cur: number }) {
+  private flattenTree(node: any, parentId: number | null, store: any[], idCounter: { cur: number }) {
     const id = node.id ?? idCounter.cur++;
     store.push({ ...node, id, parentId });
-    (node.children ?? []).forEach((c: OrgChartNode) => this.flattenTree(c, id, store, idCounter));
+    (node.children ?? []).forEach((c: any) => this.flattenTree(c, id, store, idCounter));
   }
 
-  private normaliseData(src: OrgChartNode[] | OrgChartNode): OrgChartNode[] {
+  private normaliseData(src: any): any[] {
     if (!this.needsNormalising(src)) {
       return Array.isArray(src) ? [...src] : [src];
     }
-    const out: OrgChartNode[] = [];
+    const out: any[] = [];
     const counter = { cur: 1 };
-    (Array.isArray(src) ? src : [src]).forEach((n: OrgChartNode) => this.flattenTree(n, null, out, counter));
+    (Array.isArray(src) ? src : [src]).forEach((n: any) => this.flattenTree(n, null, out, counter));
     return out;
   }
 
@@ -213,7 +201,7 @@ export class TkOrgChart implements ComponentInterface {
     this.updateButtonsState();
   }
 
-  private defaultNodeHTML(d: OrgChartRenderNode) {
+  private defaultNodeHTML(d: any) {
     const nameCol = '#222530';
     const titleCol = '#99A0AE';
 
@@ -317,16 +305,16 @@ export class TkOrgChart implements ComponentInterface {
   </div>`;
 
   private updateButtonsState() {
-    if (!this.orgChartInstance) return;
     const lb = this.orgChartInstance.layoutBindings();
+    if (!this.orgChartInstance) return;
 
     if (this.buttonUpdateTimeout) {
       clearTimeout(this.buttonUpdateTimeout);
     }
 
     if (!this.collapsible) {
-      lb.top.buttonY = n => n.height + this.nodeButtonHeight; // button y position
-      lb.top.linkParentY = n => n.parent.y + n.parent.height; // parent side connection
+      lb.top.buttonY = (n: any) => n.height + this.nodeButtonHeight; // button y position
+      lb.top.linkParentY = (n: any) => n.parent.y + n.parent.height; // parent side connection
 
       this.orgChartInstance
         .layoutBindings(lb)
@@ -335,9 +323,9 @@ export class TkOrgChart implements ComponentInterface {
         })
         .render();
     } else {
-      lb.top.buttonY = n => n.height + this.nodeButtonHeight; // button y position
-      lb.top.linkParentY = n => n.parent.y + n.parent.height + this.nodeButtonHeight + 14; // parent side connection
-      lb.top.linkY = n => n.y - 4; // child side connection
+      lb.top.buttonY = (n: any) => n.height + this.nodeButtonHeight; // button y position
+      lb.top.linkParentY = (n: any) => n.parent.y + n.parent.height + this.nodeButtonHeight + 14; // parent side connection
+      lb.top.linkY = (n: any) => n.y - 4; // child side connection
 
       this.orgChartInstance.layoutBindings(lb).render();
 
@@ -345,8 +333,7 @@ export class TkOrgChart implements ComponentInterface {
         if (this.orgChartInstance) {
           this.orgChartInstance
             .buttonContent(({ node }) => {
-              const buttonNode = node as OrgChartLayoutNode;
-              if (!buttonNode.children && !buttonNode._children) return '';
+              if (!node.children && !node._children) return '';
               return this.defaultButtonHTML();
             })
             .render();
@@ -356,9 +343,7 @@ export class TkOrgChart implements ComponentInterface {
   }
 
   render() {
-    const title = this.options?.title;
-    const titleText = typeof title === 'object' && title !== null && 'text' in title ? String(title.text ?? '') : '';
-    const accessibilityLabel = this.accessibilityLabel || titleText || 'Organization Chart';
+    const accessibilityLabel = this.accessibilityLabel || this.options?.title?.text || 'Organization Chart';
 
     return <div ref={el => (this.orgChartContainerRef = el)} class="tk-org-chart-container" role="img" aria-label={accessibilityLabel} />;
   }

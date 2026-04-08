@@ -1,40 +1,230 @@
-.titleDesc {
-  color: var(--text-base);
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  width: 100%;
 }
 
-.designSystem {
+.sectionInner {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1320px;
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.sectionTitle {
+  display: flex;
+  flex-direction: column;
+  max-width: 540px;
+  width: 100%;
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 36px;
+  line-height: 45px;
+  font-weight: 400;
+  color: var(--text-darkest, #222530);
+}
+
+.sectionDesc {
+  max-width: 540px;
+  width: 100%;
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--text-base, #717784);
+  margin: 0;
+}
+
+.cardsContainer {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #e1e4ea);
+  background: var(--static-light, white);
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 424px;
+  min-width: 424px;
+  height: 480px;
   border-radius: 16px;
-  border: 2px solid var(--border-light);
-  background: var(--static-light);
+  background: var(--static-light, white);
+  overflow: hidden;
+}
+
+.cardHeader {
   padding: 16px;
 }
 
 .figmaLogo {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
+  justify-content: center;
   width: 40px;
+  height: 40px;
   padding: 8px;
-  border-radius: 100%;
-  border: 2px solid var(--surface-light);
-  background: var(--static-light);
-  margin-bottom: 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-lightest);
+  background: var(--static-light, white);
 }
 
-.designSystemDesc {
-  color: var(--text-base);
+.figmaLogo img {
+  width: 100%;
+  height: 100%;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+  padding: 16px;
+  justify-content: center;
+}
+
+.cardTitle {
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 400;
+  color: var(--text-darkest, #222530);
+  margin: 0;
+}
+
+.cardDesc {
+  color: var(--text-base, #717784);
   font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  margin: 0;
+}
+
+.imageContainer {
+  flex: 1;
+  height: 480px;
+  overflow: hidden;
+  position: relative;
 }
 
 .previewImage {
-  height: 100%;
-  background-image: url('/img/design-system-preview.svg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  position: absolute;
+  width: 436px;
+  height: 581px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #e1e4ea);
+  box-shadow: 0 0 20px 3px var(--shadow-black-alpha-light);
+  background-color: var(--frames-lightest);
+  overflow: hidden;
 }
 
-[data-theme='dark'] .previewImage {
-  background-image: url('/img/design-system-preview-dark.svg');
+.previewImage[data-position='first'] {
+  left: 16px;
+  top: 47px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 0;
+}
+
+.previewImage[data-position='second'] {
+  left: 218px;
+  top: 115px;
+}
+
+.previewImage[data-position='third'] {
+  right: 16px;
+  top: 183px;
+}
+
+.previewImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 996px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .cardsContainer {
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+  }
+
+  .imageContainer {
+    width: 100%;
+  }
+
+  .previewImage {
+    width: 45%;
+    height: auto;
+  }
+
+  .previewImage[data-position='first'] {
+    left: 2%;
+    top: 10%;
+  }
+
+  .previewImage[data-position='second'] {
+    left: 27%;
+    top: 25%;
+  }
+
+  .previewImage[data-position='third'] {
+    left: auto;
+    right: 2%;
+    top: 40%;
+  }
+}
+
+@media (max-width: 576px) {
+  .sectionTitle {
+    font-size: 28px;
+    line-height: normal;
+  }
+
+  .sectionDesc {
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  .imageContainer {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .card {
+    z-index: 1;
+    background: var(--overlay-white-darkest);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }

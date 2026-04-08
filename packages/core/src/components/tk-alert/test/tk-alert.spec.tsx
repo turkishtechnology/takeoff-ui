@@ -1,28 +1,24 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAlert } from '../tk-alert';
-import { TkButton } from '../../tk-button/tk-button';
 import { TkIcon } from '../../tk-icon/tk-icon';
-
-type TkAlertWithCloseHandler = TkAlert & {
-  handleCloseButtonClick: () => void;
-};
+import { TkButton } from '../../tk-button/tk-button';
 
 describe('tk-alert', () => {
   it('renders header, message and variant classes', async () => {
     const page = await newSpecPage({
-      components: [TkAlert, TkIcon],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert header="Test header" message="Test message" variant="success"></tk-alert>`,
     });
 
     expect(page.root.shadowRoot.querySelector('.tk-alert-content').textContent).toContain('Test header');
     expect(page.root.shadowRoot.querySelector('.tk-alert-content').textContent).toContain('Test message');
     expect(page.root.shadowRoot.querySelector('.tk-alert-container').classList.contains('success')).toBe(true);
-    expect(page.root.shadowRoot.querySelector('tk-icon').textContent).toContain('check_circle');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.textContent).toContain('check_circle');
   });
 
   it('renders custom icon objects and multiple messages', async () => {
     const page = await newSpecPage({
-      components: [TkAlert, TkIcon],
+      components: [TkAlert, TkIcon, TkButton],
       html: `<tk-alert></tk-alert>`,
     });
 
@@ -30,14 +26,14 @@ describe('tk-alert', () => {
     page.root.message = ['First', 'Second'];
     await page.waitForChanges();
 
-    expect(page.root.shadowRoot.querySelector('tk-icon i.material-symbols-rounded').textContent).toBe('search');
+    expect(page.root.shadowRoot.querySelector('tk-icon .material-symbols-rounded')?.textContent).toBe('search');
     expect(page.root.shadowRoot.querySelectorAll('.tk-alert-message')).toHaveLength(2);
   });
 
   it('applies icon size classes', async () => {
     for (const size of ['small', 'base', 'large'] as const) {
       const page = await newSpecPage({
-        components: [TkAlert, TkIcon],
+        components: [TkAlert, TkIcon, TkButton],
         html: `<tk-alert icon="home" icon-size="${size}"></tk-alert>`,
       });
 
@@ -47,34 +43,76 @@ describe('tk-alert', () => {
     }
   });
 
-  it('removes itself when the close button emits tk-click', async () => {
+  it('renders multiple messages', async () => {
+    const message = [
+      'Lorem ipsum odor amet, consectetuer adipiscing elit.',
+      'Aptent fringilla felis aenean mus habitant.',
+      'Nullam lobortis dapibus habitant pellentesque netus placerat natoque consectetur phasellus.',
+      'Ligula turpis id netus himenaeos magna semper netus elit.',
+    ];
     const page = await newSpecPage({
-      components: [TkAlert, TkButton],
-      html: `<tk-alert removable></tk-alert>`,
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert></tk-alert>`,
     });
+    page.root.message = message;
 
-    const button = page.root.shadowRoot.querySelector('tk-button');
-    expect(button).toBeTruthy();
-
-    button.dispatchEvent(new CustomEvent('tk-click', { bubbles: true, composed: true }));
     await page.waitForChanges();
 
-    expect(page.root.isConnected).toBe(false);
-  });
+    const divs = page.root.shadowRoot.querySelectorAll('.tk-alert-message');
+    console.log(page.root.shadowRoot.innerHTML);
+    expect(divs.length).toBe(message.length);
 
-  it('calls the close handler when the button is clicked', async () => {
+    for (let i = 0; i < message.length; i++) {
+      console.log(divs[i].textContent);
+      expect(divs[i].textContent.trim()).toBe(message[i].trim());
+    }
+  });
+});
+
+//Event
+describe('event handling', () => {
+  it('should remove the alert when close button is clicked', async () => {
     const page = await newSpecPage({
-      components: [TkAlert, TkButton],
-      html: `<tk-alert removable></tk-alert>`,
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert removable
+              ></tk-alert>`,
     });
 
-    const instance = page.rootInstance as TkAlertWithCloseHandler;
-    const spy = jest.spyOn(instance, 'handleCloseButtonClick');
+    await page.waitForChanges();
+
     const button = page.root.shadowRoot.querySelector('tk-button');
 
-    button.dispatchEvent(new CustomEvent('tk-click', { bubbles: true, composed: true }));
+    expect(button).toBeTruthy();
+    expect(button.shadowRoot.querySelector('tk-icon')?.textContent).toContain('close');
+
+    (button.shadowRoot.querySelector('button') as HTMLButtonElement).click();
+
+    await page.waitForChanges();
+    expect(page.root).toBeNull;
+  });
+  it('should call handleCloseButtonClick when close button is clicked', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert removable
+                ></tk-alert>`,
+    });
+
+    await page.waitForChanges();
+
+    const instance = page.rootInstance;
+
+    expect(instance).toBeTruthy;
+
+    const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
+    const button = page.root.shadowRoot.querySelector('tk-button');
+
+    expect(button).toBeTruthy();
+
+    (button.shadowRoot.querySelector('button') as HTMLButtonElement).click();
+
     await page.waitForChanges();
 
     expect(spy).toHaveBeenCalled();
+    expect(page.root).toBeNull;
   });
 });

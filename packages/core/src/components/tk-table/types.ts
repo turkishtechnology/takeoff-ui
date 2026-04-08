@@ -5,14 +5,6 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { ITreeItem } from '../tk-treeview/types';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 
-type TableFilterValue = ITableFilter['value'];
-type TableRowData = Record<string, unknown>;
-type TableSorter = (a: TableRowData, b: TableRowData) => number;
-type TableFilterFn = (value: TableFilterValue, row: TableRowData) => boolean | undefined;
-type TableHeaderRenderer = () => string | HTMLElement;
-type TableCellRenderer = (row: TableRowData, index: number) => string | HTMLElement;
-type TableExportFormatter = (row: TableRowData) => string | number | boolean | null | undefined;
-
 /**
  * Defines the columns for the table
  */
@@ -28,9 +20,9 @@ export interface ITableColumn {
   /** Indicates if the column supports sorting */
   sortable?: boolean;
   /** Custom sort function for the column, mandatory when using client-side sorting. */
-  sorter?: TableSorter;
+  sorter?: Function;
   /** Custom filter function for the column, mandatory when using client-side filtering. */
-  filter?: TableFilterFn;
+  filter?: Function;
   /** Indicates if the column is searchable */
   searchable?: boolean;
   /** Indicates if the column is editable */
@@ -42,11 +34,11 @@ export interface ITableColumn {
   /** Indicates if the column acts as an expander */
   expander?: boolean;
   /** Custom rendering function for HTML content in the column header */
-  headerHtml?: TableHeaderRenderer;
+  headerHtml?: Function;
   /** Custom rendering function for HTML content in the column cells */
-  html?: TableCellRenderer;
+  html?: Function;
   /** Custom formatting function for exporting column data */
-  exportFormat?: TableExportFormatter;
+  exportFormat?: Function;
   /** */
   fixed?: 'left' | 'right';
   /** Allows styling to be applied to the th element of the column */
@@ -149,7 +141,7 @@ export interface ITableRequest {
   /** A list of filters applied to the table */
   filters: ITableFilter[];
   /** A list of data */
-  data?: TableRowData[];
+  data?: any[];
 }
 
 /** Represents a filter applied to a table */
@@ -188,7 +180,7 @@ export interface ITableExportOptions {
   /** Columns for only excel export */
   columns?: ITableExportExcelColumn[];
   /** */
-  externalData?: TableRowData[];
+  externalData?: any[];
 }
 
 export interface ITableExportExcelColumn {
@@ -202,9 +194,9 @@ export interface ITableExportExcelColumn {
  */
 export interface ITableGroup {
   /** The value that this group represents (e.g., "Active", "Completed") */
-  groupValue: unknown;
+  groupValue: any;
   /** The number of rows in this group */
   groupCount: number;
   /** The array of row data objects belonging to this group */
-  rows: TableRowData[];
+  rows: any[];
 }

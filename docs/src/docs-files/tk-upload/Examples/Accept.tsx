@@ -16,7 +16,7 @@ const Example = () => {
   };
 
   const handleFilesRejected = e => {
-    const errorMessage = e.detail?.map(item => item.reason + ' ' + item.file.name).join('\n');
+    let errorMessage = e.detail?.map(item => item.reason + ' ' + item.file.name).join('\n');
 
     createToast({
       header: `${e.detail.length} dosya eklenemedi!`,
