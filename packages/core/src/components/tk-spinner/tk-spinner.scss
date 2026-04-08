@@ -1,6 +1,10 @@
 .tk-spin-container {
   --spinner-size: 32px;
   --spinner-stroke-width: 5.33px;
+  --spinner-corner-offset: calc(var(--spinner-size) / 10);
+  --spinner-track-color: var(--background-light);
+  --spinner-active-color: var(--background-darkest);
+  --spinner-label-color: var(--text-sub-base);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,11 +70,47 @@
     --spinner-size: 48px;
     --spinner-stroke-width: 8px;
   }
+
+  &.primary {
+    --spinner-track-color: var(--primary-light);
+    --spinner-active-color: var(--primary-base);
+    --spinner-label-color: var(--primary-base);
+  }
+
+  &.neutral {
+    --spinner-track-color: var(--background-light);
+    --spinner-active-color: var(--background-darkest);
+    --spinner-label-color: var(--text-sub-base);
+  }
+
+  &.info {
+    --spinner-track-color: var(--states-info-light);
+    --spinner-active-color: var(--states-info-base);
+    --spinner-label-color: var(--states-info-base);
+  }
+
+  &.success {
+    --spinner-track-color: var(--states-success-light);
+    --spinner-active-color: var(--states-success-base);
+    --spinner-label-color: var(--states-success-base);
+  }
+
+  &.warning {
+    --spinner-track-color: var(--states-warning-light);
+    --spinner-active-color: var(--states-warning-dark);
+    --spinner-label-color: var(--states-warning-dark);
+  }
+
+  &.danger {
+    --spinner-track-color: var(--states-danger-light);
+    --spinner-active-color: var(--states-danger-base);
+    --spinner-label-color: var(--states-danger-base);
+  }
 }
 
 .tk-spinner-label {
   font-size: var(--desktop-body-s-size);
-  color: var(--text-sub-base);
+  color: var(--spinner-label-color);
 }
 
 .vertical .tk-spinner-label {
@@ -86,8 +126,8 @@
 /* --------------------------------------------------- SPINNER ROUNDED ----------------------------------------------------- */
 
 .spinner-rounded {
-  border: var(--spinner-stroke-width) solid var(--background-light);
-  border-top: var(--spinner-stroke-width) solid var(--background-darkest);
+  border: var(--spinner-stroke-width) solid var(--spinner-track-color);
+  border-top: var(--spinner-stroke-width) solid var(--spinner-active-color);
   border-radius: 50%;
   animation: rounded-animation 1s linear infinite;
   box-sizing: border-box;
@@ -102,7 +142,7 @@
 
 .spinner-dots .dot {
   position: absolute;
-  background-color: var(--background-darkest);
+  background-color: var(--spinner-active-color);
   border-radius: 50%;
   animation: dots-animation 1.2s linear infinite;
 }
@@ -166,7 +206,7 @@
 
 .spinner-lines .line {
   position: absolute;
-  background-color: var(--background-darkest);
+  background-color: var(--spinner-active-color);
   border-radius: 2px;
   animation: lines-animation 1.2s linear infinite;
 }
@@ -224,7 +264,7 @@
 
 .spinner-pulse {
   border-radius: 50%;
-  background-color: var(--background-darkest);
+  background-color: var(--spinner-active-color);
   animation: pulse-animation 1.5s infinite;
 }
 
@@ -240,7 +280,7 @@
 .spinner-three-dots .dot1,
 .spinner-three-dots .dot2,
 .spinner-three-dots .dot3 {
-  background-color: var(--background-darkest);
+  background-color: var(--spinner-active-color);
   border-radius: 50%;
   margin: 1px;
   animation: three-dots-animation 1.2s infinite ease-in-out;
@@ -260,7 +300,7 @@
 
 .spinner-loader {
   border: var(--spinner-stroke-width) solid transparent;
-  border-top: var(--spinner-stroke-width) solid var(--background-darkest);
+  border-top: var(--spinner-stroke-width) solid var(--spinner-active-color);
   border-radius: 50%;
   animation: loader-animation 1s linear infinite;
 }

@@ -36,6 +36,12 @@ export class TkSpinner {
   @Prop() type: 'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader' = 'rounded';
 
   /**
+   * Sets the color variant of spinner component.
+   * @defaultValue 'neutral'
+   */
+  @Prop() variant: 'primary' | 'neutral' | 'info' | 'success' | 'warning' | 'danger' = 'neutral';
+
+  /**
    * Sets the label of the spinner component.
    */
   @Prop() label: string;
@@ -103,6 +109,7 @@ export class TkSpinner {
         class={classNames('tk-spin-container', {
           [this.orientation]: true,
           [this.size]: true,
+          [this.variant]: true,
         })}
       >
         {this.renderSpinner()}
