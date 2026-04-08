@@ -13,11 +13,10 @@ const WeekStartDay = () => {
   { id: '2', name: 'Task Beta', startDate: '2026-04-10', endDate: '2026-04-25', progress: 15 },
 ];
 
-{/* weekStartDay=1 sets the week to start on Monday (0 is Sunday) */}
 <TkGanttChart 
   tasks={tasks} 
   viewType="weekly"
-  weekStartDay={1} 
+  weekStartDay={0} 
 />`;
 
   const vueCode = `<script setup>
@@ -30,19 +29,17 @@ const tasks = [
 </script>
 
 <template>
-  <!-- weekStartDay=1 sets the week to start on Monday (0 is Sunday) -->
   <TkGanttChart 
     :tasks="tasks" 
     view-type="weekly"
-    :week-start-day="1" 
+    :week-start-day="0" 
   />
 </template>`;
 
-  const angularCode = `<!-- weekStartDay=1 sets the week to start on Monday (0 is Sunday) -->
-<tk-gantt-chart
+  const angularCode = `<tk-gantt-chart
   [tasks]="tasks"
   viewType="weekly"
-  [weekStartDay]="1"
+  [weekStartDay]="0"
 ></tk-gantt-chart>
 
 // component.ts
@@ -51,7 +48,7 @@ tasks = [
   { id: '2', name: 'Task Beta', startDate: '2026-04-10', endDate: '2026-04-25', progress: 15 },
 ];`;
 
-  const demo = <TkGanttChart tasks={tasks} viewType="weekly" weekStartDay={2} />;
+  const demo = <TkGanttChart tasks={tasks} viewType="weekly" weekStartDay={0} />;
 
   return <FeatureDemo demo={demo} reactCode={reactCode} vueCode={vueCode} angularCode={angularCode}></FeatureDemo>;
 };
