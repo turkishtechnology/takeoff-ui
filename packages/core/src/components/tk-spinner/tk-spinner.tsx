@@ -33,7 +33,7 @@ export class TkSpinner {
    * Sets the style of spinner component.
    * @defaultValue 'rounded'
    */
-  @Prop() type: 'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader' = 'rounded';
+  @Prop() type: 'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader' | 'logo' = 'rounded';
 
   /**
    * Sets the color variant of spinner component.
@@ -97,6 +97,18 @@ export class TkSpinner {
         return <div class="spinner-pulse"></div>;
       case 'loader':
         return <div class="spinner-loader"></div>;
+      case 'logo':
+        return (
+          <div class="spinner-logo">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M24 0C10.7452 0 0 10.7452 0 24C0 37.2548 10.7452 48 24 48C37.2548 48 48 37.2548 48 24V4C48 1.79086 46.2091 0 44 0H24ZM24 8C15.1634 8 8 15.1634 8 24C8 32.8366 15.1634 40 24 40C32.8366 40 40 32.8366 40 24C40 15.1634 32.8366 8 24 8Z"
+              />
+            </svg>
+          </div>
+        );
       default:
         return null;
     }
