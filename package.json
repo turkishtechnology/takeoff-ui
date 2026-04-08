@@ -98,7 +98,9 @@
       "smol-toml": ">=1.6.1",
       "srvx": ">=0.11.13",
       "@tootallnate/once": ">=3.0.1",
-      "vite": "^7.3.2"
+      "vite": "^7.3.2",
+      "hono": ">=4.12.12",
+      "@hono/node-server": ">=1.19.13"
     }
   }
 }
