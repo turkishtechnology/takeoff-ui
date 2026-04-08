@@ -18,7 +18,6 @@ tk-select {
     .dropdown-item-holder {
       margin: 8px;
       padding: 1px;
-      max-height: 304px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -96,6 +95,7 @@ tk-select {
 
   &.large {
     .dropdown-item-holder {
+      max-height: 272px;
       .dropdown-item {
         font-size: var(--desktop-body-m-base-size);
       }
@@ -107,6 +107,7 @@ tk-select {
 
   &.base {
     .dropdown-item-holder {
+      max-height: 254px;
       .dropdown-item {
         font-size: var(--desktop-body-s-size);
       }
@@ -118,6 +119,7 @@ tk-select {
 
   &.small {
     .dropdown-item-holder {
+      max-height: 236px;
       .dropdown-item {
         font-size: var(--desktop-body-xs-size);
       }
