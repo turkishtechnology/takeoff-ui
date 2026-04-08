@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -18,8 +19,8 @@
   --ifm-color-primary-lightest: var(--primary-100);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --ifm-container-width-xl: 1600px;
-  --ifm-container-width: 1280px;
+  --ifm-container-width-xl: 1320px;
+  --ifm-container-width: 1320px;
   --ifm-navbar-padding-vertical: 12px;
   --ifm-navbar-link-color: var(--text-base);
   --ifm-z-index-dropdown: 1000;
@@ -671,7 +672,9 @@ body {
 }
 
 .section-image .holder {
-  margin: 32px 0;
+  margin: 32px auto;
+  max-width: 1320px;
+  padding: 0 16px;
   max-height: 240px;
   overflow: hidden;
 }
@@ -696,6 +699,44 @@ body {
 
   .page-header .container .description {
     width: 100%;
+  }
+
+  .bg-point {
+    width: 300px;
+    height: 300px;
+  }
+
+  .section-image .holder {
+    max-height: 160px;
+  }
+
+  .section-image .holder .image {
+    height: 160px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .page-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header .container h1 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .bg-point {
+    width: 200px;
+    height: 200px;
+    filter: blur(100px);
+  }
+
+  .section-image .holder {
+    max-height: 120px;
+  }
+
+  .section-image .holder .image {
+    height: 120px;
   }
 }
 
@@ -772,45 +813,14 @@ body {
   text-transform: uppercase;
 }
 
-.section-frameworks {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
-}
-
-.section-frameworks .titleDesc {
-  color: var(--text-base);
-}
-
-.section-frameworks .framework {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border-radius: 16px;
-  border: 2px solid var(--border-light);
-  background: var(--static-light);
-  padding: 16px;
-  height: 100%;
-}
-
-.section-frameworks .framework .frameworkSvg {
-  height: 40px;
-  width: 40px;
-  padding: 8px;
-  border-radius: 100%;
-  border: 2px solid var(--surface-light);
-  background: var(--static-light);
-}
-
-.section-frameworks .framework .frameworkDesc {
-  color: var(--text-base);
-  font-size: 14px;
-}
-
 .footer {
   margin-top: 24px;
   background-color: var(--static-light);
+}
+
+.footer .container {
+  max-width: 1320px;
+  padding: 0 16px;
 }
 .code-block-deprecated-usage {
   background-color: var(--primary-darkest);

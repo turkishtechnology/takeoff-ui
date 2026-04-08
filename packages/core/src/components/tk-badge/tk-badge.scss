@@ -351,6 +351,7 @@
         width: 16px;
         height: 16px;
         padding: var(--spacing-none);
+        padding: 1px;
       }
     }
 
@@ -372,6 +373,7 @@
         width: 20px;
         height: 20px;
         padding: var(--spacing-none);
+        padding: 2px;
       }
     }
 
@@ -392,7 +394,7 @@
       &.count {
         width: 24px;
         height: 24px;
-        padding: var(--spacing-none);
+        padding: 4px;
       }
     }
 
