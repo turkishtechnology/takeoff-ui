@@ -22,6 +22,10 @@
     cursor: pointer;
   }
 
+  tk-icon {
+    user-select: none;
+  }
+
   &.disabled {
     color: var(--text-sub-base) !important;
     background-color: var(--frames-light) !important;

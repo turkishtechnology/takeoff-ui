@@ -55,6 +55,16 @@
       "defaultValue": ""
     },
     {
+      "key": "iconPosition",
+      "label": "Icon Position",
+      "type": "select",
+      "defaultValue": "left",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Right", "value": "right" }
+      ]
+    },
+    {
       "key": "disabled",
       "label": "Disabled",
       "type": "checkbox",
