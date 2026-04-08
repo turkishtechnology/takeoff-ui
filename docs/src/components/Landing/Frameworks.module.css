@@ -1,0 +1,143 @@
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.sectionInner {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1320px;
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.sectionTitle {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 36px;
+  line-height: 45px;
+  font-weight: 400;
+  color: var(--text-darkest, #222530);
+}
+
+.sectionDesc {
+  max-width: 540px;
+  width: 100%;
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--text-base, #717784);
+  margin: 0;
+}
+
+.cardGrid {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid var(--border-light, #e1e4ea);
+  background: var(--static-light, white);
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 16px;
+}
+
+.iconFramework {
+  height: 40px;
+  width: 40px;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+}
+
+.cardTitle {
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 400;
+  color: var(--text-darkest, #222530);
+  margin: 0;
+}
+
+.cardDesc {
+  color: var(--text-base, #717784);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  margin: 0;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.arrowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border-lightest);
+  color: var(--text-darkest, #222530);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 996px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .card {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .sectionTitle {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .sectionDesc {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .card {
+    flex: 1 1 100%;
+  }
+}

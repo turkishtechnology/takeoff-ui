@@ -1,12 +1,10 @@
-import clsx from 'clsx';
 import React from 'react';
 import { useColorMode } from '@docusaurus/theme-common';
+import styles from './Frameworks.module.css';
 
 type FrameworkItem = {
   title: string;
-  SvgStencil: React.ComponentType<React.ComponentProps<'svg'>>;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-  SvgStencilDark: React.ComponentType<React.ComponentProps<'svg'>>;
   SvgDark: React.ComponentType<React.ComponentProps<'svg'>>;
   description: JSX.Element;
 };
@@ -14,9 +12,7 @@ type FrameworkItem = {
 const FrameworkList: FrameworkItem[] = [
   {
     title: 'React',
-    SvgStencil: require('@site/static/img/framework-section/framework-stencil.svg').default,
     Svg: require('@site/static/img/framework-section/framework-react.svg').default,
-    SvgStencilDark: require('@site/static/img/framework-section/framework-stencil-dark.svg').default,
     SvgDark: require('@site/static/img/framework-section/framework-react-dark.svg').default,
     description: (
       <>
@@ -26,24 +22,20 @@ const FrameworkList: FrameworkItem[] = [
     ),
   },
   {
-    title: 'Vue',
-    SvgStencil: require('@site/static/img/framework-section/framework-stencil.svg').default,
-    Svg: require('@site/static/img/framework-section/framework-vue.svg').default,
-    SvgStencilDark: require('@site/static/img/framework-section/framework-stencil-dark.svg').default,
-    SvgDark: require('@site/static/img/framework-section/framework-vue-dark.svg').default,
+    title: 'Angular',
+    Svg: require('@site/static/img/framework-section/framework-angular.svg').default,
+    SvgDark: require('@site/static/img/framework-section/framework-angular-dark.svg').default,
     description: (
       <>
-        Angular developers can take advantage of TakeOff’s comprehensive design system, providing consistent and scalable components that accelerate development and ensure a smooth
+        Angular developers can take advantage of TakeOff's comprehensive design system, providing consistent and scalable components that accelerate development and ensure a smooth
         user experience.
       </>
     ),
   },
   {
-    title: 'Angular',
-    SvgStencil: require('@site/static/img/framework-section/framework-stencil.svg').default,
-    Svg: require('@site/static/img/framework-section/framework-angular.svg').default,
-    SvgStencilDark: require('@site/static/img/framework-section/framework-stencil-dark.svg').default,
-    SvgDark: require('@site/static/img/framework-section/framework-angular-dark.svg').default,
+    title: 'Vue',
+    Svg: require('@site/static/img/framework-section/framework-vue.svg').default,
+    SvgDark: require('@site/static/img/framework-section/framework-vue-dark.svg').default,
     description: (
       <>
         Vue and TakeOff together offer a powerful combination of simplicity and performance. Use our versatile component library to streamline development and create interactive
@@ -53,28 +45,23 @@ const FrameworkList: FrameworkItem[] = [
   },
 ];
 
-function Framework({ title, SvgStencil, Svg, SvgStencilDark, SvgDark, description }: FrameworkItem) {
+function Framework({ title, Svg, SvgDark, description }: FrameworkItem) {
   const { colorMode } = useColorMode();
   return (
-    <div className={clsx('col col--4')}>
-      <div className="framework">
-        <div>
-          {colorMode === 'dark' ? (
-            <>
-              <SvgStencilDark className="frameworkSvg" role="img" />
-              <SvgDark className="frameworkSvg" role="img" />
-            </>
-          ) : (
-            <>
-              <SvgStencil className="frameworkSvg" role="img" />
-              <Svg className="frameworkSvg" role="img" />
-            </>
-          )}
-        </div>
-        <div>
-          <h2>{title}</h2>
-          <p className="frameworkDesc">{description}</p>
-        </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        {colorMode === 'dark' ? <SvgDark className={styles.iconFramework} role="img" /> : <Svg className={styles.iconFramework} role="img" />}
+      </div>
+      <div className={styles.cardBody}>
+        <h3 className={styles.cardTitle}>{title}</h3>
+        <p className={styles.cardDesc}>{description}</p>
+      </div>
+      <div className={styles.cardFooter}>
+        <a className={styles.arrowButton} aria-label={`${title} documentation`}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
       </div>
     </div>
   );
@@ -82,17 +69,16 @@ function Framework({ title, SvgStencil, Svg, SvgStencilDark, SvgDark, descriptio
 
 export default function Frameworks() {
   return (
-    <section className="section-frameworks">
-      <div className="container">
-        <div className="row">
-          <div className="col col--6">
-            <h1>Multiple Library Solutions</h1>
+    <section className={styles.section}>
+      <div className={styles.sectionInner}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionTitle}>
+            <span>Multiple Library</span>
+            <span>Solutions</span>
           </div>
-          <div className="col col--6">
-            <p className="titleDesc">TakeOff is designed to be versatile and adaptable, offering seamless integration with the most popular front-end frameworks.</p>
-          </div>
+          <p className={styles.sectionDesc}>TakeOff is designed to be versatile and adaptable, offering seamless integration with the most popular front-end frameworks.</p>
         </div>
-        <div className="row">
+        <div className={styles.cardGrid}>
           {FrameworkList.map((props, idx) => (
             <Framework key={idx} {...props} />
           ))}

@@ -106,10 +106,6 @@ const config: Config = {
           label: 'Github',
           position: 'right',
         },
-        // {
-        //   type: 'localeDropdown',
-        //   position: 'right',
-        // },
       ],
       hideOnScroll: true,
     },
