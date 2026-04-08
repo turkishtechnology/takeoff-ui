@@ -14,7 +14,8 @@
   .spinner-lines,
   .spinner-pulse,
   .spinner-three-dots,
-  .spinner-loader {
+  .spinner-loader,
+  .spinner-logo {
     display: flex;
     width: var(--spinner-size);
     height: var(--spinner-size);
@@ -305,6 +306,14 @@
   animation: loader-animation 1s linear infinite;
 }
 
+.spinner-logo {
+  animation: logo-animation 1s steps(4) infinite;
+
+  path {
+    fill: var(--spinner-active-color);
+  }
+}
+
 /* ----------- ANIMATIONS/KEYFRAMES ------------ */
 
 @keyframes rounded-animation {
@@ -361,6 +370,14 @@
 }
 
 @keyframes loader-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes logo-animation {
   0% {
     transform: rotate(0deg);
   }
