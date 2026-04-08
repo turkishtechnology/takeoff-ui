@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Element, Watch, Method, Event, EventEmitter } from '@stencil/core';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';

@@ -25,7 +25,7 @@ export interface IIconOptions {
   /**
    * Callback function to handle click events on the icon.
    */
-  click?: (event: MouseEvent) => void;
+  click?: Function;
 }
 
 /** Interface for multi-position icon configuration */

@@ -1,7 +1,6 @@
-import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
-import type { TkToggleButtonValue, TkToggleEventDetail } from './tk-toggle-button';
 
 /**
  * TkToggleButtonGroup is a component that allows you to create a group of toggle buttons.
@@ -33,7 +32,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
   /**
    * The value of the selected toggle button.
    */
-  @Prop({ mutable: true }) value?: TkToggleButtonValue;
+  @Prop({ mutable: true }) value?: any;
   @Watch('value')
   valueChanged() {
     this.updateSelected();
@@ -48,7 +47,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
   /**
    * Emitted when the selected value changes.
    */
-  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<TkToggleButtonValue>;
+  @Event({ eventName: 'tk-change' }) tkChange!: EventEmitter<any>;
 
   componentWillLoad() {
     this.updateSlottedItems();
@@ -79,7 +78,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
     }
   }
 
-  private handleToggle(e: CustomEvent<TkToggleEventDetail>) {
+  private handleToggle(e) {
     const { value } = e.detail;
     this.value = value;
     this.updateSelected();

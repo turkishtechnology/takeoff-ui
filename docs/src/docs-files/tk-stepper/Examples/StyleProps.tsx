@@ -31,19 +31,19 @@ const StyleProps = () => {
   const globalIcons = {
     completeIcon: {
       name: 'check_circle',
-      style: 'rounded' as const,
+      style: 'rounded' as 'rounded',
       fill: true,
       color: 'var(--primary-base)',
     },
     activeIcon: {
       name: 'radio_button_checked',
-      style: 'rounded' as const,
+      style: 'rounded' as 'rounded',
       fill: true,
       color: 'var(--primary-base)',
     },
     inactiveIcon: {
       name: 'radio_button_unchecked',
-      style: 'rounded' as const,
+      style: 'rounded' as 'rounded',
       fill: false,
       color: 'var(--red-200)',
     },

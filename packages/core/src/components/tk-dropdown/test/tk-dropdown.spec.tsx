@@ -1,7 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkDropdown } from '../tk-dropdown';
-
-type DropdownOptionTemplateItem = { name: string; code: string };
+import { h } from '@stencil/core';
 
 describe('tk-dropdown', () => {
   beforeAll(() => {
@@ -69,8 +68,11 @@ describe('tk-dropdown', () => {
               { code: 'SAW', name: 'Sabiha Gokcen Havalimani' },
               { code: 'ESB', name: 'Esenboga Havalimani' },
             ]}
-            optionHtml={(item: DropdownOptionTemplateItem) => {
-              return `<div class="flex justify-between gap-4"><div style="font-weight: bold;">${item.name}</div><div style="color: var(--primary-base)">${item.code}</div></div>`;
+            optionHtml={(item: { name: any; code: any }) => {
+              return `<div class="flex justify-between gap-4">
+                          <div style="font-weight: bold;">${item.name}</div>
+                          <div style="color: var(--primary-base)">${item.code}</div>
+                      </div>`;
             }}
           >
             <button slot="trigger"></button>
@@ -164,6 +166,18 @@ describe('tk-dropdown', () => {
       await page.waitForChanges();
 
       expect(clickSpy).toHaveBeenCalled();
+    });
+    it('should disconnect resizeObserver', async () => {
+      const page = await newSpecPage({
+        components: [TkDropdown],
+        html: `<tk-dropdown> <button slot="trigger" /></tk-dropdown>`,
+      });
+      const dropdown = page.rootInstance;
+      dropdown.resizeObserver = { disconnect: jest.fn() } as any;
+
+      dropdown.disconnectedCallback();
+
+      expect(dropdown.resizeObserver.disconnect);
     });
   });
 });

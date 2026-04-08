@@ -49,16 +49,3 @@ interface ICurrency {
   thousandsSeparator: Separator;
 }
 ```
-
-#### <span id="currencyinputchangeevent">CurrencyInputChangeEvent</span>
-
-Event data emitted when the currency input value changes. Contains the numeric
-value, formatted value, and selected currency.
-
-```typescript
-interface CurrencyInputChangeEvent {
-  value: number;
-  formattedValue: string;
-  currency: ICurrency;
-}
-```
