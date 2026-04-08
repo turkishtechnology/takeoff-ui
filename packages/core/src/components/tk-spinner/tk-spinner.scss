@@ -81,7 +81,7 @@
 
   &.primary {
     --spinner-track-color: var(--primary-light);
-    --spinner-active-color: var(--primary-base);
+    --spinner-active-color: var(--primary-dark);
     --spinner-label-color: var(--primary-base);
   }
 
@@ -93,25 +93,25 @@
 
   &.info {
     --spinner-track-color: var(--states-info-light);
-    --spinner-active-color: var(--states-info-base);
+    --spinner-active-color: var(--states-info-dark);
     --spinner-label-color: var(--states-info-base);
   }
 
   &.success {
     --spinner-track-color: var(--states-success-light);
-    --spinner-active-color: var(--states-success-base);
+    --spinner-active-color: var(--states-success-dark);
     --spinner-label-color: var(--states-success-base);
   }
 
   &.warning {
     --spinner-track-color: var(--states-warning-light);
     --spinner-active-color: var(--states-warning-dark);
-    --spinner-label-color: var(--states-warning-dark);
+    --spinner-label-color: var(--states-warning-base);
   }
 
   &.danger {
     --spinner-track-color: var(--states-danger-light);
-    --spinner-active-color: var(--states-danger-base);
+    --spinner-active-color: var(--states-danger-dark);
     --spinner-label-color: var(--states-danger-base);
   }
 }
