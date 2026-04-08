@@ -81,7 +81,6 @@
 
       .tk-phone-input-menu {
         list-style: none;
-        max-height: var(--spacing-56xl);
         overflow-y: auto;
         margin: var(--spacing-m-base);
         @include takeoff-scrollbar;
@@ -154,6 +153,10 @@
     .tk-phone-input-label {
       padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
     }
+
+    .tk-phone-input-menu {
+      max-height: 288px;
+    }
   }
 
   &.tk-phone-input-container-base {
@@ -171,6 +174,10 @@
     .tk-phone-input-label {
       padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
     }
+
+    .tk-phone-input-menu {
+      max-height: 276px;
+    }
   }
 
   &.tk-phone-input-container-small {
@@ -187,6 +194,10 @@
 
     .tk-phone-input-label {
       padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
+    }
+
+    .tk-phone-input-menu {
+      max-height: 264px;
     }
   }
 
