@@ -8,6 +8,7 @@
   border-radius: 16px;
   border: 1px solid var(--border-light);
   box-shadow: var(--effect-1-default-base);
+  font-family: var(--family-body);
 
   &.has-hover-shadow {
     &:hover {
@@ -67,7 +68,7 @@
 
         .tk-card-title {
           color: var(--text-darkest);
-          font-family: var(--desktop-title-h6-font, Geologica);
+          font-family: var(--desktop-title-h6-font);
           font-size: var(--desktop-title-h6-size, 20px);
           font-weight: 400;
           line-height: var(--desktop-title-h6-line-height);
@@ -75,7 +76,7 @@
 
         .tk-card-subtitle {
           color: var(--text-base);
-          font-family: var(--desktop-subheading-2xs-font, Geologica);
+          font-family: var(--desktop-subheading-2xs-font);
           font-size: var(--desktop-subheading-2xs-size, 11px);
           font-weight: 400;
           line-height: var(--desktop-subheading-2xs-line-height, 16px);

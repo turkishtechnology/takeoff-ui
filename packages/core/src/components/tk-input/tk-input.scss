@@ -29,6 +29,7 @@ tk-input.tk-table-input {
   flex-direction: column;
   gap: var(--input-external-label-large-container-gap);
   width: 100%;
+  font-family: var(--family-body);
 
   .label {
     color: var(--text-darkest);
@@ -107,7 +108,7 @@ tk-input.tk-table-input {
       color: var(--text-darkest);
       padding: 0px;
       width: 100%;
-      font-family: var(--desktop-body-m-base-font, Geologica);
+      font-family: var(--desktop-body-m-base-font);
       line-height: var(--desktop-body-m-base-line-height);
 
       &::placeholder {
