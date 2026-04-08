@@ -186,6 +186,11 @@
   align-items: center;
   border-bottom: 1px solid var(--border-light);
 
+  .custom-task-bar {
+    width: 100%;
+    height: 100%;
+  }
+
   &:last-child {
     border-bottom: none;
   }
