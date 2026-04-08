@@ -96,7 +96,6 @@
 
       .tk-currency-input-dropdown-menu-list {
         list-style: none;
-        max-height: var(--spacing-56xl);
         overflow-y: auto;
         margin: var(--spacing-m-base);
         @include takeoff-scrollbar;
@@ -165,8 +164,11 @@
         line-height: var(--desktop-body-m-line-height);
       }
     }
-  }
 
+    .tk-currency-input-dropdown-menu-list {
+      max-height: 280px;
+    }
+  }
   &.tk-currency-input-container-base {
     .tk-currency-input-label {
       padding: var(--input-external-label-base-label-v-padding) var(--input-external-label-base-label-h-padding);
@@ -189,8 +191,11 @@
         line-height: var(--desktop-body-s-line-height);
       }
     }
-  }
 
+    .tk-currency-input-dropdown-menu-list {
+      max-height: 268px;
+    }
+  }
   &.tk-currency-input-container-small {
     .tk-currency-input-label {
       padding: var(--input-external-label-small-label-v-padding) var(--input-external-label-small-label-h-padding);
@@ -211,6 +216,10 @@
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-line-height-xs-normal);
       }
+    }
+
+    .tk-currency-input-dropdown-menu-list {
+      max-height: 256px;
     }
   }
 }
