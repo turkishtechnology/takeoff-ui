@@ -12,6 +12,7 @@
   padding: var(--toast-base-v-padding) var(--toast-base-h-padding);
   border-width: 1px;
   border-style: solid;
+  font-family: var(--family-body);
 
   &.tk-alert-alignment-center {
     align-items: center;

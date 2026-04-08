@@ -37,6 +37,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--tree-gap, 2px);
+    font-family: var(--family-body);
   }
 
   &.node {
@@ -141,7 +142,7 @@
   }
 
   &.text {
-    font-family: var(--body-s-font, Geologica);
+    font-family: var(--desktop-body-s-font);
     font-style: normal;
     font-weight: 400;
 

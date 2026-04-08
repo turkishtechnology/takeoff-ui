@@ -3,6 +3,7 @@ tk-checkbox {
 }
 
 .tk-checkbox-container {
+  font-family: var(--family-body);
   &.card {
     border-radius: var(--radius-m-base);
     border: 1px solid var(--border-light);

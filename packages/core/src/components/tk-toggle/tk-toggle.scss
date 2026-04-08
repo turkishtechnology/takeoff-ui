@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     gap: var(--basic-switcher-container-gap);
+    font-family: var(--family-body);
   }
 
   &.tk-toggle-xlarge {

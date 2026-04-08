@@ -535,7 +535,15 @@ function Table() {
       >
         {renderExpandedRows()}
         <div slot="header-right" style={{ display: 'flex', gap: '8px' }}>
-          <TkButton onTkClick={() => setData(allData.slice(5, 10))} label="pdf"></TkButton>
+          <TkButton
+            onTkClick={() =>
+              tableRef.current?.exportFile({
+                type: 'pdf',
+                ignoreColumnsFields: ['name'],
+              })
+            }
+            label="pdf"
+          ></TkButton>
           <TkButton
             onTkClick={() =>
               tableRef.current?.exportFile({
