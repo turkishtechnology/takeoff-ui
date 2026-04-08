@@ -250,7 +250,12 @@ export class TkGanttChart implements ComponentInterface {
 
     if (this.taskBarHtml) {
       const content = this.taskBarHtml(task);
-      const barContent = typeof content === 'string' ? <div innerHTML={content}></div> : <div ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)}></div>;
+      const barContent =
+        typeof content === 'string' ? (
+          <div class="custom-task-bar" innerHTML={content}></div>
+        ) : (
+          <div class="custom-task-bar" ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)}></div>
+        );
       return (
         <tk-tooltip position="top" variant="dark">
           <div slot="trigger" class="tk-gantt-chart-task-bar tk-gantt-chart-task-bar-custom" data-testid={testId} style={commonStyle} onClick={() => this.handleTaskClick(task)}>
