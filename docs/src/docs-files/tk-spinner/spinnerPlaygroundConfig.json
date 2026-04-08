@@ -18,6 +18,20 @@
       ]
     },
     {
+      "key": "variant",
+      "label": "Variant",
+      "type": "select",
+      "defaultValue": "neutral",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Neutral", "value": "neutral" },
+        { "label": "Info", "value": "info" },
+        { "label": "Success", "value": "success" },
+        { "label": "Warning", "value": "warning" },
+        { "label": "Danger", "value": "danger" }
+      ]
+    },
+    {
       "key": "size",
       "label": "Size",
       "type": "select",
