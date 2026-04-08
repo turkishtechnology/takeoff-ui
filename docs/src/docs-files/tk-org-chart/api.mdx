@@ -2,12 +2,12 @@ import { TkBadge } from '@takeoff-ui/react';
 
 ### Props {#org-chart-props}
 
-| Name                                                                                    | Type                         | Default | Description                                                                                                        |
-| --------------------------------------------------------------------------------------- | ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| <TkBadge label="accessibilityLabel" variant="primary" size="large" type="filledlight"/> | <code>string</code>          | null    | Accessibility label for the chart                                                                                  |
-| <TkBadge label="collapsible" variant="primary" size="large" type="filledlight"/>        | <code>boolean</code>         | true    | Enable or disable expand/collapse buttons functionality When disabled, all nodes will be automatically expanded    |
-| <TkBadge label="data" variant="primary" size="large" type="filledlight"/>               | <code>OrgChartNode[]</code>  | null    | Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties. |
-| <TkBadge label="options" variant="primary" size="large" type="filledlight"/>            | <code>string, unknown</code> | null    | Chart options for d3-org-chart customization                                                                       |
+| Name                                                                                    | Type                 | Default | Description                                                                                                        |
+| --------------------------------------------------------------------------------------- | -------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| <TkBadge label="accessibilityLabel" variant="primary" size="large" type="filledlight"/> | <code>string</code>  | null    | Accessibility label for the chart                                                                                  |
+| <TkBadge label="collapsible" variant="primary" size="large" type="filledlight"/>        | <code>boolean</code> | true    | Enable or disable expand/collapse buttons functionality When disabled, all nodes will be automatically expanded    |
+| <TkBadge label="data" variant="primary" size="large" type="filledlight"/>               | <code>any[]</code>   | null    | Chart data should be an array of node objects with at least id, parentId (optional for root), and name properties. |
+| <TkBadge label="options" variant="primary" size="large" type="filledlight"/>            | <code>any</code>     | null    | Chart options for d3-org-chart customization                                                                       |
 
 ### Events {#org-chart-events}
 
@@ -17,20 +17,9 @@ import { TkBadge } from '@takeoff-ui/react';
 
 ### Methods {#org-chart-methods}
 
-| Name        | Type                                                    | Description                      |
-| ----------- | ------------------------------------------------------- | -------------------------------- |
-| addNode     | <code>addNode(node: unknown) =\> Promise\<void\></code> | Add node to organizational chart |
-| fit         | <code>fit() =\> Promise\<void\></code>                  | Fit chart to screen              |
-| getOrgChart | <code>getOrgChart() =\> Promise\<unknown\></code>       | Get the chart instance           |
-| refresh     | <code>refresh() =\> Promise\<void\></code>              | Refresh the chart                |
-
-```typescript
-interface OrgChartNode {
-  id?: NodeId;
-  parentId?: NodeId | null;
-  name?: string;
-  title?: string;
-  children?: OrgChartNode[];
-  [key: string]: unknown;
-}
-```
+| Name        | Type                                                | Description                      |
+| ----------- | --------------------------------------------------- | -------------------------------- |
+| addNode     | <code>addNode(node: any) =\> Promise\<void\></code> | Add node to organizational chart |
+| fit         | <code>fit() =\> Promise\<void\></code>              | Fit chart to screen              |
+| getOrgChart | <code>getOrgChart() =\> Promise\<any\></code>       | Get the chart instance           |
+| refresh     | <code>refresh() =\> Promise\<void\></code>          | Refresh the chart                |

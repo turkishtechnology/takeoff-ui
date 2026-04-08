@@ -6,7 +6,6 @@ describe('tk-drawer', () => {
 
     await page.setContent('<tk-drawer open="true" header="Header"></tk-drawer>');
     await page.waitForChanges();
-    await page.waitForTimeout(50);
 
     const drawer = await page.find('tk-drawer');
     const mask = await page.find('tk-drawer >>> .tk-drawer-mask');
@@ -22,7 +21,6 @@ describe('tk-drawer', () => {
 
     await page.setContent('<tk-drawer open="true"><div slot="footer">Footer</div></tk-drawer>');
     await page.waitForChanges();
-    await page.waitForTimeout(50);
 
     const drawer = await page.find('tk-drawer');
     const closeSpy = await drawer.spyOnEvent('tk-drawer-close');
@@ -41,7 +39,6 @@ describe('tk-drawer', () => {
 
     await page.setContent('<tk-drawer open="true" prevent-dismiss></tk-drawer>');
     await page.waitForChanges();
-    await page.waitForTimeout(50);
 
     const drawer = await page.find('tk-drawer');
     const closeSpy = await drawer.spyOnEvent('tk-drawer-close');

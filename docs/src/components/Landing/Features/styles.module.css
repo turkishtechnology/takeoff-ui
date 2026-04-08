@@ -5,15 +5,29 @@
   width: 100%;
 }
 
+.featureGrid {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
 .feature {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  flex: 1 1 calc(25% - 18px);
+  min-width: 0;
   border-radius: 16px;
-  border: 2px solid var(--border-light);
+  border: 1px solid var(--border-light);
   background: var(--static-light);
+  overflow: hidden;
+}
+
+.featureHeader {
   padding: 16px;
-  height: 100%;
 }
 
 .featureSvg {
@@ -21,11 +35,43 @@
   width: 64px;
   padding: 8px;
   border-radius: 8px;
-  border: 2px solid var(--surface-light);
+  border: 1px solid var(--border-lightest);
   background: var(--static-light);
+  box-shadow: none;
+}
+
+.featureBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 16px;
+}
+
+.featureTitle {
+  font-family: var(--desktop-body-s-font, Geologica), sans-serif;
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 400;
+  color: var(--text-darkest, #222530);
+  margin: 0;
 }
 
 .featureDesc {
   color: var(--text-base);
   font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  margin: 0;
+}
+
+@media screen and (max-width: 996px) {
+  .feature {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .feature {
+    flex: 1 1 100%;
+  }
 }
