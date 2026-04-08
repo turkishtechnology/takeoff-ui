@@ -8,7 +8,7 @@
 
 .scope {
   color: var(--text-sub-base, #99a0ae);
-  font-family: var(--desktop-body-s-font, Geologica);
+  font-family: var(--desktop-title-display1-font);
   line-height: 100%;
 }
 

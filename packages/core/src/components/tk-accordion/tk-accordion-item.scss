@@ -4,6 +4,7 @@
   flex-direction: column;
   transition: gap 0.2s ease-in-out;
   gap: 0;
+  font-family: var(--family-body);
 
   &.open {
     gap: var(--accordion-base-content-gap);

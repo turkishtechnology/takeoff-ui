@@ -28,8 +28,8 @@
   --ifm-z-index-overlay: 1000;
 
   /* Typography Overrides */
-  --ifm-font-family-base: 'Geologica', sans-serif;
-  --ifm-heading-font-family: 'Geologica', sans-serif;
+  --ifm-font-family-base: var(--family-body);
+  --ifm-heading-font-family: var(--family-title);
   --ifm-heading-color: var(--text-darkest);
   --ifm-heading-font-weight: 400;
 
@@ -659,7 +659,7 @@ body {
   color: var(--text-darkest, #222530);
 
   /* Title/H3-36 */
-  font-family: 'Geologica';
+  font-family: var(--desktop-title-display1-font);
   font-size: 36px;
   font-weight: 400;
   line-height: 45px;
@@ -755,14 +755,14 @@ body {
   color: var(--background-light);
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: var(--border-base);
-  font-family: var(--desktop-title-h2-font, 'Geologica');
+  font-family: var(--desktop-title-h2-font);
   font-size: var(--desktop-title-h2-size, 48px);
   line-height: var(--desktop-title-h2-line-height, 48px);
 }
 
 .release-notes .release-item span {
   color: var(--text-base, #717784);
-  font-family: var(--body-s-font, 'Geologica');
+  font-family: var(--desktop-body-s-font);
   font-size: var(--body-s-size, 14px);
   line-height: var(--body-s-line-height, 20px);
 }
@@ -774,7 +774,7 @@ body {
 
 .release-notes .release-item h1 {
   color: var(--text-darkest, #222530);
-  font-family: var(--title-h3-font, 'Geologica');
+  font-family: var(--desktop-title-h3-font);
   font-size: var(--title-h3-size, 36px);
   line-height: var(--title-h3-line-height, 36px);
   margin: 0px;
@@ -806,7 +806,7 @@ body {
 
 .release-notes .release-item .body label {
   color: var(--text-darkest, #222530);
-  font-family: 'Geologica';
+  font-family: var(--desktop-label-m-base-font);
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;

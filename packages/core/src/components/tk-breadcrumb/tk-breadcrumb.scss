@@ -9,6 +9,7 @@
   align-items: center;
   overflow-x: auto;
   overflow-y: hidden;
+  font-family: var(--family-body);
   @include takeoff-scrollbar;
 
   .tk-breadcrumb-list {

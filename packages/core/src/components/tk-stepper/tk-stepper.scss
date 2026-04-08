@@ -178,6 +178,7 @@
     border: 2px solid var(--border-light);
     background-color: var(--static-white);
     border-radius: var(--radius-full);
+    font-family: var(--family-body);
     text-align: center;
     margin-inline-end: 8px;
   }
@@ -192,11 +193,13 @@
   .tk-step-content {
     .tk-step-header {
       color: var(--text-dark);
+      font-family: var(--family-body);
       font-weight: var(--desktop-weight-medium);
     }
 
     .tk-step-subheader {
       color: var(--text-base);
+      font-family: var(--family-body);
       font-weight: var(--desktop-weight-regular);
     }
   }
