@@ -7,6 +7,7 @@ tk-pagination {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  font-family: var(--family-body);
 
   .tk-pagination-start {
     margin-right: auto;
@@ -28,7 +29,7 @@ tk-pagination {
     .tk-pagination-tag-label {
       color: var(--text-base, #717784);
       /* Body/X-Small-12 */
-      font-family: var(--desktop-body-xs-font, Geologica);
+      font-family: var(--desktop-body-xs-font);
       font-size: var(--desktop-body-xs-size, 12px);
       font-style: normal;
       font-weight: 400;
@@ -130,7 +131,7 @@ tk-pagination {
         color: var(--text-base, #717784);
 
         /* Body/Small-14 */
-        font-family: var(--desktop-body-s-font, Geologica);
+        font-family: var(--desktop-body-s-font);
         font-size: var(--desktop-body-s-size, 14px);
         font-style: normal;
         font-weight: 400;

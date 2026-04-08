@@ -6,6 +6,7 @@
   display: inline-block;
   position: relative;
   width: 100%;
+  font-family: var(--family-body);
 
   &.tk-color-picker-inline {
     width: auto;
@@ -41,10 +42,10 @@
   padding: 4px 12px;
 
   .tk-color-picker-title {
-    font-family: var(--body-m-base-font, 'Geologica', sans-serif);
-    font-size: var(--body-m-base-size, 16px);
+    font-family: var(--desktop-body-m-base-font);
+    font-size: var(--desktop-body-m-base-size, 16px);
     font-weight: 400;
-    line-height: var(--body-m-base-line-height, 24px);
+    line-height: var(--desktop-body-m-base-line-height, 24px);
     color: var(--text-darkest, #222530);
   }
 

@@ -14,6 +14,7 @@ tk-select {
     background: var(--static-light);
     z-index: 800;
     box-shadow: var(--effect-1-default-sm);
+    font-family: var(--family-body);
 
     .dropdown-item-holder {
       margin: 8px;

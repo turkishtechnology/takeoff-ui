@@ -6,6 +6,7 @@
   border-radius: var(--tooltips-base-radius, 8px);
   width: max-content;
   color: var(--text-base);
+  font-family: var(--family-body);
   line-height: 20px;
   z-index: 1300;
   box-shadow: var(--shadow-base);

@@ -9,7 +9,7 @@
   padding: var(--external-label-large-label-v-padding, 0px) 4px;
   align-items: center;
   align-self: stretch;
-  font-family: var(--label-s-font, Geologica);
+  font-family: var(--desktop-label-s-font);
   font-size: var(--label-m-base-size, 14px);
   font-style: normal;
   font-weight: 400;
@@ -119,7 +119,7 @@
   line-height: 16px;
   color: var(--text-base, #6b7280);
   text-transform: uppercase;
-  font-family: var(--subheading-2xs-font, Geologica);
+  font-family: var(--desktop-subheading-2xs-font);
   font-weight: 400;
 }
 
@@ -161,7 +161,7 @@
   color: white;
   padding: 4px 8px;
   font-size: 12px;
-  font-family: var(--subheading-xs-font, Geologica);
+  font-family: var(--desktop-subheading-xs-font);
   font-weight: 400;
   border-radius: 6px;
   white-space: nowrap;
