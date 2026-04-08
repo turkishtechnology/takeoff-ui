@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkButton } from '../tk-button';
+import { TkIcon } from '../../tk-icon/tk-icon';
 
 describe('tk-button', () => {
   it('renders its label and host full-width class', async () => {
@@ -45,15 +46,15 @@ describe('tk-button', () => {
 
   it('renders icons from both string and object values', async () => {
     const stringPage = await newSpecPage({
-      components: [TkButton],
+      components: [TkButton, TkIcon],
       html: `<tk-button icon="home"></tk-button>`,
     });
 
     expect(stringPage.root.shadowRoot.querySelector('tk-icon')).toBeTruthy();
-    expect(stringPage.root.shadowRoot.textContent).toContain('home');
+    expect(stringPage.root.shadowRoot.querySelector('tk-icon')?.textContent).toContain('home');
 
     const objectPage = await newSpecPage({
-      components: [TkButton],
+      components: [TkButton, TkIcon],
       html: `<tk-button></tk-button>`,
     });
 

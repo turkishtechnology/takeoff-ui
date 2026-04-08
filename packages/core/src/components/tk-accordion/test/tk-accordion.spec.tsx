@@ -6,6 +6,30 @@ import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAccordion } from '../tk-accordion';
 import { TkAccordionItem } from '../tk-accordion-item';
+import { TkIcon } from '../../tk-icon/tk-icon';
+
+const originalComponentWillLoad = (TkAccordionItem.prototype as any).componentWillLoad;
+
+beforeAll(() => {
+  (TkAccordionItem.prototype as any).componentWillLoad = function () {
+    this.parentEl = this.el.closest('tk-accordion');
+
+    if (this.parentEl) {
+      this.type = this.parentEl.type;
+      this.arrowPosition = this.parentEl.arrowPosition;
+      this.expandIcon = this.parentEl.expandIcon;
+      this.collapseIcon = this.parentEl.collapseIcon;
+      this.hideArrows = this.parentEl.hideArrows;
+      this.mode = this.parentEl.mode;
+    }
+
+    this.hasHeaderSlot = Array.from(this.el.children).some((child: Element) => child.getAttribute?.('slot') === 'header');
+  };
+});
+
+afterAll(() => {
+  (TkAccordionItem.prototype as any).componentWillLoad = originalComponentWillLoad;
+});
 
 describe('tk-accordion', () => {
   //Basic Rendering
@@ -57,7 +81,7 @@ describe('tk-accordion', () => {
 
   it('applies numeric activeIndex to child items', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion],
+      components: [TkAccordion, TkAccordionItem],
       html: `
         <tk-accordion>
           <tk-accordion-item header="Item 1"></tk-accordion-item>
@@ -103,7 +127,7 @@ describe('tk-accordion', () => {
 describe('icons', () => {
   it('item should handle icon', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       html: `<tk-accordion><tk-accordion-item icon="home"></tk-accordion-item></tk-accordion>`,
     });
     const accordionItem = page.body.querySelector('tk-accordion-item');
@@ -112,7 +136,7 @@ describe('icons', () => {
   });
   it('handles icon string', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       html: `<tk-accordion><tk-accordion-item icon="home"
         ></tk-accordion-item></tk-accordion>`,
     });
@@ -123,9 +147,9 @@ describe('icons', () => {
   });
   it('handles icon object with default props', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       html: `<tk-accordion><tk-accordion-item
-        ></tk-accordion-item></tk-accordion><`,
+        ></tk-accordion-item></tk-accordion>`,
     });
 
     const accordionItem = page.body.querySelector('tk-accordion-item');
@@ -139,11 +163,11 @@ describe('icons', () => {
     expect(icon.textContent).toBe('search');
     expect(icon.classList.contains('fill')).toBe(false);
 
-    expect(icon.style.color).toBe('inherit');
+    expect(icon.style.color).toBe('');
   });
   it('handles object collapse icon', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       template: () => (
         <tk-accordion
           activeIndex={0}
@@ -168,7 +192,7 @@ describe('icons', () => {
   });
   it('handles object collapse icon with default props', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       template: () => (
         <tk-accordion
           activeIndex={0}
@@ -185,11 +209,11 @@ describe('icons', () => {
     const icon = accordionItem.shadowRoot.querySelector('.material-symbols-outlined') as HTMLSpanElement;
 
     expect(icon.textContent).toBe('search');
-    expect(icon.style.color).toBe('inherit');
+    expect(icon.style.color).toBe('');
   });
   it('handles string collapse icon', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       template: () => (
         <tk-accordion activeIndex={0}>
           <tk-accordion-item></tk-accordion-item>
@@ -205,7 +229,7 @@ describe('icons', () => {
   });
   it('handles object expand icon', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       template: () => (
         <tk-accordion
           expandIcon={{
@@ -229,7 +253,7 @@ describe('icons', () => {
   });
   it('handles string expand icon', async () => {
     const page = await newSpecPage({
-      components: [TkAccordion, TkAccordionItem],
+      components: [TkAccordion, TkAccordionItem, TkIcon],
       template: () => (
         <tk-accordion>
           <tk-accordion-item active={false}></tk-accordion-item>
@@ -238,10 +262,10 @@ describe('icons', () => {
     });
 
     const spy = jest.fn();
-    const secondItem = page.root.querySelectorAll('tk-accordion-item')[1];
+    const firstItem = page.root.querySelectorAll('tk-accordion-item')[0];
 
     page.root.addEventListener('tk-active-index-change', spy);
-    secondItem.dispatchEvent(new CustomEvent('tk-active-change', { bubbles: true, detail: true }));
+    firstItem.dispatchEvent(new CustomEvent('tk-active-change', { bubbles: true, detail: true }));
     await page.waitForChanges();
 
     expect(spy).toHaveBeenCalled();

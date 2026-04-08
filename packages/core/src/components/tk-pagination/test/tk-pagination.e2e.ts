@@ -6,7 +6,6 @@ describe('tk-pagination', () => {
 
     await page.setContent('<tk-pagination total-items="30" rows-per-page="10"></tk-pagination>');
     await page.waitForChanges();
-    await page.waitForTimeout(50);
 
     const pagination = await page.find('tk-pagination');
     const changeSpy = await pagination.spyOnEvent('tk-page-change');
@@ -14,7 +13,6 @@ describe('tk-pagination', () => {
 
     await nextButton.click();
     await page.waitForChanges();
-    await page.waitForTimeout(50);
 
     const activePage = await page.find('tk-pagination .tk-pagination-page-active .tk-pagination-page-label');
 
