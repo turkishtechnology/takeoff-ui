@@ -41,6 +41,32 @@ describe('tk-chips', () => {
     expect(persistentPage.root.isConnected).toBe(true);
   });
 
+  it('renders icon on the left by default', async () => {
+    const page = await newSpecPage({
+      components: [TkChips, TkIcon],
+      html: `<tk-chips label="Chip" icon="star"></tk-chips>`,
+    });
+
+    const children = Array.from(page.root.shadowRoot.querySelector('.tk-chips').childNodes);
+    const iconIndex = children.findIndex(n => (n as Element).tagName === 'TK-ICON');
+    const labelIndex = children.findIndex(n => n.nodeType === Node.TEXT_NODE && (n.textContent || '').trim() === 'Chip');
+
+    expect(iconIndex).toBeLessThan(labelIndex);
+  });
+
+  it('renders icon on the right when iconPosition is right', async () => {
+    const page = await newSpecPage({
+      components: [TkChips, TkIcon],
+      html: `<tk-chips label="Chip" icon="star" icon-position="right"></tk-chips>`,
+    });
+
+    const children = Array.from(page.root.shadowRoot.querySelector('.tk-chips').childNodes);
+    const iconIndex = children.findIndex(n => (n as Element).tagName === 'TK-ICON');
+    const labelIndex = children.findIndex(n => n.nodeType === Node.TEXT_NODE && (n.textContent || '').trim() === 'Chip');
+
+    expect(iconIndex).toBeGreaterThan(labelIndex);
+  });
+
   it('applies disabled class', async () => {
     const page = await newSpecPage({
       components: [TkChips],

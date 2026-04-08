@@ -20,20 +20,49 @@
   line-height: 100%;
 }
 
-.package {
-  color: var(--text-base, #99a0ae);
-  line-height: 100%;
-
+/* Ticker viewport — shows only one word at a time */
+.ticker {
   position: relative;
   width: 80px;
-  text-align: left;
-
-  display: inline-flex;
-  align-items: center;
-  overflow: hidden;
   height: 1.5em;
+  overflow: hidden;
   vertical-align: bottom;
 
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+/* Track that slides upward — GPU-composited via transform */
+.tickerTrack {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Each word sits in its own row */
+.tickerItem {
+  display: block;
+  height: 1.5em;
+  line-height: 1.5em;
+  text-align: left;
+  color: var(--text-base, #99a0ae);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerTrack {
+    transition: none;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .container {
+    font-size: 14px;
+  }
+
+  .slash {
+    font-size: 18px;
+  }
+
+  .ticker {
+    width: 64px;
+  }
 }

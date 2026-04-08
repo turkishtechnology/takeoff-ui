@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -203,7 +203,7 @@ export class TkCurrencyInput implements ComponentInterface {
   /**
    * Emitted when the value has changed.
    */
-  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<CurrencyInputChangeEvent>;
+  @Event({ eventName: 'tk-change', composed: false }) tkChange!: EventEmitter<any>;
 
   /**
    * Emitted when the input loses focus.

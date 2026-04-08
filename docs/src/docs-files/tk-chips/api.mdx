@@ -9,11 +9,12 @@ import { TkBadge } from '@takeoff-ui/react';
 | <TkBadge label="disabled" variant="primary" size="large" type="filledlight"/>        | <code>boolean</code>                                                                               | false     | The disabled status.                                                                       |
 | <TkBadge label="fullWidth" variant="primary" size="large" type="filledlight"/>       | <code>boolean</code>                                                                               | false     | If true, the chip will take the full width of its container.                               |
 | <TkBadge label="icon" variant="primary" size="large" type="filledlight"/>            | <code>IIconOptions, IMultiIconOptions, string</code>                                               | null      | Specifies a material icon name to be displayed.                                            |
+| <TkBadge label="iconPosition" variant="primary" size="large" type="filledlight"/>    | <code>"left", "right"</code>                                                                       | 'left'    | The position of the icon relative to the label.                                            |
 | <TkBadge label="label" variant="primary" size="large" type="filledlight"/>           | <code>string</code>                                                                                | null      | The label to display inside the chip.                                                      |
 | <TkBadge label="removable" variant="primary" size="large" type="filledlight"/>       | <code>boolean</code>                                                                               | false     | This property determines whether the chip component is removable.                          |
 | <TkBadge label="size" variant="primary" size="large" type="filledlight"/>            | <code>"base", "large", "small"</code>                                                              | 'base'    | Sets size for the component.                                                               |
 | <TkBadge label="type" variant="primary" size="large" type="filledlight"/>            | <code>"avatar", "filled", "filledlight", "outlined"</code>                                         | 'filled'  | This field specifies the design type of the component.                                     |
-| <TkBadge label="value" variant="primary" size="large" type="filledlight"/>           | <code>boolean, number, string, unknown</code>                                                      | null      | The value of the chips                                                                     |
+| <TkBadge label="value" variant="primary" size="large" type="filledlight"/>           | <code>any</code>                                                                                   | null      | The value of the chips                                                                     |
 | <TkBadge label="variant" variant="primary" size="large" type="filledlight"/>         | <code>"danger", "info", "neutral", "primary", "secondary", "success", "verified", "warning"</code> | 'primary' | The variant of the chip for styling.                                                       |
 
 ### Events {#chips-events}
@@ -29,6 +30,7 @@ import { TkBadge } from '@takeoff-ui/react';
 ```typescript
 interface IChipOptions {
   icon?: string | IIconOptions;
+  iconPosition?: 'left' | 'right';
   type?: 'filled' | 'filledlight' | 'outlined' | 'avatar';
   size?: 'large' | 'base' | 'small';
   variant?:

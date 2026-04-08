@@ -8,14 +8,14 @@ export interface IInputMaskOptions {
   creditCardStrictMode?: boolean;
   creditCardType?: string;
   date?: boolean;
-  dateFormatter?: unknown;
+  dateFormatter?: any;
   dateMax?: string;
   dateMin?: string;
   datePattern?: string[];
   delimiter?: string;
   delimiterLazyShow?: boolean;
   delimiterLength?: number;
-  delimiters?: string[];
+  delimiters?: any[];
   initValue?: string;
   letterOnly?: boolean;
   lowerCase?: boolean;
@@ -29,7 +29,7 @@ export interface IInputMaskOptions {
   numeralThousandsGroupStyle?: string;
   numericOnly?: boolean;
   phone?: boolean;
-  phoneFormatter?: unknown;
+  phoneFormatter?: any;
   phoneRegionCode?: string;
   prefix?: string;
   prefixLength?: number;
@@ -41,7 +41,7 @@ export interface IInputMaskOptions {
   tailPrefix?: boolean;
   time?: boolean;
   timeFormat?: string;
-  timeFormatter?: unknown;
+  timeFormatter?: any;
   timePattern?: string[];
   uppercase?: boolean;
   regex?: RegExp | string;

@@ -1,4 +1,4 @@
-import { Component, Prop, Element, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, h, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 /**
  * The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.

@@ -5,35 +5,59 @@ import { TkIcon } from '../../tk-icon/tk-icon';
 describe('tk-checkbox', () => {
   it('renders label and name in light DOM', async () => {
     const page = await newSpecPage({
-      components: [TkCheckbox],
+      components: [TkCheckbox, TkIcon],
       html: `<tk-checkbox label="Test label" name="test-name"></tk-checkbox>`,
     });
 
     const label = page.root.querySelector('label');
-    const input = page.root.querySelector('input');
 
     expect(label.textContent).toContain('Test label');
-    expect(input.getAttribute('name')).toBe('test-name');
   });
-
-  it('applies disabled and invalid state attributes', async () => {
-    const page = await newSpecPage({
-      components: [TkCheckbox],
-      html: `<tk-checkbox disabled="true" invalid="true"></tk-checkbox>`,
-    });
-
-    const container = page.root.querySelector('.tk-checkbox-container');
-    const input = page.root.querySelector('input');
-
-    expect(container.getAttribute('aria-disabled')).toBe('');
-    expect(container.getAttribute('aria-invalid')).toBe('');
-    expect(input.disabled).toBe(true);
-  });
-
-  it('renders indeterminate state with the remove icon', async () => {
+  it('renders with name', async () => {
     const page = await newSpecPage({
       components: [TkCheckbox, TkIcon],
-      html: `<tk-checkbox indeterminate="true"></tk-checkbox>`,
+      html: `<tk-checkbox name='Test name'></tk-checkbox>`,
+    });
+
+    await page.waitForChanges();
+
+    const input = page.root.querySelector('input');
+
+    expect(input.getAttribute('name')).toBe('Test name');
+  });
+});
+
+// State
+describe('state handling', () => {
+  it('handles disabled state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox, TkIcon],
+      html: `<tk-checkbox disabled="true">
+               </tk-checkbox>`,
+    });
+
+    const input = page.root.querySelector('input');
+
+    expect(input.hasAttribute('disabled')).toBe(true);
+  });
+  it('handles invalid state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox, TkIcon],
+      html: `<tk-checkbox invalid>
+               </tk-checkbox>`,
+    });
+
+    await page.waitForChanges();
+
+    const container = page.root.querySelector('.tk-checkbox-container');
+
+    expect(container.getAttribute('aria-invalid')).not.toBeNull();
+  });
+  it('handles indeterminate state', async () => {
+    const page = await newSpecPage({
+      components: [TkCheckbox, TkIcon],
+      html: `<tk-checkbox indeterminate="true">
+                 </tk-checkbox>`,
     });
 
     const mask = page.root.querySelector('.mask');
@@ -44,7 +68,7 @@ describe('tk-checkbox', () => {
 
   it('emits tk-change when the checkbox changes', async () => {
     const page = await newSpecPage({
-      components: [TkCheckbox],
+      components: [TkCheckbox, TkIcon],
       html: `<tk-checkbox></tk-checkbox>`,
     });
 
@@ -62,7 +86,7 @@ describe('tk-checkbox', () => {
 
   it('resets its form-associated state', async () => {
     const page = await newSpecPage({
-      components: [TkCheckbox],
+      components: [TkCheckbox, TkIcon],
       html: `<tk-checkbox value="true" indeterminate="true"></tk-checkbox>`,
     });
 

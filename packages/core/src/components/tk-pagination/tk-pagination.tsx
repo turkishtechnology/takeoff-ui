@@ -1,5 +1,4 @@
-import { Component, ComponentInterface, Event, EventEmitter, Fragment, Prop, State, Watch } from '@stencil/core';
-import type { JSX } from '@stencil/core';
+import { Component, ComponentInterface, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { formatTemplate, getTemplateValues } from './helpers';
@@ -244,9 +243,9 @@ export class TkPagination implements ComponentInterface {
     });
   }
 
-  private renderTag(totalPages: number): JSX.Element | null {
+  private renderTag(totalPages: number) {
     if (this.mode !== 'compact') {
-      let tagContent: JSX.Element | undefined;
+      let tagContent: HTMLElement;
       const templateValues = getTemplateValues(this.internalCurrentPage, this.rowsPerPage, this.totalItems, totalPages);
 
       if (this.mode === 'compact-expanded') {
@@ -255,14 +254,12 @@ export class TkPagination implements ComponentInterface {
       } else {
         const pageText = formatTemplate(this.pageReportTemplate, templateValues);
         const itemsText = formatTemplate(this.itemsReportTemplate, templateValues);
-        if (totalPages > 0) {
-          tagContent = (
-            <Fragment>
-              <span class="tk-pagination-tag-label">{pageText}</span>
-              <span class="tk-pagination-tag-label">{itemsText}</span>
-            </Fragment>
-          );
-        }
+        tagContent = totalPages > 0 && (
+          <Fragment>
+            <span class="tk-pagination-tag-label">{pageText}</span>
+            <span class="tk-pagination-tag-label">{itemsText}</span>
+          </Fragment>
+        );
       }
 
       return <div class="tk-pagination-tag">{tagContent}</div>;
@@ -271,12 +268,12 @@ export class TkPagination implements ComponentInterface {
     return null;
   }
 
-  private renderContent(totalPages: number): JSX.Element {
+  private renderContent(totalPages: number) {
     const ContentWrapperTag = this.mode === 'compact' || this.mode === 'compact-expanded' ? 'div' : 'nav';
     const contentClasses = classNames('tk-pagination', `tk-pagination-${this.mode || this.type}`, {
       'tk-pagination-rounded': this.rounded,
     });
-    let content: JSX.Element;
+    let content: HTMLElement;
 
     if (this.mode === 'compact') {
       const templateValues = getTemplateValues(this.internalCurrentPage, this.rowsPerPage, this.totalItems, totalPages);
@@ -334,24 +331,23 @@ export class TkPagination implements ComponentInterface {
     return <ContentWrapperTag class={contentClasses}>{content}</ContentWrapperTag>;
   }
 
-  private renderSelect(): JSX.Element {
+  private renderSelect(): HTMLTkSelectElement {
     return (
       <tk-select
         style={{ width: '75px' }}
         value={this.rowsPerPage}
         options={this.rowsPerPageOptions}
         onTk-change={e => {
-          const selectedRowsPerPage = e.detail as number;
-          if (selectedRowsPerPage !== this.rowsPerPage) {
-            this.rowsPerPage = selectedRowsPerPage;
-            this.tkRowsPerPageChange.emit(selectedRowsPerPage);
+          if (e.detail !== this.rowsPerPage) {
+            this.rowsPerPage = e.detail;
+            this.tkRowsPerPageChange.emit(e.detail);
           }
         }}
       ></tk-select>
     );
   }
 
-  private renderInput(totalPages: number): JSX.Element {
+  private renderInput(totalPages: number): HTMLTkInputElement {
     return (
       <tk-input
         style={{ width: '70px' }}

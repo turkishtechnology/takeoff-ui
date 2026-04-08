@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import styles from './styles.module.css';
 
 type FeatureItem = {
@@ -34,23 +33,25 @@ const FeatureList: FeatureItem[] = [
     description: <>TakeOff is designed to work with any framework, giving developers the freedom to choose the best technology for their projects. Build without limitations.</>,
   },
   {
-    title: 'Powered By Stencil',
+    title: 'Powered by Stencil',
     Svg: require('@site/static/img/powered-by-stencil.svg').default,
-    description: <>TakeOff is designed to work with any framework, giving developers the freedom to choose the best technology for their projects. Build without limitations.</>,
+    description: (
+      <>
+        Leverage the power of Stencil.js to build fast, scalable, and reusable web components. TakeOff ensures compatibility with modern web standards and high-performance output.
+      </>
+    ),
   },
 ];
 
 function Feature({ title, Svg, description }: FeatureItem) {
   return (
-    <div className={clsx('col col--3')}>
-      <div className={styles.feature}>
-        <div>
-          <Svg className={styles.featureSvg} role="img" />
-        </div>
-        <div>
-          <h2>{title}</h2>
-          <p className={styles.featureDesc}>{description}</p>
-        </div>
+    <div className={styles.feature}>
+      <div className={styles.featureHeader}>
+        <Svg className={styles.featureSvg} role="img" />
+      </div>
+      <div className={styles.featureBody}>
+        <h2 className={styles.featureTitle}>{title}</h2>
+        <p className={styles.featureDesc}>{description}</p>
       </div>
     </div>
   );
@@ -59,12 +60,10 @@ function Feature({ title, Svg, description }: FeatureItem) {
 export default function HomepageFeatures(): JSX.Element {
   return (
     <section className={styles.features}>
-      <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
-        </div>
+      <div className={styles.featureGrid}>
+        {FeatureList.map((props, idx) => (
+          <Feature key={idx} {...props} />
+        ))}
       </div>
     </section>
   );

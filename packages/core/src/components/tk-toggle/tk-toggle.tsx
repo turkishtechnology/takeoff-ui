@@ -1,5 +1,4 @@
-import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch } from '@stencil/core';
-import type { JSX } from '@stencil/core';
+import { AttachInternals, Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
@@ -154,13 +153,11 @@ export class TkToggle implements ComponentInterface {
     }
   };
 
-  private renderInput(): JSX.Element {
+  private renderInput(): HTMLInputElement {
     return (
       <input
         id={this.uniqueId}
-        ref={input => {
-          this.nativeInput = input;
-        }}
+        ref={input => (this.nativeInput = input)}
         class="tk-toggle-input"
         type="checkbox"
         role="switch"

@@ -73,7 +73,7 @@ export type {
 } from './components/tk-table/types';
 
 // tk-timeline
-export type { ITimelineItem } from './components/tk-timeline/types';
+export type { TimelineItem } from './components/tk-timeline/types';
 
 // tk-treeview
 export type { ITreeItem } from './components/tk-treeview/types';

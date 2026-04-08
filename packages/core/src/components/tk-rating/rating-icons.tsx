@@ -1,4 +1,6 @@
-const getIcon = (type: string = 'star', state: string = 'default') => {
+import { h } from '@stencil/core';
+
+const getIcon = (type: string = 'star', state: string = 'default'): HTMLElement => {
   switch (type) {
     case 'star':
       if (state == 'fill') {
