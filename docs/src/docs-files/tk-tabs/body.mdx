@@ -1,27 +1,20 @@
 import Playground from '../../components/Playground';
 import tabsConfigData from './tabsPlaygroundConfig.json';
 import { TkTabs, TkTabsItem } from '@takeoff-ui/react';
-import Type from './Examples/Type';
-import Orientation from './Examples/Orientation';
 import Variants from './Examples/Variants';
-import SpreadHeaders from './Examples/SpreadHeaders';
+import Type from './Examples/Type';
 import Sizes from './Examples/Sizes';
-import Closable from './Examples/Closable';
-import Programmatically from './Examples/Programmatically';
+import Orientation from './Examples/Orientation';
+import SpreadHeaders from './Examples/SpreadHeaders';
 import AlignHeaders from './Examples/AlignHeaders';
+import Closable from './Examples/Closable';
 import Controlled from './Examples/Controlled';
+import Programmatically from './Examples/Programmatically';
 import BadgeOptions from './Examples/BadgeOptions';
 
 ### Playground
 
 <Playground configs={[tabsConfigData]} componentMap={{ TkTabs, TkTabsItem }} />
-
-## Type
-
-Establishes various tab styles `basic`, `divided`, `compact`, `expanded`
-available via the `type` property.
-
-<Type />
 
 ## Variants
 
@@ -30,19 +23,12 @@ property.
 
 <Variants />
 
-## Spread Headers
+## Type
 
-Determines whether the tab headers will spread evenly across the horizontal
-space.
+Establishes various tab styles `basic`, `divided`, `compact`, `expanded`
+available via the `type` property.
 
-<SpreadHeaders />
-
-## Align Headers
-
-Tabs headers can aligned as `start`, `center` or `end` via `align-headers`
-property.
-
-<AlignHeaders />
+<Type />
 
 ## Sizes
 
@@ -58,11 +44,25 @@ property.
 
 <Orientation />
 
-## Programmatic Control
+## Spread Headers
 
-Tabs can be controlled programmatically using the `activeIndex` prop.
+Determines whether the tab headers will spread evenly across the horizontal
+space.
 
-<Programmatically />
+<SpreadHeaders />
+
+## Align Headers
+
+Tabs headers can aligned as `start`, `center` or `end` via `align-headers`
+property.
+
+<AlignHeaders />
+
+## Closable
+
+Tabs can be closed separately via `is-closable` property.
+
+<Closable />
 
 ## Controlled
 
@@ -70,11 +70,11 @@ Tabs can be controlled via the `controlled` property.
 
 <Controlled />
 
-## Closable
+## Programmatic Control
 
-Tabs can be closed separately via `is-closable` property.
+Tabs can be controlled programmatically using the `activeIndex` prop.
 
-<Closable />
+<Programmatically />
 
 ## Badge Options
 

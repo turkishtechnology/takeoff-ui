@@ -1,14 +1,14 @@
 import Playground from '../../components/Playground';
 import stepperConfigData from './stepperPlaygroundConfig.json';
-import Orientation from './Examples/Orientation';
 import StepMode from './Examples/StepMode';
 import LinearMode from './Examples/LinearMode';
+import Mode from './Examples/Mode';
+import Size from './Examples/Size';
+import Orientation from './Examples/Orientation';
 import ControlledStepper from './Examples/ControlledStepper';
 import CustomIcons from './Examples/CustomIcons';
 import StyleProps from './Examples/StyleProps';
-import Size from './Examples/Size';
 import Reverse from './Examples/Reverse';
-import Mode from './Examples/Mode';
 import { TkStepper, TkStep } from '@takeoff-ui/react';
 
 ### Playground
@@ -39,6 +39,20 @@ Stepper component supports different display modes: `default` and `compact`.
 
 <Mode />
 
+## Size
+
+Stepper component supports different sizes: `xsmall`, `small`, `base`, and
+`large` via `size` property.
+
+<Size />
+
+## Orientation
+
+Stepper component provides both `horizontal` and `vertical` orientations via the
+`orientation` property.
+
+<Orientation />
+
 ## Controlled Stepper
 
 The stepper component can be controlled externally using the controlled
@@ -62,20 +76,6 @@ The stepper component offers three style props for visual customization:
 of the component.
 
 <StyleProps />
-
-## Orientation
-
-Stepper component provides both `horizontal` and `vertical` orientations via the
-`orientation` property.
-
-<Orientation />
-
-## Size
-
-Stepper component supports different sizes: `xsmall`, `small`, `base`, and
-`large` via `size` property.
-
-<Size />
 
 ## Reverse
 
