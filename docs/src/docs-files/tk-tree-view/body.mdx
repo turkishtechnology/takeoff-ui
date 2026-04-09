@@ -1,7 +1,7 @@
 import Playground from '../../components/Playground';
 import treeViewConfigData from './treeViewPlaygroundConfig.json';
-import Mode from './examples/Mode';
 import Type from './examples/Type';
+import Mode from './examples/Mode';
 import Size from './examples/Size';
 import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
@@ -13,12 +13,26 @@ import { TkTreeView } from '@takeoff-ui/react';
 
 <Playground configs={[treeViewConfigData]} componentMap={{ TkTreeView }} />
 
+## Type
+
+The `type` prop controls the style type of the tree view. It can be set to
+`basic`, `divided`, or `light`.
+
+<Type />
+
 ## Mode
 
 The mode prop controls the display mode of the tree view. It can be set to
 `basic` or `stepper`.
 
 <Mode />
+
+## Size
+
+The `size` prop controls the size of the tree view. It can be set to `base`,
+`small`, or `large`.
+
+<Size />
 
 ## Selectable
 
@@ -27,20 +41,6 @@ functionality. Use the `value` prop to control selected items and listen to
 `tk-change` events for selection updates.
 
 <Selectable />
-
-## Type
-
-The `type` prop controls the style type of the tree view. It can be set to
-`basic`, `divided`, or `light`.
-
-<Type />
-
-## Size
-
-The `size` prop controls the size of the tree view. It can be set to `base`,
-`small`, or `large`.
-
-<Size />
 
 ## Expand All
 
