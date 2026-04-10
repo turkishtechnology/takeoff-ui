@@ -3,323 +3,222 @@ sidebar_position: 4
 title: MCP Server
 ---
 
-## Takeoff UI MCP Server
+# Model Context Protocol (MCP) for Takeoff UI
 
-An MCP (Model Context Protocol) server that gives AI assistants structured
-access to Takeoff UI documentation, component data, and integration guides.
+Takeoff UI provides an MCP server so that AI coding assistants can look up
+component APIs, integration guides, and code examples on the fly — straight from
+the official documentation.
 
-### What is MCP?
+## What is MCP?
 
-Model Context Protocol is an open protocol and SDK that allows AI assistants to
-call external tools and data sources in a consistent, secure way. This server
-implements MCP tools and prompts so assistants can answer questions about
-Takeoff UI and generate code that follows its standards.
+[MCP](https://modelcontextprotocol.io) is an open protocol that lets AI
+assistants call external tools and data sources in a standardized way. Instead
+of relying on training data that may be outdated, the assistant queries the
+Takeoff UI MCP server at runtime and gets back verified, structured information.
 
-### What is Takeoff UI?
+## Why use MCP?
 
-Takeoff UI is a comprehensive design system of framework-agnostic web components
-built with Stencil.js, with official bindings for React, Vue, and Angular, plus
-a Tailwind CSS plugin. It is developed in a Turborepo monorepo and ships
-consistent APIs, styles, and documentation across frameworks.
+When you ask an AI assistant about Takeoff UI without MCP, it works from its
+training data — which can be stale, incomplete, or simply wrong. Common problems
+include made-up prop names, broken documentation links, and examples that mix
+conventions from different libraries. With the Takeoff UI MCP server connected,
+your assistant can:
 
-## Features
+- **Look up real component APIs** — props, events, slots, and tokens come
+  directly from the source, not from memory
+- **Return working documentation links** — every reference points to a page that
+  actually exists
+- **Generate idiomatic code** — React, Vue, Angular, Next.js, and Nuxt examples
+  that follow Takeoff UI conventions and naming patterns
 
-- **Component discovery and details**: List all components and fetch in-depth
-  docs and examples
-- **Tailwind CSS integration**: Guidance on setup, tokens, typography, spacing,
-  and more
-- **Framework integration**: React, Vue, Angular, Next.js, Nuxt guides
-- **Smart prompts**: Figma-to-code and refactoring prompts tailored to Takeoff
-  UI
-- **Flexible transports**: STDIO, Streamable HTTP, and legacy SSE
+## Installation and setup
 
-## Transport options
-
-- **STDIO (default)**: Best for local development with desktop assistants
-- **Streamable HTTP**: Single `/mcp` endpoint; recommended for HTTP usage
-- **SSE (legacy)**: Backwards compatibility only; not recommended for new setups
-
-## Quick start
-
-### Remote usage (recommended)
-
-Use the hosted version without local installation:
-
-```bash
-# Using mcp-remote
-npx -y mcp-remote https://takeoffui.turkishtechlab.com/mcp
-```
-
-### Local install
-
-```bash
-git clone https://github.com/turkishtechnology/takeoff-ui-mcp.git
-cd takeoff-ui-mcp
-npm install
-npm run build
-```
-
-### Run
-
-```bash
-# STDIO (default)
-npm start
-
-# Streamable HTTP
-npm run start:stream
-
-# SSE (legacy)
-npm run start:sse
-```
-
-Default addresses:
-
-- **Main (Streamable HTTP)**: `http://127.0.0.1:3845/mcp`
-- **SSE events**: `http://127.0.0.1:3845/sse`
-- **Health**: `http://127.0.0.1:3845/health`
-- **Info**: `http://127.0.0.1:3845/info`
-
-### Test the HTTP server
-
-```bash
-curl -X POST http://127.0.0.1:3845/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"initialize","id":1}'
-
-curl http://127.0.0.1:3845/health
-curl http://127.0.0.1:3845/info
-```
-
-## Configuration
-
-Create `.env` in the project root (copy from `.env.example`):
-
-```bash
-NODE_ENV=development
-HOST=127.0.0.1
-PORT=3845
-# 0=DEBUG, 1=INFO, 2=WARN, 3=ERROR
-LOG_LEVEL=1
-```
-
-## Client setup
-
-### Continue.dev
-
-Remote (recommended):
-
-```yaml
-mcpServers:
-  - name: takeoff-ui-mcp
-    command: npx
-    args:
-      - '-y'
-      - 'mcp-remote'
-      - 'https://takeoffui.turkishtechlab.com/mcp'
-```
-
-Local STDIO:
-
-```yaml
-mcpServers:
-  - name: takeoff-ui-mcp
-    command: node
-    args:
-      - /absolute/path/to/takeoff-ui-mcp/dist/index.js
-```
-
-Local HTTP:
-
-```yaml
-mcpServers:
-  - name: takeoff-ui-mcp
-    type: streamable-http
-    url: http://127.0.0.1:3845/mcp
-```
+Pick your IDE below and add the configuration snippet. All examples point to the
+hosted server — no local installation required.
 
 ### VS Code (Copilot)
 
-Remote (recommended):
-
-```json
-"mcp": {
-  "servers": {
-    "takeoff-ui-mcp": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://takeoffui.turkishtechlab.com/mcp"]
-    }
-  }
-}
-```
-
-Local STDIO:
-
-```json
-"mcp": {
-  "servers": {
-    "takeoff-ui-mcp": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["/absolute/path/to/takeoff-ui-mcp/dist/index.js"]
-    }
-  }
-}
-```
-
-Local HTTP:
+Open your MCP configuration and add the following:
 
 ```json
 "mcp": {
   "servers": {
     "takeoff-ui-mcp": {
       "type": "streamable-http",
-      "url": "http://127.0.0.1:3845/mcp"
+      "url": "https://takeoffui.turkishtechlab.com/mcp"
     }
   }
 }
+```
+
+Make sure Agent mode is enabled for Copilot Chat and add the following to your
+`settings.json`:
+
+```json
+"chat.mcp.enabled": true,
+"chat.mcp.discovery.enabled": true
+```
+
+### Cursor / Windsurf
+
+Open **Settings** > **MCP** > **Add Server** and add the following:
+
+```json
+"mcpServers": {
+  "takeoff-ui-mcp": {
+    "type": "streamable-http",
+    "url": "https://takeoffui.turkishtechlab.com/mcp"
+  }
+}
+```
+
+### JetBrains IDEs
+
+Open **Settings** > **Tools** > **AI Assistant** > **Model Context Protocol
+(MCP)** and add a new server:
+
+- **Name:** Takeoff UI MCP
+- **Type:** Streamable HTTP
+- **URL:** `https://takeoffui.turkishtechlab.com/mcp`
+
+Click **OK** and **Apply**.
+
+### Claude Code
+
+Add the Takeoff UI MCP server via the command line:
+
+```bash
+claude mcp add takeoff-ui-mcp -t streamable-http https://takeoffui.turkishtechlab.com/mcp
+```
+
+To make it available across all projects, install with user scope:
+
+```bash
+claude mcp add takeoff-ui-mcp -s user -t streamable-http https://takeoffui.turkishtechlab.com/mcp
 ```
 
 ### Claude Desktop
 
-STDIO:
+Add the following to your Claude Desktop configuration file:
 
 ```json
 {
   "mcpServers": {
     "takeoff-ui-mcp": {
-      "command": "node",
-      "args": ["/absolute/path/to/takeoff-ui-mcp/dist/index.js"]
+      "url": "https://takeoffui.turkishtechlab.com/mcp"
     }
   }
 }
 ```
 
-HTTP:
+### Continue.dev
 
-```json
-{
-  "mcpServers": {
-    "takeoff-ui-mcp": {
-      "url": "http://127.0.0.1:3845/mcp"
-    }
-  }
-}
+Add the following to your Continue configuration:
+
+```yaml
+mcpServers:
+  - name: takeoff-ui-mcp
+    type: streamable-http
+    url: https://takeoffui.turkishtechlab.com/mcp
 ```
 
-Tip: To nudge assistants to use this server, add "use takeoff-ui-mcp" to your
-prompts (for example: "Show Tailwind setup for React — use takeoff-ui-mcp").
+:::tip[Local usage]
 
-## Tools
+If you prefer to run the MCP server locally instead of using the hosted version,
+clone the [takeoff-ui-mcp](https://github.com/turkishtechnology/takeoff-ui-mcp)
+repository and follow the instructions in its README. Then replace the remote
+URL with a local address (e.g., `http://127.0.0.1:8088/mcp`) in the
+configurations above.
 
-- **`get_components_list`**: Returns the full list of Takeoff UI components
-- **`get_component_info`**: Detailed docs and examples for components
-  - Parameters: `component` (string) or `components` (string[])
-- **`get_tailwind_integration`**: Tailwind integration guidance
-  - Parameters: `framework`, `topic`
-- **`get_framework_integration`**: Framework-specific integration
-  - Parameters: `framework`, `topic`, `complexity`, `includeExamples`
+:::
 
-## Prompts
+## After setup
 
-- **`refactor_takeoff_ui_code`**: Refactor code to align with Takeoff UI best
-  practices
-  - Parameters:
-    - `code` (string, required)
-    - `framework?` (react | vue | angular)
-    - `goals?` (string[]; e.g., readability, performance, a11y)
-    - `enforceA11y?` (boolean; default true)
-    - `preferComposition?` (boolean; default true)
-    - `includeTests?` (boolean; default false)
+Once connected, you can start asking your AI assistant Takeoff UI questions and
+it will automatically call the MCP server to fetch accurate answers. Try
+something like:
 
-- **`figma_to_code`**: Convert Figma designs to code using Takeoff UI with a
-  tool-driven, verifiable process
-  - Parameters:
-    - `figmaUrl` (string, URL, required)
-    - `framework?` (react | vue | angular | nextjs | nuxt; default react)
-    - `includeInteractivity?` (boolean; default true)
-    - `useTypeScript?` (boolean; default true)
-    - `styling?` (tailwind | css-modules | styled-components | emotion; default
-      tailwind)
-    - `accessibility?` (boolean; default true)
-    - `responsiveness?` (boolean; default true)
-    - `fileStructure?` (single | multi; default single)
+- _"List all available Takeoff UI components"_
+- _"Show me how to use tk-select with form validation in React"_
+- _"How do I set up Takeoff UI with Tailwind in a Next.js project?"_
+- _"Refactor this code to follow Takeoff UI conventions"_
 
-## How it works (MCP flow)
+## Available tools
 
-1. Assistant selects a tool (e.g., `get_component_info`)
-2. MCP client sends a JSON-RPC request to the server
-3. Server reads curated Takeoff UI docs and returns structured results
-4. Assistant formats and presents the answer
+Tools are called automatically by the AI assistant when it needs information.
 
-Example request payload:
+| Tool                        | Description                                                           |
+| --------------------------- | --------------------------------------------------------------------- |
+| `get-components-list`       | Returns the full list of Takeoff UI components                        |
+| `get-components-info`       | Fetches detailed docs and examples for one or more components         |
+| `get-tailwind-integration`  | Provides Tailwind CSS integration guidance (setup, tokens, utilities) |
+| `get-framework-integration` | Provides framework-specific integration guides (React, Vue, Angular)  |
 
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "get_component_info",
-    "arguments": { "component": "button" }
-  }
-}
-```
+## Available prompts
 
-## Development
+Prompts are pre-built instruction templates that you can trigger explicitly to
+perform a specific task (e.g., refactoring or Figma-to-code conversion).
 
-Prerequisites: Node.js >= 18
+| Prompt                     | Description                                                |
+| -------------------------- | ---------------------------------------------------------- |
+| `refactor-takeoff-ui-code` | Refactors code to align with Takeoff UI best practices     |
+| `figma-to-code`            | Converts Figma designs to code using Takeoff UI components |
 
-Setup:
+## Common issues
+
+### MCP connection errors
+
+Try using the MCP Inspector to debug the connection:
 
 ```bash
-npm install
-npm run build
-
-# Dev (STDIO)
-npm run dev
-
-# Dev (HTTP)
-npm run dev:stream
+npx @modelcontextprotocol/inspector
 ```
 
-MCP Inspector (browser-based testing):
+Navigate to `http://127.0.0.1:6274` in your browser and set the following
+parameters:
 
-```bash
-# With streamable HTTP running
-npm run start:stream
-npm run inspector
-# Inspector UI target: http://127.0.0.1:3845/mcp
+- **Transport type:** Streamable HTTP
+- **URL:** `https://takeoffui.turkishtechlab.com/mcp`
+
+Click **Connect** and wait for the connection to be established. Once connected,
+you should see the following four tools listed: `get-components-list`,
+`get-components-info`, `get-tailwind-integration`, and
+`get-framework-integration`. If the list is empty or you cannot connect, check
+the terminal logs for more details.
+
+### MCP is installed but not being used
+
+Some assistants do not automatically pick up MCP tools unless they are
+explicitly told to do so. You can fix this by adding a project-level rule that
+instructs the assistant to prefer the MCP server when answering Takeoff UI
+questions.
+
+In VS Code, create a file at `.github/instructions/takeoff-ui.md` with content
+like the following:
+
+```text
+## Takeoff UI — always use the MCP server
+
+When answering questions about Takeoff UI components, styling, or integration:
+
+1. Call "get-components-list" or "get-components-info" to fetch the relevant docs
+2. Base your answer on the returned content — do not guess prop names or events
+3. Prefer Takeoff UI components (tk-button, tk-input, etc.) over plain HTML
 ```
 
-Project structure:
+Other IDEs support similar rule files — check your editor's documentation for
+the expected location.
 
-```
-src/
-├── transports/    # stdio, stream, sse
-├── tools/         # MCP tools
-├── prompts/       # MCP prompts
-├── data/          # Curated Takeoff UI docs and examples
-├── utils/         # Logging and helpers
-├── types/         # Type definitions
-└── index.ts       # Entry point
-```
+### Other issues
 
-Scripts:
+- **Node version:** Ensure you are using Node.js 18 or later
+- **Path issues:** If using local installation, verify absolute paths in your
+  client configuration
+- **Debug logs:** For local installations, set `LOG_LEVEL=0` in your `.env` file
+  for verbose output
 
-- `build`, `watch`, `dev`, `start`, `start:stream`, `start:sse`, `inspector`,
-  `clean`
+## Related links
 
-## HTTP API (when using Streamable HTTP)
-
-- `GET /health`: Basic status
-- `GET /info`: Server configuration and endpoints
-
-## Troubleshooting
-
-- **Path issues**: Verify absolute paths in client config
-- **Node version**: Use Node.js 18+
-- **Port conflicts**: Set `PORT` in `.env`
-- **Debug logs**: Set `LOG_LEVEL=0`
-
-## Related Links
-
-- Model Context Protocol: `https://modelcontextprotocol.io`
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+- [Takeoff UI MCP Server Repository](https://github.com/turkishtechnology/takeoff-ui-mcp)
