@@ -86,6 +86,7 @@
   },
   "pnpm": {
     "overrides": {
+      "basic-ftp": ">=5.2.2",
       "webpackbar": "^7.0.0",
       "@hono/node-server": ">=1.19.13",
       "serialize-javascript": ">=7.0.3",
