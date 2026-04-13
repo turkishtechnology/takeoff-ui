@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  basic-ftp: ">=5.2.2"
   webpackbar: ^7.0.0
   "@hono/node-server": ">=1.19.13"
   serialize-javascript: ">=7.0.3"
@@ -5336,8 +5337,8 @@ packages:
     engines: { node: ">=6.0.0" }
     hasBin: true
 
-  basic-ftp@5.2.1:
-    resolution: { integrity: sha512-0yaL8JdxTknKDILitVpfYfV2Ob6yb3udX/hK97M7I3jOeznBNxQPtVvTUtnhUkyHlxFWyr5Lvknmgzoc7jf+1Q== }
+  basic-ftp@5.2.2:
+    resolution: { integrity: sha512-1tDrzKsdCg70WGvbFss/ulVAxupNauGnOlgpyjKzeQxzyllBLS0CGLV7tjIXTK3ZQA9/FBEm9qyFFN1bciA6pw== }
     engines: { node: ">=10.0.0" }
 
   batch@0.6.1:
@@ -17712,7 +17713,7 @@ snapshots:
 
   baseline-browser-mapping@2.10.16: {}
 
-  basic-ftp@5.2.1: {}
+  basic-ftp@5.2.2: {}
 
   batch@0.6.1: {}
 
@@ -19796,7 +19797,7 @@ snapshots:
 
   get-uri@6.0.5:
     dependencies:
-      basic-ftp: 5.2.1
+      basic-ftp: 5.2.2
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
