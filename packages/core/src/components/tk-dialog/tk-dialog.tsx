@@ -224,7 +224,7 @@ export class TkDialog implements ComponentInterface {
       if (this.hasHeaderSlot) {
         return (
           <div {...this.__getTestIdAttribute('header')}>
-            <slot name="header" {...this.__getTestIdAttribute('header-slot')}></slot>
+            <slot name="header"></slot>
           </div>
         );
       } else {
@@ -275,13 +275,13 @@ export class TkDialog implements ComponentInterface {
   private createContent() {
     if (this.hasContentSlot) {
       return (
-        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content-slot')}>
-          <slot name="content" {...this.__getTestIdAttribute('content')}></slot>
+        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content')}>
+          <slot name="content"></slot>
         </div>
       );
     } else if (this.hasDefaultSlotContent) {
       return (
-        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content-slot')}>
+        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content')}>
           <slot></slot>
         </div>
       );
@@ -294,13 +294,13 @@ export class TkDialog implements ComponentInterface {
     if (this.hasFooterSlot) {
       return (
         <div {...this.__getTestIdAttribute('footer')}>
-          <slot name="footer" {...this.__getTestIdAttribute('footer-slot')}></slot>
+          <slot name="footer"></slot>
         </div>
       );
     } else if (this.hasFooterActionsSlot) {
       return (
         <div class="tk-dialog-footer" {...this.__getTestIdAttribute('footer')}>
-          <slot name="footer-actions" {...this.__getTestIdAttribute('footer-actions-slot')}></slot>
+          <slot name="footer-actions"></slot>
         </div>
       );
     }
@@ -332,7 +332,7 @@ export class TkDialog implements ComponentInterface {
 
   private renderMask() {
     const dialog = this.hasContainerSlot ? (
-      <div {...this.__getTestIdAttribute('container-slot')}>
+      <div>
         <slot name="container"></slot>
       </div>
     ) : (
