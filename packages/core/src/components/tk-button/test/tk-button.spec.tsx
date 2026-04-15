@@ -121,7 +121,7 @@ describe('tk-button', () => {
     });
 
     expect(page.root.getAttribute('data-testid')).toBe('1');
-    expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-button-button');
+    expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-button');
     expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('1-button-label');
     expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-button-left-icon');
   });
@@ -132,7 +132,7 @@ describe('tk-button', () => {
       html: `<tk-button mode="link" href="/test" data-testid="2" label="Docs" icon-position="right" icon="arrow_forward"></tk-button>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-button-button');
+    expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-button');
     expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('2-button-label');
     expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-button-right-icon');
   });
