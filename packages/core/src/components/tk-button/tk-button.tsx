@@ -2,7 +2,9 @@ import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmit
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
+const COMPONENT_TAG = 'button';
 /**
  * TkButton is an extension to standard input element with icons and theming.
  * @react `import { TkButton } from '@takeoff-ui/react'`
@@ -48,6 +50,11 @@ export class TkButton implements ComponentInterface {
    * Sets the URL the button should navigate to when clicked (for type="link" buttons).
    */
   @Prop() href: string;
+
+  /**
+   * Provides a stable selector for test automation.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
 
   /**
    * Specifies where to open the linked document (for type="link" buttons).
@@ -152,9 +159,14 @@ export class TkButton implements ComponentInterface {
       [this.size],
     );
 
-    let _leftIcon: HTMLTkIconElement;
-    let _rightIcon: HTMLTkIconElement;
-    const spinnerElement = <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>;
+    let _leftIcon: HTMLTkIconElement | HTMLElement | undefined;
+    let _rightIcon: HTMLTkIconElement | HTMLElement | undefined;
+    const spinnerElement = (
+      <tk-spinner
+        {...getDataTestidAttribute(this.dataTestid, COMPONENT_TAG, 'left-icon')}
+        size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}
+      ></tk-spinner>
+    );
 
     if (this.loading) {
       _leftIcon = spinnerElement;
@@ -166,6 +178,8 @@ export class TkButton implements ComponentInterface {
           additionalProps: {
             color: this.getButtonIconColor(),
           },
+          dataTestid: this.dataTestid,
+          dataTestidComponent: COMPONENT_TAG,
         },
         this.iconPosition,
       );
@@ -186,12 +200,18 @@ export class TkButton implements ComponentInterface {
 
     let label;
     if (this.label?.length > 0) {
-      label = <span>{this.label}</span>;
+      label = <span {...getDataTestidAttribute(this.dataTestid, COMPONENT_TAG, 'label')}>{this.label}</span>;
     }
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
-        <Tag class={rootClasses} {...props} disabled={this.disabled} onClick={e => this.handleClick(e)}>
+        <Tag
+          class={rootClasses}
+          {...props}
+          {...getDataTestidAttribute(this.dataTestid, COMPONENT_TAG, 'button')}
+          disabled={this.disabled}
+          onClick={(e: MouseEvent) => this.handleClick(e)}
+        >
           {_leftIcon}
           {label}
           {_rightIcon}

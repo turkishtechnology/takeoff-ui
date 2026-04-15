@@ -113,4 +113,55 @@ describe('tk-button', () => {
 
     expect(clickSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('reflects and forwards data-testid to the native button element', async () => {
+    const page = await newSpecPage({
+      components: [TkButton],
+      html: `<tk-button data-testid="1" label="Click" icon="home"></tk-button>`,
+    });
+
+    expect(page.root.getAttribute('data-testid')).toBe('1');
+    expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-button-button');
+    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('1-button-label');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-button-left-icon');
+  });
+
+  it('forwards data-testid to anchor in link mode', async () => {
+    const page = await newSpecPage({
+      components: [TkButton],
+      html: `<tk-button mode="link" href="/test" data-testid="2" label="Docs" icon-position="right" icon="arrow_forward"></tk-button>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-button-button');
+    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('2-button-label');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-button-right-icon');
+  });
+
+  it('generates left and right icon test ids for multi-icon configuration', async () => {
+    const page = await newSpecPage({
+      components: [TkButton],
+      html: `<tk-button data-testid="3"></tk-button>`,
+    });
+
+    page.root.icon = {
+      left: { name: 'chevron_left' },
+      right: { name: 'chevron_right' },
+    };
+    await page.waitForChanges();
+
+    const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
+
+    expect(icons.length).toBe(2);
+    expect(icons[0].getAttribute('data-testid')).toBe('3-button-left-icon');
+    expect(icons[1].getAttribute('data-testid')).toBe('3-button-right-icon');
+  });
+
+  it('forwards derived data-testid to loading spinner', async () => {
+    const page = await newSpecPage({
+      components: [TkButton],
+      html: `<tk-button loading="true" data-testid="loading-button"></tk-button>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('tk-spinner')?.getAttribute('data-testid')).toBe('loading-button-button-left-icon');
+  });
 });
