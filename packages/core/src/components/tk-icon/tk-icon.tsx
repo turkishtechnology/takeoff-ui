@@ -1,5 +1,7 @@
 import { Component, Prop, Element, h, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
+
 /**
  * The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.
  * This component uses Google's Material Symbols icons. For a complete list of available icon names, please visit:
@@ -74,6 +76,15 @@ export class TkIcon implements ComponentInterface {
    */
   @Prop() iconTag: 'i' | 'span' = 'i';
 
+  /**
+   * Provides a stable selector for test automation.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  private __getTestIdAttribute() {
+    return getDataTestidAttribute(this.dataTestid, 'icon');
+  }
+
   private getIconStyles = () => {
     const style: Record<string, string> = {};
     if (this.color) {
@@ -101,6 +112,7 @@ export class TkIcon implements ComponentInterface {
     const iconProps = {
       class: iconClasses,
       ...this.getIconStyles(),
+      ...this.__getTestIdAttribute(),
     };
 
     const IconTag = this.iconTag;
