@@ -161,7 +161,7 @@ export class TkCard implements ComponentInterface {
   private createHeader() {
     if (this.hideHeader) return null;
     if (this.hasHeaderSlot) {
-      return <slot name="header" {...this.__getTestIdAttribute('header-slot')}></slot>;
+      return <slot name="header"></slot>;
     } else {
       if (!this.header) return null;
       return (
@@ -173,7 +173,7 @@ export class TkCard implements ComponentInterface {
         >
           <div class="tk-card-header-content" {...this.__getTestIdAttribute('header-content')}>
             {this.hasAvatarSlot ? (
-              <slot name="avatar" {...this.__getTestIdAttribute('avatar-slot')}></slot>
+              <slot name="avatar"></slot>
             ) : (
               <Fragment>
                 {this.showAvatar && (
@@ -198,7 +198,7 @@ export class TkCard implements ComponentInterface {
             </div>
           </div>
           {this.hasHeaderActionSlot ? (
-            <slot name="header-action" {...this.__getTestIdAttribute('header-action-slot')}></slot>
+            <slot name="header-action"></slot>
           ) : (
             this.showMenuButton && (
               <tk-button
@@ -231,7 +231,7 @@ export class TkCard implements ComponentInterface {
 
   private createContent() {
     if (this.hasContentSlot) {
-      return <slot name="content" {...this.__getTestIdAttribute('content-slot')}></slot>;
+      return <slot name="content"></slot>;
     } else if (this.hasDefaultSlotBody) {
       return (
         <div class="tk-card-content" style={this.contentStyle} {...this.__getTestIdAttribute('content')}>
@@ -244,7 +244,7 @@ export class TkCard implements ComponentInterface {
 
   private createFooter() {
     if (this.hasFooterSlot) {
-      return <slot name="footer" {...this.__getTestIdAttribute('footer-slot')}></slot>;
+      return <slot name="footer"></slot>;
     } else if (this.hasFooterActionsSlot) {
       return (
         <div
@@ -253,7 +253,7 @@ export class TkCard implements ComponentInterface {
             [`tk-card-footer-${this.footerType}`]: !this.imageOptions.background,
           })}
         >
-          <slot name="footer-actions" {...this.__getTestIdAttribute('footer-actions-slot')}></slot>
+          <slot name="footer-actions"></slot>
         </div>
       );
     }

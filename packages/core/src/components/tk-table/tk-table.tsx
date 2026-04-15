@@ -2097,7 +2097,7 @@ export class TkTable implements ComponentInterface {
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
           <tr {...this.__getTestIdAttribute('expanded-row', `${index}`)}>
             <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}} {...this.__getTestIdAttribute('expanded-row-cell', `${index}`)}>
-              <slot name={`expand-content-${row[this.dataKey]}`} {...this.__getTestIdAttribute('expanded-row-slot', `${index}`)} />
+              <slot name={`expand-content-${row[this.dataKey]}`} />
             </td>
           </tr>
         )}
@@ -2399,11 +2399,11 @@ export class TkTable implements ComponentInterface {
     if (this.renderData.length > 0) {
       return (
         <tbody {...this.__getTestIdAttribute('body')}>
-          <slot name="body-header" {...this.__getTestIdAttribute('body-header-slot')}></slot>
+          <slot name="body-header"></slot>
 
           {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
 
-          <slot name="body-footer" {...this.__getTestIdAttribute('body-footer-slot')}></slot>
+          <slot name="body-footer"></slot>
         </tbody>
       );
     } else if (this.hasEmptyFilterSlot && this.filters?.length > 0) {
@@ -2411,7 +2411,7 @@ export class TkTable implements ComponentInterface {
         <tbody {...this.__getTestIdAttribute('body-empty-filter')}>
           <tr {...this.__getTestIdAttribute('body-empty-filter-row')}>
             <td colSpan={100} {...this.__getTestIdAttribute('body-empty-filter-cell')}>
-              <slot name="empty-filter" {...this.__getTestIdAttribute('empty-filter-slot')} />
+              <slot name="empty-filter" />
             </td>
           </tr>
         </tbody>
@@ -2421,7 +2421,7 @@ export class TkTable implements ComponentInterface {
         <tbody {...this.__getTestIdAttribute('body-empty-data')}>
           <tr {...this.__getTestIdAttribute('body-empty-data-row')}>
             <td colSpan={100} {...this.__getTestIdAttribute('body-empty-data-cell')}>
-              <slot name="empty-data" {...this.__getTestIdAttribute('empty-data-slot')} />
+              <slot name="empty-data" />
             </td>
           </tr>
         </tbody>
@@ -2435,7 +2435,7 @@ export class TkTable implements ComponentInterface {
         <div class="tk-table-header" {...this.__getTestIdAttribute('header')}>
           <div {...this.__getTestIdAttribute('header-title')}>{this.cardTitle}</div>
           <div {...this.__getTestIdAttribute('header-right')}>
-            <slot {...this.__getTestIdAttribute('header-right-slot')} name="header-right"></slot>
+            <slot name="header-right"></slot>
           </div>
         </div>
       );
