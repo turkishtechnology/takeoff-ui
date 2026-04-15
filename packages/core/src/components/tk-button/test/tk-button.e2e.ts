@@ -12,7 +12,7 @@ describe('tk-button', () => {
     const iconTestId = await page.$eval('tk-button >>> tk-icon', el => el.getAttribute('data-testid'));
 
     expect(hostTestId).toBe('1');
-    expect(nativeTestId).toBe('1-button-button');
+    expect(nativeTestId).toBe('1-button');
     expect(labelTestId).toBe('1-button-label');
     expect(iconTestId).toBe('1-button-left-icon');
   });
@@ -26,7 +26,7 @@ describe('tk-button', () => {
     const labelTestId = await page.$eval('tk-button >>> span', el => el.getAttribute('data-testid'));
     const iconTestId = await page.$eval('tk-button >>> tk-icon', el => el.getAttribute('data-testid'));
 
-    expect(nativeLinkTestId).toBe('2-button-button');
+    expect(nativeLinkTestId).toBe('2-button');
     expect(labelTestId).toBe('2-button-label');
     expect(iconTestId).toBe('2-button-right-icon');
   });
