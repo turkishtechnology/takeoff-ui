@@ -1,6 +1,7 @@
 import { Component, Method, Prop, State, Watch, h, Event, EventEmitter, Element, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -15,6 +16,7 @@ import { CSSStyleProperties } from '../../global/types';
  * @vue `import { TkDialog } from '@takeoff-ui/vue'`
  * @angular `import { TkDialog } from '@takeoff-ui/angular'`
  */
+
 @Component({
   tag: 'tk-dialog',
   styleUrl: 'tk-dialog.scss',
@@ -116,6 +118,11 @@ export class TkDialog implements ComponentInterface {
   @Prop() preventDismiss: boolean = false;
 
   /**
+   * Test identifier for automated testing
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * Event emitted when the dialog is opened
    */
   @Event({ eventName: 'tk-open', bubbles: false }) tkOpen: EventEmitter<void>;
@@ -208,30 +215,55 @@ export class TkDialog implements ComponentInterface {
     }
   };
 
+  private __getTestIdAttribute(...suffixes: string[]) {
+    return getDataTestidAttribute(this.dataTestid, 'dialog', ...suffixes);
+  }
+
   private createHeader() {
     if (this.showHeader) {
       if (this.hasHeaderSlot) {
-        return <slot name="header"></slot>;
+        return (
+          <div {...this.__getTestIdAttribute('header')}>
+            <slot name="header" {...this.__getTestIdAttribute('header-slot')}></slot>
+          </div>
+        );
       } else {
         const headerClasses = classNames('tk-dialog-header', `tk-dialog-header-${this.headerType}`);
 
         return (
-          <div class={headerClasses}>
-            <div class="tk-dialog-header-content">
+          <div class={headerClasses} {...this.__getTestIdAttribute('header')}>
+            <div class="tk-dialog-header-content" {...this.__getTestIdAttribute('header-content')}>
               {this.showVariantSign && (
                 <tk-icon
                   sign
+                  {...this.__getTestIdAttribute('sign-icon')}
                   size="xlarge"
                   {...getIconElementProps(this.getVariantIcon(), { class: classNames('fill tk-dialog-sign-icon'), variant: this.variant }, 'rounded', 'span')}
                 />
               )}
-              <div class="tk-dialog-title-container">
-                {this.subheader && <span class="tk-dialog-subtitle">{this.subheader}</span>}
-                {this.header && <span class="tk-dialog-title">{this.header}</span>}
+              <div class="tk-dialog-title-container" {...this.__getTestIdAttribute('title-container')}>
+                {this.subheader && (
+                  <span class="tk-dialog-subtitle" {...this.__getTestIdAttribute('subheader')}>
+                    {this.subheader}
+                  </span>
+                )}
+                {this.header && (
+                  <span class="tk-dialog-title" {...this.__getTestIdAttribute('title')}>
+                    {this.header}
+                  </span>
+                )}
               </div>
             </div>
             {this.showCloseButton && (
-              <tk-button variant="neutral" icon="close" size="small" type="text" onTk-click={this.handleCloseButtonClick} aria-label="Close dialog"></tk-button>
+              <tk-button
+                variant="neutral"
+                icon="close"
+                size="small"
+                type="text"
+                onTk-click={this.handleCloseButtonClick}
+                aria-label="Close dialog"
+                {...this.__getTestIdAttribute('close-button')}
+              ></tk-button>
             )}
           </div>
         );
@@ -243,13 +275,13 @@ export class TkDialog implements ComponentInterface {
   private createContent() {
     if (this.hasContentSlot) {
       return (
-        <div class="tk-dialog-content">
-          <slot name="content"></slot>
+        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content-slot')}>
+          <slot name="content" {...this.__getTestIdAttribute('content')}></slot>
         </div>
       );
     } else if (this.hasDefaultSlotContent) {
       return (
-        <div class="tk-dialog-content">
+        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content-slot')}>
           <slot></slot>
         </div>
       );
@@ -260,11 +292,15 @@ export class TkDialog implements ComponentInterface {
 
   private createFooter() {
     if (this.hasFooterSlot) {
-      return <slot name="footer"></slot>;
+      return (
+        <div {...this.__getTestIdAttribute('footer')}>
+          <slot name="footer" {...this.__getTestIdAttribute('footer-slot')}></slot>
+        </div>
+      );
     } else if (this.hasFooterActionsSlot) {
       return (
-        <div class="tk-dialog-footer">
-          <slot name="footer-actions"></slot>
+        <div class="tk-dialog-footer" {...this.__getTestIdAttribute('footer')}>
+          <slot name="footer-actions" {...this.__getTestIdAttribute('footer-actions-slot')}></slot>
         </div>
       );
     }
@@ -282,6 +318,7 @@ export class TkDialog implements ComponentInterface {
       'style': { display: 'flex', flexDirection: 'column', ...this.containerStyle },
       'role': 'dialog',
       'aria-modal': true,
+      ...this.__getTestIdAttribute('root'),
     };
 
     return (
@@ -294,15 +331,21 @@ export class TkDialog implements ComponentInterface {
   }
 
   private renderMask() {
-    const dialog = this.hasContainerSlot ? <slot name="container"></slot> : this.createDialog();
+    const dialog = this.hasContainerSlot ? (
+      <div {...this.__getTestIdAttribute('container-slot')}>
+        <slot name="container"></slot>
+      </div>
+    ) : (
+      this.createDialog()
+    );
     const maskClasses = classNames('tk-dialog-mask', `tk-dialog-mask-${this.maskVariant}`, {
       'tk-dialog-visible': this.visible,
       'tk-dialog-mask-hidden': this.hideBackdrop,
       'tk-dialog-mask-blur': this.isMaskBlur,
     });
     return (
-      <div class={maskClasses}>
-        <div class="tk-dialog-overlay" onClick={() => this.handleOverlayClick()}></div>
+      <div class={maskClasses} {...this.__getTestIdAttribute()}>
+        <div class="tk-dialog-overlay" onClick={() => this.handleOverlayClick()} {...this.__getTestIdAttribute('overlay')}></div>
         {dialog}
       </div>
     );
