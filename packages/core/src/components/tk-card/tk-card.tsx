@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
 import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
-const COMPONENT_NAME = 'card';
-
 /**
  * TkCard component description.
  * @slot default - Default slot to detect child to inner body.
@@ -157,7 +155,7 @@ export class TkCard implements ComponentInterface {
   }
 
   private __getTestIdAttribute(...suffixes: Array<string | undefined>) {
-    return getDataTestidAttribute(this.dataTestid, COMPONENT_NAME, ...suffixes);
+    return getDataTestidAttribute(this.dataTestid, 'card', ...suffixes);
   }
 
   private createHeader() {
