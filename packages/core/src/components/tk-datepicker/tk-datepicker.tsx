@@ -1627,10 +1627,6 @@ export class TkDatePicker {
     this.tkChange.emit(this.value);
   }
 
-  private __getDataTestidAttribute(...suffixes: string[]) {
-    return getDataTestidAttribute(this.dataTestid, 'datepicker', ...suffixes);
-  }
-
   private createDayCell(date: Date, isAdjacentMonth: boolean) {
     const { start = null, end = null } = this.internalSelectedDates;
     const dateTime = date.getTime();
@@ -1674,9 +1670,9 @@ export class TkDatePicker {
         })}
         onClick={() => !isDisabled && this.handleDateClick(date)}
         onMouseEnter={() => this.handleDateHover(date)}
-        {...this.__getDataTestidAttribute('day-cell')}
+        {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'day-cell')}
       >
-        <span class="tk-datepicker-day" {...this.__getDataTestidAttribute('day')}>
+        <span class="tk-datepicker-day" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'day')}>
           {date.getDate()}
         </span>
       </td>
@@ -1708,7 +1704,7 @@ export class TkDatePicker {
       const date = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth(), i);
       days.push(this.createDayCell(date, false));
       if (days.length === 7) {
-        weeks.push(<tr {...this.__getDataTestidAttribute('week-row')}>{days}</tr>);
+        weeks.push(<tr {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-row')}>{days}</tr>);
         days = [];
       }
     }
@@ -1721,11 +1717,11 @@ export class TkDatePicker {
         days.push(this.createDayCell(date, true));
         nextMonthDay++;
       }
-      weeks.push(<tr {...this.__getDataTestidAttribute('week-row')}>{days}</tr>);
+      weeks.push(<tr {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-row')}>{days}</tr>);
     }
     this.weeksLength = weeks.length;
     return (
-      <tbody class="tk-datepicker-days" {...this.__getDataTestidAttribute('days')}>
+      <tbody class="tk-datepicker-days" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'days')}>
         {weeks}
       </tbody>
     );
@@ -1744,11 +1740,11 @@ export class TkDatePicker {
     });
 
     return (
-      <thead {...this.__getDataTestidAttribute('week-days-header')}>
-        <tr class="tk-datepicker-week-days" {...this.__getDataTestidAttribute('week-days-row')}>
+      <thead {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-days-header')}>
+        <tr class="tk-datepicker-week-days" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-days-row')}>
           {weekdays.map(day => (
-            <th class="tk-datepicker-week-day-cell" {...this.__getDataTestidAttribute('week-day-cell')}>
-              <span class="tk-datepicker-week-day" {...this.__getDataTestidAttribute('week-day')}>
+            <th class="tk-datepicker-week-day-cell" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-day-cell')}>
+              <span class="tk-datepicker-week-day" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'week-day')}>
                 {day}
               </span>
             </th>
@@ -1765,7 +1761,7 @@ export class TkDatePicker {
     for (let i = 0; i < 12; i += 4) {
       const monthGroup = months.slice(i, i + 4);
       rows.push(
-        <tr class="tk-datepicker-month-row" {...this.__getDataTestidAttribute('month-row')}>
+        <tr class="tk-datepicker-month-row" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'month-row')}>
           {monthGroup.map((month, index) => {
             const monthIndex = i + index;
             const isSelected = this.currentMonth.getMonth() === monthIndex;
@@ -1774,7 +1770,7 @@ export class TkDatePicker {
                 class={classNames('tk-datepicker-month', {
                   selected: isSelected,
                 })}
-                {...this.__getDataTestidAttribute('month')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'month')}
                 onClick={(e: MouseEvent) => {
                   e.stopPropagation();
                   this.currentMonth = new Date(this.currentMonth.getFullYear(), monthIndex);
@@ -1789,7 +1785,7 @@ export class TkDatePicker {
       );
     }
     return (
-      <tbody class="tk-datepicker-months" {...this.__getDataTestidAttribute('months')}>
+      <tbody class="tk-datepicker-months" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'months')}>
         {rows}
       </tbody>
     );
@@ -1804,13 +1800,13 @@ export class TkDatePicker {
     for (let i = 0; i < years.length; i += 4) {
       const yearGroup = years.slice(i, i + 4);
       rows.push(
-        <tr class="tk-datepicker-year-row" {...this.__getDataTestidAttribute('year-row')}>
+        <tr class="tk-datepicker-year-row" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'year-row')}>
           {yearGroup.map(year => (
             <td
               class={classNames('tk-datepicker-year', {
                 selected: year === currentYear,
               })}
-              {...this.__getDataTestidAttribute('year')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'year')}
               onClick={e => this.handleYearSelect(e, year)}
             >
               {year}
@@ -1820,7 +1816,7 @@ export class TkDatePicker {
       );
     }
     return (
-      <tbody class="tk-datepicker-years" {...this.__getDataTestidAttribute('years')}>
+      <tbody class="tk-datepicker-years" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'years')}>
         {rows}
       </tbody>
     );
@@ -1834,60 +1830,60 @@ export class TkDatePicker {
     const headerClasses = classNames('tk-datepicker-header', `tk-datepicker-header-${this.headerType}`);
 
     return (
-      <div class={headerClasses} {...this.__getDataTestidAttribute('header')}>
-        <div class="tk-datepicker-header-content" {...this.__getDataTestidAttribute('header-content')}>
-          <div class="tk-datepicker-header-content-start" {...this.__getDataTestidAttribute('header-start')}>
+      <div class={headerClasses} {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header')}>
+        <div class="tk-datepicker-header-content" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-content')}>
+          <div class="tk-datepicker-header-content-start" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-start')}>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
               icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...this.__getDataTestidAttribute('header-prev-year')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-prev-year')}
             ></tk-button>
-            <span class="tk-datepicker-divider" {...this.__getDataTestidAttribute('divider')}></span>
+            <span class="tk-datepicker-divider" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'divider')}></span>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
               icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...this.__getDataTestidAttribute('header-prev-month')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-prev-month')}
             ></tk-button>
           </div>
-          <div class="tk-datepicker-select-container" {...this.__getDataTestidAttribute('header-select')}>
+          <div class="tk-datepicker-select-container" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-select')}>
             <div
               class={classNames('tk-datepicker-select-month', { disabled: this.readonly || this.disabled || this.loading })}
               onClick={e => !this.loading && this.handleViewChange(e, 'months')}
-              {...this.__getDataTestidAttribute('header-month')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-month')}
             >
               {monthName}
             </div>
             <div
               class={classNames('tk-datepicker-select-year', { disabled: this.readonly || this.disabled || this.loading })}
               onClick={e => !this.loading && this.handleViewChange(e, 'years')}
-              {...this.__getDataTestidAttribute('header-year')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-year')}
             >
               {year}
             </div>
           </div>
-          <div class="tk-datepicker-header-content-end" {...this.__getDataTestidAttribute('header-end')}>
+          <div class="tk-datepicker-header-content-end" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-end')}>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
               icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...this.__getDataTestidAttribute('header-next-month')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-next-month')}
             ></tk-button>
-            <span class="tk-datepicker-divider" {...this.__getDataTestidAttribute('divider')}></span>
+            <span class="tk-datepicker-divider" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'divider')}></span>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
               icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...this.__getDataTestidAttribute('header-next-year')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-next-year')}
             ></tk-button>
           </div>
         </div>
@@ -1901,7 +1897,7 @@ export class TkDatePicker {
     } else if (this.hasFooterActionsSlot) {
       const footerClass = classNames('tk-datepicker-footer', `tk-datepicker-footer-${this.footerType}`);
       return (
-        <div class={footerClass} {...this.__getDataTestidAttribute('footer')}>
+        <div class={footerClass} {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'footer')}>
           <slot name="footer-actions"></slot>
         </div>
       );
@@ -1990,10 +1986,13 @@ export class TkDatePicker {
       }
     }
     return (
-      <div class={classNames('tk-datepicker-timepicker-panel', this.timeOnly && 'tk-datepicker-timepicker-panel-only')} {...this.__getDataTestidAttribute('timepicker')}>
+      <div
+        class={classNames('tk-datepicker-timepicker-panel', this.timeOnly && 'tk-datepicker-timepicker-panel-only')}
+        {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker')}
+      >
         <div
           class={classNames('tk-datepicker-timepicker-header', `tk-datepicker-timepicker-header-${this.headerType}`, this.timeOnly && 'tk-datepicker-timepicker-header-only')}
-          {...this.__getDataTestidAttribute('timepicker-header')}
+          {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-header')}
         >
           {this.timeFormat === '12' && (
             <tk-toggle-button-group
@@ -2001,7 +2000,7 @@ export class TkDatePicker {
               type={this.headerType === 'basic' ? 'basic' : this.headerType === 'light' ? 'light' : 'divided'}
               onTk-change={e => this.handleAmPmToggle(e)}
               class="tk-datepicker-ampm-toggle"
-              {...this.__getDataTestidAttribute('timepicker-ampm-toggle')}
+              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-toggle')}
             >
               <tk-toggle-button
                 key="AM"
@@ -2011,7 +2010,7 @@ export class TkDatePicker {
                 label="AM"
                 size="small"
                 disabled={isDisabled || AMDisabled}
-                {...this.__getDataTestidAttribute('timepicker-ampm-am')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-am')}
               />
               <tk-toggle-button
                 key="PM"
@@ -2021,7 +2020,7 @@ export class TkDatePicker {
                 label="PM"
                 size="small"
                 disabled={isDisabled || PMDisabled}
-                {...this.__getDataTestidAttribute('timepicker-ampm-pm')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-pm')}
               />
             </tk-toggle-button-group>
           )}
@@ -2036,9 +2035,9 @@ export class TkDatePicker {
           style={{
             height: this.calendarTableHeightPx ? `${this.calendarTableHeightPx}px` : undefined,
           }}
-          {...this.__getDataTestidAttribute('timepicker-body')}
+          {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-body')}
         >
-          <div class="tk-datepicker-timepicker-col" {...this.__getDataTestidAttribute('timepicker-hours')}>
+          <div class="tk-datepicker-timepicker-col" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hours')}>
             <div>
               <tk-button
                 variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
@@ -2047,21 +2046,21 @@ export class TkDatePicker {
                 icon="expand_less"
                 onTk-click={this.handleDecreaseHour}
                 disabled={isMinHour || prevHourDisabled || isDisabled}
-                {...this.__getDataTestidAttribute('timepicker-hours-decrease')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hours-decrease')}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
                   'tk-datepicker-timepicker-separator-dark': this.headerType === 'dark',
                   'tk-datepicker-timepicker-separator-primary': this.headerType === 'primary',
                 })}
-                {...this.__getDataTestidAttribute('timepicker-separator')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-separator')}
               ></div>
             </div>
             {visibleHours.map(hour =>
               hour === null ? (
                 <div
                   class={classNames('tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty', { disabled: isDisabled })}
-                  {...this.__getDataTestidAttribute('timepicker-value-empty')}
+                  {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-value-empty')}
                 ></div>
               ) : (
                 <div
@@ -2071,7 +2070,7 @@ export class TkDatePicker {
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
                     'disabled': isDisabled || isHourDisabled(hour),
                   })}
-                  {...this.__getDataTestidAttribute('timepicker-hour')}
+                  {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hour')}
                   onClick={() => {
                     if (isDisabled || isHourDisabled(hour)) {
                       return;
@@ -2093,7 +2092,7 @@ export class TkDatePicker {
                   'tk-datepicker-timepicker-separator-dark': this.headerType === 'dark',
                   'tk-datepicker-timepicker-separator-primary': this.headerType === 'primary',
                 })}
-                {...this.__getDataTestidAttribute('timepicker-separator')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-separator')}
               ></div>
               <tk-button
                 variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
@@ -2102,11 +2101,11 @@ export class TkDatePicker {
                 icon="expand_more"
                 onTk-click={this.handleIncreaseHour}
                 disabled={isMaxHour || nextHourDisabled || isDisabled}
-                {...this.__getDataTestidAttribute('timepicker-hours-increase')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hours-increase')}
               ></tk-button>
             </div>
           </div>
-          <div class="tk-datepicker-timepicker-col" {...this.__getDataTestidAttribute('timepicker-minutes')}>
+          <div class="tk-datepicker-timepicker-col" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minutes')}>
             <div>
               <tk-button
                 variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
@@ -2115,21 +2114,21 @@ export class TkDatePicker {
                 icon="expand_less"
                 onTk-click={this.handleDecreaseMinute}
                 disabled={isMinMinute || prevMinuteDisabled || isDisabled}
-                {...this.__getDataTestidAttribute('timepicker-minutes-decrease')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minutes-decrease')}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
                   'tk-datepicker-timepicker-separator-dark': this.headerType === 'dark',
                   'tk-datepicker-timepicker-separator-primary': this.headerType === 'primary',
                 })}
-                {...this.__getDataTestidAttribute('timepicker-separator')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-separator')}
               ></div>
             </div>
             {visibleMinutes.map(m =>
               m === null ? (
                 <div
                   class={classNames('tk-datepicker-timepicker-value tk-datepicker-timepicker-value-empty', { disabled: isDisabled })}
-                  {...this.__getDataTestidAttribute('timepicker-value-empty')}
+                  {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-value-empty')}
                 ></div>
               ) : (
                 <div
@@ -2139,7 +2138,7 @@ export class TkDatePicker {
                     'tk-datepicker-timepicker-value-primary': this.headerType === 'primary',
                     'disabled': isDisabled || isMinuteDisabled(m),
                   })}
-                  {...this.__getDataTestidAttribute('timepicker-minute')}
+                  {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minute')}
                   onClick={() => {
                     if (isDisabled || isMinuteDisabled(m)) return;
                     this.handleMinuteClick(m);
@@ -2155,7 +2154,7 @@ export class TkDatePicker {
                   'tk-datepicker-timepicker-separator-dark': this.headerType === 'dark',
                   'tk-datepicker-timepicker-separator-primary': this.headerType === 'primary',
                 })}
-                {...this.__getDataTestidAttribute('timepicker-separator')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-separator')}
               ></div>
               <tk-button
                 variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
@@ -2164,7 +2163,7 @@ export class TkDatePicker {
                 icon="expand_more"
                 onTk-click={this.handleIncreaseMinute}
                 disabled={isMaxMinute || nextMinuteDisabled || isDisabled}
-                {...this.__getDataTestidAttribute('timepicker-minutes-increase')}
+                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minutes-increase')}
               ></tk-button>
             </div>
           </div>
@@ -2175,8 +2174,8 @@ export class TkDatePicker {
 
   private createLoading() {
     return (
-      <div class="tk-datepicker-loading" {...this.__getDataTestidAttribute('loading')}>
-        <tk-spinner size={this.size} {...this.__getDataTestidAttribute('loading-spinner')} />
+      <div class="tk-datepicker-loading" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'loading')}>
+        <tk-spinner size={this.size} {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'loading-spinner')} />
       </div>
     );
   }
@@ -2240,9 +2239,9 @@ export class TkDatePicker {
           role={!this.inline ? 'dialog' : undefined}
           aria-modal="true"
           data-tk-datepicker-id={this.uniqueId}
-          {...this.__getDataTestidAttribute('panel')}
+          {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'panel')}
         >
-          <div class="tk-datepicker-panel-inner" {...this.__getDataTestidAttribute('panel-inner')}>
+          <div class="tk-datepicker-panel-inner" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'panel-inner')}>
             {this.createTimePicker()}
           </div>
           {this.createFooter()}
@@ -2259,16 +2258,16 @@ export class TkDatePicker {
         aria-modal="true"
         data-tk-datepicker-id={this.uniqueId}
         style={{ visibility: this.concealUntilMeasured ? 'hidden' : undefined }}
-        {...this.__getDataTestidAttribute('panel')}
+        {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'panel')}
       >
-        <div class="tk-datepicker-panel-inner" {...this.__getDataTestidAttribute('panel-inner')}>
-          <div class="tk-datepicker-calendar-container" {...this.__getDataTestidAttribute('calendar')}>
+        <div class="tk-datepicker-panel-inner" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'panel-inner')}>
+          <div class="tk-datepicker-calendar-container" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'calendar')}>
             {this.createHeader()}
-            <div class={bodyClasses} {...this.__getDataTestidAttribute('body')}>
+            <div class={bodyClasses} {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'body')}>
               {this.loading ? (
                 this.createLoading()
               ) : (
-                <table class="tk-datepicker-table" {...this.__getDataTestidAttribute('table')}>
+                <table class="tk-datepicker-table" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'table')}>
                   {this.currentView === 'days' && (
                     <Fragment>
                       {this.createWeekDayNames()}
@@ -2290,7 +2289,7 @@ export class TkDatePicker {
 
   render() {
     return (
-      <div class="tk-datepicker-container" {...this.__getDataTestidAttribute()}>
+      <div class="tk-datepicker-container" {...getDataTestidAttribute(this.dataTestid, 'datepicker')}>
         {this.renderInput()}
         {this.renderPanel()}
       </div>

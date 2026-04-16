@@ -81,10 +81,6 @@ export class TkIcon implements ComponentInterface {
    */
   @Prop({ reflect: true }) dataTestid?: string;
 
-  private __getDataTestidAttribute() {
-    return getDataTestidAttribute(this.dataTestid, 'icon');
-  }
-
   private getIconStyles = () => {
     const style: Record<string, string> = {};
     if (this.color) {
@@ -112,7 +108,7 @@ export class TkIcon implements ComponentInterface {
     const iconProps = {
       class: iconClasses,
       ...this.getIconStyles(),
-      ...this.__getDataTestidAttribute(),
+      ...getDataTestidAttribute(this.dataTestid, 'icon'),
     };
 
     const IconTag = this.iconTag;
