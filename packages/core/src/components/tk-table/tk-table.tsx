@@ -18,8 +18,6 @@ import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { ITreeItem } from '../tk-treeview/types';
 
-const COMPONENT_TAG = 'table';
-
 /**
  * TkTable is a component that allows you to display data in a tabular manner. It's generally called a datatable.
  * @react `import { TkTable } from '@takeoff-ui/react'`
@@ -323,7 +321,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private __getTestIdAttribute(...suffixes: Array<string | undefined>) {
-    return getDataTestidAttribute(this.dataTestid, COMPONENT_TAG, ...suffixes);
+    return getDataTestidAttribute(this.dataTestid, 'table', ...suffixes);
   }
 
   private setTestIdAttribute(el: Element, ...suffixes: Array<string | undefined>) {
