@@ -5,23 +5,19 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  basic-ftp: ">=5.2.2"
+  webpackbar: ^7.0.0
+  "@hono/node-server": ">=1.19.13"
+  serialize-javascript: ">=7.0.3"
   undici: ">=7.18.2"
-  diff: ">=8.0.3"
-  tar: ">=7.5.3"
   path-to-regexp@<6.0.0: 0.1.13
   path-to-regexp@>=6.0.0: ">=8.3.0"
-  "@isaacs/brace-expansion": ">=5.0.1"
-  minimatch: ">=10.2.1"
-  serialize-javascript: ">=7.0.3"
-  ajv@^8.0.0: ">=8.18.0"
-  smol-toml: ">=1.6.1"
   srvx: ">=0.11.13"
+  smol-toml: ">=1.6.1"
+  ajv@^8.0.0: ">=8.18.0"
+  tar: ">=7.5.11"
+  minimatch: ">=10.2.1"
   "@tootallnate/once": ">=3.0.1"
-  vite: ^7.3.2
-  hono: ">=4.12.12"
-  "@hono/node-server": ">=1.19.13"
-  basic-ftp: ">=5.2.1"
-  webpackbar: ^7.0.0
 
 importers:
   .:
@@ -225,7 +221,7 @@ importers:
         specifier: ^8.0.1
         version: 8.58.1(eslint@9.39.4(jiti@1.21.7))(typescript@5.9.3)
       vite:
-        specifier: ^7.3.2
+        specifier: ^7.3.1
         version: 7.3.2(@types/node@20.19.39)(jiti@1.21.7)(less@4.6.4)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
 
   apps/vue-app:
@@ -241,7 +237,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.5(vite@7.3.2(@types/node@20.19.39)(jiti@2.6.1)(less@4.6.4)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))
       vite:
-        specifier: ^7.3.2
+        specifier: ^7.3.1
         version: 7.3.2(@types/node@20.19.39)(jiti@2.6.1)(less@4.6.4)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
 
   docs:
@@ -428,13 +424,13 @@ importers:
         specifier: ^1.0.0-beta.2
         version: 1.0.0-beta.15
       jspdf:
-        specifier: ^4.1.0
+        specifier: ^4.2.1
         version: 4.2.1
       jspdf-autotable:
         specifier: ^5.0.7
         version: 5.0.7(jspdf@4.2.1)
       lodash-es:
-        specifier: ^4.17.22
+        specifier: ^4.18.1
         version: 4.18.1
       mime:
         specifier: ^4.0.6
@@ -480,7 +476,7 @@ importers:
         specifier: ^24.40.0
         version: 24.40.0(typescript@5.9.3)
       rollup:
-        specifier: ^4.18.0
+        specifier: ^4.59.0
         version: 4.60.1
 
   packages/react:
@@ -2687,7 +2683,7 @@ packages:
     resolution: { integrity: sha512-TsQLe4i2gvoTtrHje625ngThGBySOgSK3Xo2XRYOdqGN1teR8+I7vchQC46uLJi8OF62YTYA3AhSpumtkhsaKQ== }
     engines: { node: ">=18.14.1" }
     peerDependencies:
-      hono: ">=4.12.12"
+      hono: ^4
 
   "@humanfs/core@0.19.1":
     resolution: { integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA== }
@@ -4851,19 +4847,19 @@ packages:
     resolution: { integrity: sha512-HXciTXN/sDBYWgeAD4V4s0DN0g72x5mlxQhHxtYu3Tt8BLa6MzcJZUyDVFCdtjNs3bfENVHVzOsmooTVuNgAAw== }
     engines: { node: ^18.0.0 || ^20.0.0 || >=22.0.0 }
     peerDependencies:
-      vite: ^7.3.2
+      vite: ^6.0.0 || ^7.0.0
 
   "@vitejs/plugin-react@5.2.0":
     resolution: { integrity: sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw== }
     engines: { node: ^20.19.0 || >=22.12.0 }
     peerDependencies:
-      vite: ^7.3.2
+      vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
   "@vitejs/plugin-vue@6.0.5":
     resolution: { integrity: sha512-bL3AxKuQySfk1iGcBsQnoRVexTPJq0Z/ixFVM8OhVJAP6ZXXXLtM7NFKWhLl30Kg7uTBqIaPXbh+nuQCuBDedg== }
     engines: { node: ^20.19.0 || >=22.12.0 }
     peerDependencies:
-      vite: ^7.3.2
+      vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
       vue: ^3.2.25
 
   "@vue/compiler-core@3.5.32":
@@ -5341,8 +5337,8 @@ packages:
     engines: { node: ">=6.0.0" }
     hasBin: true
 
-  basic-ftp@5.2.1:
-    resolution: { integrity: sha512-0yaL8JdxTknKDILitVpfYfV2Ob6yb3udX/hK97M7I3jOeznBNxQPtVvTUtnhUkyHlxFWyr5Lvknmgzoc7jf+1Q== }
+  basic-ftp@5.2.2:
+    resolution: { integrity: sha512-1tDrzKsdCg70WGvbFss/ulVAxupNauGnOlgpyjKzeQxzyllBLS0CGLV7tjIXTK3ZQA9/FBEm9qyFFN1bciA6pw== }
     engines: { node: ">=10.0.0" }
 
   batch@0.6.1:
@@ -11219,9 +11215,13 @@ packages:
   undici-types@6.21.0:
     resolution: { integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ== }
 
-  undici@8.0.2:
-    resolution: { integrity: sha512-B9MeU5wuFhkFAuNeA19K2GDFcQXZxq33fL0nRy2Aq30wdufZbyyvxW3/ChaeipXVfy/wUweZyzovQGk39+9k2w== }
-    engines: { node: ">=22.19.0" }
+  undici@7.24.4:
+    resolution: { integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w== }
+    engines: { node: ">=20.18.1" }
+
+  undici@7.24.7:
+    resolution: { integrity: sha512-H/nlJ/h0ggGC+uRL3ovD+G0i4bqhvsDOpbDv7At5eFLlj2b41L8QliGbnl2H7SnDiYhENphh1tQFJZf+MyfLsQ== }
+    engines: { node: ">=20.18.1" }
 
   unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: { integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg== }
@@ -12057,7 +12057,7 @@ snapshots:
       tinyglobby: 0.2.15
       tslib: 2.8.1
       typescript: 5.9.3
-      undici: 8.0.2
+      undici: 7.24.4
       vite: 7.3.2(@types/node@20.19.39)(jiti@2.6.1)(less@4.6.4)(sass-embedded@1.99.0)(sass@1.97.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
       watchpack: 2.5.1
     optionalDependencies:
@@ -16829,7 +16829,7 @@ snapshots:
       is-buffer: 2.0.5
       is-node-process: 1.2.0
       throttleit: 2.1.0
-      undici: 8.0.2
+      undici: 7.24.7
 
   "@vercel/build-utils@13.14.0":
     dependencies:
@@ -17022,7 +17022,7 @@ snapshots:
       ts-morph: 12.0.0
       tsx: 4.21.0
       typescript: 5.9.3
-      undici: 8.0.2
+      undici: 7.24.7
     transitivePeerDependencies:
       - encoding
       - rollup
@@ -17085,7 +17085,7 @@ snapshots:
       ms: 2.1.3
       picocolors: 1.1.1
       tar-stream: 3.1.7
-      undici: 8.0.2
+      undici: 7.24.7
       xdg-app-paths: 5.1.0
       zod: 3.24.4
     transitivePeerDependencies:
@@ -17713,7 +17713,7 @@ snapshots:
 
   baseline-browser-mapping@2.10.16: {}
 
-  basic-ftp@5.2.1: {}
+  basic-ftp@5.2.2: {}
 
   batch@0.6.1: {}
 
@@ -19797,7 +19797,7 @@ snapshots:
 
   get-uri@6.0.5:
     dependencies:
-      basic-ftp: 5.2.1
+      basic-ftp: 5.2.2
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
@@ -25054,7 +25054,9 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici@8.0.2: {}
+  undici@7.24.4: {}
+
+  undici@7.24.7: {}
 
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 
