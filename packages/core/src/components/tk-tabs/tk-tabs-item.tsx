@@ -84,11 +84,6 @@ export class TkTabsItem implements ComponentInterface {
     this.emitUpdate();
   }
 
-  /**
-   * Test identifier for automated testing
-   */
-  @Prop({ reflect: true }) dataTestid?: string;
-
   // Dispatch a custom event that the parent component can listen for
   private emitUpdate() {
     this.el.dispatchEvent(
