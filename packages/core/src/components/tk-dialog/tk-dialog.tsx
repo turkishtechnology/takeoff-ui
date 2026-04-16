@@ -215,7 +215,7 @@ export class TkDialog implements ComponentInterface {
     }
   };
 
-  private __getTestIdAttribute(...suffixes: string[]) {
+  private __getDataTestidAttribute(...suffixes: string[]) {
     return getDataTestidAttribute(this.dataTestid, 'dialog', ...suffixes);
   }
 
@@ -223,7 +223,7 @@ export class TkDialog implements ComponentInterface {
     if (this.showHeader) {
       if (this.hasHeaderSlot) {
         return (
-          <div {...this.__getTestIdAttribute('header')}>
+          <div {...this.__getDataTestidAttribute('header')}>
             <slot name="header"></slot>
           </div>
         );
@@ -231,24 +231,24 @@ export class TkDialog implements ComponentInterface {
         const headerClasses = classNames('tk-dialog-header', `tk-dialog-header-${this.headerType}`);
 
         return (
-          <div class={headerClasses} {...this.__getTestIdAttribute('header')}>
-            <div class="tk-dialog-header-content" {...this.__getTestIdAttribute('header-content')}>
+          <div class={headerClasses} {...this.__getDataTestidAttribute('header')}>
+            <div class="tk-dialog-header-content" {...this.__getDataTestidAttribute('header-content')}>
               {this.showVariantSign && (
                 <tk-icon
                   sign
-                  {...this.__getTestIdAttribute('sign-icon')}
+                  {...this.__getDataTestidAttribute('sign-icon')}
                   size="xlarge"
                   {...getIconElementProps(this.getVariantIcon(), { class: classNames('fill tk-dialog-sign-icon'), variant: this.variant }, 'rounded', 'span')}
                 />
               )}
-              <div class="tk-dialog-title-container" {...this.__getTestIdAttribute('title-container')}>
+              <div class="tk-dialog-title-container" {...this.__getDataTestidAttribute('title-container')}>
                 {this.subheader && (
-                  <span class="tk-dialog-subtitle" {...this.__getTestIdAttribute('subheader')}>
+                  <span class="tk-dialog-subtitle" {...this.__getDataTestidAttribute('subheader')}>
                     {this.subheader}
                   </span>
                 )}
                 {this.header && (
-                  <span class="tk-dialog-title" {...this.__getTestIdAttribute('title')}>
+                  <span class="tk-dialog-title" {...this.__getDataTestidAttribute('title')}>
                     {this.header}
                   </span>
                 )}
@@ -262,7 +262,7 @@ export class TkDialog implements ComponentInterface {
                 type="text"
                 onTk-click={this.handleCloseButtonClick}
                 aria-label="Close dialog"
-                {...this.__getTestIdAttribute('close-button')}
+                {...this.__getDataTestidAttribute('close-button')}
               ></tk-button>
             )}
           </div>
@@ -275,13 +275,13 @@ export class TkDialog implements ComponentInterface {
   private createContent() {
     if (this.hasContentSlot) {
       return (
-        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content')}>
+        <div class="tk-dialog-content" {...this.__getDataTestidAttribute('content')}>
           <slot name="content"></slot>
         </div>
       );
     } else if (this.hasDefaultSlotContent) {
       return (
-        <div class="tk-dialog-content" {...this.__getTestIdAttribute('content')}>
+        <div class="tk-dialog-content" {...this.__getDataTestidAttribute('content')}>
           <slot></slot>
         </div>
       );
@@ -293,13 +293,13 @@ export class TkDialog implements ComponentInterface {
   private createFooter() {
     if (this.hasFooterSlot) {
       return (
-        <div {...this.__getTestIdAttribute('footer')}>
+        <div {...this.__getDataTestidAttribute('footer')}>
           <slot name="footer"></slot>
         </div>
       );
     } else if (this.hasFooterActionsSlot) {
       return (
-        <div class="tk-dialog-footer" {...this.__getTestIdAttribute('footer')}>
+        <div class="tk-dialog-footer" {...this.__getDataTestidAttribute('footer')}>
           <slot name="footer-actions"></slot>
         </div>
       );
@@ -318,7 +318,7 @@ export class TkDialog implements ComponentInterface {
       'style': { display: 'flex', flexDirection: 'column', ...this.containerStyle },
       'role': 'dialog',
       'aria-modal': true,
-      ...this.__getTestIdAttribute('root'),
+      ...this.__getDataTestidAttribute('root'),
     };
 
     return (
@@ -332,7 +332,7 @@ export class TkDialog implements ComponentInterface {
 
   private renderMask() {
     const dialog = this.hasContainerSlot ? (
-      <div>
+      <div {...this.__getDataTestidAttribute('container')}>
         <slot name="container"></slot>
       </div>
     ) : (
@@ -344,8 +344,8 @@ export class TkDialog implements ComponentInterface {
       'tk-dialog-mask-blur': this.isMaskBlur,
     });
     return (
-      <div class={maskClasses} {...this.__getTestIdAttribute()}>
-        <div class="tk-dialog-overlay" onClick={() => this.handleOverlayClick()} {...this.__getTestIdAttribute('overlay')}></div>
+      <div class={maskClasses} {...this.__getDataTestidAttribute()}>
+        <div class="tk-dialog-overlay" onClick={() => this.handleOverlayClick()} {...this.__getDataTestidAttribute('overlay')}></div>
         {dialog}
       </div>
     );
