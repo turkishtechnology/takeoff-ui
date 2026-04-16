@@ -222,11 +222,7 @@ export class TkDialog implements ComponentInterface {
   private createHeader() {
     if (this.showHeader) {
       if (this.hasHeaderSlot) {
-        return (
-          <div {...this.__getDataTestidAttribute('header')}>
-            <slot name="header"></slot>
-          </div>
-        );
+        return <slot name="header"></slot>;
       } else {
         const headerClasses = classNames('tk-dialog-header', `tk-dialog-header-${this.headerType}`);
 
@@ -292,11 +288,7 @@ export class TkDialog implements ComponentInterface {
 
   private createFooter() {
     if (this.hasFooterSlot) {
-      return (
-        <div {...this.__getDataTestidAttribute('footer')}>
-          <slot name="footer"></slot>
-        </div>
-      );
+      return <slot name="footer"></slot>;
     } else if (this.hasFooterActionsSlot) {
       return (
         <div class="tk-dialog-footer" {...this.__getDataTestidAttribute('footer')}>
@@ -331,13 +323,7 @@ export class TkDialog implements ComponentInterface {
   }
 
   private renderMask() {
-    const dialog = this.hasContainerSlot ? (
-      <div {...this.__getDataTestidAttribute('container')}>
-        <slot name="container"></slot>
-      </div>
-    ) : (
-      this.createDialog()
-    );
+    const dialog = this.hasContainerSlot ? <slot name="container"></slot> : this.createDialog();
     const maskClasses = classNames('tk-dialog-mask', `tk-dialog-mask-${this.maskVariant}`, {
       'tk-dialog-visible': this.visible,
       'tk-dialog-mask-hidden': this.hideBackdrop,
