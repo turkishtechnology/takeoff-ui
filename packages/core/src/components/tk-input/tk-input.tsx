@@ -10,6 +10,7 @@ import { IChipOptions } from '../tk-chips/types';
 import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { renderHint } from '../../utils/hint-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -182,6 +183,11 @@ export class TkInput implements ComponentInterface {
   @Prop() hidePasswordIcon: boolean = false;
 
   /**
+   * Test identifier for automated testing.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -349,6 +355,10 @@ export class TkInput implements ComponentInterface {
     }
     return numValue;
   };
+
+  private __getTestIdAttribute(...suffixes: string[]) {
+    return getDataTestidAttribute(this.dataTestid, 'input', ...suffixes);
+  }
 
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
@@ -588,7 +598,11 @@ export class TkInput implements ComponentInterface {
         else if (this.passwordStrength < 4) className += ' medium';
         else className += ' strong';
       }
-      lines.push(<span class={className}>&nbsp;</span>);
+      lines.push(
+        <span class={className} {...this.__getTestIdAttribute('strength-line')}>
+          &nbsp;
+        </span>,
+      );
     }
     return lines;
   }
@@ -619,7 +633,7 @@ export class TkInput implements ComponentInterface {
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
-        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps}></tk-chips>;
+        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps} {...this.__getTestIdAttribute('chip')}></tk-chips>;
       });
     }
   }
@@ -645,6 +659,7 @@ export class TkInput implements ComponentInterface {
         onFocus={this.handleInputFocus}
         onKeyDown={this.handleInputKeyDown}
         onKeyUp={this.handleInputKeyUp}
+        {...this.__getTestIdAttribute('native')}
       />
     );
   }
@@ -652,9 +667,13 @@ export class TkInput implements ComponentInterface {
   private renderLabel(): HTMLLabelElement {
     let label;
     if (this.label?.length > 0) {
-      const asterisk = <span class="asterisk">*</span>;
+      const asterisk = (
+        <span class="asterisk" {...this.__getTestIdAttribute('label-asterisk')}>
+          *
+        </span>
+      );
       label = (
-        <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick}>
+        <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick} {...this.__getTestIdAttribute('label')}>
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -674,6 +693,7 @@ export class TkInput implements ComponentInterface {
             {
               class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
               onClick: this.handleMinusButtonClick.bind(this),
+              ...this.__getTestIdAttribute('counter-decrease'),
             },
             undefined,
             'span',
@@ -688,6 +708,7 @@ export class TkInput implements ComponentInterface {
             {
               class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
               onClick: this.handlePlusButtonClick.bind(this),
+              ...this.__getTestIdAttribute('counter-increase'),
             },
             undefined,
             'span',
@@ -704,7 +725,7 @@ export class TkInput implements ComponentInterface {
 
     if (this.inputType == 'password') {
       if (!this.hidePasswordIcon) {
-        passwordLeftIcon = <tk-icon {...getIconElementProps('lock', { color: 'var(--icon-base)' })} />;
+        passwordLeftIcon = <tk-icon {...getIconElementProps('lock', { color: 'var(--icon-base)', ...this.__getTestIdAttribute('password-lock') })} />;
       }
       passwordRightIcon = (
         <tk-icon
@@ -713,6 +734,7 @@ export class TkInput implements ComponentInterface {
             color: 'var(--icon-base)',
             onMouseDown: this.handleMouseDown,
             onMouseUp: this.handleMouseUp,
+            ...this.__getTestIdAttribute('password-visibility'),
           })}
         />
       );
@@ -726,7 +748,11 @@ export class TkInput implements ComponentInterface {
     let safetyStatus: HTMLElement;
 
     if (this.showSafetyStatus) {
-      safetyStatus = <div class="safety-status">{this.renderStrengthLines()}</div>;
+      safetyStatus = (
+        <div class="safety-status" {...this.__getTestIdAttribute('safety-status')}>
+          {this.renderStrengthLines()}
+        </div>
+      );
     }
 
     const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
@@ -734,7 +760,11 @@ export class TkInput implements ComponentInterface {
 
     // Handle icon rendering using utility function
     if (this.icon && !this.isCounter) {
-      const { leftIcon, rightIcon } = renderIcons(this.icon, { additionalProps: { color: 'var(--icon-base)' } }, this.iconPosition);
+      const { leftIcon, rightIcon } = renderIcons(
+        this.icon,
+        { additionalProps: { color: 'var(--icon-base)' }, dataTestid: this.dataTestid, dataTestidComponent: 'input' },
+        this.iconPosition,
+      );
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }
@@ -750,21 +780,23 @@ export class TkInput implements ComponentInterface {
     }
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
+      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} {...this.__getTestIdAttribute()}>
         {this.renderLabel()}
-        <div class="tk-input">
+        <div class="tk-input" {...this.__getTestIdAttribute('control')}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
           {this.renderAlignmentButtons().left}
           {this.pre && (
-            <div class={prefixClass}>
-              <span class="tk-input-prefix-text">{this.pre}</span>
-              <span class="tk-input-divider"></span>
+            <div class={prefixClass} {...this.__getTestIdAttribute('prefix')}>
+              <span class="tk-input-prefix-text" {...this.__getTestIdAttribute('prefix-text')}>
+                {this.pre}
+              </span>
+              <span class="tk-input-divider" {...this.__getTestIdAttribute('prefix-divider')}></span>
             </div>
           )}
           {this.renderInput()}
-          {this.loading && <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}></tk-spinner>}
+          {this.loading && <tk-spinner size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'} {...this.__getTestIdAttribute('loading')}></tk-spinner>}
           {showClearButton && (
             <tk-icon
               {...getIconElementProps('close', {
@@ -773,6 +805,7 @@ export class TkInput implements ComponentInterface {
                 onClick: this.handleClearButtonClick,
                 onKeyDown: this.handleClearButtonKeyDown,
                 tabindex: this.disabled || this.readonly ? -1 : 0,
+                ...this.__getTestIdAttribute('clear-button'),
               })}
             />
           )}
@@ -781,7 +814,7 @@ export class TkInput implements ComponentInterface {
           {this.renderAlignmentButtons().right}
         </div>
         {safetyStatus}
-        {renderHint(this.hint, this.error, this.invalid)}
+        {renderHint(this.hint, this.error, this.invalid, this.dataTestid, 'input')}
       </div>
     );
   }
