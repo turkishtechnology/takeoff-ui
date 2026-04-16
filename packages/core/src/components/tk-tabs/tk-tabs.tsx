@@ -232,7 +232,7 @@ export class TkTabs implements ComponentInterface {
     }
   }
 
-  private __getTestIdAttribute(...suffixes: string[]) {
+  private __getDataTestidAttribute(...suffixes: string[]) {
     return getDataTestidAttribute(this.dataTestid, 'tabs', ...suffixes);
   }
 
@@ -240,13 +240,15 @@ export class TkTabs implements ComponentInterface {
     renderIcons(tab.icon, {
       variant: this.getIconVariant(index),
       size: this.size === 'xxsmall' || this.size === 'xsmall' ? 'base' : 'medium',
+      dataTestid: this.dataTestid,
+      dataTestidComponent: 'tabs',
     });
 
   private renderTabBadge(tab: HTMLTkTabsItemElement, index: number) {
     if (tab.badged) {
       const badgeSize = this.size === 'xsmall' || this.size === 'xxsmall' ? 'small' : this.size;
       return (
-        <div class="tk-tabs-item-badge-container" {...this.__getTestIdAttribute(`item-${index}-badge`)}>
+        <div class="tk-tabs-item-badge-container" {...this.__getDataTestidAttribute('item-badge')}>
           <tk-badge
             label={tab.badgeLabel}
             count={tab.badgeCount}
@@ -254,6 +256,7 @@ export class TkTabs implements ComponentInterface {
             type={tab.badgeOptions?.type ?? 'filledlight'}
             rounded={tab.badgeOptions?.rounded ?? true}
             size={badgeSize}
+            {...this.__getDataTestidAttribute('item-badge')}
           />
         </div>
       );
@@ -270,11 +273,13 @@ export class TkTabs implements ComponentInterface {
             description={tab.tooltipOptions.description}
             position={tab.tooltipOptions.position || 'bottom'}
             variant={tab.tooltipOptions.variant || 'dark'}
+            {...this.__getDataTestidAttribute('item-tooltip')}
           >
             <tk-icon
               slot="trigger"
               {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
               size={this.size === 'xxsmall' ? 'xsmall' : this.size}
+              {...this.__getDataTestidAttribute('item-tooltip-icon')}
             />
           </tk-tooltip>
         );
@@ -289,7 +294,7 @@ export class TkTabs implements ComponentInterface {
     const rootProps = {
       class: rootClasses,
       style: this.containerStyle,
-      ...this.__getTestIdAttribute(),
+      ...this.__getDataTestidAttribute(),
     };
 
     const headersProps = {
@@ -298,13 +303,13 @@ export class TkTabs implements ComponentInterface {
         justifyContent: this.alignHeaders,
         ...(this.headerContainerStyle && { ...this.headerContainerStyle }),
       },
-      ...this.__getTestIdAttribute('headers'),
+      ...this.__getDataTestidAttribute('headers'),
     };
 
     const contentProps = {
       class: 'tab-content',
       style: this.contentStyle,
-      ...this.__getTestIdAttribute('content'),
+      ...this.__getDataTestidAttribute('content'),
     };
 
     return (
@@ -314,10 +319,10 @@ export class TkTabs implements ComponentInterface {
             const headerClasses = classNames('tab-header', { 'active': this.internalActiveIndex === index, 'tk-tab-header-disabled': tab.disabled });
             const tabIcons = this.createTabIcons(tab, index);
             return (
-              <div class={headerClasses} onClick={() => this.handleTabClick(index)} {...this.__getTestIdAttribute(`item-${index}`)}>
+              <div class={headerClasses} onClick={() => this.handleTabClick(index)} {...this.__getDataTestidAttribute('item')}>
                 {tabIcons.leftIcon}
-                <div class="tk-tabs-item-label-container" {...this.__getTestIdAttribute(`item-${index}-label-container`)}>
-                  <span class="tk-tabs-item-label" {...this.__getTestIdAttribute(`item-${index}-label`)}>
+                <div class="tk-tabs-item-label-container" {...this.__getDataTestidAttribute('item-label-container')}>
+                  <span class="tk-tabs-item-label" {...this.__getDataTestidAttribute('item-label')}>
                     {tab.label}
                   </span>
                   {this.renderTabBadge(tab, index)}
@@ -327,7 +332,7 @@ export class TkTabs implements ComponentInterface {
                 {this.isClosable && (
                   <tk-icon
                     {...getIconElementProps('close', { variant: this.getIconVariant(index) })}
-                    {...this.__getTestIdAttribute(`item-${index}-close`)}
+                    {...this.__getDataTestidAttribute('item-close')}
                     onClick={e => {
                       e.stopPropagation();
                       this.closeTab(index);
@@ -340,15 +345,15 @@ export class TkTabs implements ComponentInterface {
           {this.isExtendable && (
             <tk-icon
               {...getIconElementProps('add', { variant: 'neutral', class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })}
-              {...this.__getTestIdAttribute('add-icon')}
+              {...this.__getDataTestidAttribute('add-icon')}
             />
           )}
         </div>
         <div {...contentProps}>
           {this.internalTabItems.map((_tab, index) => (
-            <div class={`tab-panel ${this.internalActiveIndex === index ? 'active' : 'hidden'}`} key={index} {...this.__getTestIdAttribute(`panel-${index}`)}>
+            <div class={`tab-panel ${this.internalActiveIndex === index ? 'active' : 'hidden'}`} key={index} {...this.__getDataTestidAttribute('panel')}>
               {this.internalActiveIndex === index && (
-                <div>
+                <div {...this.__getDataTestidAttribute('tab-content')}>
                   <slot name={`tab-content-${index}`}></slot>
                 </div>
               )}

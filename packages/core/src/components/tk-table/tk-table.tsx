@@ -320,17 +320,6 @@ export class TkTable implements ComponentInterface {
     }
   }
 
-  private __getTestIdAttribute(...suffixes: Array<string | undefined>) {
-    return getDataTestidAttribute(this.dataTestid, 'table', ...suffixes);
-  }
-
-  private setTestIdAttribute(el: Element, ...suffixes: Array<string | undefined>) {
-    const testId = this.__getTestIdAttribute(...suffixes)['data-testid'];
-    if (testId) {
-      el.setAttribute('data-testid', testId);
-    }
-  }
-
   componentWillLoad(): Promise<void> | void {
     this.hasHeaderRightSlot = !!this.el.querySelector('[slot="header-right"]');
     this.hasEmptyDataSlot = !!this.el.querySelector('[slot="empty-data"]');
@@ -931,6 +920,17 @@ export class TkTable implements ComponentInterface {
     return selectableRows.every(row => this.selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
   }
 
+  private __getDataTestidAttribute(...suffixes: Array<string | undefined>) {
+    return getDataTestidAttribute(this.dataTestid, 'table', ...suffixes);
+  }
+
+  private setDataTestidAttribute(el: Element, ...suffixes: Array<string | undefined>) {
+    const testId = this.__getDataTestidAttribute(...suffixes)['data-testid'];
+    if (testId) {
+      el.setAttribute('data-testid', testId);
+    }
+  }
+
   private async handleSearchIconClick(refSearchIcon: HTMLTkIconElement, field: string) {
     if (!this.isFilterOpen) {
       this.isFilterOpen = true;
@@ -1126,7 +1126,7 @@ export class TkTable implements ComponentInterface {
     this.elFilterPanelElement = document.createElement('div');
     this.elFilterPanelElement.classList.add('tk-table-filter-panel');
     this.elFilterPanelElement.classList.add(`${field}-filter-panel`);
-    this.setTestIdAttribute(this.elFilterPanelElement, 'filter-panel', field);
+    this.setDataTestidAttribute(this.elFilterPanelElement, 'filter-panel');
 
     // Find the column configuration for this field
     const column = this.columns.find(col => col.field === field);
@@ -1136,7 +1136,7 @@ export class TkTable implements ComponentInterface {
       // Create checkbox filter
       const filterContainer = document.createElement('div');
       filterContainer.classList.add('tk-table-filter-checkbox-container');
-      this.setTestIdAttribute(filterContainer, 'filter-checkbox-container', field);
+      this.setDataTestidAttribute(filterContainer, 'filter-checkbox-container');
 
       // Get current filter values for this field
       const currentFilter = this.filters.find(filter => filter.field === field);
@@ -1151,7 +1151,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setTestIdAttribute(optionsSearchInput, 'filter-options-search-input', field);
+        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1186,7 +1186,7 @@ export class TkTable implements ComponentInterface {
       if (!column?.filterElements?.selectAllCheckbox?.hide) {
         allCheckbox = document.createElement('tk-checkbox');
         allCheckbox.classList.add('select-all');
-        this.setTestIdAttribute(allCheckbox, 'filter-select-all-checkbox', field);
+        this.setDataTestidAttribute(allCheckbox, 'filter-select-all-checkbox');
         allCheckbox.label = column?.filterElements?.selectAllCheckbox?.label || 'Select All';
         allCheckbox.value = selectedValues.length === column.filterOptions.length;
         if (selectedValues.length > 0 && selectedValues.length < column.filterOptions.length) {
@@ -1214,11 +1214,12 @@ export class TkTable implements ComponentInterface {
       column.filterOptions.forEach(option => {
         const checkboxWrapper = document.createElement('div');
         checkboxWrapper.classList.add('tk-table-filter-checkbox-item');
+        this.setDataTestidAttribute(checkboxWrapper, 'filter-checkbox-item');
 
         const checkbox = document.createElement('tk-checkbox');
         checkbox.value = selectedValues.includes(option.value);
         checkbox.label = option.label || option.value;
-        this.setTestIdAttribute(checkbox, 'filter-option-checkbox', field, `${option.value}`);
+        this.setDataTestidAttribute(checkbox, 'filter-option-checkbox');
 
         if (!column?.filterElements?.selectAllCheckbox?.hide) {
           checkbox.addEventListener('tk-change', () => {
@@ -1250,7 +1251,7 @@ export class TkTable implements ComponentInterface {
       // Create radio filter
       const filterContainer = document.createElement('div');
       filterContainer.classList.add('tk-table-filter-radio-container');
-      this.setTestIdAttribute(filterContainer, 'filter-radio-container', field);
+      this.setDataTestidAttribute(filterContainer, 'filter-radio-container');
 
       // Get current filter value for this field
       const currentFilter = this.filters.find(filter => filter.field === field);
@@ -1261,7 +1262,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setTestIdAttribute(optionsSearchInput, 'filter-options-search-input', field);
+        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1278,12 +1279,13 @@ export class TkTable implements ComponentInterface {
       column.filterOptions.forEach(option => {
         const radioWrapper = document.createElement('div');
         radioWrapper.classList.add('tk-table-filter-radio-item');
+        this.setDataTestidAttribute(radioWrapper, 'filter-radio-item');
 
         const radio = document.createElement('tk-radio');
         radio.value = option.value;
         radio.name = radioGroupName;
         radio.label = option.label || option.value;
-        this.setTestIdAttribute(radio, 'filter-option-radio', field, `${option.value}`);
+        this.setDataTestidAttribute(radio, 'filter-option-radio');
 
         // Check if this option is currently selected
         if (selectedValue === option.value) {
@@ -1298,10 +1300,10 @@ export class TkTable implements ComponentInterface {
     } else if (column?.filterType === 'datepicker') {
       const filterContainer = document.createElement('div');
       filterContainer.classList.add('tk-table-filter-datepicker-container');
-      this.setTestIdAttribute(filterContainer, 'filter-datepicker-container', field);
+      this.setDataTestidAttribute(filterContainer, 'filter-datepicker-container');
 
       const datepicker = document.createElement('tk-datepicker');
-      this.setTestIdAttribute(datepicker, 'filter-datepicker', field);
+      this.setDataTestidAttribute(datepicker, 'filter-datepicker');
       const defaultDatepickerProps = {
         label: 'Select a date',
         placeholder: 'Choose a date',
@@ -1329,7 +1331,7 @@ export class TkTable implements ComponentInterface {
       // Create treeview filter
       const filterContainer = document.createElement('div');
       filterContainer.classList.add('tk-table-filter-treeview-container');
-      this.setTestIdAttribute(filterContainer, 'filter-treeview-container', field);
+      this.setDataTestidAttribute(filterContainer, 'filter-treeview-container');
 
       // Get current filter value for this field
       const currentFilter = this.filters.find(filter => filter.field === field);
@@ -1337,7 +1339,7 @@ export class TkTable implements ComponentInterface {
 
       // Create treeview component first
       const treeview = document.createElement('tk-tree-view') as any;
-      this.setTestIdAttribute(treeview, 'filter-treeview', field);
+      this.setDataTestidAttribute(treeview, 'filter-treeview');
       const treeviewConfig = column?.filterElements?.treeViewOptions ?? {};
       treeview.selectable = true;
       treeview.size = treeviewConfig?.size ?? 'small';
@@ -1362,7 +1364,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setTestIdAttribute(optionsSearchInput, 'filter-options-search-input', field);
+        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1401,7 +1403,7 @@ export class TkTable implements ComponentInterface {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
       const searchInputConfig = column?.filterElements?.searchInput ?? {};
-      this.setTestIdAttribute(input, 'filter-search-input', field);
+      this.setDataTestidAttribute(input, 'filter-search-input');
       input.placeholder = searchInputConfig?.placeholder || 'Search';
       input.label = searchInputConfig?.label;
       input.maskOptions = searchInputConfig?.maskOptions;
@@ -1427,14 +1429,14 @@ export class TkTable implements ComponentInterface {
     // Create buttons container
     const buttons = document.createElement('div');
     buttons.classList.add('tk-table-filter-panel-buttons');
-    this.setTestIdAttribute(buttons, 'filter-panel-buttons', field);
+    this.setDataTestidAttribute(buttons, 'filter-panel-buttons');
 
     // Create cancel button
     const cancelButton: HTMLTkButtonElement = document.createElement('tk-button');
     cancelButton.label = column?.filterElements?.cancelButton?.label || column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
-    this.setTestIdAttribute(cancelButton, 'filter-cancel-button', field);
+    this.setDataTestidAttribute(cancelButton, 'filter-cancel-button');
     cancelButton.addEventListener('tk-click', () => {
       this.handleSearchCancelButtonClick(field);
       this.isFilterOpen = false;
@@ -1444,7 +1446,7 @@ export class TkTable implements ComponentInterface {
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
     searchButton.label = column?.filterElements?.searchButton?.label || column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
-    this.setTestIdAttribute(searchButton, 'filter-apply-button', field);
+    this.setDataTestidAttribute(searchButton, 'filter-apply-button');
     searchButton.addEventListener('tk-click', () => {
       this.handleSearchButtonClick(field);
       // We don't need to close the filter panel here anymore since it's closed in the apply methods
@@ -1872,22 +1874,22 @@ export class TkTable implements ComponentInterface {
               { 'tk-table-collapsible-group-header': this.collapsibleGroups },
               { 'tk-table-group-collapsed': this.collapsibleGroups && !isGroupExpanded },
             )}
-            {...this.__getTestIdAttribute('group-header-row', `${group.groupValue}`)}
+            {...this.__getDataTestidAttribute('group-header-row')}
             onClick={() => this.toggleExpandGroup(group.groupValue)}
           >
-            <td colSpan={totalColumns} class="tk-table-group-header-cell" {...this.__getTestIdAttribute('group-header-cell', `${group.groupValue}`)}>
-              <div class="tk-table-group-header-content" {...this.__getTestIdAttribute('group-header-content', `${group.groupValue}`)}>
+            <td colSpan={totalColumns} class="tk-table-group-header-cell" {...this.__getDataTestidAttribute('group-header-cell')}>
+              <div class="tk-table-group-header-content" {...this.__getDataTestidAttribute('group-header-content')}>
                 {this.collapsibleGroups && (
                   <tk-icon
                     icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
                     variant="neutral"
-                    {...this.__getTestIdAttribute('group-header-toggle-icon', `${group.groupValue}`)}
+                    {...this.__getDataTestidAttribute('group-header-toggle-icon')}
                   />
                 )}
-                <span class="tk-table-group-value" {...this.__getTestIdAttribute('group-header-value', `${group.groupValue}`)}>
+                <span class="tk-table-group-value" {...this.__getDataTestidAttribute('group-header-value')}>
                   {group.groupValue}
                 </span>
-                <span class="tk-table-group-count" {...this.__getTestIdAttribute('group-header-count', `${group.groupValue}`)}>
+                <span class="tk-table-group-count" {...this.__getDataTestidAttribute('group-header-count')}>
                   ({group.groupCount})
                 </span>
               </div>
@@ -1936,7 +1938,7 @@ export class TkTable implements ComponentInterface {
         <td
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
           style={this.getSelectionStickyStyle(index)}
-          {...this.__getTestIdAttribute('body-row-selection-cell', `${index}`)}
+          {...this.__getDataTestidAttribute('body-row-selection-cell')}
         >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
@@ -1944,7 +1946,7 @@ export class TkTable implements ComponentInterface {
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
             onClick={e => e.stopPropagation()}
-            {...this.__getTestIdAttribute('body-row-selection-checkbox', `${index}`)}
+            {...this.__getDataTestidAttribute('body-row-selection-checkbox')}
           ></tk-checkbox>
         </td>
       );
@@ -1953,7 +1955,7 @@ export class TkTable implements ComponentInterface {
         <td
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
           style={this.getSelectionStickyStyle(index)}
-          {...this.__getTestIdAttribute('body-row-selection-cell', `${index}`)}
+          {...this.__getDataTestidAttribute('body-row-selection-cell')}
         >
           <tk-radio
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
@@ -1963,7 +1965,7 @@ export class TkTable implements ComponentInterface {
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
             onClick={e => e.stopPropagation()}
-            {...this.__getTestIdAttribute('body-row-selection-radio', `${index}`)}
+            {...this.__getDataTestidAttribute('body-row-selection-radio')}
           ></tk-radio>
         </td>
       );
@@ -1974,7 +1976,7 @@ export class TkTable implements ComponentInterface {
 
     return (
       <Fragment>
-        <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled} {...this.__getTestIdAttribute('body-row', `${index}`)}>
+        <tr class={isSelected ? 'selected' : ''} onClick={e => this.handleRowClick(e, row)} aria-disabled={isRowDisabled} {...this.__getDataTestidAttribute('body-row')}>
           {selectionTd}
           {this.columns.map(col => {
             let tdExpanderButtonRef!: HTMLTkButtonElement;
@@ -1995,7 +1997,7 @@ export class TkTable implements ComponentInterface {
                 <td
                   class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                   style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
-                  {...this.__getTestIdAttribute('body-cell-expander', `${index}`, col.field)}
+                  {...this.__getDataTestidAttribute('body-cell-expander')}
                 >
                   <tk-button
                     ref={el => (tdExpanderButtonRef = el)}
@@ -2005,7 +2007,7 @@ export class TkTable implements ComponentInterface {
                     type="text"
                     size="small"
                     onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                    {...this.__getTestIdAttribute('expander-button', `${index}`, col.field)}
+                    {...this.__getDataTestidAttribute('body-expander-button')}
                   ></tk-button>
                 </td>
               );
@@ -2028,7 +2030,7 @@ export class TkTable implements ComponentInterface {
                   <td
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     innerHTML={effectiveElement}
-                    {...this.__getTestIdAttribute('body-cell-html', `${index}`, col.field)}
+                    {...this.__getDataTestidAttribute('body-cell-html')}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
                       ...styleRowObject,
@@ -2045,7 +2047,7 @@ export class TkTable implements ComponentInterface {
                   <td
                     ref={el => el?.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                    {...this.__getTestIdAttribute('body-cell-custom', `${index}`, col.field)}
+                    {...this.__getDataTestidAttribute('body-cell-custom')}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
                       ...styleRowObject,
@@ -2059,7 +2061,7 @@ export class TkTable implements ComponentInterface {
               return (
                 <td
                   class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                  {...this.__getTestIdAttribute('body-cell-editable', `${index}`, col.field)}
+                  {...this.__getDataTestidAttribute('body-cell-editable')}
                   style={{
                     ...this.getStickyColumnStyle(col, index),
                     ...styleRowObject,
@@ -2072,7 +2074,7 @@ export class TkTable implements ComponentInterface {
                     type="text"
                     onKeyDown={e => handleInputKeydown(e, this.el)}
                     onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
-                    {...this.__getTestIdAttribute('body-cell-editable-input', `${index}`, col.field)}
+                    {...this.__getDataTestidAttribute('body-cell-editable-input')}
                   ></input>
                 </td>
               );
@@ -2080,7 +2082,7 @@ export class TkTable implements ComponentInterface {
               return (
                 <td
                   class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                  {...this.__getTestIdAttribute('body-cell', `${index}`, col.field)}
+                  {...this.__getDataTestidAttribute('body-cell')}
                   style={{
                     ...this.getStickyColumnStyle(col, index),
                     ...styleRowObject,
@@ -2093,8 +2095,8 @@ export class TkTable implements ComponentInterface {
           })}
         </tr>
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
-          <tr {...this.__getTestIdAttribute('expanded-row', `${index}`)}>
-            <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}} {...this.__getTestIdAttribute('expanded-row-cell', `${index}`)}>
+          <tr {...this.__getDataTestidAttribute('body-expanded-row')}>
+            <td colSpan={100} style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}} {...this.__getDataTestidAttribute('body-expanded-row-cell')}>
               <slot name={`expand-content-${row[this.dataKey]}`} />
             </td>
           </tr>
@@ -2194,7 +2196,7 @@ export class TkTable implements ComponentInterface {
         <th
           style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
-          {...this.__getTestIdAttribute('head-selection-cell')}
+          {...this.__getDataTestidAttribute('head-selection-cell')}
         >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-all` : undefined}
@@ -2203,7 +2205,7 @@ export class TkTable implements ComponentInterface {
             ref={el => (this.refSelectAll = el)}
             indeterminate={Array.isArray(this.selection) && this.selection.length > 0 && !this.isAllRowsSelected()}
             onTk-change={e => this.handleSelectAll(e.detail)}
-            {...this.__getTestIdAttribute('head-selection-checkbox')}
+            {...this.__getDataTestidAttribute('head-selection-checkbox')}
           ></tk-checkbox>
         </th>
       );
@@ -2213,14 +2215,14 @@ export class TkTable implements ComponentInterface {
         <th
           style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
-          {...this.__getTestIdAttribute('head-selection-cell')}
+          {...this.__getDataTestidAttribute('head-selection-cell')}
         ></th>
       );
     }
 
     return (
-      <thead class={theadClasses} {...this.__getTestIdAttribute('head')}>
-        <tr {...this.__getTestIdAttribute('head-row')}>
+      <thead class={theadClasses} {...this.__getDataTestidAttribute('head')}>
+        <tr {...this.__getDataTestidAttribute('head-row')}>
           {selectionTh}
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
@@ -2237,7 +2239,7 @@ export class TkTable implements ComponentInterface {
             _headerStructure = (
               <div
                 class="header-container"
-                {...this.__getTestIdAttribute('head-cell-header-container', col.field)}
+                {...this.__getDataTestidAttribute('head-cell-header-container')}
                 ref={el => {
                   if (_customHeader) {
                     if (typeof _customHeader === 'string') {
@@ -2281,7 +2283,7 @@ export class TkTable implements ComponentInterface {
                     ...this.getStickyColumnStyle(col),
                     ...col?.style,
                   }}
-                  {...this.__getTestIdAttribute('head-cell-expander', col.field)}
+                  {...this.__getDataTestidAttribute('head-cell-expander')}
                 ></th>
               );
             }
@@ -2293,7 +2295,7 @@ export class TkTable implements ComponentInterface {
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
             _sortIcon = showBadge ? (
-              <tk-badge count={sortIndex + 1} type="text" rounded size="small" {...this.__getTestIdAttribute('head-cell-sort-badge', col.field)}>
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small" {...this.__getDataTestidAttribute('head-cell-sort-badge')}>
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
@@ -2301,7 +2303,7 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
-                  {...this.__getTestIdAttribute('head-cell-sort-icon', col.field)}
+                  {...this.__getDataTestidAttribute('head-cell-sort-icon')}
                 />
               </tk-badge>
             ) : (
@@ -2312,7 +2314,7 @@ export class TkTable implements ComponentInterface {
                   ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
-                {...this.__getTestIdAttribute('head-cell-sort-icon', col.field)}
+                {...this.__getDataTestidAttribute('head-cell-sort-icon')}
               />
             );
 
@@ -2334,14 +2336,14 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
-                  {...this.__getTestIdAttribute('head-cell-search-icon', col.field)}
+                  {...this.__getDataTestidAttribute('head-cell-search-icon')}
                 />
               );
 
               // filtrelenmiş ise badge ile göster
               if (hasFilter) {
                 _searchIcon = (
-                  <tk-badge dot {...this.__getTestIdAttribute('head-cell-search-badge', col.field)}>
+                  <tk-badge dot {...this.__getDataTestidAttribute('head-cell-search-badge')}>
                     {_searchIcon}
                   </tk-badge>
                 );
@@ -2361,14 +2363,14 @@ export class TkTable implements ComponentInterface {
                   ...col?.style,
                 }}
                 data-field={col.field}
-                {...this.__getTestIdAttribute('head-cell', col.field)}
+                {...this.__getDataTestidAttribute('head-cell')}
               >
-                <div class="tk-table-head-cell" {...this.__getTestIdAttribute('head-cell-content', col.field)}>
+                <div class="tk-table-head-cell" {...this.__getDataTestidAttribute('head-cell-content')}>
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div
                       class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && noSortAndFilter && !filterPanelOpen }, buttonDirection)}
-                      {...this.__getTestIdAttribute('head-cell-icons', col.field)}
+                      {...this.__getDataTestidAttribute('head-cell-icons')}
                     >
                       {col.sortable && _sortIcon}
                       {_searchIcon}
@@ -2378,7 +2380,7 @@ export class TkTable implements ComponentInterface {
                   <div
                     class="tk-table-resize-handle"
                     onMouseDown={e => this.handleMouseDown(e, this.columns.indexOf(col))}
-                    {...this.__getTestIdAttribute('head-cell-resize-handle', col.field)}
+                    {...this.__getDataTestidAttribute('head-cell-resize-handle')}
                   ></div>
                 </div>
               </th>
@@ -2396,7 +2398,7 @@ export class TkTable implements ComponentInterface {
 
     if (this.renderData.length > 0) {
       return (
-        <tbody {...this.__getTestIdAttribute('body')}>
+        <tbody {...this.__getDataTestidAttribute('body')}>
           <slot name="body-header"></slot>
 
           {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
@@ -2406,9 +2408,9 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.hasEmptyFilterSlot && this.filters?.length > 0) {
       return (
-        <tbody {...this.__getTestIdAttribute('body-empty-filter')}>
-          <tr {...this.__getTestIdAttribute('body-empty-filter-row')}>
-            <td colSpan={100} {...this.__getTestIdAttribute('body-empty-filter-cell')}>
+        <tbody {...this.__getDataTestidAttribute('body-empty-filter')}>
+          <tr {...this.__getDataTestidAttribute('body-empty-filter-row')}>
+            <td colSpan={100} {...this.__getDataTestidAttribute('body-empty-filter-cell')}>
               <slot name="empty-filter" />
             </td>
           </tr>
@@ -2416,9 +2418,9 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.hasEmptyDataSlot) {
       return (
-        <tbody {...this.__getTestIdAttribute('body-empty-data')}>
-          <tr {...this.__getTestIdAttribute('body-empty-data-row')}>
-            <td colSpan={100} {...this.__getTestIdAttribute('body-empty-data-cell')}>
+        <tbody {...this.__getDataTestidAttribute('body-empty-data')}>
+          <tr {...this.__getDataTestidAttribute('body-empty-data-row')}>
+            <td colSpan={100} {...this.__getDataTestidAttribute('body-empty-data-cell')}>
               <slot name="empty-data" />
             </td>
           </tr>
@@ -2430,9 +2432,9 @@ export class TkTable implements ComponentInterface {
   private renderHeader() {
     if (this.cardTitle || this.hasHeaderRightSlot)
       return (
-        <div class="tk-table-header" {...this.__getTestIdAttribute('header')}>
-          <div {...this.__getTestIdAttribute('header-title')}>{this.cardTitle}</div>
-          <div {...this.__getTestIdAttribute('header-right')}>
+        <div class="tk-table-header" {...this.__getDataTestidAttribute('header')}>
+          <div {...this.__getDataTestidAttribute('header-title')}>{this.cardTitle}</div>
+          <div {...this.__getDataTestidAttribute('header-right')}>
             <slot name="header-right"></slot>
           </div>
         </div>
@@ -2441,19 +2443,18 @@ export class TkTable implements ComponentInterface {
 
   private renderTable() {
     return (
-      <div class="table-holder" {...this.__getTestIdAttribute('table-holder')}>
-        <table {...this.__getTestIdAttribute('table')}>
+      <div class="table-holder" {...this.__getDataTestidAttribute('table-holder')}>
+        <table {...this.__getDataTestidAttribute('table')}>
           {this.createHead()}
           {this.loading ? (
-            <tbody class="loading-holder" {...this.__getTestIdAttribute('loading-holder')}>
-              <tr {...this.__getTestIdAttribute('loading-row')}>
-                <td colSpan={this.columns.length + 1} {...this.__getTestIdAttribute('loading-cell')}>
-                  <div class="loading" {...this.__getTestIdAttribute('loading-content')}>
-                    <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg" {...this.__getTestIdAttribute('loading-icon')}>
+            <tbody class="loading-holder" {...this.__getDataTestidAttribute('loading-holder')}>
+              <tr {...this.__getDataTestidAttribute('loading-row')}>
+                <td colSpan={this.columns.length + 1} {...this.__getDataTestidAttribute('loading-cell')}>
+                  <div class="loading" {...this.__getDataTestidAttribute('loading-content')}>
+                    <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg" {...this.__getDataTestidAttribute('loading-icon')}>
                       <path
                         d="M88.8501 0.5H48.8501C35.5901 0.5 23.5901 5.87 14.9101 14.56C6.2201 23.25 0.850098 35.25 0.850098 48.5C0.850098 75.01 22.3401 96.5 48.8501 96.5C75.3601 96.5 96.8501 75.01 96.8501 48.5V8.5C96.8501 4.09 93.2601 0.5 88.8501 0.5ZM71.4801 71.13C65.6901 76.92 57.6901 80.5 48.8501 80.5C31.1701 80.5 16.8501 66.18 16.8501 48.5C16.8501 39.67 20.4301 31.67 26.2201 25.87C32.0101 20.08 40.0101 16.5 48.8501 16.5C57.6901 16.5 65.6901 20.08 71.4801 25.87C77.2701 31.67 80.8501 39.67 80.8501 48.5C80.8501 57.33 77.2701 65.34 71.4801 71.13Z"
                         fill="#C92027"
-                        {...this.__getTestIdAttribute('loading-icon-path')}
                       />
                     </svg>
                   </div>
@@ -2479,7 +2480,7 @@ export class TkTable implements ComponentInterface {
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
-          {...this.__getTestIdAttribute('pagination')}
+          {...this.__getDataTestidAttribute('pagination')}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.internalRowsPerPage = e.detail;
@@ -2498,7 +2499,7 @@ export class TkTable implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} style={this.containerStyle} {...this.__getTestIdAttribute()}>
+      <div class={rootClasses} style={this.containerStyle} {...this.__getDataTestidAttribute()}>
         {this.renderHeader()}
         {this.renderTable()}
         {this.renderPagination()}
