@@ -22,6 +22,15 @@ import { renderHint } from '../../utils/hint-utils';
   formAssociated: true,
 })
 export class TkCurrencyInput implements ComponentInterface {
+  /**
+   * Minimum allowed value for the input.
+   */
+  @Prop() min?: number;
+
+  /**
+   * Maximum allowed value for the input.
+   */
+  @Prop() max?: number;
   @Element() private el!: HTMLTkCurrencyInputElement;
 
   /**
@@ -62,7 +71,10 @@ export class TkCurrencyInput implements ComponentInterface {
   @Watch('value')
   valueChanged() {
     if (this.value !== this.currentNumericValue) {
-      this.currentNumericValue = this.value || 0;
+      let clamped = this.value || 0;
+      if (typeof this.min === 'number' && clamped < this.min) clamped = this.min;
+      if (typeof this.max === 'number' && clamped > this.max) clamped = this.max;
+      this.currentNumericValue = clamped;
       this.updateDisplayValue();
     }
   }
@@ -533,7 +545,10 @@ export class TkCurrencyInput implements ComponentInterface {
       }
     }
 
-    const numericValue = this.parseFormattedValue(filteredValue);
+    let numericValue = this.parseFormattedValue(filteredValue);
+    // Clamp to min/max if set
+    if (typeof this.min === 'number' && numericValue < this.min) numericValue = this.min;
+    if (typeof this.max === 'number' && numericValue > this.max) numericValue = this.max;
 
     this.currentNumericValue = numericValue;
 
@@ -570,7 +585,10 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private handleBlur = () => {
     const target = this.inputElement;
-    const numericValue = this.parseFormattedValue(target.value);
+    let numericValue = this.parseFormattedValue(target.value);
+    // Clamp to min/max if set
+    if (typeof this.min === 'number' && numericValue < this.min) numericValue = this.min;
+    if (typeof this.max === 'number' && numericValue > this.max) numericValue = this.max;
     this.currentNumericValue = numericValue;
 
     const formattedValue = this.formatCurrency(numericValue);
