@@ -76,3 +76,34 @@ describe('tk-chips', () => {
     expect(page.root.shadowRoot.querySelector('.tk-chips').classList.contains('disabled')).toBe(true);
   });
 });
+
+describe('dataTestid', () => {
+  it('sets data-testid on chip root when dataTestid is provided', async () => {
+    const page = await newSpecPage({
+      components: [TkChips],
+      html: `<tk-chips data-testid="my-chip" label="Chip"></tk-chips>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-chips').getAttribute('data-testid')).toBe('my-chip-chips');
+  });
+
+  it('does not set data-testid when dataTestid is not provided', async () => {
+    const page = await newSpecPage({
+      components: [TkChips],
+      html: `<tk-chips label="Chip"></tk-chips>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-chips').getAttribute('data-testid')).toBeNull();
+  });
+
+  it('sets data-testid on icon and remove icon', async () => {
+    const page = await newSpecPage({
+      components: [TkChips, TkIcon],
+      html: `<tk-chips data-testid="my-chip" label="Chip" icon="star" removable="true"></tk-chips>`,
+    });
+
+    const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
+    expect(icons[0].getAttribute('data-testid')).toBe('my-chip-chips-left-icon');
+    expect(icons[1].getAttribute('data-testid')).toBe('my-chip-chips-remove');
+  });
+});

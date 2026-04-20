@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
@@ -88,6 +89,11 @@ export class TkChips implements ComponentInterface {
   @Prop() fullWidth: boolean = false;
 
   /**
+   * Sets the data-testid attribute on chip elements.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * When an element is deleted, it is triggered. It returns the label.
    */
   @Event({ eventName: 'tk-remove' }) tkRemove: EventEmitter<any>;
@@ -119,13 +125,15 @@ export class TkChips implements ComponentInterface {
         variant: this.variant,
         size: this.size === 'large' ? 'medium' : this.size,
         additionalProps: { color: this.disabled ? 'var(--icon-sub-base)' : this.type === 'filled' ? 'var(--static-white)' : undefined },
+        dataTestid: this.dataTestid,
+        dataTestidComponent: 'chips',
       },
       this.iconPosition,
     );
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
-        <div class={rootClasses} style={this.containerStyle}>
+        <div class={rootClasses} style={this.containerStyle} {...getDataTestidAttribute(this.dataTestid, 'chips')}>
           {leftIcon}
           {this.label}
           {rightIcon}
@@ -138,6 +146,7 @@ export class TkChips implements ComponentInterface {
                 onClick: () => this.handleClick(),
                 onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
                 tabIndex: this.disabled ? -1 : 0,
+                ...getDataTestidAttribute(this.dataTestid, 'chips', 'remove'),
               })}
             />
           )}
