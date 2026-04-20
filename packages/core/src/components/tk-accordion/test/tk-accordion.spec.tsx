@@ -43,6 +43,26 @@ describe('tk-accordion', () => {
       expect(accordion.getAttribute('activeIndex')).toBeFalsy();
       expect(accordion.getAttribute('allowMultiple')).toBeFalsy();
     });
+
+    it('applies data-testid to root element', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordion],
+        html: `<tk-accordion data-testid="my-accordion"></tk-accordion>`,
+      });
+
+      const root = page.root?.shadowRoot?.querySelector('[data-testid="my-accordion-accordion"]');
+      expect(root).toBeTruthy();
+    });
+
+    it('does not add data-testid when prop is not set', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordion],
+        html: `<tk-accordion></tk-accordion>`,
+      });
+
+      const anyTestId = page.root?.shadowRoot?.querySelector('[data-testid]');
+      expect(anyTestId).toBeFalsy();
+    });
     it('should render items with default properties', async () => {
       const page = await newSpecPage({
         components: [TkAccordionItem, TkAccordion],
