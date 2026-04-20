@@ -53,16 +53,16 @@ export class TkCurrencyInput implements ComponentInterface {
    * Current numeric value of the input, used for calculations and formatting.
    * This is updated based on user input and can be used in form submissions.
    */
-  @State() currentNumericValue: number = 0;
+  @State() currentNumericValue: number | '' = 0;
 
   /**
    * The value of the input.
    */
-  @Prop() value: number = 0;
+  @Prop() value: number | '' = 0;
   @Watch('value')
   valueChanged() {
     if (this.value !== this.currentNumericValue) {
-      this.currentNumericValue = this.value || 0;
+      this.currentNumericValue = this.normalizeValue(this.value);
       this.updateDisplayValue();
     }
   }
@@ -283,16 +283,24 @@ export class TkCurrencyInput implements ComponentInterface {
     return this.currencyList || INTERNAL_CURRENCY_LIST;
   }
 
+  private normalizeValue(value: number | ''): number | '' {
+    return value === '' ? value : (value ?? 0);
+  }
+
+  private isNumericValue(value: number | ''): value is number {
+    return typeof value === 'number' && !Number.isNaN(value);
+  }
+
   private setSelectedCurrency(currencyCode: string) {
     const currencies = this.getCurrencies();
     const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
     this.selectedCurrency = currency || currencies[0];
-    this.currentNumericValue = this.value || 0;
+    this.currentNumericValue = this.normalizeValue(this.value);
     this.updateDisplayValue();
   }
 
   private updateDisplayValue() {
-    if (this.currentNumericValue === null || this.currentNumericValue === undefined || isNaN(this.currentNumericValue)) {
+    if (!this.isNumericValue(this.currentNumericValue)) {
       this.displayValue = '';
       return;
     }
@@ -473,7 +481,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
     const inputValue = target.value;
-    const cursorPosition = target.selectionStart;
+    const cursorPosition = target.selectionStart ?? 0;
 
     // Use custom separators if provided, otherwise fall back to currency defaults
     const decimalSeparator = this.getDecimalSeparator();
@@ -570,6 +578,8 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private handleBlur = () => {
     const target = this.inputElement;
+    if (!target) return;
+
     const numericValue = this.parseFormattedValue(target.value);
     this.currentNumericValue = numericValue;
 
