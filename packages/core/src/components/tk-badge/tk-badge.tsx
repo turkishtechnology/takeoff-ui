@@ -2,6 +2,7 @@ import { Component, Prop, Element, h, State, ComponentInterface, Host } from '@s
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The TkBadge component allows you to create a small badge for adding information like contextual data that needs to stand out and get noticed. It is also often useful in combination with other elements like a user avatar to show a number of new messages.
@@ -80,6 +81,11 @@ export class TkBadge implements ComponentInterface {
    */
   @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'verified' | 'purple' | 'cyan' | 'business' | 'teal' = 'primary';
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   componentDidLoad(): void {
     this.hasSlot = this.el.shadowRoot.querySelector('slot')?.assignedNodes?.().length > 0;
   }
@@ -113,7 +119,11 @@ export class TkBadge implements ComponentInterface {
       };
       const type = this.label ? 'label' : this.isValidCount() ? 'count' : null;
       const { value = '', class: contentClass = '' } = contentConfig[type] || {};
-      content = <span class={contentClass}>{value}</span>;
+      content = (
+        <span class={contentClass} {...getDataTestidAttribute(this.dataTestid, 'badge', contentClass)}>
+          {value}
+        </span>
+      );
     }
     return content;
   }
@@ -138,7 +148,13 @@ export class TkBadge implements ComponentInterface {
     if (this.icon && !this.dot) {
       const { leftIcon, rightIcon } = renderIcons(
         this.icon,
-        { variant: this.variant, size: this.size, additionalProps: { ...(this.type === 'filled' ? { color: 'var(--static-white)' } : {}) } },
+        {
+          variant: this.variant,
+          size: this.size,
+          additionalProps: { ...(this.type === 'filled' ? { color: 'var(--static-white)' } : {}) },
+          dataTestid: this.dataTestid,
+          dataTestidComponent: 'badge',
+        },
         this.iconPosition,
       );
       _leftIcon = leftIcon;
@@ -147,9 +163,9 @@ export class TkBadge implements ComponentInterface {
 
     return (
       <Host class={{ 'full-width': this.fullWidth && !this.hasSlot }}>
-        <div class={rootClasses}>
+        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'badge')}>
           <slot />
-          <span class={badgeClasses}>
+          <span class={badgeClasses} {...getDataTestidAttribute(this.dataTestid, 'badge', 'content')}>
             {_leftIcon}
             {this.renderContent()}
             {_rightIcon}
