@@ -1,5 +1,6 @@
 import { Component, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The `TkSpinner` component description.
@@ -46,6 +47,11 @@ export class TkSpinner {
    */
   @Prop() label: string;
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   componentWillLoad() {
     this.isButton = this.el.closest('button')?.classList.contains('tk-button');
   }
@@ -56,51 +62,57 @@ export class TkSpinner {
         if (this.isButton) {
           const button = this.el.closest('button');
           const borderColor = window.getComputedStyle(button).color;
-          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded"></div>;
+          return (
+            <div
+              style={{ borderColor: borderColor, borderTopColor: 'transparent' }}
+              class="spinner-rounded"
+              {...getDataTestidAttribute(this.dataTestid, 'spinner', 'rounded')}
+            ></div>
+          );
         }
-        return <div class="spinner-rounded"></div>;
+        return <div class="spinner-rounded" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'rounded')}></div>;
       case 'dots':
         return (
-          <div class="spinner-dots">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+          <div class="spinner-dots" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dots')}>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
           </div>
         );
       case 'lines':
         return (
-          <div class="spinner-lines">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+          <div class="spinner-lines" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'lines')}>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
           </div>
         );
       case 'three-dots':
         return (
-          <div class="spinner-three-dots">
-            <span class="dot1"></span>
-            <span class="dot2"></span>
-            <span class="dot3"></span>
+          <div class="spinner-three-dots" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'three-dots')}>
+            <span class="dot1" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
+            <span class="dot2" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
+            <span class="dot3" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
           </div>
         );
       case 'pulse':
-        return <div class="spinner-pulse"></div>;
+        return <div class="spinner-pulse" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'pulse')}></div>;
       case 'loader':
-        return <div class="spinner-loader"></div>;
+        return <div class="spinner-loader" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'loader')}></div>;
       case 'logo':
         return (
-          <div class="spinner-logo">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="spinner-logo" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'logo')}>
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'logo-svg')}>
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -123,9 +135,14 @@ export class TkSpinner {
           [this.size]: true,
           [this.variant]: true,
         })}
+        {...getDataTestidAttribute(this.dataTestid, 'spinner')}
       >
         {this.renderSpinner()}
-        {this.label && <div class="tk-spinner-label">{this.label}</div>}
+        {this.label && (
+          <div class="tk-spinner-label" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'label')}>
+            {this.label}
+          </div>
+        )}
       </div>
     );
   }
