@@ -74,6 +74,11 @@ export class TkAlert implements ComponentInterface {
    */
   @Prop() containerStyle?: CSSStyleProperties = null;
 
+  /**
+   * The style attribute of header element
+   */
+  @Prop() headerStyle?: CSSStyleProperties;
+
   private handleCloseButtonClick() {
     this.el.remove();
   }
@@ -93,7 +98,11 @@ export class TkAlert implements ComponentInterface {
     let header, message;
 
     if (this.header?.length > 0) {
-      header = <div class="tk-alert-header">{this.header}</div>;
+      header = (
+        <div class="tk-alert-header" style={this.headerStyle}>
+          {this.header}
+        </div>
+      );
     }
 
     if (typeof this.message == 'string') {
