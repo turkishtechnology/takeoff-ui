@@ -4,7 +4,7 @@ describe('tk-popover', () => {
   it('opens on trigger click and emits open state', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<tk-popover><button slot="trigger">Open</button><div slot="content">Body</div></tk-popover>');
+    await page.setContent('<tk-popover data-testid="my-pop"><button slot="trigger">Open</button><div slot="content">Body</div></tk-popover>');
 
     const popover = await page.find('tk-popover');
     const changeSpy = await popover.spyOnEvent('tk-change');
@@ -14,8 +14,18 @@ describe('tk-popover', () => {
     await page.waitForChanges();
 
     const content = await page.find('tk-popover >>> .tk-popover-content');
+    const rootWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover"]');
+    const contentWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover-content"]');
+    const arrowWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover-arrow"]');
+    const triggerSlot = await page.find('tk-popover >>> slot[name="trigger"]');
+    const contentSlot = await page.find('tk-popover >>> slot[name="content"]');
 
     expect(content).toBeTruthy();
+    expect(rootWithId).toBeTruthy();
+    expect(contentWithId).toBeTruthy();
+    expect(arrowWithId).toBeTruthy();
+    expect(await triggerSlot.getAttribute('data-testid')).toBeNull();
+    expect(await contentSlot.getAttribute('data-testid')).toBeNull();
     expect(changeSpy).toHaveReceivedEventDetail(true);
   });
 });
