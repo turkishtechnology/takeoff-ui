@@ -179,11 +179,11 @@ export class TkSlider implements ComponentInterface {
               {!this.disabled && (isMinActive || this.draggingThumb === 'min') && (
                 <div class="tk-slider-tooltip" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tooltip-min')}>
                   {this.currentMin}
-                  <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tooltip-min-arrow')}></div>
+                  <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'slider', 'arrow')}></div>
                 </div>
               )}
 
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'slider', 'thumb-min-icon')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'slider', 'icon')}>
                 <circle cx="4" cy="4" r="4" />
               </svg>
             </div>
@@ -201,11 +201,11 @@ export class TkSlider implements ComponentInterface {
                 {!this.disabled && (isMaxActive || this.draggingThumb === 'max') && (
                   <div class="tk-slider-tooltip" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tooltip-max')}>
                     {this.currentMax}
-                    <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tooltip-max-arrow')}></div>
+                    <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'slider', 'arrow')}></div>
                   </div>
                 )}
 
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'slider', 'thumb-max-icon')}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'slider', 'icon')}>
                   <circle cx="4" cy="4" r="4" />
                 </svg>
               </div>
@@ -222,7 +222,7 @@ export class TkSlider implements ComponentInterface {
 
         {this.type === 'ticks' && (
           <div class="tk-slider-ticks" {...getDataTestidAttribute(this.dataTestid, 'slider', 'ticks')}>
-            <div class="tk-slider-tick-track" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tick-track')}>
+            <div class="tk-slider-tick-track" {...getDataTestidAttribute(this.dataTestid, 'slider', 'track')}>
               {Array.from({ length: Math.floor((this.max - this.min) / this.step) + 1 }).map((_, index) => (
                 <div key={index} class="tk-slider-tick" {...getDataTestidAttribute(this.dataTestid, 'slider', 'tick')}></div>
               ))}

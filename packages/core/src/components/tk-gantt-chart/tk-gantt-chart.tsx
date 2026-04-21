@@ -257,12 +257,12 @@ export class TkGanttChart implements ComponentInterface {
       const content = this.taskBarHtml(task);
       const barContent =
         typeof content === 'string' ? (
-          <div class="custom-task-bar" innerHTML={content} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar')}></div>
+          <div class="custom-task-bar" innerHTML={content} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-custom')}></div>
         ) : (
           <div
             class="custom-task-bar"
             ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)}
-            {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar')}
+            {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-custom')}
           ></div>
         );
       return (
@@ -272,11 +272,11 @@ export class TkGanttChart implements ComponentInterface {
             class="tk-gantt-chart-task-bar tk-gantt-chart-task-bar-custom"
             style={commonStyle}
             onClick={() => this.handleTaskClick(task)}
-            {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'trigger')}
+            {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-trigger')}
           >
             {barContent}
           </div>
-          <div slot="content" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'content')}>
+          <div slot="content" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-tooltip-content')}>
             {tooltipContent}
           </div>
         </tk-tooltip>
@@ -284,7 +284,7 @@ export class TkGanttChart implements ComponentInterface {
     }
 
     return (
-      <tk-tooltip position="top" variant="dark" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip')}>
+      <tk-tooltip position="top" variant="dark" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-tooltip')}>
         <div
           slot="trigger"
           class={classNames('tk-gantt-chart-task-bar', { 'tk-gantt-chart-task-bar-segment': segmentIndex != null })}
@@ -296,14 +296,14 @@ export class TkGanttChart implements ComponentInterface {
             <div
               class="tk-gantt-chart-task-bar-progress"
               style={{ width: `${Math.min(progress, 100)}%` }}
-              {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'progress')}
+              {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-progress')}
             ></div>
           )}
-          <span class="tk-gantt-chart-task-bar-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'label')}>
+          <span class="tk-gantt-chart-task-bar-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-label')}>
             {barLabel}
           </span>
         </div>
-        <div slot="content" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'content')}>
+        <div slot="content" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-tooltip-content')}>
           {tooltipContent}
         </div>
       </tk-tooltip>
@@ -326,7 +326,7 @@ export class TkGanttChart implements ComponentInterface {
         {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'indicator')}
       >
         {indicator.label && (
-          <span class="tk-gantt-chart-indicator-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'label')}>
+          <span class="tk-gantt-chart-indicator-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'indicator-label')}>
             {indicator.label}
           </span>
         )}
@@ -338,33 +338,33 @@ export class TkGanttChart implements ComponentInterface {
     if (this.tooltipHtml) {
       const content = this.tooltipHtml(task);
       if (typeof content === 'string') {
-        return <div innerHTML={content} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip')}></div>;
+        return <div innerHTML={content} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-custom')}></div>;
       }
-      return <div ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip')}></div>;
+      return <div ref={(el: HTMLElement) => el && el.replaceChildren(content as HTMLElement)} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-custom')}></div>;
     }
 
     const startLabel = toDateOnly(task.startDate).toLocaleDateString(this.locale);
     const endLabel = toDateOnly(task.endDate).toLocaleDateString(this.locale);
     return (
       <Fragment>
-        <div class="tk-gantt-chart-tooltip-title" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'title')}>
+        <div class="tk-gantt-chart-tooltip-title" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-title')}>
           {task.name}
         </div>
-        <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'start')}>
-          <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'label')}>
+        <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-start')}>
+          <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-label')}>
             Start:
           </span>
           {startLabel}
         </div>
-        <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'end')}>
-          <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'label')}>
+        <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-end')}>
+          <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-label')}>
             End:
           </span>
           {endLabel}
         </div>
         {task.progress != null && (
-          <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'progress')}>
-            <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'label')}>
+          <div class="tk-gantt-chart-tooltip-row" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-progress')}>
+            <span class="tk-gantt-chart-tooltip-label" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip-label')}>
               Progress:
             </span>
             {task.progress}%
@@ -392,12 +392,12 @@ export class TkGanttChart implements ComponentInterface {
         {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel')}
       >
         {/* Panel header placeholder aligned with timeline headers */}
-        <div class="tk-gantt-chart-panel-header" style={{ height: `${headerHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'header')}>
+        <div class="tk-gantt-chart-panel-header" style={{ height: `${headerHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-header')}>
           {this.columns.map(col => (
             <div
               class="tk-gantt-chart-panel-header-cell"
               style={{ width: col.width || 'auto', minWidth: col.width || '80px' }}
-              {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'cell')}
+              {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-header-cell')}
             >
               {col.header}
             </div>
@@ -405,9 +405,9 @@ export class TkGanttChart implements ComponentInterface {
         </div>
 
         {/* Panel rows */}
-        <div class="tk-gantt-chart-panel-body" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'body')}>
+        <div class="tk-gantt-chart-panel-body" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-body')}>
           {flatRows.map(({ task, depth }) => (
-            <div class="tk-gantt-chart-panel-row" style={{ height: `${this.rowHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'row')}>
+            <div class="tk-gantt-chart-panel-row" style={{ height: `${this.rowHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-row')}>
               {this.columns.map((col, colIndex) => (
                 <div
                   class="tk-gantt-chart-panel-cell"
@@ -416,7 +416,7 @@ export class TkGanttChart implements ComponentInterface {
                     minWidth: col.width || '80px',
                     paddingLeft: colIndex === 0 ? `${depth * 20 + 8}px` : '8px',
                   }}
-                  {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'cell')}
+                  {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-cell')}
                 >
                   {colIndex === 0 && task.children?.length > 0 && (
                     <button
@@ -424,15 +424,17 @@ export class TkGanttChart implements ComponentInterface {
                         'tk-gantt-chart-expand-btn-open': this.expandedIds.has(task.id),
                       })}
                       onClick={(e: MouseEvent) => this.handleToggleRow(task, e)}
-                      {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'expand-button')}
+                      {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-expand-button')}
                     >
-                      <tk-icon icon="chevron_right" size="small" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'expand-icon')}></tk-icon>
+                      <tk-icon icon="chevron_right" size="small" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-expand-icon')}></tk-icon>
                     </button>
                   )}
                   {col.html ? (
-                    <span innerHTML={col.html(task)} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'html')}></span>
+                    <span innerHTML={col.html(task)} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-cell-content')}></span>
                   ) : (
-                    <span {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'html')}>{(task as unknown as Record<string, unknown>)[col.field] as string}</span>
+                    <span {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-cell-content')}>
+                      {(task as unknown as Record<string, unknown>)[col.field] as string}
+                    </span>
                   )}
                 </div>
               ))}
@@ -451,15 +453,19 @@ export class TkGanttChart implements ComponentInterface {
     const secondaryCells = generateSecondaryHeaders(start, end, vt, this.locale, this.weekStartDay, this.secondaryHeaderMode);
 
     return (
-      <div class="tk-gantt-chart-timeline-headers" style={{ width: `${totalWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'headers')}>
+      <div class="tk-gantt-chart-timeline-headers" style={{ width: `${totalWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-headers')}>
         {/* Primary (upper) header */}
         <div
           class="tk-gantt-chart-timeline-header tk-gantt-chart-timeline-header-primary"
           style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }}
-          {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'primary')}
+          {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-primary')}
         >
           {primaryCells.map(cell => (
-            <div class="tk-gantt-chart-timeline-header-cell" style={{ width: `${cell.span * dayWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'cell')}>
+            <div
+              class="tk-gantt-chart-timeline-header-cell"
+              style={{ width: `${cell.span * dayWidth}px` }}
+              {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-cell')}
+            >
               {cell.label}
             </div>
           ))}
@@ -469,7 +475,7 @@ export class TkGanttChart implements ComponentInterface {
         <div
           class="tk-gantt-chart-timeline-header tk-gantt-chart-timeline-header-secondary"
           style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }}
-          {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'secondary')}
+          {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-secondary')}
         >
           {secondaryCells.map(cell => {
             const cellStart = cell.startDate;
@@ -482,7 +488,7 @@ export class TkGanttChart implements ComponentInterface {
                   'tk-gantt-chart-timeline-header-cell-holiday': isHolidayCell,
                 })}
                 style={{ width: `${cell.span * dayWidth}px` }}
-                {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'cell')}
+                {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-cell')}
               >
                 {cell.label}
               </div>
@@ -498,7 +504,7 @@ export class TkGanttChart implements ComponentInterface {
     const bodyHeight = flatRows.length * this.rowHeight;
 
     return (
-      <div class="tk-gantt-chart-timeline-body" style={{ width: `${totalWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'body')}>
+      <div class="tk-gantt-chart-timeline-body" style={{ width: `${totalWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-body')}>
         {/* Weekend & holiday columns */}
         {(this.highlightWeekends || this.holidays.length > 0) &&
           Array.from({ length: totalDays }).map((_, i) => {
@@ -534,7 +540,7 @@ export class TkGanttChart implements ComponentInterface {
           const hasSegments = task.segments && task.segments.length > 0;
 
           return (
-            <div class="tk-gantt-chart-timeline-row" style={{ height: `${this.rowHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'row')}>
+            <div class="tk-gantt-chart-timeline-row" style={{ height: `${this.rowHeight}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'timeline-row')}>
               {hasSegments
                 ? task.segments.map((seg, idx) => {
                     const segPos = getBarPositionFromDates(seg.startDate, seg.endDate, start, this.computedViewType);

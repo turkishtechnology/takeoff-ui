@@ -94,7 +94,7 @@ export class TkAccordionItem implements ComponentInterface {
     return (
       <tk-icon
         {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}
-        {...getDataTestidAttribute(this.dataTestid, 'accordion-item', this.active ? 'collapse-icon' : 'expand-icon')}
+        {...getDataTestidAttribute(this.dataTestid, 'accordion-item', this.active ? 'collapse' : 'expand')}
       ></tk-icon>
     );
   }

@@ -93,7 +93,7 @@ export class TkBreadcrumb implements ComponentInterface {
           ) : (
             this.model?.map((item, index) => (
               <Fragment>
-                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'item')} />
+                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} dataTestid={this.dataTestid} />
                 {index < this.model.length - 1 && (
                   <li class="tk-breadcrumb-separator" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator')}>
                     {this.renderSeparator()}

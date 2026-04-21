@@ -2215,7 +2215,7 @@ export class TkDatePicker {
         aria-haspopup="true"
         data-tk-datepicker-id={this.uniqueId}
         showAsterisk={this.showAsterisk}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker` : undefined}
+        {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'input')}
       />
     );
   }

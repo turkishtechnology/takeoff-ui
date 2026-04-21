@@ -244,7 +244,7 @@ export class TkDrawer {
         {hasHeaderSlot ? (
           <slot name="header"></slot>
         ) : this.header ? (
-          <span class="tk-drawer-header-label" {...getDataTestidAttribute(this.dataTestid, 'drawer', 'header-label')}>
+          <span class="tk-drawer-header-label" {...getDataTestidAttribute(this.dataTestid, 'drawer', 'label')}>
             {this.header}
           </span>
         ) : null}

@@ -794,7 +794,7 @@ export class TkColorPicker implements ComponentInterface {
     if (this.hasFooterActionsSlot) {
       const footerClasses = classNames('tk-color-picker-panel-footer', `tk-color-picker-panel-footer-${this.footerType}`);
       return (
-        <div class={footerClasses} {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'footer-actions-container')}>
+        <div class={footerClasses} {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'footer-actions')}>
           <slot name="footer-actions" />
         </div>
       );
@@ -841,13 +841,13 @@ export class TkColorPicker implements ComponentInterface {
     if (this.orientation === 'horizontal') {
       return (
         <Fragment>
-          <div class="tk-color-picker-body-horizontal" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'body-horizontal')}>
-            <div class="tk-color-picker-controls-side" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls-side')}>
+          <div class="tk-color-picker-body-horizontal" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'horizontal')}>
+            <div class="tk-color-picker-controls-side" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls')}>
               {this.createColorPreview()}
               {this.createSliders()}
               {this.createEyedropperButton()}
             </div>
-            <div class="tk-color-picker-saturation-wrapper" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'saturation-wrapper')}>
+            <div class="tk-color-picker-saturation-wrapper" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'saturation')}>
               {this.createSaturation()}
             </div>
           </div>
@@ -859,10 +859,10 @@ export class TkColorPicker implements ComponentInterface {
 
     return (
       <Fragment>
-        <div class="tk-color-picker-body-vertical" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'body-vertical')}>
+        <div class="tk-color-picker-body-vertical" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'vertical')}>
           {this.createSaturation()}
-          <div class="tk-color-picker-controls-bottom" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls-bottom')}>
-            <div class="tk-color-picker-eyedropper-row" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'eyedropper-row')}>
+          <div class="tk-color-picker-controls-bottom" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls')}>
+            <div class="tk-color-picker-eyedropper-row" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'eyedropper')}>
               {this.createEyedropperButton()}
               {this.createSliders()}
               {this.createColorPreview()}
