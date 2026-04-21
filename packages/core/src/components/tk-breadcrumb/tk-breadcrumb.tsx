@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, Element, h, State, Fragment } from
 import classNames from 'classnames';
 import { IBreadcrumbModel } from './types';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The `TkBreadcrumb` provides a navigational aid, allowing users to keep track of their location within the application's hierarchy.
@@ -43,6 +44,11 @@ export class TkBreadcrumb implements ComponentInterface {
    */
   @Prop() type?: 'basic' | 'outlined' = 'basic';
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   componentWillLoad() {
     this.hasSlottedItems = !!this.el.querySelector('tk-breadcrumb-item');
   }
@@ -66,24 +72,33 @@ export class TkBreadcrumb implements ComponentInterface {
       'tk-breadcrumb-vertical-separator': this.separator === 'vertical',
     });
     if (this.separator === 'icon') {
-      return <tk-icon {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, 'rounded', 'span')} />;
+      return (
+        <tk-icon
+          {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, 'rounded', 'span')}
+          {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator-item')}
+        />
+      );
     }
-    return <span class={separatorClasses} />;
+    return <span class={separatorClasses} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator-item')} />;
   }
 
   render() {
     const rootClasses = classNames('tk-breadcrumb', `tk-breadcrumb-${this.type}`);
 
     return (
-      <nav class={rootClasses} aria-label="breadcrumb">
-        <ol class="tk-breadcrumb-list">
+      <nav class={rootClasses} aria-label="breadcrumb" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb')}>
+        <ol class="tk-breadcrumb-list" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'list')}>
           {this.hasSlottedItems ? (
             <slot />
           ) : (
             this.model?.map((item, index) => (
               <Fragment>
-                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} />
-                {index < this.model.length - 1 && <li class="tk-breadcrumb-separator">{this.renderSeparator()}</li>}
+                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'item')} />
+                {index < this.model.length - 1 && (
+                  <li class="tk-breadcrumb-separator" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator')}>
+                    {this.renderSeparator()}
+                  </li>
+                )}
               </Fragment>
             ))
           )}
