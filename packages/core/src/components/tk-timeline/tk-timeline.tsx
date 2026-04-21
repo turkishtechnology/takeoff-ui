@@ -2,6 +2,7 @@ import { Component, h, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { TimelineItem } from './types';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The `TkTimeline` is a component that displays a vertical or horizontal timeline of events.
@@ -37,6 +38,11 @@ export class TkTimeline implements ComponentInterface {
    * Whether to alternate the position of timeline items relative to the line.
    */
   @Prop() alternate: boolean = true;
+
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
 
   connectedCallback() {
     // MutationObserver ile DOM değişikliklerini izle
@@ -80,11 +86,23 @@ export class TkTimeline implements ComponentInterface {
   private createItemContent(item: TimelineItem) {
     return (
       <Fragment>
-        <div class="tk-timeline-item-content-inner">
-          {item.title && <div class="tk-timeline-item-title">{item.title}</div>}
-          {item.description && <div class="tk-timeline-item-description">{item.description}</div>}
+        <div class="tk-timeline-item-content-inner" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'content')}>
+          {item.title && (
+            <div class="tk-timeline-item-title" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'title')}>
+              {item.title}
+            </div>
+          )}
+          {item.description && (
+            <div class="tk-timeline-item-description" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'description')}>
+              {item.description}
+            </div>
+          )}
         </div>
-        {item.date && <div class="tk-timeline-item-date">{item.date}</div>}
+        {item.date && (
+          <div class="tk-timeline-item-date" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'date')}>
+            {item.date}
+          </div>
+        )}
       </Fragment>
     );
   }
@@ -100,13 +118,17 @@ export class TkTimeline implements ComponentInterface {
     });
 
     return (
-      <li class={itemClasses}>
-        <div class="tk-timeline-item-content tk-timeline-item-content-start">{contentPlacement === 'start' && this.createItemContent(item)}</div>
-        <div class="tk-timeline-item-separator">
-          <div class="tk-timeline-item-point"></div>
-          <div class="tk-timeline-item-connector"></div>
+      <li class={itemClasses} {...getDataTestidAttribute(this.dataTestid, 'timeline', 'item')}>
+        <div class="tk-timeline-item-content tk-timeline-item-content-start" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'start')}>
+          {contentPlacement === 'start' && this.createItemContent(item)}
         </div>
-        <div class="tk-timeline-item-content tk-timeline-item-content-end">{contentPlacement === 'end' && this.createItemContent(item)}</div>
+        <div class="tk-timeline-item-separator" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'separator')}>
+          <div class="tk-timeline-item-point" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'point')}></div>
+          <div class="tk-timeline-item-connector" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'connector')}></div>
+        </div>
+        <div class="tk-timeline-item-content tk-timeline-item-content-end" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'end')}>
+          {contentPlacement === 'end' && this.createItemContent(item)}
+        </div>
       </li>
     );
   }
@@ -129,13 +151,17 @@ export class TkTimeline implements ComponentInterface {
       item.setAttribute('data-index', index.toString());
 
       return (
-        <li class={itemClasses}>
-          <div class="tk-timeline-item-content tk-timeline-item-content-start">{contentPlacement === 'start' && <slot name={`item-${index}`}></slot>}</div>
-          <div class="tk-timeline-item-separator">
-            <div class="tk-timeline-item-point"></div>
-            <div class="tk-timeline-item-connector"></div>
+        <li class={itemClasses} {...getDataTestidAttribute(this.dataTestid, 'timeline', 'item')}>
+          <div class="tk-timeline-item-content tk-timeline-item-content-start" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'start')}>
+            {contentPlacement === 'start' && <slot name={`item-${index}`}></slot>}
           </div>
-          <div class="tk-timeline-item-content tk-timeline-item-content-end">{contentPlacement === 'end' && <slot name={`item-${index}`}></slot>}</div>
+          <div class="tk-timeline-item-separator" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'separator')}>
+            <div class="tk-timeline-item-point" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'point')}></div>
+            <div class="tk-timeline-item-connector" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'connector')}></div>
+          </div>
+          <div class="tk-timeline-item-content tk-timeline-item-content-end" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'end')}>
+            {contentPlacement === 'end' && <slot name={`item-${index}`}></slot>}
+          </div>
         </li>
       );
     });
@@ -146,8 +172,8 @@ export class TkTimeline implements ComponentInterface {
     const hasSlottedItems = this.slottedItemsCount > 0;
 
     return (
-      <div class={hostClasses}>
-        <ul class="tk-timeline-items">
+      <div class={hostClasses} {...getDataTestidAttribute(this.dataTestid, 'timeline')}>
+        <ul class="tk-timeline-items" {...getDataTestidAttribute(this.dataTestid, 'timeline', 'items')}>
           {hasSlottedItems ? <Fragment>{this.renderSlottedTimelineItems()}</Fragment> : this.items.map((item, index) => this.renderTimelineItem(item, index))}
         </ul>
       </div>
