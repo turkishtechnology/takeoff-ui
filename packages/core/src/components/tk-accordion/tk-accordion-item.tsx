@@ -110,7 +110,13 @@ export class TkAccordionItem implements ComponentInterface {
     const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
-    const icon = renderIcons(this.icon, { sign: true, variant: 'neutral', additionalProps: { class: 'tk-accordion-item-icon' } });
+    const icon = renderIcons(this.icon, {
+      sign: true,
+      variant: 'neutral',
+      additionalProps: { class: 'tk-accordion-item-icon' },
+      dataTestid: this.dataTestid,
+      dataTestidComponent: 'accordion-item',
+    });
     return (
       <Host>
         <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'accordion-item')}>
