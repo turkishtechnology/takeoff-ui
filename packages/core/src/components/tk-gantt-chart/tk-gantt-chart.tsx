@@ -458,7 +458,7 @@ export class TkGanttChart implements ComponentInterface {
           style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }}
           {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'primary')}
         >
-          {primaryCells.map((cell, index) => (
+          {primaryCells.map(cell => (
             <div class="tk-gantt-chart-timeline-header-cell" style={{ width: `${cell.span * dayWidth}px` }} {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'cell')}>
               {cell.label}
             </div>
@@ -471,7 +471,7 @@ export class TkGanttChart implements ComponentInterface {
           style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }}
           {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'secondary')}
         >
-          {secondaryCells.map((cell, index) => {
+          {secondaryCells.map(cell => {
             const cellStart = cell.startDate;
             const isWeekendCell = cell.span === 1 && isWeekend(cellStart);
             const isHolidayCell = cell.span === 1 && isHoliday(cellStart, this.holidays);

@@ -774,7 +774,7 @@ export class TkColorPicker implements ComponentInterface {
 
     return (
       <div class="tk-color-picker-presets" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'presets')}>
-        {this.presets.map((color, index) => (
+        {this.presets.map(color => (
           <div
             class="tk-color-picker-preset"
             style={{ backgroundColor: color }}
