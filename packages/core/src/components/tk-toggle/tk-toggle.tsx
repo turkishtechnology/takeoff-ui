@@ -2,6 +2,7 @@ import { AttachInternals, Component, ComponentInterface, Element, Event, EventEm
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The TkToggle component is another basic element for user input. You can use this for turning settings, features or true/false inputs on and off.
@@ -99,6 +100,11 @@ export class TkToggle implements ComponentInterface {
   }
 
   /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * Event emitted when the toggle value changes.
    * @event onChange
    */
@@ -170,6 +176,7 @@ export class TkToggle implements ComponentInterface {
         aria-invalid={this.invalid || undefined}
         aria-label={this.name}
         aria-labelledby={this.ariaLabelledby}
+        {...getDataTestidAttribute(this.dataTestid, 'toggle', 'native')}
       />
     );
   }
@@ -181,23 +188,32 @@ export class TkToggle implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses}>
-        <label htmlFor={this.uniqueId}>
-          <div class="tk-toggle-input-container">
+      <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'toggle')}>
+        <label htmlFor={this.uniqueId} {...getDataTestidAttribute(this.dataTestid, 'toggle', 'label-container')}>
+          <div class="tk-toggle-input-container" {...getDataTestidAttribute(this.dataTestid, 'toggle', 'control')}>
             {this.renderInput()}
-            <span class="tk-toggle-thumb">
+            <span class="tk-toggle-thumb" {...getDataTestidAttribute(this.dataTestid, 'toggle', 'thumb')}>
               {this.showIcon && (
                 <tk-icon
                   {...getIconElementProps(this.getActiveIcon(), {
                     variant: this.invalid ? 'danger' : this.variant,
                     size: this.size === 'large' || this.size === 'xlarge' ? 'medium' : this.size,
                     color: this.disabled ? 'var(--icon-lightest)' : '',
+                    ...getDataTestidAttribute(this.dataTestid, 'toggle', 'thumb-icon'),
                   })}
                 />
               )}
             </span>
           </div>
-          {this.hasDefaultSlot ? <slot></slot> : this.label && <span class="tk-toggle-label">{this.label}</span>}
+          {this.hasDefaultSlot ? (
+            <slot></slot>
+          ) : (
+            this.label && (
+              <span class="tk-toggle-label" {...getDataTestidAttribute(this.dataTestid, 'toggle', 'label')}>
+                {this.label}
+              </span>
+            )
+          )}
         </label>
       </div>
     );
