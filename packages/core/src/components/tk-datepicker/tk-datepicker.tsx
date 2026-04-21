@@ -257,11 +257,6 @@ export class TkDatePicker {
   @Prop() showAsterisk: boolean = false;
 
   /**
-   * Test identifier for automated testing.
-   */
-  @Prop({ reflect: true }) dataTestid?: string;
-
-  /**
    * Disabled week days (0-6, where 0 is Sunday and 6 is Saturday)
    * Example: [0,6] will disable Sunday and Saturday
    */
@@ -346,6 +341,11 @@ export class TkDatePicker {
    * - MM
    */
   @Prop() defaultDate?: string;
+
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
 
   /**
    * Emitted on input value changes

@@ -59,14 +59,15 @@ export class TkToggleButton implements ComponentInterface {
   @Prop() value?: any;
 
   /**
+   * Whether the button is selected.
+   */
+  @Prop({ mutable: true, reflect: true }) selected: boolean = false;
+
+  /**
    * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 
-  /**
-   * Whether the button is selected.
-   */
-  @Prop({ mutable: true, reflect: true }) selected: boolean = false;
   /**
    * Emitted when the toggle button is toggled.
    */

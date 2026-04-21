@@ -183,11 +183,6 @@ export class TkInput implements ComponentInterface {
   @Prop() hidePasswordIcon: boolean = false;
 
   /**
-   * Test identifier for automated testing.
-   */
-  @Prop({ reflect: true }) dataTestid?: string;
-
-  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
@@ -201,6 +196,11 @@ export class TkInput implements ComponentInterface {
       }
     }
   }
+
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
 
   /**
    * Emitted when the value has changed.

@@ -38,7 +38,7 @@ export class TkBreadcrumbItem implements ComponentInterface {
   @Prop() isCurrent?: boolean = false;
 
   /**
-   * Sets the data-testid attribute for testing.
+   * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 

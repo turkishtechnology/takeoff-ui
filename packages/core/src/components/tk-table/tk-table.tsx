@@ -264,7 +264,7 @@ export class TkTable implements ComponentInterface {
   @Prop() collapsibleGroups: boolean = false;
 
   /**
-   * Provides a stable selector for test automation.
+   * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 

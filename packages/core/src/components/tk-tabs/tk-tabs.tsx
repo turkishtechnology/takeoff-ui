@@ -116,7 +116,7 @@ export class TkTabs implements ComponentInterface {
   @Prop() contentStyle?: CSSStyleProperties = null;
 
   /**
-   * Test identifier for automated testing
+   * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 

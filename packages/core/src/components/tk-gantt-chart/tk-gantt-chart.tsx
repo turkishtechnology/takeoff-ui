@@ -240,7 +240,6 @@ export class TkGanttChart implements ComponentInterface {
   // ---------------------------------------------------------------------------
 
   private createTaskBar(task: IGanttTask, barPos: { left: number; width: number }, segment?: IGanttTaskSegment, segmentIndex?: number) {
-    const testId = segmentIndex != null ? `task-bar-${task.id}-seg-${segmentIndex}` : `task-bar-${task.id}`;
     const progress = segment?.progress ?? task.progress;
     const barStyle = segment?.style ?? task.style;
     const barLabel = segment?.label ?? task.name;

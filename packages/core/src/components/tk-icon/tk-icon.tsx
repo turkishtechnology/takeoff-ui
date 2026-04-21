@@ -77,7 +77,7 @@ export class TkIcon implements ComponentInterface {
   @Prop() iconTag: 'i' | 'span' = 'i';
 
   /**
-   * Provides a stable selector for test automation.
+   * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 

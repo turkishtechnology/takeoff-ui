@@ -51,11 +51,6 @@ export class TkButton implements ComponentInterface {
   @Prop() href: string;
 
   /**
-   * Provides a stable selector for test automation.
-   */
-  @Prop({ reflect: true }) dataTestid?: string;
-
-  /**
    * Specifies where to open the linked document (for type="link" buttons).
    */
   @Prop() target: string;
@@ -96,6 +91,11 @@ export class TkButton implements ComponentInterface {
    * Determines the button's variant for different styles.
    */
   @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' | 'black' = 'primary';
+
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
 
   /**
    * Emitted when the button click.

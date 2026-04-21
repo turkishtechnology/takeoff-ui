@@ -89,7 +89,7 @@ export class TkChips implements ComponentInterface {
   @Prop() fullWidth: boolean = false;
 
   /**
-   * Sets the data-testid attribute on chip elements.
+   * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
 
