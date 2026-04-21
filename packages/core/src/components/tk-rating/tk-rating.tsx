@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Prop, State, Event, EventEmitter, h } from '@stencil/core';
 import getIcon from './rating-icons';
 import classNames from 'classnames';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The `TkRating` component is a customizable rating input element that allows users to select a value from a series of icons (such as stars, hearts, or dot).
@@ -50,6 +51,11 @@ export class TkRating implements ComponentInterface {
   @Prop() readonly: boolean = false;
 
   /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * Emitted when the value has changed.
    */
   @Event({ eventName: 'tk-change' }) tkChange: EventEmitter<number>;
@@ -89,7 +95,7 @@ export class TkRating implements ComponentInterface {
 
     if (this.disabled) {
       return (
-        <div class={classNames('tk-rating', this.type, state, { disabled: this.disabled })}>
+        <div class={classNames('tk-rating', this.type, state, { disabled: this.disabled })} {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}>
           {getIcon(this.type, 'disabled')}
           {this.showRatingValue && `0${ratingValue}`}
         </div>
@@ -101,6 +107,7 @@ export class TkRating implements ComponentInterface {
         onMouseMove={() => this.handleMouseMove(ratingValue)}
         onMouseLeave={() => this.handleMouseLeave()}
         onClick={() => this.handleRatingClick(ratingValue)}
+        {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}
       >
         {getIcon(this.type, state)} {this.showRatingValue && `0${ratingValue}`}
       </div>
@@ -118,6 +125,7 @@ export class TkRating implements ComponentInterface {
         onMouseMove={() => this.handleMouseMove(ratingValue)}
         onMouseLeave={() => this.handleMouseLeave()}
         onClick={() => this.handleRatingClick(ratingValue)}
+        {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}
       >
         {ratingValue.toString().padStart(2, '0')}
       </div>
@@ -128,7 +136,7 @@ export class TkRating implements ComponentInterface {
     const isNumberType = this.type === 'number';
 
     return (
-      <div class={classNames('tk-rating-container', { number: isNumberType })}>
+      <div class={classNames('tk-rating-container', { number: isNumberType })} {...getDataTestidAttribute(this.dataTestid, 'rating')}>
         {isNumberType ? this.renderNumberRating() : Array.from({ length: this.maxRating }, (_, index) => this.renderIcon(index + 1))}
       </div>
     );
