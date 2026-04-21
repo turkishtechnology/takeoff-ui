@@ -3,6 +3,7 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
+import { getDataTestidAttribute } from '../../utils/test-id-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -72,6 +73,11 @@ export class TkTooltip implements ComponentInterface {
    */
   @Prop() containerStyle?: CSSStyleProperties = null;
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   componentWillLoad() {
     this.hasContentSlot = !!this.el.querySelector('[slot="content"]');
   }
@@ -123,13 +129,15 @@ export class TkTooltip implements ComponentInterface {
         variant: this.variant === 'dark' ? 'neutral' : this.variant,
         sign: true,
         size: 'small',
+        dataTestid: this.dataTestid,
+        dataTestidComponent: 'tooltip',
       });
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }
 
     return (
-      <div class="tk-tooltip">
+      <div class="tk-tooltip" {...getDataTestidAttribute(this.dataTestid, 'tooltip')}>
         <slot name="trigger" />
 
         {this.isOpen && (
@@ -141,6 +149,7 @@ export class TkTooltip implements ComponentInterface {
             }}
             style={{ ...this.containerStyle }}
             role="tooltip"
+            {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'content')}
           >
             {this.hasContentSlot ? (
               <slot name="content" />
@@ -148,13 +157,17 @@ export class TkTooltip implements ComponentInterface {
               <Fragment>
                 {_leftIcon}
                 <div>
-                  <div class="tk-tooltip-header">{this.header}</div>
-                  <div class="tk-tooltip-description">{this.description}</div>
+                  <div class="tk-tooltip-header" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'header')}>
+                    {this.header}
+                  </div>
+                  <div class="tk-tooltip-description" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'description')}>
+                    {this.description}
+                  </div>
                 </div>
                 {_rightIcon}
               </Fragment>
             )}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow"></div>
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'arrow')}></div>
           </div>
         )}
       </div>
