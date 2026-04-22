@@ -389,7 +389,7 @@ export class TkDatePicker {
     if (!this.inline) {
       const tkInputArea = this.inputRef?.querySelector('.tk-input') as HTMLElement;
       this.clickOutsideMixin = new ClickOutsideMixin({
-        referenceElement: tkInputArea || this.el,
+        referenceElement: tkInputArea ?? this.el,
         handler: this.closeHandler,
         disabled: this.disabled || this.readonly || !this.isOpen,
       });
