@@ -248,7 +248,7 @@ export class TkColorPicker implements ComponentInterface {
   componentDidLoad() {
     const tkInputArea = this.inputRef?.querySelector('.tk-input') as HTMLElement;
     this.clickOutsideMixin = new ClickOutsideMixin({
-      referenceElement: tkInputArea || this.el,
+      referenceElement: tkInputArea ?? this.el,
       handler: this.handleClickOutside,
       disabled: !this.isOpen || this.disabled || this.readonly || this.inline || this.preventDismiss,
     });
