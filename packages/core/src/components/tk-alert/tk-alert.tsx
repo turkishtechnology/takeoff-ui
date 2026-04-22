@@ -76,6 +76,11 @@ export class TkAlert implements ComponentInterface {
   @Prop() containerStyle?: CSSStyleProperties = null;
 
   /**
+   * The style attribute of header element
+   */
+  @Prop() headerStyle?: CSSStyleProperties;
+
+  /**
    * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
@@ -108,7 +113,7 @@ export class TkAlert implements ComponentInterface {
 
     if (this.header?.length > 0) {
       header = (
-        <div class="tk-alert-header" {...getDataTestidAttribute(this.dataTestid, 'alert', 'header')}>
+        <div class="tk-alert-header" style={this.headerStyle} {...getDataTestidAttribute(this.dataTestid, 'alert', 'header')}>
           {this.header}
         </div>
       );

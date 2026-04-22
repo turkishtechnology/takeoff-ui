@@ -522,6 +522,7 @@ export class TkInput implements ComponentInterface {
   }
 
   private handleChipsRemove(index: number) {
+    if (this.readonly || this.disabled) return;
     const chipsArr = [...(this.value as any[])];
 
     if (index >= 0 && index < chipsArr.length) {
@@ -608,7 +609,7 @@ export class TkInput implements ComponentInterface {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
         let isRemovable;
-        if (this.chipDisabled?.(item) || this.disabled || this.readonly) {
+        if (this.chipDisabled?.(item) || this.disabled) {
           isRemovable = false;
         } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
           isRemovable = item.removable;
@@ -624,7 +625,7 @@ export class TkInput implements ComponentInterface {
           variant: (itemChipOptions.variant ?? 'neutral') as IChipOptions['variant'],
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
-          disabled: this.disabled || this.readonly,
+          disabled: this.disabled,
         };
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
