@@ -146,8 +146,8 @@ export class TkChips implements ComponentInterface {
                 onClick: () => this.handleClick(),
                 onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
                 tabIndex: this.disabled ? -1 : 0,
-                ...getDataTestidAttribute(this.dataTestid, 'chips', 'remove'),
               })}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-chips-remove` : undefined}
             />
           )}
         </div>

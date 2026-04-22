@@ -258,7 +258,7 @@ export class TkDrawer {
               icon="close"
               type="text"
               onTk-click={this.handleCloseButtonClick}
-              {...getDataTestidAttribute(this.dataTestid, 'drawer', 'close-button')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-drawer-close-button` : undefined}
             ></tk-button>
           )
         )}

@@ -1147,7 +1147,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
+        optionsSearchInput.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-options-search-input` : undefined;
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1258,7 +1258,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
+        optionsSearchInput.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-options-search-input` : undefined;
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1299,7 +1299,7 @@ export class TkTable implements ComponentInterface {
       this.setDataTestidAttribute(filterContainer, 'filter-datepicker-container');
 
       const datepicker = document.createElement('tk-datepicker');
-      this.setDataTestidAttribute(datepicker, 'filter-datepicker');
+      datepicker.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-datepicker` : undefined;
       const defaultDatepickerProps = {
         label: 'Select a date',
         placeholder: 'Choose a date',
@@ -1360,7 +1360,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        this.setDataTestidAttribute(optionsSearchInput, 'filter-options-search-input');
+        optionsSearchInput.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-options-search-input` : undefined;
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1399,7 +1399,7 @@ export class TkTable implements ComponentInterface {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
       const searchInputConfig = column?.filterElements?.searchInput ?? {};
-      this.setDataTestidAttribute(input, 'filter-search-input');
+      input.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-search-input` : undefined;
       input.placeholder = searchInputConfig?.placeholder || 'Search';
       input.label = searchInputConfig?.label;
       input.maskOptions = searchInputConfig?.maskOptions;
@@ -1432,7 +1432,7 @@ export class TkTable implements ComponentInterface {
     cancelButton.label = column?.filterElements?.cancelButton?.label || column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
-    this.setDataTestidAttribute(cancelButton, 'filter-cancel-button');
+    cancelButton.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-cancel-button` : undefined;
     cancelButton.addEventListener('tk-click', () => {
       this.handleSearchCancelButtonClick(field);
       this.isFilterOpen = false;
@@ -1442,7 +1442,7 @@ export class TkTable implements ComponentInterface {
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
     searchButton.label = column?.filterElements?.searchButton?.label || column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
-    this.setDataTestidAttribute(searchButton, 'filter-apply-button');
+    searchButton.dataTestid = this.dataTestid ? `${this.dataTestid}-table-filter-apply-button` : undefined;
     searchButton.addEventListener('tk-click', () => {
       this.handleSearchButtonClick(field);
       // We don't need to close the filter panel here anymore since it's closed in the apply methods
@@ -1879,7 +1879,7 @@ export class TkTable implements ComponentInterface {
                   <tk-icon
                     icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
                     variant="neutral"
-                    {...getDataTestidAttribute(this.dataTestid, 'table', 'group-header-toggle-icon')}
+                    dataTestid={this.dataTestid ? `${this.dataTestid}-table-group-header-toggle-icon` : undefined}
                   />
                 )}
                 <span class="tk-table-group-value" {...getDataTestidAttribute(this.dataTestid, 'table', 'group-header-value')}>
@@ -2008,7 +2008,7 @@ export class TkTable implements ComponentInterface {
                     type="text"
                     size="small"
                     onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                    {...getDataTestidAttribute(this.dataTestid, 'table', 'body-expander-button')}
+                    dataTestid={this.dataTestid ? `${this.dataTestid}-table-body-expander-button` : undefined}
                   ></tk-button>
                 </td>
               );
@@ -2300,7 +2300,7 @@ export class TkTable implements ComponentInterface {
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
             _sortIcon = showBadge ? (
-              <tk-badge count={sortIndex + 1} type="text" rounded size="small" {...getDataTestidAttribute(this.dataTestid, 'table', 'head-cell-sort-badge')}>
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small" dataTestid={this.dataTestid ? `${this.dataTestid}-table-head-cell-sort-badge` : undefined}>
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
@@ -2308,7 +2308,7 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
-                  {...getDataTestidAttribute(this.dataTestid, 'table', 'head-cell-sort-icon')}
+                  dataTestid={this.dataTestid ? `${this.dataTestid}-table-head-cell-sort-icon` : undefined}
                 />
               </tk-badge>
             ) : (
@@ -2319,7 +2319,7 @@ export class TkTable implements ComponentInterface {
                   ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
-                {...getDataTestidAttribute(this.dataTestid, 'table', 'head-cell-sort-icon')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-table-head-cell-sort-icon` : undefined}
               />
             );
 
@@ -2341,14 +2341,14 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
-                  {...getDataTestidAttribute(this.dataTestid, 'table', 'head-cell-search-icon')}
+                  dataTestid={this.dataTestid ? `${this.dataTestid}-table-head-cell-search-icon` : undefined}
                 />
               );
 
               // filtrelenmiş ise badge ile göster
               if (hasFilter) {
                 _searchIcon = (
-                  <tk-badge dot {...getDataTestidAttribute(this.dataTestid, 'table', 'head-cell-search-badge')}>
+                  <tk-badge dot dataTestid={this.dataTestid ? `${this.dataTestid}-table-head-cell-search-badge` : undefined}>
                     {_searchIcon}
                   </tk-badge>
                 );

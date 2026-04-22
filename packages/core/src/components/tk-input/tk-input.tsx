@@ -629,7 +629,14 @@ export class TkInput implements ComponentInterface {
         const label =
           typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
-        return <tk-chips label={label} onTk-remove={() => this.handleChipsRemove(index)} {...baseProps} {...getDataTestidAttribute(this.dataTestid, 'input', 'chip')}></tk-chips>;
+        return (
+          <tk-chips
+            label={label}
+            onTk-remove={() => this.handleChipsRemove(index)}
+            {...baseProps}
+            dataTestid={this.dataTestid ? `${this.dataTestid}-input-chip` : undefined}
+          ></tk-chips>
+        );
       });
     }
   }
@@ -689,11 +696,11 @@ export class TkInput implements ComponentInterface {
             {
               class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) <= Number(this.min) }),
               onClick: this.handleMinusButtonClick.bind(this),
-              ...getDataTestidAttribute(this.dataTestid, 'input', 'counter-decrease'),
             },
             undefined,
             'span',
           )}
+          dataTestid={this.dataTestid ? `${this.dataTestid}-input-counter-decrease` : undefined}
         />
       );
 
@@ -704,11 +711,11 @@ export class TkInput implements ComponentInterface {
             {
               class: classNames('counter-icon clickable', { disabled: this.disabled || Number(this.value) >= Number(this.max) }),
               onClick: this.handlePlusButtonClick.bind(this),
-              ...getDataTestidAttribute(this.dataTestid, 'input', 'counter-increase'),
             },
             undefined,
             'span',
           )}
+          dataTestid={this.dataTestid ? `${this.dataTestid}-input-counter-increase` : undefined}
         />
       );
     }
@@ -721,7 +728,14 @@ export class TkInput implements ComponentInterface {
 
     if (this.inputType == 'password') {
       if (!this.hidePasswordIcon) {
-        passwordLeftIcon = <tk-icon {...getIconElementProps('lock', { color: 'var(--icon-base)', ...getDataTestidAttribute(this.dataTestid, 'input', 'password-lock') })} />;
+        passwordLeftIcon = (
+          <tk-icon
+            {...getIconElementProps('lock', {
+              color: 'var(--icon-base)',
+            })}
+            dataTestid={this.dataTestid ? `${this.dataTestid}-input-password-lock` : undefined}
+          />
+        );
       }
       passwordRightIcon = (
         <tk-icon
@@ -730,8 +744,8 @@ export class TkInput implements ComponentInterface {
             color: 'var(--icon-base)',
             onMouseDown: this.handleMouseDown,
             onMouseUp: this.handleMouseUp,
-            ...getDataTestidAttribute(this.dataTestid, 'input', 'password-visibility'),
           })}
+          dataTestid={this.dataTestid ? `${this.dataTestid}-input-password-visibility` : undefined}
         />
       );
     }
@@ -795,7 +809,7 @@ export class TkInput implements ComponentInterface {
           {this.loading && (
             <tk-spinner
               size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}
-              {...getDataTestidAttribute(this.dataTestid, 'input', 'loading-spinner')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-input-loading-spinner` : undefined}
             ></tk-spinner>
           )}
           {showClearButton && (
@@ -806,8 +820,8 @@ export class TkInput implements ComponentInterface {
                 onClick: this.handleClearButtonClick,
                 onKeyDown: this.handleClearButtonKeyDown,
                 tabindex: this.disabled || this.readonly ? -1 : 0,
-                ...getDataTestidAttribute(this.dataTestid, 'input', 'clear-button'),
               })}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-input-clear-button` : undefined}
             />
           )}
           {_rightIcon}

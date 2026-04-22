@@ -162,7 +162,7 @@ export class TkButton implements ComponentInterface {
     let _rightIcon: HTMLTkIconElement | HTMLElement | undefined;
     const spinnerElement = (
       <tk-spinner
-        {...getDataTestidAttribute(this.dataTestid, 'button', 'loading-spinner')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-button-loading-spinner` : undefined}
         size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}
       ></tk-spinner>
     );

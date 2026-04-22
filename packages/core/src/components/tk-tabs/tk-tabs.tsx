@@ -252,7 +252,7 @@ export class TkTabs implements ComponentInterface {
             type={tab.badgeOptions?.type ?? 'filledlight'}
             rounded={tab.badgeOptions?.rounded ?? true}
             size={badgeSize}
-            {...getDataTestidAttribute(this.dataTestid, 'tabs', 'item-badge')}
+            dataTestid={this.dataTestid ? `${this.dataTestid}-tabs-item-badge` : undefined}
           />
         </div>
       );
@@ -269,13 +269,13 @@ export class TkTabs implements ComponentInterface {
             description={tab.tooltipOptions.description}
             position={tab.tooltipOptions.position || 'bottom'}
             variant={tab.tooltipOptions.variant || 'dark'}
-            {...getDataTestidAttribute(this.dataTestid, 'tabs', 'item-tooltip')}
+            dataTestid={this.dataTestid ? `${this.dataTestid}-tabs-item-tooltip` : undefined}
           >
             <tk-icon
               slot="trigger"
               {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
               size={this.size === 'xxsmall' ? 'xsmall' : this.size}
-              {...getDataTestidAttribute(this.dataTestid, 'tabs', 'item-tooltip-icon')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-tabs-item-tooltip-icon` : undefined}
             />
           </tk-tooltip>
         );
@@ -328,7 +328,7 @@ export class TkTabs implements ComponentInterface {
                 {this.isClosable && (
                   <tk-icon
                     {...getIconElementProps('close', { variant: this.getIconVariant(index) })}
-                    {...getDataTestidAttribute(this.dataTestid, 'tabs', 'item-close')}
+                    dataTestid={this.dataTestid ? `${this.dataTestid}-tabs-item-close` : undefined}
                     onClick={e => {
                       e.stopPropagation();
                       this.closeTab(index);
@@ -341,7 +341,7 @@ export class TkTabs implements ComponentInterface {
           {this.isExtendable && (
             <tk-icon
               {...getIconElementProps('add', { variant: 'neutral', class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })}
-              {...getDataTestidAttribute(this.dataTestid, 'tabs', 'add-icon')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-tabs-add-icon` : undefined}
             />
           )}
         </div>

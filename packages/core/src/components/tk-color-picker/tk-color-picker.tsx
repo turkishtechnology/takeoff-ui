@@ -583,7 +583,7 @@ export class TkColorPicker implements ComponentInterface {
         icon="colorize"
         onTk-click={this.handleEyeDropper}
         disabled={this.disabled}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'eyedropper')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-eyedropper` : undefined}
       />
     );
   }
@@ -690,7 +690,7 @@ export class TkColorPicker implements ComponentInterface {
         disabled={this.disabled}
         onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
         onTk-blur={() => this.handleInputBlur('a')}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'alpha-input')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-alpha-input` : undefined}
       />
     );
   }
@@ -727,7 +727,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('hex')}
-                {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'hex')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-hex` : undefined}
               />
               {this.createAlphaInput()}
             </Fragment>
@@ -741,7 +741,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('r')}
-                {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'red')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-red` : undefined}
               />
               <tk-input
                 class="tk-color-picker-rgb-input"
@@ -750,7 +750,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('g')}
-                {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'green')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-green` : undefined}
               />
               <tk-input
                 class="tk-color-picker-rgb-input"
@@ -759,7 +759,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('b')}
-                {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'blue')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-blue` : undefined}
               />
               {this.createAlphaInput()}
             </div>
@@ -828,7 +828,7 @@ export class TkColorPicker implements ComponentInterface {
                 size="small"
                 icon="close"
                 onClick={this.handleCloseClick}
-                {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'close')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-close` : undefined}
               />
             )
           )}
@@ -911,7 +911,7 @@ export class TkColorPicker implements ComponentInterface {
         onTk-blur={this.handleTriggerInputBlur}
         onTk-change={this.handleTriggerInputChange}
         onKeyDown={this.handleTriggerInputKeyDown}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'trigger-input')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-trigger-input` : undefined}
       ></tk-input>
     );
   }

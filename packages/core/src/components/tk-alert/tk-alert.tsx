@@ -155,7 +155,7 @@ export class TkAlert implements ComponentInterface {
         variant={buttonVariant}
         type="text"
         onTk-click={() => this.handleCloseButtonClick()}
-        {...getDataTestidAttribute(this.dataTestid, 'alert', 'close')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-alert-close` : undefined}
       ></tk-button>
     );
   }

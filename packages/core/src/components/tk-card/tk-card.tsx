@@ -203,7 +203,7 @@ export class TkCard implements ComponentInterface {
                 size="base"
                 type="text"
                 aria-label="TkCard Header Menu Button"
-                {...getDataTestidAttribute(this.dataTestid, 'card', 'header-menu-button')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-card-header-menu-button` : undefined}
               ></tk-button>
             )
           )}

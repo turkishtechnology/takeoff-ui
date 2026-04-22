@@ -266,7 +266,7 @@ export class TkGanttChart implements ComponentInterface {
           ></div>
         );
       return (
-        <tk-tooltip position="top" variant="dark" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'tooltip')}>
+        <tk-tooltip position="top" variant="dark" dataTestid={this.dataTestid ? `${this.dataTestid}-gantt-chart-tooltip` : undefined}>
           <div
             slot="trigger"
             class="tk-gantt-chart-task-bar tk-gantt-chart-task-bar-custom"
@@ -284,7 +284,7 @@ export class TkGanttChart implements ComponentInterface {
     }
 
     return (
-      <tk-tooltip position="top" variant="dark" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'task-bar-tooltip')}>
+      <tk-tooltip position="top" variant="dark" dataTestid={this.dataTestid ? `${this.dataTestid}-gantt-chart-task-bar-tooltip` : undefined}>
         <div
           slot="trigger"
           class={classNames('tk-gantt-chart-task-bar', { 'tk-gantt-chart-task-bar-segment': segmentIndex != null })}
@@ -426,7 +426,7 @@ export class TkGanttChart implements ComponentInterface {
                       onClick={(e: MouseEvent) => this.handleToggleRow(task, e)}
                       {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-expand-button')}
                     >
-                      <tk-icon icon="chevron_right" size="small" {...getDataTestidAttribute(this.dataTestid, 'gantt-chart', 'panel-expand-icon')}></tk-icon>
+                      <tk-icon icon="chevron_right" size="small" dataTestid={this.dataTestid ? `${this.dataTestid}-gantt-chart-panel-expand-icon` : undefined}></tk-icon>
                     </button>
                   )}
                   {col.html ? (

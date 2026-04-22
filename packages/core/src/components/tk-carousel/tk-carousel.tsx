@@ -256,7 +256,7 @@ export class TkCarousel implements ComponentInterface {
         class="prev-button"
         icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'}
         onTk-click={this.handlePrevClick}
-        {...getDataTestidAttribute(this.dataTestid, 'carousel', 'prev-button')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-prev-button` : undefined}
       />
     );
   }
@@ -272,7 +272,7 @@ export class TkCarousel implements ComponentInterface {
         class="next-button"
         icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'}
         onTk-click={this.handleNextClick}
-        {...getDataTestidAttribute(this.dataTestid, 'carousel', 'next-button')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-next-button` : undefined}
       />
     );
   }
@@ -284,7 +284,7 @@ export class TkCarousel implements ComponentInterface {
       icon: this.autoplayTimer ? 'pause_circle' : 'play_circle',
       onClick: this.autoplayTimer ? this.stopAutoplay : this.startAutoplay,
     };
-    return <tk-icon class="player-button" size="small" {...iconProps} {...getDataTestidAttribute(this.dataTestid, 'carousel', 'player-button')}></tk-icon>;
+    return <tk-icon class="player-button" size="small" {...iconProps} dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-player-button` : undefined}></tk-icon>;
   }
 
   private createIndicators() {

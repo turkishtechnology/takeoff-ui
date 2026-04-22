@@ -1839,7 +1839,7 @@ export class TkDatePicker {
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-prev-year')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-header-prev-year` : undefined}
             ></tk-button>
             <span class="tk-datepicker-divider" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'divider')}></span>
             <tk-button
@@ -1848,7 +1848,7 @@ export class TkDatePicker {
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-prev-month')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-header-prev-month` : undefined}
             ></tk-button>
           </div>
           <div class="tk-datepicker-select-container" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-select')}>
@@ -1874,7 +1874,7 @@ export class TkDatePicker {
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-next-month')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-header-next-month` : undefined}
             ></tk-button>
             <span class="tk-datepicker-divider" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'divider')}></span>
             <tk-button
@@ -1883,7 +1883,7 @@ export class TkDatePicker {
               onTk-click={() => this.handleYearChange(1)}
               type="text"
               disabled={this.readonly || this.disabled || this.loading}
-              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'header-next-year')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-header-next-year` : undefined}
             ></tk-button>
           </div>
         </div>
@@ -2000,7 +2000,7 @@ export class TkDatePicker {
               type={this.headerType === 'basic' ? 'basic' : this.headerType === 'light' ? 'light' : 'divided'}
               onTk-change={e => this.handleAmPmToggle(e)}
               class="tk-datepicker-ampm-toggle"
-              {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-toggle')}
+              dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-ampm-toggle` : undefined}
             >
               <tk-toggle-button
                 key="AM"
@@ -2010,7 +2010,7 @@ export class TkDatePicker {
                 label="AM"
                 size="small"
                 disabled={isDisabled || AMDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-am')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-ampm-am` : undefined}
               />
               <tk-toggle-button
                 key="PM"
@@ -2020,7 +2020,7 @@ export class TkDatePicker {
                 label="PM"
                 size="small"
                 disabled={isDisabled || PMDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-ampm-pm')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-ampm-pm` : undefined}
               />
             </tk-toggle-button-group>
           )}
@@ -2046,7 +2046,7 @@ export class TkDatePicker {
                 icon="expand_less"
                 onTk-click={this.handleDecreaseHour}
                 disabled={isMinHour || prevHourDisabled || isDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hours-decrease')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-hours-decrease` : undefined}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
@@ -2101,7 +2101,7 @@ export class TkDatePicker {
                 icon="expand_more"
                 onTk-click={this.handleIncreaseHour}
                 disabled={isMaxHour || nextHourDisabled || isDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-hours-increase')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-hours-increase` : undefined}
               ></tk-button>
             </div>
           </div>
@@ -2114,7 +2114,7 @@ export class TkDatePicker {
                 icon="expand_less"
                 onTk-click={this.handleDecreaseMinute}
                 disabled={isMinMinute || prevMinuteDisabled || isDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minutes-decrease')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-minutes-decrease` : undefined}
               ></tk-button>
               <div
                 class={classNames('tk-datepicker-timepicker-separator', {
@@ -2163,7 +2163,7 @@ export class TkDatePicker {
                 icon="expand_more"
                 onTk-click={this.handleIncreaseMinute}
                 disabled={isMaxMinute || nextMinuteDisabled || isDisabled}
-                {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'timepicker-minutes-increase')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-timepicker-minutes-increase` : undefined}
               ></tk-button>
             </div>
           </div>
@@ -2175,7 +2175,7 @@ export class TkDatePicker {
   private createLoading() {
     return (
       <div class="tk-datepicker-loading" {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'loading')}>
-        <tk-spinner size={this.size} {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'loading-spinner')} />
+        <tk-spinner size={this.size} dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-loading-spinner` : undefined} />
       </div>
     );
   }
@@ -2215,7 +2215,7 @@ export class TkDatePicker {
         aria-haspopup="true"
         data-tk-datepicker-id={this.uniqueId}
         showAsterisk={this.showAsterisk}
-        {...getDataTestidAttribute(this.dataTestid, 'datepicker', 'input')}
+        dataTestid={this.dataTestid ? `${this.dataTestid}-datepicker-input` : undefined}
       />
     );
   }

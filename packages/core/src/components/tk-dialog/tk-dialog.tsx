@@ -228,7 +228,7 @@ export class TkDialog implements ComponentInterface {
               {this.showVariantSign && (
                 <tk-icon
                   sign
-                  {...getDataTestidAttribute(this.dataTestid, 'dialog', 'sign-icon')}
+                  dataTestid={this.dataTestid ? `${this.dataTestid}-dialog-sign-icon` : undefined}
                   size="xlarge"
                   {...getIconElementProps(this.getVariantIcon(), { class: classNames('fill tk-dialog-sign-icon'), variant: this.variant }, 'rounded', 'span')}
                 />
@@ -254,7 +254,7 @@ export class TkDialog implements ComponentInterface {
                 type="text"
                 onTk-click={this.handleCloseButtonClick}
                 aria-label="Close dialog"
-                {...getDataTestidAttribute(this.dataTestid, 'dialog', 'close-button')}
+                dataTestid={this.dataTestid ? `${this.dataTestid}-dialog-close-button` : undefined}
               ></tk-button>
             )}
           </div>

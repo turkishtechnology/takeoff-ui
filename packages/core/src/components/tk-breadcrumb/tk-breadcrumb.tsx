@@ -62,6 +62,7 @@ export class TkBreadcrumb implements ComponentInterface {
       icon,
       isExternal,
       isCurrent: index === (this.model?.length ?? 0) - 1,
+      dataTestid: this.dataTestid,
     };
   }
 
@@ -75,7 +76,7 @@ export class TkBreadcrumb implements ComponentInterface {
       return (
         <tk-icon
           {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, 'rounded', 'span')}
-          {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator-item')}
+          dataTestid={this.dataTestid ? `${this.dataTestid}-breadcrumb-separator-item` : undefined}
         />
       );
     }
@@ -93,7 +94,7 @@ export class TkBreadcrumb implements ComponentInterface {
           ) : (
             this.model?.map((item, index) => (
               <Fragment>
-                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} dataTestid={this.dataTestid} />
+                <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} />
                 {index < this.model.length - 1 && (
                   <li class="tk-breadcrumb-separator" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator')}>
                     {this.renderSeparator()}

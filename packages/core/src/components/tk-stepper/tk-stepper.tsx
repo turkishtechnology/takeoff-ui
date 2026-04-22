@@ -225,7 +225,7 @@ export class TkStepper implements ComponentInterface {
     const defaultProps = { size: iconSizes[this.size], fill: true, ...props, class: props?.class };
     const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
-    return <tk-icon {...iconProps} {...getDataTestidAttribute(this.dataTestid, 'stepper', 'icon')} />;
+    return <tk-icon {...iconProps} dataTestid={this.dataTestid ? `${this.dataTestid}-stepper-icon` : undefined} />;
   }
 
   private handleStepClick = (index: number) => {
