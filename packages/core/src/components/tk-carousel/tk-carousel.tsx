@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * The `TkCarousel` is a content slider component with various options.
@@ -256,7 +256,7 @@ export class TkCarousel implements ComponentInterface {
         class="prev-button"
         icon={this.orientation === 'vertical' ? 'keyboard_arrow_up' : 'chevron_left'}
         onTk-click={this.handlePrevClick}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-prev-button` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'prev-button')}
       />
     );
   }
@@ -272,7 +272,7 @@ export class TkCarousel implements ComponentInterface {
         class="next-button"
         icon={this.orientation === 'vertical' ? 'keyboard_arrow_down' : 'chevron_right'}
         onTk-click={this.handleNextClick}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-next-button` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'next-button')}
       />
     );
   }
@@ -284,7 +284,7 @@ export class TkCarousel implements ComponentInterface {
       icon: this.autoplayTimer ? 'pause_circle' : 'play_circle',
       onClick: this.autoplayTimer ? this.stopAutoplay : this.startAutoplay,
     };
-    return <tk-icon class="player-button" size="small" {...iconProps} dataTestid={this.dataTestid ? `${this.dataTestid}-carousel-player-button` : undefined}></tk-icon>;
+    return <tk-icon class="player-button" size="small" {...iconProps} dataTestid={getDataTestidProp(this.dataTestid, 'player-icon')}></tk-icon>;
   }
 
   private createIndicators() {
@@ -292,16 +292,16 @@ export class TkCarousel implements ComponentInterface {
     const indicatorCount = Math.max(1, this.totalItems - this.itemsPerView + 1);
 
     return (
-      <div class="tk-carousel-indicators" {...getDataTestidAttribute(this.dataTestid, 'carousel', 'indicators')}>
+      <div class="tk-carousel-indicators" {...getDataTestidAttribute(this.dataTestid, 'indicators')}>
         {this.createPlayerButtons()}
-        {Array.from({ length: indicatorCount }).map((_, index) => (
-          <div class="tk-carousel-indicator" onClick={() => this.handleIndicatorClick(index)} {...getDataTestidAttribute(this.dataTestid, 'carousel', 'indicator')}>
-            <div
-              class={classNames('tk-carousel-indicator-dot', { active: index === this.activeIndex })}
-              {...getDataTestidAttribute(this.dataTestid, 'carousel', 'indicator-dot')}
-            ></div>
-          </div>
-        ))}
+        {Array.from({ length: indicatorCount }).map((_, index) => {
+          const indicatorDataTestid = getDataTestidProp(this.dataTestid, 'indicator', index.toString());
+          return (
+            <div class="tk-carousel-indicator" onClick={() => this.handleIndicatorClick(index)} {...getDataTestidAttribute(indicatorDataTestid)}>
+              <div class={classNames('tk-carousel-indicator-dot', { active: index === this.activeIndex })} {...getDataTestidAttribute(indicatorDataTestid, 'dot')}></div>
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -315,7 +315,7 @@ export class TkCarousel implements ComponentInterface {
           { 'tk-carousel-navigation': navPosition !== 'distributed' },
           { 'vertical-navigation': navPosition === 'left' || navPosition === 'right' },
         )}
-        {...getDataTestidAttribute(this.dataTestid, 'carousel', 'navigation')}
+        {...getDataTestidAttribute(this.dataTestid, 'navigation')}
       >
         {this.createPrevButton()}
         {this.createIndicators()}
@@ -338,9 +338,9 @@ export class TkCarousel implements ComponentInterface {
     this.el.style.setProperty('--items-per-view', String(this.itemsPerView));
 
     return (
-      <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'carousel')}>
-        <div class="tk-carousel-overlay" {...getDataTestidAttribute(this.dataTestid, 'carousel', 'overlay')}>
-          <div class="tk-carousel-items-container" {...getDataTestidAttribute(this.dataTestid, 'carousel', 'items-container')}>
+      <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+        <div class="tk-carousel-overlay" {...getDataTestidAttribute(this.dataTestid, 'overlay')}>
+          <div class="tk-carousel-items-container" {...getDataTestidAttribute(this.dataTestid, 'items')}>
             <slot
               onSlotchange={() => {
                 this.updateItems();

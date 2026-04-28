@@ -28,10 +28,10 @@ describe('tk-accordion-item', () => {
         html: `<tk-accordion-item data-testid="my-item" header="Title"></tk-accordion-item>`,
       });
 
-      const root = page.root?.shadowRoot?.querySelector('[data-testid="my-item-accordion-item"]');
-      const header = page.root?.shadowRoot?.querySelector('[data-testid="my-item-accordion-item-header"]');
-      const title = page.root?.shadowRoot?.querySelector('[data-testid="my-item-accordion-item-title"]');
-      const content = page.root?.shadowRoot?.querySelector('[data-testid="my-item-accordion-item-content"]');
+      const root = page.root?.shadowRoot?.querySelector('[data-testid="my-item-item"]');
+      const header = page.root?.shadowRoot?.querySelector('[data-testid="my-item-header"]');
+      const title = page.root?.shadowRoot?.querySelector('[data-testid="my-item-title"]');
+      const content = page.root?.shadowRoot?.querySelector('[data-testid="my-item-content"]');
 
       expect(root).toBeTruthy();
       expect(header).toBeTruthy();

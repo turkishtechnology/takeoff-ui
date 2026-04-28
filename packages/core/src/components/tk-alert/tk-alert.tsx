@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.
@@ -104,7 +104,6 @@ export class TkAlert implements ComponentInterface {
       iconStyle: 'rounded',
       fill: true,
       dataTestid: this.dataTestid,
-      dataTestidComponent: 'alert',
     });
   }
 
@@ -113,7 +112,7 @@ export class TkAlert implements ComponentInterface {
 
     if (this.header?.length > 0) {
       header = (
-        <div class="tk-alert-header" style={this.headerStyle} {...getDataTestidAttribute(this.dataTestid, 'alert', 'header')}>
+        <div class="tk-alert-header" style={this.headerStyle} {...getDataTestidAttribute(this.dataTestid, 'header')}>
           {this.header}
         </div>
       );
@@ -121,15 +120,15 @@ export class TkAlert implements ComponentInterface {
 
     if (typeof this.message == 'string') {
       message = (
-        <div class="tk-alert-message" {...getDataTestidAttribute(this.dataTestid, 'alert', 'message')}>
+        <div class="tk-alert-message" {...getDataTestidAttribute(this.dataTestid, 'message')}>
           {this.message}
         </div>
       );
     } else if (this.message?.every(item => typeof item === 'string')) {
       message = (
-        <div class="tk-alert-message-holder" {...getDataTestidAttribute(this.dataTestid, 'alert', 'message-holder')}>
-          {this.message?.map(m => (
-            <div class="tk-alert-message" {...getDataTestidAttribute(this.dataTestid, 'alert', 'message')}>
+        <div class="tk-alert-message-holder" {...getDataTestidAttribute(this.dataTestid, 'message-holder')}>
+          {this.message?.map((m, index) => (
+            <div class="tk-alert-message" {...getDataTestidAttribute(this.dataTestid, 'message', index.toString())}>
               {m}
             </div>
           ))}
@@ -138,7 +137,7 @@ export class TkAlert implements ComponentInterface {
     }
 
     return (
-      <div class={classNames('tk-alert-content', !this.header && 'message-content')} {...getDataTestidAttribute(this.dataTestid, 'alert', 'content')}>
+      <div class={classNames('tk-alert-content', !this.header && 'message-content')} {...getDataTestidAttribute(this.dataTestid, 'content')}>
         <div>
           {header}
           {message}
@@ -160,7 +159,7 @@ export class TkAlert implements ComponentInterface {
         variant={buttonVariant}
         type="text"
         onTk-click={() => this.handleCloseButtonClick()}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-alert-close` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'close-button')}
       ></tk-button>
     );
   }
@@ -176,7 +175,7 @@ export class TkAlert implements ComponentInterface {
     const icon = this.createIcons();
 
     return (
-      <div class={rootClasses} style={this.containerStyle} {...getDataTestidAttribute(this.dataTestid, 'alert')}>
+      <div class={rootClasses} style={this.containerStyle} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         {this.hasContentSlot ? (
           <slot name="content" />
         ) : (

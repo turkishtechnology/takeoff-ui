@@ -14,9 +14,9 @@ describe('tk-popover', () => {
     await page.waitForChanges();
 
     const content = await page.find('tk-popover >>> .tk-popover-content');
-    const rootWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover"]');
-    const contentWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover-content"]');
-    const arrowWithId = await page.find('tk-popover >>> [data-testid="my-pop-popover-arrow"]');
+    const rootWithId = await page.find('tk-popover >>> [data-testid="my-pop-container"]');
+    const contentWithId = await page.find('tk-popover >>> [data-testid="my-pop-content"]');
+    const arrowWithId = await page.find('tk-popover >>> [data-testid="my-pop-arrow"]');
     const triggerSlot = await page.find('tk-popover >>> slot[name="trigger"]');
     const contentSlot = await page.find('tk-popover >>> slot[name="content"]');
 

@@ -84,7 +84,7 @@ describe('dataTestid', () => {
       html: `<tk-chips data-testid="my-chip" label="Chip"></tk-chips>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('.tk-chips').getAttribute('data-testid')).toBe('my-chip-chips');
+    expect(page.root.shadowRoot.querySelector('.tk-chips').getAttribute('data-testid')).toBe('my-chip-container');
   });
 
   it('does not set data-testid when dataTestid is not provided', async () => {
@@ -103,7 +103,7 @@ describe('dataTestid', () => {
     });
 
     const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
-    expect(icons[0].getAttribute('data-testid')).toBe('my-chip-chips-left-icon');
-    expect(icons[1].getAttribute('data-testid')).toBe('my-chip-chips-remove');
+    expect(icons[0].getAttribute('data-testid')).toBe('my-chip-left');
+    expect(icons[1].getAttribute('data-testid')).toBe('my-chip-remove-icon');
   });
 });

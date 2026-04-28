@@ -153,12 +153,12 @@ export class TkRadioGroup implements ComponentInterface {
 
     if (this.label?.length > 0) {
       const asterisk = (
-        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'radio-group', 'label-asterisk')}>
+        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
       _label = (
-        <label class="label" {...getDataTestidAttribute(this.dataTestid, 'radio-group', 'label')}>
+        <label class="label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
           {this.label}
           {this.showAsterisk && asterisk}
         </label>
@@ -166,12 +166,12 @@ export class TkRadioGroup implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses} aria-invalid={this.invalid} {...getDataTestidAttribute(this.dataTestid, 'radio-group')}>
+      <div class={rootClasses} aria-invalid={this.invalid} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         {_label}
-        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })} {...getDataTestidAttribute(this.dataTestid, 'radio-group', 'holder')}>
+        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })} {...getDataTestidAttribute(this.dataTestid, 'holder')}>
           <slot onSlotchange={this.handleSlotChange.bind(this)} />
         </div>
-        {renderHint(this.hint, this.error, this.invalid, this.dataTestid, 'radio-group')}
+        {renderHint(this.hint, this.error, this.invalid, this.dataTestid)}
       </div>
     );
   }

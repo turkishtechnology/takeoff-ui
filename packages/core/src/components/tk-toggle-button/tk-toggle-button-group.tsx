@@ -98,7 +98,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
     });
 
     return (
-      <div class={groupClasses} {...getDataTestidAttribute(this.dataTestid, 'toggle-button-group')}>
+      <div class={groupClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         <slot onSlotchange={() => this.updateSlottedItems()}></slot>
       </div>
     );

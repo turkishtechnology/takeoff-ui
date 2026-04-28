@@ -120,7 +120,7 @@ export class TkBadge implements ComponentInterface {
       const type = this.label ? 'label' : this.isValidCount() ? 'count' : null;
       const { value = '', class: contentClass = '' } = contentConfig[type] || {};
       content = (
-        <span class={contentClass} {...getDataTestidAttribute(this.dataTestid, 'badge', contentClass)}>
+        <span class={contentClass} {...getDataTestidAttribute(this.dataTestid, contentClass)}>
           {value}
         </span>
       );
@@ -153,7 +153,6 @@ export class TkBadge implements ComponentInterface {
           size: this.size,
           additionalProps: { ...(this.type === 'filled' ? { color: 'var(--static-white)' } : {}) },
           dataTestid: this.dataTestid,
-          dataTestidComponent: 'badge',
         },
         this.iconPosition,
       );
@@ -163,9 +162,9 @@ export class TkBadge implements ComponentInterface {
 
     return (
       <Host class={{ 'full-width': this.fullWidth && !this.hasSlot }}>
-        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'badge')}>
+        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
           <slot />
-          <span class={badgeClasses} {...getDataTestidAttribute(this.dataTestid, 'badge', 'content')}>
+          <span class={badgeClasses} {...getDataTestidAttribute(this.dataTestid, 'content')}>
             {_leftIcon}
             {this.renderContent()}
             {_rightIcon}

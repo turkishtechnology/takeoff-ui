@@ -62,57 +62,51 @@ export class TkSpinner {
         if (this.isButton) {
           const button = this.el.closest('button');
           const borderColor = window.getComputedStyle(button).color;
-          return (
-            <div
-              style={{ borderColor: borderColor, borderTopColor: 'transparent' }}
-              class="spinner-rounded"
-              {...getDataTestidAttribute(this.dataTestid, 'spinner', 'rounded')}
-            ></div>
-          );
+          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded" {...getDataTestidAttribute(this.dataTestid, 'rounded')}></div>;
         }
-        return <div class="spinner-rounded" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'rounded')}></div>;
+        return <div class="spinner-rounded" {...getDataTestidAttribute(this.dataTestid, 'rounded')}></div>;
       case 'dots':
         return (
-          <div class="spinner-dots" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dots')}>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
-            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></div>
+          <div class="spinner-dots" {...getDataTestidAttribute(this.dataTestid, 'dots')}>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-0')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-1')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-2')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-3')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-4')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-5')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-6')}></div>
+            <div class="dot" {...getDataTestidAttribute(this.dataTestid, 'dot-7')}></div>
           </div>
         );
       case 'lines':
         return (
-          <div class="spinner-lines" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'lines')}>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
-            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'line')}></div>
+          <div class="spinner-lines" {...getDataTestidAttribute(this.dataTestid, 'lines')}>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-0')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-1')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-2')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-3')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-4')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-5')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-6')}></div>
+            <div class="line" {...getDataTestidAttribute(this.dataTestid, 'line-7')}></div>
           </div>
         );
       case 'three-dots':
         return (
-          <div class="spinner-three-dots" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'three-dots')}>
-            <span class="dot1" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
-            <span class="dot2" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
-            <span class="dot3" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'dot')}></span>
+          <div class="spinner-three-dots" {...getDataTestidAttribute(this.dataTestid, 'three-dots')}>
+            <span class="dot1" {...getDataTestidAttribute(this.dataTestid, 'dot-0')}></span>
+            <span class="dot2" {...getDataTestidAttribute(this.dataTestid, 'dot-1')}></span>
+            <span class="dot3" {...getDataTestidAttribute(this.dataTestid, 'dot-2')}></span>
           </div>
         );
       case 'pulse':
-        return <div class="spinner-pulse" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'pulse')}></div>;
+        return <div class="spinner-pulse" {...getDataTestidAttribute(this.dataTestid, 'pulse')}></div>;
       case 'loader':
-        return <div class="spinner-loader" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'loader')}></div>;
+        return <div class="spinner-loader" {...getDataTestidAttribute(this.dataTestid, 'loader')}></div>;
       case 'logo':
         return (
-          <div class="spinner-logo" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'logo')}>
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'logo-svg')}>
+          <div class="spinner-logo" {...getDataTestidAttribute(this.dataTestid, 'logo')}>
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...getDataTestidAttribute(this.dataTestid, 'logo-icon')}>
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -135,11 +129,11 @@ export class TkSpinner {
           [this.size]: true,
           [this.variant]: true,
         })}
-        {...getDataTestidAttribute(this.dataTestid, 'spinner')}
+        {...getDataTestidAttribute(this.dataTestid, 'container')}
       >
         {this.renderSpinner()}
         {this.label && (
-          <div class="tk-spinner-label" {...getDataTestidAttribute(this.dataTestid, 'spinner', 'label')}>
+          <div class="tk-spinner-label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
             {this.label}
           </div>
         )}

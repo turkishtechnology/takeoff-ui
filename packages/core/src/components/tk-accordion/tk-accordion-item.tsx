@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, ty
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -94,7 +94,7 @@ export class TkAccordionItem implements ComponentInterface {
     return (
       <tk-icon
         {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-accordion-item-${this.active ? 'collapse' : 'expand'}` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, this.active ? 'collapse-icon' : 'expand-icon')}
       ></tk-icon>
     );
   }
@@ -115,21 +115,20 @@ export class TkAccordionItem implements ComponentInterface {
       variant: 'neutral',
       additionalProps: { class: 'tk-accordion-item-icon' },
       dataTestid: this.dataTestid,
-      dataTestidComponent: 'accordion-item',
     });
     return (
       <Host>
-        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'accordion-item')}>
-          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)} {...getDataTestidAttribute(this.dataTestid, 'accordion-item', 'header')}>
+        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'item')}>
+          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)} {...getDataTestidAttribute(this.dataTestid, 'header')}>
             {this.arrowPosition === 'left' && this.renderCollapseIcon()}
             {icon.leftIcon}
-            <span class="title" {...getDataTestidAttribute(this.dataTestid, 'accordion-item', 'title')}>
+            <span class="title" {...getDataTestidAttribute(this.dataTestid, 'title')}>
               {this.createHeader()}
             </span>
             {icon.rightIcon}
             {this.arrowPosition === 'right' && this.renderCollapseIcon()}
           </div>
-          <div class={`content ${this.active ? 'open' : ''}`} {...getDataTestidAttribute(this.dataTestid, 'accordion-item', 'content')}>
+          <div class={`content ${this.active ? 'open' : ''}`} {...getDataTestidAttribute(this.dataTestid, 'content')}>
             <slot name="content" />
           </div>
         </div>

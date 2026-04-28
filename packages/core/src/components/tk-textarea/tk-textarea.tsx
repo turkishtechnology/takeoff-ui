@@ -192,12 +192,12 @@ export class TkTextarea implements ComponentInterface {
 
     if (this.label?.length > 0) {
       const asterisk = (
-        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'textarea', 'label-asterisk')}>
+        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
       label = (
-        <label htmlFor={this.uniqueId} class="label" {...getDataTestidAttribute(this.dataTestid, 'textarea', 'label')}>
+        <label htmlFor={this.uniqueId} class="label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -213,16 +213,16 @@ export class TkTextarea implements ComponentInterface {
     const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
     if (this.maxLength) {
       counter = (
-        <span class={counterClasses} {...getDataTestidAttribute(this.dataTestid, 'textarea', 'counter')}>
+        <span class={counterClasses} {...getDataTestidAttribute(this.dataTestid, 'counter')}>
           {this.charCount}/{this.maxLength}
         </span>
       );
     }
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'textarea')}>
+      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         {this.renderLabel()}
-        <div class="tk-textarea" {...getDataTestidAttribute(this.dataTestid, 'textarea', 'control')}>
+        <div class="tk-textarea" {...getDataTestidAttribute(this.dataTestid, 'control')}>
           <textarea
             id={this.uniqueId}
             ref={el => (this.nativeInput = el)}
@@ -238,11 +238,11 @@ export class TkTextarea implements ComponentInterface {
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
             value={this.value}
-            {...getDataTestidAttribute(this.dataTestid, 'textarea', 'native')}
+            {...getDataTestidAttribute(this.dataTestid, 'native-textarea')}
           />
           {counter}
         </div>
-        {renderHint(this.hint, this.error, this.invalid, this.dataTestid, 'textarea')}
+        {renderHint(this.hint, this.error, this.invalid, this.dataTestid)}
       </div>
     );
   }

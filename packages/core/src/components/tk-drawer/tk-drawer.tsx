@@ -1,7 +1,7 @@
 import { Component, Prop, h, State, Watch, Element, Event, EventEmitter, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * The `TkDrawer` is a container component displayed as an overlay. It supports various features such as different header and footer types, multiple variants, and flexible positioning, making it suitable for a wide range of use cases.
@@ -240,11 +240,11 @@ export class TkDrawer {
     const hasHeaderActionsSlot = !!this.el.querySelector('[slot="header-actions"]');
 
     return (
-      <div class={classNames('tk-drawer-header', `tk-drawer-header-${this.headerType}`)} {...getDataTestidAttribute(this.dataTestid, 'drawer', 'header')}>
+      <div class={classNames('tk-drawer-header', `tk-drawer-header-${this.headerType}`)} {...getDataTestidAttribute(this.dataTestid, 'header')}>
         {hasHeaderSlot ? (
           <slot name="header"></slot>
         ) : this.header ? (
-          <span class="tk-drawer-header-label" {...getDataTestidAttribute(this.dataTestid, 'drawer', 'label')}>
+          <span class="tk-drawer-header-label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
             {this.header}
           </span>
         ) : null}
@@ -258,7 +258,7 @@ export class TkDrawer {
               icon="close"
               type="text"
               onTk-click={this.handleCloseButtonClick}
-              dataTestid={this.dataTestid ? `${this.dataTestid}-drawer-close-button` : undefined}
+              dataTestid={getDataTestidProp(this.dataTestid, 'close-button')}
             ></tk-button>
           )
         )}
@@ -271,7 +271,7 @@ export class TkDrawer {
 
     if (hasFooterSlot) {
       return (
-        <div class={classNames('tk-drawer-footer', `tk-drawer-footer-${this.footerType}`)} {...getDataTestidAttribute(this.dataTestid, 'drawer', 'footer')}>
+        <div class={classNames('tk-drawer-footer', `tk-drawer-footer-${this.footerType}`)} {...getDataTestidAttribute(this.dataTestid, 'footer')}>
           <slot name="footer"></slot>
         </div>
       );
@@ -291,11 +291,11 @@ export class TkDrawer {
     };
 
     return (
-      <div class={drawerClass} style={style} {...getDataTestidAttribute(this.dataTestid, 'drawer', 'panel')}>
-        <div class="tk-drawer-content" {...getDataTestidAttribute(this.dataTestid, 'drawer', 'content')}>
+      <div class={drawerClass} style={style} {...getDataTestidAttribute(this.dataTestid, 'panel')}>
+        <div class="tk-drawer-content" {...getDataTestidAttribute(this.dataTestid, 'content')}>
           <slot name="container">
             {this.createHeader()}
-            <div class="tk-drawer-body" {...getDataTestidAttribute(this.dataTestid, 'drawer', 'body')}>
+            <div class="tk-drawer-body" {...getDataTestidAttribute(this.dataTestid, 'body')}>
               <slot name="content"></slot>
             </div>
             {this.createFooter()}
@@ -311,8 +311,8 @@ export class TkDrawer {
       'tk-drawer-mask-hidden': this.hideBackdrop,
     });
     return (
-      <div class={maskClasses} {...getDataTestidAttribute(this.dataTestid, 'drawer')}>
-        <div class="tk-drawer-overlay" onClick={() => this.handleOverlayClick()} {...getDataTestidAttribute(this.dataTestid, 'drawer', 'overlay')}></div>
+      <div class={maskClasses} {...getDataTestidAttribute(this.dataTestid, 'mask')}>
+        <div class="tk-drawer-overlay" onClick={() => this.handleOverlayClick()} {...getDataTestidAttribute(this.dataTestid, 'overlay')}></div>
         {this.createDrawer()}
       </div>
     );

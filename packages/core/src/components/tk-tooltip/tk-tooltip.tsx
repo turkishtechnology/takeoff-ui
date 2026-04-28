@@ -130,14 +130,13 @@ export class TkTooltip implements ComponentInterface {
         sign: true,
         size: 'small',
         dataTestid: this.dataTestid,
-        dataTestidComponent: 'tooltip',
       });
       _leftIcon = leftIcon;
       _rightIcon = rightIcon;
     }
 
     return (
-      <div class="tk-tooltip" {...getDataTestidAttribute(this.dataTestid, 'tooltip')}>
+      <div class="tk-tooltip" {...getDataTestidAttribute(this.dataTestid, 'container')}>
         <slot name="trigger" />
 
         {this.isOpen && (
@@ -149,7 +148,7 @@ export class TkTooltip implements ComponentInterface {
             }}
             style={{ ...this.containerStyle }}
             role="tooltip"
-            {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'content')}
+            {...getDataTestidAttribute(this.dataTestid, 'content')}
           >
             {this.hasContentSlot ? (
               <slot name="content" />
@@ -157,17 +156,17 @@ export class TkTooltip implements ComponentInterface {
               <Fragment>
                 {_leftIcon}
                 <div>
-                  <div class="tk-tooltip-header" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'header')}>
+                  <div class="tk-tooltip-header" {...getDataTestidAttribute(this.dataTestid, 'header')}>
                     {this.header}
                   </div>
-                  <div class="tk-tooltip-description" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'description')}>
+                  <div class="tk-tooltip-description" {...getDataTestidAttribute(this.dataTestid, 'description')}>
                     {this.description}
                   </div>
                 </div>
                 {_rightIcon}
               </Fragment>
             )}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'tooltip', 'arrow')}></div>
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow')}></div>
           </div>
         )}
       </div>

@@ -125,7 +125,7 @@ describe('dataTestid', () => {
     });
 
     const container = page.root.shadowRoot.querySelector('.tk-alert-container');
-    expect(container.getAttribute('data-testid')).toBe('my-alert-alert');
+    expect(container.getAttribute('data-testid')).toBe('my-alert-container');
   });
 
   it('does not set data-testid when dataTestid is not provided', async () => {
@@ -144,8 +144,8 @@ describe('dataTestid', () => {
       html: `<tk-alert data-testid="my-alert" header="Title" message="Body"></tk-alert>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('.tk-alert-header').getAttribute('data-testid')).toBe('my-alert-alert-header');
-    expect(page.root.shadowRoot.querySelector('.tk-alert-message').getAttribute('data-testid')).toBe('my-alert-alert-message');
+    expect(page.root.shadowRoot.querySelector('.tk-alert-header').getAttribute('data-testid')).toBe('my-alert-header');
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message').getAttribute('data-testid')).toBe('my-alert-message');
   });
 
   it('sets data-testid on message-holder when message is an array', async () => {
@@ -156,11 +156,11 @@ describe('dataTestid', () => {
     page.root.message = ['First', 'Second'];
     await page.waitForChanges();
 
-    expect(page.root.shadowRoot.querySelector('.tk-alert-message-holder').getAttribute('data-testid')).toBe('my-alert-alert-message-holder');
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message-holder').getAttribute('data-testid')).toBe('my-alert-message-holder');
 
     const messages = page.root.shadowRoot.querySelectorAll('.tk-alert-message');
-    expect(messages[0].getAttribute('data-testid')).toBe('my-alert-alert-message');
-    expect(messages[1].getAttribute('data-testid')).toBe('my-alert-alert-message');
+    expect(messages[0].getAttribute('data-testid')).toBe('my-alert-message-0');
+    expect(messages[1].getAttribute('data-testid')).toBe('my-alert-message-1');
   });
 
   it('sets data-testid on content wrapper', async () => {
@@ -170,7 +170,7 @@ describe('dataTestid', () => {
     });
 
     const content = page.root.shadowRoot.querySelector('.tk-alert-content');
-    expect(content.getAttribute('data-testid')).toBe('my-alert-alert-content');
+    expect(content.getAttribute('data-testid')).toBe('my-alert-content');
   });
 
   it('sets data-testid on close button when removable', async () => {
@@ -180,7 +180,7 @@ describe('dataTestid', () => {
     });
 
     const closeBtn = page.root.shadowRoot.querySelector('tk-button');
-    expect(closeBtn.getAttribute('data-testid')).toBe('my-alert-alert-close');
+    expect(closeBtn.getAttribute('data-testid')).toBe('my-alert-close-button');
   });
 
   it('sets data-testid on icon element', async () => {
@@ -190,6 +190,6 @@ describe('dataTestid', () => {
     });
 
     const icon = page.root.shadowRoot.querySelector('tk-icon');
-    expect(icon.getAttribute('data-testid')).toBe('my-alert-alert-left-icon');
+    expect(icon.getAttribute('data-testid')).toBe('my-alert-left');
   });
 });

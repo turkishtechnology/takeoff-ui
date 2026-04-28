@@ -220,7 +220,7 @@ export class TkAccordion implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-accordion" {...getDataTestidAttribute(this.dataTestid, 'accordion')}>
+      <div class="tk-accordion" {...getDataTestidAttribute(this.dataTestid, 'container')}>
         <slot />
       </div>
     );

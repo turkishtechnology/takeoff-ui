@@ -100,7 +100,6 @@ export class TkToggleButton implements ComponentInterface {
         variant: 'neutral',
         additionalProps: { color: this.getIconColor() },
         dataTestid: this.dataTestid,
-        dataTestidComponent: 'toggle-button',
       },
       this.iconPosition,
     );
@@ -109,7 +108,7 @@ export class TkToggleButton implements ComponentInterface {
   private renderLabel() {
     if (this.label?.length > 0) {
       return (
-        <span class={classNames('tk-toggle-button-label', this.size)} {...getDataTestidAttribute(this.dataTestid, 'toggle-button', 'label')}>
+        <span class={classNames('tk-toggle-button-label', this.size)} {...getDataTestidAttribute(this.dataTestid, 'label')}>
           {this.label}
         </span>
       );
@@ -126,7 +125,7 @@ export class TkToggleButton implements ComponentInterface {
     const icon = this.createIcons();
 
     return (
-      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick} {...getDataTestidAttribute(this.dataTestid, 'toggle-button')}>
+      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick} {...getDataTestidAttribute(this.dataTestid, 'button')}>
         {icon.leftIcon}
         {this.renderLabel()}
         {icon.rightIcon}

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } from './color-utils';
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 declare global {
   interface Window {
@@ -583,7 +583,7 @@ export class TkColorPicker implements ComponentInterface {
         icon="colorize"
         onTk-click={this.handleEyeDropper}
         disabled={this.disabled}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-eyedropper` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'eyedropper-button')}
       />
     );
   }
@@ -593,7 +593,7 @@ export class TkColorPicker implements ComponentInterface {
       <div
         class="tk-color-picker-preview-box"
         style={{ backgroundColor: hsvaToCss(this.internalHSVA, this.currentFormat) }}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'preview')}
+        {...getDataTestidAttribute(this.dataTestid, 'preview')}
       />
     );
   }
@@ -606,17 +606,17 @@ export class TkColorPicker implements ComponentInterface {
         class="tk-color-picker-saturation-container"
         style={{ backgroundColor: `hsl(${hue}, 100%, 50%)` }}
         onMouseDown={this.handleSaturationMouseDown}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'saturation')}
+        {...getDataTestidAttribute(this.dataTestid, 'saturation')}
       >
-        <div class="tk-color-picker-saturation-white" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'white')} />
-        <div class="tk-color-picker-saturation-black" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'black')} />
+        <div class="tk-color-picker-saturation-white" {...getDataTestidAttribute(this.dataTestid, 'white')} />
+        <div class="tk-color-picker-saturation-black" {...getDataTestidAttribute(this.dataTestid, 'black')} />
         <div
           class="tk-color-picker-saturation-pointer"
           style={{
             left: `${s}%`,
             top: `${100 - v}%`,
           }}
-          {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'pointer')}
+          {...getDataTestidAttribute(this.dataTestid, 'pointer')}
         />
       </div>
     );
@@ -631,22 +631,19 @@ export class TkColorPicker implements ComponentInterface {
     const huePercent = (this.internalHSVA.h / 360) * 100;
 
     return (
-      <div
-        class={classNames('tk-color-picker-sliders', { 'tk-color-picker-sliders-vertical-layout': isHorizontalLayout })}
-        {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'sliders')}
-      >
+      <div class={classNames('tk-color-picker-sliders', { 'tk-color-picker-sliders-vertical-layout': isHorizontalLayout })} {...getDataTestidAttribute(this.dataTestid, 'sliders')}>
         <div
           class={`${sliderClass} tk-color-picker-hue`}
           ref={el => (this.hueSliderRef = el as HTMLElement)}
           onMouseDown={this.handleHueMouseDown}
-          {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'hue')}
+          {...getDataTestidAttribute(this.dataTestid, 'hue')}
         >
           <div
             class="tk-color-picker-slider-thumb"
             style={isHorizontalLayout ? { top: `${huePercent}%`, left: '50%' } : { left: `${huePercent}%`, top: '50%' }}
-            {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'thumb')}
+            {...getDataTestidAttribute(this.dataTestid, 'hue-thumb')}
           >
-            <div class="tk-color-picker-slider-thumb-inner" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'inner')} />
+            <div class="tk-color-picker-slider-thumb-inner" {...getDataTestidAttribute(this.dataTestid, 'hue-inner-thumb')} />
           </div>
         </div>
 
@@ -655,20 +652,20 @@ export class TkColorPicker implements ComponentInterface {
             class={sliderClass}
             ref={el => (this.alphaSliderRef = el as HTMLElement)}
             onMouseDown={this.handleAlphaMouseDown}
-            {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'alpha')}
+            {...getDataTestidAttribute(this.dataTestid, 'alpha')}
           >
-            <div class="tk-color-picker-alpha-bg" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'slider')} />
+            <div class="tk-color-picker-alpha-bg" {...getDataTestidAttribute(this.dataTestid, 'slider')} />
             <div
               class="tk-color-picker-alpha-overlay"
               style={{ background: `linear-gradient(${isHorizontalLayout ? 'to bottom' : 'to right'}, transparent, ${hsvaToHex(this.internalHSVA)})` }}
-              {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'overlay')}
+              {...getDataTestidAttribute(this.dataTestid, 'overlay')}
             />
             <div
               class="tk-color-picker-slider-thumb"
               style={isHorizontalLayout ? { top: `${this.internalHSVA.a * 100}%`, left: '50%' } : { left: `${this.internalHSVA.a * 100}%`, top: '50%' }}
-              {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'thumb')}
+              {...getDataTestidAttribute(this.dataTestid, 'alpha-thumb')}
             >
-              <div class="tk-color-picker-slider-thumb-inner" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'inner')} />
+              <div class="tk-color-picker-slider-thumb-inner" {...getDataTestidAttribute(this.dataTestid, 'alpha-inner-thumb')} />
             </div>
           </div>
         )}
@@ -690,7 +687,7 @@ export class TkColorPicker implements ComponentInterface {
         disabled={this.disabled}
         onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
         onTk-blur={() => this.handleInputBlur('a')}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-alpha-input` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'alpha-input')}
       />
     );
   }
@@ -699,7 +696,7 @@ export class TkColorPicker implements ComponentInterface {
     const { r, g, b } = hsvaToRgb(this.internalHSVA.h, this.internalHSVA.s, this.internalHSVA.v);
 
     return (
-      <div class="tk-color-picker-inputs" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'inputs')}>
+      <div class="tk-color-picker-inputs" {...getDataTestidAttribute(this.dataTestid, 'inputs')}>
         {this.showFormatSelector && (
           <tk-select
             class="tk-color-picker-format-select"
@@ -712,10 +709,10 @@ export class TkColorPicker implements ComponentInterface {
               { value: 'rgba', label: 'RGB' },
             ]}
             onTk-change={this.handleFormatChange}
-            {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'format-select')}
+            {...getDataTestidAttribute(this.dataTestid, 'format-select')}
           />
         )}
-        <div class="tk-color-picker-input-fields" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'input-fields')}>
+        <div class="tk-color-picker-input-fields" {...getDataTestidAttribute(this.dataTestid, 'input-fields')}>
           {this.currentFormat === 'hex' && (
             <Fragment>
               <tk-input
@@ -727,13 +724,13 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('hex')}
-                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-hex` : undefined}
+                dataTestid={getDataTestidProp(this.dataTestid, 'hex-input')}
               />
               {this.createAlphaInput()}
             </Fragment>
           )}
           {this.currentFormat === 'rgba' && (
-            <div class="tk-color-picker-rgb-inputs" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'rgb')}>
+            <div class="tk-color-picker-rgb-inputs" {...getDataTestidAttribute(this.dataTestid, 'rgb')}>
               <tk-input
                 class="tk-color-picker-rgb-input"
                 size="small"
@@ -741,7 +738,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('r')}
-                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-red` : undefined}
+                dataTestid={getDataTestidProp(this.dataTestid, 'red-input')}
               />
               <tk-input
                 class="tk-color-picker-rgb-input"
@@ -750,7 +747,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('g')}
-                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-green` : undefined}
+                dataTestid={getDataTestidProp(this.dataTestid, 'green-input')}
               />
               <tk-input
                 class="tk-color-picker-rgb-input"
@@ -759,7 +756,7 @@ export class TkColorPicker implements ComponentInterface {
                 disabled={this.disabled}
                 onTk-change={(e: CustomEvent) => (this.tempInputVal = e.detail)}
                 onTk-blur={() => this.handleInputBlur('b')}
-                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-blue` : undefined}
+                dataTestid={getDataTestidProp(this.dataTestid, 'blue-input')}
               />
               {this.createAlphaInput()}
             </div>
@@ -773,13 +770,13 @@ export class TkColorPicker implements ComponentInterface {
     if (!this.showPresets || !this.presets?.length) return null;
 
     return (
-      <div class="tk-color-picker-presets" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'presets')}>
-        {this.presets.map(color => (
+      <div class="tk-color-picker-presets" {...getDataTestidAttribute(this.dataTestid, 'presets')}>
+        {this.presets.map((color, index) => (
           <div
             class="tk-color-picker-preset"
             style={{ backgroundColor: color }}
             onClick={() => this.handlePresetSelect(color)}
-            {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'preset')}
+            {...getDataTestidAttribute(this.dataTestid, 'preset', index.toString())}
           />
         ))}
       </div>
@@ -794,7 +791,7 @@ export class TkColorPicker implements ComponentInterface {
     if (this.hasFooterActionsSlot) {
       const footerClasses = classNames('tk-color-picker-panel-footer', `tk-color-picker-panel-footer-${this.footerType}`);
       return (
-        <div class={footerClasses} {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'footer-actions')}>
+        <div class={footerClasses} {...getDataTestidAttribute(this.dataTestid, 'footer-actions')}>
           <slot name="footer-actions" />
         </div>
       );
@@ -813,8 +810,8 @@ export class TkColorPicker implements ComponentInterface {
       const headerClasses = classNames('tk-color-picker-panel-header', `tk-color-picker-panel-header-${this.headerType}`);
 
       return (
-        <div class={headerClasses} {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'header')}>
-          <span class="tk-color-picker-title" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'title')}>
+        <div class={headerClasses} {...getDataTestidAttribute(this.dataTestid, 'header')}>
+          <span class="tk-color-picker-title" {...getDataTestidAttribute(this.dataTestid, 'title')}>
             {this.header}
           </span>
           {this.hasHeaderActionsSlot ? (
@@ -822,14 +819,7 @@ export class TkColorPicker implements ComponentInterface {
           ) : (
             !this.inline &&
             this.showCloseButton && (
-              <tk-button
-                variant="neutral"
-                type="text"
-                size="small"
-                icon="close"
-                onClick={this.handleCloseClick}
-                dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-close` : undefined}
-              />
+              <tk-button variant="neutral" type="text" size="small" icon="close" onClick={this.handleCloseClick} dataTestid={getDataTestidProp(this.dataTestid, 'close-button')} />
             )
           )}
         </div>
@@ -841,13 +831,13 @@ export class TkColorPicker implements ComponentInterface {
     if (this.orientation === 'horizontal') {
       return (
         <Fragment>
-          <div class="tk-color-picker-body-horizontal" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'horizontal')}>
-            <div class="tk-color-picker-controls-side" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls')}>
+          <div class="tk-color-picker-body-horizontal" {...getDataTestidAttribute(this.dataTestid, 'horizontal')}>
+            <div class="tk-color-picker-controls-side" {...getDataTestidAttribute(this.dataTestid, 'controls')}>
               {this.createColorPreview()}
               {this.createSliders()}
               {this.createEyedropperButton()}
             </div>
-            <div class="tk-color-picker-saturation-wrapper" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'saturation')}>
+            <div class="tk-color-picker-saturation-wrapper" {...getDataTestidAttribute(this.dataTestid, 'saturation-wrapper')}>
               {this.createSaturation()}
             </div>
           </div>
@@ -859,10 +849,10 @@ export class TkColorPicker implements ComponentInterface {
 
     return (
       <Fragment>
-        <div class="tk-color-picker-body-vertical" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'vertical')}>
+        <div class="tk-color-picker-body-vertical" {...getDataTestidAttribute(this.dataTestid, 'vertical')}>
           {this.createSaturation()}
-          <div class="tk-color-picker-controls-bottom" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'controls')}>
-            <div class="tk-color-picker-eyedropper-row" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'eyedropper')}>
+          <div class="tk-color-picker-controls-bottom" {...getDataTestidAttribute(this.dataTestid, 'controls')}>
+            <div class="tk-color-picker-eyedropper-row" {...getDataTestidAttribute(this.dataTestid, 'eyedropper-row')}>
               {this.createEyedropperButton()}
               {this.createSliders()}
               {this.createColorPreview()}
@@ -911,7 +901,7 @@ export class TkColorPicker implements ComponentInterface {
         onTk-blur={this.handleTriggerInputBlur}
         onTk-change={this.handleTriggerInputChange}
         onKeyDown={this.handleTriggerInputKeyDown}
-        dataTestid={this.dataTestid ? `${this.dataTestid}-color-picker-trigger-input` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'trigger-input')}
       ></tk-input>
     );
   }
@@ -923,9 +913,9 @@ export class TkColorPicker implements ComponentInterface {
     });
 
     return (
-      <div class={panelCls} ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-id={this.uniqueId} {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'panel')}>
+      <div class={panelCls} ref={el => (this.panelRef = el as HTMLDivElement)} data-tk-id={this.uniqueId} {...getDataTestidAttribute(this.dataTestid, 'panel')}>
         {this.createPanelHeader()}
-        <div class="tk-color-picker-panel-body" {...getDataTestidAttribute(this.dataTestid, 'color-picker', 'body')}>
+        <div class="tk-color-picker-panel-body" {...getDataTestidAttribute(this.dataTestid, 'body')}>
           {this.createPanelBody()}
         </div>
         {this.createFooter()}
@@ -940,7 +930,7 @@ export class TkColorPicker implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'color-picker')}>
+      <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         {this.renderInput()}
         {(this.isOpen || this.inline) && this.renderPanel()}
       </div>

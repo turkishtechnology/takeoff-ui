@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Fragment, Prop, State, h } from '@stencil/core';
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * TkCard component description.
@@ -162,32 +162,32 @@ export class TkCard implements ComponentInterface {
       if (!this.header) return null;
       return (
         <div
-          {...getDataTestidAttribute(this.dataTestid, 'card', 'header')}
+          {...getDataTestidAttribute(this.dataTestid, 'header-container')}
           class={classNames('tk-card-header', `tk-card-header-${this.headerPosition}`, {
             [`tk-card-header-${this.headerType}`]: !this.imageOptions.background,
           })}
         >
-          <div class="tk-card-header-content" {...getDataTestidAttribute(this.dataTestid, 'card', 'header-content')}>
+          <div class="tk-card-header-content" {...getDataTestidAttribute(this.dataTestid, 'header')}>
             {this.hasAvatarSlot ? (
               <slot name="avatar"></slot>
             ) : (
               <Fragment>
                 {this.showAvatar && (
-                  <div class="tk-card-avatar" {...getDataTestidAttribute(this.dataTestid, 'card', 'avatar-container')}>
+                  <div class="tk-card-avatar" {...getDataTestidAttribute(this.dataTestid, 'avatar-container')}>
                     {' '}
-                    <tk-avatar {...this.avatarProps} {...getDataTestidAttribute(this.dataTestid, 'card', 'avatar')}></tk-avatar>
+                    <tk-avatar {...this.avatarProps} {...getDataTestidAttribute(this.dataTestid, 'avatar')}></tk-avatar>
                   </div>
                 )}
               </Fragment>
             )}
-            <div class="tk-card-title-container" {...getDataTestidAttribute(this.dataTestid, 'card', 'title-container')}>
+            <div class="tk-card-title-container" {...getDataTestidAttribute(this.dataTestid, 'title-container')}>
               {this.subheader && (
-                <span class="tk-card-subtitle" {...getDataTestidAttribute(this.dataTestid, 'card', 'subtitle')}>
+                <span class="tk-card-subtitle" {...getDataTestidAttribute(this.dataTestid, 'subtitle')}>
                   {this.subheader}
                 </span>
               )}
               {this.header && (
-                <span class="tk-card-title" {...getDataTestidAttribute(this.dataTestid, 'card', 'title')}>
+                <span class="tk-card-title" {...getDataTestidAttribute(this.dataTestid, 'title')}>
                   {this.header}
                 </span>
               )}
@@ -203,7 +203,7 @@ export class TkCard implements ComponentInterface {
                 size="base"
                 type="text"
                 aria-label="TkCard Header Menu Button"
-                dataTestid={this.dataTestid ? `${this.dataTestid}-card-header-menu-button` : undefined}
+                dataTestid={getDataTestidProp(this.dataTestid, 'header-menu-button')}
               ></tk-button>
             )
           )}
@@ -216,8 +216,8 @@ export class TkCard implements ComponentInterface {
     if (!this.image || this.imageOptions.background) return null;
     const imageClasses = classNames('tk-card-image', `tk-card-image-${this.imageOptions.position}`, { 'tk-card-windowed-image': this.imageOptions.windowed });
     return (
-      <div class={imageClasses} {...getDataTestidAttribute(this.dataTestid, 'card', 'image')}>
-        <img src={this.image} alt="Card image" {...getDataTestidAttribute(this.dataTestid, 'card', 'image-tag')} />
+      <div class={imageClasses} {...getDataTestidAttribute(this.dataTestid, 'image-container')}>
+        <img src={this.image} alt="Card image" {...getDataTestidAttribute(this.dataTestid, 'image')} />
         {/* {this.imageOptions.badge && (
           TODO: Add Badge
         )} */}
@@ -230,7 +230,7 @@ export class TkCard implements ComponentInterface {
       return <slot name="content"></slot>;
     } else if (this.hasDefaultSlotBody) {
       return (
-        <div class="tk-card-content" style={this.contentStyle} {...getDataTestidAttribute(this.dataTestid, 'card', 'content')}>
+        <div class="tk-card-content" style={this.contentStyle} {...getDataTestidAttribute(this.dataTestid, 'content')}>
           <slot></slot>
         </div>
       );
@@ -244,7 +244,7 @@ export class TkCard implements ComponentInterface {
     } else if (this.hasFooterActionsSlot) {
       return (
         <div
-          {...getDataTestidAttribute(this.dataTestid, 'card', 'footer')}
+          {...getDataTestidAttribute(this.dataTestid, 'footer')}
           class={classNames('tk-card-footer', {
             [`tk-card-footer-${this.footerType}`]: !this.imageOptions.background,
           })}
@@ -277,7 +277,7 @@ export class TkCard implements ComponentInterface {
       return (
         <Fragment>
           {imageOption === 'left' && image}
-          <div class="tk-card-horizontal-has-image-container" {...getDataTestidAttribute(this.dataTestid, 'card', 'horizontal-has-image-container')}>
+          <div class="tk-card-horizontal-has-image-container" {...getDataTestidAttribute(this.dataTestid, 'horizontal-has-image-container')}>
             {header}
             {content}
             {footer}
@@ -302,7 +302,7 @@ export class TkCard implements ComponentInterface {
         ...(this.imageOptions.backgroundUrl && { background: `url(${this.imageOptions.backgroundUrl})` }),
         ...this.containerStyle,
       },
-      ...getDataTestidAttribute(this.dataTestid, 'card'),
+      ...getDataTestidAttribute(this.dataTestid, 'container'),
     };
     return <div {...rootProps}>{this.renderCardContent()}</div>;
   }

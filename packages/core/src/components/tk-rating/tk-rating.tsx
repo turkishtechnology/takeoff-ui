@@ -95,7 +95,7 @@ export class TkRating implements ComponentInterface {
 
     if (this.disabled) {
       return (
-        <div class={classNames('tk-rating', this.type, state, { disabled: this.disabled })} {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}>
+        <div class={classNames('tk-rating', this.type, state, { disabled: this.disabled })} {...getDataTestidAttribute(this.dataTestid, 'item', ratingValue.toString())}>
           {getIcon(this.type, 'disabled')}
           {this.showRatingValue && `0${ratingValue}`}
         </div>
@@ -107,7 +107,7 @@ export class TkRating implements ComponentInterface {
         onMouseMove={() => this.handleMouseMove(ratingValue)}
         onMouseLeave={() => this.handleMouseLeave()}
         onClick={() => this.handleRatingClick(ratingValue)}
-        {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}
+        {...getDataTestidAttribute(this.dataTestid, 'item', ratingValue.toString())}
       >
         {getIcon(this.type, state)} {this.showRatingValue && `0${ratingValue}`}
       </div>
@@ -125,7 +125,7 @@ export class TkRating implements ComponentInterface {
         onMouseMove={() => this.handleMouseMove(ratingValue)}
         onMouseLeave={() => this.handleMouseLeave()}
         onClick={() => this.handleRatingClick(ratingValue)}
-        {...getDataTestidAttribute(this.dataTestid, 'rating', 'item')}
+        {...getDataTestidAttribute(this.dataTestid, 'item', ratingValue.toString())}
       >
         {ratingValue.toString().padStart(2, '0')}
       </div>
@@ -136,7 +136,7 @@ export class TkRating implements ComponentInterface {
     const isNumberType = this.type === 'number';
 
     return (
-      <div class={classNames('tk-rating-container', { number: isNumberType })} {...getDataTestidAttribute(this.dataTestid, 'rating')}>
+      <div class={classNames('tk-rating-container', { number: isNumberType })} {...getDataTestidAttribute(this.dataTestid, 'container')}>
         {isNumberType ? this.renderNumberRating() : Array.from({ length: this.maxRating }, (_, index) => this.renderIcon(index + 1))}
       </div>
     );

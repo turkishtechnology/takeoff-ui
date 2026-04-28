@@ -27,12 +27,12 @@ describe('tk-tooltip', () => {
       trigger.dispatchEvent(new Event('mouseenter'));
       await page.waitForChanges();
 
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-content"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-header"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-description"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-arrow"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-left-icon"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-container"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-content"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-header"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-description"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-arrow"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-left"]')).toBeTruthy();
     });
 
     it('keeps semantic ids with custom content slot', async () => {
@@ -45,10 +45,10 @@ describe('tk-tooltip', () => {
       trigger.dispatchEvent(new Event('mouseenter'));
       await page.waitForChanges();
 
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-content"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-arrow"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-header"]')).toBeFalsy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-tooltip-description"]')).toBeFalsy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-content"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-arrow"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-header"]')).toBeFalsy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-description"]')).toBeFalsy();
     });
 
     it('does not set data-testid when not provided', async () => {

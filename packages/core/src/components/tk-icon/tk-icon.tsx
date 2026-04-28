@@ -108,7 +108,7 @@ export class TkIcon implements ComponentInterface {
     const iconProps = {
       class: iconClasses,
       ...this.getIconStyles(),
-      ...getDataTestidAttribute(this.dataTestid, 'icon'),
+      ...getDataTestidAttribute(this.dataTestid, 'content'),
     };
 
     const IconTag = this.iconTag;

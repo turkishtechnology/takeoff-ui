@@ -10,7 +10,7 @@ describe('tk-card', () => {
     const containerTestId = await page.$eval('tk-card >>> .tk-card', el => el.getAttribute('data-testid'));
 
     expect(hostTestId).toBe('automation-card');
-    expect(containerTestId).toBe('automation-card-card');
+    expect(containerTestId).toBe('automation-card-container');
   });
 
   it('forwards derived data-testid values to rendered card sections', async () => {
@@ -36,14 +36,14 @@ describe('tk-card', () => {
     const imageTagTestId = await page.$eval('tk-card >>> .tk-card-image img', el => el.getAttribute('data-testid'));
     const contentTestId = await page.$eval('tk-card >>> .tk-card-content', el => el.getAttribute('data-testid'));
 
-    expect(headerTestId).toBe('automation-card-card-header');
-    expect(headerContentTestId).toBe('automation-card-card-header-content');
-    expect(titleContainerTestId).toBe('automation-card-card-title-container');
-    expect(titleTestId).toBe('automation-card-card-title');
-    expect(subtitleTestId).toBe('automation-card-card-subtitle');
-    expect(imageTestId).toBe('automation-card-card-image');
-    expect(imageTagTestId).toBe('automation-card-card-image-tag');
-    expect(contentTestId).toBe('automation-card-card-content');
+    expect(headerTestId).toBe('automation-card-header-container');
+    expect(headerContentTestId).toBe('automation-card-header');
+    expect(titleContainerTestId).toBe('automation-card-title-container');
+    expect(titleTestId).toBe('automation-card-title');
+    expect(subtitleTestId).toBe('automation-card-subtitle');
+    expect(imageTestId).toBe('automation-card-image-container');
+    expect(imageTagTestId).toBe('automation-card-image');
+    expect(contentTestId).toBe('automation-card-content');
   });
 
   it('forwards derived data-testid values for footer actions slot wrapper', async () => {
@@ -58,8 +58,8 @@ describe('tk-card', () => {
     const footerTestId = await page.$eval('tk-card >>> .tk-card-footer', el => el.getAttribute('data-testid'));
     const footerSlotTestId = await page.$eval('tk-card >>> slot[name="footer-actions"]', el => el.getAttribute('data-testid'));
 
-    expect(footerTestId).toBe('automation-card-card-footer');
-    expect(footerSlotTestId).toBe('automation-card-card-footer-actions-slot');
+    expect(footerTestId).toBe('automation-card-footer');
+    expect(footerSlotTestId).toBeNull();
   });
 
   it('renders header and subheader content', async () => {

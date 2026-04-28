@@ -12,9 +12,9 @@ describe('tk-button', () => {
     const iconTestId = await page.$eval('tk-button >>> tk-icon', el => el.getAttribute('data-testid'));
 
     expect(hostTestId).toBe('1');
-    expect(nativeTestId).toBe('1-button');
-    expect(labelTestId).toBe('1-button-label');
-    expect(iconTestId).toBe('1-button-left-icon');
+    expect(nativeTestId).toBe('1-container');
+    expect(labelTestId).toBe('1-label');
+    expect(iconTestId).toBe('1-left');
   });
 
   it('forwards data-testid to anchor in link mode', async () => {
@@ -26,9 +26,9 @@ describe('tk-button', () => {
     const labelTestId = await page.$eval('tk-button >>> span', el => el.getAttribute('data-testid'));
     const iconTestId = await page.$eval('tk-button >>> tk-icon', el => el.getAttribute('data-testid'));
 
-    expect(nativeLinkTestId).toBe('2-button');
-    expect(labelTestId).toBe('2-button-label');
-    expect(iconTestId).toBe('2-button-right-icon');
+    expect(nativeLinkTestId).toBe('2-container');
+    expect(labelTestId).toBe('2-label');
+    expect(iconTestId).toBe('2-right');
   });
 
   it('generates left and right icon test ids for multi-icon configuration', async () => {
@@ -47,8 +47,8 @@ describe('tk-button', () => {
     const leftIconTestId = await page.$eval('tk-button >>> tk-icon:first-of-type', el => el.getAttribute('data-testid'));
     const rightIconTestId = await page.$eval('tk-button >>> tk-icon:last-of-type', el => el.getAttribute('data-testid'));
 
-    expect(leftIconTestId).toBe('3-multi-button-left-icon');
-    expect(rightIconTestId).toBe('3-multi-button-right-icon');
+    expect(leftIconTestId).toBe('3-multi-left');
+    expect(rightIconTestId).toBe('3-multi-right');
   });
 
   it('forwards derived data-testid to loading spinner', async () => {
@@ -58,6 +58,6 @@ describe('tk-button', () => {
 
     const spinnerTestId = await page.$eval('tk-button >>> tk-spinner', el => el.getAttribute('data-testid'));
 
-    expect(spinnerTestId).toBe('4-button-left-icon');
+    expect(spinnerTestId).toBe('4-loading-spinner');
   });
 });

@@ -50,7 +50,7 @@ describe('tk-accordion', () => {
         html: `<tk-accordion data-testid="my-accordion"></tk-accordion>`,
       });
 
-      const root = page.root?.shadowRoot?.querySelector('[data-testid="my-accordion-accordion"]');
+      const root = page.root?.shadowRoot?.querySelector('[data-testid="my-accordion-container"]');
       expect(root).toBeTruthy();
     });
 

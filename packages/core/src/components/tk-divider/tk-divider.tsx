@@ -68,10 +68,10 @@ export class TkDivider implements ComponentInterface {
         role="separator"
         aria-orientation={this.orientation}
         style={this.getRootStyles()}
-        {...getDataTestidAttribute(this.dataTestid, 'divider')}
+        {...getDataTestidAttribute(this.dataTestid, 'container')}
       >
         {this.hasDefaultSlot && (
-          <div class="tk-divider-content" {...getDataTestidAttribute(this.dataTestid, 'divider', 'content')}>
+          <div class="tk-divider-content" {...getDataTestidAttribute(this.dataTestid, 'content')}>
             <slot />
           </div>
         )}

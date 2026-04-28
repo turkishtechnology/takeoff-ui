@@ -159,7 +159,7 @@ export class TkPopover implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-popover" {...getDataTestidAttribute(this.dataTestid, 'popover')}>
+      <div class="tk-popover" {...getDataTestidAttribute(this.dataTestid, 'container')}>
         <slot name="trigger" />
         {this.isOpen && (
           <div
@@ -171,10 +171,10 @@ export class TkPopover implements ComponentInterface {
             style={{ ...this.containerStyle }}
             role="popover"
             onClick={e => e.stopPropagation()}
-            {...getDataTestidAttribute(this.dataTestid, 'popover', 'content')}
+            {...getDataTestidAttribute(this.dataTestid, 'content')}
           >
             {this.hasContentSlot && <slot name="content" />}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow" {...getDataTestidAttribute(this.dataTestid, 'popover', 'arrow')}></div>
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow')}></div>
           </div>
         )}
       </div>

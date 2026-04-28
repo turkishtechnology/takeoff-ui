@@ -55,15 +55,14 @@ export class TkBreadcrumbItem implements ComponentInterface {
       additionalProps: { color: this.isCurrent ? 'var(--icon-dark)' : 'var(--icon-sub-base)' },
       iconTag: 'span',
       dataTestid: this.dataTestid,
-      dataTestidComponent: 'breadcrumb-item',
     });
 
     return (
-      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb-item')}>
-        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb-item', 'link')}>
+      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0} {...getDataTestidAttribute(this.dataTestid, 'link')}>
           {leftIcon}
           {this.label && (
-            <span class="tk-breadcrumb-item-label" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb-item', 'label')}>
+            <span class="tk-breadcrumb-item-label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
               <slot>{this.label}</slot>
             </span>
           )}

@@ -90,7 +90,7 @@ describe('dataTestid', () => {
       html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('.tk-badge-container').getAttribute('data-testid')).toBe('my-badge-badge');
+    expect(page.root.shadowRoot.querySelector('.tk-badge-container').getAttribute('data-testid')).toBe('my-badge-container');
   });
 
   it('does not set data-testid when dataTestid is not provided', async () => {
@@ -108,7 +108,7 @@ describe('dataTestid', () => {
       html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('.tk-badge').getAttribute('data-testid')).toBe('my-badge-badge-content');
+    expect(page.root.shadowRoot.querySelector('.tk-badge').getAttribute('data-testid')).toBe('my-badge-content');
   });
 
   it('sets data-testid on label and count content elements', async () => {
@@ -117,14 +117,14 @@ describe('dataTestid', () => {
       html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
     });
 
-    expect(labelPage.root.shadowRoot.querySelector('.label').getAttribute('data-testid')).toBe('my-badge-badge-label');
+    expect(labelPage.root.shadowRoot.querySelector('.label').getAttribute('data-testid')).toBe('my-badge-label');
 
     const countPage = await newSpecPage({
       components: [TkBadge],
       html: `<tk-badge data-testid="my-badge" count="5"></tk-badge>`,
     });
 
-    expect(countPage.root.shadowRoot.querySelector('.tk-badge > .count').getAttribute('data-testid')).toBe('my-badge-badge-count');
+    expect(countPage.root.shadowRoot.querySelector('.tk-badge > .count').getAttribute('data-testid')).toBe('my-badge-count');
   });
 
   it('sets data-testid on the icon element', async () => {
@@ -133,6 +133,6 @@ describe('dataTestid', () => {
       html: `<tk-badge data-testid="my-badge" icon="home" label="Test"></tk-badge>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('tk-icon').getAttribute('data-testid')).toBe('my-badge-badge-left-icon');
+    expect(page.root.shadowRoot.querySelector('tk-icon').getAttribute('data-testid')).toBe('my-badge-left');
   });
 });

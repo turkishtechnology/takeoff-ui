@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmit
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * TkButton is an extension to standard input element with icons and theming.
@@ -162,7 +162,7 @@ export class TkButton implements ComponentInterface {
     let _rightIcon: HTMLTkIconElement | HTMLElement | undefined;
     const spinnerElement = (
       <tk-spinner
-        dataTestid={this.dataTestid ? `${this.dataTestid}-button-loading-spinner` : undefined}
+        dataTestid={getDataTestidProp(this.dataTestid, 'loading-spinner')}
         size={this.size === 'large' ? 'small' : this.size === 'base' ? 'xsmall' : 'xxsmall'}
       ></tk-spinner>
     );
@@ -178,7 +178,6 @@ export class TkButton implements ComponentInterface {
             color: this.getButtonIconColor(),
           },
           dataTestid: this.dataTestid,
-          dataTestidComponent: 'button',
         },
         this.iconPosition,
       );
@@ -199,12 +198,12 @@ export class TkButton implements ComponentInterface {
 
     let label;
     if (this.label?.length > 0) {
-      label = <span {...getDataTestidAttribute(this.dataTestid, 'button', 'label')}>{this.label}</span>;
+      label = <span {...getDataTestidAttribute(this.dataTestid, 'label')}>{this.label}</span>;
     }
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
-        <Tag class={rootClasses} {...props} {...getDataTestidAttribute(this.dataTestid, 'button')} disabled={this.disabled} onClick={(e: MouseEvent) => this.handleClick(e)}>
+        <Tag class={rootClasses} {...props} {...getDataTestidAttribute(this.dataTestid, 'container')} disabled={this.disabled} onClick={(e: MouseEvent) => this.handleClick(e)}>
           {_leftIcon}
           {label}
           {_rightIcon}

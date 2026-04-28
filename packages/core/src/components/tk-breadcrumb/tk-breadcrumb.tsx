@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Prop, Element, h, State, Fragment } from
 import classNames from 'classnames';
 import { IBreadcrumbModel } from './types';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
 
 /**
  * The `TkBreadcrumb` provides a navigational aid, allowing users to keep track of their location within the application's hierarchy.
@@ -62,11 +62,12 @@ export class TkBreadcrumb implements ComponentInterface {
       icon,
       isExternal,
       isCurrent: index === (this.model?.length ?? 0) - 1,
-      dataTestid: this.dataTestid,
+      dataTestid: getDataTestidProp(this.dataTestid, 'item', index.toString()),
     };
   }
 
-  private renderSeparator() {
+  private renderSeparator(index: number) {
+    const separatorDataTestid = getDataTestidProp(this.dataTestid, 'separator', index.toString());
     const separatorClasses = classNames('tk-breadcrumb-separator-icon', {
       'tk-breadcrumb-dot-separator': this.separator === 'dot',
       'tk-breadcrumb-slash-separator': this.separator === 'slash',
@@ -76,19 +77,19 @@ export class TkBreadcrumb implements ComponentInterface {
       return (
         <tk-icon
           {...getIconElementProps(this.separatorIcon, { class: separatorClasses, color: 'var(--icon-sub-base)' }, 'rounded', 'span')}
-          dataTestid={this.dataTestid ? `${this.dataTestid}-breadcrumb-separator-item` : undefined}
+          dataTestid={getDataTestidProp(separatorDataTestid, 'icon')}
         />
       );
     }
-    return <span class={separatorClasses} {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator-item')} />;
+    return <span class={separatorClasses} {...getDataTestidAttribute(separatorDataTestid, 'item')} />;
   }
 
   render() {
     const rootClasses = classNames('tk-breadcrumb', `tk-breadcrumb-${this.type}`);
 
     return (
-      <nav class={rootClasses} aria-label="breadcrumb" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb')}>
-        <ol class="tk-breadcrumb-list" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'list')}>
+      <nav class={rootClasses} aria-label="breadcrumb" {...getDataTestidAttribute(this.dataTestid, 'container')}>
+        <ol class="tk-breadcrumb-list" {...getDataTestidAttribute(this.dataTestid, 'list')}>
           {this.hasSlottedItems ? (
             <slot />
           ) : (
@@ -96,8 +97,8 @@ export class TkBreadcrumb implements ComponentInterface {
               <Fragment>
                 <tk-breadcrumb-item {...this.getBreadcrumbItemProps(item, index)} />
                 {index < this.model.length - 1 && (
-                  <li class="tk-breadcrumb-separator" {...getDataTestidAttribute(this.dataTestid, 'breadcrumb', 'separator')}>
-                    {this.renderSeparator()}
+                  <li class="tk-breadcrumb-separator" {...getDataTestidAttribute(this.dataTestid, 'separator', index.toString())}>
+                    {this.renderSeparator(index)}
                   </li>
                 )}
               </Fragment>

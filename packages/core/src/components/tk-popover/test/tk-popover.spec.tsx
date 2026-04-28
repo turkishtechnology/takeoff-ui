@@ -24,9 +24,9 @@ describe('tk-popover', () => {
       page.rootInstance.isOpen = true;
       await page.waitForChanges();
 
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-popover"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-popover-content"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-popover-arrow"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-container"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-content"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-pop-arrow"]')).toBeTruthy();
     });
 
     it('does not set data-testid on slot elements', async () => {
