@@ -33,7 +33,13 @@ export class TkSpinner {
    * Sets the style of spinner component.
    * @defaultValue 'rounded'
    */
-  @Prop() type: 'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader' = 'rounded';
+  @Prop() type: 'rounded' | 'dots' | 'lines' | 'pulse' | 'three-dots' | 'loader' | 'logo' = 'rounded';
+
+  /**
+   * Sets the color variant of spinner component.
+   * @defaultValue 'neutral'
+   */
+  @Prop() variant: 'primary' | 'neutral' | 'info' | 'success' | 'warning' | 'danger' = 'neutral';
 
   /**
    * Sets the label of the spinner component.
@@ -50,7 +56,7 @@ export class TkSpinner {
         if (this.isButton) {
           const button = this.el.closest('button');
           const borderColor = window.getComputedStyle(button).color;
-          return <div style={{ border: '3px solid ' + borderColor, borderTop: '3px solid transparent' }} class="spinner-rounded"></div>;
+          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded"></div>;
         }
         return <div class="spinner-rounded"></div>;
       case 'dots':
@@ -91,6 +97,18 @@ export class TkSpinner {
         return <div class="spinner-pulse"></div>;
       case 'loader':
         return <div class="spinner-loader"></div>;
+      case 'logo':
+        return (
+          <div class="spinner-logo">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M24 0C10.7452 0 0 10.7452 0 24C0 37.2548 10.7452 48 24 48C37.2548 48 48 37.2548 48 24V4C48 1.79086 46.2091 0 44 0H24ZM24 8C15.1634 8 8 15.1634 8 24C8 32.8366 15.1634 40 24 40C32.8366 40 40 32.8366 40 24C40 15.1634 32.8366 8 24 8Z"
+              />
+            </svg>
+          </div>
+        );
       default:
         return null;
     }
@@ -103,6 +121,7 @@ export class TkSpinner {
         class={classNames('tk-spin-container', {
           [this.orientation]: true,
           [this.size]: true,
+          [this.variant]: true,
         })}
       >
         {this.renderSpinner()}

@@ -3,6 +3,7 @@ tk-checkbox {
 }
 
 .tk-checkbox-container {
+  font-family: var(--family-body);
   &.card {
     border-radius: var(--radius-m-base);
     border: 1px solid var(--border-light);
@@ -37,21 +38,18 @@ tk-checkbox {
     }
 
     .mask {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background-color: var(--static-light);
       border: 2px solid var(--border-sub-base);
       border-radius: var(--radius-s);
       box-sizing: border-box;
       -moz-box-sizing: border-box;
       -webkit-box-sizing: border-box;
-      padding: 2px;
 
-      i {
+      .inner-mask {
         visibility: hidden;
-        color: var(--static-light);
         background-color: var(--states-info-base);
+        display: flex;
+        border-radius: 2px;
       }
     }
     .tk-checkbox-text-holder {
@@ -80,7 +78,7 @@ tk-checkbox {
     border-color: var(--states-info-light);
     background-color: var(--static-light);
 
-    i {
+    .inner-mask {
       visibility: visible;
     }
   }
@@ -93,6 +91,8 @@ tk-checkbox {
 
   &[aria-disabled],
   &[disabled] {
+    pointer-events: none;
+
     label {
       color: var(--text-sub-base);
 
@@ -100,7 +100,7 @@ tk-checkbox {
         border: 2px solid var(--border-sub-base);
         background-color: var(--background-light);
 
-        i {
+        .inner-mask {
           background-color: var(--background-sub-base);
         }
       }
@@ -118,7 +118,7 @@ tk-checkbox {
       input:indeterminate + .mask {
         border-color: var(--states-danger-light);
 
-        i {
+        .inner-mask {
           background-color: var(--states-danger-base);
         }
       }
@@ -136,14 +136,12 @@ tk-checkbox {
   &.base {
     label {
       .mask {
-        width: 20px;
-        height: 20px;
         border-radius: 6px;
-        border: 2px solid var(--background-sub-base);
+        padding: 2px;
 
-        i {
-          font-size: 12px;
-          border-radius: 2px;
+        .inner-mask {
+          width: 12px;
+          height: 12px;
         }
       }
     }
@@ -152,14 +150,12 @@ tk-checkbox {
   &.small {
     label {
       .mask {
-        width: 16px;
-        height: 16px;
-        border-radius: 4.8px;
-        border: 1.6px solid var(--background-sub-base);
+        border-radius: 4px;
+        padding: 1px;
 
-        i {
-          font-size: 8px;
-          border-radius: 1.333px;
+        .inner-mask {
+          width: 10px;
+          height: 10px;
         }
       }
     }

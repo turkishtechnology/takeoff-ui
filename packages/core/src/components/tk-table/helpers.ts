@@ -1,5 +1,5 @@
 import { getNestedValue } from '../../utils/object-utils';
-import { ITableColumn, ITableFilter, ITableSort } from './interfaces';
+import { ITableColumn, ITableFilter, ITableSort } from './types';
 import { parse, isWithinInterval } from 'date-fns';
 
 /**

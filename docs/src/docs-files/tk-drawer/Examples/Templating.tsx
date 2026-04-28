@@ -13,7 +13,7 @@ const demoStyles = `.notification-panel-header {
 .notification-panel-header .header-title {
     color: var(--text-darkest, #222530);
     /* Body/Base-16 */
-    font-family: var(--body-m-base-font, Geologica);
+    font-family: var(--desktop-title-display1-font);
     font-size: var(--body-m-base-size, 16px);
     font-style: normal;
     font-weight: 400;
@@ -71,7 +71,7 @@ const demoStyles = `.notification-panel-header {
 .notification-container .notification-content .message-container .message-header .message-header-start .message-date {
     color: var(--text-sub-base, #99A0AE);
     /* Subheading/2x-Small-10 */
-    font-family: var(--subheading-2xs-font, Geologica);
+    font-family: var(--desktop-subheading-2xs-font);
     font-size: var(--subheading-2xs-size, 11px);
     font-style: normal;
     font-weight: 300;
@@ -83,7 +83,7 @@ const demoStyles = `.notification-panel-header {
 .notification-container .notification-content .message-container .message-header .message-header-start .message-title {
     color: var(--text-darkest, #222530);
     /* Body/Small-14 */
-    font-family: var(--body-s-font, Geologica);
+    font-family: var(--desktop-body-s-font);
     font-size: var(--body-s-size, 14px);
     font-style: normal;
     font-weight: 400;
@@ -94,7 +94,7 @@ const demoStyles = `.notification-panel-header {
 .notification-container .notification-content .message-container .message-text {
     color: var(--text-dark, #525866);
     /* Body/X-Small-12 */
-    font-family: var(--body-xs-font, Geologica);
+    font-family: var(--desktop-body-xs-font);
     font-size: var(--body-xs-size, 12px);
     font-style: normal;
     font-weight: 300;

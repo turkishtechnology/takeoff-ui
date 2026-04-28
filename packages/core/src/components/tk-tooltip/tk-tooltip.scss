@@ -7,6 +7,7 @@
   gap: 8px;
   position: fixed;
   color: var(--static-white);
+  font-family: var(--family-body);
   padding: var(--tooltips-base-v-padding) var(--tooltips-base-h-padding);
   border-radius: var(--tooltips-base-radius, 8px);
   pointer-events: none;

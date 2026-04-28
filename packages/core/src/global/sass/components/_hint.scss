@@ -1,0 +1,17 @@
+.tk-hint-wrapper {
+  color: var(--text-sub-base);
+  font-size: var(--desktop-body-xs-size);
+  line-height: var(--desktop-body-xs-line-height);
+  font-weight: var(--weight-light);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+  cursor: default;
+  font-family: var(--family-body);
+
+  &.invalid,
+  &.error {
+    color: var(--states-danger-base);
+  }
+}

@@ -42,6 +42,7 @@
           border: none;
 
           th {
+            font-family: var(--family-body);
             font-size: var(--desktop-body-s-size);
             color: var(--text-darkest);
             text-align: left;
@@ -175,6 +176,7 @@
           border: none;
           border-bottom: 1px solid var(--border-light);
           td {
+            font-family: var(--family-body);
             font-size: var(--desktop-body-s-size);
             color: var(--text-dark);
             font-weight: 400;
@@ -196,7 +198,7 @@
                 background: var(--static-light);
                 outline: none;
                 font-size: 14px;
-                font-family: 'Geologica', sans-serif;
+                font-family: var(--family-body);
                 width: 100%;
 
                 &:hover {
@@ -330,24 +332,12 @@
 
   &.base table thead tr .icons {
     gap: 8px;
-
-    i {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
   }
 
   &.small {
     table thead tr {
       .icons {
         gap: 4px;
-
-        i {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
       }
 
       th {
@@ -368,12 +358,6 @@
     table thead tr {
       .icons {
         gap: 2px;
-
-        i {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
       }
 
       th {
