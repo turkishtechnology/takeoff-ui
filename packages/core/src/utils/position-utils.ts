@@ -76,6 +76,32 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
   });
 }
 
+/**
+ * If the trigger lives inside a tk-table sticky `<td>`, return that td.
+ * Walks up through shadow DOM boundaries until it either finds the td
+ * or leaves the tk-table scope.
+ */
+function findTableStickyTd(el: HTMLElement): HTMLElement | null {
+  let node: Node = el;
+
+  while (node) {
+    const root = node.getRootNode();
+    if (!(root instanceof ShadowRoot)) return null;
+
+    const host = root.host as HTMLElement;
+    if (host.tagName === 'TK-TABLE') {
+      // in tk-table's shadow root — look for the sticky td
+      const td = (node as HTMLElement).closest?.('td') as HTMLElement | null;
+      return td?.style.zIndex && getComputedStyle(td).position === 'sticky' ? td : null;
+    }
+    node = host;
+  }
+  return null;
+}
+
+/** The z-index value applied to a sticky td while a floating element is open. */
+const RAISED_Z_INDEX = '101';
+
 export function floatingElementAutoUpdate(
   triggerElement: HTMLElement,
   floatingElement: HTMLElement,
@@ -83,7 +109,16 @@ export function floatingElementAutoUpdate(
   options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
-  return autoUpdate(
+  // Raise the z-index of any sticky td inside tk-table so the floating
+  // element is not trapped behind the sticky thead stacking context.
+  const stickyTd = findTableStickyTd(triggerElement);
+  let originalZIndex: string | undefined;
+  if (stickyTd) {
+    originalZIndex = stickyTd.style.zIndex;
+    stickyTd.style.zIndex = RAISED_Z_INDEX;
+  }
+
+  const cleanupAutoUpdate = autoUpdate(
     triggerElement,
     floatingElement,
     () => {
@@ -91,4 +126,12 @@ export function floatingElementAutoUpdate(
     },
     { animationFrame: true },
   );
+
+  // Return a cleanup function that also restores the original z-index.
+  return () => {
+    cleanupAutoUpdate();
+    if (stickyTd) {
+      stickyTd.style.zIndex = originalZIndex ?? '';
+    }
+  };
 }
