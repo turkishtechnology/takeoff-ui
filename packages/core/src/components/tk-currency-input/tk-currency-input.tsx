@@ -53,16 +53,16 @@ export class TkCurrencyInput implements ComponentInterface {
    * Current numeric value of the input, used for calculations and formatting.
    * This is updated based on user input and can be used in form submissions.
    */
-  @State() currentNumericValue: number = 0;
+  @State() currentNumericValue: number | '' = 0;
 
   /**
    * The value of the input.
    */
-  @Prop() value: number = 0;
+  @Prop() value: number | '' = 0;
   @Watch('value')
   valueChanged() {
     if (this.value !== this.currentNumericValue) {
-      this.currentNumericValue = this.value || 0;
+      this.currentNumericValue = this.value === '' ? '' : this.value || 0;
       this.updateDisplayValue();
     }
   }
@@ -287,18 +287,17 @@ export class TkCurrencyInput implements ComponentInterface {
     const currencies = this.getCurrencies();
     const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
     this.selectedCurrency = currency || currencies[0];
-    this.currentNumericValue = this.value || 0;
+    this.currentNumericValue = this.value === '' ? '' : this.value || 0;
     this.updateDisplayValue();
   }
 
   private updateDisplayValue() {
-    if (this.currentNumericValue === null || this.currentNumericValue === undefined || isNaN(this.currentNumericValue)) {
+    if (typeof this.currentNumericValue !== 'number') {
       this.displayValue = '';
       return;
     }
 
-    const formattedValue = this.formatCurrency(this.currentNumericValue);
-    this.displayValue = formattedValue;
+    this.displayValue = this.formatCurrency(this.currentNumericValue);
   }
 
   /**
@@ -347,8 +346,8 @@ export class TkCurrencyInput implements ComponentInterface {
     return result;
   }
 
-  private parseFormattedValue(formattedValue: string): number {
-    if (!formattedValue) return 0;
+  private parseFormattedValue(formattedValue: string): number | '' {
+    if (!formattedValue) return '';
 
     // Use custom separators if provided, otherwise fall back to currency defaults
     const decimalSeparator = this.getDecimalSeparator();
@@ -535,6 +534,24 @@ export class TkCurrencyInput implements ComponentInterface {
 
     const numericValue = this.parseFormattedValue(filteredValue);
 
+    // If parsed value is empty OR user is deleting toward zero (input differs from formatted zero)
+    const isClearing = numericValue === '' || (numericValue === 0 && inputValue !== this.formatCurrency(0) && inputValue.length < this.displayValue.length);
+
+    if (isClearing) {
+      this.currentNumericValue = '';
+      this.displayValue = '';
+      target.value = '';
+
+      const eventData = {
+        value: '',
+        currency: this.selectedCurrency,
+        formattedValue: '',
+      } as CurrencyInputChangeEvent;
+
+      this.tkChange.emit(eventData);
+      return;
+    }
+
     this.currentNumericValue = numericValue;
 
     const formattedValue = this.formatCurrency(numericValue);
@@ -570,12 +587,17 @@ export class TkCurrencyInput implements ComponentInterface {
 
   private handleBlur = () => {
     const target = this.inputElement;
+    if (!target) return;
     const numericValue = this.parseFormattedValue(target.value);
     this.currentNumericValue = numericValue;
-
-    const formattedValue = this.formatCurrency(numericValue);
-    target.value = formattedValue;
-    this.displayValue = formattedValue;
+    if (numericValue === '') {
+      target.value = '';
+      this.displayValue = '';
+    } else {
+      const formattedValue = this.formatCurrency(numericValue);
+      target.value = formattedValue;
+      this.displayValue = formattedValue;
+    }
 
     this.tkBlur.emit();
   };
