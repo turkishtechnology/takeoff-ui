@@ -1391,6 +1391,12 @@ export class TkDatePicker {
     // Just update the state - the watcher will handle the time conversion
     this.internalAmPm = newAmPm;
   };
+  private handleInputBlur = () => {
+    if (this.timeOnly && this.timeFormat === '12' && this.internalStartTime) {
+      this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
+      this.inputValue = this.formatInputValue();
+    }
+  };
 
   private handleInputClick = (e: MouseEvent) => {
     if (this.disabled || this.readonly) {
@@ -2211,6 +2217,7 @@ export class TkDatePicker {
         onInput={this.handleInputInput}
         onKeyDown={this.handleInputKeyDown}
         onClick={this.handleInputClick}
+        onTk-blur={this.handleInputBlur}
         aria-expanded={!!this.isOpen}
         aria-haspopup="true"
         data-tk-datepicker-id={this.uniqueId}
