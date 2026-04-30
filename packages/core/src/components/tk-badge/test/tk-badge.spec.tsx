@@ -82,3 +82,57 @@ describe('tk-badge', () => {
     expect(page.root.shadowRoot.querySelector('.tk-badge-container').classList.contains('has-slot')).toBe(true);
   });
 });
+
+describe('dataTestid', () => {
+  it('sets data-testid on the root container when dataTestid is provided', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-badge-container').getAttribute('data-testid')).toBe('my-badge-container');
+  });
+
+  it('does not set data-testid when dataTestid is not provided', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge label="Test"></tk-badge>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-badge-container').getAttribute('data-testid')).toBeNull();
+  });
+
+  it('sets data-testid on the badge content span', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-badge').getAttribute('data-testid')).toBe('my-badge-content');
+  });
+
+  it('sets data-testid on label and count content elements', async () => {
+    const labelPage = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge data-testid="my-badge" label="Test"></tk-badge>`,
+    });
+
+    expect(labelPage.root.shadowRoot.querySelector('.label').getAttribute('data-testid')).toBe('my-badge-label');
+
+    const countPage = await newSpecPage({
+      components: [TkBadge],
+      html: `<tk-badge data-testid="my-badge" count="5"></tk-badge>`,
+    });
+
+    expect(countPage.root.shadowRoot.querySelector('.tk-badge > .count').getAttribute('data-testid')).toBe('my-badge-count');
+  });
+
+  it('sets data-testid on the icon element', async () => {
+    const page = await newSpecPage({
+      components: [TkBadge, TkIcon],
+      html: `<tk-badge data-testid="my-badge" icon="home" label="Test"></tk-badge>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('tk-icon').getAttribute('data-testid')).toBe('my-badge-left-icon');
+  });
+});

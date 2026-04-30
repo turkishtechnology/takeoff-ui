@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkAlert component is designed to display contextual feedback messages, such as success, warnings, informational notices, and errors.
@@ -79,6 +80,11 @@ export class TkAlert implements ComponentInterface {
    */
   @Prop() headerStyle?: CSSStyleProperties;
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   private handleCloseButtonClick() {
     this.el.remove();
   }
@@ -91,7 +97,14 @@ export class TkAlert implements ComponentInterface {
       else if (this.variant == 'danger') iconValue = 'error';
       else if (this.variant == 'warning') iconValue = 'warning';
     }
-    return renderIcons(iconValue, { variant: this.variant, sign: true, size: this.iconSize, iconStyle: 'rounded', fill: true });
+    return renderIcons(iconValue, {
+      variant: this.variant,
+      sign: true,
+      size: this.iconSize,
+      iconStyle: 'rounded',
+      fill: true,
+      dataTestid: this.dataTestid,
+    });
   }
 
   private renderContent() {
@@ -99,26 +112,32 @@ export class TkAlert implements ComponentInterface {
 
     if (this.header?.length > 0) {
       header = (
-        <div class="tk-alert-header" style={this.headerStyle}>
+        <div class="tk-alert-header" style={this.headerStyle} data-testid={getDataTestId(this.dataTestid, 'header')}>
           {this.header}
         </div>
       );
     }
 
     if (typeof this.message == 'string') {
-      message = <div class="tk-alert-message">{this.message}</div>;
+      message = (
+        <div class="tk-alert-message" data-testid={getDataTestId(this.dataTestid, 'message')}>
+          {this.message}
+        </div>
+      );
     } else if (this.message?.every(item => typeof item === 'string')) {
       message = (
-        <div class="tk-alert-message-holder">
-          {this.message?.map(m => (
-            <div class="tk-alert-message">{m}</div>
+        <div class="tk-alert-message-holder" data-testid={getDataTestId(this.dataTestid, 'message-holder')}>
+          {this.message?.map((m, index) => (
+            <div class="tk-alert-message" data-testid={getDataTestId(this.dataTestid, 'message', index.toString())}>
+              {m}
+            </div>
           ))}
         </div>
       );
     }
 
     return (
-      <div class={classNames('tk-alert-content', !this.header && 'message-content')}>
+      <div class={classNames('tk-alert-content', !this.header && 'message-content')} data-testid={getDataTestId(this.dataTestid, 'content')}>
         <div>
           {header}
           {message}
@@ -133,7 +152,16 @@ export class TkAlert implements ComponentInterface {
 
     const buttonVariant = this.type == 'filled' ? 'white' : 'neutral';
 
-    return <tk-button icon="close" size="small" variant={buttonVariant} type="text" onTk-click={() => this.handleCloseButtonClick()}></tk-button>;
+    return (
+      <tk-button
+        icon="close"
+        size="small"
+        variant={buttonVariant}
+        type="text"
+        onTk-click={() => this.handleCloseButtonClick()}
+        dataTestid={getDataTestId(this.dataTestid, 'close-button')}
+      ></tk-button>
+    );
   }
 
   render() {
@@ -147,7 +175,7 @@ export class TkAlert implements ComponentInterface {
     const icon = this.createIcons();
 
     return (
-      <div class={rootClasses} style={this.containerStyle}>
+      <div class={rootClasses} style={this.containerStyle} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.hasContentSlot ? (
           <slot name="content" />
         ) : (

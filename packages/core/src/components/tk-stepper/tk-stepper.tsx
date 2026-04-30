@@ -4,6 +4,7 @@ import { IStep, IStepClickDetail } from './types';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { CSSStyleProperties } from '../../global/types';
 import { getIconElementProps } from '../../utils/icon-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * TkStepper component for managing a series of steps.
@@ -127,6 +128,11 @@ export class TkStepper implements ComponentInterface {
   @Prop() reverse: boolean = false;
 
   /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * Emitted when the active step changes.
    */
   @Event({ eventName: 'tk-step-change' }) tkStepChange: EventEmitter<number>;
@@ -209,7 +215,7 @@ export class TkStepper implements ComponentInterface {
     return false;
   }
 
-  private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}): JSX.Element {
+  private getIconElement(icon: string | IIconOptions, props: Record<string, any> = {}, dataTestid?: string): JSX.Element {
     const iconSizes = {
       large: 'xxlarge',
       base: 'medium',
@@ -219,7 +225,7 @@ export class TkStepper implements ComponentInterface {
     const defaultProps = { size: iconSizes[this.size], fill: true, ...props, class: props?.class };
     const iconProps = getIconElementProps(icon, defaultProps, 'outlined', 'i');
 
-    return <tk-icon {...iconProps} />;
+    return <tk-icon {...iconProps} dataTestid={getDataTestId(dataTestid ?? this.dataTestid, 'icon')} />;
   }
 
   private handleStepClick = (index: number) => {
@@ -230,16 +236,20 @@ export class TkStepper implements ComponentInterface {
     this.setActive(index);
   };
 
-  private createStepIcon(step: IStep, index: number): JSX.Element {
+  private createStepIcon(step: IStep, index: number, stepDataTestid?: string): JSX.Element {
     if (step.disabled) {
-      return this.getIconElement({
-        name: 'fiber_manual_record',
-        color: 'var(--border-light)',
-      });
+      return this.getIconElement(
+        {
+          name: 'fiber_manual_record',
+          color: 'var(--border-light)',
+        },
+        {},
+        stepDataTestid,
+      );
     }
 
     if (step.icon) {
-      return this.getIconElement(step.icon);
+      return this.getIconElement(step.icon, {}, stepDataTestid);
     }
 
     if (step.error) {
@@ -249,6 +259,8 @@ export class TkStepper implements ComponentInterface {
             name: 'close',
             color: 'var(--static-light)',
           },
+        {},
+        stepDataTestid,
       );
     }
 
@@ -258,11 +270,17 @@ export class TkStepper implements ComponentInterface {
           this.completeIcon || {
             name: 'check',
           },
+        {},
+        stepDataTestid,
       );
     }
 
     if (this.stepMode === 'number') {
-      return <span class="tk-step-number">{index + 1}</span>;
+      return (
+        <span class="tk-step-number" data-testid={getDataTestId(stepDataTestid, 'number')}>
+          {index + 1}
+        </span>
+      );
     }
 
     if (step.isActive) {
@@ -272,6 +290,8 @@ export class TkStepper implements ComponentInterface {
             name: 'fiber_manual_record',
             color: 'var(--static-white)',
           },
+        {},
+        stepDataTestid,
       );
     }
 
@@ -281,24 +301,27 @@ export class TkStepper implements ComponentInterface {
           name: 'fiber_manual_record',
           color: 'var(--border-light)',
         },
+      {},
+      stepDataTestid,
     );
   }
 
-  private createStepSign(step: IStep, index: number): JSX.Element {
+  private createStepSign(step: IStep, index: number, stepDataTestid?: string): JSX.Element {
     return (
-      <span class="tk-step-sign" aria-hidden="true" style={this.signStyle}>
-        {this.createStepIcon(step, index)}
+      <span class="tk-step-sign" aria-hidden="true" style={this.signStyle} data-testid={getDataTestId(stepDataTestid, 'sign')}>
+        {this.createStepIcon(step, index, stepDataTestid)}
       </span>
     );
   }
 
-  private createRail(): JSX.Element {
+  private createRail(stepDataTestid?: string): JSX.Element {
     if (this.mode === 'compact') return null;
-    else return <div class="tk-step-rail" style={this.railStyle}></div>;
+    else return <div class="tk-step-rail" style={this.railStyle} data-testid={getDataTestId(stepDataTestid, 'rail')}></div>;
   }
 
   private renderSteps(): JSX.Element[] {
     return this.steps.map((step, index) => {
+      const stepDataTestid = getDataTestId(this.dataTestid, 'step', index.toString());
       const status = step.disabled ? 'disabled' : step.error ? 'error' : step.complete ? 'completed' : step.isActive ? 'active' : 'inactive';
 
       const isClickable = this.canStepBeSelected(index);
@@ -319,14 +342,21 @@ export class TkStepper implements ComponentInterface {
           aria-label={step.header}
           aria-selected={step.isActive}
           aria-disabled={!this.canStepBeSelected(index)}
+          data-testid={getDataTestId(stepDataTestid)}
         >
-          <div class={containerClasses} data-index={index} data-clickable={step.isClickable && !step.disabled}>
-            <div class={stepClasses}>
-              {this.createRail()}
-              {this.createStepSign(step, index)}
-              <div class={contentClasses} style={this.contentStyle}>
-                <div class="tk-step-header">{step.header}</div>
-                {step.subheader && <div class="tk-step-subheader">{step.subheader}</div>}
+          <div class={containerClasses} data-index={index} data-clickable={step.isClickable && !step.disabled} data-testid={getDataTestId(stepDataTestid, 'container')}>
+            <div class={stepClasses} data-testid={getDataTestId(stepDataTestid, 'state')}>
+              {this.createRail(stepDataTestid)}
+              {this.createStepSign(step, index, stepDataTestid)}
+              <div class={contentClasses} style={this.contentStyle} data-testid={getDataTestId(stepDataTestid, 'content')}>
+                <div class="tk-step-header" data-testid={getDataTestId(stepDataTestid, 'header')}>
+                  {step.header}
+                </div>
+                {step.subheader && (
+                  <div class="tk-step-subheader" data-testid={getDataTestId(stepDataTestid, 'subheader')}>
+                    {step.subheader}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -342,7 +372,7 @@ export class TkStepper implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} style={this.containerStyle} role="tablist" aria-orientation={this.orientation}>
+      <div class={rootClasses} style={this.containerStyle} role="tablist" aria-orientation={this.orientation} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.renderSteps()}
       </div>
     );
