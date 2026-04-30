@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
-import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkChip component is basically a simple UI block entity, representing for example more advanced underlying data, such as a contact, in a compact way. Chips can contain entities such as an avatar, text or an icon, optionally having a pointer too.
@@ -132,7 +132,7 @@ export class TkChips implements ComponentInterface {
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
-        <div class={rootClasses} style={this.containerStyle} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+        <div class={rootClasses} style={this.containerStyle} data-testid={getDataTestId(this.dataTestid, 'container')}>
           {leftIcon}
           {this.label}
           {rightIcon}
@@ -146,7 +146,7 @@ export class TkChips implements ComponentInterface {
                 onKeyDown: (e: KeyboardEvent) => this.handleKeyDown(e),
                 tabIndex: this.disabled ? -1 : 0,
               })}
-              dataTestid={getDataTestidProp(this.dataTestid, 'remove-icon')}
+              dataTestid={getDataTestId(this.dataTestid, 'remove-icon')}
             />
           )}
         </div>

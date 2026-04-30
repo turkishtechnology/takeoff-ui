@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
 import { renderIcons } from '../../../utils/icon-utils';
 import { IIconOptions } from '../../../global/interfaces/IIconOptions';
-import { getDataTestidAttribute } from '../../../utils/test-id-utils';
+import { getDataTestId } from '../../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-breadcrumb-item',
@@ -58,11 +58,11 @@ export class TkBreadcrumbItem implements ComponentInterface {
     });
 
     return (
-      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null} {...getDataTestidAttribute(this.dataTestid, 'container')}>
-        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0} {...getDataTestidAttribute(this.dataTestid, 'link')}>
+      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null} data-testid={getDataTestId(this.dataTestid, 'container')}>
+        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0} data-testid={getDataTestId(this.dataTestid, 'link')}>
           {leftIcon}
           {this.label && (
-            <span class="tk-breadcrumb-item-label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
+            <span class="tk-breadcrumb-item-label" data-testid={getDataTestId(this.dataTestid, 'label')}>
               <slot>{this.label}</slot>
             </span>
           )}

@@ -2,7 +2,7 @@ import { Component, Prop, Element, h, State, ComponentInterface, Host } from '@s
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkBadge component allows you to create a small badge for adding information like contextual data that needs to stand out and get noticed. It is also often useful in combination with other elements like a user avatar to show a number of new messages.
@@ -120,7 +120,7 @@ export class TkBadge implements ComponentInterface {
       const type = this.label ? 'label' : this.isValidCount() ? 'count' : null;
       const { value = '', class: contentClass = '' } = contentConfig[type] || {};
       content = (
-        <span class={contentClass} {...getDataTestidAttribute(this.dataTestid, contentClass)}>
+        <span class={contentClass} data-testid={getDataTestId(this.dataTestid, contentClass)}>
           {value}
         </span>
       );
@@ -162,9 +162,9 @@ export class TkBadge implements ComponentInterface {
 
     return (
       <Host class={{ 'full-width': this.fullWidth && !this.hasSlot }}>
-        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+        <div class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
           <slot />
-          <span class={badgeClasses} {...getDataTestidAttribute(this.dataTestid, 'content')}>
+          <span class={badgeClasses} data-testid={getDataTestId(this.dataTestid, 'content')}>
             {_leftIcon}
             {this.renderContent()}
             {_rightIcon}

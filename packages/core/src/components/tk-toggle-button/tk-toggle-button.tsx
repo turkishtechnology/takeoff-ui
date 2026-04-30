@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } 
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-toggle-button',
@@ -108,7 +108,7 @@ export class TkToggleButton implements ComponentInterface {
   private renderLabel() {
     if (this.label?.length > 0) {
       return (
-        <span class={classNames('tk-toggle-button-label', this.size)} {...getDataTestidAttribute(this.dataTestid, 'label')}>
+        <span class={classNames('tk-toggle-button-label', this.size)} data-testid={getDataTestId(this.dataTestid, 'label')}>
           {this.label}
         </span>
       );
@@ -125,7 +125,7 @@ export class TkToggleButton implements ComponentInterface {
     const icon = this.createIcons();
 
     return (
-      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick} {...getDataTestidAttribute(this.dataTestid, 'button')}>
+      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick} data-testid={getDataTestId(this.dataTestid, 'button')}>
         {icon.leftIcon}
         {this.renderLabel()}
         {icon.rightIcon}

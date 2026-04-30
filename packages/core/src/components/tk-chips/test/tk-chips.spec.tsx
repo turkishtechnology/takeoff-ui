@@ -103,7 +103,7 @@ describe('dataTestid', () => {
     });
 
     const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
-    expect(icons[0].getAttribute('data-testid')).toBe('my-chip-left');
+    expect(icons[0].getAttribute('data-testid')).toBe('my-chip-left-icon');
     expect(icons[1].getAttribute('data-testid')).toBe('my-chip-remove-icon');
   });
 });

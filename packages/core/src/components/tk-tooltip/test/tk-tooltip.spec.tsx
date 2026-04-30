@@ -32,7 +32,7 @@ describe('tk-tooltip', () => {
       expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-header"]')).toBeTruthy();
       expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-description"]')).toBeTruthy();
       expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-arrow"]')).toBeTruthy();
-      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-left"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('[data-testid="my-tooltip-left-icon"]')).toBeTruthy();
     });
 
     it('keeps semantic ids with custom content slot', async () => {

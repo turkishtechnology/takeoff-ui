@@ -190,6 +190,6 @@ describe('dataTestid', () => {
     });
 
     const icon = page.root.shadowRoot.querySelector('tk-icon');
-    expect(icon.getAttribute('data-testid')).toBe('my-alert-left');
+    expect(icon.getAttribute('data-testid')).toBe('my-alert-left-icon');
   });
 });

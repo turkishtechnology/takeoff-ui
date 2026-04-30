@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, State, Watch, Event, EventEmitter, h } from '@stencil/core';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * TkToggleButtonGroup is a component that allows you to create a group of toggle buttons.
@@ -98,7 +98,7 @@ export class TkToggleButtonGroup implements ComponentInterface {
     });
 
     return (
-      <div class={groupClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class={groupClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
         <slot onSlotchange={() => this.updateSlottedItems()}></slot>
       </div>
     );

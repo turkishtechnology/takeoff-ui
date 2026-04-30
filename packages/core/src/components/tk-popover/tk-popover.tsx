@@ -3,7 +3,7 @@ import { floatingElementAutoUpdate } from '../../utils/position-utils';
 
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { CSSStyleProperties } from '../../global/types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkPopover displays additional information when triggered. By default, it opens when clicked, but can also be configured to open on hover.
@@ -159,7 +159,7 @@ export class TkPopover implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-popover" {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class="tk-popover" data-testid={getDataTestId(this.dataTestid, 'container')}>
         <slot name="trigger" />
         {this.isOpen && (
           <div
@@ -171,10 +171,10 @@ export class TkPopover implements ComponentInterface {
             style={{ ...this.containerStyle }}
             role="popover"
             onClick={e => e.stopPropagation()}
-            {...getDataTestidAttribute(this.dataTestid, 'content')}
+            data-testid={getDataTestId(this.dataTestid, 'content')}
           >
             {this.hasContentSlot && <slot name="content" />}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow')}></div>
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-popover-arrow" data-testid={getDataTestId(this.dataTestid, 'arrow')}></div>
           </div>
         )}
       </div>

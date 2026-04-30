@@ -2,7 +2,7 @@ import { Component, h, Prop, Element, Fragment, State } from '@stencil/core';
 import { ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
 import { TimelineItem } from './types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The `TkTimeline` is a component that displays a vertical or horizontal timeline of events.
@@ -86,20 +86,20 @@ export class TkTimeline implements ComponentInterface {
   private createItemContent(item: TimelineItem, index: number) {
     return (
       <Fragment>
-        <div class="tk-timeline-item-content-inner" {...getDataTestidAttribute(this.dataTestid, 'item-content', index.toString())}>
+        <div class="tk-timeline-item-content-inner" data-testid={getDataTestId(this.dataTestid, 'item-content', index.toString())}>
           {item.title && (
-            <div class="tk-timeline-item-title" {...getDataTestidAttribute(this.dataTestid, 'item-title', index.toString())}>
+            <div class="tk-timeline-item-title" data-testid={getDataTestId(this.dataTestid, 'item-title', index.toString())}>
               {item.title}
             </div>
           )}
           {item.description && (
-            <div class="tk-timeline-item-description" {...getDataTestidAttribute(this.dataTestid, 'item-description', index.toString())}>
+            <div class="tk-timeline-item-description" data-testid={getDataTestId(this.dataTestid, 'item-description', index.toString())}>
               {item.description}
             </div>
           )}
         </div>
         {item.date && (
-          <div class="tk-timeline-item-date" {...getDataTestidAttribute(this.dataTestid, 'item-date', index.toString())}>
+          <div class="tk-timeline-item-date" data-testid={getDataTestId(this.dataTestid, 'item-date', index.toString())}>
             {item.date}
           </div>
         )}
@@ -118,15 +118,15 @@ export class TkTimeline implements ComponentInterface {
     });
 
     return (
-      <li class={itemClasses} {...getDataTestidAttribute(this.dataTestid, 'item', index.toString())}>
-        <div class="tk-timeline-item-content tk-timeline-item-content-start" {...getDataTestidAttribute(this.dataTestid, 'item-start', index.toString())}>
+      <li class={itemClasses} data-testid={getDataTestId(this.dataTestid, 'item', index.toString())}>
+        <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
           {contentPlacement === 'start' && this.createItemContent(item, index)}
         </div>
-        <div class="tk-timeline-item-separator" {...getDataTestidAttribute(this.dataTestid, 'item-separator', index.toString())}>
-          <div class="tk-timeline-item-point" {...getDataTestidAttribute(this.dataTestid, 'item-point', index.toString())}></div>
-          <div class="tk-timeline-item-connector" {...getDataTestidAttribute(this.dataTestid, 'item-connector', index.toString())}></div>
+        <div class="tk-timeline-item-separator" data-testid={getDataTestId(this.dataTestid, 'item-separator', index.toString())}>
+          <div class="tk-timeline-item-point" data-testid={getDataTestId(this.dataTestid, 'item-point', index.toString())}></div>
+          <div class="tk-timeline-item-connector" data-testid={getDataTestId(this.dataTestid, 'item-connector', index.toString())}></div>
         </div>
-        <div class="tk-timeline-item-content tk-timeline-item-content-end" {...getDataTestidAttribute(this.dataTestid, 'item-end', index.toString())}>
+        <div class="tk-timeline-item-content tk-timeline-item-content-end" data-testid={getDataTestId(this.dataTestid, 'item-end', index.toString())}>
           {contentPlacement === 'end' && this.createItemContent(item, index)}
         </div>
       </li>
@@ -151,15 +151,15 @@ export class TkTimeline implements ComponentInterface {
       item.setAttribute('data-index', index.toString());
 
       return (
-        <li class={itemClasses} {...getDataTestidAttribute(this.dataTestid, 'item', index.toString())}>
-          <div class="tk-timeline-item-content tk-timeline-item-content-start" {...getDataTestidAttribute(this.dataTestid, 'item-start', index.toString())}>
+        <li class={itemClasses} data-testid={getDataTestId(this.dataTestid, 'item', index.toString())}>
+          <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
             {contentPlacement === 'start' && <slot name={`item-${index}`}></slot>}
           </div>
-          <div class="tk-timeline-item-separator" {...getDataTestidAttribute(this.dataTestid, 'item-separator', index.toString())}>
-            <div class="tk-timeline-item-point" {...getDataTestidAttribute(this.dataTestid, 'item-point', index.toString())}></div>
-            <div class="tk-timeline-item-connector" {...getDataTestidAttribute(this.dataTestid, 'item-connector', index.toString())}></div>
+          <div class="tk-timeline-item-separator" data-testid={getDataTestId(this.dataTestid, 'item-separator', index.toString())}>
+            <div class="tk-timeline-item-point" data-testid={getDataTestId(this.dataTestid, 'item-point', index.toString())}></div>
+            <div class="tk-timeline-item-connector" data-testid={getDataTestId(this.dataTestid, 'item-connector', index.toString())}></div>
           </div>
-          <div class="tk-timeline-item-content tk-timeline-item-content-end" {...getDataTestidAttribute(this.dataTestid, 'item-end', index.toString())}>
+          <div class="tk-timeline-item-content tk-timeline-item-content-end" data-testid={getDataTestId(this.dataTestid, 'item-end', index.toString())}>
             {contentPlacement === 'end' && <slot name={`item-${index}`}></slot>}
           </div>
         </li>
@@ -172,8 +172,8 @@ export class TkTimeline implements ComponentInterface {
     const hasSlottedItems = this.slottedItemsCount > 0;
 
     return (
-      <div class={hostClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
-        <ul class="tk-timeline-items" {...getDataTestidAttribute(this.dataTestid, 'items')}>
+      <div class={hostClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
+        <ul class="tk-timeline-items" data-testid={getDataTestId(this.dataTestid, 'items')}>
           {hasSlottedItems ? <Fragment>{this.renderSlottedTimelineItems()}</Fragment> : this.items.map((item, index) => this.renderTimelineItem(item, index))}
         </ul>
       </div>

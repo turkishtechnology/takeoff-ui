@@ -2,7 +2,7 @@ import { AttachInternals, Component, ComponentInterface, Element, Event, EventEm
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { renderHint } from '../../utils/hint-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkTextarea component enables multi-line text input with customizable size, validation, and styling options.
@@ -192,12 +192,12 @@ export class TkTextarea implements ComponentInterface {
 
     if (this.label?.length > 0) {
       const asterisk = (
-        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'label-asterisk')}>
+        <span class="asterisk" data-testid={getDataTestId(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
       label = (
-        <label htmlFor={this.uniqueId} class="label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
+        <label htmlFor={this.uniqueId} class="label" data-testid={getDataTestId(this.dataTestid, 'label')}>
           {this.label}
           {this.showAsterisk ? asterisk : ''}
         </label>
@@ -213,16 +213,16 @@ export class TkTextarea implements ComponentInterface {
     const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
     if (this.maxLength) {
       counter = (
-        <span class={counterClasses} {...getDataTestidAttribute(this.dataTestid, 'counter')}>
+        <span class={counterClasses} data-testid={getDataTestId(this.dataTestid, 'counter')}>
           {this.charCount}/{this.maxLength}
         </span>
       );
     }
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.renderLabel()}
-        <div class="tk-textarea" {...getDataTestidAttribute(this.dataTestid, 'control')}>
+        <div class="tk-textarea" data-testid={getDataTestId(this.dataTestid, 'control')}>
           <textarea
             id={this.uniqueId}
             ref={el => (this.nativeInput = el)}
@@ -238,7 +238,7 @@ export class TkTextarea implements ComponentInterface {
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
             value={this.value}
-            {...getDataTestidAttribute(this.dataTestid, 'native-textarea')}
+            data-testid={getDataTestId(this.dataTestid, 'native-textarea')}
           />
           {counter}
         </div>

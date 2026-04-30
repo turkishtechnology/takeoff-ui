@@ -1,6 +1,6 @@
 import { IIconOptions, IMultiIconOptions } from '../global/interfaces/IIconOptions';
 import { h } from '@stencil/core';
-import { getDataTestidAttribute } from './test-id-utils';
+import { getDataTestId } from './test-id-utils';
 export interface IconRendererOptions {
   variant?: string | null;
   sign?: boolean;
@@ -91,13 +91,13 @@ export const renderIcons = (
 
     if (leftIconConfig) {
       leftIcon = h('tk-icon', {
-        ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps, ...getDataTestidAttribute(dataTestid, 'left') }, iconStyle, iconTag),
+        ...getIconElementProps(leftIconConfig, { variant, sign, size, fill, ...additionalProps, 'data-testid': getDataTestId(dataTestid, 'left-icon') }, iconStyle, iconTag),
       });
     }
 
     if (rightIconConfig) {
       rightIcon = h('tk-icon', {
-        ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps, ...getDataTestidAttribute(dataTestid, 'right') }, iconStyle, iconTag),
+        ...getIconElementProps(rightIconConfig, { variant, sign, size, fill, ...additionalProps, 'data-testid': getDataTestId(dataTestid, 'right-icon') }, iconStyle, iconTag),
       });
     }
   } else {
@@ -105,7 +105,7 @@ export const renderIcons = (
     const iconElement = h('tk-icon', {
       ...getIconElementProps(
         icon as string | IIconOptions,
-        { variant, sign, size, fill, ...additionalProps, ...getDataTestidAttribute(dataTestid, `${position}`) },
+        { variant, sign, size, fill, ...additionalProps, 'data-testid': getDataTestId(dataTestid, `${position}-icon`) },
         iconStyle,
         iconTag,
       ),

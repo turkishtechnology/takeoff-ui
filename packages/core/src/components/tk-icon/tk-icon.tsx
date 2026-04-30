@@ -1,6 +1,6 @@
 import { Component, Prop, Element, h, ComponentInterface } from '@stencil/core';
 import classNames from 'classnames';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkIcon component allows you to create a icon for adding visual information. It is also often useful in combination with other elements.
@@ -106,9 +106,9 @@ export class TkIcon implements ComponentInterface {
     });
 
     const iconProps = {
-      class: iconClasses,
+      'class': iconClasses,
       ...this.getIconStyles(),
-      ...getDataTestidAttribute(this.dataTestid, 'content'),
+      'data-testid': getDataTestId(this.dataTestid, 'content'),
     };
 
     const IconTag = this.iconTag;

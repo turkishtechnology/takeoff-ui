@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
 import { getIconElementProps } from '../../utils/icon-utils';
-import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 import '../../global/sass/fonts/tk-font/tk-text-regular';
 import '../../global/sass/fonts/tk-font/tk-text-bold';
 import '../../global/sass/fonts/geologica/geologica-regular';
@@ -921,7 +921,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private setDataTestidAttribute(el: Element, ...suffixes: Array<string | undefined>) {
-    const testId = getDataTestidAttribute(this.dataTestid, ...suffixes)['data-testid'];
+    const testId = getDataTestId(this.dataTestid, ...suffixes)['data-testid'];
     if (testId) {
       el.setAttribute('data-testid', testId);
     }
@@ -1147,7 +1147,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        optionsSearchInput.dataTestid = getDataTestidProp(this.dataTestid, 'filter-options-search-input', field);
+        optionsSearchInput.dataTestid = getDataTestId(this.dataTestid, 'filter-options-search-input', field);
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1258,7 +1258,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        optionsSearchInput.dataTestid = getDataTestidProp(this.dataTestid, 'filter-options-search-input', field);
+        optionsSearchInput.dataTestid = getDataTestId(this.dataTestid, 'filter-options-search-input', field);
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1299,7 +1299,7 @@ export class TkTable implements ComponentInterface {
       this.setDataTestidAttribute(filterContainer, 'filter-datepicker-container', field);
 
       const datepicker = document.createElement('tk-datepicker');
-      datepicker.dataTestid = getDataTestidProp(this.dataTestid, 'filter-datepicker', field);
+      datepicker.dataTestid = getDataTestId(this.dataTestid, 'filter-datepicker', field);
       const defaultDatepickerProps = {
         label: 'Select a date',
         placeholder: 'Choose a date',
@@ -1360,7 +1360,7 @@ export class TkTable implements ComponentInterface {
       if (column?.filterElements?.optionsSearchInput?.show) {
         const optionsSearchInput = document.createElement('tk-input');
         optionsSearchInput.placeholder = column.filterElements.optionsSearchInput.placeholder || 'Search';
-        optionsSearchInput.dataTestid = getDataTestidProp(this.dataTestid, 'filter-options-search-input', field);
+        optionsSearchInput.dataTestid = getDataTestId(this.dataTestid, 'filter-options-search-input', field);
 
         optionsSearchInput.addEventListener('tk-change', (e: any) => {
           const searchText = e.detail.toLowerCase();
@@ -1399,7 +1399,7 @@ export class TkTable implements ComponentInterface {
       // Default text input filter
       const input: HTMLTkInputElement = document.createElement('tk-input');
       const searchInputConfig = column?.filterElements?.searchInput ?? {};
-      input.dataTestid = getDataTestidProp(this.dataTestid, 'filter-search-input', field);
+      input.dataTestid = getDataTestId(this.dataTestid, 'filter-search-input', field);
       input.placeholder = searchInputConfig?.placeholder || 'Search';
       input.label = searchInputConfig?.label;
       input.maskOptions = searchInputConfig?.maskOptions;
@@ -1432,7 +1432,7 @@ export class TkTable implements ComponentInterface {
     cancelButton.label = column?.filterElements?.cancelButton?.label || column?.filterButtons?.cancelButton?.label || 'Remove';
     cancelButton.type = 'outlined';
     cancelButton.fullWidth = true;
-    cancelButton.dataTestid = getDataTestidProp(this.dataTestid, 'filter-cancel-button', field);
+    cancelButton.dataTestid = getDataTestId(this.dataTestid, 'filter-cancel-button', field);
     cancelButton.addEventListener('tk-click', () => {
       this.handleSearchCancelButtonClick(field);
       this.isFilterOpen = false;
@@ -1442,7 +1442,7 @@ export class TkTable implements ComponentInterface {
     const searchButton: HTMLTkButtonElement = document.createElement('tk-button');
     searchButton.label = column?.filterElements?.searchButton?.label || column?.filterButtons?.searchButton?.label || 'Apply';
     searchButton.fullWidth = true;
-    searchButton.dataTestid = getDataTestidProp(this.dataTestid, 'filter-apply-button', field);
+    searchButton.dataTestid = getDataTestId(this.dataTestid, 'filter-apply-button', field);
     searchButton.addEventListener('tk-click', () => {
       this.handleSearchButtonClick(field);
       // We don't need to close the filter panel here anymore since it's closed in the apply methods
@@ -1870,22 +1870,22 @@ export class TkTable implements ComponentInterface {
               { 'tk-table-collapsible-group-header': this.collapsibleGroups },
               { 'tk-table-group-collapsed': this.collapsibleGroups && !isGroupExpanded },
             )}
-            {...getDataTestidAttribute(this.dataTestid, 'group-header', groupIndex.toString())}
+            data-testid={getDataTestId(this.dataTestid, 'group-header', groupIndex.toString())}
             onClick={() => this.toggleExpandGroup(group.groupValue)}
           >
-            <td colSpan={totalColumns} class="tk-table-group-header-cell" {...getDataTestidAttribute(this.dataTestid, 'group-header-cell', groupIndex.toString())}>
-              <div class="tk-table-group-header-content" {...getDataTestidAttribute(this.dataTestid, 'group-header-content', groupIndex.toString())}>
+            <td colSpan={totalColumns} class="tk-table-group-header-cell" data-testid={getDataTestId(this.dataTestid, 'group-header-cell', groupIndex.toString())}>
+              <div class="tk-table-group-header-content" data-testid={getDataTestId(this.dataTestid, 'group-header-content', groupIndex.toString())}>
                 {this.collapsibleGroups && (
                   <tk-icon
                     icon={isGroupExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
                     variant="neutral"
-                    dataTestid={getDataTestidProp(this.dataTestid, 'group-header-toggle-icon', groupIndex.toString())}
+                    dataTestid={getDataTestId(this.dataTestid, 'group-header-toggle-icon', groupIndex.toString())}
                   />
                 )}
-                <span class="tk-table-group-value" {...getDataTestidAttribute(this.dataTestid, 'group-header-value', groupIndex.toString())}>
+                <span class="tk-table-group-value" data-testid={getDataTestId(this.dataTestid, 'group-header-value', groupIndex.toString())}>
                   {group.groupValue}
                 </span>
-                <span class="tk-table-group-count" {...getDataTestidAttribute(this.dataTestid, 'group-header-count', groupIndex.toString())}>
+                <span class="tk-table-group-count" data-testid={getDataTestId(this.dataTestid, 'group-header-count', groupIndex.toString())}>
                   ({group.groupCount})
                 </span>
               </div>
@@ -1935,7 +1935,7 @@ export class TkTable implements ComponentInterface {
         <td
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
           style={this.getSelectionStickyStyle(index)}
-          {...getDataTestidAttribute(this.dataTestid, 'body-row-selection-cell', rowKey)}
+          data-testid={getDataTestId(this.dataTestid, 'body-row-selection-cell', rowKey)}
         >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
@@ -1943,7 +1943,7 @@ export class TkTable implements ComponentInterface {
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
             onClick={e => e.stopPropagation()}
-            {...getDataTestidAttribute(this.dataTestid, 'body-row-selection-checkbox', rowKey)}
+            data-testid={getDataTestId(this.dataTestid, 'body-row-selection-checkbox', rowKey)}
           ></tk-checkbox>
         </td>
       );
@@ -1952,7 +1952,7 @@ export class TkTable implements ComponentInterface {
         <td
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
           style={this.getSelectionStickyStyle(index)}
-          {...getDataTestidAttribute(this.dataTestid, 'body-row-selection-cell', rowKey)}
+          data-testid={getDataTestId(this.dataTestid, 'body-row-selection-cell', rowKey)}
         >
           <tk-radio
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
@@ -1962,7 +1962,7 @@ export class TkTable implements ComponentInterface {
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
             onClick={e => e.stopPropagation()}
-            {...getDataTestidAttribute(this.dataTestid, 'body-row-selection-radio', rowKey)}
+            data-testid={getDataTestId(this.dataTestid, 'body-row-selection-radio', rowKey)}
           ></tk-radio>
         </td>
       );
@@ -1977,7 +1977,7 @@ export class TkTable implements ComponentInterface {
           class={isSelected ? 'selected' : ''}
           onClick={e => this.handleRowClick(e, row)}
           aria-disabled={isRowDisabled}
-          {...getDataTestidAttribute(this.dataTestid, 'body-row', rowKey)}
+          data-testid={getDataTestId(this.dataTestid, 'body-row', rowKey)}
         >
           {selectionTd}
           {this.columns.map(col => {
@@ -1999,7 +1999,7 @@ export class TkTable implements ComponentInterface {
                 <td
                   class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                   style={{ ...this.getStickyColumnStyle(col, index), ...styleRowObject, ...styleCellObject }}
-                  {...getDataTestidAttribute(this.dataTestid, 'body-cell-expander', rowKey, String(col.field))}
+                  data-testid={getDataTestId(this.dataTestid, 'body-cell-expander', rowKey, String(col.field))}
                 >
                   <tk-button
                     ref={el => (tdExpanderButtonRef = el)}
@@ -2009,7 +2009,7 @@ export class TkTable implements ComponentInterface {
                     type="text"
                     size="small"
                     onTk-click={() => this.toggleExpandRow(row, tdExpanderButtonRef)}
-                    dataTestid={getDataTestidProp(this.dataTestid, 'body-expander-button', rowKey, String(col.field))}
+                    dataTestid={getDataTestId(this.dataTestid, 'body-expander-button', rowKey, String(col.field))}
                   ></tk-button>
                 </td>
               );
@@ -2032,7 +2032,7 @@ export class TkTable implements ComponentInterface {
                   <td
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
                     innerHTML={effectiveElement}
-                    {...getDataTestidAttribute(this.dataTestid, 'body-cell-html', rowKey, String(col.field))}
+                    data-testid={getDataTestId(this.dataTestid, 'body-cell-html', rowKey, String(col.field))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
                       ...styleRowObject,
@@ -2049,7 +2049,7 @@ export class TkTable implements ComponentInterface {
                   <td
                     ref={el => el?.replaceChildren(effectiveElement)}
                     class={classNames('non-text', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                    {...getDataTestidAttribute(this.dataTestid, 'body-cell-custom', rowKey, String(col.field))}
+                    data-testid={getDataTestId(this.dataTestid, 'body-cell-custom', rowKey, String(col.field))}
                     style={{
                       ...this.getStickyColumnStyle(col, index),
                       ...styleRowObject,
@@ -2063,7 +2063,7 @@ export class TkTable implements ComponentInterface {
               return (
                 <td
                   class={classNames('non-text editable', this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                  {...getDataTestidAttribute(this.dataTestid, 'body-cell-editable', rowKey, String(col.field))}
+                  data-testid={getDataTestId(this.dataTestid, 'body-cell-editable', rowKey, String(col.field))}
                   style={{
                     ...this.getStickyColumnStyle(col, index),
                     ...styleRowObject,
@@ -2076,7 +2076,7 @@ export class TkTable implements ComponentInterface {
                     type="text"
                     onKeyDown={e => handleInputKeydown(e, this.el)}
                     onBlur={() => this.handleInputBlur(row, index, col.field, editableInputRef)}
-                    {...getDataTestidAttribute(this.dataTestid, 'body-cell-editable-input', rowKey, String(col.field))}
+                    data-testid={getDataTestId(this.dataTestid, 'body-cell-editable-input', rowKey, String(col.field))}
                   ></input>
                 </td>
               );
@@ -2084,7 +2084,7 @@ export class TkTable implements ComponentInterface {
               return (
                 <td
                   class={classNames(this.getStickyColumnClasses(col, isFirstLeft, isLastRight))}
-                  {...getDataTestidAttribute(this.dataTestid, 'body-cell', rowKey, String(col.field))}
+                  data-testid={getDataTestId(this.dataTestid, 'body-cell', rowKey, String(col.field))}
                   style={{
                     ...this.getStickyColumnStyle(col, index),
                     ...styleRowObject,
@@ -2097,11 +2097,11 @@ export class TkTable implements ComponentInterface {
           })}
         </tr>
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
-          <tr {...getDataTestidAttribute(this.dataTestid, 'body-expanded-row', rowKey)}>
+          <tr data-testid={getDataTestId(this.dataTestid, 'body-expanded-row', rowKey)}>
             <td
               colSpan={100}
               style={typeof this.expandedRowStyle == 'function' ? this.expandedRowStyle(row) : {}}
-              {...getDataTestidAttribute(this.dataTestid, 'body-expanded-row-cell', rowKey)}
+              data-testid={getDataTestId(this.dataTestid, 'body-expanded-row-cell', rowKey)}
             >
               <slot name={`expand-content-${row[this.dataKey]}`} />
             </td>
@@ -2202,7 +2202,7 @@ export class TkTable implements ComponentInterface {
         <th
           style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
-          {...getDataTestidAttribute(this.dataTestid, 'head-selection-cell')}
+          data-testid={getDataTestId(this.dataTestid, 'head-selection-cell')}
         >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-all` : undefined}
@@ -2211,7 +2211,7 @@ export class TkTable implements ComponentInterface {
             ref={el => (this.refSelectAll = el)}
             indeterminate={Array.isArray(this.selection) && this.selection.length > 0 && !this.isAllRowsSelected()}
             onTk-change={e => this.handleSelectAll(e.detail)}
-            {...getDataTestidAttribute(this.dataTestid, 'head-selection-checkbox')}
+            data-testid={getDataTestId(this.dataTestid, 'head-selection-checkbox')}
           ></tk-checkbox>
         </th>
       );
@@ -2221,14 +2221,14 @@ export class TkTable implements ComponentInterface {
         <th
           style={{ width: '20px', maxWidth: '20px', ...this.getSelectionStickyStyle() }}
           class={classNames('non-text', 'tk-table-left-sticky', 'tk-table-sticky-first', { 'tk-table-sticky-shadow-right': leftColumns.length === 0 })}
-          {...getDataTestidAttribute(this.dataTestid, 'head-selection-cell')}
+          data-testid={getDataTestId(this.dataTestid, 'head-selection-cell')}
         ></th>
       );
     }
 
     return (
-      <thead class={theadClasses} {...getDataTestidAttribute(this.dataTestid, 'head')}>
-        <tr {...getDataTestidAttribute(this.dataTestid, 'head-row')}>
+      <thead class={theadClasses} data-testid={getDataTestId(this.dataTestid, 'head')}>
+        <tr data-testid={getDataTestId(this.dataTestid, 'head-row')}>
           {selectionTh}
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
@@ -2245,7 +2245,7 @@ export class TkTable implements ComponentInterface {
             _headerStructure = (
               <div
                 class="header-container"
-                {...getDataTestidAttribute(this.dataTestid, 'head-cell-header-container', String(col.field))}
+                data-testid={getDataTestId(this.dataTestid, 'head-cell-header-container', String(col.field))}
                 ref={el => {
                   if (_customHeader) {
                     if (typeof _customHeader === 'string') {
@@ -2289,7 +2289,7 @@ export class TkTable implements ComponentInterface {
                     ...this.getStickyColumnStyle(col),
                     ...col?.style,
                   }}
-                  {...getDataTestidAttribute(this.dataTestid, 'head-cell-expander')}
+                  data-testid={getDataTestId(this.dataTestid, 'head-cell-expander')}
                 ></th>
               );
             }
@@ -2301,7 +2301,7 @@ export class TkTable implements ComponentInterface {
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
             _sortIcon = showBadge ? (
-              <tk-badge count={sortIndex + 1} type="text" rounded size="small" dataTestid={getDataTestidProp(this.dataTestid, 'head-cell-sort-badge', String(col.field))}>
+              <tk-badge count={sortIndex + 1} type="text" rounded size="small" dataTestid={getDataTestId(this.dataTestid, 'head-cell-sort-badge', String(col.field))}>
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
@@ -2309,7 +2309,7 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
-                  dataTestid={getDataTestidProp(this.dataTestid, 'head-cell-sort-icon', String(col.field))}
+                  dataTestid={getDataTestId(this.dataTestid, 'head-cell-sort-icon', String(col.field))}
                 />
               </tk-badge>
             ) : (
@@ -2320,7 +2320,7 @@ export class TkTable implements ComponentInterface {
                   ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
-                dataTestid={getDataTestidProp(this.dataTestid, 'head-cell-sort-icon', String(col.field))}
+                dataTestid={getDataTestId(this.dataTestid, 'head-cell-sort-icon', String(col.field))}
               />
             );
 
@@ -2342,14 +2342,14 @@ export class TkTable implements ComponentInterface {
                     ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}
-                  dataTestid={getDataTestidProp(this.dataTestid, 'head-cell-search-icon', String(col.field))}
+                  dataTestid={getDataTestId(this.dataTestid, 'head-cell-search-icon', String(col.field))}
                 />
               );
 
               // filtrelenmiş ise badge ile göster
               if (hasFilter) {
                 _searchIcon = (
-                  <tk-badge dot dataTestid={getDataTestidProp(this.dataTestid, 'head-cell-search-badge', String(col.field))}>
+                  <tk-badge dot dataTestid={getDataTestId(this.dataTestid, 'head-cell-search-badge', String(col.field))}>
                     {_searchIcon}
                   </tk-badge>
                 );
@@ -2369,14 +2369,14 @@ export class TkTable implements ComponentInterface {
                   ...col?.style,
                 }}
                 data-field={col.field}
-                {...getDataTestidAttribute(this.dataTestid, 'head-cell', String(col.field))}
+                data-testid={getDataTestId(this.dataTestid, 'head-cell', String(col.field))}
               >
-                <div class="tk-table-head-cell" {...getDataTestidAttribute(this.dataTestid, 'head-cell-content', String(col.field))}>
+                <div class="tk-table-head-cell" data-testid={getDataTestId(this.dataTestid, 'head-cell-content', String(col.field))}>
                   {_headerStructure}
                   {(col.sortable || col.searchable) && (
                     <div
                       class={classNames('icons', { 'show-icon-on-hover': col.showIconsOnHover && noSortAndFilter && !filterPanelOpen }, buttonDirection)}
-                      {...getDataTestidAttribute(this.dataTestid, 'head-cell-icons', String(col.field))}
+                      data-testid={getDataTestId(this.dataTestid, 'head-cell-icons', String(col.field))}
                     >
                       {col.sortable && _sortIcon}
                       {_searchIcon}
@@ -2386,7 +2386,7 @@ export class TkTable implements ComponentInterface {
                   <div
                     class="tk-table-resize-handle"
                     onMouseDown={e => this.handleMouseDown(e, this.columns.indexOf(col))}
-                    {...getDataTestidAttribute(this.dataTestid, 'head-cell-resize-handle', String(col.field))}
+                    data-testid={getDataTestId(this.dataTestid, 'head-cell-resize-handle', String(col.field))}
                   ></div>
                 </div>
               </th>
@@ -2404,7 +2404,7 @@ export class TkTable implements ComponentInterface {
 
     if (this.renderData.length > 0) {
       return (
-        <tbody {...getDataTestidAttribute(this.dataTestid, 'body')}>
+        <tbody data-testid={getDataTestId(this.dataTestid, 'body')}>
           <slot name="body-header"></slot>
 
           {this.groupByColumnField ? this.createGroupedRows() : this.renderData.map((row, index) => this.createDataRow(row, index))}
@@ -2414,9 +2414,9 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.hasEmptyFilterSlot && this.filters?.length > 0) {
       return (
-        <tbody {...getDataTestidAttribute(this.dataTestid, 'body-empty-filter')}>
-          <tr {...getDataTestidAttribute(this.dataTestid, 'body-empty-filter-row')}>
-            <td colSpan={100} {...getDataTestidAttribute(this.dataTestid, 'body-empty-filter-cell')}>
+        <tbody data-testid={getDataTestId(this.dataTestid, 'body-empty-filter')}>
+          <tr data-testid={getDataTestId(this.dataTestid, 'body-empty-filter-row')}>
+            <td colSpan={100} data-testid={getDataTestId(this.dataTestid, 'body-empty-filter-cell')}>
               <slot name="empty-filter" />
             </td>
           </tr>
@@ -2424,9 +2424,9 @@ export class TkTable implements ComponentInterface {
       );
     } else if (this.hasEmptyDataSlot) {
       return (
-        <tbody {...getDataTestidAttribute(this.dataTestid, 'body-empty-data')}>
-          <tr {...getDataTestidAttribute(this.dataTestid, 'body-empty-data-row')}>
-            <td colSpan={100} {...getDataTestidAttribute(this.dataTestid, 'body-empty-data-cell')}>
+        <tbody data-testid={getDataTestId(this.dataTestid, 'body-empty-data')}>
+          <tr data-testid={getDataTestId(this.dataTestid, 'body-empty-data-row')}>
+            <td colSpan={100} data-testid={getDataTestId(this.dataTestid, 'body-empty-data-cell')}>
               <slot name="empty-data" />
             </td>
           </tr>
@@ -2438,9 +2438,9 @@ export class TkTable implements ComponentInterface {
   private renderHeader() {
     if (this.cardTitle || this.hasHeaderRightSlot)
       return (
-        <div class="tk-table-header" {...getDataTestidAttribute(this.dataTestid, 'header')}>
-          <div {...getDataTestidAttribute(this.dataTestid, 'header-title')}>{this.cardTitle}</div>
-          <div {...getDataTestidAttribute(this.dataTestid, 'header-right')}>
+        <div class="tk-table-header" data-testid={getDataTestId(this.dataTestid, 'header')}>
+          <div data-testid={getDataTestId(this.dataTestid, 'header-title')}>{this.cardTitle}</div>
+          <div data-testid={getDataTestId(this.dataTestid, 'header-right')}>
             <slot name="header-right"></slot>
           </div>
         </div>
@@ -2449,15 +2449,15 @@ export class TkTable implements ComponentInterface {
 
   private renderTable() {
     return (
-      <div class="table-holder" {...getDataTestidAttribute(this.dataTestid, 'table-holder')}>
-        <table {...getDataTestidAttribute(this.dataTestid, 'content-table')}>
+      <div class="table-holder" data-testid={getDataTestId(this.dataTestid, 'table-holder')}>
+        <table data-testid={getDataTestId(this.dataTestid, 'content-table')}>
           {this.createHead()}
           {this.loading ? (
-            <tbody class="loading-holder" {...getDataTestidAttribute(this.dataTestid, 'loading-holder')}>
-              <tr {...getDataTestidAttribute(this.dataTestid, 'loading-row')}>
-                <td colSpan={this.columns.length + 1} {...getDataTestidAttribute(this.dataTestid, 'loading-cell')}>
-                  <div class="loading" {...getDataTestidAttribute(this.dataTestid, 'loading-content')}>
-                    <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg" {...getDataTestidAttribute(this.dataTestid, 'loading-icon')}>
+            <tbody class="loading-holder" data-testid={getDataTestId(this.dataTestid, 'loading-holder')}>
+              <tr data-testid={getDataTestId(this.dataTestid, 'loading-row')}>
+                <td colSpan={this.columns.length + 1} data-testid={getDataTestId(this.dataTestid, 'loading-cell')}>
+                  <div class="loading" data-testid={getDataTestId(this.dataTestid, 'loading-content')}>
+                    <svg width="97" height="97" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg" data-testid={getDataTestId(this.dataTestid, 'loading-icon')}>
                       <path
                         d="M88.8501 0.5H48.8501C35.5901 0.5 23.5901 5.87 14.9101 14.56C6.2201 23.25 0.850098 35.25 0.850098 48.5C0.850098 75.01 22.3401 96.5 48.8501 96.5C75.3601 96.5 96.8501 75.01 96.8501 48.5V8.5C96.8501 4.09 93.2601 0.5 88.8501 0.5ZM71.4801 71.13C65.6901 76.92 57.6901 80.5 48.8501 80.5C31.1701 80.5 16.8501 66.18 16.8501 48.5C16.8501 39.67 20.4301 31.67 26.2201 25.87C32.0101 20.08 40.0101 16.5 48.8501 16.5C57.6901 16.5 65.6901 20.08 71.4801 25.87C77.2701 31.67 80.8501 39.67 80.8501 48.5C80.8501 57.33 77.2701 65.34 71.4801 71.13Z"
                         fill="#C92027"
@@ -2486,7 +2486,7 @@ export class TkTable implements ComponentInterface {
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
-          {...getDataTestidAttribute(this.dataTestid, 'pagination')}
+          data-testid={getDataTestId(this.dataTestid, 'pagination')}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
             this.internalRowsPerPage = e.detail;
@@ -2505,7 +2505,7 @@ export class TkTable implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} style={this.containerStyle} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class={rootClasses} style={this.containerStyle} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.renderHeader()}
         {this.renderTable()}
         {this.renderPagination()}

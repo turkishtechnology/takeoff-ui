@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Prop, State, Event, Element, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { renderHint } from '../../utils/hint-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-slider',
@@ -141,19 +141,19 @@ export class TkSlider implements ComponentInterface {
     const isMaxActive = this.draggingThumb === 'max';
 
     return (
-      <div class={`tk-slider ${this.disabled ? 'tk-slider-disabled' : ''}`} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class={`tk-slider ${this.disabled ? 'tk-slider-disabled' : ''}`} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.label && (
-          <label class="tk-slider-label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
+          <label class="tk-slider-label" data-testid={getDataTestId(this.dataTestid, 'label')}>
             {this.label}
             {this.showAsterisk && (
-              <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'label-asterisk')}>
+              <span class="asterisk" data-testid={getDataTestId(this.dataTestid, 'label-asterisk')}>
                 *
               </span>
             )}
           </label>
         )}
-        <div class="tk-slider-track-wrapper" {...getDataTestidAttribute(this.dataTestid, 'track-wrapper')}>
-          <div class="tk-slider-track" ref={el => (this.trackRef = el)} {...getDataTestidAttribute(this.dataTestid, 'track')}>
+        <div class="tk-slider-track-wrapper" data-testid={getDataTestId(this.dataTestid, 'track-wrapper')}>
+          <div class="tk-slider-track" ref={el => (this.trackRef = el)} data-testid={getDataTestId(this.dataTestid, 'track')}>
             {this.range ? (
               <div
                 class="tk-slider-fill"
@@ -161,10 +161,10 @@ export class TkSlider implements ComponentInterface {
                   left: `${minPercent}%`,
                   width: `${maxPercent - minPercent}%`,
                 }}
-                {...getDataTestidAttribute(this.dataTestid, 'fill')}
+                data-testid={getDataTestId(this.dataTestid, 'fill')}
               ></div>
             ) : (
-              <div class="tk-slider-fill" style={{ width: `${minPercent}%` }} {...getDataTestidAttribute(this.dataTestid, 'fill')}></div>
+              <div class="tk-slider-fill" style={{ width: `${minPercent}%` }} data-testid={getDataTestId(this.dataTestid, 'fill')}></div>
             )}
 
             <div
@@ -174,16 +174,16 @@ export class TkSlider implements ComponentInterface {
               })}
               style={{ left: `${minPercent}%` }}
               onPointerDown={!this.disabled ? () => this.handlePointerDown('min') : undefined}
-              {...getDataTestidAttribute(this.dataTestid, 'thumb-min')}
+              data-testid={getDataTestId(this.dataTestid, 'thumb-min')}
             >
               {!this.disabled && (isMinActive || this.draggingThumb === 'min') && (
-                <div class="tk-slider-tooltip" {...getDataTestidAttribute(this.dataTestid, 'tooltip-min')}>
+                <div class="tk-slider-tooltip" data-testid={getDataTestId(this.dataTestid, 'tooltip-min')}>
                   {this.currentMin}
-                  <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow-min')}></div>
+                  <div class="tk-slider-tooltip-arrow" data-testid={getDataTestId(this.dataTestid, 'arrow-min')}></div>
                 </div>
               )}
 
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'icon-min')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" data-testid={getDataTestId(this.dataTestid, 'icon-min')}>
                 <circle cx="4" cy="4" r="4" />
               </svg>
             </div>
@@ -196,16 +196,16 @@ export class TkSlider implements ComponentInterface {
                 })}
                 style={{ left: `${maxPercent}%` }}
                 onPointerDown={!this.disabled ? () => this.handlePointerDown('max') : undefined}
-                {...getDataTestidAttribute(this.dataTestid, 'thumb-max')}
+                data-testid={getDataTestId(this.dataTestid, 'thumb-max')}
               >
                 {!this.disabled && (isMaxActive || this.draggingThumb === 'max') && (
-                  <div class="tk-slider-tooltip" {...getDataTestidAttribute(this.dataTestid, 'tooltip-max')}>
+                  <div class="tk-slider-tooltip" data-testid={getDataTestId(this.dataTestid, 'tooltip-max')}>
                     {this.currentMax}
-                    <div class="tk-slider-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow-max')}></div>
+                    <div class="tk-slider-tooltip-arrow" data-testid={getDataTestId(this.dataTestid, 'arrow-max')}></div>
                   </div>
                 )}
 
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" {...getDataTestidAttribute(this.dataTestid, 'icon-max')}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" data-testid={getDataTestId(this.dataTestid, 'icon-max')}>
                   <circle cx="4" cy="4" r="4" />
                 </svg>
               </div>
@@ -214,17 +214,17 @@ export class TkSlider implements ComponentInterface {
         </div>
 
         {this.type === 'labels' && this.rangeVisibility && (
-          <div class="tk-slider-labels" {...getDataTestidAttribute(this.dataTestid, 'labels')}>
-            <span {...getDataTestidAttribute(this.dataTestid, 'label-min')}>{this.min}</span>
-            <span {...getDataTestidAttribute(this.dataTestid, 'label-max')}>{this.max}</span>
+          <div class="tk-slider-labels" data-testid={getDataTestId(this.dataTestid, 'labels')}>
+            <span data-testid={getDataTestId(this.dataTestid, 'label-min')}>{this.min}</span>
+            <span data-testid={getDataTestId(this.dataTestid, 'label-max')}>{this.max}</span>
           </div>
         )}
 
         {this.type === 'ticks' && (
-          <div class="tk-slider-ticks" {...getDataTestidAttribute(this.dataTestid, 'ticks')}>
-            <div class="tk-slider-tick-track" {...getDataTestidAttribute(this.dataTestid, 'tick-track')}>
+          <div class="tk-slider-ticks" data-testid={getDataTestId(this.dataTestid, 'ticks')}>
+            <div class="tk-slider-tick-track" data-testid={getDataTestId(this.dataTestid, 'tick-track')}>
               {Array.from({ length: Math.floor((this.max - this.min) / this.step) + 1 }).map((_, index) => (
-                <div key={index} class="tk-slider-tick" {...getDataTestidAttribute(this.dataTestid, 'tick', index.toString())}></div>
+                <div key={index} class="tk-slider-tick" data-testid={getDataTestId(this.dataTestid, 'tick', index.toString())}></div>
               ))}
             </div>
           </div>

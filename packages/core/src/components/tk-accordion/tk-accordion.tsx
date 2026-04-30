@@ -2,7 +2,7 @@ import { Component, h, Element, Prop, ComponentInterface, Watch, Event, type Eve
 import { isEqual } from 'lodash-es';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import type { IAccordionItemSelect } from './types';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkAccordion component is a user interface element that organizes content under headers, allowing users to expand and collapse sections by clicking on each header. It is particularly useful for improving layout and readability on pages with extensive information.
@@ -220,7 +220,7 @@ export class TkAccordion implements ComponentInterface {
 
   render() {
     return (
-      <div class="tk-accordion" {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class="tk-accordion" data-testid={getDataTestId(this.dataTestid, 'container')}>
         <slot />
       </div>
     );

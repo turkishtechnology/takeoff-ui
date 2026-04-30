@@ -1,7 +1,7 @@
 import { Component, h, Prop, State, Element, Event, EventEmitter, ComponentInterface, Watch } from '@stencil/core';
 import classNames from 'classnames';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
-import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -243,7 +243,7 @@ export class TkTabs implements ComponentInterface {
     if (tab.badged) {
       const badgeSize = this.size === 'xsmall' || this.size === 'xxsmall' ? 'small' : this.size;
       return (
-        <div class="tk-tabs-item-badge-container" {...getDataTestidAttribute(itemDataTestid, 'badge-container')}>
+        <div class="tk-tabs-item-badge-container" data-testid={getDataTestId(itemDataTestid, 'badge-container')}>
           <tk-badge
             label={tab.badgeLabel}
             count={tab.badgeCount}
@@ -251,7 +251,7 @@ export class TkTabs implements ComponentInterface {
             type={tab.badgeOptions?.type ?? 'filledlight'}
             rounded={tab.badgeOptions?.rounded ?? true}
             size={badgeSize}
-            dataTestid={getDataTestidProp(itemDataTestid, 'badge')}
+            dataTestid={getDataTestId(itemDataTestid, 'badge')}
           />
         </div>
       );
@@ -268,13 +268,13 @@ export class TkTabs implements ComponentInterface {
             description={tab.tooltipOptions.description}
             position={tab.tooltipOptions.position || 'bottom'}
             variant={tab.tooltipOptions.variant || 'dark'}
-            dataTestid={getDataTestidProp(itemDataTestid, 'tooltip')}
+            dataTestid={getDataTestId(itemDataTestid, 'tooltip')}
           >
             <tk-icon
               slot="trigger"
               {...(typeof tab.tooltipOptions.icon === 'string' ? { icon: tab.tooltipOptions.icon } : getIconElementProps(tab.tooltipOptions.icon))}
               size={this.size === 'xxsmall' ? 'xsmall' : this.size}
-              dataTestid={getDataTestidProp(itemDataTestid, 'tooltip-icon')}
+              dataTestid={getDataTestId(itemDataTestid, 'tooltip-icon')}
             />
           </tk-tooltip>
         );
@@ -287,38 +287,38 @@ export class TkTabs implements ComponentInterface {
     const rootClasses = classNames('tk-tabs', [`tk-tabs-${this.orientation}`], [`tk-tabs-${this.size}`], [`tk-tabs-${this.type}`], [`tk-tabs-${this.variant}`]);
     const headersClasses = classNames('tab-headers', { spread: this.spreadHeaders });
     const rootProps = {
-      class: rootClasses,
-      style: this.containerStyle,
-      ...getDataTestidAttribute(this.dataTestid, 'container'),
+      'class': rootClasses,
+      'style': this.containerStyle,
+      'data-testid': getDataTestId(this.dataTestid, 'container'),
     };
 
     const headersProps = {
-      class: headersClasses,
-      style: {
+      'class': headersClasses,
+      'style': {
         justifyContent: this.alignHeaders,
         ...(this.headerContainerStyle && { ...this.headerContainerStyle }),
       },
-      ...getDataTestidAttribute(this.dataTestid, 'headers'),
+      'data-testid': getDataTestId(this.dataTestid, 'headers'),
     };
 
     const contentProps = {
-      class: 'tab-content',
-      style: this.contentStyle,
-      ...getDataTestidAttribute(this.dataTestid, 'content'),
+      'class': 'tab-content',
+      'style': this.contentStyle,
+      'data-testid': getDataTestId(this.dataTestid, 'content'),
     };
 
     return (
       <div {...rootProps}>
         <div {...headersProps}>
           {this.internalTabItems.map((tab, index) => {
-            const itemDataTestid = getDataTestidProp(this.dataTestid, 'item', index.toString());
+            const itemDataTestid = getDataTestId(this.dataTestid, 'item', index.toString());
             const headerClasses = classNames('tab-header', { 'active': this.internalActiveIndex === index, 'tk-tab-header-disabled': tab.disabled });
             const tabIcons = this.createTabIcons(tab, index, itemDataTestid);
             return (
-              <div class={headerClasses} onClick={() => this.handleTabClick(index)} {...getDataTestidAttribute(itemDataTestid)}>
+              <div class={headerClasses} onClick={() => this.handleTabClick(index)} data-testid={getDataTestId(itemDataTestid)}>
                 {tabIcons.leftIcon}
-                <div class="tk-tabs-item-label-container" {...getDataTestidAttribute(itemDataTestid, 'label-container')}>
-                  <span class="tk-tabs-item-label" {...getDataTestidAttribute(itemDataTestid, 'label')}>
+                <div class="tk-tabs-item-label-container" data-testid={getDataTestId(itemDataTestid, 'label-container')}>
+                  <span class="tk-tabs-item-label" data-testid={getDataTestId(itemDataTestid, 'label')}>
                     {tab.label}
                   </span>
                   {this.renderTabBadge(tab, index, itemDataTestid)}
@@ -328,7 +328,7 @@ export class TkTabs implements ComponentInterface {
                 {this.isClosable && (
                   <tk-icon
                     {...getIconElementProps('close', { variant: this.getIconVariant(index) })}
-                    dataTestid={getDataTestidProp(itemDataTestid, 'close-icon')}
+                    dataTestid={getDataTestId(itemDataTestid, 'close-icon')}
                     onClick={e => {
                       e.stopPropagation();
                       this.closeTab(index);
@@ -341,17 +341,17 @@ export class TkTabs implements ComponentInterface {
           {this.isExtendable && (
             <tk-icon
               {...getIconElementProps('add', { variant: 'neutral', class: classNames('tk-tabs-item-add-icon'), onclick: () => this.addTab() })}
-              dataTestid={getDataTestidProp(this.dataTestid, 'add-icon')}
+              dataTestid={getDataTestId(this.dataTestid, 'add-icon')}
             />
           )}
         </div>
         <div {...contentProps}>
           {this.internalTabItems.map((_tab, index) => {
-            const panelDataTestid = getDataTestidProp(this.dataTestid, 'panel', index.toString());
+            const panelDataTestid = getDataTestId(this.dataTestid, 'panel', index.toString());
             return (
-              <div class={`tab-panel ${this.internalActiveIndex === index ? 'active' : 'hidden'}`} key={index} {...getDataTestidAttribute(panelDataTestid)}>
+              <div class={`tab-panel ${this.internalActiveIndex === index ? 'active' : 'hidden'}`} key={index} data-testid={getDataTestId(panelDataTestid)}>
                 {this.internalActiveIndex === index && (
-                  <div {...getDataTestidAttribute(panelDataTestid, 'content')}>
+                  <div data-testid={getDataTestId(panelDataTestid, 'content')}>
                     <slot name={`tab-content-${index}`}></slot>
                   </div>
                 )}

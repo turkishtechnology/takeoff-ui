@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, ty
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
-import { getDataTestidAttribute, getDataTestidProp } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -94,7 +94,7 @@ export class TkAccordionItem implements ComponentInterface {
     return (
       <tk-icon
         {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}
-        dataTestid={getDataTestidProp(this.dataTestid, this.active ? 'collapse-icon' : 'expand-icon')}
+        dataTestid={getDataTestId(this.dataTestid, this.active ? 'collapse-icon' : 'expand-icon')}
       ></tk-icon>
     );
   }
@@ -118,17 +118,17 @@ export class TkAccordionItem implements ComponentInterface {
     });
     return (
       <Host>
-        <div class={rootClasses} {...getDataTestidAttribute(this.dataTestid, 'item')}>
-          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)} {...getDataTestidAttribute(this.dataTestid, 'header')}>
+        <div class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'item')}>
+          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)} data-testid={getDataTestId(this.dataTestid, 'header')}>
             {this.arrowPosition === 'left' && this.renderCollapseIcon()}
             {icon.leftIcon}
-            <span class="title" {...getDataTestidAttribute(this.dataTestid, 'title')}>
+            <span class="title" data-testid={getDataTestId(this.dataTestid, 'title')}>
               {this.createHeader()}
             </span>
             {icon.rightIcon}
             {this.arrowPosition === 'right' && this.renderCollapseIcon()}
           </div>
-          <div class={`content ${this.active ? 'open' : ''}`} {...getDataTestidAttribute(this.dataTestid, 'content')}>
+          <div class={`content ${this.active ? 'open' : ''}`} data-testid={getDataTestId(this.dataTestid, 'content')}>
             <slot name="content" />
           </div>
         </div>

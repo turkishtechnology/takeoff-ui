@@ -133,6 +133,6 @@ describe('dataTestid', () => {
       html: `<tk-badge data-testid="my-badge" icon="home" label="Test"></tk-badge>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('tk-icon').getAttribute('data-testid')).toBe('my-badge-left');
+    expect(page.root.shadowRoot.querySelector('tk-icon').getAttribute('data-testid')).toBe('my-badge-left-icon');
   });
 });

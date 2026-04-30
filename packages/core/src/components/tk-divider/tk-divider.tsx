@@ -1,6 +1,6 @@
 import { Component, h, Prop, ComponentInterface, State, Element } from '@stencil/core';
 import classNames from 'classnames';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * TkDivider is a component that allows you to separate different sections, elements and content.
@@ -68,10 +68,10 @@ export class TkDivider implements ComponentInterface {
         role="separator"
         aria-orientation={this.orientation}
         style={this.getRootStyles()}
-        {...getDataTestidAttribute(this.dataTestid, 'container')}
+        data-testid={getDataTestId(this.dataTestid, 'container')}
       >
         {this.hasDefaultSlot && (
-          <div class="tk-divider-content" {...getDataTestidAttribute(this.dataTestid, 'content')}>
+          <div class="tk-divider-content" data-testid={getDataTestId(this.dataTestid, 'content')}>
             <slot />
           </div>
         )}

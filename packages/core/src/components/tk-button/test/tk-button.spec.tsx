@@ -124,7 +124,7 @@ describe('tk-button', () => {
     expect(page.root.getAttribute('data-testid')).toBe('1');
     expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-container');
     expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('1-label');
-    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-left');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-left-icon');
   });
 
   it('forwards data-testid to anchor in link mode', async () => {
@@ -135,7 +135,7 @@ describe('tk-button', () => {
 
     expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-container');
     expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('2-label');
-    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-right');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-right-icon');
   });
 
   it('generates left and right icon test ids for multi-icon configuration', async () => {
@@ -153,8 +153,8 @@ describe('tk-button', () => {
     const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
 
     expect(icons.length).toBe(2);
-    expect(icons[0].getAttribute('data-testid')).toBe('3-left');
-    expect(icons[1].getAttribute('data-testid')).toBe('3-right');
+    expect(icons[0].getAttribute('data-testid')).toBe('3-left-icon');
+    expect(icons[1].getAttribute('data-testid')).toBe('3-right-icon');
   });
 
   it('forwards derived data-testid to loading spinner', async () => {

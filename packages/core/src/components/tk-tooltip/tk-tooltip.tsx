@@ -3,7 +3,7 @@ import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOp
 import { renderIcons } from '../../utils/icon-utils';
 import { CSSStyleProperties } from '../../global/types';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
-import { getDataTestidAttribute } from '../../utils/test-id-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The TkTooltip is used to display additional information when element is hovered over.
@@ -136,7 +136,7 @@ export class TkTooltip implements ComponentInterface {
     }
 
     return (
-      <div class="tk-tooltip" {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class="tk-tooltip" data-testid={getDataTestId(this.dataTestid, 'container')}>
         <slot name="trigger" />
 
         {this.isOpen && (
@@ -148,7 +148,7 @@ export class TkTooltip implements ComponentInterface {
             }}
             style={{ ...this.containerStyle }}
             role="tooltip"
-            {...getDataTestidAttribute(this.dataTestid, 'content')}
+            data-testid={getDataTestId(this.dataTestid, 'content')}
           >
             {this.hasContentSlot ? (
               <slot name="content" />
@@ -156,17 +156,17 @@ export class TkTooltip implements ComponentInterface {
               <Fragment>
                 {_leftIcon}
                 <div>
-                  <div class="tk-tooltip-header" {...getDataTestidAttribute(this.dataTestid, 'header')}>
+                  <div class="tk-tooltip-header" data-testid={getDataTestId(this.dataTestid, 'header')}>
                     {this.header}
                   </div>
-                  <div class="tk-tooltip-description" {...getDataTestidAttribute(this.dataTestid, 'description')}>
+                  <div class="tk-tooltip-description" data-testid={getDataTestId(this.dataTestid, 'description')}>
                     {this.description}
                   </div>
                 </div>
                 {_rightIcon}
               </Fragment>
             )}
-            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow" {...getDataTestidAttribute(this.dataTestid, 'arrow')}></div>
+            <div ref={el => (this.arrowElement = el as HTMLElement)} class="tk-tooltip-arrow" data-testid={getDataTestId(this.dataTestid, 'arrow')}></div>
           </div>
         )}
       </div>

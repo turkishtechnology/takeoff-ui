@@ -2,7 +2,7 @@ import { Component, ComponentInterface, Element, Prop, State, Watch, Event, Even
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
 import { renderHint } from '../../../utils/hint-utils';
-import { getDataTestidAttribute } from '../../../utils/test-id-utils';
+import { getDataTestId } from '../../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-radio-group',
@@ -153,12 +153,12 @@ export class TkRadioGroup implements ComponentInterface {
 
     if (this.label?.length > 0) {
       const asterisk = (
-        <span class="asterisk" {...getDataTestidAttribute(this.dataTestid, 'label-asterisk')}>
+        <span class="asterisk" data-testid={getDataTestId(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
       _label = (
-        <label class="label" {...getDataTestidAttribute(this.dataTestid, 'label')}>
+        <label class="label" data-testid={getDataTestId(this.dataTestid, 'label')}>
           {this.label}
           {this.showAsterisk && asterisk}
         </label>
@@ -166,9 +166,9 @@ export class TkRadioGroup implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses} aria-invalid={this.invalid} {...getDataTestidAttribute(this.dataTestid, 'container')}>
+      <div class={rootClasses} aria-invalid={this.invalid} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {_label}
-        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })} {...getDataTestidAttribute(this.dataTestid, 'holder')}>
+        <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })} data-testid={getDataTestId(this.dataTestid, 'holder')}>
           <slot onSlotchange={this.handleSlotChange.bind(this)} />
         </div>
         {renderHint(this.hint, this.error, this.invalid, this.dataTestid)}
