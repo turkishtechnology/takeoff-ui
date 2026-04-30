@@ -34,6 +34,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
+  private initialValueIsEmpty: boolean = false;
 
   /**
    * The currently selected currency object.
@@ -219,6 +220,7 @@ export class TkCurrencyInput implements ComponentInterface {
    * Initialize the component before it is rendered.
    */
   componentWillLoad() {
+    this.initialValueIsEmpty = this.value === '';
     this.setSelectedCurrency(this.defaultCurrency);
   }
 
@@ -376,6 +378,21 @@ export class TkCurrencyInput implements ComponentInterface {
     const result = isNaN(numericValue) ? 0 : numericValue;
 
     return isNegative ? -result : result;
+  }
+
+  private applyResetValue(target: HTMLInputElement): { value: number | ''; formattedValue: string } {
+    if (this.initialValueIsEmpty) {
+      this.currentNumericValue = '';
+      this.displayValue = '';
+      target.value = '';
+      return { value: '', formattedValue: '' };
+    }
+
+    this.currentNumericValue = 0;
+    const formattedZero = this.formatCurrency(0);
+    this.displayValue = formattedZero;
+    target.value = formattedZero;
+    return { value: 0, formattedValue: formattedZero };
   }
 
   private closeDropdown = (event: Event) => {
@@ -538,17 +555,8 @@ export class TkCurrencyInput implements ComponentInterface {
     const isClearing = numericValue === '' || (numericValue === 0 && inputValue !== this.formatCurrency(0) && inputValue.length < this.displayValue.length);
 
     if (isClearing) {
-      this.currentNumericValue = '';
-      this.displayValue = '';
-      target.value = '';
-
-      const eventData = {
-        value: '',
-        currency: this.selectedCurrency,
-        formattedValue: '',
-      } as CurrencyInputChangeEvent;
-
-      this.tkChange.emit(eventData);
+      const { value, formattedValue } = this.applyResetValue(target);
+      this.tkChange.emit({ value, currency: this.selectedCurrency, formattedValue } as CurrencyInputChangeEvent);
       return;
     }
 
@@ -589,11 +597,10 @@ export class TkCurrencyInput implements ComponentInterface {
     const target = this.inputElement;
     if (!target) return;
     const numericValue = this.parseFormattedValue(target.value);
-    this.currentNumericValue = numericValue;
     if (numericValue === '') {
-      target.value = '';
-      this.displayValue = '';
+      this.applyResetValue(target);
     } else {
+      this.currentNumericValue = numericValue;
       const formattedValue = this.formatCurrency(numericValue);
       target.value = formattedValue;
       this.displayValue = formattedValue;
