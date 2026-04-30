@@ -116,3 +116,80 @@ describe('event handling', () => {
     expect(page.root).toBeNull;
   });
 });
+
+describe('dataTestid', () => {
+  it('sets data-testid on the root container when dataTestid is provided', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert" header="Test"></tk-alert>`,
+    });
+
+    const container = page.root.shadowRoot.querySelector('.tk-alert-container');
+    expect(container.getAttribute('data-testid')).toBe('my-alert-container');
+  });
+
+  it('does not set data-testid when dataTestid is not provided', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert header="Test"></tk-alert>`,
+    });
+
+    const container = page.root.shadowRoot.querySelector('.tk-alert-container');
+    expect(container.getAttribute('data-testid')).toBeNull();
+  });
+
+  it('sets data-testid on header and message elements', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert" header="Title" message="Body"></tk-alert>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.tk-alert-header').getAttribute('data-testid')).toBe('my-alert-header');
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message').getAttribute('data-testid')).toBe('my-alert-message');
+  });
+
+  it('sets data-testid on message-holder when message is an array', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert"></tk-alert>`,
+    });
+    page.root.message = ['First', 'Second'];
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message-holder').getAttribute('data-testid')).toBe('my-alert-message-holder');
+
+    const messages = page.root.shadowRoot.querySelectorAll('.tk-alert-message');
+    expect(messages[0].getAttribute('data-testid')).toBe('my-alert-message-0');
+    expect(messages[1].getAttribute('data-testid')).toBe('my-alert-message-1');
+  });
+
+  it('sets data-testid on content wrapper', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert" message="Body"></tk-alert>`,
+    });
+
+    const content = page.root.shadowRoot.querySelector('.tk-alert-content');
+    expect(content.getAttribute('data-testid')).toBe('my-alert-content');
+  });
+
+  it('sets data-testid on close button when removable', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert" removable></tk-alert>`,
+    });
+
+    const closeBtn = page.root.shadowRoot.querySelector('tk-button');
+    expect(closeBtn.getAttribute('data-testid')).toBe('my-alert-close-button');
+  });
+
+  it('sets data-testid on icon element', async () => {
+    const page = await newSpecPage({
+      components: [TkAlert, TkIcon, TkButton],
+      html: `<tk-alert data-testid="my-alert" icon="check" variant="success"></tk-alert>`,
+    });
+
+    const icon = page.root.shadowRoot.querySelector('tk-icon');
+    expect(icon.getAttribute('data-testid')).toBe('my-alert-left-icon');
+  });
+});

@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkButton } from '../tk-button';
 import { TkIcon } from '../../tk-icon/tk-icon';
+import { TkSpinner } from '../../tk-spinner/tk-spinner';
 
 describe('tk-button', () => {
   it('renders its label and host full-width class', async () => {
@@ -121,9 +122,9 @@ describe('tk-button', () => {
     });
 
     expect(page.root.getAttribute('data-testid')).toBe('1');
-    expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-button');
-    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('1-button-label');
-    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-button-left-icon');
+    expect(page.root.shadowRoot.querySelector('button')?.getAttribute('data-testid')).toBe('1-container');
+    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('1-label');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('1-left-icon');
   });
 
   it('forwards data-testid to anchor in link mode', async () => {
@@ -132,9 +133,9 @@ describe('tk-button', () => {
       html: `<tk-button mode="link" href="/test" data-testid="2" label="Docs" icon-position="right" icon="arrow_forward"></tk-button>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-button');
-    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('2-button-label');
-    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-button-right-icon');
+    expect(page.root.shadowRoot.querySelector('a')?.getAttribute('data-testid')).toBe('2-container');
+    expect(page.root.shadowRoot.querySelector('span')?.getAttribute('data-testid')).toBe('2-label');
+    expect(page.root.shadowRoot.querySelector('tk-icon')?.getAttribute('data-testid')).toBe('2-right-icon');
   });
 
   it('generates left and right icon test ids for multi-icon configuration', async () => {
@@ -152,16 +153,16 @@ describe('tk-button', () => {
     const icons = page.root.shadowRoot.querySelectorAll('tk-icon');
 
     expect(icons.length).toBe(2);
-    expect(icons[0].getAttribute('data-testid')).toBe('3-button-left-icon');
-    expect(icons[1].getAttribute('data-testid')).toBe('3-button-right-icon');
+    expect(icons[0].getAttribute('data-testid')).toBe('3-left-icon');
+    expect(icons[1].getAttribute('data-testid')).toBe('3-right-icon');
   });
 
   it('forwards derived data-testid to loading spinner', async () => {
     const page = await newSpecPage({
-      components: [TkButton],
+      components: [TkButton, TkSpinner],
       html: `<tk-button loading="true" data-testid="loading-button"></tk-button>`,
     });
 
-    expect(page.root.shadowRoot.querySelector('tk-spinner')?.getAttribute('data-testid')).toBe('loading-button-button-left-icon');
+    expect(page.root.shadowRoot.querySelector('tk-spinner')?.getAttribute('data-testid')).toBe('loading-button-loading-spinner');
   });
 });

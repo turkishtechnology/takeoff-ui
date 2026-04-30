@@ -67,9 +67,11 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     }
 
     if (middlewareData.hide) {
-      applyStyles(floatingElement, {
-        visibility: middlewareData.hide.referenceHidden ? 'hidden' : 'visible',
-      });
+      if (middlewareData.hide.referenceHidden) {
+        floatingElement.classList.add('floating-hidden');
+      } else {
+        floatingElement.classList.remove('floating-hidden');
+      }
     }
 
     return placement;
