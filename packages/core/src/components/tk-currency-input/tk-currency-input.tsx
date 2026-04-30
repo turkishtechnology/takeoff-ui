@@ -34,7 +34,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
-  private initialValueIsEmpty: boolean = false;
+  private isInitialValueEmpty: boolean = false;
 
   /**
    * The currently selected currency object.
@@ -220,7 +220,7 @@ export class TkCurrencyInput implements ComponentInterface {
    * Initialize the component before it is rendered.
    */
   componentWillLoad() {
-    this.initialValueIsEmpty = this.value === '';
+    this.isInitialValueEmpty = this.value === '';
     this.setSelectedCurrency(this.defaultCurrency);
   }
 
@@ -381,7 +381,7 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   private applyResetValue(target: HTMLInputElement): { value: number | ''; formattedValue: string } {
-    if (this.initialValueIsEmpty) {
+    if (this.isInitialValueEmpty) {
       this.currentNumericValue = '';
       this.displayValue = '';
       target.value = '';
