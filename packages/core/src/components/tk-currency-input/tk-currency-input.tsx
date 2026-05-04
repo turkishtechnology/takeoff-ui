@@ -34,7 +34,6 @@ export class TkCurrencyInput implements ComponentInterface {
   private dropdownEl?: HTMLElement;
   private cleanup;
   private uniqueId = uuidv4();
-  private isInitialValueEmpty: boolean = false;
 
   /**
    * The currently selected currency object.
@@ -54,16 +53,16 @@ export class TkCurrencyInput implements ComponentInterface {
    * Current numeric value of the input, used for calculations and formatting.
    * This is updated based on user input and can be used in form submissions.
    */
-  @State() currentNumericValue: number | '' = 0;
+  @State() currentNumericValue: number | null = 0;
 
   /**
    * The value of the input.
    */
-  @Prop() value: number | '' = 0;
+  @Prop() value: number | null = 0;
   @Watch('value')
   valueChanged() {
     if (this.value !== this.currentNumericValue) {
-      this.currentNumericValue = this.value === '' ? '' : this.value || 0;
+      this.currentNumericValue = this.normalizeNumericValue(this.value);
       this.updateDisplayValue();
     }
   }
@@ -196,6 +195,12 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() hideFlag: boolean = false;
 
   /**
+   * Allows the value to be set to null.
+   * @default false
+   */
+  @Prop() allowEmptyValue: boolean = false;
+
+  /**
    * Determines the width of the dropdown. Accepts values like 'match-parent', 'auto', or a specific width in '300px'.
    * @defaultValue match-parent
    */
@@ -220,7 +225,6 @@ export class TkCurrencyInput implements ComponentInterface {
    * Initialize the component before it is rendered.
    */
   componentWillLoad() {
-    this.isInitialValueEmpty = this.value === '';
     this.setSelectedCurrency(this.defaultCurrency);
   }
 
@@ -289,12 +293,20 @@ export class TkCurrencyInput implements ComponentInterface {
     const currencies = this.getCurrencies();
     const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
     this.selectedCurrency = currency || currencies[0];
-    this.currentNumericValue = this.value === '' ? '' : this.value || 0;
+    this.currentNumericValue = this.normalizeNumericValue(this.value);
     this.updateDisplayValue();
   }
 
+  private normalizeNumericValue(value: number | null | undefined): number | null {
+    if (this.allowEmptyValue && value === null) {
+      return null;
+    }
+
+    return value ?? 0;
+  }
+
   private updateDisplayValue() {
-    if (typeof this.currentNumericValue !== 'number') {
+    if (this.currentNumericValue === null || this.currentNumericValue === undefined || isNaN(this.currentNumericValue)) {
       this.displayValue = '';
       return;
     }
@@ -348,8 +360,11 @@ export class TkCurrencyInput implements ComponentInterface {
     return result;
   }
 
-  private parseFormattedValue(formattedValue: string): number | '' {
-    if (!formattedValue) return '';
+  private parseFormattedValue(formattedValue: string): number | null {
+    if (!formattedValue) {
+      if (this.allowEmptyValue) return null;
+      return 0;
+    }
 
     // Use custom separators if provided, otherwise fall back to currency defaults
     const decimalSeparator = this.getDecimalSeparator();
@@ -378,21 +393,6 @@ export class TkCurrencyInput implements ComponentInterface {
     const result = isNaN(numericValue) ? 0 : numericValue;
 
     return isNegative ? -result : result;
-  }
-
-  private applyResetValue(target: HTMLInputElement): { value: number | ''; formattedValue: string } {
-    if (this.isInitialValueEmpty) {
-      this.currentNumericValue = '';
-      this.displayValue = '';
-      target.value = '';
-      return { value: '', formattedValue: '' };
-    }
-
-    this.currentNumericValue = 0;
-    const formattedZero = this.formatCurrency(0);
-    this.displayValue = formattedZero;
-    target.value = formattedZero;
-    return { value: 0, formattedValue: formattedZero };
   }
 
   private closeDropdown = (event: Event) => {
@@ -489,7 +489,7 @@ export class TkCurrencyInput implements ComponentInterface {
   private handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
     const inputValue = target.value;
-    const cursorPosition = target.selectionStart;
+    const cursorPosition = target.selectionStart ?? 0;
 
     // Use custom separators if provided, otherwise fall back to currency defaults
     const decimalSeparator = this.getDecimalSeparator();
@@ -551,12 +551,16 @@ export class TkCurrencyInput implements ComponentInterface {
 
     const numericValue = this.parseFormattedValue(filteredValue);
 
-    // If parsed value is empty OR user is deleting toward zero (input differs from formatted zero)
-    const isClearing = numericValue === '' || (numericValue === 0 && inputValue !== this.formatCurrency(0) && inputValue.length < this.displayValue.length);
-
-    if (isClearing) {
-      const { value, formattedValue } = this.applyResetValue(target);
-      this.tkChange.emit({ value, currency: this.selectedCurrency, formattedValue } as CurrencyInputChangeEvent);
+    const isDeleting = inputValue.length < this.displayValue.length;
+    if ((this.allowEmptyValue && isDeleting && cursorPosition === 0) || numericValue === null) {
+      this.currentNumericValue = null;
+      this.displayValue = '';
+      target.value = '';
+      this.tkChange.emit({
+        value: null,
+        currency: this.selectedCurrency,
+        formattedValue: '',
+      } as CurrencyInputChangeEvent);
       return;
     }
 
@@ -597,10 +601,11 @@ export class TkCurrencyInput implements ComponentInterface {
     const target = this.inputElement;
     if (!target) return;
     const numericValue = this.parseFormattedValue(target.value);
-    if (numericValue === '') {
-      this.applyResetValue(target);
+    this.currentNumericValue = numericValue;
+    if (numericValue === null) {
+      target.value = '';
+      this.displayValue = '';
     } else {
-      this.currentNumericValue = numericValue;
       const formattedValue = this.formatCurrency(numericValue);
       target.value = formattedValue;
       this.displayValue = formattedValue;

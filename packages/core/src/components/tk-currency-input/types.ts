@@ -15,7 +15,7 @@ export interface ICurrency {
  * Contains the numeric value, formatted value, and selected currency.
  */
 export interface CurrencyInputChangeEvent {
-  value: number | '';
+  value: number | null;
   formattedValue: string;
   currency: ICurrency;
 }
