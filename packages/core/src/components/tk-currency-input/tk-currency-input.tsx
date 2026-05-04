@@ -551,8 +551,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
     const numericValue = this.parseFormattedValue(filteredValue);
 
-    const isDeleting = inputValue.length < this.displayValue.length;
-    if ((this.allowEmptyValue && isDeleting && cursorPosition === 0) || numericValue === null) {
+    if ((this.allowEmptyValue && cursorPosition === 0) || numericValue === null) {
       this.currentNumericValue = null;
       this.displayValue = '';
       target.value = '';
