@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Element, Prop, h, Event, EventEmitter } 
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { renderIcons } from '../../utils/icon-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-toggle-button',
@@ -61,6 +62,12 @@ export class TkToggleButton implements ComponentInterface {
    * Whether the button is selected.
    */
   @Prop({ mutable: true, reflect: true }) selected: boolean = false;
+
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   /**
    * Emitted when the toggle button is toggled.
    */
@@ -92,6 +99,7 @@ export class TkToggleButton implements ComponentInterface {
         size: this.size,
         variant: 'neutral',
         additionalProps: { color: this.getIconColor() },
+        dataTestid: this.dataTestid,
       },
       this.iconPosition,
     );
@@ -99,7 +107,11 @@ export class TkToggleButton implements ComponentInterface {
 
   private renderLabel() {
     if (this.label?.length > 0) {
-      return <span class={classNames('tk-toggle-button-label', this.size)}>{this.label}</span>;
+      return (
+        <span class={classNames('tk-toggle-button-label', this.size)} data-testid={getDataTestId(this.dataTestid, 'label')}>
+          {this.label}
+        </span>
+      );
     }
     return null;
   }
@@ -113,7 +125,7 @@ export class TkToggleButton implements ComponentInterface {
     const icon = this.createIcons();
 
     return (
-      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick}>
+      <button class={rootClasses} disabled={this.disabled} onClick={this.handleClick} data-testid={getDataTestId(this.dataTestid, 'button')}>
         {icon.leftIcon}
         {this.renderLabel()}
         {icon.rightIcon}

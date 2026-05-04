@@ -13,10 +13,10 @@
   .tk-editor-label {
     color: var(--text-darkest);
     font-family: var(--desktop-label-s-font);
-    font-size: var(--desktop-label-l-size);
+    font-size: var(--desktop-label-m-base-size);
     font-style: normal;
     font-weight: 400;
-    line-height: var(--desktop-label-l-line-height);
+    line-height: var(--desktop-label-m-base-line-height);
     padding: var(--input-external-label-large-label-v-padding) var(--input-external-label-large-label-h-padding);
 
     .tk-editor-label-asterisk {

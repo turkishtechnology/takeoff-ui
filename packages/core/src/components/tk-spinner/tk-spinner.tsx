@@ -1,5 +1,6 @@
 import { Component, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * The `TkSpinner` component description.
@@ -46,6 +47,11 @@ export class TkSpinner {
    */
   @Prop() label: string;
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   componentWillLoad() {
     this.isButton = this.el.closest('button')?.classList.contains('tk-button');
   }
@@ -56,51 +62,51 @@ export class TkSpinner {
         if (this.isButton) {
           const button = this.el.closest('button');
           const borderColor = window.getComputedStyle(button).color;
-          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded"></div>;
+          return <div style={{ borderColor: borderColor, borderTopColor: 'transparent' }} class="spinner-rounded" data-testid={getDataTestId(this.dataTestid, 'rounded')}></div>;
         }
-        return <div class="spinner-rounded"></div>;
+        return <div class="spinner-rounded" data-testid={getDataTestId(this.dataTestid, 'rounded')}></div>;
       case 'dots':
         return (
-          <div class="spinner-dots">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+          <div class="spinner-dots" data-testid={getDataTestId(this.dataTestid, 'dots')}>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-0')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-1')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-2')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-3')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-4')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-5')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-6')}></div>
+            <div class="dot" data-testid={getDataTestId(this.dataTestid, 'dot-7')}></div>
           </div>
         );
       case 'lines':
         return (
-          <div class="spinner-lines">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+          <div class="spinner-lines" data-testid={getDataTestId(this.dataTestid, 'lines')}>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-0')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-1')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-2')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-3')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-4')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-5')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-6')}></div>
+            <div class="line" data-testid={getDataTestId(this.dataTestid, 'line-7')}></div>
           </div>
         );
       case 'three-dots':
         return (
-          <div class="spinner-three-dots">
-            <span class="dot1"></span>
-            <span class="dot2"></span>
-            <span class="dot3"></span>
+          <div class="spinner-three-dots" data-testid={getDataTestId(this.dataTestid, 'three-dots')}>
+            <span class="dot1" data-testid={getDataTestId(this.dataTestid, 'dot-0')}></span>
+            <span class="dot2" data-testid={getDataTestId(this.dataTestid, 'dot-1')}></span>
+            <span class="dot3" data-testid={getDataTestId(this.dataTestid, 'dot-2')}></span>
           </div>
         );
       case 'pulse':
-        return <div class="spinner-pulse"></div>;
+        return <div class="spinner-pulse" data-testid={getDataTestId(this.dataTestid, 'pulse')}></div>;
       case 'loader':
-        return <div class="spinner-loader"></div>;
+        return <div class="spinner-loader" data-testid={getDataTestId(this.dataTestid, 'loader')}></div>;
       case 'logo':
         return (
-          <div class="spinner-logo">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="spinner-logo" data-testid={getDataTestId(this.dataTestid, 'logo')}>
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-testid={getDataTestId(this.dataTestid, 'logo-icon')}>
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -123,9 +129,14 @@ export class TkSpinner {
           [this.size]: true,
           [this.variant]: true,
         })}
+        data-testid={getDataTestId(this.dataTestid, 'container')}
       >
         {this.renderSpinner()}
-        {this.label && <div class="tk-spinner-label">{this.label}</div>}
+        {this.label && (
+          <div class="tk-spinner-label" data-testid={getDataTestId(this.dataTestid, 'label')}>
+            {this.label}
+          </div>
+        )}
       </div>
     );
   }

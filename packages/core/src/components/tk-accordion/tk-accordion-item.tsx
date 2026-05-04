@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, h, Element, State, Host, Event, ty
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
+import { getDataTestId } from '../../utils/test-id-utils';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -59,6 +60,11 @@ export class TkAccordionItem implements ComponentInterface {
   @Prop() icon?: string | IIconOptions | IMultiIconOptions;
 
   /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
+  /**
    * Emitted when an active index is changed
    */
   @Event({ eventName: 'tk-active-change' }) tkActiveChange: EventEmitter<boolean>;
@@ -85,7 +91,12 @@ export class TkAccordionItem implements ComponentInterface {
     } else {
       _renderIcon = this.expandIcon;
     }
-    return <tk-icon {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}></tk-icon>;
+    return (
+      <tk-icon
+        {...getIconElementProps(_renderIcon, { size: 'large', variant: this.active ? 'primary' : 'neutral' })}
+        dataTestid={getDataTestId(this.dataTestid, this.active ? 'collapse-icon' : 'expand-icon')}
+      ></tk-icon>
+    );
   }
 
   private createHeader() {
@@ -99,18 +110,25 @@ export class TkAccordionItem implements ComponentInterface {
     const rootClasses = classNames('tk-accordion-item', this.size, this.type, this.mode, {
       open: this.active,
     });
-    const icon = renderIcons(this.icon, { sign: true, variant: 'neutral', additionalProps: { class: 'tk-accordion-item-icon' } });
+    const icon = renderIcons(this.icon, {
+      sign: true,
+      variant: 'neutral',
+      additionalProps: { class: 'tk-accordion-item-icon' },
+      dataTestid: this.dataTestid,
+    });
     return (
       <Host>
-        <div class={rootClasses}>
-          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)}>
+        <div class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'item')}>
+          <div class="header" onClick={() => this.tkActiveChange.emit(!this.active)} data-testid={getDataTestId(this.dataTestid, 'header')}>
             {this.arrowPosition === 'left' && this.renderCollapseIcon()}
             {icon.leftIcon}
-            <span class="title">{this.createHeader()}</span>
+            <span class="title" data-testid={getDataTestId(this.dataTestid, 'title')}>
+              {this.createHeader()}
+            </span>
             {icon.rightIcon}
             {this.arrowPosition === 'right' && this.renderCollapseIcon()}
           </div>
-          <div class={`content ${this.active ? 'open' : ''}`}>
+          <div class={`content ${this.active ? 'open' : ''}`} data-testid={getDataTestId(this.dataTestid, 'content')}>
             <slot name="content" />
           </div>
         </div>

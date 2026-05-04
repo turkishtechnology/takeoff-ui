@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, Element, h } from '@stencil/core';
 import classNames from 'classnames';
 import { renderIcons } from '../../../utils/icon-utils';
 import { IIconOptions } from '../../../global/interfaces/IIconOptions';
+import { getDataTestId } from '../../../utils/test-id-utils';
 
 @Component({
   tag: 'tk-breadcrumb-item',
@@ -36,6 +37,11 @@ export class TkBreadcrumbItem implements ComponentInterface {
    */
   @Prop() isCurrent?: boolean = false;
 
+  /**
+   * Sets the data-testid attribute on the root container element.
+   */
+  @Prop({ reflect: true }) dataTestid?: string;
+
   render() {
     const rootClasses = classNames('tk-breadcrumb-item', {
       'tk-breadcrumb-item-current': this.isCurrent,
@@ -48,14 +54,15 @@ export class TkBreadcrumbItem implements ComponentInterface {
     const { leftIcon, rightIcon } = renderIcons(this.icon, {
       additionalProps: { color: this.isCurrent ? 'var(--icon-dark)' : 'var(--icon-sub-base)' },
       iconTag: 'span',
+      dataTestid: this.dataTestid,
     });
 
     return (
-      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null}>
-        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0}>
+      <li class={rootClasses} aria-current={this.isCurrent ? 'page' : null} data-testid={getDataTestId(this.dataTestid, 'container')}>
+        <a class="tk-breadcrumb-link" {...linkProps} tabindex={this.isCurrent ? -1 : 0} data-testid={getDataTestId(this.dataTestid, 'link')}>
           {leftIcon}
           {this.label && (
-            <span class="tk-breadcrumb-item-label">
+            <span class="tk-breadcrumb-item-label" data-testid={getDataTestId(this.dataTestid, 'label')}>
               <slot>{this.label}</slot>
             </span>
           )}

@@ -5,7 +5,7 @@ describe('tk-gantt-chart', () => {
   it('renders the empty state when there are no tasks', async () => {
     const page = await newSpecPage({
       components: [TkGanttChart],
-      html: `<tk-gantt-chart></tk-gantt-chart>`,
+      html: `<tk-gantt-chart data-testid="gantt"></tk-gantt-chart>`,
     });
 
     expect(page.root.shadowRoot.querySelector('[data-testid="gantt-empty"]')).toBeTruthy();
