@@ -10,7 +10,7 @@ argument-hint: '[component-name or question]'
 license: Apache-2.0
 metadata:
   author: turkishtechnology
-  version: '0.11.3'
+  version: '0.11.4'
   homepage: 'https://takeoffui.com'
 ---
 
@@ -26,7 +26,7 @@ wrappers for React, Vue, and Angular.
 - **Packages**: `@takeoff-ui/core` (web components), `@takeoff-ui/react`,
   `@takeoff-ui/vue`, `@takeoff-ui/angular` (framework wrappers),
   `@takeoff-ui/tailwind` (design tokens)
-- **Version**: 0.11.3
+- **Version**: 0.11.4
 - **All events** use `tk-` prefix (e.g., `tk-click`, `tk-change`)
 - **All components** use `tk-` prefix (e.g., `tk-button`, `tk-input`)
 
