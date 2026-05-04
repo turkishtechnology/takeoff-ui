@@ -1392,7 +1392,7 @@ export class TkDatePicker {
     this.internalAmPm = newAmPm;
   };
   private handleInputBlur = () => {
-    if (this.timeOnly && this.timeFormat === '12' && this.internalStartTime) {
+    if ((this.timeOnly || this.showTimePicker) && this.timeFormat === '12' && this.internalStartTime) {
       this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
       this.inputValue = this.formatInputValue();
     }
