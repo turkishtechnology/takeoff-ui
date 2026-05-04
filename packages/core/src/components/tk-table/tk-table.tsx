@@ -921,7 +921,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private setDataTestidAttribute(el: Element, ...suffixes: Array<string | undefined>) {
-    const testId = getDataTestId(this.dataTestid, ...suffixes)['data-testid'];
+    const testId = getDataTestId(this.dataTestid, ...suffixes);
     if (testId) {
       el.setAttribute('data-testid', testId);
     }
