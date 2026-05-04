@@ -42,3 +42,7 @@ changelog:
     - title: "Breaking Changes 💥"
       labels:
         - breaking changes
+
+    - title: "Security 🔒"
+      labels:
+        - security
