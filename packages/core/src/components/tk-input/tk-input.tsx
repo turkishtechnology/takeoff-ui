@@ -384,7 +384,9 @@ export class TkInput implements ComponentInterface {
           }
 
           if (this.cleaveInstance) {
-            this.cleaveInstance?.setRawValue(_value);
+            // Re-apply the current raw value to force Cleave to re-sync its internal state before reading formatted output.
+            const rawValue = this.cleaveInstance.getRawValue();
+            this.cleaveInstance?.setRawValue(rawValue);
             _value = this.cleaveInstance?.getFormattedValue();
           }
         }
