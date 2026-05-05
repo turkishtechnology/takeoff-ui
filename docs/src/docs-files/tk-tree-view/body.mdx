@@ -40,6 +40,13 @@ Enable checkbox selection with the `selectable` prop for multi-selection
 functionality. Use the `value` prop to control selected items and listen to
 `tk-change` events for selection updates.
 
+The `selectAll` prop displays a "Select All" checkbox above the tree with a
+badge counter showing the total number of selected items. The selection behavior
+respects the `selectionStrategy` prop:
+
+- `all`: Selects both branches and leaf nodes
+- `leaf`: Selects only leaf nodes (file nodes)
+
 <Selectable />
 
 ## Expand All

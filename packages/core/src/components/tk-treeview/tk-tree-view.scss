@@ -13,6 +13,9 @@
     align-items: flex-start;
     gap: var(--tree-gap, 12px);
     overflow-x: auto;
+    .select-all {
+      width: auto;
+    }
 
     .column .node .tk-tree-view.pointer {
       height: 100%;
@@ -38,6 +41,51 @@
     flex-direction: column;
     gap: var(--tree-gap, 2px);
     font-family: var(--family-body);
+  }
+
+  .select-all {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--text-dark);
+    user-select: none;
+    width: 100%;
+
+    &.large {
+      padding: var(--items-tree-large-v-padding, 10px) var(--items-tree-large-h-padding, 12px);
+      font-size: var(--desktop-body-m-base-size, 16px);
+      line-height: var(--desktop-body-m-base-line-height, 24px);
+    }
+
+    &.base {
+      padding: var(--items-tree-base-v-padding, 6px) var(--items-tree-base-h-padding, 8px);
+      font-size: var(--desktop-body-s-size, 14px);
+      line-height: var(--desktop-body-s-line-height, 20px);
+    }
+
+    &.small {
+      padding: var(--items-tree-small-v-padding, 4px) var(--items-tree-small-h-padding, 6px);
+      font-size: var(--desktop-body-2xs-size, 11px);
+      line-height: var(--line-height-xxs-normal, 16px);
+    }
+
+    &.disabled {
+      color: var(--text-sub-base);
+      cursor: not-allowed;
+    }
+
+    &:not(.disabled):hover {
+      color: var(--text-darkest);
+    }
+    .select-all-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+    }
   }
 
   &.node {
