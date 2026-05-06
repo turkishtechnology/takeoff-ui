@@ -119,9 +119,11 @@ export class TkTimeline implements ComponentInterface {
 
     return (
       <li class={itemClasses} data-testid={getDataTestId(this.dataTestid, 'item', index.toString())}>
-        <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
-          {contentPlacement === 'start' && this.createItemContent(item, index)}
-        </div>
+        {this.alternate && (
+          <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
+            {contentPlacement === 'start' && this.createItemContent(item, index)}
+          </div>
+        )}
         <div class="tk-timeline-item-separator" data-testid={getDataTestId(this.dataTestid, 'item-separator', index.toString())}>
           <div class="tk-timeline-item-point" data-testid={getDataTestId(this.dataTestid, 'item-point', index.toString())}></div>
           <div class="tk-timeline-item-connector" data-testid={getDataTestId(this.dataTestid, 'item-connector', index.toString())}></div>
@@ -152,9 +154,11 @@ export class TkTimeline implements ComponentInterface {
 
       return (
         <li class={itemClasses} data-testid={getDataTestId(this.dataTestid, 'item', index.toString())}>
-          <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
-            {contentPlacement === 'start' && <slot name={`item-${index}`}></slot>}
-          </div>
+          {this.alternate && (
+            <div class="tk-timeline-item-content tk-timeline-item-content-start" data-testid={getDataTestId(this.dataTestid, 'item-start', index.toString())}>
+              {contentPlacement === 'start' && <slot name={`item-${index}`}></slot>}
+            </div>
+          )}
           <div class="tk-timeline-item-separator" data-testid={getDataTestId(this.dataTestid, 'item-separator', index.toString())}>
             <div class="tk-timeline-item-point" data-testid={getDataTestId(this.dataTestid, 'item-point', index.toString())}></div>
             <div class="tk-timeline-item-connector" data-testid={getDataTestId(this.dataTestid, 'item-connector', index.toString())}></div>
