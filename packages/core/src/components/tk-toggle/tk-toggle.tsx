@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { renderHint } from '../../utils/hint-utils';
 
 /**
  * The TkToggle component is another basic element for user input. You can use this for turning settings, features or true/false inputs on and off.
@@ -61,6 +62,16 @@ export class TkToggle implements ComponentInterface {
    * The label for the toggle.
    */
   @Prop() label?: string;
+
+  /**
+   * Provides a hint or additional information about the toggle.
+   */
+  @Prop() hint?: string;
+
+  /**
+   * This is the error message that will be displayed.
+   */
+  @Prop() error?: string;
 
   /**
    * Whether to show the icon in the toggle.
@@ -215,6 +226,7 @@ export class TkToggle implements ComponentInterface {
             )
           )}
         </label>
+        {renderHint(this.hint, this.error, this.invalid, this.dataTestid)}
       </div>
     );
   }

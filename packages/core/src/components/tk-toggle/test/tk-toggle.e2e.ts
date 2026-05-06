@@ -16,4 +16,26 @@ describe('tk-toggle', () => {
     expect(await page.$eval('tk-toggle', el => (el as HTMLTkToggleElement).value)).toBe(true);
     expect(changeSpy).toHaveReceivedEventDetail(true);
   });
+
+  it('renders hint text when hint prop is provided', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<tk-toggle data-testid="toggle" hint="Helpful hint"></tk-toggle>');
+
+    const hint = await page.find('tk-toggle >>> [data-testid="toggle-hint-text"]');
+
+    expect(hint).toEqualText('Helpful hint');
+  });
+
+  it('renders error text when invalid and error props are provided', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<tk-toggle data-testid="toggle" invalid error="Something went wrong"></tk-toggle>');
+
+    const errorWrapper = await page.find('tk-toggle >>> [data-testid="toggle-error"]');
+    const errorText = await page.find('tk-toggle >>> [data-testid="toggle-error-text"]');
+
+    expect(errorWrapper).toHaveClass('invalid');
+    expect(errorText).toEqualText('Something went wrong');
+  });
 });
