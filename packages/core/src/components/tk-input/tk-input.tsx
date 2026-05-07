@@ -356,6 +356,27 @@ export class TkInput implements ComponentInterface {
     return numValue;
   };
 
+  private isMaskDelimiterCharacter(charToCheck?: string): boolean {
+    const delimiterChars = new Set<string>();
+    if (typeof this.maskOptions.delimiter === 'string' && this.maskOptions.delimiter.length > 0) {
+      delimiterChars.add(this.maskOptions.delimiter);
+    }
+    if (Array.isArray(this.maskOptions.delimiters)) {
+      this.maskOptions.delimiters.forEach(delimiter => {
+        if (typeof delimiter === 'string' && delimiter.length > 0) {
+          delimiterChars.add(delimiter);
+        }
+      });
+    }
+
+    const decimalMark = this.maskOptions.numeralDecimalMark ?? '.';
+    const isConfiguredDelimiter = !!charToCheck && delimiterChars.has(charToCheck);
+    const isNumericThousandsDelimiterFallback =
+      !!charToCheck && !!this.maskOptions.numeral && delimiterChars.size === 0 && /[^0-9]/.test(charToCheck) && charToCheck !== decimalMark;
+
+    return !!charToCheck && (isConfiguredDelimiter || isNumericThousandsDelimiterFallback) && charToCheck !== decimalMark;
+  }
+
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
@@ -384,7 +405,9 @@ export class TkInput implements ComponentInterface {
           }
 
           if (this.cleaveInstance) {
-            this.cleaveInstance?.setRawValue(_value);
+            // Re-apply the current raw value to force Cleave to re-sync its internal state before reading formatted output.
+            const rawValue = this.cleaveInstance.getRawValue();
+            this.cleaveInstance?.setRawValue(rawValue);
             _value = this.cleaveInstance?.getFormattedValue();
           }
         }
@@ -438,7 +461,8 @@ export class TkInput implements ComponentInterface {
 
       // Sadece imleç varsa (seçili alan yoksa) işle
       if (selectionStart === selectionEnd) {
-        let charToCheck, posToRemove;
+        let charToCheck: string | undefined;
+        let posToRemove = -1;
         if (e.key === 'Backspace' && selectionStart > 0) {
           charToCheck = value[selectionStart - 1];
           posToRemove = selectionStart - 1;
@@ -448,22 +472,24 @@ export class TkInput implements ComponentInterface {
         }
 
         // Eğer karakter bir ayırıcı ise (rakam/harf değilse)
-        if (charToCheck && /[^a-zA-Z0-9]/.test(charToCheck)) {
+        if (this.isMaskDelimiterCharacter(charToCheck)) {
           e.preventDefault();
           // Ayırıcıyı ve öncesindeki (Backspace) veya sonrasındaki (Delete) karakteri sil
           let newValue;
           let newCaretPos;
           if (e.key === 'Backspace') {
             // Ayırıcının öncesindeki karakteri sil
-            newValue = value.slice(0, posToRemove - 1) + value.slice(posToRemove);
+            newValue = value.slice(0, posToRemove - 1) + value.slice(posToRemove + 1);
             newCaretPos = posToRemove - 1;
           } else {
             // Ayırıcının sonrasındaki karakteri sil
-            newValue = value.slice(0, posToRemove) + value.slice(posToRemove + 1);
+            newValue = value.slice(0, posToRemove) + value.slice(posToRemove + 2);
             newCaretPos = posToRemove;
           }
           this.cleaveInstance.setRawValue(newValue);
-          this.value = this.cleaveInstance.getFormattedValue();
+          const formattedValue = this.cleaveInstance.getFormattedValue();
+          input.value = formattedValue;
+          this.value = formattedValue;
           this.tkChange.emit(this.value);
 
           // DOM güncellendikten sonra imleç pozisyonunu ayarla
