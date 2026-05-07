@@ -3,6 +3,7 @@ import toggleConfigData from './togglePlaygroundConfig.json';
 import Basic from './Examples/Basic';
 import Variant from './Examples/Variant';
 import States from './Examples/States';
+import HintError from './Examples/HintError';
 import { TkToggle } from '@takeoff-ui/react';
 
 ### Playground
@@ -26,3 +27,10 @@ Use the `variant` prop to change the color scheme of the toggle.
 This example illustrates the disabled state of the toggle.
 
 <States />
+
+## Hint And Error
+
+Use the `hint` prop to show supporting text below the toggle. When `invalid` is
+`true`, the `error` prop is displayed instead of the hint.
+
+<HintError />
