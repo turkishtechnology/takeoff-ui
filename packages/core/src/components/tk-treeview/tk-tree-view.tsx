@@ -17,6 +17,8 @@ import { CSSStyleProperties } from '../../global/types';
   shadow: false,
 })
 export class TkTreeView implements ComponentInterface {
+  private isAllSelected: boolean = false;
+
   @Element() el: HTMLElement;
 
   @State() expandedPaths: Set<string> = new Set();
@@ -121,6 +123,17 @@ export class TkTreeView implements ComponentInterface {
   @Prop() stepStyle?: CSSStyleProperties = null;
 
   /**
+   * If true, shows a "Select All" checkbox above the tree items. Only effective when `selectable` is true.
+   */
+  @Prop() selectAll: boolean = false;
+
+  /**
+   * Label for the "Select All" checkbox row.
+   * @defaultValue 'Select All'
+   */
+  @Prop() selectAllLabel: string = 'Select All';
+
+  /**
    * If true, expands all nodes in basic mode.
    * <br />
    * **Note:** This prop is ignored when expandedKeys is provided.
@@ -214,6 +227,10 @@ export class TkTreeView implements ComponentInterface {
 
   componentWillLoad() {
     this.initializeExpandedPaths();
+  }
+
+  componentWillRender() {
+    this.isAllSelected = this.computeIsAllSelected();
   }
 
   /**
@@ -529,6 +546,25 @@ export class TkTreeView implements ComponentInterface {
     this.tkItemClick.emit(item);
   };
 
+  private computeIsAllSelected(): boolean {
+    const allKeys = this.selectionStrategy === 'leaf' ? this.items.flatMap(item => this.getLeafKeys(item)) : this.getAllKeys(this.items);
+    return allKeys.length > 0 && allKeys.every(k => this.value?.includes(k));
+  }
+
+  /**
+   * Get all keys (including branches and leaves) from a list of items recursively.
+   */
+  private getAllKeys = (items: ITreeItem[]): string[] => {
+    const keys: string[] = [];
+    for (const item of items) {
+      if (item.key) keys.push(item.key);
+      if (item.children && item.children.length > 0) {
+        keys.push(...this.getAllKeys(item.children));
+      }
+    }
+    return keys;
+  };
+
   /**
    * Get all child keys recursively
    */
@@ -676,6 +712,16 @@ export class TkTreeView implements ComponentInterface {
     }
   };
 
+  private handleSelectAllClick = () => {
+    if (this.disabled) return;
+    if (this.isAllSelected) {
+      this.value = [];
+    } else {
+      this.value = this.selectionStrategy === 'leaf' ? this.items.flatMap(item => this.getLeafKeys(item)) : this.getAllKeys(this.items);
+    }
+    this.tkChange.emit(this.value);
+  };
+
   private renderItem = (item: ITreeItem, basePath: string = '', index: number, depth: number = 0) => {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
     const isDirectory = !!(item.children && item.children.length > 0);
@@ -757,6 +803,32 @@ export class TkTreeView implements ComponentInterface {
     );
   };
 
+  private renderSelectAll() {
+    if (!this.selectAll || !this.selectable) return null;
+
+    const isIndeterminate = !this.isAllSelected && (this.value?.length ?? 0) > 0;
+    const selectedCount = this.value?.length ?? 0;
+
+    return (
+      <div class={classNames('select-all', this.size, { disabled: this.disabled })} onClick={this.handleSelectAllClick}>
+        <div class={classNames('select-all-content')}>
+          <tk-checkbox
+            value={this.isAllSelected}
+            indeterminate={isIndeterminate}
+            disabled={this.disabled}
+            onClick={e => e.stopPropagation()}
+            onTk-change={e => {
+              e.stopPropagation();
+              this.handleSelectAllClick();
+            }}
+          />
+          <div>{this.selectAllLabel}</div>
+        </div>
+        {selectedCount > 0 && <tk-badge count={selectedCount} size={this.size} type="filledlight" variant="neutral" rounded={true} />}
+      </div>
+    );
+  }
+
   render() {
     if (!this.items || !this.items.length) return null;
 
@@ -764,6 +836,7 @@ export class TkTreeView implements ComponentInterface {
       const columns = this.getStepperColumns();
       return (
         <div class={classNames('tk-tree-view', 'stepper')} style={this.containerStyle}>
+          {this.renderSelectAll()}
           {columns.map((column, idx) => (
             <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx} style={this.stepStyle}>
               {column.items.map((item, itemIndex) => this.renderItem(item, column.basePath, itemIndex))}
@@ -775,6 +848,7 @@ export class TkTreeView implements ComponentInterface {
       const rootClasses = classNames('tk-tree-view', this.type, { disabled: this.disabled });
       return (
         <div class={rootClasses} style={this.containerStyle}>
+          {this.renderSelectAll()}
           <div class={classNames('tk-tree-view', 'content')}>{this.items.map((item, index) => this.renderItem(item, '', index))}</div>
         </div>
       );
