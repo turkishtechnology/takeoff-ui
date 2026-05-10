@@ -10,7 +10,7 @@ across packages.
 ## Documentation
 
 Full API reference, guides, and examples are available at:  
-https://takeoff-ui.thy.com/docs
+[https://takeoff-ui.thy.com/docs](https://www.takeoffui.com/docs/Introduction)
 
 ## Contributing
 
