@@ -276,17 +276,17 @@ export class TkInput implements ComponentInterface {
   }
 
   private validateMinMax() {
-    if (this.mode === 'text' && this.min !== undefined && this.max !== undefined) {
-      const numValue = parseInt(this.value as string, 10);
-      if (!isNaN(numValue)) {
-        if (numValue < Number(this.min)) {
-          this.value = this.min.toString();
-          this.tkChange.emit(this.min.toString());
-        } else if (numValue > Number(this.max)) {
-          this.value = this.max.toString();
-          this.tkChange.emit(this.max.toString());
-        }
-      }
+    if (this.min === undefined && this.max === undefined) return;
+
+    const numValue = parseFloat(this.value as string);
+    if (isNaN(numValue)) return;
+
+    if (this.min !== undefined && numValue < Number(this.min)) {
+      this.value = this.mode === 'counter' ? Number(this.min) : this.min.toString();
+      this.tkChange.emit(this.value);
+    } else if (this.max !== undefined && numValue > Number(this.max)) {
+      this.value = this.mode === 'counter' ? Number(this.max) : this.max.toString();
+      this.tkChange.emit(this.value);
     }
   }
 
