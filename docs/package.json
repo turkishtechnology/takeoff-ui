@@ -18,10 +18,10 @@
     "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.7.0",
-    "@docusaurus/preset-classic": "^3.7.0",
-    "@docusaurus/theme-classic": "^3.7.0",
     "@docsearch/react": "^3.8.0",
+    "@docusaurus/core": "^3.10.1",
+    "@docusaurus/preset-classic": "^3.10.1",
+    "@docusaurus/theme-classic": "^3.10.1",
     "@mdx-js/react": "^3.0.0",
     "@takeoff-ui/core": "workspace:*",
     "@takeoff-ui/react": "workspace:*",
@@ -38,10 +38,10 @@
     "react-markdown": "^9.0.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.7.0",
-    "@docusaurus/theme-common": "^3.7.0",
-    "@docusaurus/tsconfig": "3.6.3",
-    "@docusaurus/types": "3.6.3",
+    "@docusaurus/module-type-aliases": "^3.10.1",
+    "@docusaurus/theme-common": "^3.10.1",
+    "@docusaurus/tsconfig": "3.10.1",
+    "@docusaurus/types": "3.10.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.10",
     "tailwindcss": "^3.4.17",
