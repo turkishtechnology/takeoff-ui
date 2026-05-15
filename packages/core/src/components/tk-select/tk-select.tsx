@@ -731,6 +731,7 @@ export class TkSelect implements ComponentInterface {
       this.value = [...tmpValue];
       this.tkChange.emit([...tmpValue]);
     }
+    this.isItemClickFlag = false;
   }
 
   private async handleItemClick(item) {
@@ -764,6 +765,7 @@ export class TkSelect implements ComponentInterface {
 
     // seçim yapıldıktan sonra eğer filtreleme yapılarak bir seçim yapıldıysa eski filtreleme sonuçlarının tutulmaması ve tüm listesinin optionlarda render edilebilmesi için yapılmıştır.
     this.renderOptions = await this.filter(null, this.options);
+    this.isItemClickFlag = false;
   }
 
   private async handleInputChange(value) {
