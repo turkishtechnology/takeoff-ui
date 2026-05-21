@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [["@takeoff-ui/core", "@takeoff-ui/react", "@takeoff-ui/vue", "@takeoff-ui/angular", "@takeoff-ui/tailwind", "@takeoff-ui/docs"]],
+  "linked": [],
+  "access": "restricted",
+  "baseBranch": "develop",
+  "updateInternalDependencies": "patch",
+  "ignore": ["angular-app", "react-app", "vue-app", "angular-workspace"],
+  "snapshot": {
+    "useCalculatedVersion": true,
+    "prereleaseTemplate": "{tag}-{commit}"
+  }
+}
