@@ -477,6 +477,9 @@ export class TkTable implements ComponentInterface {
     if (options.type == 'pdf') {
       const doc = new jsPDF(options.orientation === 'horizontal' ? 'l' : 'p');
 
+      const fontFamily = getComputedStyle(this.el).getPropertyValue('--family-body').trim().replace(/['"]/g, '');
+      const pdfFont = fontFamily.startsWith('tk-text') ? 'tk-text' : 'Geologica';
+
       autoTable(doc, {
         head: [this.columns.map(col => col.header)], // Başlıkları dinamik olarak ekler
         body: _data.map(row =>
@@ -492,7 +495,7 @@ export class TkTable implements ComponentInterface {
         // styles: { halign: 'center', fontSize: 10 },
         headStyles: { fillColor: [201, 0, 25], fontStyle: 'bold' },
         bodyStyles: { fontStyle: 'normal' },
-        styles: { font: 'var(--family-body)' },
+        styles: { font: pdfFont },
       });
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
