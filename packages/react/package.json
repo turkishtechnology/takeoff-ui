@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/react",
-  "version": "0.11.6",
+  "version": "0.11.7",
   "description": "React components library designed for Turkish Technology.",
   "author": "Turkish Technology Frontend Infrastructure Team < takeoffui@thy.com >",
   "homepage": "https://takeoffui.com",
@@ -20,10 +20,7 @@
     "url": "https://github.com/turkishtechnology/takeoff-ui.git"
   },
   "publishConfig": {
-    "access": "public",
-    "dependencies": {
-      "@takeoff-ui/core": "^0.11.6"
-    }
+    "access": "public"
   },
   "scripts": {
     "test": "node ./__tests__/react-library.test.js",
