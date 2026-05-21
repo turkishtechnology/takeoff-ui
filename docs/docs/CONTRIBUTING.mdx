@@ -145,6 +145,61 @@ chore(deps): Bump stenciljs to v3.5.0
 
 ---
 
+## Changesets
+
+We use [Changesets](https://github.com/changesets/changesets) to manage
+versioning and changelogs. Every PR that affects a publishable package **must**
+include a changeset.
+
+### When to Add a Changeset
+
+- Any change to `@takeoff-ui/core`, `@takeoff-ui/react`, `@takeoff-ui/vue`,
+  `@takeoff-ui/angular`, or `@takeoff-ui/tailwind`
+- Bug fixes, new features, breaking changes, or dependency updates that affect
+  public APIs
+
+### When NOT to Add a Changeset
+
+- Changes to demo apps (`angular-app`, `react-app`, `vue-app`)
+- CI/CD configuration, README updates, or internal tooling that doesn't affect
+  published packages
+
+### How to Add a Changeset
+
+Run the following command from the repository root:
+
+```bash
+pnpm changeset add
+```
+
+You'll be prompted to:
+
+1. **Select affected packages** — choose which packages your change impacts
+2. **Choose bump type** — `patch` (bug fix), `minor` (new feature), or `major`
+   (breaking change)
+3. **Write a summary** — a short description that will appear in the CHANGELOG
+
+This creates a markdown file in the `.changeset/` directory. Commit it with your
+PR.
+
+### Bump Type Guide
+
+| Change Type               | Bump    | Example                          |
+| ------------------------- | ------- | -------------------------------- |
+| Bug fix, style tweak      | `patch` | Fix button focus ring color      |
+| New component, new prop   | `minor` | Add `tk-avatar` component        |
+| Removed prop, renamed API | `major` | Rename `variant` to `appearance` |
+
+### Empty Changesets
+
+If your PR doesn't need a release (e.g., docs-only or test-only changes), run:
+
+```bash
+pnpm changeset add --empty
+```
+
+---
+
 ## Pull Request Guidelines
 
 Our PR template will guide you through these sections:
