@@ -28,4 +28,24 @@ describe('tk-popover', () => {
     expect(await contentSlot.getAttribute('data-testid')).toBeNull();
     expect(changeSpy).toHaveReceivedEventDetail(true);
   });
+
+  it('renders the open panel in the top layer (native popover)', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<tk-popover><button slot="trigger">Open</button><div slot="content">Body</div></tk-popover>');
+
+    const trigger = await page.find('tk-popover [slot="trigger"]');
+    await trigger.click();
+    await page.waitForChanges();
+
+    // The panel must be promoted to the top layer so it escapes ancestor
+    // stacking contexts (the sticky-table-cell z-index bug). Assert via the
+    // :popover-open pseudo-class, which only matches top-layer popovers.
+    const isInTopLayer = await page.evaluate(() => {
+      const panel = document.querySelector('tk-popover')?.shadowRoot?.querySelector('.tk-popover-content');
+      return !!panel && panel.matches(':popover-open');
+    });
+
+    expect(isInTopLayer).toBe(true);
+  });
 });

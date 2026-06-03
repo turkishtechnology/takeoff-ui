@@ -14,6 +14,20 @@ describe('tk-popover', () => {
     expect(page.root.shadowRoot.querySelector('.tk-popover-content')).toBeTruthy();
   });
 
+  it('renders the panel as a native popover so it lands in the top layer', async () => {
+    const page = await newSpecPage({
+      components: [TkPopover],
+      html: `<tk-popover><button slot="trigger">Open</button><div slot="content">Body</div></tk-popover>`,
+    });
+
+    page.rootInstance.isOpen = true;
+    await page.waitForChanges();
+
+    // popover="manual" escapes ancestor stacking contexts (e.g. sticky table
+    // cells) via the top layer, while leaving dismissal to ClickOutsideMixin.
+    expect(page.root.shadowRoot.querySelector('.tk-popover-content')?.getAttribute('popover')).toBe('manual');
+  });
+
   describe('dataTestid', () => {
     it('applies semantic data-testid on root, content and arrow', async () => {
       const page = await newSpecPage({
