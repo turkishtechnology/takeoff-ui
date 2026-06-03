@@ -134,6 +134,9 @@ export class TkPopover implements ComponentInterface {
     this.clickOutsideMixin.updateConfig({ disabled: this.isHover || !this.isOpen });
 
     if (this.isOpen) {
+      // Promote to the top layer before positioning so it cannot be trapped
+      // behind a sticky table cell's stacking context.
+      this.showInTopLayer();
       // Clean up old floating UI listeners before setting up new ones
       this.cleanup?.();
       this.updatePosition();
@@ -157,6 +160,26 @@ export class TkPopover implements ComponentInterface {
     this.cleanup = floatingElementAutoUpdate(this.triggerElement, this.popoverElement, this.arrowElement, { placement: this.position });
   }
 
+  /**
+   * Promote the panel to the browser top layer via the native Popover API.
+   * The top layer escapes every ancestor stacking context (e.g. the per-cell
+   * z-index of sticky tk-table columns), so the panel can no longer be hidden
+   * behind a neighbouring cell. The element stays inside this component's shadow
+   * root, so slotted content, scoped styles and click-outside detection keep
+   * working. No-ops when the API is unavailable (older browsers).
+   */
+  private showInTopLayer() {
+    const el = this.popoverElement as HTMLElement & { showPopover?: () => void };
+    if (typeof el?.showPopover !== 'function' || !el.isConnected) return;
+    // showPopover() throws if the element is already in the top layer.
+    if (el.matches(':popover-open')) return;
+    try {
+      el.showPopover();
+    } catch {
+      /* element not eligible (e.g. detached during a re-render) — ignore */
+    }
+  }
+
   render() {
     return (
       <div class="tk-popover" data-testid={getDataTestId(this.dataTestid, 'container')}>
@@ -164,6 +187,9 @@ export class TkPopover implements ComponentInterface {
         {this.isOpen && (
           <div
             ref={el => (this.popoverElement = el as HTMLElement)}
+            // `manual` keeps the browser's light-dismiss from fighting our
+            // ClickOutsideMixin, while still rendering the panel in the top layer.
+            popover="manual"
             class={{
               'tk-popover-content': true,
               [`tk-popover-${this.type}`]: true,

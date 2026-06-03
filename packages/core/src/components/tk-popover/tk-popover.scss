@@ -11,6 +11,15 @@
   z-index: 1300;
   box-shadow: var(--shadow-base);
 
+  // When rendered in the top layer via the native Popover API, reset the UA
+  // defaults (inset: 0 + margin: auto would center it) so Floating UI's
+  // left/top positioning is honoured. Harmless when the API is unavailable.
+  &[popover] {
+    margin: 0;
+    inset: auto;
+    overflow: visible;
+  }
+
   &.tk-popover-dark {
     border: 1px solid var(--border-light);
     background: var(--background-darkest);
