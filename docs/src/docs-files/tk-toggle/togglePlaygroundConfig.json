@@ -45,6 +45,18 @@
       ]
     },
     {
+      "key": "hint",
+      "label": "Hint",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
+      "key": "error",
+      "label": "Error",
+      "type": "text",
+      "defaultValue": ""
+    },
+    {
       "key": "icon",
       "label": "Icon",
       "type": "text",

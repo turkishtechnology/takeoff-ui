@@ -137,17 +137,17 @@ const treeData = [
 ];
 
 <TkTreeView 
-  mode="basic"
   type="light"
   size="base"
   items={treeData}
   selectable={true}
-  selectionStrategy={${selectionStrategy}}
+  selectAll={true}
+  selectAllLabel="Select All"
+  selectionStrategy="${selectionStrategy}"
   value={selectedItems}
   branchIcon="folder"
   leafIcon="insert_drive_file"
   onTkChange={(e) => setSelectedItems(e.detail)}
-  
 />
 
 <div>
@@ -220,15 +220,17 @@ const treeData = [
 
 <template>
   <TkTreeView 
-    mode="basic"
     type="light"
     size="base"
     :items="treeData"
     :selectable="true"
+    :selectAll="true"
+    selectAllLabel="Select All"
     :selectionStrategy="selectionStrategy"
     v-model="selectedItems"
     branchIcon="folder"
     leafIcon="insert_drive_file"
+    @tk-change="(e) => selectedItems = e.detail"
   />
   
   <div>
@@ -249,6 +251,8 @@ const treeData = [
         </TkRadioGroup>
       </div>
       <TkTreeView
+        selectAll
+        selectAllLabel="Select All"
         type="light"
         size="base"
         items={sampleData}

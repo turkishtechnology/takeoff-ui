@@ -1,6 +1,6 @@
 {
   "name": "takeoff-ui",
-  "version": "0.11.2",
+  "version": "0.11.7",
   "private": true,
   "description": "Takeoff UI - Turkish Technology",
   "keywords": [
@@ -60,6 +60,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@changesets/cli": "^2.31.0",
     "@eslint/js": "9.36.0",
     "@stencil/eslint-plugin": "^1.1.0",
     "@types/node": "^20.13.0",
@@ -72,7 +73,7 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.1",
     "rimraf": "^6.0.1",
-    "turbo": "^2.5.0",
+    "turbo": "^2.9.14",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.1"
   },
@@ -88,15 +89,21 @@
     "overrides": {
       "path-to-regexp@<6.0.0": "0.1.13",
       "path-to-regexp@>=6.0.0": ">=8.4.0",
+      "hono": ">=4.12.18",
+      "ip-address": ">=10.1.1",
       "serialize-javascript": ">=7.0.5",
       "tar": ">=7.5.11",
       "minimatch": ">=10.2.3",
       "undici": ">=6.24.0",
       "ajv@>=7.0.0": ">=8.18.0",
+      "fast-uri": ">=3.1.2",
       "smol-toml": ">=1.6.1",
       "srvx": ">=0.11.13",
       "@tootallnate/once": ">=3.0.1",
-      "webpackbar": "^7.0.0"
+      "webpackbar": "^7.0.0",
+      "uuid": ">=14.0.0",
+      "ws": " >=8.20.1",
+      "brace-expansion": ">=5.0.6"
     }
   }
 }

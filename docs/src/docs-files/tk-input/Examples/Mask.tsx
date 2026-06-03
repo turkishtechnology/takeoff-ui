@@ -69,6 +69,21 @@ const Mask = () => {
   onTkChange={(e) => {
     setValue5(e.detail);
   }}
+/>
+
+<TkInput
+  label="Numeral"
+  placeholder="1.234.567,89"
+  maskOptions={{
+    numeral: true,
+    delimiter: '.',
+    numeralDecimalMark: ',',
+   
+  }}
+  value={value6}
+  onTkChange={(e) => {
+    setValue6(e.detail);
+  }}
 />`;
 
   const vueCode = `<script setup>
@@ -80,6 +95,7 @@ const value2 = ref();
 const value3 = ref();
 const value4 = ref();
 const value5 = ref();
+const value6 = ref();
 </script>
 
 <template>
@@ -139,6 +155,17 @@ const value5 = ref();
       }"
       v-model="value5"
     />
+    <TkInput
+      label="Numeral"
+      placeholder="1.234.567,89"
+      :maskOptions="{
+        numeral: true,
+        delimiter: '.',
+        numeralDecimalMark: ',',
+       
+      }"
+      v-model="value6"
+    />
   </div>
 </template>
 `;
@@ -197,6 +224,17 @@ const value5 = ref();
     blocks: [6],
   }"
   [(ngModel)]="value5"
+></tk-input>
+<tk-input
+  label="Numeral"
+  placeholder="1.234.567,89"
+  [maskOptions]="{
+    numeral: true,
+    delimiter: '.',
+    numeralDecimalMark: ',',
+   
+  }"
+  [(ngModel)]="value6"
 ></tk-input>`;
 
   const [value, setValue] = useState();
@@ -205,6 +243,7 @@ const value5 = ref();
   const [value3, setValue3] = useState();
   const [value4, setValue4] = useState();
   const [value5, setValue5] = useState();
+  const [value6, setValue6] = useState();
   const demo = (
     <div className="flex flex-col gap-2 w-[300px]">
       <TkInput
@@ -275,6 +314,20 @@ const value5 = ref();
         value={value5}
         onTkChange={e => {
           setValue5(e.detail);
+        }}
+      />
+
+      <TkInput
+        label="Numeral"
+        placeholder="1.234.567,89"
+        maskOptions={{
+          numeral: true,
+          delimiter: '.',
+          numeralDecimalMark: ',',
+        }}
+        value={value6}
+        onTkChange={e => {
+          setValue6(e.detail);
         }}
       />
     </div>

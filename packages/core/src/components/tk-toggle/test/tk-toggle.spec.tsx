@@ -79,4 +79,31 @@ describe('tk-toggle', () => {
     expect(page.root.hasAttribute('tabindex')).toBe(false);
     expect(inputElement instanceof HTMLInputElement).toBe(true);
   });
+
+  it('renders hint text when hint is provided', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle data-testid="toggle" hint="Helpful hint"></tk-toggle>`,
+    });
+
+    const hintWrapper = page.root!.shadowRoot!.querySelector('[data-testid="toggle-hint"]');
+    const hintText = page.root!.shadowRoot!.querySelector('[data-testid="toggle-hint-text"]') as HTMLElement;
+
+    expect(hintWrapper).not.toBeNull();
+    expect(hintText.textContent).toBe('Helpful hint');
+  });
+
+  it('renders error text when error is provided and invalid is true', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle data-testid="toggle" invalid="true" error="Something went wrong"></tk-toggle>`,
+    });
+
+    const errorWrapper = page.root!.shadowRoot!.querySelector('[data-testid="toggle-error"]') as HTMLElement;
+    const errorText = page.root!.shadowRoot!.querySelector('[data-testid="toggle-error-text"]') as HTMLElement;
+
+    expect(errorWrapper).not.toBeNull();
+    expect(errorWrapper.classList.contains('invalid')).toBe(true);
+    expect(errorText.textContent).toBe('Something went wrong');
+  });
 });
