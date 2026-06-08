@@ -1,5 +1,12 @@
 # @takeoff-ui/vue
 
+## 0.11.8
+
+### Patch Changes
+
+- Updated dependencies [83e9012]
+  - @takeoff-ui/core@0.11.8
+
 ## 0.11.7
 
 ### Patch Changes
