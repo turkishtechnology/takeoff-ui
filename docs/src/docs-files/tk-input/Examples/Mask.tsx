@@ -308,8 +308,7 @@ const value6 = ref();
         label="Custom Regex (PNR Code)"
         placeholder="ABC123"
         maskOptions={{
-          regex: /[A-Z0-9]/,
-          blocks: [6],
+          regex: /^[0-9,]{1,10}$/,
         }}
         value={value5}
         onTkChange={e => {
