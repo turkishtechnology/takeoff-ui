@@ -68,6 +68,16 @@ export class TkCurrencyInput implements ComponentInterface {
   }
 
   /**
+   * Minimum value allowed for the input.
+   */
+  @Prop() min?: number;
+
+  /**
+   * Maximum value allowed for the input.
+   */
+  @Prop() max?: number;
+
+  /**
    * List of available currencies.
    * If not provided, it defaults to the internal currency list.
    */
@@ -303,6 +313,46 @@ export class TkCurrencyInput implements ComponentInterface {
     }
 
     return value ?? 0;
+  }
+
+  private clampNumericValue(value: number | null | undefined): number | null {
+    if (value === null || value === undefined || isNaN(value)) {
+      return null;
+    }
+
+    let numericValue = value;
+
+    if (this.min !== null && this.min !== undefined && numericValue < this.min) {
+      numericValue = this.min;
+    }
+
+    if (this.max !== null && this.max !== undefined && numericValue > this.max) {
+      numericValue = this.max;
+    }
+
+    return numericValue;
+  }
+
+  private validateMinMax() {
+    if (this.min === undefined && this.max === undefined) return;
+    if (this.currentNumericValue === null || this.currentNumericValue === undefined) return;
+
+    const clampedValue = this.clampNumericValue(this.currentNumericValue);
+
+    if (clampedValue !== null && clampedValue !== this.currentNumericValue) {
+      this.currentNumericValue = clampedValue;
+      this.updateDisplayValue();
+
+      if (this.inputElement) {
+        this.inputElement.value = this.displayValue;
+      }
+
+      this.tkChange.emit({
+        value: this.currentNumericValue,
+        currency: this.selectedCurrency,
+        formattedValue: this.displayValue,
+      } as CurrencyInputChangeEvent);
+    }
   }
 
   private updateDisplayValue() {
@@ -608,6 +658,7 @@ export class TkCurrencyInput implements ComponentInterface {
       const formattedValue = this.formatCurrency(numericValue);
       target.value = formattedValue;
       this.displayValue = formattedValue;
+      this.validateMinMax();
     }
 
     this.tkBlur.emit();
