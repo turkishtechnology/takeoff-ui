@@ -74,6 +74,18 @@
       "defaultValue": 2
     },
     {
+      "key": "min",
+      "label": "Min",
+      "type": "text",
+      "defaultValue": null
+    },
+    {
+      "key": "max",
+      "label": "Max",
+      "type": "text",
+      "defaultValue": null
+    },
+    {
       "key": "currencyList",
       "label": "Currency List",
       "type": "json",

@@ -3,6 +3,7 @@ import CustomCurrencyList from './Examples/CustomCurrencyList';
 import AllowNegativeValue from './Examples/AllowNegativeValue';
 import AllowEmptyValue from './Examples/AllowEmptyValue';
 import CustomSeparators from './Examples/CustomSeparators';
+import MinMax from './Examples/MinMax';
 import Size from './Examples/Size';
 import State from './Examples/State';
 import Playground from '../../components/Playground';
@@ -78,6 +79,14 @@ true, users can enter negative amounts.
 The "allowEmptyValue" prop allows the value to be null.
 
 <AllowEmptyValue />
+
+## Minimum and Maximum Value
+
+The "min" and "max" props define the allowed numeric range. A value outside this
+range is clamped to the nearest limit, both when it is set via the "value" prop
+and when the user edits the field and it loses focus.
+
+<MinMax />
 
 ## Size
 
