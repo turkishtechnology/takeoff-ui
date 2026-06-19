@@ -11,6 +11,7 @@ import { renderIcons, getIconElementProps } from '../../utils/icon-utils';
 import { getNestedValue } from '../../utils/object-utils';
 import { renderHint } from '../../utils/hint-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { createIncrementalMatcher, stripAnchors, FAILED, MatchState } from '../../utils/regex-mask-utils';
 
 /**
  * The TkInput component is used to capture text input from the user.
@@ -27,9 +28,15 @@ export class TkInput implements ComponentInterface {
   private nativeInput?: HTMLInputElement;
   private tabindex?: string | number;
   private uniqueId = uuidv4();
-  private cleaveInstance: Cleave;
+  private cleaveInstance?: Cleave;
   private readOnly: boolean = false;
   private editable: boolean = true;
+  /** Memoized incremental matcher for `maskOptions.regex`; null when the regex is unsupported/invalid. */
+  private regexMatcher?: ((value: string) => MatchState) | null;
+  /** Source string the current `regexMatcher` was built from, to detect regex changes. */
+  private regexMatcherSource?: string;
+  /** Last value accepted by the regex mask, used to revert a rejected keystroke. */
+  private lastRegexAcceptedValue = '';
 
   @Element() el!: HTMLTkInputElement;
 
@@ -95,11 +102,20 @@ export class TkInput implements ComponentInterface {
   @Prop() maskOptions: IInputMaskOptions;
   @Watch('maskOptions')
   protected maskOptionsChanged(newValue: IInputMaskOptions, oldValue: IInputMaskOptions) {
-    if (!isEqual(newValue, oldValue)) {
-      this.cleaveInstance?.destroy();
+    if (isEqual(newValue, oldValue) || !this.nativeInput) return;
+    this.cleaveInstance?.destroy();
+    this.cleaveInstance = undefined;
+    // Drop any memoized regex matcher so it rebuilds for the new options, and
+    // re-seed the revert target from the current field value under the new mask.
+    this.regexMatcher = undefined;
+    this.regexMatcherSource = undefined;
+    this.lastRegexAcceptedValue = '';
+    if (this.shouldUseCleave()) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
         ...this.maskOptions,
       } as CleaveOptions);
+    } else {
+      this.syncRegexAcceptedValue(this.nativeInput.value);
     }
   }
 
@@ -194,6 +210,9 @@ export class TkInput implements ComponentInterface {
       } else {
         this.nativeInput.value = newValue;
       }
+      // A programmatic value bypasses keystroke handling; keep the regex revert
+      // target in sync so a later rejected keystroke restores this value.
+      this.syncRegexAcceptedValue(this.nativeInput.value);
     }
   }
 
@@ -250,10 +269,14 @@ export class TkInput implements ComponentInterface {
     if (this.mode === 'counter') {
       this.nativeInput.value = this.clampValueByLimit(this.value)?.toString() ?? '';
     }
-    if (this.mode == 'text' && this.maskOptions) {
+    if (this.shouldUseCleave()) {
       this.cleaveInstance = new Cleave(this.nativeInput, {
         ...this.maskOptions,
       } as CleaveOptions);
+    } else {
+      // Seed the regex revert target from any initial value so the first rejected
+      // keystroke restores it instead of wiping the field.
+      this.syncRegexAcceptedValue(this.nativeInput.value);
     }
   }
   componentDidUpdate(): void {
@@ -377,6 +400,72 @@ export class TkInput implements ComponentInterface {
     return !!charToCheck && (isConfiguredDelimiter || isNumericThousandsDelimiterFallback) && charToCheck !== decimalMark;
   }
 
+  /**
+   * Whether a Cleave.js instance should back the current mask. Cleave is only used
+   * for its own formatting options; a `regex` mask is handled by the incremental
+   * matcher instead, so we never build a (useless and side-effecting) Cleave
+   * instance for it.
+   */
+  private shouldUseCleave(): boolean {
+    return this.mode === 'text' && !!this.maskOptions && !this.maskOptions.regex;
+  }
+
+  /**
+   * Re-seeds `lastRegexAcceptedValue` from a value that bypassed keystroke handling
+   * (initial render, programmatic `value` set, mask change). Keeps the revert target
+   * in sync so a later rejected keystroke restores the displayed value, not a stale one.
+   */
+  private syncRegexAcceptedValue(value: unknown): void {
+    if (this.mode !== 'text' || !this.maskOptions?.regex) return;
+    const next = value == null ? '' : String(value);
+    const matcher = this.getRegexMatcher();
+    // Only adopt values the mask would accept; an invalid programmatic value should
+    // not become the revert target.
+    if (!matcher || matcher(next) !== FAILED) {
+      this.lastRegexAcceptedValue = next;
+    }
+  }
+
+  /**
+   * Picks the value to keep when `candidate` is rejected by the regex mask.
+   *
+   * Defaults to the last accepted value, which correctly handles a single bad key
+   * pressed anywhere (the valid suffix is preserved). For a paste that introduces
+   * new valid content followed by junk, it instead keeps the longest leading prefix
+   * the matcher still accepts when that prefix is longer than the last accepted value.
+   */
+  private longestAcceptedPrefix(matcher: (value: string) => MatchState, candidate: string): string {
+    let best = this.lastRegexAcceptedValue;
+    for (let end = candidate.length; end > best.length; end--) {
+      const prefix = candidate.slice(0, end);
+      if (matcher(prefix) !== FAILED) {
+        best = prefix;
+        break;
+      }
+    }
+    return best;
+  }
+
+  /**
+   * Returns the incremental matcher for the current `maskOptions.regex`, rebuilding
+   * it only when the regex source changes. Returns null when the regex is invalid or
+   * uses syntax we cannot model (caller then skips masking and warns once).
+   */
+  private getRegexMatcher(): ((value: string) => MatchState) | null {
+    const regex = this.maskOptions?.regex;
+    if (!regex) return null;
+    const source = typeof regex === 'string' ? regex : regex.source;
+    if (this.regexMatcherSource !== source) {
+      this.regexMatcherSource = source;
+      this.regexMatcher = createIncrementalMatcher(stripAnchors(source));
+      if (!this.regexMatcher) {
+        // eslint-disable-next-line no-console
+        console.warn(`[tk-input] maskOptions.regex "${source}" is invalid or unsupported (lookarounds/back-references are not supported); the regex mask is disabled.`);
+      }
+    }
+    return this.regexMatcher ?? null;
+  }
+
   private handleInput = (ev: Event) => {
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
@@ -391,12 +480,26 @@ export class TkInput implements ComponentInterface {
       if (this.maskOptions) {
         // Custom regex mask
         if (this.maskOptions?.regex && this.mode === 'text') {
-          const regex = typeof this.maskOptions.regex === 'string' ? new RegExp(this.maskOptions.regex, 'g') : new RegExp(this.maskOptions.regex.source, 'g');
-
-          // Regex'e uyan karakterleri filtrele
-          const matches = _value.match(regex);
-          _value = matches ? matches.join('') : '';
-          input.value = _value;
+          // The regex describes the final value, so we validate the typed value
+          // incrementally: a complete match (DONE) or a valid prefix (MORE) is
+          // accepted, while an impossible value (FAILED) is rejected and the input
+          // reverts to the last accepted value — never wiping the whole field.
+          const matcher = this.getRegexMatcher();
+          if (matcher) {
+            if (matcher(_value as string) === FAILED) {
+              // The new value can't be valid. Salvage the longest prefix the matcher
+              // still accepts — this keeps "ABC" when a single bad key is typed and,
+              // on a paste like "AB!CD", keeps the leading "AB" instead of discarding
+              // everything. Falls back to the last accepted value when nothing fits.
+              _value = this.longestAcceptedPrefix(matcher, _value as string);
+              const caretPos = _value.length;
+              input.value = _value;
+              input.setSelectionRange?.(caretPos, caretPos);
+              this.lastRegexAcceptedValue = _value as string;
+            } else {
+              this.lastRegexAcceptedValue = _value as string;
+            }
+          }
         } else {
           if (this.maskOptions.letterOnly) {
             // If letterOnly option is enabled, filter out non-letters
@@ -447,13 +550,16 @@ export class TkInput implements ComponentInterface {
     } else {
       this.value = null;
     }
+    this.lastRegexAcceptedValue = '';
     this.tkChange.emit(this.value);
   }
 
   // for add chip
   private handleInputKeyDown = (e: KeyboardEvent) => {
     // --- Cleave.js maske ayırıcı karakterlerinin silinmesi için genel çözüm ---
-    if (this.maskOptions && this.cleaveInstance && this.mode == 'text' && (e.key === 'Backspace' || e.key === 'Delete')) {
+    // Regex masks have no Cleave instance and manage their own value, so this
+    // Cleave-specific delimiter handling must not run for them.
+    if (this.maskOptions && !this.maskOptions.regex && this.cleaveInstance && this.mode == 'text' && (e.key === 'Backspace' || e.key === 'Delete')) {
       const input = this.nativeInput;
       const value = input.value;
       const selectionStart = input.selectionStart;
