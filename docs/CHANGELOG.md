@@ -1,5 +1,21 @@
 # @takeoff-ui/docs
 
+## 0.11.9
+
+### Patch Changes
+
+- 17ac266: docs(tk-table): add a server-side multi-sort example. With
+  `multiSort` and `paginationMethod="server"` combined, the table emits the full
+  `sorts` array (in priority order) on the `tk-request` event and skips internal
+  sorting, so the backend can sort by multiple columns. No component change
+  required.
+- Updated dependencies [75ba2ba]
+- Updated dependencies [fa6c5dc]
+- Updated dependencies [603c6a5]
+  - @takeoff-ui/core@0.11.9
+  - @takeoff-ui/react@0.11.9
+  - @takeoff-ui/tailwind@0.11.9
+
 ## 0.11.8
 
 ### Patch Changes

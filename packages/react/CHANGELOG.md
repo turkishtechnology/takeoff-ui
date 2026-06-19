@@ -1,5 +1,14 @@
 # @takeoff-ui/react
 
+## 0.11.9
+
+### Patch Changes
+
+- Updated dependencies [75ba2ba]
+- Updated dependencies [fa6c5dc]
+- Updated dependencies [603c6a5]
+  - @takeoff-ui/core@0.11.9
+
 ## 0.11.8
 
 ### Patch Changes
