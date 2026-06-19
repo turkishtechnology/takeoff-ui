@@ -63,6 +63,7 @@ export class TkCurrencyInput implements ComponentInterface {
   valueChanged() {
     if (this.value !== this.currentNumericValue) {
       this.currentNumericValue = this.normalizeNumericValue(this.value);
+      this.applyMinMax(false);
       this.updateDisplayValue();
     }
   }
@@ -304,6 +305,7 @@ export class TkCurrencyInput implements ComponentInterface {
     const currency = currencies.find(c => c.code.toUpperCase() === currencyCode.toUpperCase());
     this.selectedCurrency = currency || currencies[0];
     this.currentNumericValue = this.normalizeNumericValue(this.value);
+    this.applyMinMax(false);
     this.updateDisplayValue();
   }
 
@@ -315,25 +317,60 @@ export class TkCurrencyInput implements ComponentInterface {
     return value ?? 0;
   }
 
+  /**
+   * Returns the effective min/max bounds, ignoring a negative bound when
+   * negative values are not allowed (otherwise the value could be clamped to a
+   * number the input can never display or produce).
+   */
+  private getEffectiveBounds(): { min: number | null; max: number | null } {
+    const hasMin = this.min !== null && this.min !== undefined;
+    const hasMax = this.max !== null && this.max !== undefined;
+
+    let min = hasMin ? this.min : null;
+    let max = hasMax ? this.max : null;
+
+    if (!this.allowNegative) {
+      if (min !== null && min < 0) min = null;
+      if (max !== null && max < 0) max = null;
+    }
+
+    return { min, max };
+  }
+
   private clampNumericValue(value: number | null | undefined): number | null {
     if (value === null || value === undefined || isNaN(value)) {
       return null;
     }
 
+    const { min, max } = this.getEffectiveBounds();
+
     let numericValue = value;
 
-    if (this.min !== null && this.min !== undefined && numericValue < this.min) {
-      numericValue = this.min;
+    // Apply max before min so that an inverted range (min > max) still yields a
+    // value that respects min rather than silently violating it.
+    if (max !== null && numericValue > max) {
+      numericValue = max;
     }
 
-    if (this.max !== null && this.max !== undefined && numericValue > this.max) {
-      numericValue = this.max;
+    if (min !== null && numericValue < min) {
+      numericValue = min;
+    }
+
+    // Round the bound to the configured precision so the stored value matches
+    // what is displayed/emitted (a fractional bound must not render below min).
+    if (numericValue !== value) {
+      const factor = Math.pow(10, Math.max(this.precision, 0));
+      numericValue = Math.round(numericValue * factor) / factor;
     }
 
     return numericValue;
   }
 
-  private validateMinMax() {
+  /**
+   * Clamps the current value to the configured min/max range.
+   * @param emitChange when true, emits a tkChange event if the value was clamped.
+   */
+  private applyMinMax(emitChange: boolean) {
     if (this.min === undefined && this.max === undefined) return;
     if (this.currentNumericValue === null || this.currentNumericValue === undefined) return;
 
@@ -347,11 +384,13 @@ export class TkCurrencyInput implements ComponentInterface {
         this.inputElement.value = this.displayValue;
       }
 
-      this.tkChange.emit({
-        value: this.currentNumericValue,
-        currency: this.selectedCurrency,
-        formattedValue: this.displayValue,
-      } as CurrencyInputChangeEvent);
+      if (emitChange) {
+        this.tkChange.emit({
+          value: this.currentNumericValue,
+          currency: this.selectedCurrency,
+          formattedValue: this.displayValue,
+        } as CurrencyInputChangeEvent);
+      }
     }
   }
 
@@ -649,6 +688,9 @@ export class TkCurrencyInput implements ComponentInterface {
   private handleBlur = () => {
     const target = this.inputElement;
     if (!target) return;
+    // An empty field is treated as "no value entered": skip clamping so it does
+    // not silently snap to min when allowEmptyValue is false (value stays 0/null).
+    const isEmpty = target.value.trim() === '';
     const numericValue = this.parseFormattedValue(target.value);
     this.currentNumericValue = numericValue;
     if (numericValue === null) {
@@ -658,7 +700,9 @@ export class TkCurrencyInput implements ComponentInterface {
       const formattedValue = this.formatCurrency(numericValue);
       target.value = formattedValue;
       this.displayValue = formattedValue;
-      this.validateMinMax();
+      if (!isEmpty) {
+        this.applyMinMax(true);
+      }
     }
 
     this.tkBlur.emit();

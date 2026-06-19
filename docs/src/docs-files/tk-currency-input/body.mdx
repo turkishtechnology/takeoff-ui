@@ -82,8 +82,9 @@ The "allowEmptyValue" prop allows the value to be null.
 
 ## Minimum and Maximum Value
 
-The "min" and "max" props define the allowed numeric range. Values outside this
-range are clamped to the nearest limit when the input loses focus.
+The "min" and "max" props define the allowed numeric range. A value outside this
+range is clamped to the nearest limit, both when it is set via the "value" prop
+and when the user edits the field and it loses focus.
 
 <MinMax />
 
