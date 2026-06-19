@@ -8,6 +8,7 @@ import FilterAndSort from './Examples/FilterAndSort';
 import Pagination from './Examples/Pagination';
 import Localization from './Examples/Localization';
 import ServerSide from './Examples/ServerSide';
+import ServerSideMultiSort from './Examples/ServerSideMultiSort';
 import CustomCell from './Examples/CustomCell';
 import RowCellStyle from './Examples/RowCellStyle';
 import ExpandedRows from './Examples/ExpandedRows';
@@ -126,6 +127,17 @@ Customize pagination labels for different locales using `pageReportTemplate` and
 Server side sorting, filter ang pagination example.
 
 <ServerSide />
+
+## Server Side Multi Sorting
+
+Server side multi-column sorting. With `multiSort` and
+`paginationMethod="server"` together, the table does not sort internally — it
+emits the full `sorts` array (in priority order) on the `tk-request` event. The
+consumer forwards it to the backend, which sorts as
+`ORDER BY col1 dir1, col2 dir2, ...`. Click multiple headers to build up the
+sort order.
+
+<ServerSideMultiSort />
 
 ## Custom Cell
 
