@@ -4,6 +4,7 @@ import Basic from './Examples/Basic';
 import Password from './Examples/Password';
 import Counter from './Examples/Counter';
 import Mask from './Examples/Mask';
+import RegexMask from './Examples/RegexMask';
 import Size from './Examples/Size';
 import Clearable from './Examples/Clearable';
 import Chips from './Examples/Chips';
@@ -47,6 +48,28 @@ example, you can configure it for formatting dates, phone numbers, or credit
 card numbers as needed.
 
 <Mask />
+
+## Regex Mask
+
+For rules that Cleave.js cannot express, pass a `regex` to `maskOptions`. Write
+the pattern for the **final** value — anchors (`^ $`) and length quantifiers
+like `{1,10}` are fully supported. The input is validated **as the user types**:
+characters that could never lead to a valid value are rejected, while valid
+prefixes are accepted, so the field is never wiped when an invalid key is
+pressed.
+
+This supports the regular-language subset of JavaScript regex: character classes
+and ranges, groups and nested groups, alternation (`|`), all quantifiers
+(`* + ? {n} {n,m}`), optional groups, named groups, and non-ASCII ranges.
+
+<RegexMask />
+
+<TkAlert
+  header="Caveat"
+  variant="warning"
+  message="Lookarounds ((?=…), (?<=…)) and back-references (\1, \k<name>) cannot be validated incrementally; if used, the regex mask is disabled and a console warning is logged."
+  filledlight
+/>
 
 ## Size
 
