@@ -96,6 +96,12 @@
       "defaultValue": false
     },
     {
+      "key": "ai",
+      "label": "AI",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
       "key": "rounded",
       "label": "Rounded",
       "type": "checkbox",

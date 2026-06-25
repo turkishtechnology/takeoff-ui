@@ -110,6 +110,7 @@
   outline: none;
   overflow: hidden;
   height: 100%;
+  position: relative;
 
   &.underline span {
     text-decoration: underline;
@@ -843,6 +844,173 @@
     }
   }
 
+  &.ai {
+    isolation: isolate;
+
+    --tk-button-ai-outlined-content-color: var(--primary-darkest);
+    --tk-button-ai-surface-middle: var(--primary-base);
+    --tk-button-ai-surface-bottom: var(--primary-darkest);
+    --tk-button-ai-glow-dark: var(--primary-900);
+    --tk-button-ai-glow-light: var(--primary-300);
+    --tk-button-ai-shadow-dark: var(--shadow-primary-alpha-dark);
+    --tk-button-ai-shadow-base: var(--shadow-primary-alpha-base);
+    --tk-button-ai-shadow-light: var(--shadow-primary-alpha-light);
+    --tk-button-ai-focus-shadow: var(--primary-focus);
+
+    transition:
+      color 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67),
+      box-shadow 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
+
+    > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    &.secondary {
+      --tk-button-ai-outlined-content-color: var(--secondary-darkest);
+      --tk-button-ai-surface-middle: var(--secondary-base);
+      --tk-button-ai-surface-bottom: var(--secondary-darkest);
+      --tk-button-ai-glow-dark: var(--secondary-900);
+      --tk-button-ai-glow-light: var(--secondary-300);
+      --tk-button-ai-shadow-dark: var(--alpha-brand-secondary-500-16);
+      --tk-button-ai-shadow-base: var(--alpha-brand-secondary-500-8);
+      --tk-button-ai-shadow-light: var(--alpha-brand-secondary-500-8);
+      --tk-button-ai-focus-shadow: var(--secondary-focus);
+    }
+
+    &:not(.outlined):not(.link) {
+      color: var(--text-lightest);
+      background:
+        linear-gradient(
+            160deg,
+            var(--tk-button-ai-glow-dark) 0%,
+            var(--tk-button-ai-surface-bottom) 28%,
+            var(--tk-button-ai-surface-middle) 56%,
+            var(--tk-button-ai-surface-middle) 78%,
+            var(--tk-button-ai-glow-dark) 100%
+          )
+          padding-box,
+        linear-gradient(45deg, var(--tk-button-ai-surface-middle) 0%, var(--static-dark) 100%) border-box;
+      border: 1px solid transparent;
+      box-shadow:
+        0px 2px 2px 0px var(--tk-button-ai-shadow-dark),
+        0px 6px 12px 0px var(--tk-button-ai-shadow-base),
+        0px 8px 20px 6px var(--tk-button-ai-shadow-light);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -96% -64%;
+        pointer-events: none;
+        opacity: 1;
+        filter: blur(14px);
+        background:
+          radial-gradient(44% 42% at 22% 68%, var(--tk-button-ai-glow-light) 0%, var(--tk-button-ai-surface-middle) 34%, transparent 70%),
+          radial-gradient(46% 48% at 78% 28%, var(--tk-button-ai-glow-dark) 0%, var(--tk-button-ai-surface-bottom) 48%, transparent 74%),
+          radial-gradient(42% 40% at 54% 52%, var(--tk-button-ai-surface-middle) 0%, transparent 66%);
+        animation: tk-button-ai-swim 3.6s linear infinite;
+        transition: opacity 120ms ease-out;
+        z-index: 0;
+        will-change: transform, opacity;
+      }
+
+      &:hover {
+        color: var(--text-lightest);
+        background:
+          linear-gradient(var(--tk-button-ai-surface-bottom), var(--tk-button-ai-surface-bottom)) padding-box,
+          linear-gradient(45deg, var(--tk-button-ai-surface-middle) 0%, var(--static-dark) 100%) border-box;
+        cursor: pointer;
+
+        &::before {
+          animation-play-state: paused;
+          opacity: 0;
+        }
+      }
+
+      &:focus-visible {
+        box-shadow:
+          var(--tk-button-ai-focus-shadow),
+          0px 2px 2px 0px var(--tk-button-ai-shadow-dark),
+          0px 6px 12px 0px var(--tk-button-ai-shadow-base),
+          0px 8px 20px 6px var(--tk-button-ai-shadow-light);
+      }
+
+      @include tk-button-disabled {
+        color: var(--static-white);
+        background: var(--background-sub-base);
+        border-color: transparent;
+        box-shadow: none;
+
+        &::before {
+          animation: none;
+          opacity: 0;
+        }
+      }
+    }
+
+    &.outlined {
+      color: var(--tk-button-ai-outlined-content-color);
+      background: transparent;
+      border: 1px solid transparent;
+      box-shadow: none;
+      overflow: visible;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1px;
+        pointer-events: none;
+        opacity: 1;
+        filter: none;
+        background: linear-gradient(45deg, var(--tk-button-ai-surface-middle) 0%, var(--tk-button-ai-surface-middle) 36%, var(--static-dark) 72%, var(--static-dark) 100%) 0% 50% /
+          220% 220%;
+        animation: tk-button-ai-border-flow 3.2s linear infinite;
+        transition: none;
+        z-index: 0;
+        will-change: background-position;
+        -webkit-mask:
+          linear-gradient(var(--static-white) 0 0) content-box,
+          linear-gradient(var(--static-white) 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(var(--static-white) 0 0) content-box,
+          linear-gradient(var(--static-white) 0 0);
+        mask-composite: exclude;
+      }
+
+      &:hover {
+        color: var(--tk-button-ai-outlined-content-color);
+        background: transparent;
+        border-color: transparent;
+        cursor: pointer;
+
+        &::before {
+          background: var(--tk-button-ai-surface-middle);
+          animation: none;
+          opacity: 1;
+        }
+      }
+
+      &:focus-visible {
+        box-shadow: var(--tk-button-ai-focus-shadow);
+      }
+
+      @include tk-button-disabled {
+        color: var(--text-sub-base);
+        background: transparent;
+        border-color: var(--border-sub-base);
+        box-shadow: none;
+
+        &::before {
+          animation: none;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
   &.small {
     @include button-size(
       32px,
@@ -916,5 +1084,48 @@
     &.large {
       height: 24px;
     }
+  }
+}
+
+@keyframes tk-button-ai-border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes tk-button-ai-swim {
+  0% {
+    transform: translate3d(16%, -10%, 0) rotate(0deg) scale(1.08);
+  }
+
+  25% {
+    transform: translate3d(0%, 14%, 0) rotate(90deg) scale(1.14);
+  }
+
+  50% {
+    transform: translate3d(-18%, 0%, 0) rotate(180deg) scale(1.1);
+  }
+
+  75% {
+    transform: translate3d(0%, -18%, 0) rotate(270deg) scale(1.16);
+  }
+
+  100% {
+    transform: translate3d(16%, -10%, 0) rotate(360deg) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-button.ai::before {
+    animation: none;
+    transition: none;
   }
 }

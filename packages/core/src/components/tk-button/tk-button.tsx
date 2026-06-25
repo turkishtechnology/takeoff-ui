@@ -35,6 +35,11 @@ export class TkButton implements ComponentInterface {
   @Prop({ mutable: true }) type: 'filled' | 'filledLight' | 'outlined' | 'text' = 'filled';
 
   /**
+   * Applies the AI action button style.
+   */
+  @Prop() ai: boolean;
+
+  /**
    * Specifies a material icon name to be displayed.
    */
   @Prop() icon?: string | IIconOptions | IMultiIconOptions;
@@ -131,7 +136,15 @@ export class TkButton implements ComponentInterface {
   }
   private getButtonIconColor(): string {
     if (this.disabled) {
-      return this.type === 'filled' || this.type === 'filledLight' ? 'var(--static-white)' : 'var(--icon-sub-base)';
+      return this.type === 'filled' || this.type === 'filledLight' || (this.ai && this.type !== 'outlined') ? 'var(--static-white)' : 'var(--icon-sub-base)';
+    }
+
+    if (this.ai) {
+      if (this.type === 'outlined') {
+        return this.variant === 'secondary' ? 'var(--secondary-darkest)' : 'var(--primary-darkest)';
+      }
+
+      return 'var(--static-white)';
     }
 
     if (this.type === 'filled') {
@@ -152,6 +165,7 @@ export class TkButton implements ComponentInterface {
         'rounded': this.rounded && this.icon && (this.label == '' || this.label == null || this.label.length <= 0),
         'link': this.mode == 'link',
         'underline': this.underline,
+        'ai': this.ai,
         'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon && !hasMultipleIcons,
       },
       [this.variant],
