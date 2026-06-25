@@ -171,6 +171,7 @@ export class TkButton implements ComponentInterface {
         this.icon,
         {
           variant: null,
+          size: this.size === 'small' ? 'base' : 'large',
           additionalProps: {
             color: this.getButtonIconColor(),
           },
