@@ -51,6 +51,18 @@ export const overviewItems: OverviewItem[] = [
     SvgDark: require('@site/static/img/overview/card-dark.png').default,
   },
   {
+    title: 'Carousel',
+    href: 'Carousel',
+    Svg: require('@site/static/img/overview/carousel.png').default,
+    SvgDark: require('@site/static/img/overview/carousel-dark.png').default,
+  },
+  {
+    title: 'Chart',
+    href: 'Chart',
+    Svg: require('@site/static/img/overview/chart.png').default,
+    SvgDark: require('@site/static/img/overview/chart-dark.png').default,
+  },
+  {
     title: 'Checkbox',
     href: 'Checkbox',
     Svg: require('@site/static/img/overview/checkbox.png').default,
@@ -67,13 +79,12 @@ export const overviewItems: OverviewItem[] = [
     href: 'Color-Picker',
     Svg: require('@site/static/img/overview/color-picker.png').default,
     SvgDark: require('@site/static/img/overview/color-picker-dark.png').default,
-    isNew: true,
   },
   {
     title: 'Currency Input',
     href: 'Currency-Input',
-    Svg: require('@site/static/img/overview/input.png').default,
-    SvgDark: require('@site/static/img/overview/input-dark.png').default,
+    Svg: require('@site/static/img/overview/currency-input.png').default,
+    SvgDark: require('@site/static/img/overview/currency-input-dark.png').default,
   },
   {
     title: 'Datepicker',
@@ -90,9 +101,8 @@ export const overviewItems: OverviewItem[] = [
   {
     title: 'Divider',
     href: 'Divider',
-    Svg: require('@site/static/img/overview/input.png').default,
-    SvgDark: require('@site/static/img/overview/input-dark.png').default,
-    isNew: true,
+    Svg: require('@site/static/img/overview/divider.png').default,
+    SvgDark: require('@site/static/img/overview/divider-dark.png').default,
   },
   {
     title: 'Drawer',
@@ -103,9 +113,26 @@ export const overviewItems: OverviewItem[] = [
   {
     title: 'Dropdown',
     href: 'Dropdown',
-    Svg: require('@site/static/img/overview/select.png').default,
-    SvgDark: require('@site/static/img/overview/select-dark.png').default,
-    isNew: true,
+    Svg: require('@site/static/img/overview/dropdown.png').default,
+    SvgDark: require('@site/static/img/overview/dropdown-dark.png').default,
+  },
+  {
+    title: 'Editor',
+    href: 'Editor',
+    Svg: require('@site/static/img/overview/editor.png').default,
+    SvgDark: require('@site/static/img/overview/editor-dark.png').default,
+  },
+  {
+    title: 'Gantt Chart',
+    href: 'GanttChart',
+    Svg: require('@site/static/img/overview/gantt-chart.png').default,
+    SvgDark: require('@site/static/img/overview/gantt-chart-dark.png').default,
+  },
+  {
+    title: 'Icon',
+    href: 'Icon',
+    Svg: require('@site/static/img/overview/icon.png').default,
+    SvgDark: require('@site/static/img/overview/icon-dark.png').default,
   },
   {
     title: 'Input',
@@ -114,10 +141,28 @@ export const overviewItems: OverviewItem[] = [
     SvgDark: require('@site/static/img/overview/input-dark.png').default,
   },
   {
+    title: 'Org Chart',
+    href: 'OrgChart',
+    Svg: require('@site/static/img/overview/org-chart.png').default,
+    SvgDark: require('@site/static/img/overview/org-chart-dark.png').default,
+  },
+  {
     title: 'Pagination',
     href: 'Pagination',
     Svg: require('@site/static/img/overview/pagination.png').default,
     SvgDark: require('@site/static/img/overview/pagination-dark.png').default,
+  },
+  {
+    title: 'Phone Input',
+    href: 'PhoneInput',
+    Svg: require('@site/static/img/overview/phone-input.png').default,
+    SvgDark: require('@site/static/img/overview/phone-input-dark.png').default,
+  },
+  {
+    title: 'Popover',
+    href: 'Popover',
+    Svg: require('@site/static/img/overview/popover.png').default,
+    SvgDark: require('@site/static/img/overview/popover-dark.png').default,
   },
   {
     title: 'Radio',
@@ -130,7 +175,6 @@ export const overviewItems: OverviewItem[] = [
     href: 'Rating',
     Svg: require('@site/static/img/overview/rating.png').default,
     SvgDark: require('@site/static/img/overview/rating-dark.png').default,
-    isNew: true,
   },
   {
     title: 'Select',
@@ -139,20 +183,22 @@ export const overviewItems: OverviewItem[] = [
     SvgDark: require('@site/static/img/overview/select-dark.png').default,
   },
   {
+    title: 'Slider',
+    href: 'Slider',
+    Svg: require('@site/static/img/overview/slider.png').default,
+    SvgDark: require('@site/static/img/overview/slider-dark.png').default,
+  },
+  {
     title: 'Spinner',
     href: 'Spinner',
-    //TODO: Add assets for TkSpinner
-    Svg: require('@site/static/img/overview/select.png').default,
-    SvgDark: require('@site/static/img/overview/select-dark.png').default,
-    isNew: true,
+    Svg: require('@site/static/img/overview/spinner.png').default,
+    SvgDark: require('@site/static/img/overview/spinner-dark.png').default,
   },
   {
     title: 'Stepper',
     href: 'Stepper',
-    //TODO: Add assets for TkSpinner
     Svg: require('@site/static/img/overview/stepper.png').default,
     SvgDark: require('@site/static/img/overview/stepper-dark.png').default,
-    isNew: true,
   },
   {
     title: 'Table',
@@ -162,23 +208,21 @@ export const overviewItems: OverviewItem[] = [
   },
   {
     title: 'Tabs',
-    href: 'Select',
+    href: 'Tabs',
     Svg: require('@site/static/img/overview/tabs.png').default,
     SvgDark: require('@site/static/img/overview/tabs-dark.png').default,
   },
   {
     title: 'Textarea',
     href: 'Textarea',
-    Svg: require('@site/static/img/overview/input.png').default,
-    SvgDark: require('@site/static/img/overview/input-dark.png').default,
+    Svg: require('@site/static/img/overview/textarea.png').default,
+    SvgDark: require('@site/static/img/overview/textarea-dark.png').default,
   },
   {
     title: 'Timeline',
     href: 'Timeline',
-    //TODO: Add assets for TkTimeline
-    Svg: require('@site/static/img/overview/input.png').default,
-    SvgDark: require('@site/static/img/overview/input-dark.png').default,
-    isNew: true,
+    Svg: require('@site/static/img/overview/timeline.png').default,
+    SvgDark: require('@site/static/img/overview/timeline-dark.png').default,
   },
   {
     title: 'Toggle',
@@ -187,9 +231,27 @@ export const overviewItems: OverviewItem[] = [
     SvgDark: require('@site/static/img/overview/toggle-dark.png').default,
   },
   {
+    title: 'Toggle Button',
+    href: 'Toggle-Button',
+    Svg: require('@site/static/img/overview/toggle-button.png').default,
+    SvgDark: require('@site/static/img/overview/toggle-button-dark.png').default,
+  },
+  {
     title: 'Tooltip',
     href: 'Tooltip',
     Svg: require('@site/static/img/overview/tooltip.png').default,
     SvgDark: require('@site/static/img/overview/tooltip-dark.png').default,
+  },
+  {
+    title: 'Tree View',
+    href: 'TreeView',
+    Svg: require('@site/static/img/overview/tree-view.png').default,
+    SvgDark: require('@site/static/img/overview/tree-view-dark.png').default,
+  },
+  {
+    title: 'Upload',
+    href: 'Upload',
+    Svg: require('@site/static/img/overview/file-upload.png').default,
+    SvgDark: require('@site/static/img/overview/file-upload-dark.png').default,
   },
 ];
