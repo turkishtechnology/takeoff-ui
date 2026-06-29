@@ -99,15 +99,12 @@
       }
 
       &.tk-card-header-dark {
-        background: var(--background-darkest);
+        background: var(--neutral-800);
 
         .tk-card-title-container {
+          .tk-card-title,
           .tk-card-subtitle {
-            color: var(--text-sub-base);
-          }
-
-          .tk-card-title {
-            color: var(--text-lightest);
+            color: var(--static-white);
           }
         }
 
@@ -121,11 +118,11 @@
 
         .tk-card-title-container {
           .tk-card-subtitle {
-            color: var(--primary-lightest);
+            color: var(--primary-100);
           }
 
           .tk-card-title {
-            color: var(--text-lightest);
+            color: var(--static-white);
           }
         }
 
