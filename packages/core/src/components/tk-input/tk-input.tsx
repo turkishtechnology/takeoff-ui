@@ -92,6 +92,11 @@ export class TkInput implements ComponentInterface {
   @Prop() label: string;
 
   /**
+   * Provides a function to customize the label.
+   */
+  @Prop() labelHtml: Function;
+
+  /**
    * Defines the prefix of the input;
    */
   @Prop() pre?: string;
@@ -802,15 +807,16 @@ export class TkInput implements ComponentInterface {
 
   private renderLabel(): HTMLLabelElement {
     let label;
-    if (this.label?.length > 0) {
+    if (this.label?.length > 0 || this.labelHtml) {
       const asterisk = (
         <span class="asterisk" data-testid={getDataTestId(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
+      const labelContent = this.labelHtml ? <span innerHTML={this.labelHtml(this.label)} data-testid={getDataTestId(this.dataTestid, 'label-html')}></span> : this.label;
       label = (
         <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick} data-testid={getDataTestId(this.dataTestid, 'label')}>
-          {this.label}
+          {labelContent}
           {this.showAsterisk ? asterisk : ''}
         </label>
       );
