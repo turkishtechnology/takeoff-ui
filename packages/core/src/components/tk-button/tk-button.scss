@@ -96,6 +96,9 @@
   }
 
   &.icon-only {
+    width: $height;
+    height: $height;
+    box-sizing: border-box;
     padding: $icon-only-padding;
   }
 }
