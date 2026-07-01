@@ -15,6 +15,7 @@ import { createIncrementalMatcher, stripAnchors, FAILED, MatchState } from '../.
 
 /**
  * The TkInput component is used to capture text input from the user.
+ * @slot label - Custom label content.
  * @react `import { TkInput } from '@takeoff-ui/react'`
  * @vue `import { TkInput } from '@takeoff-ui/vue'`
  * @angular `import { TkInput } from '@takeoff-ui/angular'`
@@ -47,6 +48,7 @@ export class TkInput implements ComponentInterface {
   @State() isCounter = false;
   @State() isPassword = false;
   @State() passwordStrength: number = 0;
+  @State() hasLabelSlot: boolean = false;
 
   /**
    * the user cannot interact with the input.
@@ -242,6 +244,8 @@ export class TkInput implements ComponentInterface {
   @Event({ eventName: 'tk-clear-click' }) tkClearClick: EventEmitter<void>;
 
   componentWillLoad() {
+    this.hasLabelSlot = Array.from(this.el.children).some((child: Element) => child.getAttribute?.('slot') === 'label');
+
     // If the tk-input has a tabindex attribute we get the value
     // and pass it down to the native input, then remove it from the
     // tk-input to avoid causing tabbing twice on the same element
@@ -802,15 +806,16 @@ export class TkInput implements ComponentInterface {
 
   private renderLabel(): HTMLLabelElement {
     let label;
-    if (this.label?.length > 0) {
+    if (this.label?.length > 0 || this.hasLabelSlot) {
       const asterisk = (
         <span class="asterisk" data-testid={getDataTestId(this.dataTestid, 'label-asterisk')}>
           *
         </span>
       );
+      const labelContent = this.hasLabelSlot ? <slot name="label"></slot> : this.label;
       label = (
         <label htmlFor={this.uniqueId} class="label" onClick={this.handleLabelClick} data-testid={getDataTestId(this.dataTestid, 'label')}>
-          {this.label}
+          {labelContent}
           {this.showAsterisk ? asterisk : ''}
         </label>
       );
