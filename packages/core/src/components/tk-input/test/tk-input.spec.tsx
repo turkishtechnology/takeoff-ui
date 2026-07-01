@@ -19,19 +19,16 @@ describe('tk-input', () => {
     expect(page.root.querySelector('.label .asterisk')?.textContent).toBe('*');
   });
 
-  it('renders custom label html when labelHtml is provided', async () => {
+  it('renders custom label slot content', async () => {
     const page = await newSpecPage({
       components: [TkInput],
-      html: `<tk-input label="Name" show-asterisk="true"></tk-input>`,
+      html: `<tk-input label="Name" show-asterisk="true"><span slot="label" class="custom-label">Name<small> optional</small></span></tk-input>`,
     });
-    page.rootInstance.labelHtml = (label: string) => {
-      return `<span class="custom-label">${label}<small> optional</small></span>`;
-    };
-    await page.waitForChanges();
 
     const label = page.root.querySelector('.label');
 
     expect(label?.querySelector('.custom-label')?.textContent).toBe('Name optional');
+    expect(page.rootInstance.hasLabelSlot).toBe(true);
     expect(label?.querySelector('.asterisk')?.textContent).toBe('*');
   });
 
