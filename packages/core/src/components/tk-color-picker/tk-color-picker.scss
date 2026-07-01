@@ -64,10 +64,10 @@
   }
 
   &.tk-color-picker-panel-header-dark {
-    background: var(--background-darkest, #222530);
+    background: var(--neutral-800, #222530);
 
     .tk-color-picker-title {
-      color: var(--text-lightest, #f9fafc);
+      color: var(--static-white, #ffffff);
     }
   }
 
@@ -75,7 +75,7 @@
     background: var(--primary-base, #c90019);
 
     .tk-color-picker-title {
-      color: var(--text-lightest, #f9fafc);
+      color: var(--static-white, #ffffff);
     }
   }
 }

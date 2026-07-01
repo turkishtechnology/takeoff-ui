@@ -146,16 +146,10 @@ tk-dialog {
     }
 
     &.tk-dialog-header-dark {
-      background: var(--background-darkest);
+      background: var(--neutral-800);
 
-      .tk-dialog-title-container {
-        .tk-dialog-subtitle {
-          color: var(--text-sub-base);
-        }
-
-        .tk-dialog-title {
-          color: var(--text-lightest);
-        }
+      .tk-dialog-title-container .tk-dialog-title {
+        color: var(--static-white);
       }
 
       .tk-dialog-header-close-button {
@@ -168,11 +162,11 @@ tk-dialog {
 
       .tk-dialog-title-container {
         .tk-dialog-subtitle {
-          color: var(--primary-lightest);
+          color: var(--primary-100);
         }
 
         .tk-dialog-title {
-          color: var(--text-lightest);
+          color: var(--static-white);
         }
       }
 
