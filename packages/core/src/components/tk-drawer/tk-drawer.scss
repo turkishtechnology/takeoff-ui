@@ -180,10 +180,10 @@
   }
 
   &.tk-drawer-header-dark {
-    background: var(--background-darkest);
+    background: var(--neutral-800);
 
     .tk-drawer-header-label {
-      color: var(--text-lightest);
+      color: var(--static-white);
     }
 
     .tk-drawer-close {
@@ -195,11 +195,11 @@
     background: var(--primary-base);
 
     .tk-drawer-header-label {
-      color: var(--text-lightest);
+      color: var(--static-white);
     }
 
     .tk-drawer-close {
-      color: var(--primary-lightest);
+      color: var(--icon-base);
     }
   }
 }

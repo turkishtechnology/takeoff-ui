@@ -858,7 +858,11 @@ export class TkSelect implements ComponentInterface {
     if (isClearButton || isChipsClearButton) return;
 
     if (isChevron) {
-      this.isOpen = !this.isOpen;
+      const willOpen = !this.isOpen;
+      this.isOpen = willOpen;
+      if (willOpen) {
+        this.nativeInputRef?.focus({ preventScroll: true });
+      }
       return;
     }
 

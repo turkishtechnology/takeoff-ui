@@ -1,7 +1,25 @@
+// uuid v14 ships pure ESM which Jest can't transform from node_modules; stub it for the suite.
+jest.mock('uuid', () => ({ v4: () => 'test-uuid' }));
+
 import { newSpecPage } from '@stencil/core/testing';
 import { TkCurrencyInput } from '../tk-currency-input';
 
 describe('tk-currency-input', () => {
+  const pasteText = (input: HTMLInputElement, text: string) => {
+    const pasteEvent = new Event('paste', { bubbles: true, cancelable: true }) as ClipboardEvent;
+    Object.defineProperty(pasteEvent, 'clipboardData', {
+      value: {
+        getData: () => text,
+      },
+    });
+    input.dispatchEvent(pasteEvent);
+  };
+
+  const setSelection = (input: HTMLInputElement, start: number, end: number = start) => {
+    Object.defineProperty(input, 'selectionStart', { configurable: true, value: start });
+    Object.defineProperty(input, 'selectionEnd', { configurable: true, value: end });
+  };
+
   it('shows the selected currency code in the trigger button', async () => {
     const page = await newSpecPage({
       components: [TkCurrencyInput],
@@ -103,5 +121,39 @@ describe('tk-currency-input', () => {
 
     expect(input.value).toBe('0');
     expect((page.rootInstance as any).currentNumericValue).toBe(0);
+  });
+
+  it('pastes comma decimal values over the default zero value', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input></tk-currency-input>`,
+    });
+
+    const tkChange = jest.fn();
+    page.root.addEventListener('tk-change', tkChange);
+
+    const input = page.root.querySelector('input');
+    setSelection(input, input.value.length);
+    pasteText(input, '123,45');
+    await page.waitForChanges();
+
+    expect(input.value).toBe('123,45');
+    expect((page.rootInstance as any).currentNumericValue).toBe(123.45);
+    expect(tkChange).toHaveBeenLastCalledWith(expect.objectContaining({ detail: expect.objectContaining({ value: 123.45, formattedValue: '123,45' }) }));
+  });
+
+  it('preserves comma decimals when pasting a fully selected formatted amount', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input value="9876.54"></tk-currency-input>`,
+    });
+
+    const input = page.root.querySelector('input');
+    setSelection(input, 0, input.value.length);
+    pasteText(input, '1.234,56');
+    await page.waitForChanges();
+
+    expect(input.value).toBe('1.234,56');
+    expect((page.rootInstance as any).currentNumericValue).toBe(1234.56);
   });
 });
