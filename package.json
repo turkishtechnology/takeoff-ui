@@ -100,6 +100,7 @@
       "fast-uri": ">=3.1.2",
       "smol-toml": ">=1.6.1",
       "srvx": ">=0.11.13",
+      "@sigstore/core": "3.2.1",
       "@tootallnate/once": ">=3.0.1",
       "webpackbar": "^7.0.0",
       "uuid": ">=14.0.0",

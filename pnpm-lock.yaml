@@ -18,6 +18,7 @@ overrides:
   fast-uri: ">=3.1.2"
   smol-toml: ">=1.6.1"
   srvx: ">=0.11.13"
+  "@sigstore/core": 3.2.1
   "@tootallnate/once": ">=3.0.1"
   webpackbar: ^7.0.0
   uuid: ">=14.0.0"
@@ -3869,8 +3870,8 @@ packages:
     resolution: { integrity: sha512-NwCl5Y0V6Di0NexvkTqdoVfmjTaQwoLM236r89KEojGmq/jMls8S+zb7yOwAPdXvbwfKDlP+lmXgAL4vKSQT+A== }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
-  "@sigstore/core@3.2.0":
-    resolution: { integrity: sha512-kxHrDQ9YgfrWUSXU0cjsQGv8JykOFZQ9ErNKbFPWzk3Hgpwu8x2hHrQ9IdA8yl+j9RTLTC3sAF3Tdq1IQCP4oA== }
+  "@sigstore/core@3.2.1":
+    resolution: { integrity: sha512-qRsxPnCrbC/puegGxKuynfnxgLiHqWStrSjxkoB4YKqq3Z3s4cyZyj42ZdWFAEblNP65C+rBH8EuREHIXoi83g== }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
   "@sigstore/protobuf-specs@0.5.1":
@@ -16239,7 +16240,7 @@ snapshots:
     dependencies:
       "@sigstore/protobuf-specs": 0.5.1
 
-  "@sigstore/core@3.2.0": {}
+  "@sigstore/core@3.2.1": {}
 
   "@sigstore/protobuf-specs@0.5.1": {}
 
@@ -16247,7 +16248,7 @@ snapshots:
     dependencies:
       "@gar/promise-retry": 1.0.3
       "@sigstore/bundle": 4.0.0
-      "@sigstore/core": 3.2.0
+      "@sigstore/core": 3.2.1
       "@sigstore/protobuf-specs": 0.5.1
       make-fetch-happen: 15.0.5
       proc-log: 6.1.0
@@ -16264,7 +16265,7 @@ snapshots:
   "@sigstore/verify@3.1.0":
     dependencies:
       "@sigstore/bundle": 4.0.0
-      "@sigstore/core": 3.2.0
+      "@sigstore/core": 3.2.1
       "@sigstore/protobuf-specs": 0.5.1
 
   "@sinclair/typebox@0.25.24": {}
@@ -24953,7 +24954,7 @@ snapshots:
   sigstore@4.1.0:
     dependencies:
       "@sigstore/bundle": 4.0.0
-      "@sigstore/core": 3.2.0
+      "@sigstore/core": 3.2.1
       "@sigstore/protobuf-specs": 0.5.1
       "@sigstore/sign": 4.1.1
       "@sigstore/tuf": 4.0.2
