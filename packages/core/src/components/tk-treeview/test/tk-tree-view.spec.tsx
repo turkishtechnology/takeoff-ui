@@ -107,5 +107,59 @@ describe('tk-tree-view', () => {
       expect(page.root.value).toEqual([]);
       expect(emittedValues[1]).toEqual([]);
     });
+
+    it('renders select-all badge when items are selected and showBadge is true', async () => {
+      const page = await newSpecPage({
+        components: [TkTreeView],
+        html: `<tk-tree-view selectable select-all></tk-tree-view>`,
+      });
+      page.root.items = treeItems;
+      await page.waitForChanges();
+
+      const selectAllRow = page.root.querySelector('.select-all') as HTMLElement;
+      selectAllRow.click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.select-all tk-badge')).toBeTruthy();
+    });
+
+    it('renders select-all zero badge when showZeroCountBadges is true', async () => {
+      const page = await newSpecPage({
+        components: [TkTreeView],
+        html: `<tk-tree-view selectable select-all></tk-tree-view>`,
+      });
+      page.root.items = treeItems;
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.select-all tk-badge')).toBeTruthy();
+    });
+
+    it('does not render select-all zero badge when showZeroCountBadges is false', async () => {
+      const page = await newSpecPage({
+        components: [TkTreeView],
+        html: `<tk-tree-view selectable select-all></tk-tree-view>`,
+      });
+      page.root.items = treeItems;
+      page.root.showZeroCountBadges = false;
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.select-all tk-badge')).toBeNull();
+    });
+
+    it('does not render select-all badge when showBadge is false', async () => {
+      const page = await newSpecPage({
+        components: [TkTreeView],
+        html: `<tk-tree-view selectable select-all></tk-tree-view>`,
+      });
+      page.root.items = treeItems;
+      page.root.showBadge = false;
+      await page.waitForChanges();
+
+      const selectAllRow = page.root.querySelector('.select-all') as HTMLElement;
+      selectAllRow.click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.select-all tk-badge')).toBeNull();
+    });
   });
 });
