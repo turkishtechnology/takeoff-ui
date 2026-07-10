@@ -72,6 +72,21 @@ export class TkUpload implements ComponentInterface {
   @Prop() uploadButtonLabel: string = 'Upload';
 
   /**
+   * Label text displayed next to a file after it has been successfully added.
+   */
+  @Prop() addedLabel: string = 'Added';
+
+  /**
+   * Label text displayed next to a file while it is being uploaded.
+   */
+  @Prop() loadingLabel: string = 'Loading';
+
+  /**
+   * Label text displayed next to a file when its upload has failed.
+   */
+  @Prop() failedLabel: string = 'Failed';
+
+  /**
    * Acceptable file types for upload. Use MIME types or extensions separated by commas.
    */
   @Prop() accept: string = '*';
@@ -320,13 +335,16 @@ export class TkUpload implements ComponentInterface {
   private renderState() {
     let iconName = 'check_circle';
     let state = 'added';
+    let label = this.addedLabel;
     let iconVariant: string = 'success';
 
     if (this.loading) {
       state = 'loading';
+      label = this.loadingLabel;
       iconName = 'progress_activity';
     } else if (this.invalid) {
       state = 'failed';
+      label = this.failedLabel;
       iconName = 'dangerous';
       iconVariant = 'danger';
     }
@@ -338,7 +356,7 @@ export class TkUpload implements ComponentInterface {
         ) : (
           <tk-icon {...getIconElementProps(iconName, { variant: iconVariant }, 'rounded', 'span')} />
         )}
-        {state}
+        {label}
       </label>
     );
   }

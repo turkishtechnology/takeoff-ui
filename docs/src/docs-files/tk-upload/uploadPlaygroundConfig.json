@@ -52,6 +52,24 @@
       "defaultValue": "Upload"
     },
     {
+      "key": "addedLabel",
+      "label": "Added Label",
+      "type": "text",
+      "defaultValue": "Added"
+    },
+    {
+      "key": "loadingLabel",
+      "label": "Loading Label",
+      "type": "text",
+      "defaultValue": "Loading"
+    },
+    {
+      "key": "failedLabel",
+      "label": "Failed Label",
+      "type": "text",
+      "defaultValue": "Failed"
+    },
+    {
       "key": "hint",
       "label": "Hint",
       "type": "text",
