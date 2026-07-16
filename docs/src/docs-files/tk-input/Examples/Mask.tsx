@@ -62,8 +62,7 @@ const Mask = () => {
   label="Custom Regex (PNR Code)"
   placeholder="ABC123"
   maskOptions={{
-    regex: /[A-Z0-9]/,
-    blocks: [6],
+    regex: /^[A-Za-z0-9]{1,6}$/,
   }}
   value={value5}
   onTkChange={(e) => {
@@ -150,8 +149,7 @@ const value6 = ref();
       label="Custom Regex (PNR Code)"
       placeholder="ABC123"
       :maskOptions.prop="{
-        regex: /[A-Z0-9]/,
-        blocks: [6],
+        regex: /^[A-Za-z0-9]{1,6}$/,
       }"
       v-model="value5"
     />
@@ -220,8 +218,7 @@ const value6 = ref();
   label="Custom Regex (PNR Code)"
   placeholder="ABC123"
   [maskOptions]="{
-    regex: /[A-Z0-9]/,
-    blocks: [6],
+    regex: /^[A-Za-z0-9]{1,6}$/,
   }"
   [(ngModel)]="value5"
 ></tk-input>
@@ -308,7 +305,7 @@ const value6 = ref();
         label="Custom Regex (PNR Code)"
         placeholder="ABC123"
         maskOptions={{
-          regex: /^[0-9,]{1,10}$/,
+          regex: /^[A-Za-z0-9]{1,6}$/,
         }}
         value={value5}
         onTkChange={e => {
