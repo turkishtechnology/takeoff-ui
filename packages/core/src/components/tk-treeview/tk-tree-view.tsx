@@ -824,7 +824,9 @@ export class TkTreeView implements ComponentInterface {
           />
           <div>{this.selectAllLabel}</div>
         </div>
-        {selectedCount > 0 && <tk-badge count={selectedCount} size={this.size} type="filledlight" variant="neutral" rounded={true} />}
+        {this.showBadge && (this.showZeroCountBadges || selectedCount > 0) && (
+          <tk-badge count={selectedCount} size={this.size} type="filledlight" variant="neutral" rounded={true} />
+        )}
       </div>
     );
   }
