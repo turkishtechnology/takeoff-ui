@@ -19,6 +19,8 @@ overrides:
   smol-toml: ">=1.6.1"
   srvx: ">=0.11.13"
   "@sigstore/core": 3.2.1
+  "@sigstore/verify": 3.1.1
+  sigstore: 4.1.1
   "@tootallnate/once": ">=3.0.1"
   webpackbar: ^7.0.0
   uuid: ">=14.0.0"
@@ -36,6 +38,7 @@ overrides:
   read-yaml-file: 2.1.0
   markdown-it: 14.2.0
   webpack-dev-server: 5.2.5
+  websocket-driver: 0.7.5
   http-proxy-middleware: 2.0.10
   "@babel/core": 7.29.7
   dompurify: 3.4.11
@@ -3886,8 +3889,8 @@ packages:
     resolution: { integrity: sha512-TCAzTy0xzdP79EnxSjq9KQ3eaR7+FmudLC6eRKknVKZbV7ZNlGLClAAQb/HMNJ5n2OBNk2GT1tEmU0xuPr+SLQ== }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
-  "@sigstore/verify@3.1.0":
-    resolution: { integrity: sha512-mNe0Iigql08YupSOGv197YdHpPPr+EzDZmfCgMc7RPNaZTw5aLN01nBl6CHJOh3BGtnMIj83EeN4butBchc8Ag== }
+  "@sigstore/verify@3.1.1":
+    resolution: { integrity: sha512-qv7+G3J2cc6wwFj3yKvXOamzqhMwSk1ogPGmhpS8iXllcPrJaIIBA+4HbttlHVu1pqWTdmaCH/WE7UOC51kdoA== }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
   "@sinclair/typebox@0.25.24":
@@ -5048,6 +5051,9 @@ packages:
 
   arg@5.0.2:
     resolution: { integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg== }
+
+  argparse@1.0.10:
+    resolution: { integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg== }
 
   argparse@2.0.1:
     resolution: { integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q== }
@@ -10606,8 +10612,8 @@ packages:
     resolution: { integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw== }
     engines: { node: ">=14" }
 
-  sigstore@4.1.0:
-    resolution: { integrity: sha512-/fUgUhYghuLzVT/gaJoeVehLCgZiUxPCPMcyVNY0lIf/cTCz58K/WTI7PefDarXxp9nUKpEwg1yyz3eSBMTtgA== }
+  sigstore@4.1.1:
+    resolution: { integrity: sha512-endqECJkfhozrXMK5ngu/UAA0xVcVEFdnHJCElGaExypjW+HK5i6zu3NteLoaX/iFbRUbC3+DjttQs0GARr+5w== }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
   sirv@2.0.4:
@@ -10734,6 +10740,9 @@ packages:
   split2@4.2.0:
     resolution: { integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg== }
     engines: { node: ">= 10.x" }
+
+  sprintf-js@1.0.3:
+    resolution: { integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g== }
 
   srcset@4.0.0:
     resolution: { integrity: sha512-wvLeHgcVHKO8Sc/H/5lkGreJQVeYMm9rlmt8PuR1xE31rIuXhuzznUUqAt8MqLhB3MqJdFzlNAfpcWnxiFUcPw== }
@@ -11602,8 +11611,8 @@ packages:
       webpack:
         optional: true
 
-  websocket-driver@0.7.4:
-    resolution: { integrity: sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg== }
+  websocket-driver@0.7.5:
+    resolution: { integrity: sha512-ZL2+3c7kMBdIRCMz6l8jQMHyGVxj+UL+xVk74Ombiciboca8rHa15L86B19E5oh1pL9Ii/uj54gtsIrZGMo6zA== }
     engines: { node: ">=0.8.0" }
 
   websocket-extensions@0.1.4:
@@ -16266,7 +16275,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  "@sigstore/verify@3.1.0":
+  "@sigstore/verify@3.1.1":
     dependencies:
       "@sigstore/bundle": 4.0.0
       "@sigstore/core": 3.2.1
@@ -17898,6 +17907,10 @@ snapshots:
   arg@4.1.0: {}
 
   arg@5.0.2: {}
+
+  argparse@1.0.10:
+    dependencies:
+      sprintf-js: 1.0.3
 
   argparse@2.0.1: {}
 
@@ -19983,7 +19996,7 @@ snapshots:
 
   faye-websocket@0.11.4:
     dependencies:
-      websocket-driver: 0.7.4
+      websocket-driver: 0.7.5
 
   fb-watchman@2.0.2:
     dependencies:
@@ -21401,7 +21414,7 @@ snapshots:
 
   js-yaml@3.15.0:
     dependencies:
-      argparse: 2.0.1
+      argparse: 1.0.10
       esprima: 4.0.1
 
   js-yaml@4.2.0:
@@ -23019,7 +23032,7 @@ snapshots:
       npm-pick-manifest: 11.0.3
       npm-registry-fetch: 19.1.1
       proc-log: 6.1.0
-      sigstore: 4.1.0
+      sigstore: 4.1.1
       ssri: 13.0.1
       tar: 7.5.16
     transitivePeerDependencies:
@@ -24960,14 +24973,14 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  sigstore@4.1.0:
+  sigstore@4.1.1:
     dependencies:
       "@sigstore/bundle": 4.0.0
       "@sigstore/core": 3.2.1
       "@sigstore/protobuf-specs": 0.5.1
       "@sigstore/sign": 4.1.1
       "@sigstore/tuf": 4.0.2
-      "@sigstore/verify": 3.1.0
+      "@sigstore/verify": 3.1.1
     transitivePeerDependencies:
       - supports-color
 
@@ -25058,7 +25071,7 @@ snapshots:
     dependencies:
       faye-websocket: 0.11.4
       uuid: 14.0.0
-      websocket-driver: 0.7.4
+      websocket-driver: 0.7.5
 
   socks-proxy-agent@8.0.5:
     dependencies:
@@ -25133,6 +25146,8 @@ snapshots:
       - supports-color
 
   split2@4.2.0: {}
+
+  sprintf-js@1.0.3: {}
 
   srcset@4.0.0: {}
 
@@ -26201,7 +26216,7 @@ snapshots:
     optionalDependencies:
       webpack: 5.106.2(clean-css@5.3.3)(cssnano@6.1.2(postcss@8.5.12))(html-minifier-terser@7.2.0)(postcss@8.5.12)
 
-  websocket-driver@0.7.4:
+  websocket-driver@0.7.5:
     dependencies:
       http-parser-js: 0.5.10
       safe-buffer: 5.2.1
