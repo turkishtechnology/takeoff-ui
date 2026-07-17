@@ -72,7 +72,7 @@ export class TkDatePicker {
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
-            const h = this.measureCalendarTableHeight();
+            const h = this.measureCalendarBodyHeight();
             if (h > 0) this.calendarTableHeightPx = h;
             this.concealUntilMeasured = false;
           });
@@ -397,7 +397,7 @@ export class TkDatePicker {
 
     if (this.inline && this.showTimePicker) {
       requestAnimationFrame(() => {
-        const h = this.measureCalendarTableHeight();
+        const h = this.measureCalendarBodyHeight();
         if (h > 0) this.calendarTableHeightPx = h;
       });
     }
@@ -824,15 +824,15 @@ export class TkDatePicker {
     this.inputValue = this.formatInputValue();
   }
 
-  private measureCalendarTableHeight(): number {
-    const table = this.panelRef?.querySelector('.tk-datepicker-table') as HTMLTableElement | null;
-    return table ? Math.ceil(table.getBoundingClientRect().height) : 0;
+  private measureCalendarBodyHeight(): number {
+    const body = this.panelRef?.querySelector('.tk-datepicker-body') as HTMLElement | null;
+    return body ? Math.ceil(body.getBoundingClientRect().height) : 0;
   }
 
   private remeasureCalendarOnNextFrame = () => {
     if (!(this.showTimePicker && (this.inline || this.isOpen))) return;
     requestAnimationFrame(() => {
-      const h = this.measureCalendarTableHeight();
+      const h = this.measureCalendarBodyHeight();
       if (h > 0) this.calendarTableHeightPx = h;
     });
   };
@@ -1750,7 +1750,7 @@ export class TkDatePicker {
       <thead data-testid={getDataTestId(this.dataTestid, 'week-days-header')}>
         <tr class="tk-datepicker-week-days" data-testid={getDataTestId(this.dataTestid, 'week-days-row')}>
           {weekdays.map((day, index) => (
-            <th class="tk-datepicker-week-day-cell" data-testid={getDataTestId(this.dataTestid, 'week-cell', index.toString())}>
+            <th scope="col" class="tk-datepicker-week-day-cell" data-testid={getDataTestId(this.dataTestid, 'week-cell', index.toString())}>
               <span class="tk-datepicker-week-day" data-testid={getDataTestId(this.dataTestid, 'week-day', index.toString())}>
                 {day}
               </span>

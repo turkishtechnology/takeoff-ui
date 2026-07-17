@@ -12,6 +12,12 @@
   display: block;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .tk-datepicker-container {
   display: block;
 }
@@ -206,12 +212,11 @@
     height: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border-spacing: 8px;
   }
 
   &.tk-datepicker-months-view,
   &.tk-datepicker-years-view {
-    height: 260px;
+    height: 284px;
   }
 }
 
@@ -363,11 +368,6 @@
   }
 }
 
-.tk-datepicker-table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
 .tk-datepicker-months {
   display: flex;
   flex-direction: column;
@@ -431,7 +431,7 @@
 .tk-datepicker-panel-small {
   .tk-datepicker-header,
   .tk-datepicker-body {
-    width: 240px;
+    width: 266px;
   }
 
   .tk-datepicker-header {
@@ -444,9 +444,13 @@
     padding: 8px 12px;
   }
 
+  .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body {
+    gap: 2px;
+  }
+
   .tk-datepicker-body.tk-datepicker-months-view,
   .tk-datepicker-body.tk-datepicker-years-view {
-    height: 218px;
+    height: 228px;
   }
 
   .tk-datepicker-week-day,
@@ -514,8 +518,8 @@
   }
 
   .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
-    height: 45px;
-    width: 80px;
+    height: 46px;
+    width: 112px;
   }
 
   .tk-datepicker-timepicker-col {
@@ -542,8 +546,8 @@
 }
 
 .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
-  width: 88px;
-  height: 52px;
+  width: 116px;
+  height: 53px;
   padding: 0 var(--datepicker-header-base-h-padding) 0 var(--datepicker-header-base-h-padding);
   border-bottom: 1px solid var(--border-light);
   border-top-right-radius: var(--radius-xl);
@@ -578,7 +582,6 @@
   gap: 4px;
   padding: var(--datepicker-body-base-day-v-padding) var(--datepicker-body-base-day-h-padding);
   flex: none;
-  height: 260px;
   overflow-y: auto;
   position: relative;
   @include takeoff-scrollbar;
