@@ -2234,6 +2234,7 @@ export class TkDatePicker {
     if (!this.isOpen && !this.inline) return null;
     const panelClasses = classNames('tk-datepicker-panel', `tk-datepicker-panel-${this.size}`, {
       'tk-datepicker-panel-inline': this.inline,
+      'tk-datepicker-panel-with-footer': this.hasFooterSlot || this.hasFooterActionsSlot,
     });
     const bodyClasses = classNames('tk-datepicker-body', {
       'tk-datepicker-months-view': this.currentView === 'months',
