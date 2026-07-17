@@ -1,0 +1,51 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm" # pnpm için de "npm" kullanılıyor
+    directories:
+      - "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Istanbul"
+    open-pull-requests-limit: 8
+    labels:
+      - "security"
+    commit-message:
+      # Match the repo's conventional-commit convention (chore + deps scope).
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    reviewers:
+      - "harun-demir"
+      - "pinaryalcinduran"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # ── GitHub Actions used in .github/workflows ──────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Istanbul"
+    open-pull-requests-limit: 5
+    labels:
+      - "security"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    reviewers:
+      - "harun-demir"
+      - "pinaryalcinduran"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

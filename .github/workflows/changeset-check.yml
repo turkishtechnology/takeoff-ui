@@ -2,7 +2,7 @@ name: Changeset Check
 
 # Fail PRs that touch publishable code without a corresponding changeset, so
 # nothing accidentally ships without a CHANGELOG entry. Overridable with the
-# `release:none` label when a PR is intentionally docs/tooling-only.
+# `skip-changelog` label when a PR is intentionally docs/tooling-only.
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'release:none') }}
+    if: ${{ github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.labels.*.name, 'skip-changelog') }}
     steps:
       - uses: actions/checkout@v4
         with:
