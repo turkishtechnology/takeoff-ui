@@ -429,13 +429,13 @@
 }
 
 .tk-datepicker-panel-small {
-  .tk-datepicker-panel-inner .tk-datepicker-calendar-container {
-    align-items: center;
-  }
-
   .tk-datepicker-header,
   .tk-datepicker-body {
     width: 240px;
+  }
+
+  .tk-datepicker-header {
+    padding-inline: 12px;
   }
 
   .tk-datepicker-body,

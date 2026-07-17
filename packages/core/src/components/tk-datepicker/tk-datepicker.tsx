@@ -2016,7 +2016,7 @@ export class TkDatePicker {
                 variant={this.headerType === 'dark' ? 'neutral' : 'primary'}
                 value="AM"
                 label="AM"
-                size={this.size === 'small' ? 'small' : 'base'}
+                size="small"
                 disabled={isDisabled || AMDisabled}
                 dataTestid={getDataTestId(this.dataTestid, 'timepicker-am')}
               />
@@ -2026,7 +2026,7 @@ export class TkDatePicker {
                 variant={this.headerType === 'dark' ? 'neutral' : 'primary'}
                 value="PM"
                 label="PM"
-                size={this.size === 'small' ? 'small' : 'base'}
+                size="small"
                 disabled={isDisabled || PMDisabled}
                 dataTestid={getDataTestId(this.dataTestid, 'timepicker-pm')}
               />
