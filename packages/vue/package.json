@@ -28,6 +28,7 @@
     "tsc": "tsc -p . --outDir ./dist"
   },
   "dependencies": {
+    "@stencil/vue-output-target": "0.14.1",
     "@takeoff-ui/core": "workspace:*"
   },
   "devDependencies": {
