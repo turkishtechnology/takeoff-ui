@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Element, Prop, h, Event, Host, EventEmitter } from '@stencil/core';
 import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
+import { CSSStyleProperties } from '../../global/types';
 import { renderIcons, isMultiIconOptions } from '../../utils/icon-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
 
@@ -33,6 +34,11 @@ export class TkButton implements ComponentInterface {
    * @defaultValue filled
    */
   @Prop({ mutable: true }) type: 'filled' | 'filledLight' | 'outlined' | 'text' = 'filled';
+
+  /**
+   * The style attribute of container element
+   */
+  @Prop() containerStyle?: CSSStyleProperties;
 
   /**
    * Applies the animated button style, adapting to the selected variant.
@@ -222,7 +228,14 @@ export class TkButton implements ComponentInterface {
 
     return (
       <Host class={{ 'full-width': this.fullWidth }}>
-        <Tag class={rootClasses} {...props} data-testid={getDataTestId(this.dataTestid, 'container')} disabled={this.disabled} onClick={(e: MouseEvent) => this.handleClick(e)}>
+        <Tag
+          class={rootClasses}
+          {...props}
+          style={this.containerStyle}
+          data-testid={getDataTestId(this.dataTestid, 'container')}
+          disabled={this.disabled}
+          onClick={(e: MouseEvent) => this.handleClick(e)}
+        >
           {_leftIcon}
           {label}
           {_rightIcon}

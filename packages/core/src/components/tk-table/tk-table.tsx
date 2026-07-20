@@ -2308,7 +2308,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(iconType, {
                     class: classNames('sort-icon'),
-                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--static-white)',
                     ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                     onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                   })}
@@ -2319,7 +2319,7 @@ export class TkTable implements ComponentInterface {
               <tk-icon
                 {...getIconElementProps('swap_vert', {
                   class: classNames('sort-icon'),
-                  color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                  color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--static-white)',
                   ref: (el: HTMLTkIconElement) => (refSortIcon = el),
                   onClick: () => this.renderData?.length > 0 && this.handleSortIconClick(refSortIcon, col),
                 })}
@@ -2341,7 +2341,7 @@ export class TkTable implements ComponentInterface {
                 <tk-icon
                   {...getIconElementProps(col?.filterElements?.icon || 'search', {
                     class: classNames('filter-icon'),
-                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--icon-lightest)',
+                    color: this.headerType === 'basic' ? 'var(--icon-darkest)' : 'var(--static-white)',
                     ref: (el: HTMLTkIconElement) => (refSearchIcon = el),
                     onClick: () => this.handleSearchIconClick(refSearchIcon, col.field),
                   })}

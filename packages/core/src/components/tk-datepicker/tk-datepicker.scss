@@ -1,7 +1,21 @@
 @use '../../global/sass/mixins' as *;
 
+@mixin datepicker-small-typography {
+  font-family: var(--desktop-body-xs-font);
+  font-size: var(--desktop-body-xs-size);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--desktop-body-xs-line-height);
+}
+
 :host {
   display: block;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 .tk-datepicker-container {
@@ -78,7 +92,7 @@
 
   &.tk-datepicker-header-dark {
     .tk-datepicker-header-content {
-      background: var(--background-darkest);
+      background: var(--neutral-800);
     }
   }
 
@@ -149,7 +163,7 @@
       .tk-datepicker-select-container {
         .tk-datepicker-select-month,
         .tk-datepicker-select-year {
-          color: var(--primary-lightest);
+          color: var(--static-white);
 
           &.disabled {
             color: var(--primary-light);
@@ -168,10 +182,19 @@
       .tk-datepicker-select-container {
         .tk-datepicker-select-month,
         .tk-datepicker-select-year {
-          color: var(--text-lightest);
+          color: var(--static-white);
         }
       }
     }
+  }
+}
+
+.tk-datepicker-header-primary .tk-datepicker-header-content,
+.tk-datepicker-header-dark .tk-datepicker-header-content,
+.tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body-primary,
+.tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body-dark {
+  tk-button {
+    --text-lightest: var(--static-white);
   }
 }
 
@@ -189,12 +212,11 @@
     height: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border-spacing: 8px;
   }
 
   &.tk-datepicker-months-view,
   &.tk-datepicker-years-view {
-    height: 260px;
+    height: 284px;
   }
 }
 
@@ -346,11 +368,6 @@
   }
 }
 
-.tk-datepicker-table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
 .tk-datepicker-months {
   display: flex;
   flex-direction: column;
@@ -411,6 +428,105 @@
   justify-content: space-between;
 }
 
+.tk-datepicker-panel-small {
+  .tk-datepicker-header,
+  .tk-datepicker-body {
+    width: 266px;
+  }
+
+  .tk-datepicker-header {
+    padding-inline: 12px;
+  }
+
+  .tk-datepicker-body,
+  .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body,
+  .tk-datepicker-footer {
+    padding: 8px 12px;
+  }
+
+  .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body {
+    gap: 2px;
+  }
+
+  .tk-datepicker-body.tk-datepicker-months-view,
+  .tk-datepicker-body.tk-datepicker-years-view {
+    height: 228px;
+  }
+
+  .tk-datepicker-week-day,
+  .tk-datepicker-day,
+  .tk-datepicker-month,
+  .tk-datepicker-year,
+  .tk-datepicker-timepicker-value,
+  .tk-datepicker-day-cell,
+  .tk-datepicker-week-day-cell,
+  .tk-datepicker-timepicker-value.tk-datepicker-timepicker-value-empty {
+    width: var(--datepicker-items-small-size);
+    min-width: var(--datepicker-items-small-size);
+    height: var(--datepicker-items-small-size);
+    min-height: var(--datepicker-items-small-size);
+  }
+
+  .tk-datepicker-week-day,
+  .tk-datepicker-day,
+  .tk-datepicker-month,
+  .tk-datepicker-year,
+  .tk-datepicker-timepicker-value {
+    display: flex;
+    max-width: var(--datepicker-items-small-size);
+    max-height: var(--datepicker-items-small-size);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--datepicker-items-small-radius);
+    @include datepicker-small-typography;
+  }
+
+  .tk-datepicker-header .tk-datepicker-header-content .tk-datepicker-select-container {
+    .tk-datepicker-select-month,
+    .tk-datepicker-select-year {
+      @include datepicker-small-typography;
+    }
+  }
+
+  .tk-datepicker-day-cell::before {
+    left: 0;
+    height: var(--datepicker-items-small-size);
+  }
+
+  .tk-datepicker-month,
+  .tk-datepicker-year {
+    flex: 0 0 var(--datepicker-items-small-size);
+  }
+
+  .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-body {
+    align-items: center;
+
+    &::before {
+      top: calc(50% + 1px);
+      right: 12px;
+      left: 12px;
+      height: var(--datepicker-items-small-size);
+      border-radius: var(--datepicker-items-small-radius);
+      @include datepicker-small-typography;
+    }
+
+    &.tk-datepicker-timepicker-body-4-weeks::before,
+    &.tk-datepicker-timepicker-body-6-weeks::before {
+      top: calc(50% - var(--datepicker-items-small-size) / 2);
+    }
+  }
+
+  .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
+    height: 46px;
+    width: 112px;
+  }
+
+  .tk-datepicker-timepicker-col {
+    gap: 2px;
+  }
+}
+
 .tk-datepicker-footer {
   display: flex;
   padding: var(--datepicker-footer-base-v-padding) var(--datepicker-footer-base-h-padding);
@@ -430,8 +546,8 @@
 }
 
 .tk-datepicker-timepicker-panel .tk-datepicker-timepicker-header {
-  width: 88px;
-  height: 52px;
+  width: 120px;
+  height: 53px;
   padding: 0 var(--datepicker-header-base-h-padding) 0 var(--datepicker-header-base-h-padding);
   border-bottom: 1px solid var(--border-light);
   border-top-right-radius: var(--radius-xl);
@@ -452,7 +568,7 @@
   }
 
   &.tk-datepicker-timepicker-header-dark {
-    background: var(--background-darkest);
+    background: var(--neutral-800);
     border-bottom: 1px solid var(--border-dark);
   }
 }
@@ -466,7 +582,6 @@
   gap: 4px;
   padding: var(--datepicker-body-base-day-v-padding) var(--datepicker-body-base-day-h-padding);
   flex: none;
-  height: 260px;
   overflow-y: auto;
   position: relative;
   @include takeoff-scrollbar;
@@ -495,11 +610,11 @@
   }
 
   &.tk-datepicker-timepicker-body-dark {
-    background: var(--background-darkest);
+    background: var(--neutral-800);
 
     &::before {
-      background: var(--static-dark);
-      color: var(--text-lightest);
+      background: var(--neutral-900);
+      color: var(--static-white);
       border-color: var(--border-dark);
     }
   }
@@ -527,6 +642,10 @@
     pointer-events: none;
     z-index: 0;
   }
+}
+
+.tk-datepicker-panel:not(.tk-datepicker-panel-with-footer) .tk-datepicker-timepicker-body {
+  border-bottom-right-radius: var(--radius-xl);
 }
 
 .tk-datepicker-timepicker-col {
@@ -560,7 +679,7 @@
   cursor: pointer;
   font-weight: 400;
   &.tk-datepicker-timepicker-value-dark {
-    color: var(--text-lightest);
+    color: var(--static-white);
   }
   &.tk-datepicker-timepicker-value-primary {
     color: var(--primary-50);

@@ -575,11 +575,7 @@ export class TkCurrencyInput implements ComponentInterface {
     }
   }
 
-  private handleInput = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const inputValue = target.value;
-    const cursorPosition = target.selectionStart ?? 0;
-
+  private applyInputValue(target: HTMLInputElement, inputValue: string, cursorPosition: number) {
     // Use custom separators if provided, otherwise fall back to currency defaults
     const decimalSeparator = this.getDecimalSeparator();
     const thousandsSeparator = this.getThousandsSeparator();
@@ -590,7 +586,7 @@ export class TkCurrencyInput implements ComponentInterface {
       if (inputValue === expectedValueWithoutSeparator) {
         target.value = this.displayValue;
         const commaIndex = this.displayValue.indexOf(decimalSeparator);
-        target.setSelectionRange(commaIndex, commaIndex);
+        target.setSelectionRange?.(commaIndex, commaIndex);
         return;
       }
     }
@@ -662,7 +658,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
     const newCursorPosition = this.calculateNewCursorPosition(inputValue, formattedValue, cursorPosition);
 
-    target.setSelectionRange(newCursorPosition, newCursorPosition);
+    target.setSelectionRange?.(newCursorPosition, newCursorPosition);
 
     const eventData = {
       value: numericValue,
@@ -671,6 +667,31 @@ export class TkCurrencyInput implements ComponentInterface {
     } as CurrencyInputChangeEvent;
 
     this.tkChange.emit(eventData);
+  }
+
+  private handleInput = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    this.applyInputValue(target, target.value, target.selectionStart ?? 0);
+  };
+
+  private handlePaste = (event: ClipboardEvent) => {
+    const target = event.target as HTMLInputElement;
+    const pastedValue = event.clipboardData?.getData('text');
+
+    if (!pastedValue) return;
+
+    event.preventDefault();
+
+    const selectionStart = target.selectionStart ?? target.value.length;
+    const selectionEnd = target.selectionEnd ?? selectionStart;
+    const isFullSelection = selectionStart === 0 && selectionEnd === target.value.length;
+    const isInitialZeroValue = this.currentNumericValue === 0 && target.value === this.formatCurrency(0);
+    const shouldReplaceValue = isFullSelection || isInitialZeroValue;
+    const nextValue = shouldReplaceValue ? pastedValue : target.value.slice(0, selectionStart) + pastedValue + target.value.slice(selectionEnd);
+    const nextCursorPosition = shouldReplaceValue ? pastedValue.length : selectionStart + pastedValue.length;
+
+    target.value = nextValue;
+    this.applyInputValue(target, nextValue, nextCursorPosition);
   };
 
   private handleKeyDown = (event: KeyboardEvent) => {
@@ -761,6 +782,7 @@ export class TkCurrencyInput implements ComponentInterface {
         readonly={this.readonly}
         name={this.name}
         onInput={this.handleInput}
+        onPaste={this.handlePaste}
         onKeyDown={this.handleKeyDown}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}

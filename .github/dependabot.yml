@@ -1,0 +1,110 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm" # pnpm için de "npm" kullanılıyor
+    directories:
+      - "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Istanbul"
+    open-pull-requests-limit: 8
+    labels:
+      - "security"
+    commit-message:
+      # Match the repo's conventional-commit convention (chore + deps scope).
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    reviewers:
+      - "harun-demir"
+      - "pinaryalcinduran"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # ── Major-version HOLD list ───────────────────────────────────────────────
+    # Keep these off auto/piecemeal bumps; upgrade only in a coordinated, manual PR.
+    # Rationale: each was tested in this repo and found broken or incompatible.
+    ignore:
+      # @stencil/sass 3.3.x went ESM-only → breaks Stencil 4.x's CJS plugin loader
+      # (ERR_PACKAGE_PATH_NOT_EXPORTED). It's a MINOR bump, so block by version;
+      # 3.2.x patches are still allowed.
+      - dependency-name: "@stencil/sass"
+        versions: [">=3.3.0"]
+      # Angular family: 21→22 only via a coordinated `ng update`, never piecemeal.
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@angular-devkit/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ng-packagr"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "zone.js"
+        update-types: ["version-update:semver-major"]
+      # commitlint 21 requires Node 22 (this repo is on Node 20).
+      - dependency-name: "@commitlint/*"
+        update-types: ["version-update:semver-major"]
+      # Jest 30: Stencil's test runner has no Jest 30 adapter (falls back to Jest 27).
+      - dependency-name: "jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "jest-cli"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/jest"
+        update-types: ["version-update:semver-major"]
+      # Tiptap v3: the whole @tiptap/* family must be migrated together.
+      - dependency-name: "@tiptap/*"
+        update-types: ["version-update:semver-major"]
+      # React 19: the published wrapper packages target React 18 (peer).
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+      # TypeScript 7 (native compiler) is too new; Angular/Stencil pin their TS range.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # Tailwind v4: engine + config rewrite.
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      # ESLint 10 ecosystem majors.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-prettier"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-plugin-react-hooks"
+        update-types: ["version-update:semver-major"]
+      # Node runtime is 20; don't jump @types/node to 26, stay on the current major.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+
+  # ── GitHub Actions used in .github/workflows ──────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Istanbul"
+    open-pull-requests-limit: 5
+    labels:
+      - "security"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    reviewers:
+      - "harun-demir"
+      - "pinaryalcinduran"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

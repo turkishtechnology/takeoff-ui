@@ -68,10 +68,11 @@
               height: 50%;
               cursor: col-resize;
               background: transparent;
-              border-right: 1px solid var(--border-sub-base);
+              border-right: 1px solid var(--neutral-300);
               z-index: 1;
 
-              &:hover {
+              &:hover,
+              &:active {
                 width: 3px;
                 border-right: 2px solid var(--primary-base);
               }
@@ -153,15 +154,22 @@
 
         &.dark {
           tr th {
-            color: var(--text-lightest);
-            background-color: var(--background-darkest);
+            color: var(--static-white);
+            background-color: var(--neutral-800);
           }
         }
 
         &.primary {
           tr th {
-            color: var(--text-lightest);
+            color: var(--static-white);
             background-color: var(--primary-base);
+
+            .tk-table-resize-handle {
+              &:hover,
+              &:active {
+                border-right-color: var(--neutral-300);
+              }
+            }
           }
         }
       }

@@ -19,6 +19,19 @@ describe('tk-input', () => {
     expect(page.root.querySelector('.label .asterisk')?.textContent).toBe('*');
   });
 
+  it('renders custom label slot content', async () => {
+    const page = await newSpecPage({
+      components: [TkInput],
+      html: `<tk-input label="Name" show-asterisk="true"><span slot="label" class="custom-label">Name<small> optional</small></span></tk-input>`,
+    });
+
+    const label = page.root.querySelector('.label');
+
+    expect(label?.querySelector('.custom-label')?.textContent).toBe('Name optional');
+    expect(page.rootInstance.hasLabelSlot).toBe(true);
+    expect(label?.querySelector('.asterisk')?.textContent).toBe('*');
+  });
+
   describe('regex mask', () => {
     // Simulates realistic typing: appends one character at a time and fires an
     // input event after each keystroke, the way a real <input> behaves.

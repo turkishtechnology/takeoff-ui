@@ -72,7 +72,7 @@ export class TkDatePicker {
         if (this.showTimePicker) {
           this.concealUntilMeasured = true;
           requestAnimationFrame(() => {
-            const h = this.measureCalendarTableHeight();
+            const h = this.measureCalendarBodyHeight();
             if (h > 0) this.calendarTableHeightPx = h;
             this.concealUntilMeasured = false;
           });
@@ -108,7 +108,7 @@ export class TkDatePicker {
    */
   @Prop() label: string;
   /**
-   * Defines the size for the label
+   * Defines the size for the datepicker component
    * @defaultValue base
    */
   @Prop() size: 'large' | 'base' | 'small' = 'base';
@@ -397,7 +397,7 @@ export class TkDatePicker {
 
     if (this.inline && this.showTimePicker) {
       requestAnimationFrame(() => {
-        const h = this.measureCalendarTableHeight();
+        const h = this.measureCalendarBodyHeight();
         if (h > 0) this.calendarTableHeightPx = h;
       });
     }
@@ -824,15 +824,15 @@ export class TkDatePicker {
     this.inputValue = this.formatInputValue();
   }
 
-  private measureCalendarTableHeight(): number {
-    const table = this.panelRef?.querySelector('.tk-datepicker-table') as HTMLTableElement | null;
-    return table ? Math.ceil(table.getBoundingClientRect().height) : 0;
+  private measureCalendarBodyHeight(): number {
+    const body = this.panelRef?.querySelector('.tk-datepicker-body') as HTMLElement | null;
+    return body ? Math.ceil(body.getBoundingClientRect().height) : 0;
   }
 
   private remeasureCalendarOnNextFrame = () => {
     if (!(this.showTimePicker && (this.inline || this.isOpen))) return;
     requestAnimationFrame(() => {
-      const h = this.measureCalendarTableHeight();
+      const h = this.measureCalendarBodyHeight();
       if (h > 0) this.calendarTableHeightPx = h;
     });
   };
@@ -1750,7 +1750,7 @@ export class TkDatePicker {
       <thead data-testid={getDataTestId(this.dataTestid, 'week-days-header')}>
         <tr class="tk-datepicker-week-days" data-testid={getDataTestId(this.dataTestid, 'week-days-row')}>
           {weekdays.map((day, index) => (
-            <th class="tk-datepicker-week-day-cell" data-testid={getDataTestId(this.dataTestid, 'week-cell', index.toString())}>
+            <th scope="col" class="tk-datepicker-week-day-cell" data-testid={getDataTestId(this.dataTestid, 'week-cell', index.toString())}>
               <span class="tk-datepicker-week-day" data-testid={getDataTestId(this.dataTestid, 'week-day', index.toString())}>
                 {day}
               </span>
@@ -1842,6 +1842,7 @@ export class TkDatePicker {
           <div class="tk-datepicker-header-content-start" data-testid={getDataTestId(this.dataTestid, 'header-start')}>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              size={this.size === 'small' ? 'small' : 'base'}
               icon="keyboard_double_arrow_left"
               onTk-click={() => this.handleYearChange(-1)}
               type="text"
@@ -1851,6 +1852,7 @@ export class TkDatePicker {
             <span class="tk-datepicker-divider" data-testid={getDataTestId(this.dataTestid, 'header-start-divider')}></span>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              size={this.size === 'small' ? 'small' : 'base'}
               icon="chevron_left"
               onTk-click={() => this.handleMonthChange(-1)}
               type="text"
@@ -1877,6 +1879,7 @@ export class TkDatePicker {
           <div class="tk-datepicker-header-content-end" data-testid={getDataTestId(this.dataTestid, 'header-end')}>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              size={this.size === 'small' ? 'small' : 'base'}
               icon="chevron_right"
               onTk-click={() => this.handleMonthChange(1)}
               type="text"
@@ -1886,6 +1889,7 @@ export class TkDatePicker {
             <span class="tk-datepicker-divider" data-testid={getDataTestId(this.dataTestid, 'header-end-divider')}></span>
             <tk-button
               variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
+              size={this.size === 'small' ? 'small' : 'base'}
               icon="keyboard_double_arrow_right"
               onTk-click={() => this.handleYearChange(1)}
               type="text"
@@ -2034,6 +2038,7 @@ export class TkDatePicker {
             'tk-datepicker-timepicker-body',
             ['primary', 'light', 'dark'].includes(this.headerType as any) && `tk-datepicker-timepicker-body-${this.headerType}`,
             this.weeksLength === 4 && 'tk-datepicker-timepicker-body-4-weeks',
+            this.weeksLength === 6 && 'tk-datepicker-timepicker-body-6-weeks',
             this.timeOnly && 'tk-datepicker-timepicker-body-only',
           )}
           style={{
@@ -2046,7 +2051,7 @@ export class TkDatePicker {
               <tk-button
                 variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
                 type="text"
-                size="base"
+                size={this.size === 'small' ? 'small' : 'base'}
                 icon="expand_less"
                 onTk-click={this.handleDecreaseHour}
                 disabled={isMinHour || prevHourDisabled || isDisabled}
@@ -2101,7 +2106,7 @@ export class TkDatePicker {
               <tk-button
                 variant={this.headerType === 'primary' || this.headerType === 'dark' ? 'white' : 'neutral'}
                 type="text"
-                size="base"
+                size={this.size === 'small' ? 'small' : 'base'}
                 icon="expand_more"
                 onTk-click={this.handleIncreaseHour}
                 disabled={isMaxHour || nextHourDisabled || isDisabled}
@@ -2114,7 +2119,7 @@ export class TkDatePicker {
               <tk-button
                 variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
                 type="text"
-                size="base"
+                size={this.size === 'small' ? 'small' : 'base'}
                 icon="expand_less"
                 onTk-click={this.handleDecreaseMinute}
                 disabled={isMinMinute || prevMinuteDisabled || isDisabled}
@@ -2163,7 +2168,7 @@ export class TkDatePicker {
               <tk-button
                 variant={this.headerType === 'dark' || this.headerType === 'primary' ? 'white' : 'neutral'}
                 type="text"
-                size="base"
+                size={this.size === 'small' ? 'small' : 'base'}
                 icon="expand_more"
                 onTk-click={this.handleIncreaseMinute}
                 disabled={isMaxMinute || nextMinuteDisabled || isDisabled}
@@ -2227,8 +2232,9 @@ export class TkDatePicker {
 
   private renderPanel() {
     if (!this.isOpen && !this.inline) return null;
-    const panelClasses = classNames('tk-datepicker-panel', {
+    const panelClasses = classNames('tk-datepicker-panel', `tk-datepicker-panel-${this.size}`, {
       'tk-datepicker-panel-inline': this.inline,
+      'tk-datepicker-panel-with-footer': this.hasFooterSlot || this.hasFooterActionsSlot,
     });
     const bodyClasses = classNames('tk-datepicker-body', {
       'tk-datepicker-months-view': this.currentView === 'months',
