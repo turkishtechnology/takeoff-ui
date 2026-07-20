@@ -36,6 +36,7 @@ function Table() {
       header: 'Ad',
       field: 'name',
       sortable: true,
+      sorter: (a: any, b: any) => String(a.name).localeCompare(String(b.name)),
       searchable: true,
       fixed: 'left',
       // editable: true,
@@ -125,6 +126,8 @@ function Table() {
       header: 'Age',
       field: 'age',
       sortable: true,
+      defaultSortOrder: 'desc',
+      sorter: (a: any, b: any) => a.age - b.age,
       searchable: true,
       html: (row: any) => {
         const tkButton: HTMLTkButtonElement = document.createElement('tk-button');
