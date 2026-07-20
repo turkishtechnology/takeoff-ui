@@ -41,4 +41,15 @@ describe('tk-datepicker', () => {
     expect(page.root.shadowRoot.querySelector('[data-testid="calendar-month-option-0"]')).toBeTruthy();
     expect(page.root.shadowRoot.querySelector('[data-testid="calendar-month-option-11"]')).toBeTruthy();
   });
+
+  it.each(['small', 'base', 'large'])('applies the %s size class to the panel', async size => {
+    const page = await newSpecPage({
+      components: [TkDatePicker, MockTkInput],
+      html: `<tk-datepicker inline="true" size="${size}" data-testid="calendar"></tk-datepicker>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('[data-testid="calendar-panel"]')?.classList.contains(`tk-datepicker-panel-${size}`)).toBe(true);
+    const expectedButtonSize = size === 'small' ? 'small' : 'base';
+    expect(Array.from(page.root.shadowRoot.querySelectorAll('tk-button')).every(button => button.getAttribute('size') === expectedButtonSize)).toBe(true);
+  });
 });
