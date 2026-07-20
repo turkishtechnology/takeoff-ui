@@ -860,6 +860,88 @@
     }
   }
 
+  &.purple {
+    border: 0px;
+    color: var(--static-white);
+
+    &.filled {
+      background-color: var(--purple-600);
+
+      &:hover {
+        background-color: var(--purple-800);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.filledLight {
+      color: var(--purple-700);
+      background-color: var(--purple-100);
+
+      &:hover {
+        background-color: var(--purple-200);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        box-shadow: var(--secondary-focus);
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--purple-600);
+      border: 1px solid var(--purple-300);
+
+      &:hover {
+        background-color: var(--purple-50);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        color: var(--text-sub-base);
+        background-color: transparent;
+        border-color: var(--border-sub-base);
+      }
+    }
+
+    &.text {
+      background-color: transparent;
+      color: var(--purple-600);
+      box-shadow: none;
+
+      &:hover {
+        background-color: var(--purple-50);
+        cursor: pointer;
+      }
+
+      &:focus-visible {
+        box-shadow: var(--secondary-focus);
+      }
+
+      @include tk-button-disabled {
+        background-color: transparent;
+        color: var(--text-sub-base);
+      }
+    }
+
+    &.link {
+      @include button-variant-link(var(--purple-600), var(--purple-800));
+    }
+
+    @include tk-button-disabled {
+      color: var(--static-white);
+      background-color: var(--background-sub-base);
+    }
+  }
+
   &.animated {
     isolation: isolate;
 
@@ -978,6 +1060,10 @@
         var(--background-darkest),
         var(--secondary-focus)
       );
+    }
+
+    &.purple {
+      @include tk-button-animated-palette(var(--purple-900), var(--purple-500), var(--purple-900), var(--purple-900), var(--purple-300), var(--purple-500), var(--secondary-focus));
     }
 
     &:not(.outlined):not(.link) {

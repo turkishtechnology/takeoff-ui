@@ -16,6 +16,7 @@
         { "label": "Success", "value": "success" },
         { "label": "Warning", "value": "warning" },
         { "label": "Danger", "value": "danger" },
+        { "label": "Purple", "value": "purple" },
         { "label": "White", "value": "white" },
         { "label": "Black", "value": "black" }
       ]

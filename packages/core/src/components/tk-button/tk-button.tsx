@@ -96,7 +96,7 @@ export class TkButton implements ComponentInterface {
   /**
    * Determines the button's variant for different styles.
    */
-  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' | 'black' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'purple' | 'white' | 'black' = 'primary';
 
   /**
    * Sets the data-testid attribute on the root container element.
