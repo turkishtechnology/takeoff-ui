@@ -392,7 +392,7 @@
       }
 
       &:focus-visible {
-        box-shadow: var(--info-focus);
+        box-shadow: var(--secondary-focus);
       }
     }
 
@@ -955,6 +955,8 @@
     --tk-button-animated-shadow-base: var(--shadow-primary-alpha-base);
     --tk-button-animated-shadow-light: var(--shadow-primary-alpha-light);
     --tk-button-animated-focus-shadow: var(--primary-focus);
+    --tk-button-animated-glow:
+      0px 2px 2px 0px var(--tk-button-animated-shadow-dark), 0px 6px 12px 0px var(--tk-button-animated-shadow-base), 0px 8px 20px 6px var(--tk-button-animated-shadow-light);
 
     transition:
       color 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67),
@@ -985,26 +987,26 @@
         var(--background-darkest),
         var(--background-light),
         var(--background-base),
-        var(--neutral-focus)
+        var(--secondary-focus)
       );
     }
 
     &.info {
       @include tk-button-animated-palette(
         var(--states-info-dark),
-        var(--states-info-dark),
+        var(--states-info-base),
         var(--states-info-darkest),
         var(--states-info-darkest),
         var(--states-info-light),
         var(--states-info-base),
-        var(--info-focus)
+        var(--secondary-focus)
       );
     }
 
     &.success {
       @include tk-button-animated-palette(
         var(--states-success-dark),
-        var(--states-success-dark),
+        var(--states-success-base),
         var(--states-success-darkest),
         var(--states-success-darkest),
         var(--states-success-light),
@@ -1016,7 +1018,7 @@
     &.danger {
       @include tk-button-animated-palette(
         var(--states-danger-dark),
-        var(--states-danger-dark),
+        var(--states-danger-base),
         var(--states-danger-darkest),
         var(--states-danger-darkest),
         var(--states-danger-light),
@@ -1028,7 +1030,7 @@
     &.warning {
       @include tk-button-animated-palette(
         var(--states-warning-dark),
-        var(--states-warning-dark),
+        var(--states-warning-base),
         var(--states-warning-darkest),
         var(--states-warning-darkest),
         var(--states-warning-light),
@@ -1040,11 +1042,11 @@
     &.white {
       @include tk-button-animated-palette(
         var(--text-lightest),
-        var(--static-light),
-        var(--background-lightest),
+        var(--static-white),
         var(--background-light),
+        var(--background-base),
         var(--static-white),
-        var(--static-white),
+        var(--background-base),
         var(--secondary-focus),
         var(--text-darkest)
       );
@@ -1053,10 +1055,10 @@
     &.black {
       @include tk-button-animated-palette(
         var(--text-darkest),
-        var(--background-darkest),
+        var(--background-dark),
         var(--static-dark),
         var(--static-dark),
-        var(--background-base),
+        var(--background-light),
         var(--background-darkest),
         var(--secondary-focus)
       );
@@ -1080,10 +1082,7 @@
           padding-box,
         linear-gradient(45deg, var(--tk-button-animated-surface-middle) 0%, var(--static-dark) 100%) border-box;
       border: 1px solid transparent;
-      box-shadow:
-        0px 2px 2px 0px var(--tk-button-animated-shadow-dark),
-        0px 6px 12px 0px var(--tk-button-animated-shadow-base),
-        0px 8px 20px 6px var(--tk-button-animated-shadow-light);
+      box-shadow: var(--tk-button-animated-glow);
 
       &::before {
         content: '';
@@ -1111,11 +1110,7 @@
       }
 
       &:focus-visible {
-        box-shadow:
-          var(--tk-button-animated-focus-shadow),
-          0px 2px 2px 0px var(--tk-button-animated-shadow-dark),
-          0px 6px 12px 0px var(--tk-button-animated-shadow-base),
-          0px 8px 20px 6px var(--tk-button-animated-shadow-light);
+        box-shadow: var(--tk-button-animated-focus-shadow), var(--tk-button-animated-glow);
       }
 
       @include tk-button-disabled {
@@ -1135,7 +1130,7 @@
       color: var(--tk-button-animated-outlined-content-color);
       background: transparent;
       border: 1px solid transparent;
-      box-shadow: none;
+      box-shadow: var(--tk-button-animated-glow);
       overflow: visible;
 
       &::before {
@@ -1174,10 +1169,14 @@
         background: transparent;
         border-color: transparent;
         cursor: pointer;
+        &::before {
+          background: var(--tk-button-animated-surface-middle);
+          animation: none;
+        }
       }
 
       &:focus-visible {
-        box-shadow: var(--tk-button-animated-focus-shadow);
+        box-shadow: var(--tk-button-animated-focus-shadow), var(--tk-button-animated-glow);
       }
 
       @include tk-button-disabled {

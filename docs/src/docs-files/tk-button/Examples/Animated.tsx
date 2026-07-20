@@ -11,6 +11,8 @@ const Animated = () => {
 <TkButton animated icon="auto_awesome" variant="danger" />
 <TkButton animated icon="auto_awesome" variant="warning" />
 <TkButton animated icon="auto_awesome" variant="purple" />
+<TkButton animated icon="auto_awesome" variant="black" />
+<TkButton animated icon="auto_awesome" variant="white" />
 
 <TkButton animated icon="auto_awesome" variant="primary" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="secondary" type="outlined" />
@@ -19,7 +21,9 @@ const Animated = () => {
 <TkButton animated icon="auto_awesome" variant="success" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="danger" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="warning" type="outlined" />
-<TkButton animated icon="auto_awesome" variant="purple" type="outlined" />`;
+<TkButton animated icon="auto_awesome" variant="purple" type="outlined" />
+<TkButton animated icon="auto_awesome" variant="black" type="outlined" />
+<TkButton animated icon="auto_awesome" variant="white" type="outlined" />`;
 
   const vueCode = `<TkButton animated icon="auto_awesome" variant="primary" />
 <TkButton animated icon="auto_awesome" variant="secondary" />
@@ -29,6 +33,8 @@ const Animated = () => {
 <TkButton animated icon="auto_awesome" variant="danger" />
 <TkButton animated icon="auto_awesome" variant="warning" />
 <TkButton animated icon="auto_awesome" variant="purple" />
+<TkButton animated icon="auto_awesome" variant="black" />
+<TkButton animated icon="auto_awesome" variant="white" />
 
 <TkButton animated icon="auto_awesome" variant="primary" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="secondary" type="outlined" />
@@ -37,7 +43,9 @@ const Animated = () => {
 <TkButton animated icon="auto_awesome" variant="success" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="danger" type="outlined" />
 <TkButton animated icon="auto_awesome" variant="warning" type="outlined" />
-<TkButton animated icon="auto_awesome" variant="purple" type="outlined" />`;
+<TkButton animated icon="auto_awesome" variant="purple" type="outlined" />
+<TkButton animated icon="auto_awesome" variant="black" type="outlined" />
+<TkButton animated icon="auto_awesome" variant="white" type="outlined" />`;
 
   const angularCode = `<tk-button [animated]="true" icon="auto_awesome" variant="primary" />
 <tk-button [animated]="true" icon="auto_awesome" variant="secondary" />
@@ -47,6 +55,8 @@ const Animated = () => {
 <tk-button [animated]="true" icon="auto_awesome" variant="danger" />
 <tk-button [animated]="true" icon="auto_awesome" variant="warning" />
 <tk-button [animated]="true" icon="auto_awesome" variant="purple" />
+<tk-button [animated]="true" icon="auto_awesome" variant="black" />
+<tk-button [animated]="true" icon="auto_awesome" variant="white" />
 
 <tk-button [animated]="true" icon="auto_awesome" variant="primary" type="outlined" />
 <tk-button [animated]="true" icon="auto_awesome" variant="secondary" type="outlined" />
@@ -55,9 +65,11 @@ const Animated = () => {
 <tk-button [animated]="true" icon="auto_awesome" variant="success" type="outlined" />
 <tk-button [animated]="true" icon="auto_awesome" variant="danger" type="outlined" />
 <tk-button [animated]="true" icon="auto_awesome" variant="warning" type="outlined" />
-<tk-button [animated]="true" icon="auto_awesome" variant="purple" type="outlined" />`;
+<tk-button [animated]="true" icon="auto_awesome" variant="purple" type="outlined" />
+<tk-button [animated]="true" icon="auto_awesome" variant="black" type="outlined" />
+<tk-button [animated]="true" icon="auto_awesome" variant="white" type="outlined" />`;
 
-  const variants = ['primary', 'secondary', 'neutral', 'info', 'success', 'danger', 'warning', 'purple'] as const;
+  const variants = ['primary', 'secondary', 'neutral', 'info', 'success', 'danger', 'warning', 'purple', 'black', 'white'] as const;
 
   const demo = (
     <div className="flex flex-col gap-3">
