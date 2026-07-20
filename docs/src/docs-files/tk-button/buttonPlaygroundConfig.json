@@ -96,8 +96,8 @@
       "defaultValue": false
     },
     {
-      "key": "ai",
-      "label": "AI",
+      "key": "animated",
+      "label": "Animated",
       "type": "checkbox",
       "defaultValue": false
     },

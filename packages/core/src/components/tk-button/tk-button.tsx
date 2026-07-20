@@ -35,9 +35,10 @@ export class TkButton implements ComponentInterface {
   @Prop({ mutable: true }) type: 'filled' | 'filledLight' | 'outlined' | 'text' = 'filled';
 
   /**
-   * Applies the AI action button style.
+   * Applies the animated button style, adapting to the selected variant.
+   * Only the `filled` and `outlined` types are animated.
    */
-  @Prop() ai: boolean;
+  @Prop() animated: boolean = false;
 
   /**
    * Specifies a material icon name to be displayed.
@@ -134,17 +135,24 @@ export class TkButton implements ComponentInterface {
       }
     }
   }
+  /**
+   * The animated style is only applied to the `filled` and `outlined` types.
+   */
+  private get isAnimated(): boolean {
+    return this.animated && (this.type === 'filled' || this.type === 'outlined');
+  }
+
   private getButtonIconColor(): string {
     if (this.disabled) {
-      return this.type === 'filled' || this.type === 'filledLight' || (this.ai && this.type !== 'outlined') ? 'var(--static-white)' : 'var(--icon-sub-base)';
+      return this.type === 'filled' || this.type === 'filledLight' || (this.isAnimated && this.type !== 'outlined') ? 'var(--static-white)' : 'var(--icon-sub-base)';
     }
 
-    if (this.ai) {
+    if (this.isAnimated) {
       if (this.type === 'outlined') {
-        return this.variant === 'secondary' ? 'var(--secondary-darkest)' : 'var(--primary-darkest)';
+        return 'var(--tk-button-animated-outlined-content-color)';
       }
 
-      return 'var(--static-white)';
+      return 'var(--tk-button-animated-content-color)';
     }
 
     if (this.type === 'filled') {
@@ -165,7 +173,7 @@ export class TkButton implements ComponentInterface {
         'rounded': this.rounded && this.icon && (this.label == '' || this.label == null || this.label.length <= 0),
         'link': this.mode == 'link',
         'underline': this.underline,
-        'ai': this.ai,
+        'animated': this.isAnimated,
         'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon && !hasMultipleIcons,
       },
       [this.variant],
