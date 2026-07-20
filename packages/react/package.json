@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@takeoff-ui/core": "workspace:*",
-    "@stencil/react-output-target": "0.8.0"
+    "@stencil/react-output-target": "1.6.1"
   }
 }
