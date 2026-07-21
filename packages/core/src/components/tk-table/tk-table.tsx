@@ -1063,7 +1063,7 @@ export class TkTable implements ComponentInterface {
   }
 
   // Sort icon cycle starts from col.firstSortOrder ('asc' unless the column opts into 'desc' first).
-  private getSortCycle(col: ITableColumn) {
+  private getSortCycle(col: ITableColumn): { firstOrder: 'asc' | 'desc'; firstIcon: string; secondOrder: 'asc' | 'desc'; secondIcon: string } {
     const firstOrder = col.firstSortOrder === 'desc' ? 'desc' : 'asc';
     const firstIcon = firstOrder === 'desc' ? 'arrow_drop_down' : 'arrow_drop_up';
     const secondOrder = firstOrder === 'desc' ? 'asc' : 'desc';
