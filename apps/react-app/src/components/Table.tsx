@@ -126,7 +126,7 @@ function Table() {
       header: 'Age',
       field: 'age',
       sortable: true,
-      defaultSortOrder: 'desc',
+      firstSortOrder: 'desc',
       sorter: (a: any, b: any) => a.age - b.age,
       searchable: true,
       html: (row: any) => {

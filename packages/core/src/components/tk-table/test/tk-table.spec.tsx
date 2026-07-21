@@ -51,7 +51,7 @@ describe('tk-table', () => {
       return instance;
     };
 
-    it('single-sort defaults to asc -> desc -> none when defaultSortOrder is not set', () => {
+    it('single-sort defaults to asc -> desc -> none when firstSortOrder is not set', () => {
       const instance = createInstance();
       const col: ITableColumn = { field: 'name', header: 'Name', sortable: true };
       const refSortIcon = { icon: 'swap_vert' };
@@ -70,9 +70,9 @@ describe('tk-table', () => {
       expect(refSortIcon.icon).toBe('swap_vert');
     });
 
-    it('single-sort cycles desc -> asc -> none when column opts into defaultSortOrder desc', () => {
+    it('single-sort cycles desc -> asc -> none when column opts into firstSortOrder desc', () => {
       const instance = createInstance();
-      const col: ITableColumn = { field: 'amount', header: 'Amount', sortable: true, defaultSortOrder: 'desc' };
+      const col: ITableColumn = { field: 'amount', header: 'Amount', sortable: true, firstSortOrder: 'desc' };
       const refSortIcon = { icon: 'swap_vert' };
 
       instance.handleSingleSort(refSortIcon, col);
@@ -89,7 +89,7 @@ describe('tk-table', () => {
       expect(refSortIcon.icon).toBe('swap_vert');
     });
 
-    it('multi-sort pushes asc order on first click when defaultSortOrder is not set', () => {
+    it('multi-sort pushes asc order on first click when firstSortOrder is not set', () => {
       const instance = createInstance();
       instance.sorts = [];
       const col: ITableColumn = { field: 'name', header: 'Name', sortable: true };
@@ -99,9 +99,9 @@ describe('tk-table', () => {
       expect(instance.sorts).toEqual([{ field: 'name', order: 'asc' }]);
     });
 
-    it('multi-sort cycles desc -> asc -> removed when column opts into defaultSortOrder desc', () => {
+    it('multi-sort cycles desc -> asc -> removed when column opts into firstSortOrder desc', () => {
       const instance = createInstance();
-      const col: ITableColumn = { field: 'amount', header: 'Amount', sortable: true, defaultSortOrder: 'desc' };
+      const col: ITableColumn = { field: 'amount', header: 'Amount', sortable: true, firstSortOrder: 'desc' };
       instance.sorts = [];
 
       instance.handleMultiSort({ icon: 'swap_vert' }, col);

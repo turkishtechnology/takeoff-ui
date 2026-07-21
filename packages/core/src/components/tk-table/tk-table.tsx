@@ -1062,6 +1062,16 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  // Sort icon cycle starts from col.firstSortOrder ('asc' unless the column opts into 'desc' first).
+  private getSortCycle(col: ITableColumn) {
+    const firstOrder = col.firstSortOrder === 'desc' ? 'desc' : 'asc';
+    const firstIcon = firstOrder === 'desc' ? 'arrow_drop_down' : 'arrow_drop_up';
+    const secondOrder = firstOrder === 'desc' ? 'asc' : 'desc';
+    const secondIcon = firstOrder === 'desc' ? 'arrow_drop_up' : 'arrow_drop_down';
+
+    return { firstOrder, firstIcon, secondOrder, secondIcon };
+  }
+
   private handleSingleSort(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
     this.sortField = col.field;
     const icon = refSortIcon.icon;
@@ -1070,11 +1080,7 @@ export class TkTable implements ComponentInterface {
     // tüm sort iconlar default duruma getirilir.
     this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
-    // Sort icon cycle starts from col.defaultSortOrder ('asc' unless the column opts into 'desc' first).
-    const firstOrder = col.defaultSortOrder === 'desc' ? 'desc' : 'asc';
-    const firstIcon = firstOrder === 'desc' ? 'arrow_drop_down' : 'arrow_drop_up';
-    const secondOrder = firstOrder === 'desc' ? 'asc' : 'desc';
-    const secondIcon = firstOrder === 'desc' ? 'arrow_drop_up' : 'arrow_drop_down';
+    const { firstOrder, firstIcon, secondOrder, secondIcon } = this.getSortCycle(col);
 
     if (icon == 'swap_vert') {
       this.sortOrder = firstOrder;
@@ -1096,10 +1102,7 @@ export class TkTable implements ComponentInterface {
 
     const icon = refSortIcon.icon;
 
-    // Sort icon cycle starts from col.defaultSortOrder ('asc' unless the column opts into 'desc' first).
-    const firstOrder = col.defaultSortOrder === 'desc' ? 'desc' : 'asc';
-    const firstIcon = firstOrder === 'desc' ? 'arrow_drop_down' : 'arrow_drop_up';
-    const secondOrder = firstOrder === 'desc' ? 'asc' : 'desc';
+    const { firstOrder, firstIcon, secondOrder } = this.getSortCycle(col);
 
     if (existingIndex > -1) {
       const currentSort = this.sorts[existingIndex];

@@ -22,7 +22,7 @@ export interface ITableColumn {
   /** Custom sort function for the column, mandatory when using client-side sorting. */
   sorter?: Function;
   /** The sort direction applied on the first click of the column's sort icon. Defaults to 'asc' when not set. */
-  defaultSortOrder?: 'asc' | 'desc';
+  firstSortOrder?: 'asc' | 'desc';
   /** Custom filter function for the column, mandatory when using client-side filtering. */
   filter?: Function;
   /** Indicates if the column is searchable */
