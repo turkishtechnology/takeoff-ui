@@ -1062,6 +1062,16 @@ export class TkTable implements ComponentInterface {
     }
   }
 
+  // Sort icon cycle starts from col.firstSortOrder ('asc' unless the column opts into 'desc' first).
+  private getSortCycle(col: ITableColumn): { firstOrder: 'asc' | 'desc'; firstIcon: string; secondOrder: 'asc' | 'desc'; secondIcon: string } {
+    const firstOrder = col.firstSortOrder === 'desc' ? 'desc' : 'asc';
+    const firstIcon = firstOrder === 'desc' ? 'arrow_drop_down' : 'arrow_drop_up';
+    const secondOrder = firstOrder === 'desc' ? 'asc' : 'desc';
+    const secondIcon = firstOrder === 'desc' ? 'arrow_drop_up' : 'arrow_drop_down';
+
+    return { firstOrder, firstIcon, secondOrder, secondIcon };
+  }
+
   private handleSingleSort(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
     this.sortField = col.field;
     const icon = refSortIcon.icon;
@@ -1070,13 +1080,15 @@ export class TkTable implements ComponentInterface {
     // tüm sort iconlar default duruma getirilir.
     this.el.shadowRoot.querySelectorAll('thead th .tk-table-head-cell .sort-icon').forEach((icon: HTMLTkIconElement) => (icon.icon = 'swap_vert'));
 
+    const { firstOrder, firstIcon, secondOrder, secondIcon } = this.getSortCycle(col);
+
     if (icon == 'swap_vert') {
-      this.sortOrder = 'asc';
-      refSortIcon.icon = 'arrow_drop_up';
-    } else if (icon == 'arrow_drop_up') {
-      this.sortOrder = 'desc';
-      refSortIcon.icon = 'arrow_drop_down';
-    } else if (icon == 'arrow_drop_down') {
+      this.sortOrder = firstOrder;
+      refSortIcon.icon = firstIcon;
+    } else if (icon == firstIcon) {
+      this.sortOrder = secondOrder;
+      refSortIcon.icon = secondIcon;
+    } else if (icon == secondIcon) {
       this.sortField = null;
       this.sortOrder = null;
       refSortIcon.icon = 'swap_vert';
@@ -1090,18 +1102,20 @@ export class TkTable implements ComponentInterface {
 
     const icon = refSortIcon.icon;
 
+    const { firstOrder, firstIcon, secondOrder } = this.getSortCycle(col);
+
     if (existingIndex > -1) {
       const currentSort = this.sorts[existingIndex];
 
-      if (icon === 'arrow_drop_up') {
-        currentSort.order = 'desc';
-      } else if (icon === 'arrow_drop_down') {
+      if (icon === firstIcon) {
+        currentSort.order = secondOrder;
+      } else {
         this.sorts.splice(existingIndex, 1);
       }
     } else {
       this.sorts.push({
         field: col.field,
-        order: 'asc',
+        order: firstOrder,
       });
     }
 
