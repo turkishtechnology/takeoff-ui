@@ -165,11 +165,6 @@
     .tk-textarea {
       background-color: var(--background-lightest);
     }
-
-    .copy-button {
-      pointer-events: auto;
-      cursor: not-allowed;
-    }
   }
 
   &[aria-readonly] {

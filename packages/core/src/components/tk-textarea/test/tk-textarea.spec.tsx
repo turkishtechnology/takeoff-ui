@@ -120,6 +120,9 @@ describe('tk-textarea', () => {
       });
 
       page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      // handleCopy is async (awaits the clipboard write); flush the write's
+      // microtask, then the render triggered by the copied-state change.
+      await page.waitForChanges();
       await page.waitForChanges();
 
       expect(writeText).toHaveBeenCalledWith('hello');
@@ -155,23 +158,21 @@ describe('tk-textarea', () => {
     });
 
     it('resets the copied state after the timeout', async () => {
-      jest.useFakeTimers();
-      try {
-        const page = await newSpecPage({
-          components: [TkTextarea],
-          html: `<tk-textarea value="hello" show-copy-button="true"></tk-textarea>`,
-        });
+      // Fake timers deadlock Stencil's waitForChanges, so use real timers and
+      // wait just past the 2s reset window.
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello" show-copy-button="true"></tk-textarea>`,
+      });
 
-        page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
-        await page.waitForChanges();
-        expect(page.rootInstance.copied).toBe(true);
+      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+      await page.waitForChanges();
+      expect(page.rootInstance.copied).toBe(true);
 
-        jest.advanceTimersByTime(2000);
-        await page.waitForChanges();
-        expect(page.rootInstance.copied).toBe(false);
-      } finally {
-        jest.useRealTimers();
-      }
+      await new Promise(resolve => setTimeout(resolve, 2100));
+      await page.waitForChanges();
+      expect(page.rootInstance.copied).toBe(false);
     });
   });
 });
