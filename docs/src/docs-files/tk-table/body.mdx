@@ -70,6 +70,10 @@ The filtering type can be configured using the `filterType` property in column
 definition. For checkbox and radio filters, you need to provide `filterOptions`
 with value-label pairs.
 
+Clicking a sortable column's sort icon cycles through `asc -> desc -> none` by
+default. Set `firstSortOrder: 'desc'` on a column (see `Quantity` below) to make
+its first click sort descending instead, cycling `desc -> asc -> none`.
+
 <TkAlert
   header="Deprecation"
   message="Future releases will not support filterButtons instead please use filterElements. For more information, see Column Interface."

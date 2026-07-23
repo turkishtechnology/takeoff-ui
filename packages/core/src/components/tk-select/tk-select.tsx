@@ -233,6 +233,13 @@ export class TkSelect implements ComponentInterface {
   @Prop() selectAllLabel: string = 'All';
 
   /**
+   * If `true`, collapses the selection into a single chip labelled with `selectAllLabel`
+   * once every option is selected.
+   * @defaultValue false
+   */
+  @Prop() showSelectAllChip: boolean = false;
+
+  /**
    * A function to determine whether an option should be disabled.
    */
   @Prop() optionDisabled: Function;
@@ -481,7 +488,35 @@ export class TkSelect implements ComponentInterface {
     }
   }
 
+  // Keep only the currently-selected values whose option is disabled. optionDisabled expects the
+  // option object, so when optionValueKey is set each stored value is resolved back to its option
+  // before testing it — a raw value key would never look disabled and the item would be dropped.
+  private getSelectedDisabledValues(): any[] {
+    if (!Array.isArray(this.value) || !this.optionDisabled) return [];
+    return this.value.filter(val => {
+      const option = this.optionValueKey ? this.flatOptions.find(opt => this.getOptionValue(opt) === val) : val;
+      return option != null && this.optionDisabled(option);
+    });
+  }
+
+  // allowCustomValue is excluded on purpose: a custom value lives outside the option list, so the
+  // selection can be a superset of "all" — which the collapsed chip can neither state nor let the
+  // user edit. isAllSelected() only inspects the options, so it cannot see those extras either.
+  private isAllChipActive(): boolean {
+    return this.showSelectAllChip && this.multiple && this.selectAll && !this.allowCustomValue && this.isAllSelected();
+  }
+
   private getDisplayValueForMultiple(selectedItems: any[]): any[] {
+    if (this.isAllChipActive()) {
+      return [
+        {
+          __isAllIndicator: true,
+          label: this.selectAllLabel,
+          removable: !this.readonly,
+        },
+      ];
+    }
+
     if (!this.visibleItemCount || selectedItems.length <= this.visibleItemCount) {
       return selectedItems;
     }
@@ -696,7 +731,7 @@ export class TkSelect implements ComponentInterface {
 
   private handleFormReset() {
     if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
-      this.value = this.value.filter(item => this.optionDisabled(item));
+      this.value = this.getSelectedDisabledValues();
     } else {
       this.value = null;
     }
@@ -710,7 +745,7 @@ export class TkSelect implements ComponentInterface {
       const checking = this.isAllSelected();
       if (checking) {
         // Deselect all
-        tmpValue = this.value.filter(item => this.optionDisabled?.(item));
+        tmpValue = this.getSelectedDisabledValues();
         this.tkSelectAll.emit(false);
       } else {
         //optionsdaki değerleri almak için
@@ -770,6 +805,18 @@ export class TkSelect implements ComponentInterface {
 
   private async handleInputChange(value) {
     if (this.multiple) {
+      // Selection is collapsed into the single "all" chip, so removing that chip is the
+      // only change the input can report here. It clears everything but the disabled items.
+      if (this.isAllChipActive()) {
+        const incomingChips = value == null ? [] : Array.isArray(value) ? value : [value];
+        const isAllChipRemoved = !incomingChips.some(val => typeof val === 'object' && val !== null && val.__isAllIndicator);
+        if (isAllChipRemoved) {
+          this.value = this.getSelectedDisabledValues();
+          this.tkChange.emit(this.value);
+        }
+        return;
+      }
+
       if (value == null) {
         this.value = [];
       } else {
@@ -961,7 +1008,7 @@ export class TkSelect implements ComponentInterface {
 
   private handleInputClearClick() {
     if (this.multiple && this.optionDisabled && Array.isArray(this.value)) {
-      this.value = this.value.filter(item => this.optionDisabled(item));
+      this.value = this.getSelectedDisabledValues();
     } else {
       this.value = null;
     }

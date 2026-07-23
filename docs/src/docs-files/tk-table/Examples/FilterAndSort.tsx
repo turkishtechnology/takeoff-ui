@@ -60,6 +60,7 @@ const Example = () => {
       field: 'quantity',
       header: 'Quantity',
       sortable: true,
+      firstSortOrder: 'desc',
       sorter: (a: any, b: any) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
       searchable: true,
       filterType: 'treeview',
@@ -232,6 +233,7 @@ const FilterAndSort = () => {
       field: 'quantity',
       header: 'Quantity',
       sortable: true,
+      firstSortOrder: 'desc',
       sorter: (a: any, b: any) =>
         Number(a.quantity) > Number(b.quantity) ? 1 : -1,
       searchable: true,
@@ -408,6 +410,7 @@ const column = [
     field: 'quantity',
     header: 'Quantity',
     sortable: true,
+    firstSortOrder: 'desc',
     sorter: (a, b) => (Number(a.quantity) > Number(b.quantity) ? 1 : -1),
     searchable: true,
     filterType: 'treeview',

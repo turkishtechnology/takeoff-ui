@@ -16,6 +16,7 @@
         { "label": "Success", "value": "success" },
         { "label": "Warning", "value": "warning" },
         { "label": "Danger", "value": "danger" },
+        { "label": "Purple", "value": "purple" },
         { "label": "White", "value": "white" },
         { "label": "Black", "value": "black" }
       ]
@@ -92,6 +93,12 @@
     {
       "key": "fullWidth",
       "label": "Full Width",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "key": "animated",
+      "label": "Animated",
       "type": "checkbox",
       "defaultValue": false
     },
