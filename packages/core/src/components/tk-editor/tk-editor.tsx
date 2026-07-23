@@ -53,7 +53,9 @@ export class TkEditor {
   valueChanged(newValue: string) {
     if (this.editor && newValue !== this.editor.getHTML()) {
       this.isExternalUpdate = true;
-      this.editor.commands.setContent(newValue);
+      // emitUpdate must be true; otherwise onUpdate never fires and the flag
+      // stays armed, swallowing the next real user edit's tk-change
+      this.editor.commands.setContent(newValue, true);
     }
   }
 
