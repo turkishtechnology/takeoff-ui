@@ -24,6 +24,17 @@
     }
   }
 
+  // Row that holds the label on the left and the copy button on the right.
+  .tk-textarea-label-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+    .label {
+      margin-inline-end: auto;
+    }
+  }
+
   .tk-textarea {
     display: flex;
     gap: var(--spacing-xs);
@@ -86,6 +97,11 @@
         line-height: var(--desktop-body-m-base-line-height);
       }
     }
+
+    .copy-button {
+      margin-inline: var(--spacing-s);
+      cursor: pointer;
+    }
   }
 
   &.base {
@@ -104,6 +120,11 @@
         line-height: var(--desktop-body-s-line-height);
       }
     }
+
+    .copy-button {
+      margin-inline: var(--spacing-xs);
+      cursor: pointer;
+    }
   }
 
   &.small {
@@ -121,6 +142,11 @@
         font-size: var(--desktop-body-xs-size);
         line-height: var(--desktop-body-xs-line-height);
       }
+    }
+
+    .copy-button {
+      margin-inline: var(--spacing-xxs);
+      cursor: pointer;
     }
   }
 

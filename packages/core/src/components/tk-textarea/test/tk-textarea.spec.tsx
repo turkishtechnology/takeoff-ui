@@ -87,4 +87,92 @@ describe('tk-textarea', () => {
 
     expect(page.root.value).toBeNull();
   });
+
+  describe('copy button', () => {
+    let writeText: jest.Mock;
+
+    beforeEach(() => {
+      writeText = jest.fn().mockResolvedValue(undefined);
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        configurable: true,
+      });
+    });
+
+    it('renders the copy button only when showCopyButton is set', async () => {
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello"></tk-textarea>`,
+      });
+
+      expect(page.root.shadowRoot.querySelector('.copy-button')).toBeNull();
+
+      page.root.showCopyButton = true;
+      await page.waitForChanges();
+
+      expect(page.root.shadowRoot.querySelector('.copy-button')).toBeTruthy();
+    });
+
+    it('copies the current value and shows the copied state', async () => {
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello" show-copy-button="true"></tk-textarea>`,
+      });
+
+      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      // handleCopy is async (awaits the clipboard write); flush the write's
+      // microtask, then the render triggered by the copied-state change.
+      await page.waitForChanges();
+      await page.waitForChanges();
+
+      expect(writeText).toHaveBeenCalledWith('hello');
+      expect(page.rootInstance.copied).toBe(true);
+      expect(page.root.shadowRoot.querySelector('.copy-button').getAttribute('aria-label')).toBe('Copied!');
+    });
+
+    it('does not copy when disabled', async () => {
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello" show-copy-button="true" disabled="true"></tk-textarea>`,
+      });
+
+      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+
+      expect(writeText).not.toHaveBeenCalled();
+      expect(page.rootInstance.copied).toBe(false);
+    });
+
+    it('stays un-copied when the clipboard write fails', async () => {
+      writeText.mockRejectedValue(new Error('denied'));
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello" show-copy-button="true"></tk-textarea>`,
+      });
+
+      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+
+      expect(writeText).toHaveBeenCalled();
+      expect(page.rootInstance.copied).toBe(false);
+    });
+
+    it('resets the copied state after the timeout', async () => {
+      // Fake timers deadlock Stencil's waitForChanges, so use real timers and
+      // wait just past the 2s reset window.
+      const page = await newSpecPage({
+        components: [TkTextarea],
+        html: `<tk-textarea value="hello" show-copy-button="true"></tk-textarea>`,
+      });
+
+      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+      await page.waitForChanges();
+      expect(page.rootInstance.copied).toBe(true);
+
+      await new Promise(resolve => setTimeout(resolve, 2100));
+      await page.waitForChanges();
+      expect(page.rootInstance.copied).toBe(false);
+    });
+  });
 });
