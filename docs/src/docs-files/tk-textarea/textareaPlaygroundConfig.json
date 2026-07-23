@@ -79,6 +79,12 @@
       "label": "Show Asterisk",
       "type": "checkbox",
       "defaultValue": false
+    },
+    {
+      "key": "showCopyButton",
+      "label": "Show Copy Button",
+      "type": "checkbox",
+      "defaultValue": false
     }
   ]
 }
