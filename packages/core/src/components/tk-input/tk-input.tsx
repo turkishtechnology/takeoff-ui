@@ -763,8 +763,8 @@ export class TkInput implements ComponentInterface {
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
           disabled: this.disabled,
         };
-        const label =
-          typeof item === 'object' && item !== null && item.__isOthersIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
+        const isIndicator = typeof item === 'object' && item !== null && (item.__isOthersIndicator || item.__isAllIndicator);
+        const label = isIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
 
         return (
           <tk-chips

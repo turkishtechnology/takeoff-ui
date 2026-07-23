@@ -79,6 +79,12 @@ You can customize top of the select panel using `panelTopHtml` prop.
 
 You can add `selectAll` option and edit the label via `selectAllLabel`.
 
+With `showSelectAllChip` set to `true`, the selection collapses into a single
+chip labelled with `selectAllLabel` once every option is selected, instead of
+listing every chip. It has no effect when `allowCustomValue` is `true`, because
+a custom value can put the selection outside the option list and the collapsed
+chip cannot represent that; every selected value keeps its own chip instead.
+
 <TkAlert
   header="Note"
   variant="info"
