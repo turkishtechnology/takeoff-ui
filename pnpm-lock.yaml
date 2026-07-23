@@ -4868,7 +4868,14 @@ packages:
     resolution: { integrity: sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw== }
     engines: { node: ^20.19.0 || >=22.12.0 }
     peerDependencies:
+      "@rolldown/plugin-babel": ^0.1.7 || ^0.2.0
+      babel-plugin-react-compiler: ^1.0.0
       vite: 7.3.5
+    peerDependenciesMeta:
+      "@rolldown/plugin-babel":
+        optional: true
+      babel-plugin-react-compiler:
+        optional: true
 
   "@vitejs/plugin-vue@6.0.8":
     resolution: { integrity: sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew== }
@@ -17731,8 +17738,6 @@ snapshots:
       "@types/babel__core": 7.20.5
       react-refresh: 0.18.0
       vite: 7.3.5(@types/node@25.7.0)(jiti@1.21.7)(less@4.7.0)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.21.0)(yaml@2.8.3)
-    transitivePeerDependencies:
-      - supports-color
 
   "@vitejs/plugin-vue@6.0.8(vite@7.3.5(@types/node@25.7.0)(jiti@2.7.0)(less@4.7.0)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.40(typescript@5.9.3))":
     dependencies:
@@ -24270,8 +24275,6 @@ snapshots:
       - supports-color
 
   react-property@2.0.2: {}
-
-  react-refresh@0.18.0: {}
 
   react-router-config@5.1.1(react-router@5.3.4(react@18.3.1))(react@18.3.1):
     dependencies:
