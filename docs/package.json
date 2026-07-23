@@ -28,7 +28,7 @@
     "@takeoff-ui/tailwind": "workspace:*",
     "@tiptap/extension-highlight": "^2.11.0",
     "clsx": "^2.0.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.4.2",
     "dotenv-cli": "^8.0.0",
     "fs": "^0.0.1-security",
     "prism-react-renderer": "^2.3.0",
