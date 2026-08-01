@@ -5,4 +5,5 @@
 Add keyboard support to `tk-datepicker`: Enter confirms and closes the panel
 when a value is selected (except in apply-button mode), and Escape dismisses it.
 Closing works regardless of where focus is inside the panel, including nested
-shadow roots.
+shadow roots. Escape dismisses rather than reverts — outside apply-button mode
+changes are emitted as they happen, so they are kept.

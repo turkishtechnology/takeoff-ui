@@ -1191,8 +1191,7 @@ export class TkDatePicker {
   private addDocumentKeyListener = (): void => {
     // Attached only while the panel is open (mirrors the click-outside handling) so we are not
     // holding a document-wide keydown listener for every datepicker on the page at all times.
-    // Capture phase so that, as the topmost open layer, we can consume Escape before an ancestor
-    // overlay (e.g. a surrounding modal) also closes on the same keystroke.
+    // Capture phase so the keystroke is seen even when a panel control stops propagation.
     document.addEventListener('keydown', this.handleDocumentKeyDown, true);
   };
 
@@ -1205,7 +1204,9 @@ export class TkDatePicker {
    * on the trigger input, on a focusable panel control, or fallen back to <body>
    * after clicking a non-focusable calendar/time cell. A panel-only listener misses
    * that last case because the event never bubbles into the panel. Bound only while open.
-   * - Escape always closes the panel (cancel), even in apply-button mode.
+   * - Escape dismisses the panel. It is not a revert: in apply-button mode the pending
+   *   selection is discarded by the isOpen watcher, but everywhere else changes are already
+   *   emitted as they happen, so dismissing keeps them. Use allowApplyButton for cancel semantics.
    * - Enter closes only when there is a selection to confirm and not in apply-button mode,
    *   and never while a panel control (nav arrows, time steppers, AM/PM toggle) is focused —
    *   Enter must trigger that control's own action instead.
@@ -1213,33 +1214,36 @@ export class TkDatePicker {
   private handleDocumentKeyDown = (event: KeyboardEvent): void => {
     if (this.inline || !this.isOpen) return;
 
-    // Escape dismisses the open panel from anywhere and is consumed here (stopPropagation) so it
-    // does not also close a surrounding overlay — the datepicker is the topmost layer while open.
+    // Only react to keystrokes that belong to this datepicker: originating inside it
+    // (composedPath pierces nested shadow roots, unlike `activeElement === this.el`) or with focus
+    // fallen back to body/root after clicking a non-focusable calendar/time cell. Never hijack
+    // keys aimed at unrelated elements on the page.
+    const path = event.composedPath();
+    const originatedInside = path.includes(this.el);
+    const activeEl = document.activeElement;
+    const focusOnBodyOrRoot = !activeEl || activeEl === document.body || activeEl === document.documentElement;
+    if (!originatedInside && !focusOnBodyOrRoot) return;
+
     if (event.key === 'Escape') {
       event.preventDefault();
-      event.stopPropagation();
       this.closeAndReturnFocus();
       return;
     }
 
     if (event.key !== 'Enter' || this.allowApplyButton) return;
 
-    // Enter acts only when the keystroke belongs to this datepicker: originating inside it
-    // (composedPath pierces nested shadow roots, unlike `activeElement === this.el`) or with focus
-    // fallen back to body/root after clicking a non-focusable calendar/time cell. Never hijack
-    // Enter aimed at unrelated elements on the page.
-    const originatedInside = event.composedPath().includes(this.el);
-    const activeEl = document.activeElement;
-    const focusOnBodyOrRoot = !activeEl || activeEl === document.body || activeEl === document.documentElement;
-    if (!originatedInside && !focusOnBodyOrRoot) return;
-
-    const innerActive = this.el.shadowRoot?.activeElement as HTMLElement | null;
-    // Let Enter trigger a focused panel control (nav arrows, steppers, AM/PM toggle) instead of closing.
-    if (innerActive?.closest('tk-button, tk-toggle-button, tk-toggle-button-group, [role="button"]')) return;
+    // Let Enter trigger a focused panel control (nav arrows, steppers, AM/PM toggle) instead of
+    // closing. Checked against composedPath because those controls are shadow components: the
+    // real focus sits on a <button> inside their own shadow root, which `closest()` cannot reach.
+    // Duck-typed rather than `instanceof Element` because the path also holds non-element targets
+    // (document, window) and `Element` is not a global in every environment Stencil runs in.
+    const onPanelControl = path.some(
+      node => typeof (node as Element).matches === 'function' && (node as Element).matches('tk-button, tk-toggle-button, tk-toggle-button-group, [role="button"]'),
+    );
+    if (onPanelControl) return;
 
     if (!this.hasSelectedValue()) return;
     event.preventDefault();
-    event.stopPropagation();
     this.closeAndReturnFocus();
   };
 
