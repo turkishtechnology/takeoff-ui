@@ -138,6 +138,13 @@
       "tooltip": "This feature works only when the `multiple` prop is enabled."
     },
     {
+      "key": "showSelectAllChip",
+      "label": "Show Select All Chip",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "Collapses the selection into a single chip labelled with `selectAllLabel` once every option is selected. Works only when the `multiple` and `selectAll` props are enabled. Has no effect when `allowCustomValue` is enabled, where every selected value keeps its own chip."
+    },
+    {
       "key": "editable",
       "label": "Editable",
       "type": "checkbox",

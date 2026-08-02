@@ -41,6 +41,12 @@ export class TkButton implements ComponentInterface {
   @Prop() containerStyle?: CSSStyleProperties;
 
   /**
+   * Applies the animated button style, adapting to the selected variant.
+   * Only the `filled` and `outlined` types are animated.
+   */
+  @Prop() animated: boolean = false;
+
+  /**
    * Specifies a material icon name to be displayed.
    */
   @Prop() icon?: string | IIconOptions | IMultiIconOptions;
@@ -96,7 +102,7 @@ export class TkButton implements ComponentInterface {
   /**
    * Determines the button's variant for different styles.
    */
-  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'white' | 'black' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'neutral' | 'info' | 'success' | 'danger' | 'warning' | 'purple' | 'white' | 'black' = 'primary';
 
   /**
    * Sets the data-testid attribute on the root container element.
@@ -135,9 +141,24 @@ export class TkButton implements ComponentInterface {
       }
     }
   }
+  /**
+   * The animated style is only applied to the `filled` and `outlined` types.
+   */
+  private get isAnimated(): boolean {
+    return this.animated && (this.type === 'filled' || this.type === 'outlined');
+  }
+
   private getButtonIconColor(): string {
     if (this.disabled) {
-      return this.type === 'filled' || this.type === 'filledLight' ? 'var(--static-white)' : 'var(--icon-sub-base)';
+      return this.type === 'filled' || this.type === 'filledLight' || (this.isAnimated && this.type !== 'outlined') ? 'var(--static-white)' : 'var(--icon-sub-base)';
+    }
+
+    if (this.isAnimated) {
+      if (this.type === 'outlined') {
+        return 'var(--tk-button-animated-outlined-content-color)';
+      }
+
+      return 'var(--tk-button-animated-content-color)';
     }
 
     if (this.type === 'filled') {
@@ -158,6 +179,7 @@ export class TkButton implements ComponentInterface {
         'rounded': this.rounded && this.icon && (this.label == '' || this.label == null || this.label.length <= 0),
         'link': this.mode == 'link',
         'underline': this.underline,
+        'animated': this.isAnimated,
         'icon-only': (this.label == '' || this.label == null || this.label.length <= 0) && this.icon && !hasMultipleIcons,
       },
       [this.variant],

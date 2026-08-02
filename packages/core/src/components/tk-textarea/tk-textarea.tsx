@@ -20,6 +20,7 @@ export class TkTextarea implements ComponentInterface {
   private nativeInput?: HTMLTextAreaElement;
   private tabindex?: string | number;
   private uniqueId = uuidv4();
+  private copyResetTimeout?: ReturnType<typeof setTimeout>;
 
   @Element() el!: HTMLTkTextareaElement;
 
@@ -28,6 +29,7 @@ export class TkTextarea implements ComponentInterface {
   @State() hasFocus = false;
   @State() passwordStrength: number = 0;
   @State() charCount: number = 0;
+  @State() copied: boolean = false;
 
   /**
    * If `true`, the user cannot interact with the input.
@@ -87,6 +89,12 @@ export class TkTextarea implements ComponentInterface {
   @Prop() showAsterisk: boolean = false;
 
   /**
+   * Shows a copy button that copies the current value to the clipboard.
+   * @defaultValue false
+   */
+  @Prop() showCopyButton: boolean = false;
+
+  /**
    * Limits the number of characters.
    */
   @Prop() maxLength?: number;
@@ -144,6 +152,10 @@ export class TkTextarea implements ComponentInterface {
     this.nativeInput = this.el.shadowRoot.querySelector('textarea');
   }
 
+  disconnectedCallback() {
+    clearTimeout(this.copyResetTimeout);
+  }
+
   formResetCallback() {
     this.handleFormReset();
   }
@@ -187,6 +199,28 @@ export class TkTextarea implements ComponentInterface {
     this.tkFocus.emit();
   };
 
+  private handleCopy = async () => {
+    if (this.disabled) return;
+    const text = this.value != null ? String(this.value) : '';
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard write can fail (denied permission / insecure context); ignore.
+      return;
+    }
+    this.copied = true;
+    clearTimeout(this.copyResetTimeout);
+    this.copyResetTimeout = setTimeout(() => (this.copied = false), 2000);
+  };
+
+  private handleCopyKeyDown = (e: KeyboardEvent) => {
+    // Make the copy button operable with the keyboard (Enter / Space).
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.handleCopy();
+    }
+  };
+
   private renderLabel(): HTMLLabelElement {
     let label: HTMLLabelElement;
 
@@ -209,19 +243,38 @@ export class TkTextarea implements ComponentInterface {
   render() {
     const rootClasses = classNames('tk-textarea-container', this.size, { focus: this.hasFocus });
 
-    let counter: HTMLSpanElement;
     const counterClasses = classNames('counter', this.charCount == this.maxLength && 'maxed');
-    if (this.maxLength) {
-      counter = (
-        <span class={counterClasses} data-testid={getDataTestId(this.dataTestid, 'counter')}>
-          {this.charCount}/{this.maxLength}
-        </span>
-      );
-    }
+    const counter = this.maxLength ? (
+      <span class={counterClasses} data-testid={getDataTestId(this.dataTestid, 'counter')}>
+        {this.charCount}/{this.maxLength}
+      </span>
+    ) : null;
+
+    const copyButton = this.showCopyButton ? (
+      <tk-icon
+        icon={this.copied ? 'check' : 'content_copy'}
+        variant={this.copied ? 'success' : 'neutral'}
+        size={this.size}
+        color={this.disabled ? 'var(--text-sub-base)' : undefined}
+        class="copy-button"
+        role="button"
+        aria-label={this.copied ? 'Copied!' : 'Copy'}
+        aria-disabled={this.disabled ? 'true' : undefined}
+        tabindex={this.disabled ? -1 : 0}
+        onClick={this.handleCopy}
+        onKeyDown={this.handleCopyKeyDown}
+        data-testid={getDataTestId(this.dataTestid, 'copy-button')}
+      />
+    ) : null;
 
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
-        {this.renderLabel()}
+        {(this.label?.length > 0 || this.showCopyButton) && (
+          <div class="tk-textarea-label-row" data-testid={getDataTestId(this.dataTestid, 'label-row')}>
+            {this.renderLabel()}
+            {copyButton}
+          </div>
+        )}
         <div class="tk-textarea" data-testid={getDataTestId(this.dataTestid, 'control')}>
           <textarea
             id={this.uniqueId}

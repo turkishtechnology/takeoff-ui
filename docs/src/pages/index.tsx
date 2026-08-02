@@ -6,6 +6,7 @@ import Frameworks from '../components/Landing/Frameworks';
 import DesignSystem from '../components/Landing/DesignSystem/DesignSystem';
 import PageHeader from '../components/PageHeader/PageHeader';
 import Contributors from '../components/Landing/Contributors';
+import V2Banner from '../components/Landing/V2Banner/V2Banner';
 import React from 'react';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <Layout title={`${siteConfig.title}`}>
       <PageHeader />
       <main>
+        <V2Banner />
         <HomepageFeatures />
         <Frameworks />
         <DesignSystem />

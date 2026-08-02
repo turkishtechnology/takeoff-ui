@@ -9,7 +9,8 @@ const Variant = () => {
 <TkButton variant="info" label="Info" />
 <TkButton variant="success" label="Success" />
 <TkButton variant="danger" label="Danger" />
-<TkButton variant="warning" label="Warning" />`;
+<TkButton variant="warning" label="Warning" />
+<TkButton variant="purple" label="Purple" />`;
 
   const vueCode = `<TkButton variant="primary" label="Primary" />
 <TkButton variant="secondary" label="Secondary" />
@@ -17,7 +18,8 @@ const Variant = () => {
 <TkButton variant="info" label="Info" />
 <TkButton variant="success" label="Success" />
 <TkButton variant="danger" label="Danger" />
-<TkButton variant="warning" label="Warning" />`;
+<TkButton variant="warning" label="Warning" />
+<TkButton variant="purple" label="Purple" />`;
 
   const angularCode = `<tk-button variant="primary" label="Primary" />
 <tk-button variant="secondary" label="Secondary" />
@@ -25,7 +27,8 @@ const Variant = () => {
 <tk-button variant="info" label="Info" />
 <tk-button variant="success" label="Success" />
 <tk-button variant="danger" label="Danger" />
-<tk-button variant="warning" label="Warning" />`;
+<tk-button variant="warning" label="Warning" />
+<tk-button variant="purple" label="Purple" />`;
 
   const demo = (
     <div className="flex justify-center flex-wrap gap-2">
@@ -36,6 +39,7 @@ const Variant = () => {
       <TkButton variant="success" label="Success" />
       <TkButton variant="danger" label="Danger" />
       <TkButton variant="warning" label="Warning" />
+      <TkButton variant="purple" label="Purple" />
     </div>
   );
 

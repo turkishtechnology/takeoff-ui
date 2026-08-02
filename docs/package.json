@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/docs",
-  "version": "0.11.11",
+  "version": "0.11.12",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -28,7 +28,7 @@
     "@takeoff-ui/tailwind": "workspace:*",
     "@tiptap/extension-highlight": "^2.11.0",
     "clsx": "^2.0.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.4.2",
     "dotenv-cli": "^8.0.0",
     "fs": "^0.0.1-security",
     "prism-react-renderer": "^2.3.0",
@@ -45,7 +45,7 @@
     "autoprefixer": "^10.5.4",
     "postcss": "^8.5.20",
     "tailwindcss": "^3.4.17",
-    "typescript": "~5.5.2",
+    "typescript": "~5.9.3",
     "utility-types": "^3.11.0",
     "vercel": "^52.0.1"
   },

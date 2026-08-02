@@ -15,9 +15,10 @@ const SelectAll = () => {
     { value: "male", label: "Male" },
     { value: "other", label: "Other" },
   ]}
-  selectAllLabel="Select All"
+  selectAllLabel="All"
   multiple
   selectAll={true}
+  showSelectAllChip={true}
   onTkSelectAll={handleSelectAll}
 />
  <div>Selected All: { selectAll ? 'true' : 'false' }</div>`;
@@ -40,8 +41,9 @@ const handleSelectAll = e => {
     { value: 'male', label: 'Male' },
     { value: 'other', label: 'Other' },
   ]"
-  selectAllLabel="Select All"
+  selectAllLabel="All"
   :selectAll="true"
+  :showSelectAllChip="true"
   multiple
   @tk-select-all="handleSelectAll"
 />
@@ -69,13 +71,14 @@ const handleSelectAll = e => {
     <div className="max-w-[215px]">
       <TkSelect
         label="Select All"
-        selectAllLabel="Select All"
+        selectAllLabel="All"
         options={options}
         multiple
         hint="Hint text"
         placeholder="Placeholder text"
         value={value}
         selectAll={true}
+        showSelectAllChip={true}
         onTkChange={handleTkChange}
         onTkSelectAll={handleSelectAll}
       />
