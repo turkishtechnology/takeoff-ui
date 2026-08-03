@@ -23,8 +23,7 @@
   },
   "scripts": {
     "test": "node ./__tests__/takeoff-ui-vue.test.js",
-    "update-utils": "node lib/update-utils.js",
-    "build": "npm run update-utils && npm run tsc",
+    "build": "npm run tsc",
     "tsc": "tsc -p . --outDir ./dist"
   },
   "dependencies": {

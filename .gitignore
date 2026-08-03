@@ -4,7 +4,6 @@
 **/dist
 /packages/core/src/components.d.ts
 /packages/core/src/interfaces.d.ts
-/packages/vue/lib/vue-component-lib
 /packages/vue/lib/components.ts
 /packages/react/lib/components/stencil-generated
 /packages/angular/projects/library/src/directives
