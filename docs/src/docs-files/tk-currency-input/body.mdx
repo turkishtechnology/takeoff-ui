@@ -4,6 +4,7 @@ import AllowNegativeValue from './Examples/AllowNegativeValue';
 import AllowEmptyValue from './Examples/AllowEmptyValue';
 import CustomSeparators from './Examples/CustomSeparators';
 import MinMax from './Examples/MinMax';
+import MaxIntegerDigits from './Examples/MaxIntegerDigits';
 import Size from './Examples/Size';
 import State from './Examples/State';
 import Playground from '../../components/Playground';
@@ -87,6 +88,15 @@ range is clamped to the nearest limit, both when it is set via the "value" prop
 and when the user edits the field and it loses focus.
 
 <MinMax />
+
+## Maximum Integer Digits
+
+The "maxIntegerDigits" prop limits how many digits the integer part can hold.
+Longer numbers can neither be typed nor pasted, and a value set through the
+"value" prop is clamped to the largest number that fits. Decimal digits are not
+counted; they are controlled by the "precision" prop.
+
+<MaxIntegerDigits />
 
 ## Size
 

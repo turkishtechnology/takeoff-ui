@@ -86,6 +86,12 @@
       "defaultValue": null
     },
     {
+      "key": "maxIntegerDigits",
+      "label": "Max Integer Digits",
+      "type": "text",
+      "defaultValue": null
+    },
+    {
       "key": "currencyList",
       "label": "Currency List",
       "type": "json",
