@@ -66,6 +66,7 @@ export class TkDatePicker {
   isOpenChanged(newValue: boolean) {
     if (!this.inline) {
       if (newValue) {
+        this.addDocumentKeyListener();
         if (this.internalSelectedDates.start) {
           this.currentMonth = new Date(this.internalSelectedDates.start.getFullYear(), this.internalSelectedDates.start.getMonth());
         }
@@ -78,6 +79,7 @@ export class TkDatePicker {
           });
         }
       } else {
+        this.removeDocumentKeyListener();
         // Kullanıcı değişikliklerini uygulamadan paneli kapatırsa, geçici seçimleri temizle
         if (this.allowApplyButton) {
           this.processDateValue(this.value, true);
@@ -430,6 +432,8 @@ export class TkDatePicker {
     // Clear reference to allow garbage collection
     this.cleanup = null;
     this.internals?.form?.removeEventListener('reset', this.handleFormReset);
+    // Remove the document keydown listener in case the component is unmounted while open
+    this.removeDocumentKeyListener();
 
     // Call mixin's disconnectedCallback for cleanup
     this.clickOutsideMixin?.disconnectedCallback();
@@ -1169,6 +1173,80 @@ export class TkDatePicker {
     this.isOpen = false;
   };
 
+  /** Closes the panel (if open) and returns focus to the trigger input. */
+  private closeAndReturnFocus = (): void => {
+    if (this.inline || !this.isOpen) return;
+    this.isOpen = false;
+    this.inputRef?.setFocus();
+  };
+
+  /** Whether there is a selection worth confirming (used to gate the Enter-to-close behavior). */
+  private hasSelectedValue = (): boolean => {
+    if (this.timeOnly) return !!this.internalStartTime;
+    const { start, end } = this.internalSelectedDates;
+    if (this.mode === 'range') return Boolean(start && end);
+    return Boolean(start);
+  };
+
+  private addDocumentKeyListener = (): void => {
+    // Attached only while the panel is open (mirrors the click-outside handling) so we are not
+    // holding a document-wide keydown listener for every datepicker on the page at all times.
+    // Capture phase so the keystroke is seen even when a panel control stops propagation.
+    document.addEventListener('keydown', this.handleDocumentKeyDown, true);
+  };
+
+  private removeDocumentKeyListener = (): void => {
+    document.removeEventListener('keydown', this.handleDocumentKeyDown, true);
+  };
+
+  /**
+   * Document-level keyboard handling so Enter/Escape work no matter where focus is:
+   * on the trigger input, on a focusable panel control, or fallen back to <body>
+   * after clicking a non-focusable calendar/time cell. A panel-only listener misses
+   * that last case because the event never bubbles into the panel. Bound only while open.
+   * - Escape dismisses the panel. It is not a revert: in apply-button mode the pending
+   *   selection is discarded by the isOpen watcher, but everywhere else changes are already
+   *   emitted as they happen, so dismissing keeps them. Use allowApplyButton for cancel semantics.
+   * - Enter closes only when there is a selection to confirm and not in apply-button mode,
+   *   and never while a panel control (nav arrows, time steppers, AM/PM toggle) is focused —
+   *   Enter must trigger that control's own action instead.
+   */
+  private handleDocumentKeyDown = (event: KeyboardEvent): void => {
+    if (this.inline || !this.isOpen) return;
+
+    // Only react to keystrokes that belong to this datepicker: originating inside it
+    // (composedPath pierces nested shadow roots, unlike `activeElement === this.el`) or with focus
+    // fallen back to body/root after clicking a non-focusable calendar/time cell. Never hijack
+    // keys aimed at unrelated elements on the page.
+    const path = event.composedPath();
+    const originatedInside = path.includes(this.el);
+    const activeEl = document.activeElement;
+    const focusOnBodyOrRoot = !activeEl || activeEl === document.body || activeEl === document.documentElement;
+    if (!originatedInside && !focusOnBodyOrRoot) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeAndReturnFocus();
+      return;
+    }
+
+    if (event.key !== 'Enter' || this.allowApplyButton) return;
+
+    // Let Enter trigger a focused panel control (nav arrows, steppers, AM/PM toggle) instead of
+    // closing. Checked against composedPath because those controls are shadow components: the
+    // real focus sits on a <button> inside their own shadow root, which `closest()` cannot reach.
+    // Duck-typed rather than `instanceof Element` because the path also holds non-element targets
+    // (document, window) and `Element` is not a global in every environment Stencil runs in.
+    const onPanelControl = path.some(
+      node => typeof (node as Element).matches === 'function' && (node as Element).matches('tk-button, tk-toggle-button, tk-toggle-button-group, [role="button"]'),
+    );
+    if (onPanelControl) return;
+
+    if (!this.hasSelectedValue()) return;
+    event.preventDefault();
+    this.closeAndReturnFocus();
+  };
+
   private getTimeStateToModify(): { time: { hour: number; minute: number }; type: 'start' | 'end' } | null {
     // Allow time changes if any time UI is active: showTimePicker or timeOnly mode
     if (!(this.showTimePicker || this.timeOnly)) return null;
@@ -1485,6 +1563,7 @@ export class TkDatePicker {
   };
 
   private handleInputKeyDown = (event: KeyboardEvent) => {
+    // Enter/Escape close handling lives in handleDocumentKeyDown so it works regardless of focus.
     if (this.timeOnly) return; // let time mask/type
     if (this.disableMask || this.mode === 'range') {
       event.preventDefault();
