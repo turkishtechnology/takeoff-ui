@@ -113,6 +113,11 @@ export class TkTreeView implements ComponentInterface {
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
 
   /**
+   * Determines which part of a branch item toggles its expanded state
+   */
+  @Prop() toggleTrigger: 'item' | 'icon' = 'item';
+
+  /**
    * The style attribute of container element
    */
   @Prop() containerStyle?: CSSStyleProperties = null;
@@ -465,19 +470,21 @@ export class TkTreeView implements ComponentInterface {
 
       if (isExpanded) {
         // Stepper: Close self and descendants
+        // A new Set is assigned instead of mutating the current one, otherwise the state change is not picked up
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.delete(pathStr);
+        descendants.forEach(descPath => newPaths.delete(descPath));
+
         if (!this.isControlled()) {
-          this.expandedPaths.delete(pathStr);
-          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+          this.expandedPaths = newPaths;
         }
         if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
-          this.selectedPath = null;
+          // Expanding a branch selects it, so collapsing keeps it selected instead of dropping the
+          // selection. Otherwise the same control would select and deselect on alternating clicks.
+          this.handleSelect(pathStr, item);
         }
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.delete(pathStr);
-          descendants.forEach(descPath => newPaths.delete(descPath));
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -502,19 +509,21 @@ export class TkTreeView implements ComponentInterface {
     } else {
       if (this.expandedPaths.has(pathStr)) {
         // Basic: Close self and descendants
+        // A new Set is assigned instead of mutating the current one, otherwise the state change is not picked up
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.delete(pathStr);
+        descendants.forEach(descPath => newPaths.delete(descPath));
+
         if (!this.isControlled()) {
-          this.expandedPaths.delete(pathStr);
-          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+          this.expandedPaths = newPaths;
         }
         if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
-          this.selectedPath = null;
+          // Expanding a branch selects it, so collapsing keeps it selected instead of dropping the
+          // selection. Otherwise the same control would select and deselect on alternating clicks.
+          this.handleSelect(pathStr, item);
         }
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.delete(pathStr);
-          descendants.forEach(descPath => newPaths.delete(descPath));
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -522,15 +531,15 @@ export class TkTreeView implements ComponentInterface {
         }
       } else {
         // Basic: Open only self
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.add(pathStr);
+
         if (!this.isControlled()) {
-          this.expandedPaths.add(pathStr);
+          this.expandedPaths = newPaths;
         }
         this.handleSelect(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.add(pathStr);
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -685,6 +694,11 @@ export class TkTreeView implements ComponentInterface {
   private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
     if (isDirectory) {
+      // The arrow icon owns the toggle in this mode, clicking the item only selects it
+      if (this.toggleTrigger === 'icon') {
+        this.handleSelect(pathStr, item);
+        return;
+      }
       this.handleToggleUnified(pathStr, item);
     } else {
       // In stepper mode, when a file (leaf) is clicked, collapse any expanded
@@ -729,6 +743,14 @@ export class TkTreeView implements ComponentInterface {
     const isSelected = this.selectedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
 
+    const handleToggleIconClick =
+      this.toggleTrigger === 'icon' && !isDisabled
+        ? (event: MouseEvent) => {
+            event.stopPropagation();
+            this.handleToggleUnified(pathStr, item);
+          }
+        : undefined;
+
     const nodeClass = classNames('tk-tree-view', 'node', {
       directory: isDirectory,
       file: !isDirectory,
@@ -755,7 +777,9 @@ export class TkTreeView implements ComponentInterface {
             this.handleItemClick(pathStr, item, isDisabled, isDirectory);
           }}
         >
-          {isDirectory && this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />}
+          {isDirectory && this.mode === 'basic' && (
+            <tk-icon onClick={handleToggleIconClick} variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
+          )}
           {this.selectable && (
             <tk-checkbox
               onClick={e => {
@@ -793,7 +817,12 @@ export class TkTreeView implements ComponentInterface {
             })()}
           </div>
           {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
-            <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} size={this.size} />
+            <tk-icon
+              onClick={handleToggleIconClick}
+              variant={isSelected ? 'primary' : 'neutral'}
+              icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
+              size={this.size}
+            />
           )}
         </div>
         {this.mode === 'basic' && isDirectory && isExpanded && item.children && item.children.length > 0 && (

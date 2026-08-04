@@ -13,6 +13,18 @@ const treeItems = [
   { key: 'b', label: 'B' },
 ];
 
+const setupTree = async (html: string) => {
+  const page = await newSpecPage({ components: [TkTreeView], html });
+  page.root.items = treeItems;
+  await page.waitForChanges();
+  return page;
+};
+
+const branchNode = (page: Awaited<ReturnType<typeof setupTree>>) => page.root.querySelector('.node.directory');
+const branchLabel = (page: Awaited<ReturnType<typeof setupTree>>) => page.root.querySelector('.node.directory > .tk-tree-view.label') as HTMLElement;
+// the arrow icon is the first tk-icon of a branch label, the fixture sets no branchIcon
+const branchToggleIcon = (page: Awaited<ReturnType<typeof setupTree>>) => page.root.querySelector('.node.directory > .tk-tree-view.label > tk-icon') as HTMLElement;
+
 describe('tk-tree-view', () => {
   it('renders a badge for branch child counts', async () => {
     const page = await newSpecPage({
@@ -24,6 +36,237 @@ describe('tk-tree-view', () => {
     await page.waitForChanges();
 
     expect(page.root.querySelector('tk-badge')).toBeTruthy();
+  });
+
+  describe('toggleTrigger', () => {
+    it('collapses the branch when the item is clicked with the default trigger', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+    });
+
+    it('expands the branch when the item is clicked with the default trigger', async () => {
+      const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('does not collapse the branch when the item is clicked and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('does not expand the branch when the item is clicked and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view toggle-trigger="icon"></tk-tree-view>`);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+    });
+
+    it('selects the branch and emits tk-item-click when the item is clicked and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      // select the child leaf first, then click its parent branch
+      (page.root.querySelector('.node.directory .node.file > .tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(clicked).toEqual(['a1', 'a']);
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+    });
+
+    it('collapses the branch when the arrow icon is clicked and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
+
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+    });
+
+    it('expands the branch when the arrow icon is clicked and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view toggle-trigger="icon"></tk-tree-view>`);
+
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('leaves a selection outside the collapsed subtree untouched', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view expand-all></tk-tree-view>` });
+      page.root.items = [
+        { key: 'a', label: 'A', children: [{ key: 'a1', label: 'A1' }] },
+        { key: 'b', label: 'B', children: [{ key: 'b1', label: 'B1' }] },
+      ];
+      await page.waitForChanges();
+
+      const branches = page.root.querySelectorAll('.node.directory');
+      (branches[1].querySelector('.node.file > .tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+
+      const emitted: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => emitted.push((e as CustomEvent).detail.key));
+
+      // collapsing A must not move the selection that lives under B
+      (page.root.querySelector('.node.directory > .tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelectorAll('.node.directory')[1].querySelector('.node.file').classList.contains('selected')).toBe(true);
+      expect(emitted).toEqual([]);
+    });
+
+    // The reported issue: selecting a child leaf and then clicking its parent collapsed the tree
+    // and left nothing selected. With the icon trigger the parent takes the selection instead.
+    it('moves the selection to the parent without collapsing when a child leaf was selected', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
+
+      const childLeaf = page.root.querySelector('.node.directory .node.file') as HTMLElement;
+      (childLeaf.querySelector('.tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(childLeaf.classList.contains('selected')).toBe(true);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+      expect((page.root.querySelector('.node.directory .node.file') as HTMLElement).classList.contains('selected')).toBe(false);
+    });
+
+    // Expanding a branch selects it, so collapsing has to keep it selected. Otherwise repeated
+    // clicks on one control would select and deselect in turn, and the deselect half would be
+    // silent because no event is emitted for it.
+    it.each([
+      ['icon', 'toggle-trigger="icon"'],
+      ['item', ''],
+    ])('keeps the branch selected across repeated toggles with the %s trigger', async (trigger: string, attr: string) => {
+      const page = await setupTree(`<tk-tree-view ${attr}></tk-tree-view>`);
+      const toggle = () => (trigger === 'icon' ? branchToggleIcon(page) : branchLabel(page));
+
+      const emitted: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => emitted.push((e as CustomEvent).detail.key));
+
+      const states: string[] = [];
+      for (let i = 0; i < 3; i++) {
+        toggle().click();
+        await page.waitForChanges();
+        states.push(`${branchNode(page).classList.contains('expanded')}/${branchNode(page).classList.contains('selected')}`);
+      }
+
+      expect(states).toEqual(['true/true', 'false/true', 'true/true']);
+      expect(emitted).toEqual(['a', 'a', 'a']);
+    });
+
+    it('moves the selection to the collapsed branch when the collapse hides the selected item', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
+
+      (page.root.querySelector('.node.directory .node.file > .tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+    });
+
+    it('keeps the arrow icon neutral while the branch is expanded but not selected', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+      expect(branchNode(page).classList.contains('selected')).toBe(false);
+      expect(branchToggleIcon(page).getAttribute('variant')).toBe('neutral');
+    });
+
+    it('renders the arrow icon with the primary variant once the branch is selected', async () => {
+      const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
+      expect(branchToggleIcon(page).getAttribute('variant')).toBe('neutral');
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+      expect(branchToggleIcon(page).getAttribute('variant')).toBe('primary');
+    });
+
+    it('handles an arrow icon click exactly once with the default trigger', async () => {
+      const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      // no handler on the icon, the click has to reach the label exactly once
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+
+      expect(clicked).toEqual(['a']);
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('handles an arrow icon click exactly once when the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view toggle-trigger="icon"></tk-tree-view>`);
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      // the icon handler stops propagation, the label handler must not run as well
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+
+      expect(clicked).toEqual(['a']);
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('ignores an arrow icon click on a disabled item', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view toggle-trigger="icon"></tk-tree-view>` });
+      page.root.items = [{ key: 'a', label: 'A', disabled: true, children: [{ key: 'a1', label: 'A1' }] }];
+      await page.waitForChanges();
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+
+      expect(clicked).toEqual([]);
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+    });
+
+    it('clears the selection when expandedKeys hides the selected item in controlled mode', async () => {
+      const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
+      page.root.expandedKeys = ['a'];
+      await page.waitForChanges();
+
+      // select the child leaf, then collapse its parent from the outside
+      (page.root.querySelector('.node.directory .node.file > .tk-tree-view.label') as HTMLElement).click();
+      await page.waitForChanges();
+
+      page.root.expandedKeys = [];
+      await page.waitForChanges();
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+      expect(page.root.querySelector('.node.selected')).toBeNull();
+    });
   });
 
   describe('selectAll', () => {
