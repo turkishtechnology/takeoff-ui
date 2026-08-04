@@ -409,6 +409,7 @@ export class TkCurrencyInput implements ComponentInterface {
    * @param emitChange when true, emits a tkChange event if the value was clamped.
    */
   private applyMinMax(emitChange: boolean) {
+    if (this.min === undefined && this.max === undefined && this.getDigitLimitBound() === null) return;
     if (this.currentNumericValue === null || this.currentNumericValue === undefined) return;
 
     const clampedValue = this.clampNumericValue(this.currentNumericValue);
