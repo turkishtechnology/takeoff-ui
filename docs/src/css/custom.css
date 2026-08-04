@@ -551,7 +551,7 @@
 }
 
 /* sadece overview sayfasında container daha geniş olması sağlandı */
-@media (min-width: 1440px) {
+@media (min-width: 997px) {
   .docs-doc-id-Components\/Overview .container {
     width: 100% !important;
     max-width: 100% !important;

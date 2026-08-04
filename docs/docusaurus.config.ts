@@ -77,6 +77,16 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/takeoff-og.jpg',
+    // Site-wide notice pointing new projects at Takeoff UI v2.
+    // Dismissible: returning readers who already know can hide it for good.
+    announcementBar: {
+      id: 'takeoff-v2-release',
+      content:
+        'Takeoff UI v2 is here — headless, accessible, React-only. New projects should start with <a target="_blank" rel="noopener noreferrer" href="https://takeoff-v2.app.turkishtechlab.com/">Takeoff UI v2</a>. v1 stays supported for existing projects.',
+      backgroundColor: 'var(--primary-600)',
+      textColor: 'var(--static-light)',
+      isCloseable: true,
+    },
     navbar: {
       // title: "Takeoff UI",
       logo: {
@@ -99,6 +109,11 @@ const config: Config = {
         {
           to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
           label: 'v0.11.12',
+          position: 'right',
+        },
+        {
+          href: 'https://takeoff-v2.app.turkishtechlab.com/',
+          label: 'Takeoff UI v2',
           position: 'right',
         },
         {
