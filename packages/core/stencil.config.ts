@@ -106,6 +106,9 @@ export const config: Config = {
   ],
   testing: {
     browserHeadless: 'shell',
+    moduleNameMapper: {
+      '^uuid$': '<rootDir>/jest-uuid-shim.js',
+    },
   },
   plugins: [
     sass({
