@@ -11,9 +11,11 @@ on the item.
 Only a click changes the highlight now, in both trigger modes. Collapsing a
 branch highlights that branch instead of clearing the highlight or leaving it on
 another item, so `tk-item-click` also fires when a click collapses a branch.
-Clicking the highlighted item again removes the highlight, except for a branch
-click with the `item` trigger, where the click expands or collapses instead. No
-event is emitted for the removal.
+Clicking the highlighted item again removes the highlight, except when that
+click also expands or collapses. No event is emitted for the removal.
+
+With `toggleTrigger="icon"` the arrow is the only expansion control in stepper
+mode as well, so clicking a leaf no longer closes the columns next to it.
 
 A collapse coming from the `expandedKeys` prop no longer clears the highlight
 either. It only hides the highlighted row along with its branch, and expanding

@@ -671,9 +671,10 @@ export class TkTreeView implements ComponentInterface {
   private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
     // Clicking the highlighted item again removes the highlight, but only when highlighting is all
-    // the click does. A branch click with the item trigger also toggles, and letting it clear the
-    // highlight as well would make the highlight blink on and off on every other click.
-    const alsoToggles = isDirectory && this.toggleTrigger === 'item';
+    // the click does. Clicks that also expand or collapse keep it, otherwise the highlight would
+    // blink on and off on every other click. With the item trigger that covers branches, and leaves
+    // too in stepper mode where a leaf click closes the columns next to it.
+    const alsoToggles = this.toggleTrigger === 'item' && (isDirectory || this.mode === 'stepper');
     if (!alsoToggles && this.highlightedPath === pathStr) {
       this.highlightedPath = null;
       this.isInitialLoad = false;
@@ -688,8 +689,9 @@ export class TkTreeView implements ComponentInterface {
       this.handleToggleUnified(pathStr, item);
     } else {
       // In stepper mode, when a file (leaf) is clicked, collapse any expanded
-      // directory at the same level by keeping only the ancestors of the file's parent
-      if (this.mode === 'stepper') {
+      // directory at the same level by keeping only the ancestors of the file's parent.
+      // With the icon trigger the arrow owns every expansion change, so the click only highlights.
+      if (this.mode === 'stepper' && this.toggleTrigger === 'item') {
         const parentPath = pathStr.includes('-') ? pathStr.split('-').slice(0, -1).join('-') : '';
         const ancestors: string[] = [];
         if (parentPath) {

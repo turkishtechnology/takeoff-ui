@@ -180,6 +180,34 @@ describe('tk-tree-view', () => {
       expect(emitted).toEqual(['a', 'a', 'a']);
     });
 
+    it('does not restructure the stepper columns on a leaf click when the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view mode="stepper" toggle-trigger="icon"></tk-tree-view>`);
+
+      branchToggleIcon(page).click();
+      await page.waitForChanges();
+      expect(page.root.querySelectorAll('.column').length).toBe(2);
+
+      // the root level leaf has no arrow, so clicking it must only highlight
+      const rootLeaf = page.root.querySelectorAll('.column')[0].querySelector('.node.file > .tk-tree-view.label') as HTMLElement;
+      rootLeaf.click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelectorAll('.column').length).toBe(2);
+      expect(page.root.querySelector('.node.file').classList.contains('selected')).toBe(true);
+    });
+
+    it('still collapses the stepper columns on a leaf click with the item trigger', async () => {
+      const page = await setupTree(`<tk-tree-view mode="stepper" expand-all></tk-tree-view>`);
+
+      expect(page.root.querySelectorAll('.column').length).toBe(2);
+
+      const rootLeaf = page.root.querySelectorAll('.column')[0].querySelector('.node.file > .tk-tree-view.label') as HTMLElement;
+      rootLeaf.click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelectorAll('.column').length).toBe(1);
+    });
+
     // Clicking the highlighted item again removes the highlight, but only where highlighting is the
     // whole effect of the click. A branch with the item trigger toggles instead, so it keeps the
     // highlight rather than blinking it on and off on alternating clicks.
