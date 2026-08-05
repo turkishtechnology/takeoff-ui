@@ -405,6 +405,27 @@ export class TkInput implements ComponentInterface {
   }
 
   /**
+   * Re-syncs Cleave (its own listener runs after this one, so it still holds the previous
+   * keystroke) and returns the formatted value. `setRawValue` writes the delimiter-less value
+   * into the field first, which parks the caret at the end, so restore the caret afterwards.
+   */
+  private resyncCleaveValue(input: HTMLInputElement, cleave: Cleave): string {
+    const caretBefore = input.selectionStart;
+    const valueBefore = input.value;
+
+    cleave.setRawValue(cleave.getRawValue());
+    const formattedValue = cleave.getFormattedValue();
+
+    if (typeof caretBefore === 'number' && typeof input.setSelectionRange === 'function') {
+      // At the end, follow any delimiter the mask appended ("2026" -> "2026-"); otherwise stay put.
+      const caret = caretBefore >= valueBefore.length ? input.value.length : caretBefore;
+      input.setSelectionRange(caret, caret);
+    }
+
+    return formattedValue;
+  }
+
+  /**
    * Whether a Cleave.js instance should back the current mask. Cleave is only used
    * for its own formatting options; a `regex` mask is handled by the incremental
    * matcher instead, so we never build a (useless and side-effecting) Cleave
@@ -512,10 +533,7 @@ export class TkInput implements ComponentInterface {
           }
 
           if (this.cleaveInstance) {
-            // Re-apply the current raw value to force Cleave to re-sync its internal state before reading formatted output.
-            const rawValue = this.cleaveInstance.getRawValue();
-            this.cleaveInstance?.setRawValue(rawValue);
-            _value = this.cleaveInstance?.getFormattedValue();
+            _value = this.resyncCleaveValue(input, this.cleaveInstance);
           }
         }
       }
