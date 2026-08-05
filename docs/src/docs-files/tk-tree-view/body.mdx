@@ -68,9 +68,11 @@ By default clicking anywhere on a branch item expands or collapses it, so a
 branch closes when it is clicked while one of its children is highlighted.
 
 Set `toggleTrigger="icon"` to limit toggling to the arrow icon. Clicking the
-rest of the item then only highlights it and leaves the tree open. Expanding and
-collapsing from the arrow both keep that branch highlighted, so the highlight
-never disappears while the user is only opening and closing branches.
+rest of the item then only highlights it and leaves the tree open.
+
+The highlight always follows the last clicked item, so expanding and collapsing
+a branch both highlight that branch and the highlight never disappears while the
+user is only opening and closing branches.
 
 <CollapseBehavior />
 

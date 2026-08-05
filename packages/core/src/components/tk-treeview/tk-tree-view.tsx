@@ -478,11 +478,9 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = newPaths;
         }
-        if (this.highlightedPath !== null && (pathStr === this.highlightedPath || descendants.includes(this.highlightedPath))) {
-          // Expanding a branch highlights it, so collapsing keeps that highlight. Otherwise the same
-          // control would highlight the branch on one click and clear it on the next.
-          this.handleHighlight(pathStr, item);
-        }
+        // Clicking an item makes it the highlighted one and collapsing is no exception, so the
+        // highlight always follows the last clicked item instead of depending on where it was.
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
           const deepestPaths = this.getDeepestPaths(newPaths);
@@ -517,11 +515,9 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = newPaths;
         }
-        if (this.highlightedPath !== null && (this.highlightedPath === pathStr || descendants.includes(this.highlightedPath))) {
-          // Expanding a branch highlights it, so collapsing keeps that highlight. Otherwise the same
-          // control would highlight the branch on one click and clear it on the next.
-          this.handleHighlight(pathStr, item);
-        }
+        // Clicking an item makes it the highlighted one and collapsing is no exception, so the
+        // highlight always follows the last clicked item instead of depending on where it was.
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
           const deepestPaths = this.getDeepestPaths(newPaths);
@@ -755,7 +751,7 @@ export class TkTreeView implements ComponentInterface {
       directory: isDirectory,
       file: !isDirectory,
       expanded: isExpanded,
-      highlighted: isHighlighted,
+      selected: isHighlighted,
       disabled: isDisabled,
     });
     const selectedCount = this.getSelectedCount(item);
@@ -768,7 +764,7 @@ export class TkTreeView implements ComponentInterface {
             'tk-tree-view',
             'label',
             {
-              highlighted: isHighlighted,
+              selected: isHighlighted,
               disabled: isDisabled,
             },
             this.size,
