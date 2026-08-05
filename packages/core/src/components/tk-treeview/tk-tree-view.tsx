@@ -189,27 +189,8 @@ export class TkTreeView implements ComponentInterface {
 
       this.expandedPaths = this.expandKeysWithAncestors(indexPaths);
 
-      // In controlled mode, clear the highlight if the highlighted node is no longer expanded
-      if (this.highlightedPath !== null) {
-        // Check if the highlighted path or any of its ancestors is collapsed
-        const highlightedPathParts = this.highlightedPath.split('-');
-        let isHighlightedPathVisible = true;
-
-        // Check each ancestor up to and including the highlighted path
-        for (let i = 1; i <= highlightedPathParts.length; i++) {
-          const ancestorPath = highlightedPathParts.slice(0, i).join('-');
-          // For directories, they need to be expanded to show their children
-          if (i < highlightedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
-            isHighlightedPathVisible = false;
-            break;
-          }
-        }
-
-        // Clear the highlight if not visible
-        if (!isHighlightedPathVisible) {
-          this.highlightedPath = null;
-        }
-      }
+      // The highlight is deliberately left alone here. Only a click moves it, so a change coming
+      // from the prop just hides it along with its row and brings it back when the branch reopens.
     }
   }
 
@@ -689,6 +670,15 @@ export class TkTreeView implements ComponentInterface {
    */
   private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
+    // Clicking the highlighted item again removes the highlight, but only when highlighting is all
+    // the click does. A branch click with the item trigger also toggles, and letting it clear the
+    // highlight as well would make the highlight blink on and off on every other click.
+    const alsoToggles = isDirectory && this.toggleTrigger === 'item';
+    if (!alsoToggles && this.highlightedPath === pathStr) {
+      this.highlightedPath = null;
+      this.isInitialLoad = false;
+      return;
+    }
     if (isDirectory) {
       // The arrow icon owns the toggle in this mode, clicking the item only highlights it
       if (this.toggleTrigger === 'icon') {

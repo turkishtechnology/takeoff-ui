@@ -180,6 +180,51 @@ describe('tk-tree-view', () => {
       expect(emitted).toEqual(['a', 'a', 'a']);
     });
 
+    // Clicking the highlighted item again removes the highlight, but only where highlighting is the
+    // whole effect of the click. A branch with the item trigger toggles instead, so it keeps the
+    // highlight rather than blinking it on and off on alternating clicks.
+    it('clears the highlight when the highlighted item is clicked again and the trigger is icon', async () => {
+      const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.node.selected')).toBeNull();
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    it('clears the highlight when a highlighted leaf is clicked again in either trigger mode', async () => {
+      for (const attr of ['expand-all', 'expand-all toggle-trigger="icon"']) {
+        const page = await setupTree(`<tk-tree-view ${attr}></tk-tree-view>`);
+        const leaf = () => page.root.querySelector('.node.file > .tk-tree-view.label') as HTMLElement;
+
+        leaf().click();
+        await page.waitForChanges();
+        expect(page.root.querySelector('.node.file').classList.contains('selected')).toBe(true);
+
+        leaf().click();
+        await page.waitForChanges();
+        expect(page.root.querySelector('.node.selected')).toBeNull();
+      }
+    });
+
+    it('keeps the highlight on a branch clicked again with the item trigger', async () => {
+      const page = await setupTree(`<tk-tree-view toggle-trigger="item"></tk-tree-view>`);
+
+      const states: string[] = [];
+      for (let i = 0; i < 4; i++) {
+        branchLabel(page).click();
+        await page.waitForChanges();
+        states.push(`${branchNode(page).classList.contains('expanded')}/${branchNode(page).classList.contains('selected')}`);
+      }
+
+      expect(states).toEqual(['true/true', 'false/true', 'true/true', 'false/true']);
+    });
+
     it('moves the highlight to the collapsed branch when the collapse hides the highlighted item', async () => {
       const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
 
@@ -255,7 +300,9 @@ describe('tk-tree-view', () => {
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
     });
 
-    it('clears the highlight when expandedKeys hides the highlighted item in controlled mode', async () => {
+    // A prop driven collapse is not a click, so it only hides the highlighted row. Re-expanding the
+    // branch brings the highlight back, which keeps clicks the single thing that moves it.
+    it('keeps the highlight when expandedKeys hides the highlighted item in controlled mode', async () => {
       const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
       page.root.expandedKeys = ['a'];
       await page.waitForChanges();
@@ -268,7 +315,12 @@ describe('tk-tree-view', () => {
       await page.waitForChanges();
 
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
+      // the highlighted leaf is hidden but still highlighted, so it returns when A reopens
       expect(page.root.querySelector('.node.selected')).toBeNull();
+
+      page.root.expandedKeys = ['a'];
+      await page.waitForChanges();
+      expect(page.root.querySelector('.node.file').classList.contains('selected')).toBe(true);
     });
   });
 
