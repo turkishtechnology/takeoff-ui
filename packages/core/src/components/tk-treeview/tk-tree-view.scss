@@ -173,7 +173,7 @@
       padding: var(--items-tree-small-v-padding, 4px) var(--items-tree-small-h-padding, 6px);
     }
 
-    &.selected {
+    &.highlighted {
       background: var(--primary-lightest, #fae6e8);
       color: var(--text-darkest, #222530);
     }
@@ -183,7 +183,7 @@
       cursor: not-allowed;
     }
 
-    &:not(.disabled, .selected):hover {
+    &:not(.disabled, .highlighted):hover {
       color: var(--text-darkest, #222530);
       background: var(--background-lightest, #f9fafc);
     }

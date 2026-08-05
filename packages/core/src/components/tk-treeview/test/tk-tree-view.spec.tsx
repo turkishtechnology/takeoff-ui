@@ -77,13 +77,13 @@ describe('tk-tree-view', () => {
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
     });
 
-    it('selects the branch and emits tk-item-click when the item is clicked and the trigger is icon', async () => {
+    it('highlights the branch and emits tk-item-click when the item is clicked and the trigger is icon', async () => {
       const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
 
       const clicked: string[] = [];
       page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
 
-      // select the child leaf first, then click its parent branch
+      // highlight the child leaf first, then click its parent branch
       (page.root.querySelector('.node.directory .node.file > .tk-tree-view.label') as HTMLElement).click();
       await page.waitForChanges();
 
@@ -91,7 +91,7 @@ describe('tk-tree-view', () => {
       await page.waitForChanges();
 
       expect(clicked).toEqual(['a1', 'a']);
-      expect(branchNode(page).classList.contains('selected')).toBe(true);
+      expect(branchNode(page).classList.contains('highlighted')).toBe(true);
     });
 
     it('collapses the branch when the arrow icon is clicked and the trigger is icon', async () => {
@@ -112,7 +112,7 @@ describe('tk-tree-view', () => {
       expect(branchNode(page).classList.contains('expanded')).toBe(true);
     });
 
-    it('leaves a selection outside the collapsed subtree untouched', async () => {
+    it('leaves a highlight outside the collapsed subtree untouched', async () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view expand-all></tk-tree-view>` });
       page.root.items = [
         { key: 'a', label: 'A', children: [{ key: 'a1', label: 'A1' }] },
@@ -127,39 +127,39 @@ describe('tk-tree-view', () => {
       const emitted: string[] = [];
       page.root.addEventListener('tk-item-click', (e: Event) => emitted.push((e as CustomEvent).detail.key));
 
-      // collapsing A must not move the selection that lives under B
+      // collapsing A must not move the highlight that lives under B
       (page.root.querySelector('.node.directory > .tk-tree-view.label') as HTMLElement).click();
       await page.waitForChanges();
 
-      expect(page.root.querySelectorAll('.node.directory')[1].querySelector('.node.file').classList.contains('selected')).toBe(true);
+      expect(page.root.querySelectorAll('.node.directory')[1].querySelector('.node.file').classList.contains('highlighted')).toBe(true);
       expect(emitted).toEqual([]);
     });
 
-    // The reported issue: selecting a child leaf and then clicking its parent collapsed the tree
-    // and left nothing selected. With the icon trigger the parent takes the selection instead.
-    it('moves the selection to the parent without collapsing when a child leaf was selected', async () => {
+    // The reported issue: highlighting a child leaf and then clicking its parent collapsed the tree
+    // and left nothing highlighted. With the icon trigger the parent takes the highlight instead.
+    it('moves the highlight to the parent without collapsing when a child leaf was highlighted', async () => {
       const page = await setupTree(`<tk-tree-view expand-all toggle-trigger="icon"></tk-tree-view>`);
 
       const childLeaf = page.root.querySelector('.node.directory .node.file') as HTMLElement;
       (childLeaf.querySelector('.tk-tree-view.label') as HTMLElement).click();
       await page.waitForChanges();
-      expect(childLeaf.classList.contains('selected')).toBe(true);
+      expect(childLeaf.classList.contains('highlighted')).toBe(true);
 
       branchLabel(page).click();
       await page.waitForChanges();
 
       expect(branchNode(page).classList.contains('expanded')).toBe(true);
-      expect(branchNode(page).classList.contains('selected')).toBe(true);
-      expect((page.root.querySelector('.node.directory .node.file') as HTMLElement).classList.contains('selected')).toBe(false);
+      expect(branchNode(page).classList.contains('highlighted')).toBe(true);
+      expect((page.root.querySelector('.node.directory .node.file') as HTMLElement).classList.contains('highlighted')).toBe(false);
     });
 
-    // Expanding a branch selects it, so collapsing has to keep it selected. Otherwise repeated
-    // clicks on one control would select and deselect in turn, and the deselect half would be
-    // silent because no event is emitted for it.
+    // Expanding a branch highlights it, so collapsing has to keep that highlight. Otherwise one
+    // control would highlight the branch on one click and clear it on the next, and the clearing
+    // half would be silent because no event is emitted for it.
     it.each([
       ['icon', 'toggle-trigger="icon"'],
       ['item', ''],
-    ])('keeps the branch selected across repeated toggles with the %s trigger', async (trigger: string, attr: string) => {
+    ])('keeps the branch highlighted across repeated toggles with the %s trigger', async (trigger: string, attr: string) => {
       const page = await setupTree(`<tk-tree-view ${attr}></tk-tree-view>`);
       const toggle = () => (trigger === 'icon' ? branchToggleIcon(page) : branchLabel(page));
 
@@ -170,14 +170,14 @@ describe('tk-tree-view', () => {
       for (let i = 0; i < 3; i++) {
         toggle().click();
         await page.waitForChanges();
-        states.push(`${branchNode(page).classList.contains('expanded')}/${branchNode(page).classList.contains('selected')}`);
+        states.push(`${branchNode(page).classList.contains('expanded')}/${branchNode(page).classList.contains('highlighted')}`);
       }
 
       expect(states).toEqual(['true/true', 'false/true', 'true/true']);
       expect(emitted).toEqual(['a', 'a', 'a']);
     });
 
-    it('moves the selection to the collapsed branch when the collapse hides the selected item', async () => {
+    it('moves the highlight to the collapsed branch when the collapse hides the highlighted item', async () => {
       const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
 
       (page.root.querySelector('.node.directory .node.file > .tk-tree-view.label') as HTMLElement).click();
@@ -187,25 +187,25 @@ describe('tk-tree-view', () => {
       await page.waitForChanges();
 
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
-      expect(branchNode(page).classList.contains('selected')).toBe(true);
+      expect(branchNode(page).classList.contains('highlighted')).toBe(true);
     });
 
-    it('keeps the arrow icon neutral while the branch is expanded but not selected', async () => {
+    it('keeps the arrow icon neutral while the branch is expanded but not highlighted', async () => {
       const page = await setupTree(`<tk-tree-view expand-all></tk-tree-view>`);
 
       expect(branchNode(page).classList.contains('expanded')).toBe(true);
-      expect(branchNode(page).classList.contains('selected')).toBe(false);
+      expect(branchNode(page).classList.contains('highlighted')).toBe(false);
       expect(branchToggleIcon(page).getAttribute('variant')).toBe('neutral');
     });
 
-    it('renders the arrow icon with the primary variant once the branch is selected', async () => {
+    it('renders the arrow icon with the primary variant once the branch is highlighted', async () => {
       const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
       expect(branchToggleIcon(page).getAttribute('variant')).toBe('neutral');
 
       branchLabel(page).click();
       await page.waitForChanges();
 
-      expect(branchNode(page).classList.contains('selected')).toBe(true);
+      expect(branchNode(page).classList.contains('highlighted')).toBe(true);
       expect(branchToggleIcon(page).getAttribute('variant')).toBe('primary');
     });
 
@@ -252,7 +252,7 @@ describe('tk-tree-view', () => {
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
     });
 
-    it('clears the selection when expandedKeys hides the selected item in controlled mode', async () => {
+    it('clears the highlight when expandedKeys hides the highlighted item in controlled mode', async () => {
       const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
       page.root.expandedKeys = ['a'];
       await page.waitForChanges();
@@ -265,7 +265,7 @@ describe('tk-tree-view', () => {
       await page.waitForChanges();
 
       expect(branchNode(page).classList.contains('expanded')).toBe(false);
-      expect(page.root.querySelector('.node.selected')).toBeNull();
+      expect(page.root.querySelector('.node.highlighted')).toBeNull();
     });
   });
 

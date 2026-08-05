@@ -22,7 +22,7 @@ export class TkTreeView implements ComponentInterface {
   @Element() el: HTMLElement;
 
   @State() expandedPaths: Set<string> = new Set();
-  @State() selectedPath: string | null = null;
+  @State() highlightedPath: string | null = null;
   /**
    * başlangıçta expanded keys lerin seçili gibi görünmesini ve herhangi bir item'a tıklandığında
    * bu state'in false'a çekilerek expandedKeys'lerin sürekli seçili görünmesini engellemek için kurgulanmıştır.s
@@ -189,25 +189,25 @@ export class TkTreeView implements ComponentInterface {
 
       this.expandedPaths = this.expandKeysWithAncestors(indexPaths);
 
-      // In controlled mode, clear selection if the selected node is no longer expanded
-      if (this.selectedPath !== null) {
-        // Check if the selected path or any of its ancestors is collapsed
-        const selectedPathParts = this.selectedPath.split('-');
-        let isSelectedPathVisible = true;
+      // In controlled mode, clear the highlight if the highlighted node is no longer expanded
+      if (this.highlightedPath !== null) {
+        // Check if the highlighted path or any of its ancestors is collapsed
+        const highlightedPathParts = this.highlightedPath.split('-');
+        let isHighlightedPathVisible = true;
 
-        // Check each ancestor up to and including the selected path
-        for (let i = 1; i <= selectedPathParts.length; i++) {
-          const ancestorPath = selectedPathParts.slice(0, i).join('-');
+        // Check each ancestor up to and including the highlighted path
+        for (let i = 1; i <= highlightedPathParts.length; i++) {
+          const ancestorPath = highlightedPathParts.slice(0, i).join('-');
           // For directories, they need to be expanded to show their children
-          if (i < selectedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
-            isSelectedPathVisible = false;
+          if (i < highlightedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
+            isHighlightedPathVisible = false;
             break;
           }
         }
 
-        // Clear selection if not visible
-        if (!isSelectedPathVisible) {
-          this.selectedPath = null;
+        // Clear the highlight if not visible
+        if (!isHighlightedPathVisible) {
+          this.highlightedPath = null;
         }
       }
     }
@@ -478,10 +478,10 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = newPaths;
         }
-        if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
-          // Expanding a branch selects it, so collapsing keeps it selected instead of dropping the
-          // selection. Otherwise the same control would select and deselect on alternating clicks.
-          this.handleSelect(pathStr, item);
+        if (this.highlightedPath !== null && (pathStr === this.highlightedPath || descendants.includes(this.highlightedPath))) {
+          // Expanding a branch highlights it, so collapsing keeps that highlight. Otherwise the same
+          // control would highlight the branch on one click and clear it on the next.
+          this.handleHighlight(pathStr, item);
         }
         // Emit new state for controlled mode
         if (this.isControlled()) {
@@ -495,7 +495,7 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = new Set(ancestors);
         }
-        this.handleSelect(pathStr, item);
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
           const ancestorSet = new Set(ancestors);
@@ -517,10 +517,10 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = newPaths;
         }
-        if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
-          // Expanding a branch selects it, so collapsing keeps it selected instead of dropping the
-          // selection. Otherwise the same control would select and deselect on alternating clicks.
-          this.handleSelect(pathStr, item);
+        if (this.highlightedPath !== null && (this.highlightedPath === pathStr || descendants.includes(this.highlightedPath))) {
+          // Expanding a branch highlights it, so collapsing keeps that highlight. Otherwise the same
+          // control would highlight the branch on one click and clear it on the next.
+          this.handleHighlight(pathStr, item);
         }
         // Emit new state for controlled mode
         if (this.isControlled()) {
@@ -537,7 +537,7 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = newPaths;
         }
-        this.handleSelect(pathStr, item);
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
           const deepestPaths = this.getDeepestPaths(newPaths);
@@ -549,8 +549,8 @@ export class TkTreeView implements ComponentInterface {
     }
   };
 
-  private handleSelect = (pathStr: string, item: ITreeItem) => {
-    this.selectedPath = pathStr;
+  private handleHighlight = (pathStr: string, item: ITreeItem) => {
+    this.highlightedPath = pathStr;
     this.isInitialLoad = false;
     this.tkItemClick.emit(item);
   };
@@ -694,9 +694,9 @@ export class TkTreeView implements ComponentInterface {
   private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
     if (isDirectory) {
-      // The arrow icon owns the toggle in this mode, clicking the item only selects it
+      // The arrow icon owns the toggle in this mode, clicking the item only highlights it
       if (this.toggleTrigger === 'icon') {
-        this.handleSelect(pathStr, item);
+        this.handleHighlight(pathStr, item);
         return;
       }
       this.handleToggleUnified(pathStr, item);
@@ -722,7 +722,7 @@ export class TkTreeView implements ComponentInterface {
           this.expandedPaths = new Set(ancestors);
         }
       }
-      this.handleSelect(pathStr, item);
+      this.handleHighlight(pathStr, item);
     }
   };
 
@@ -740,7 +740,7 @@ export class TkTreeView implements ComponentInterface {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
     const isDirectory = !!(item.children && item.children.length > 0);
     const isExpanded = this.expandedPaths.has(pathStr);
-    const isSelected = this.selectedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
+    const isHighlighted = this.highlightedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
 
     const handleToggleIconClick =
@@ -755,20 +755,20 @@ export class TkTreeView implements ComponentInterface {
       directory: isDirectory,
       file: !isDirectory,
       expanded: isExpanded,
-      selected: isSelected,
+      highlighted: isHighlighted,
       disabled: isDisabled,
     });
     const selectedCount = this.getSelectedCount(item);
 
     return (
       <div class={nodeClass}>
-        {this.showPointer && (isExpanded || isSelected) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
+        {this.showPointer && (isExpanded || isHighlighted) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
         <div
           class={classNames(
             'tk-tree-view',
             'label',
             {
-              selected: isSelected,
+              highlighted: isHighlighted,
               disabled: isDisabled,
             },
             this.size,
@@ -778,7 +778,7 @@ export class TkTreeView implements ComponentInterface {
           }}
         >
           {isDirectory && this.mode === 'basic' && (
-            <tk-icon onClick={handleToggleIconClick} variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
+            <tk-icon onClick={handleToggleIconClick} variant={isHighlighted ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
           )}
           {this.selectable && (
             <tk-checkbox
@@ -794,8 +794,8 @@ export class TkTreeView implements ComponentInterface {
               }}
             />
           )}
-          {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
-          {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
+          {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isHighlighted ? 'primary' : 'neutral'} size={this.size} />}
+          {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isHighlighted ? 'primary' : 'neutral'} size={this.size} />}
           <div class={classNames('tk-tree-view', 'text-container', this.size)}>
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
             {(() => {
@@ -819,7 +819,7 @@ export class TkTreeView implements ComponentInterface {
           {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
             <tk-icon
               onClick={handleToggleIconClick}
-              variant={isSelected ? 'primary' : 'neutral'}
+              variant={isHighlighted ? 'primary' : 'neutral'}
               icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
               size={this.size}
             />

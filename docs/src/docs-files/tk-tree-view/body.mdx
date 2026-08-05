@@ -65,12 +65,12 @@ The expandedKeys prop to control the expanded items.
 ## Collapse Behavior
 
 By default clicking anywhere on a branch item expands or collapses it, so a
-branch also closes when it is clicked while one of its children is selected.
+branch closes when it is clicked while one of its children is highlighted.
 
-Set `toggleTrigger="icon"` to limit this to the arrow icon. Clicking the rest of
-the item then only selects it and leaves the tree open. Expanding and collapsing
-from the arrow both keep that branch selected, so the selection never disappears
-while the user is only opening and closing branches.
+Set `toggleTrigger="icon"` to limit toggling to the arrow icon. Clicking the
+rest of the item then only highlights it and leaves the tree open. Expanding and
+collapsing from the arrow both keep that branch highlighted, so the highlight
+never disappears while the user is only opening and closing branches.
 
 <CollapseBehavior />
 
