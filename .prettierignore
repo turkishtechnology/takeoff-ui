@@ -1,0 +1,14 @@
+# Lockfiles must stay in the format their package manager writes.
+# If Prettier reformats them (quote style, line wrapping), the committed lockfile
+# drifts from the one Dependabot generates — producing a ~18,000-line phantom diff
+# that makes every Dependabot PR conflict with every other one.
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated output
+dist/
+build/
+www/
+.turbo/
+node_modules/

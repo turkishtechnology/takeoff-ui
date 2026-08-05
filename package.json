@@ -42,8 +42,8 @@
     "clear:docs": "cd docs && pnpm run clear"
   },
   "lint-staged": {
-    "*.{tsx,ts,js,scss,css,json,vue,md,mdx,yml,yaml,html}": [
-      "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache"
+    "*.{tsx,ts,js,jsx,scss,css,json,vue,md,mdx,yml,yaml,html}": [
+      "prettier --write --cache --ignore-unknown"
     ]
   },
   "engines": {
