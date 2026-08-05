@@ -27,11 +27,28 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      # Majors are grouped too. Opened individually, every one of them rewrites
+      # the same pnpm-lock.yaml, so merging one puts all the others in conflict.
+      # One PR = one lockfile diff.
+      major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
 
     # ── Major-version HOLD list ───────────────────────────────────────────────
     # Keep these off auto/piecemeal bumps; upgrade only in a coordinated, manual PR.
     # Rationale: each was tested in this repo and found broken or incompatible.
     ignore:
+      # Stencil output targets generate the React/Vue/Angular wrapper packages.
+      # A bump can silently change the generated public API (prop/event names,
+      # type signatures, SSR hydration), and that only surfaces once the wrappers
+      # are published. They're kept exact-pinned; upgrade only in a coordinated PR
+      # where all three framework apps are manually tested.
+      # No update-types given → EVERY update (major/minor/patch) is blocked.
+      - dependency-name: "@stencil/react-output-target"
+      - dependency-name: "@stencil/vue-output-target"
+      - dependency-name: "@stencil/angular-output-target"
       # @stencil/sass 3.3.x went ESM-only → breaks Stencil 4.x's CJS plugin loader
       # (ERR_PACKAGE_PATH_NOT_EXPORTED). It's a MINOR bump, so block by version;
       # 3.2.x patches are still allowed.
