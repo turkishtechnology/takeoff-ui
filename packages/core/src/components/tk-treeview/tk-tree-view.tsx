@@ -527,9 +527,18 @@ export class TkTreeView implements ComponentInterface {
   };
 
   private handleHighlight = (pathStr: string, item: ITreeItem) => {
+    // The event reports a change of the highlighted item, so re-highlighting the one that already
+    // holds it emits nothing. Without this an arrow click on the highlighted branch would keep
+    // firing tk-item-click for an item that never stopped being the active one.
+    // isInitialLoad has to be read first: while it is set the expandedKeys items render highlighted
+    // without holding highlightedPath, so their first click is a real change and still emits.
+    const alreadyHighlighted = !this.isInitialLoad && this.highlightedPath === pathStr;
+
     this.highlightedPath = pathStr;
     this.isInitialLoad = false;
-    this.tkItemClick.emit(item);
+    if (!alreadyHighlighted) {
+      this.tkItemClick.emit(item);
+    }
   };
 
   private computeIsAllSelected(): boolean {

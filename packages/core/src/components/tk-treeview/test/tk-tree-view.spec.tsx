@@ -177,7 +177,9 @@ describe('tk-tree-view', () => {
       }
 
       expect(states).toEqual(['true/true', 'false/true', 'true/true']);
-      expect(emitted).toEqual(['a', 'a', 'a']);
+      // Only the first click changes the highlighted item, the branch holds it from then on, so the
+      // two toggles after it expand and collapse without re-announcing an active item that never changed.
+      expect(emitted).toEqual(['a']);
     });
 
     it('does not restructure the stepper columns on a leaf click when the trigger is icon', async () => {
@@ -297,6 +299,46 @@ describe('tk-tree-view', () => {
 
       expect(clicked).toEqual(['a']);
       expect(branchNode(page).classList.contains('expanded')).toBe(true);
+    });
+
+    // tk-item-click reports a change of the highlighted item. The arrow keeps toggling the branch it
+    // is already on, so it must not keep re-announcing an active item that never changed.
+    it('does not emit tk-item-click when the arrow toggles an already highlighted branch', async () => {
+      const page = await setupTree(`<tk-tree-view toggle-trigger="icon"></tk-tree-view>`);
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      for (let i = 0; i < 3; i++) {
+        branchToggleIcon(page).click();
+        await page.waitForChanges();
+      }
+
+      expect(clicked).toEqual(['a']);
+      // the toggling itself still works, only the redundant event is gone. The label click with the
+      // icon trigger only highlights, so three arrow clicks from collapsed leave the branch open.
+      expect(branchNode(page).classList.contains('expanded')).toBe(true);
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+    });
+
+    // While isInitialLoad is set the expandedKeys items render highlighted without holding
+    // highlightedPath, so the first click on one of them is a real change and still has to emit.
+    it('emits tk-item-click on the first click of an item highlighted only by expandedKeys', async () => {
+      const page = await setupTree(`<tk-tree-view></tk-tree-view>`);
+      page.root.expandedKeys = ['a'];
+      await page.waitForChanges();
+      expect(branchNode(page).classList.contains('selected')).toBe(true);
+
+      const clicked: string[] = [];
+      page.root.addEventListener('tk-item-click', (e: Event) => clicked.push((e as CustomEvent).detail.key));
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(clicked).toEqual(['a']);
     });
 
     it('handles an arrow icon click exactly once when the trigger is icon', async () => {
