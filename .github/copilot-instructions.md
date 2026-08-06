@@ -15,7 +15,7 @@ wrapper packages for React, Vue, and Angular.
 
 ## Build and Test Commands
 
-- **Bootstrap**: `pnpm install` (Node >= 20.12.2, pnpm >= 8.0.0)
+- **Bootstrap**: `pnpm install` (Node >= 22.22.0, pnpm >= 8.0.0)
 - **Core build**: `pnpm run build --filter=@takeoff-ui/core` veya
   `cd packages/core && pnpm run build`
 - **Core test**: `cd packages/core && pnpm run test`
