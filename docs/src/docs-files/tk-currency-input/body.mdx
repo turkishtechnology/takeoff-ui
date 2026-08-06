@@ -96,6 +96,11 @@ Longer numbers can neither be typed nor pasted, and a value set through the
 "value" prop is clamped to the largest number that fits. Decimal digits are not
 counted; they are controlled by the "precision" prop.
 
+The integer and decimal digits together are capped at 15, the number of digits a
+JavaScript number can represent exactly. A larger "maxIntegerDigits" is reduced
+to that cap, so amounts beyond it are limited more strictly than requested
+rather than losing precision.
+
 <MaxIntegerDigits />
 
 ## Size

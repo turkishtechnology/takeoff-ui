@@ -309,6 +309,56 @@ describe('tk-currency-input', () => {
     expect((page.rootInstance as any).currentNumericValue).toBe(999);
   });
 
+  // A bound built from more significant digits than a double holds rounds up
+  // (999999999999999.99 -> 1e15), which used to admit one digit more than configured.
+  it('never admits more integer digits than configured at the float resolution limit', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input max-integer-digits="15" precision="2"></tk-currency-input>`,
+    });
+
+    const input = page.root.querySelector('input');
+    // 1e15 has 16 integer digits, one more than the configured limit.
+    input.value = '1000000000000000';
+    input.dispatchEvent(new Event('input'));
+    await page.waitForChanges();
+
+    const stored = (page.rootInstance as any).currentNumericValue;
+    expect(String(Math.trunc(Math.abs(stored))).length).toBeLessThanOrEqual(15);
+  });
+
+  it('clamps a value prop to an exactly representable bound at high digit limits', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input value="99999999999999999999" max-integer-digits="15" precision="2"></tk-currency-input>`,
+    });
+
+    const stored = (page.rootInstance as any).currentNumericValue;
+    expect(String(Math.trunc(Math.abs(stored))).length).toBeLessThanOrEqual(15);
+  });
+
+  it('keeps the digit bound finite for an absurdly large maxIntegerDigits', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input max-integer-digits="400" precision="2"></tk-currency-input>`,
+    });
+
+    // An Infinity bound would silently disable the limit, since nothing exceeds it.
+    expect(Number.isFinite((page.rootInstance as any).getDigitLimitBound())).toBe(true);
+  });
+
+  it('clamps an over-limit negative value prop to the positive bound when allowNegative is false', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input value="-123456" max-integer-digits="3"></tk-currency-input>`,
+    });
+
+    const input = page.root.querySelector('input');
+    // Clamping to -999,99 would store a sign the field can neither display nor produce.
+    expect((page.rootInstance as any).currentNumericValue).toBe(999.99);
+    expect(input.value).toBe('999,99');
+  });
+
   it('pastes comma decimal values over the default zero value', async () => {
     const page = await newSpecPage({
       components: [TkCurrencyInput],
