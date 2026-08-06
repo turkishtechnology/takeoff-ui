@@ -6,6 +6,7 @@ import Size from './examples/Size';
 import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
 import ExpandAll from './examples/ExpandAll';
+import CollapseBehavior from './examples/CollapseBehavior';
 import CustomStyles from './examples/CustomStyles';
 import { TkTreeView } from '@takeoff-ui/react';
 
@@ -60,6 +61,24 @@ The `expandAll` prop controls the initial expansion state of tree nodes.
 The expandedKeys prop to control the expanded items.
 
 <ExpandedKeys />
+
+## Collapse Behavior
+
+By default clicking anywhere on a branch item expands or collapses it, so a
+branch closes when it is clicked while one of its children is highlighted.
+
+Set `toggleTrigger="icon"` to limit toggling to the arrow icon. Clicking the
+rest of the item then only highlights it and leaves the tree open.
+
+The highlight always follows the last clicked item, so expanding and collapsing
+a branch both highlight that branch and the highlight never disappears while the
+user is only opening and closing branches.
+
+Clicking the highlighted item again removes the highlight. A branch click with
+the `item` trigger expands or collapses instead, so it keeps the highlight
+rather than blinking it on and off on alternating clicks.
+
+<CollapseBehavior />
 
 ## Custom Styles
 

@@ -22,7 +22,7 @@ export class TkTreeView implements ComponentInterface {
   @Element() el: HTMLElement;
 
   @State() expandedPaths: Set<string> = new Set();
-  @State() selectedPath: string | null = null;
+  @State() highlightedPath: string | null = null;
   /**
    * başlangıçta expanded keys lerin seçili gibi görünmesini ve herhangi bir item'a tıklandığında
    * bu state'in false'a çekilerek expandedKeys'lerin sürekli seçili görünmesini engellemek için kurgulanmıştır.s
@@ -113,6 +113,11 @@ export class TkTreeView implements ComponentInterface {
   @Prop() selectionStrategy: 'all' | 'leaf' = 'all';
 
   /**
+   * Determines which part of a branch item toggles its expanded state
+   */
+  @Prop() toggleTrigger: 'item' | 'icon' = 'item';
+
+  /**
    * The style attribute of container element
    */
   @Prop() containerStyle?: CSSStyleProperties = null;
@@ -184,27 +189,8 @@ export class TkTreeView implements ComponentInterface {
 
       this.expandedPaths = this.expandKeysWithAncestors(indexPaths);
 
-      // In controlled mode, clear selection if the selected node is no longer expanded
-      if (this.selectedPath !== null) {
-        // Check if the selected path or any of its ancestors is collapsed
-        const selectedPathParts = this.selectedPath.split('-');
-        let isSelectedPathVisible = true;
-
-        // Check each ancestor up to and including the selected path
-        for (let i = 1; i <= selectedPathParts.length; i++) {
-          const ancestorPath = selectedPathParts.slice(0, i).join('-');
-          // For directories, they need to be expanded to show their children
-          if (i < selectedPathParts.length && !this.expandedPaths.has(ancestorPath)) {
-            isSelectedPathVisible = false;
-            break;
-          }
-        }
-
-        // Clear selection if not visible
-        if (!isSelectedPathVisible) {
-          this.selectedPath = null;
-        }
-      }
+      // The highlight is deliberately left alone here. Only a click moves it, so a change coming
+      // from the prop just hides it along with its row and brings it back when the branch reopens.
     }
   }
 
@@ -465,19 +451,19 @@ export class TkTreeView implements ComponentInterface {
 
       if (isExpanded) {
         // Stepper: Close self and descendants
+        // A new Set is assigned instead of mutating the current one, otherwise the state change is not picked up
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.delete(pathStr);
+        descendants.forEach(descPath => newPaths.delete(descPath));
+
         if (!this.isControlled()) {
-          this.expandedPaths.delete(pathStr);
-          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+          this.expandedPaths = newPaths;
         }
-        if (pathStr === this.selectedPath || descendants.includes(this.selectedPath)) {
-          this.selectedPath = null;
-        }
+        // Clicking an item makes it the highlighted one and collapsing is no exception, so the
+        // highlight always follows the last clicked item instead of depending on where it was.
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.delete(pathStr);
-          descendants.forEach(descPath => newPaths.delete(descPath));
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -488,7 +474,7 @@ export class TkTreeView implements ComponentInterface {
         if (!this.isControlled()) {
           this.expandedPaths = new Set(ancestors);
         }
-        this.handleSelect(pathStr, item);
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
           const ancestorSet = new Set(ancestors);
@@ -502,19 +488,19 @@ export class TkTreeView implements ComponentInterface {
     } else {
       if (this.expandedPaths.has(pathStr)) {
         // Basic: Close self and descendants
+        // A new Set is assigned instead of mutating the current one, otherwise the state change is not picked up
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.delete(pathStr);
+        descendants.forEach(descPath => newPaths.delete(descPath));
+
         if (!this.isControlled()) {
-          this.expandedPaths.delete(pathStr);
-          descendants.forEach(descPath => this.expandedPaths.delete(descPath));
+          this.expandedPaths = newPaths;
         }
-        if (this.selectedPath === pathStr || descendants.includes(this.selectedPath)) {
-          this.selectedPath = null;
-        }
+        // Clicking an item makes it the highlighted one and collapsing is no exception, so the
+        // highlight always follows the last clicked item instead of depending on where it was.
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.delete(pathStr);
-          descendants.forEach(descPath => newPaths.delete(descPath));
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -522,15 +508,15 @@ export class TkTreeView implements ComponentInterface {
         }
       } else {
         // Basic: Open only self
+        const newPaths = new Set(this.expandedPaths);
+        newPaths.add(pathStr);
+
         if (!this.isControlled()) {
-          this.expandedPaths.add(pathStr);
+          this.expandedPaths = newPaths;
         }
-        this.handleSelect(pathStr, item);
+        this.handleHighlight(pathStr, item);
         // Emit new state for controlled mode
         if (this.isControlled()) {
-          const newPaths = new Set(this.expandedPaths);
-          newPaths.add(pathStr);
-
           const deepestPaths = this.getDeepestPaths(newPaths);
           const keyPaths = deepestPaths.map(indexPath => this.indexPathToKey(indexPath)).filter((key): key is string => key !== null);
 
@@ -540,10 +526,19 @@ export class TkTreeView implements ComponentInterface {
     }
   };
 
-  private handleSelect = (pathStr: string, item: ITreeItem) => {
-    this.selectedPath = pathStr;
+  private handleHighlight = (pathStr: string, item: ITreeItem) => {
+    // The event reports a change of the highlighted item, so re-highlighting the one that already
+    // holds it emits nothing. Without this an arrow click on the highlighted branch would keep
+    // firing tk-item-click for an item that never stopped being the active one.
+    // isInitialLoad has to be read first: while it is set the expandedKeys items render highlighted
+    // without holding highlightedPath, so their first click is a real change and still emits.
+    const alreadyHighlighted = !this.isInitialLoad && this.highlightedPath === pathStr;
+
+    this.highlightedPath = pathStr;
     this.isInitialLoad = false;
-    this.tkItemClick.emit(item);
+    if (!alreadyHighlighted) {
+      this.tkItemClick.emit(item);
+    }
   };
 
   private computeIsAllSelected(): boolean {
@@ -684,12 +679,28 @@ export class TkTreeView implements ComponentInterface {
    */
   private handleItemClick = (pathStr: string, item: ITreeItem, isDisabled: boolean, isDirectory: boolean) => {
     if (this.disabled || isDisabled) return;
+    // Clicking the highlighted item again removes the highlight, but only when highlighting is all
+    // the click does. Clicks that also expand or collapse keep it, otherwise the highlight would
+    // blink on and off on every other click. With the item trigger that covers branches, and leaves
+    // too in stepper mode where a leaf click closes the columns next to it.
+    const alsoToggles = this.toggleTrigger === 'item' && (isDirectory || this.mode === 'stepper');
+    if (!alsoToggles && this.highlightedPath === pathStr) {
+      this.highlightedPath = null;
+      this.isInitialLoad = false;
+      return;
+    }
     if (isDirectory) {
+      // The arrow icon owns the toggle in this mode, clicking the item only highlights it
+      if (this.toggleTrigger === 'icon') {
+        this.handleHighlight(pathStr, item);
+        return;
+      }
       this.handleToggleUnified(pathStr, item);
     } else {
       // In stepper mode, when a file (leaf) is clicked, collapse any expanded
-      // directory at the same level by keeping only the ancestors of the file's parent
-      if (this.mode === 'stepper') {
+      // directory at the same level by keeping only the ancestors of the file's parent.
+      // With the icon trigger the arrow owns every expansion change, so the click only highlights.
+      if (this.mode === 'stepper' && this.toggleTrigger === 'item') {
         const parentPath = pathStr.includes('-') ? pathStr.split('-').slice(0, -1).join('-') : '';
         const ancestors: string[] = [];
         if (parentPath) {
@@ -708,7 +719,7 @@ export class TkTreeView implements ComponentInterface {
           this.expandedPaths = new Set(ancestors);
         }
       }
-      this.handleSelect(pathStr, item);
+      this.handleHighlight(pathStr, item);
     }
   };
 
@@ -726,27 +737,35 @@ export class TkTreeView implements ComponentInterface {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
     const isDirectory = !!(item.children && item.children.length > 0);
     const isExpanded = this.expandedPaths.has(pathStr);
-    const isSelected = this.selectedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
+    const isHighlighted = this.highlightedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
+
+    const handleToggleIconClick =
+      this.toggleTrigger === 'icon' && !isDisabled
+        ? (event: MouseEvent) => {
+            event.stopPropagation();
+            this.handleToggleUnified(pathStr, item);
+          }
+        : undefined;
 
     const nodeClass = classNames('tk-tree-view', 'node', {
       directory: isDirectory,
       file: !isDirectory,
       expanded: isExpanded,
-      selected: isSelected,
+      selected: isHighlighted,
       disabled: isDisabled,
     });
     const selectedCount = this.getSelectedCount(item);
 
     return (
       <div class={nodeClass}>
-        {this.showPointer && (isExpanded || isSelected) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
+        {this.showPointer && (isExpanded || isHighlighted) && <span class={classNames('tk-tree-view', 'pointer', this.size)}></span>}
         <div
           class={classNames(
             'tk-tree-view',
             'label',
             {
-              selected: isSelected,
+              selected: isHighlighted,
               disabled: isDisabled,
             },
             this.size,
@@ -755,7 +774,9 @@ export class TkTreeView implements ComponentInterface {
             this.handleItemClick(pathStr, item, isDisabled, isDirectory);
           }}
         >
-          {isDirectory && this.mode === 'basic' && <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />}
+          {isDirectory && this.mode === 'basic' && (
+            <tk-icon onClick={handleToggleIconClick} variant={isHighlighted ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
+          )}
           {this.selectable && (
             <tk-checkbox
               onClick={e => {
@@ -770,8 +791,8 @@ export class TkTreeView implements ComponentInterface {
               }}
             />
           )}
-          {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
-          {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isSelected ? 'primary' : 'neutral'} size={this.size} />}
+          {isDirectory && this.branchIcon && <tk-icon icon={this.branchIcon} variant={isHighlighted ? 'primary' : 'neutral'} size={this.size} />}
+          {!isDirectory && this.leafIcon && <tk-icon icon={this.leafIcon} variant={isHighlighted ? 'primary' : 'neutral'} size={this.size} />}
           <div class={classNames('tk-tree-view', 'text-container', this.size)}>
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
             {(() => {
@@ -793,7 +814,12 @@ export class TkTreeView implements ComponentInterface {
             })()}
           </div>
           {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
-            <tk-icon variant={isSelected ? 'primary' : 'neutral'} icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'} size={this.size} />
+            <tk-icon
+              onClick={handleToggleIconClick}
+              variant={isHighlighted ? 'primary' : 'neutral'}
+              icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
+              size={this.size}
+            />
           )}
         </div>
         {this.mode === 'basic' && isDirectory && isExpanded && item.children && item.children.length > 0 && (

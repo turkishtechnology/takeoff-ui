@@ -70,6 +70,16 @@
       ]
     },
     {
+      "key": "toggleTrigger",
+      "label": "Toggle Trigger",
+      "type": "select",
+      "defaultValue": "item",
+      "options": [
+        { "label": "Item", "value": "item" },
+        { "label": "Icon", "value": "icon" }
+      ]
+    },
+    {
       "key": "branchIcon",
       "label": "Branch Icon",
       "type": "text",
