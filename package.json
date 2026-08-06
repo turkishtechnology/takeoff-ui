@@ -58,9 +58,9 @@
     "@takeoff-ui/vue": "workspace:*"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@changesets/cli": "^2.31.1",
     "@eslint/js": "9.39.5",
     "@stencil/eslint-plugin": "^1.4.0",
     "@types/node": "^20.13.0",
@@ -95,6 +95,7 @@
       "serialize-javascript": ">=7.0.5",
       "tar": "7.5.21",
       "minimatch": ">=10.2.3",
+      "test-exclude>minimatch": "^3.1.2",
       "undici@<7.0.0": "6.27.0",
       "undici@>=7.0.0 <8.0.0": "7.28.0",
       "ajv@>=7.0.0": ">=8.18.0",
@@ -130,6 +131,14 @@
       "piscina": "5.2.0",
       "esbuild": "0.28.1",
       "vite": "7.3.5"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
+      "esbuild",
+      "lmdb",
+      "msgpackr-extract",
+      "puppeteer"
+    ]
   }
 }
