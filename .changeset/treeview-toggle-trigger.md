@@ -29,14 +29,17 @@ branch was highlighted. `expandedPaths` was mutated in place, so no re-render
 was triggered and the collapse only became visible as a side effect of the
 highlight being cleared. Affects both basic and stepper mode.
 
+`tk-item-click` now reports a change of the highlighted item, so it fires once
+when the highlight moves and stays silent when a click leaves it where it was.
+Repeatedly toggling the same branch emits only on the first click.
+
 To migrate: the highlight rules apply to the default `toggleTrigger="item"` as
 well, so they reach consumers that never set the prop. Review every
-`tk-item-click` handler, because it now fires in three cases where it used to
-stay silent: collapsing a branch, clicking a branch whose child was highlighted,
-and clicking the arrow icon of an already highlighted branch. Handlers that
-navigate, fetch, or reset a detail pane will run on those interactions. Nothing
-is emitted when a second click on the highlighted item removes the highlight, so
-a consumer mirroring the active item in its own state should clear it on the
-next `tk-item-click` rather than expect an event for the removal. No prop or
-event was renamed or removed, no event payload changed, and the `selected` CSS
-class is unchanged, so stylesheets targeting it keep working.
+`tk-item-click` handler, because it now fires in two cases where it used to stay
+silent: collapsing a branch, and clicking a branch whose child was highlighted.
+Handlers that navigate, fetch, or reset a detail pane will run on those
+interactions. Nothing is emitted when a second click on the highlighted item
+removes the highlight, so a consumer mirroring the active item in its own state
+should clear it on the next `tk-item-click` rather than expect an event for the
+removal. No prop or event was renamed or removed, no event payload changed, and
+the `selected` CSS class is unchanged, so stylesheets targeting it keep working.
