@@ -47,7 +47,7 @@
     ]
   },
   "engines": {
-    "node": ">= 20.12.2",
+    "node": ">= 22.22.0",
     "pnpm": ">= 8.0.0"
   },
   "preinstall": "npx only-allow pnpm",
@@ -89,15 +89,15 @@
     "overrides": {
       "path-to-regexp@<6.0.0": "0.1.13",
       "path-to-regexp@>=6.0.0": ">=8.4.0",
-      "hono": "4.12.27",
+      "hono": "4.12.34",
       "@hono/node-server": "2.0.11",
       "ip-address": ">=10.1.1",
       "serialize-javascript": ">=7.0.5",
       "tar": "7.5.21",
       "minimatch": ">=10.2.3",
       "test-exclude>minimatch": "^3.1.2",
-      "undici@<7.0.0": "6.27.0",
-      "undici@>=7.0.0 <8.0.0": "7.28.0",
+      "undici@<7.0.0": "6.28.0",
+      "undici@>=7.0.0 <8.0.0": "7.29.0",
       "ajv@>=7.0.0": ">=8.18.0",
       "fast-uri": ">=3.1.2",
       "smol-toml": ">=1.6.1",
@@ -130,7 +130,7 @@
       "dompurify": "3.4.12",
       "piscina": "5.2.0",
       "esbuild": "0.28.1",
-      "vite": "7.3.5"
+      "vite": "8.2.0"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
