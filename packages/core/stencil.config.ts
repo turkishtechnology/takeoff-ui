@@ -34,21 +34,25 @@ const vueComponentModels: ComponentModelConfig[] = [
     ],
     event: 'tk-change',
     targetAttr: 'value',
+    eventAttr: 'detail',
   },
   {
     elements: ['tk-dialog'],
     event: 'tk-visible-change',
     targetAttr: 'visible',
+    eventAttr: 'detail',
   },
   {
     elements: ['tk-drawer'],
     event: 'tk-drawer-change',
     targetAttr: 'open',
+    eventAttr: 'detail',
   },
   {
     elements: ['tk-stepper'],
     event: 'tk-step-change',
     targetAttr: 'active',
+    eventAttr: 'detail',
   },
 ];
 

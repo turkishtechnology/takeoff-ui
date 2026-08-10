@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { getIconElementProps } from '../../utils/icon-utils';
 import type { Separator, ICurrency, CurrencyInputChangeEvent } from './types';
-import { INTERNAL_CURRENCY_LIST } from './constants';
+import { INTERNAL_CURRENCY_LIST, MAX_SIGNIFICANT_DIGITS } from './constants';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getValidSeparator } from './helpers';
 import { applyStyles } from '../../utils/style-utils';
@@ -79,6 +79,15 @@ export class TkCurrencyInput implements ComponentInterface {
   @Prop() max?: number;
 
   /**
+   * Maximum number of digits allowed in the integer part of the value.
+   */
+  @Prop() maxIntegerDigits?: number;
+  @Watch('maxIntegerDigits')
+  maxIntegerDigitsChanged() {
+    this.applyMinMax(false);
+  }
+
+  /**
    * List of available currencies.
    * If not provided, it defaults to the internal currency list.
    */
@@ -128,6 +137,11 @@ export class TkCurrencyInput implements ComponentInterface {
    * Default is 2, which is common for most currencies.
    */
   @Prop() precision: number = 2;
+  @Watch('precision')
+  precisionChanged() {
+    // The bounds move with the precision: 999.99 renders as 1.000 at precision 0.
+    this.applyMinMax(false);
+  }
 
   /**
    * The default currency to use when the component is initialized.
@@ -337,6 +351,39 @@ export class TkCurrencyInput implements ComponentInterface {
     return { min, max };
   }
 
+  /**
+   * Returns the effective integer digit limit, or null when no limit applies.
+   *
+   * A bound built from more significant digits than a double can hold rounds *up*
+   * (999999999999999.99 becomes 1e15), which would let through one more digit than
+   * configured. The limit is therefore capped so the bound stays exactly
+   * representable, leaving the constraint conservative rather than too permissive.
+   */
+  private getEffectiveDigitLimit(): number | null {
+    const limit = this.maxIntegerDigits;
+
+    if (limit === null || limit === undefined || !Number.isFinite(limit) || limit < 1) {
+      return null;
+    }
+
+    const decimals = Math.max(this.precision, 0);
+    const maxIntegerDigitsForPrecision = Math.max(MAX_SIGNIFICANT_DIGITS - decimals, 1);
+
+    return Math.min(Math.floor(limit), maxIntegerDigitsForPrecision);
+  }
+
+  private getDigitLimitBound(): number | null {
+    const limit = this.getEffectiveDigitLimit();
+
+    if (limit === null) {
+      return null;
+    }
+
+    const decimals = Math.max(this.precision, 0);
+
+    return Number('9'.repeat(limit) + (decimals > 0 ? `.${'9'.repeat(decimals)}` : ''));
+  }
+
   private clampNumericValue(value: number | null | undefined): number | null {
     if (value === null || value === undefined || isNaN(value)) {
       return null;
@@ -356,6 +403,21 @@ export class TkCurrencyInput implements ComponentInterface {
       numericValue = min;
     }
 
+    // The integer digit limit is a hard constraint: a longer number can neither be
+    // typed nor displayed, so it wins over min/max.
+    const digitBound = this.getDigitLimitBound();
+
+    if (digitBound !== null) {
+      if (numericValue > digitBound) {
+        numericValue = digitBound;
+      } else if (numericValue < -digitBound) {
+        // Clamp to the positive bound when negatives are not allowed, mirroring
+        // getEffectiveBounds: a negative clamp target is a number the field can
+        // neither display nor produce, so state and display would disagree.
+        numericValue = this.allowNegative ? -digitBound : digitBound;
+      }
+    }
+
     // Round the bound to the configured precision so the stored value matches
     // what is displayed/emitted (a fractional bound must not render below min).
     if (numericValue !== value) {
@@ -371,7 +433,7 @@ export class TkCurrencyInput implements ComponentInterface {
    * @param emitChange when true, emits a tkChange event if the value was clamped.
    */
   private applyMinMax(emitChange: boolean) {
-    if (this.min === undefined && this.max === undefined) return;
+    if (this.min === undefined && this.max === undefined && this.getDigitLimitBound() === null) return;
     if (this.currentNumericValue === null || this.currentNumericValue === undefined) return;
 
     const clampedValue = this.clampNumericValue(this.currentNumericValue);
@@ -635,6 +697,22 @@ export class TkCurrencyInput implements ComponentInterface {
     }
 
     const numericValue = this.parseFormattedValue(filteredValue);
+
+    const digitBound = this.getDigitLimitBound();
+
+    if (digitBound !== null && numericValue !== null && Math.abs(numericValue) > digitBound) {
+      target.value = this.displayValue;
+
+      // Assigning value moves the caret to the end, so put it back where it was
+      // before the refused characters were inserted. An edit that is shorter than
+      // the current display refused nothing positional, so never push the caret
+      // forward past where the user was typing.
+      const refusedLength = Math.max(inputValue.length - this.displayValue.length, 0);
+      const revertedPosition = Math.min(Math.max(cursorPosition - refusedLength, 0), this.displayValue.length);
+
+      target.setSelectionRange?.(revertedPosition, revertedPosition);
+      return;
+    }
 
     if ((this.allowEmptyValue && cursorPosition === 0) || numericValue === null) {
       this.currentNumericValue = null;
