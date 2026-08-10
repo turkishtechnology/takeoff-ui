@@ -18,7 +18,7 @@
     "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js"
   },
   "dependencies": {
-    "@docsearch/react": "^4.7.0",
+    "@docsearch/react": "^5.0.0",
     "@docusaurus/core": "^3.10.2",
     "@docusaurus/preset-classic": "^3.10.2",
     "@docusaurus/theme-classic": "^3.10.2",
