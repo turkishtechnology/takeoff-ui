@@ -208,9 +208,9 @@ export class TkInput implements ComponentInterface {
   protected valueChanged(newValue, oldValue) {
     if (!isEqual(newValue, oldValue) && this.mode !== 'chips') {
       if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
+        this.writeNativeValue(getNestedValue(newValue, this.chipLabelKey));
       } else {
-        this.nativeInput.value = newValue;
+        this.writeNativeValue(newValue);
       }
       // A programmatic value bypasses keystroke handling; keep the regex revert
       // target in sync so a later rejected keystroke restores this value.
@@ -405,24 +405,59 @@ export class TkInput implements ComponentInterface {
   }
 
   /**
+   * Writes a programmatic value into the field without throwing the user out of it.
+   * Assigning `input.value` always parks the caret at the end, which is fine for an idle
+   * field but not while it has focus: a consumer that echoes `tk-change` back into `value`
+   * (a controlled datepicker normalising "09:30" to "09:30 AM", for instance) would send
+   * the caret to the end on every keystroke.
+   */
+  private writeNativeValue(value: unknown): void {
+    const input = this.nativeInput;
+    if (!input) return;
+
+    const selection = this.getSelection(input);
+    input.value = value as string;
+    this.restoreSelection(input, selection);
+  }
+
+  /**
    * Re-syncs Cleave (its own listener runs after this one, so it still holds the previous
    * keystroke) and returns the formatted value. `setRawValue` writes the delimiter-less value
    * into the field first, which parks the caret at the end, so restore the caret afterwards.
    */
   private resyncCleaveValue(input: HTMLInputElement, cleave: Cleave): string {
-    const caretBefore = input.selectionStart;
-    const valueBefore = input.value;
+    const selection = this.getSelection(input);
+    const wasAtEnd = !!selection && selection[0] >= input.value.length;
 
     cleave.setRawValue(cleave.getRawValue());
     const formattedValue = cleave.getFormattedValue();
 
-    if (typeof caretBefore === 'number' && typeof input.setSelectionRange === 'function') {
-      // At the end, follow any delimiter the mask appended ("2026" -> "2026-"); otherwise stay put.
-      const caret = caretBefore >= valueBefore.length ? input.value.length : caretBefore;
-      input.setSelectionRange(caret, caret);
-    }
+    // At the end, follow any delimiter the mask appended ("2026" -> "2026-") - it belongs to
+    // the keystroke that just landed; otherwise stay put.
+    const end = input.value.length;
+    this.restoreSelection(input, wasAtEnd ? [end, end] : selection);
 
     return formattedValue;
+  }
+
+  /**
+   * Current selection of a focused field, or null when there is nothing to preserve.
+   * Only the text-like types carry a selection: on the `type="number"` that `mode="number"`
+   * and `mode="counter"` render, `selectionStart` reads back as null and `setSelectionRange`
+   * throws an InvalidStateError.
+   */
+  private getSelection(input: HTMLInputElement): [number, number] | null {
+    const isFocused = (input.getRootNode() as Document | ShadowRoot)?.activeElement === input;
+    const isSelectable = input.type === 'text' || input.type === 'password';
+    if (!isFocused || !isSelectable || typeof input.setSelectionRange !== 'function') return null;
+    return isNil(input.selectionStart) || isNil(input.selectionEnd) ? null : [input.selectionStart, input.selectionEnd];
+  }
+
+  /** Puts back a selection captured before the field was rewritten, clamped to the new value. */
+  private restoreSelection(input: HTMLInputElement, selection: [number, number] | null): void {
+    if (!selection) return;
+    const length = input.value.length;
+    input.setSelectionRange(Math.min(selection[0], length), Math.min(selection[1], length));
   }
 
   /**

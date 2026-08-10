@@ -59,4 +59,25 @@ describe('tk-datepicker', () => {
 
     expect(await readInput(page)).toEqual({ value: '2026-08-04 09:30', caret: 16 });
   });
+
+  it('keeps the caret in place when a controlled value comes back normalised', async () => {
+    // 12-hour mode displays "hh:mm a" while the mask only produces digits, so every
+    // successful parse echoed back by the consumer rewrites the field with an " AM"
+    // suffix. That rewrite used to drop the caret at the end of the field.
+    const page = await newE2EPage();
+    await page.setContent('<tk-datepicker mode="single" show-time-picker="true" time-format="12"></tk-datepicker>');
+    await page.evaluate(() => {
+      const datepicker = document.querySelector('tk-datepicker') as any;
+      datepicker.addEventListener('tk-change', (event: CustomEvent) => (datepicker.value = event.detail));
+    });
+    await page.waitForChanges();
+
+    await page.evaluate(() => (document.querySelector('tk-datepicker')?.shadowRoot?.querySelector('input') as HTMLInputElement).focus());
+    await page.keyboard.type('202608040930');
+    // The parse is debounced, so the normalised value lands a moment after the last keystroke.
+    await page.waitForFunction(() => (document.querySelector('tk-datepicker')?.shadowRoot?.querySelector('input') as HTMLInputElement).value.endsWith('AM'));
+    await page.waitForChanges();
+
+    expect(await readInput(page)).toEqual({ value: '2026-08-04 09:30 AM', caret: 16 });
+  });
 });

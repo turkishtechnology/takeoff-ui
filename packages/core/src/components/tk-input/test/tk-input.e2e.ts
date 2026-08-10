@@ -72,5 +72,25 @@ describe('tk-input', () => {
 
       expect(await readInput(page)).toEqual({ value: '2026-', caret: 5 });
     });
+
+    it('keeps the caret in place when `value` is set programmatically while the field has focus', async () => {
+      // A controlled consumer normalising the value mid-typing (tk-datepicker turning
+      // "09:30" into "09:30 AM") must not push the caret to the end of the field.
+      const page = await setupMasked({ blocks: [4, 2, 2, 2, 2], delimiters: ['-', '-', ' ', ':'], numericOnly: true }, '2026-08-04 09:30', 16, 16);
+
+      await page.$eval('tk-input', (el: any) => (el.value = '2026-08-04 09:30 AM'));
+      await page.waitForChanges();
+
+      expect(await readInput(page)).toEqual({ value: '2026-08-04 09:30 AM', caret: 16 });
+    });
+
+    it('clamps the restored caret when a programmatic value is shorter', async () => {
+      const page = await setupMasked({ blocks: [4, 2, 2, 2, 2], delimiters: ['-', '-', ' ', ':'], numericOnly: true }, '2026-08-04 09:30', 16, 16);
+
+      await page.$eval('tk-input', (el: any) => (el.value = '2026'));
+      await page.waitForChanges();
+
+      expect(await readInput(page)).toEqual({ value: '2026', caret: 4 });
+    });
   });
 });
