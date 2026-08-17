@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@stencil/angular-output-target": "1.4.1",
-    "@stencil/core": "4.43.5",
+    "@stencil/core": "4.44.0",
     "@stencil/react-output-target": "1.6.1",
     "@stencil/sass": "3.2.3",
     "@stencil/vue-output-target": "0.14.1",
@@ -68,7 +68,7 @@
     "@types/node": "^16.18.11",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
-    "puppeteer": "^25.4.0",
+    "puppeteer": "^25.7.0",
     "rollup": "^4.62.2"
   },
   "license": "Apache-2.0",
