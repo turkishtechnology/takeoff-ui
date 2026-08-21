@@ -2,7 +2,7 @@ import './App.css';
 import Components from './components/Components';
 import Select from './components/Select';
 import Examples from './examples/Examples';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import Layout from './layout/Layout';
 import Table from './components/Table';
 import ReactHookForm from './examples/ReactHookForm';

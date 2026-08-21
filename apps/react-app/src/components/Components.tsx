@@ -1,5 +1,5 @@
 import { TkCard } from '@takeoff-ui/react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 function Components() {
   return (

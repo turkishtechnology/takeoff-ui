@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/docs",
-  "version": "0.11.12",
+  "version": "0.11.13",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -18,7 +18,7 @@
     "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js"
   },
   "dependencies": {
-    "@docsearch/react": "^3.8.0",
+    "@docsearch/react": "^4.7.0",
     "@docusaurus/core": "^3.10.2",
     "@docusaurus/preset-classic": "^3.10.2",
     "@docusaurus/theme-classic": "^3.10.2",
@@ -29,13 +29,13 @@
     "@tiptap/extension-highlight": "^2.11.0",
     "clsx": "^2.0.0",
     "dotenv": "^17.4.2",
-    "dotenv-cli": "^8.0.0",
+    "dotenv-cli": "^11.0.0",
     "fs": "^0.0.1-security",
     "prism-react-renderer": "^2.3.0",
     "prismjs": "^1.30.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-markdown": "^9.0.1"
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.10.2",
@@ -47,7 +47,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.3",
     "utility-types": "^3.11.0",
-    "vercel": "^52.0.1"
+    "vercel": "^58.4.4"
   },
   "browserslist": {
     "production": [

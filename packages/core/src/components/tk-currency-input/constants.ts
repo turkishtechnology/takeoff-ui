@@ -1,5 +1,12 @@
 import type { ICurrency } from './types';
 
+/**
+ * Number of significant digits a double can represent without rounding.
+ * Caps the integer digit limit so its bound stays exact: a bound built from more
+ * digits than this rounds up and would admit a longer number than configured.
+ */
+export const MAX_SIGNIFICANT_DIGITS = 15;
+
 export const INTERNAL_CURRENCY_LIST: ICurrency[] = [
   { code: 'USD', id: 'US', symbol: '$', name: 'US Dollar', decimalSeparator: '.', thousandsSeparator: ',' },
   { code: 'EUR', id: 'DE', symbol: '€', name: 'Euro', decimalSeparator: ',', thousandsSeparator: '.' },
