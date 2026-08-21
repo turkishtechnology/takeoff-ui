@@ -140,7 +140,7 @@ const handleLoad = async (event) => {
 
 <template>
   <TkTreeView
-    lazy
+    :lazy="true"
     type="light"
     :items="items"
     :loadingKeys="loadingKeys"
@@ -157,7 +157,7 @@ const angularCode = `import { Component } from '@angular/core';
   selector: 'app-lazy-tree',
   template: \`
     <tk-tree-view
-      lazy
+      [lazy]="true"
       type="light"
       [items]="items"
       [loadingKeys]="loadingKeys"

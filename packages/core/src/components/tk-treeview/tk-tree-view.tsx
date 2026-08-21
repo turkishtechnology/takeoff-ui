@@ -20,12 +20,12 @@ export class TkTreeView implements ComponentInterface {
   private isAllSelected: boolean = false;
   private hasWarnedExpandAll: boolean = false;
   /**
-   * Keys already asked for but not yet acknowledged through loadingKeys. The consumer's answer only
-   * reaches us on the next render, so without this a branch reopened inside that window would be
-   * requested twice. It is dropped as soon as any of the lazy inputs come back, since the guards
-   * they carry take over from there.
+   * Branches already asked for while they have been open. Requests are issued from a render sweep,
+   * so without this a branch would be asked for again on every render, and a failed fetch would
+   * turn into an endless retry. Entries are dropped when their branch closes, which is what makes
+   * reopening it the retry.
    */
-  private requestedKeys: Set<string> = new Set();
+  private requestedIds: Set<string> = new Set();
 
   @Element() el: HTMLElement;
 
@@ -43,7 +43,6 @@ export class TkTreeView implements ComponentInterface {
   @Prop() items: ITreeItem[] = [];
   @Watch('items')
   itemsChanged() {
-    this.releaseRequestedKeys();
     this.initializeExpandedPaths();
   }
 
@@ -223,11 +222,6 @@ export class TkTreeView implements ComponentInterface {
    * in place of its toggle icon until its key is taken off the list.
    */
   @Prop() loadingKeys: string[] = [];
-  @Watch('loadingKeys')
-  @Watch('loadedKeys')
-  loadStateChanged() {
-    this.releaseRequestedKeys();
-  }
 
   /**
    * Keys of the branches whose children have already been fetched. A branch listed here never emits
@@ -312,14 +306,23 @@ export class TkTreeView implements ComponentInterface {
   private requestChildren = (pathStr: string, item: ITreeItem) => {
     if (!this.lazy || !this.isBranch(item)) return;
     if (item.children && item.children.length > 0) return;
-    // An item without a key cannot be tracked through loadingKeys or loadedKeys, so it is requested
-    // again on every expand.
-    if (item.key && (this.loadingKeys.includes(item.key) || this.loadedKeys.includes(item.key) || this.requestedKeys.has(item.key))) return;
+    if (item.key && (this.loadingKeys.includes(item.key) || this.loadedKeys.includes(item.key))) return;
 
-    if (item.key) {
-      this.requestedKeys.add(item.key);
-    }
+    // An item without a key is unreachable through loadingKeys and loadedKeys, so its path is what
+    // keeps it from being asked for more than once while it stays open.
+    const requestId = this.requestIdOf(item, pathStr);
+    if (this.requestedIds.has(requestId)) return;
+
+    this.requestedIds.add(requestId);
     this.tkLoad.emit({ item, path: pathStr });
+  };
+
+  /**
+   * Identify a branch across renders. The key is what loadingKeys and loadedKeys speak, and the path
+   * stands in for an item that has none so it is still asked for only once per expansion.
+   */
+  private requestIdOf = (item: ITreeItem, pathStr: string): string => {
+    return item.key ?? `path:${pathStr}`;
   };
 
   /**
@@ -327,19 +330,26 @@ export class TkTreeView implements ComponentInterface {
    * Running this after each render is what makes an expansion coming from expandedKeys load just
    * like a clicked one, since the prop writes expandedPaths without going through a toggle.
    */
-  private releaseRequestedKeys = () => {
-    this.requestedKeys.clear();
-  };
-
   private requestExpandedBranches = () => {
     if (!this.lazy) return;
 
+    const openBranches = new Map<string, { item: ITreeItem; pathStr: string }>();
     this.expandedPaths.forEach(pathStr => {
       const item = this.itemAtPath(pathStr);
       if (item) {
-        this.requestChildren(pathStr, item);
+        openBranches.set(this.requestIdOf(item, pathStr), { item, pathStr });
       }
     });
+
+    // Forgetting a branch that is no longer open is the whole retry story: nothing else re-asks, so
+    // a fetch that failed while the branch stayed open is not repeated until the user reopens it.
+    this.requestedIds.forEach(id => {
+      if (!openBranches.has(id)) {
+        this.requestedIds.delete(id);
+      }
+    });
+
+    openBranches.forEach(({ item, pathStr }) => this.requestChildren(pathStr, item));
   };
 
   /**

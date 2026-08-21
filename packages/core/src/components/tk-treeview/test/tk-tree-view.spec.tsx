@@ -1271,7 +1271,24 @@ describe('tk-tree-view', () => {
       expect(requests[0].item.key).toBe('lazy');
     });
 
-    it('emits once when a branch is collapsed and reopened before loadingKeys comes back', async () => {
+    it('does not ask again when a branch is reopened while its fetch is still in flight', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('asks again when a branch is reopened, which is how a failed fetch is retried', async () => {
       const page = await setupLazyTree();
       const requests = listenForLoad(page);
 
@@ -1282,7 +1299,7 @@ describe('tk-tree-view', () => {
       branchLabel(page).click();
       await page.waitForChanges();
 
-      expect(requests).toHaveLength(1);
+      expect(requests).toHaveLength(2);
     });
 
     it('asks again once loadingKeys clears without children arriving', async () => {
@@ -1347,6 +1364,84 @@ describe('tk-tree-view', () => {
 
       expect(selected[0]).toEqual(['lazy']);
       expect((page.root.querySelector('.node.directory tk-checkbox') as any).value).toBe(true);
+    });
+
+    it('does not keep re-asking while a branch stays open and its fetches keep failing', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      // the consumer's try/finally round-trip, five failures in a row
+      for (let attempt = 0; attempt < 5; attempt++) {
+        page.root.loadingKeys = ['lazy'];
+        await page.waitForChanges();
+        page.root.loadingKeys = [];
+        await page.waitForChanges();
+      }
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('does not re-ask for an empty branch while it stays open without loadedKeys', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [{ key: 'empty', label: 'Empty', isLeaf: false, children: [] }];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['empty'];
+      await page.waitForChanges();
+      page.root.loadingKeys = [];
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('leaves a branch still in flight alone when another branch gets its children', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [
+        { key: 'a', label: 'A', isLeaf: false },
+        { key: 'b', label: 'B', isLeaf: false },
+      ];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      const branches = Array.from(page.root.querySelectorAll('.node.directory > .tk-tree-view.label')) as HTMLElement[];
+      branches[0].click();
+      await page.waitForChanges();
+      branches[1].click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['a', 'b'];
+      await page.waitForChanges();
+
+      // A arrives while B is still being fetched
+      page.root.items = [
+        { key: 'a', label: 'A', isLeaf: false, children: [{ key: 'a1', label: 'A1' }] },
+        { key: 'b', label: 'B', isLeaf: false },
+      ];
+      page.root.loadingKeys = ['b'];
+      await page.waitForChanges();
+
+      expect(requests.map(request => request.item.key)).toEqual(['a', 'b']);
+    });
+
+    it('asks once for an item without a key rather than once per render', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [{ label: 'NoKey', isLeaf: false }];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.size = 'small';
+      await page.waitForChanges();
+      page.root.size = 'large';
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
     });
   });
 });
