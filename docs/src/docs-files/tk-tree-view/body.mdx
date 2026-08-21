@@ -7,6 +7,7 @@ import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
 import ExpandAll from './examples/ExpandAll';
 import CollapseBehavior from './examples/CollapseBehavior';
+import LazyLoading from './examples/LazyLoading';
 import CustomStyles from './examples/CustomStyles';
 import { TkTreeView } from '@takeoff-ui/react';
 
@@ -79,6 +80,67 @@ the `item` trigger expands or collapses instead, so it keeps the highlight
 rather than blinking it on and off on alternating clicks.
 
 <CollapseBehavior />
+
+## Lazy Loading
+
+Set the `lazy` prop to fetch a branch's children only when it is expanded,
+instead of handing the whole tree over up front. Expanding a branch that has no
+children emits `tk-load` with the item and its index path; the fetch itself
+belongs to you, exactly like `tk-request` on the table.
+
+Three pieces of state drive it, and all three are yours:
+
+- `items` — put the children you fetched onto the right branch.
+- `loadingKeys` — the keys being fetched right now. Each of them shows a spinner
+  in place of its toggle icon, so clearing a key is what stops its spinner.
+- `loadedKeys` — the keys already fetched. A branch listed here never emits
+  `tk-load` again, and leaving a failed branch off the list is what lets the
+  next expand retry it. This one is optional: a branch that came back with
+  children is already recognised as loaded, so the only case that needs the list
+  is a branch that came back **empty** and should still read as a branch.
+  Marking that branch `isLeaf: true` instead is the other way out, and it turns
+  the node into a leaf and takes its arrow away. The example below takes that
+  second route, which is why it could drop `loadedKeys` entirely.
+
+Branches whose children are not loaded yet have to be marked with
+`isLeaf: false`, otherwise they are indistinguishable from a leaf and cannot be
+expanded at all. `isLeaf` is only read while `lazy` is set, so a tree that
+provides all of its data keeps behaving exactly as before.
+
+<LazyLoading />
+
+Clear `loadingKeys` in a `finally` branch rather than after the fetch resolves.
+A key left on the list keeps its spinner running forever, since the component
+only shows what the list says.
+
+Two more things the example above shows. A fetch that is still in the air when
+the tree is reset will otherwise land on the tree that replaced it, so it
+carries a generation counter and drops a result that no longer belongs. And
+resetting means clearing `expandedKeys` as well: a branch left expanded with its
+children taken away sits there open and empty.
+
+Two props behave differently on a lazy tree:
+
+- `expandAll` is ignored, because it could only reach the branches that happen
+  to be loaded. Use `expandedKeys` instead.
+- `expandedKeys` only resolves keys that are already in the tree; a key inside a
+  branch that has not been fetched yet is skipped rather than reported as
+  invalid. A branch it does open emits `tk-load` the same way a clicked one
+  does, so it is the way to open a lazy branch programmatically.
+
+Selection works off the items that are currently loaded, and the two strategies
+part ways on a branch that has not been fetched yet:
+
+- `selectionStrategy="all"` selects the branch's own key, and the descendants
+  that arrive afterwards arrive unselected. Its checkbox therefore reads as
+  checked over a subtree that is not fully selected.
+- `selectionStrategy="leaf"` leaves an unloaded branch out entirely, since it is
+  a branch rather than a leaf, so `selectAll` covers only the leaves already in
+  the tree.
+
+One more thing to know with `toggleTrigger="icon"`: the arrow is what the
+spinner replaces, so a branch cannot be collapsed again until its key leaves
+`loadingKeys`.
 
 ## Custom Styles
 
