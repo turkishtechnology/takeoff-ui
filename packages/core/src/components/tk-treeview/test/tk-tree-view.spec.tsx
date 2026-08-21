@@ -1062,12 +1062,12 @@ describe('tk-tree-view', () => {
 
   describe('lazy loading', () => {
     const lazyItems = [
-      { key: 'lazy', label: 'Lazy', isLeaf: false },
+      { key: 'lazy', label: 'Lazy', hasChildren: true },
       { key: 'plain', label: 'Plain' },
     ];
 
     const loadedItems = [
-      { key: 'lazy', label: 'Lazy', isLeaf: false, children: [{ key: 'child', label: 'Child' }] },
+      { key: 'lazy', label: 'Lazy', hasChildren: true, children: [{ key: 'child', label: 'Child' }] },
       { key: 'plain', label: 'Plain' },
     ];
 
@@ -1086,14 +1086,14 @@ describe('tk-tree-view', () => {
 
     const spinner = (page: SpecPage) => page.root.querySelector('.node.directory > .tk-tree-view.label > tk-spinner');
 
-    it('treats an item marked with isLeaf false as a branch', async () => {
+    it('treats an item marked with hasChildren as a branch', async () => {
       const page = await setupLazyTree();
 
       expect(branchNode(page)).toBeTruthy();
       expect(branchToggleIcon(page)).toBeTruthy();
     });
 
-    it('ignores isLeaf when lazy is not set', async () => {
+    it('ignores hasChildren when lazy is not set', async () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view></tk-tree-view>` });
       page.root.items = lazyItems;
       await page.waitForChanges();
@@ -1386,7 +1386,7 @@ describe('tk-tree-view', () => {
 
     it('does not re-ask for an empty branch while it stays open without loadedKeys', async () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
-      page.root.items = [{ key: 'empty', label: 'Empty', isLeaf: false, children: [] }];
+      page.root.items = [{ key: 'empty', label: 'Empty', hasChildren: true, children: [] }];
       await page.waitForChanges();
       const requests = listenForLoad(page);
 
@@ -1403,8 +1403,8 @@ describe('tk-tree-view', () => {
     it('leaves a branch still in flight alone when another branch gets its children', async () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
       page.root.items = [
-        { key: 'a', label: 'A', isLeaf: false },
-        { key: 'b', label: 'B', isLeaf: false },
+        { key: 'a', label: 'A', hasChildren: true },
+        { key: 'b', label: 'B', hasChildren: true },
       ];
       await page.waitForChanges();
       const requests = listenForLoad(page);
@@ -1419,8 +1419,8 @@ describe('tk-tree-view', () => {
 
       // A arrives while B is still being fetched
       page.root.items = [
-        { key: 'a', label: 'A', isLeaf: false, children: [{ key: 'a1', label: 'A1' }] },
-        { key: 'b', label: 'B', isLeaf: false },
+        { key: 'a', label: 'A', hasChildren: true, children: [{ key: 'a1', label: 'A1' }] },
+        { key: 'b', label: 'B', hasChildren: true },
       ];
       page.root.loadingKeys = ['b'];
       await page.waitForChanges();
@@ -1430,7 +1430,7 @@ describe('tk-tree-view', () => {
 
     it('asks once for an item without a key rather than once per render', async () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
-      page.root.items = [{ label: 'NoKey', isLeaf: false }];
+      page.root.items = [{ label: 'NoKey', hasChildren: true }];
       await page.waitForChanges();
       const requests = listenForLoad(page);
 

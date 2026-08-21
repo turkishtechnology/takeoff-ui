@@ -5,20 +5,20 @@ import FeatureDemo from '../../../components/FeatureDemo';
 type LazyItem = {
   key: string;
   label: string;
-  isLeaf?: boolean;
+  hasChildren?: boolean;
   children?: LazyItem[];
 };
 
 const initialData: LazyItem[] = [
-  { key: 'documents', label: 'Documents', isLeaf: false },
-  { key: 'images', label: 'Images', isLeaf: false },
+  { key: 'documents', label: 'Documents', hasChildren: true },
+  { key: 'images', label: 'Images', hasChildren: true },
   { key: 'readme', label: 'readme.txt' },
 ];
 
 // Stands in for the server. Only the keys listed here can be expanded any further.
 const childrenByKey: Record<string, LazyItem[]> = {
   documents: [
-    { key: 'projects', label: 'Projects', isLeaf: false },
+    { key: 'projects', label: 'Projects', hasChildren: true },
     { key: 'reports', label: 'reports.pdf' },
   ],
   projects: [
@@ -37,7 +37,7 @@ const fetchChildren = (key: string): Promise<LazyItem[]> => new Promise(resolve 
 const attachChildren = (nodes: LazyItem[], key: string, children: LazyItem[]): LazyItem[] =>
   nodes.map(node => {
     if (node.key === key) {
-      return { ...node, children, isLeaf: children.length === 0 };
+      return { ...node, children, hasChildren: children.length > 0 };
     }
     if (node.children) {
       return { ...node, children: attachChildren(node.children, key, children) };
@@ -46,8 +46,8 @@ const attachChildren = (nodes: LazyItem[], key: string, children: LazyItem[]): L
   });
 
 const reactCode = `const initialData = [
-  { key: 'documents', label: 'Documents', isLeaf: false },
-  { key: 'images', label: 'Images', isLeaf: false },
+  { key: 'documents', label: 'Documents', hasChildren: true },
+  { key: 'images', label: 'Images', hasChildren: true },
   { key: 'readme', label: 'readme.txt' },
 ];
 
@@ -55,7 +55,7 @@ const reactCode = `const initialData = [
 const attachChildren = (nodes, key, children) =>
   nodes.map((node) => {
     if (node.key === key) {
-      return { ...node, children, isLeaf: children.length === 0 };
+      return { ...node, children, hasChildren: children.length > 0 };
     }
     if (node.children) {
       return { ...node, children: attachChildren(node.children, key, children) };
@@ -106,8 +106,8 @@ const vueCode = `<script setup>
 import { ref } from 'vue';
 
 const items = ref([
-  { key: 'documents', label: 'Documents', isLeaf: false },
-  { key: 'images', label: 'Images', isLeaf: false },
+  { key: 'documents', label: 'Documents', hasChildren: true },
+  { key: 'images', label: 'Images', hasChildren: true },
   { key: 'readme', label: 'readme.txt' },
 ]);
 const loadingKeys = ref([]);
@@ -117,7 +117,7 @@ const loadedKeys = ref([]);
 const attachChildren = (nodes, key, children) =>
   nodes.map((node) => {
     if (node.key === key) {
-      return { ...node, children, isLeaf: children.length === 0 };
+      return { ...node, children, hasChildren: children.length > 0 };
     }
     if (node.children) {
       return { ...node, children: attachChildren(node.children, key, children) };
@@ -170,8 +170,8 @@ const angularCode = `import { Component } from '@angular/core';
 })
 export class LazyTreeComponent {
   items = [
-    { key: 'documents', label: 'Documents', isLeaf: false },
-    { key: 'images', label: 'Images', isLeaf: false },
+    { key: 'documents', label: 'Documents', hasChildren: true },
+    { key: 'images', label: 'Images', hasChildren: true },
     { key: 'readme', label: 'readme.txt' },
   ];
   loadingKeys: string[] = [];
@@ -192,7 +192,7 @@ export class LazyTreeComponent {
   private attachChildren(nodes, key, children) {
     return nodes.map((node) => {
       if (node.key === key) {
-        return { ...node, children, isLeaf: children.length === 0 };
+        return { ...node, children, hasChildren: children.length > 0 };
       }
       if (node.children) {
         return { ...node, children: this.attachChildren(node.children, key, children) };

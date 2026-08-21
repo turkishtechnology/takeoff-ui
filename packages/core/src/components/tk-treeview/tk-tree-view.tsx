@@ -209,7 +209,7 @@ export class TkTreeView implements ComponentInterface {
    * whose children are missing emits `tk-load` instead of rendering nothing, and the fetch itself
    * belongs to the consumer.
    *
-   * <br /> **Note:** Branches that are not loaded yet have to be marked with `isLeaf: false`,
+   * <br /> **Note:** Branches that are not loaded yet have to be marked with `hasChildren: true`,
    * otherwise they cannot be told apart from a leaf and cannot be expanded at all. Items also need
    * a `key`, since `loadingKeys` and `loadedKeys` address them by key.
    * <br />
@@ -229,8 +229,8 @@ export class TkTreeView implements ComponentInterface {
    *
    * <br /> **Note:** This is optional. A branch that came back with children is already recognised
    * as loaded, so the only case that needs this list is a branch that came back empty and should
-   * still read as a branch. Marking such a branch `isLeaf: true` instead turns it into a leaf and
-   * takes its arrow away.
+   * still read as a branch. Marking such a branch `hasChildren: false` instead turns it into a leaf
+   * and takes its arrow away.
    */
   @Prop() loadedKeys: string[] = [];
 
@@ -282,11 +282,11 @@ export class TkTreeView implements ComponentInterface {
 
   /**
    * Decide whether an item is a branch. Loaded children answer this on their own, but a lazy branch
-   * has none yet, so isLeaf is what keeps it expandable until its first load.
+   * has none yet, so hasChildren is what keeps it expandable until its first load.
    */
   private isBranch = (item: ITreeItem): boolean => {
-    if (this.lazy && item.isLeaf !== undefined) {
-      return !item.isLeaf;
+    if (this.lazy && item.hasChildren !== undefined) {
+      return item.hasChildren;
     }
     return !!(item.children && item.children.length > 0);
   };

@@ -9,10 +9,11 @@ export interface ITreeItem {
   /** Child items */
   children?: ITreeItem[];
   /**
-   * Determines if this is a leaf node. Only effective when `lazy` is set.
-   * `false` forces the item to be treated as a branch even while its children are not loaded yet.
+   * Declares whether the item has children, for the times the children themselves cannot say.
+   * Only effective when `lazy` is set: `true` keeps an item expandable while its children are still
+   * unloaded, and `false` settles it as a leaf. Left out, the loaded children decide.
    */
-  isLeaf?: boolean;
+  hasChildren?: boolean;
 }
 
 // Payload of the tk-load event, emitted when an expanded branch needs its children

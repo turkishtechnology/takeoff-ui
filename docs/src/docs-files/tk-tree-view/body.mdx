@@ -88,11 +88,11 @@ Expanding a branch that has none emits `tk-load` with the item and its index
 path, and the fetch is yours to make — the same split as `tk-request` on the
 table.
 
-Branches that are not loaded yet have to be marked `isLeaf: false`, otherwise
-they cannot be told apart from a leaf and cannot be expanded at all. Put the
-children you fetch onto that branch in `items`, and list the keys in flight in
-`loadingKeys` to give them a spinner. Clear that list in a `finally`, or a
-failed fetch leaves one spinning forever.
+Branches that are not loaded yet have to be marked `hasChildren: true`,
+otherwise they cannot be told apart from a leaf and cannot be expanded at all.
+Put the children you fetch onto that branch in `items`, and list the keys in
+flight in `loadingKeys` to give them a spinner. Clear that list in a `finally`,
+or a failed fetch leaves one spinning forever.
 
 <LazyLoading />
 
