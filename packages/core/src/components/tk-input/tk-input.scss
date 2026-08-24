@@ -266,4 +266,10 @@ tk-input.tk-table-input {
       }
     }
   }
+
+  &.chips-focus-active {
+    .tk-input input {
+      caret-color: transparent;
+    }
+  }
 }

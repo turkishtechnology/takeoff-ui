@@ -8,6 +8,7 @@ jest.mock('uuid', () => ({ v4: () => 'test-uuid' }));
 
 import { newSpecPage } from '@stencil/core/testing';
 import { TkInput } from '../tk-input';
+import { TkChips } from '../../tk-chips/tk-chips';
 
 describe('tk-input', () => {
   it('renders the label asterisk when showAsterisk is true', async () => {
@@ -331,6 +332,251 @@ describe('tk-input', () => {
       input.value = '42';
       input.dispatchEvent(new Event('input'));
       expect(page.rootInstance.value).toBe(42);
+    });
+  });
+
+  describe('chips mode keyboard focus', () => {
+    const createChipsInput = async (attrs = '', value: any[] = ['Alpha', 'Beta', 'Gamma'], props: Record<string, any> = {}) => {
+      const page = await newSpecPage({
+        components: [TkInput],
+        html: `<tk-input mode="chips" ${attrs}></tk-input>`,
+      });
+      Object.assign(page.root, props);
+      page.root.value = value;
+      await page.waitForChanges();
+      return page;
+    };
+
+    const nativeInputOf = (page: any) => page.root.querySelector('input') as HTMLInputElement;
+
+    const pressKey = async (page: any, key: string) => {
+      nativeInputOf(page).dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      await page.waitForChanges();
+    };
+
+    const typeInto = async (page: any, text: string) => {
+      const nativeInput = nativeInputOf(page);
+      nativeInput.value = text;
+      nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
+    };
+
+    it('walks the focus through the chips and back into the text', async () => {
+      const page = await createChipsInput();
+
+      // ArrowRight from the text does nothing: the chips are behind it, not ahead of it
+      await pressKey(page, 'ArrowRight');
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(2);
+
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(0);
+
+      // the first chip is the end of the road
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(0);
+
+      await pressKey(page, 'ArrowRight');
+      await pressKey(page, 'ArrowRight');
+      await pressKey(page, 'ArrowRight');
+      // past the last chip the text field owns the keyboard again
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+    });
+
+    it('marks the focused chip and stops the text caret from blinking behind it', async () => {
+      const page = await newSpecPage({
+        components: [TkInput, TkChips],
+        html: `<tk-input mode="chips"></tk-input>`,
+      });
+      page.root.value = ['Alpha', 'Beta', 'Gamma'];
+      await page.waitForChanges();
+
+      // which chip carries the ring, by its position among the rendered chips
+      const focusedPositions = () =>
+        Array.from(page.root.querySelectorAll('tk-chips'))
+          .map((chip: any, index) => (chip.focused ? index : -1))
+          .filter(index => index >= 0);
+
+      expect(focusedPositions()).toEqual([]);
+
+      await pressKey(page, 'ArrowLeft');
+      expect(focusedPositions()).toEqual([2]);
+      expect(page.root.querySelector('.tk-input-container').classList.contains('chips-focus-active')).toBe(true);
+
+      await pressKey(page, 'ArrowLeft');
+      expect(focusedPositions()).toEqual([1]);
+
+      await pressKey(page, 'ArrowRight');
+      await pressKey(page, 'ArrowRight');
+      expect(focusedPositions()).toEqual([]);
+      expect(page.root.querySelector('.tk-input-container').classList.contains('chips-focus-active')).toBe(false);
+    });
+
+    it('removes the focused chip, Backspace stepping back and Delete staying put', async () => {
+      const page = await createChipsInput();
+      const changes: any[] = [];
+      page.root.addEventListener('tk-change', (e: Event) => changes.push((e as CustomEvent).detail));
+
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Alpha', 'Beta']);
+      // Backspace stepped back onto the chip before the one it removed
+      expect(page.rootInstance.focusedChipIndex).toBe(1);
+
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'Delete');
+      expect(page.root.value).toEqual(['Beta']);
+      // Delete stayed put and took over the chip that slid into the freed slot
+      expect(page.rootInstance.focusedChipIndex).toBe(0);
+
+      await pressKey(page, 'Delete');
+      expect(page.root.value).toEqual([]);
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+      expect(changes).toEqual([['Alpha', 'Beta'], ['Beta'], []]);
+    });
+
+    it('aims at the last chip before removing anything from the text field', async () => {
+      const page = await createChipsInput();
+
+      await typeInto(page, 'De');
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Alpha', 'Beta', 'Gamma']);
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      // Delete never reaches the chips from the text field, they are behind it
+      await typeInto(page, '');
+      await pressKey(page, 'Delete');
+      expect(page.root.value).toEqual(['Alpha', 'Beta', 'Gamma']);
+
+      // the first Backspace out of the empty text only focuses the last chip
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Alpha', 'Beta', 'Gamma']);
+      expect(page.rootInstance.focusedChipIndex).toBe(2);
+
+      // from there each press removes one chip and steps back onto the one before it
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Alpha', 'Beta']);
+      await pressKey(page, 'Backspace');
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual([]);
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+    });
+
+    it('steps over chips that carry no remove button', async () => {
+      const page = await createChipsInput('', ['Alpha', 'Beta'], { chipDisabled: (item: any) => item === 'Beta' });
+
+      // the disabled chip cannot be focused, so the walk lands on the one before it
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(0);
+
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Beta']);
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      // nothing removable is left, so the keys go back to the text field
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'Backspace');
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual(['Beta']);
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      const indicator = { label: '+2', removable: false };
+      const collapsed = await createChipsInput('', ['Alpha', indicator]);
+      // the indicator cannot be aimed at, so both the walk and a plain Backspace land on "Alpha"
+      await pressKey(collapsed, 'Backspace');
+      expect(collapsed.rootInstance.focusedChipIndex).toBe(0);
+      await pressKey(collapsed, 'Backspace');
+      expect(collapsed.root.value).toEqual([indicator]);
+    });
+
+    it('stays out of readonly and disabled inputs, and out of text mode', async () => {
+      const readonly = await createChipsInput('readonly="true"');
+      await pressKey(readonly, 'ArrowLeft');
+      await pressKey(readonly, 'Backspace');
+      expect(readonly.rootInstance.focusedChipIndex).toBeNull();
+      expect(readonly.root.value).toEqual(['Alpha', 'Beta', 'Gamma']);
+
+      const disabled = await createChipsInput('disabled="true"');
+      await pressKey(disabled, 'ArrowLeft');
+      await pressKey(disabled, 'Backspace');
+      expect(disabled.rootInstance.focusedChipIndex).toBeNull();
+      expect(disabled.root.value).toEqual(['Alpha', 'Beta', 'Gamma']);
+
+      const text = await newSpecPage({ components: [TkInput], html: `<tk-input value="Alpha"></tk-input>` });
+      await pressKey(text, 'ArrowLeft');
+      expect(text.rootInstance.focusedChipIndex).toBeNull();
+    });
+
+    it('drops the focus when the value is replaced from the outside', async () => {
+      const page = await createChipsInput();
+
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(2);
+
+      page.root.value = ['Alpha'];
+      await page.waitForChanges();
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      // the keys work against the new list right away instead of swallowing a press
+      await pressKey(page, 'Backspace');
+      expect(page.rootInstance.focusedChipIndex).toBe(0);
+      await pressKey(page, 'Backspace');
+      expect(page.root.value).toEqual([]);
+    });
+
+    it('ignores a chips input that was handed a plain string value', async () => {
+      const page = await newSpecPage({ components: [TkInput], html: `<tk-input mode="chips" value="Alpha"></tk-input>` });
+
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'Backspace');
+
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+      expect(page.root.value).toBe('Alpha');
+    });
+
+    it('leaves the arrows to a selected range in the text field', async () => {
+      const page = await createChipsInput();
+      const nativeInput = nativeInputOf(page);
+
+      await typeInto(page, 'Delta');
+      // the whole text is selected, the way Ctrl+A leaves it: the arrows still belong to the text
+      nativeInput.selectionStart = 0;
+      nativeInput.selectionEnd = 5;
+      await pressKey(page, 'ArrowLeft');
+
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+    });
+
+    it('drops the ring when the last removable chip becomes untouchable', async () => {
+      const page = await createChipsInput('', ['Alpha', 'Beta']);
+
+      await pressKey(page, 'ArrowLeft');
+      expect(page.rootInstance.focusedChipIndex).toBe(1);
+
+      page.root.chipDisabled = () => true;
+      await page.waitForChanges();
+
+      // with nothing left to remove the key goes back to the text field and the ring goes away
+      await pressKey(page, 'Backspace');
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+      expect(page.root.value).toEqual(['Alpha', 'Beta']);
+      expect(page.root.querySelector('.tk-input-container').classList.contains('chips-focus-active')).toBe(false);
+    });
+
+    it('hands the keyboard back on any other key and on blur', async () => {
+      const page = await createChipsInput();
+
+      await pressKey(page, 'ArrowLeft');
+      await pressKey(page, 'a');
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
+
+      await pressKey(page, 'ArrowLeft');
+      nativeInputOf(page).dispatchEvent(new Event('blur'));
+      await page.waitForChanges();
+      expect(page.rootInstance.focusedChipIndex).toBeNull();
     });
   });
 

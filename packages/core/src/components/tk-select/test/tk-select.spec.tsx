@@ -792,6 +792,141 @@ describe('tk-select', () => {
 
       expect(page.root.value).toEqual(['Alpha']);
     });
+
+    describe('chip keyboard focus and removal', () => {
+      // the chip focus lives in tk-input, so these drive real key events instead of the select's handler
+      const typeInto = (page: SpecPage, text: string) => {
+        const nativeInput = page.root.querySelector('input') as HTMLInputElement;
+        nativeInput.value = text;
+        nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        return nativeInput;
+      };
+
+      const pressKey = async (page: SpecPage, key: string) => {
+        (page.root.querySelector('input') as HTMLInputElement).dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+        await page.waitForChanges();
+      };
+
+      it('removes the selected options one by one on Backspace', async () => {
+        const page = await createSelect('multiple="true" editable="true" option-value-key="value"', { options: objectOptions });
+        page.root.value = [1, 2, 3];
+        await page.waitForChanges();
+        const changes = listen(page, 'tk-change');
+
+        // the first press only aims at the last chip
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1, 2, 3]);
+
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1, 2]);
+
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([]);
+        expect(changes).toEqual([[1, 2], [1], []]);
+      });
+
+      it('keeps the typed filter text intact until the input is empty', async () => {
+        const page = await createSelect('multiple="true" editable="true" option-value-key="value"', { options: objectOptions });
+        page.root.value = [1, 2];
+        await page.waitForChanges();
+
+        typeInto(page, 'Th');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1, 2]);
+
+        typeInto(page, '');
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1]);
+      });
+
+      it('removes the chip the arrow keys focused, resolved back through optionValueKey', async () => {
+        const page = await createSelect('multiple="true" editable="true" option-value-key="value"', { options: objectOptions });
+        page.root.value = [1, 2, 3];
+        await page.waitForChanges();
+
+        // the focus lands on "Three" and Backspace removes exactly that chip
+        await pressKey(page, 'ArrowLeft');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1, 2]);
+
+        // the focus stepped back onto "Two", which Delete then removes
+        await pressKey(page, 'Delete');
+        expect(page.root.value).toEqual([1]);
+      });
+
+      it('maps a removal back to the right value while the +N indicator is shown', async () => {
+        const page = await createSelect('multiple="true" editable="true" visible-item-count="2" option-value-key="value"', { options: objectOptions });
+        page.root.value = [1, 2, 3];
+        await page.waitForChanges();
+
+        // the last rendered chip is the +N indicator, which has no remove button: the focus steps
+        // over it onto "Two", and removing that maps back past the collapsed display
+        await pressKey(page, 'ArrowLeft');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([1, 3]);
+
+        const plain = await createSelect('multiple="true" editable="true" visible-item-count="2" option-value-key="value"', { options: objectOptions });
+        plain.root.value = [1, 2, 3];
+        await plain.waitForChanges();
+
+        // a plain Backspace aims past the indicator the same way, then removes
+        await pressKey(plain, 'Backspace');
+        await pressKey(plain, 'Backspace');
+        expect(plain.root.value).toEqual([1, 3]);
+      });
+
+      it('clears the collapsed select-all chip but keeps disabled selections', async () => {
+        const page = await createSelect('multiple="true" editable="true" select-all="true" show-select-all-chip="true" option-value-key="value"', {
+          options: objectOptions,
+          optionDisabled: (item: any) => item.value === 3,
+        });
+        page.root.value = [1, 2, 3];
+        await page.waitForChanges();
+
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([3]);
+      });
+
+      it('never removes a disabled selection', async () => {
+        const page = await createSelect('multiple="true" editable="true" option-value-key="value"', {
+          options: objectOptions,
+          optionDisabled: (item: any) => item.value === 3,
+        });
+        page.root.value = [1, 3];
+        await page.waitForChanges();
+
+        // the last chip is the disabled one, so the keys step over it onto the removable chip
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Backspace');
+        expect(page.root.value).toEqual([3]);
+
+        // with only the disabled selection left there is nothing for them to take
+        await pressKey(page, 'ArrowLeft');
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Backspace');
+        await pressKey(page, 'Delete');
+        expect(page.root.value).toEqual([3]);
+      });
+
+      it('is ignored when the select is not editable or readonly', async () => {
+        const plain = await createSelect('multiple="true" option-value-key="value"', { options: objectOptions });
+        plain.root.value = [1, 2];
+        await plain.waitForChanges();
+        await pressKey(plain, 'Backspace');
+        await pressKey(plain, 'Backspace');
+        expect(plain.root.value).toEqual([1, 2]);
+
+        const readonly = await createSelect('multiple="true" editable="true" readonly="true" option-value-key="value"', { options: objectOptions });
+        readonly.root.value = [1, 2];
+        await readonly.waitForChanges();
+        await pressKey(readonly, 'Backspace');
+        await pressKey(readonly, 'Backspace');
+        expect(readonly.root.value).toEqual([1, 2]);
+      });
+    });
   });
 
   describe('input interactions', () => {
