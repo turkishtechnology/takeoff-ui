@@ -15,6 +15,7 @@ import ExpandedRows from './Examples/ExpandedRows';
 import Export from './Examples/Export';
 import StickyColumn from './Examples/StickyColumn';
 import StickyHeader from './Examples/StickyHeader';
+import HorizontalScrollPosition from './Examples/HorizontalScrollPosition';
 import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
 import { TkAlert, TkTable } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
@@ -183,6 +184,15 @@ through large datasets. To enable sticky header functionality, you must provide
 a height value through the `containerStyle` prop.
 
 <StickyHeader />
+
+## Horizontal Scroll Position
+
+This feature allows the horizontal scrollbar to be placed on top of the table
+with the `horizontalScrollPosition` prop, so it stays reachable without
+scrolling to the bottom of a long table. It defaults to `bottom`, and `both`
+renders it on top and at the bottom.
+
+<HorizontalScrollPosition />
 
 ## Column Arrangement
 

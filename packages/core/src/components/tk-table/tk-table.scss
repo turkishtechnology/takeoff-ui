@@ -1,5 +1,11 @@
 @use '../../global/sass/mixins' as *;
 
+// The box the table is drawn in: either the holder itself, or the frame that wraps it and the top scrollbar.
+@mixin table-border {
+  border-radius: var(--radius-m-base);
+  outline: 2px solid var(--border-light);
+}
+
 .tk-table-container {
   display: flex;
   flex-direction: column;
@@ -16,12 +22,52 @@
     gap: 16px;
   }
 
+  // The table holder is the scroll container itself, so the top scrollbar can live neither inside it (it would
+  // scroll away with the content) nor next to it (it would fall outside the table border). This frame carries
+  // the border instead, which puts the scrollbar inside it while keeping it out of the scrolled area.
+  .table-frame {
+    display: flex;
+    flex-direction: column;
+    // Keeps row backgrounds inside the rounded corners
+    overflow: hidden;
+    @include table-border;
+
+    .table-holder {
+      flex: 1;
+      height: auto;
+      border-radius: 0;
+      outline: none;
+    }
+  }
+
+  // Mirrors the scrollbar the table draws at its bottom: same mixin, same 4px track.
+  .tk-table-top-scrollbar {
+    // The content is 1px tall, so the box needs its own height to leave room for the scrollbar.
+    height: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    @include takeoff-scrollbar;
+
+    &.hidden {
+      display: none;
+    }
+
+    // A zero height box produces no scrollable overflow, so the bar would not scroll at all without this.
+    .tk-table-top-scrollbar-content {
+      height: 1px;
+    }
+  }
+
+  // With the scrollbar moved to the top, the table keeps scrolling but no longer draws its own horizontal bar.
+  &.hide-bottom-scrollbar .table-holder::-webkit-scrollbar:horizontal {
+    height: 0;
+  }
+
   .table-holder {
     height: 100%;
     overflow-x: auto;
-    border-radius: var(--radius-m-base);
     border-style: hidden;
-    outline: 2px solid var(--border-light);
+    @include table-border;
     @include takeoff-scrollbar;
 
     table {

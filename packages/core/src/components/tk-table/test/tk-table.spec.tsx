@@ -266,6 +266,63 @@ describe('tk-table rendering', () => {
     expect(row.querySelector('td span').textContent).toBe('element cell');
   });
 
+  it('keeps the horizontal scrollbar at the bottom by default', async () => {
+    const page = await createPage();
+
+    expect(page.root.shadowRoot.querySelector('.tk-table-top-scrollbar')).toBeFalsy();
+    expect(page.root.shadowRoot.querySelector('.tk-table-container.hide-bottom-scrollbar')).toBeFalsy();
+  });
+
+  it('hides the bottom scrollbar when the horizontal scrollbar is placed on top', async () => {
+    const page = await createPage({ horizontalScrollPosition: 'top' });
+
+    expect(page.root.shadowRoot.querySelector('.tk-table-top-scrollbar')).toBeTruthy();
+    expect(page.root.shadowRoot.querySelector('.tk-table-container.hide-bottom-scrollbar')).toBeTruthy();
+  });
+
+  it('keeps both scrollbars when the horizontal scrollbar is placed on both sides', async () => {
+    const page = await createPage({ horizontalScrollPosition: 'both' });
+
+    expect(page.root.shadowRoot.querySelector('.tk-table-top-scrollbar')).toBeTruthy();
+    expect(page.root.shadowRoot.querySelector('.tk-table-container.hide-bottom-scrollbar')).toBeFalsy();
+  });
+
+  it('mirrors the scroll position between the table and the top scrollbar', async () => {
+    const page = await createPage({ horizontalScrollPosition: 'top' });
+    const instance = getInstance(page);
+    const bar = page.root.shadowRoot.querySelector('.tk-table-top-scrollbar') as HTMLElement;
+    const holder = page.root.shadowRoot.querySelector('.table-holder') as HTMLElement;
+
+    holder.scrollLeft = 120;
+    instance.handleScroll({ target: holder } as unknown as Event);
+    expect(bar.scrollLeft).toBe(120);
+
+    bar.scrollLeft = 40;
+    instance.handleTopScrollbarScroll();
+    expect(holder.scrollLeft).toBe(40);
+  });
+
+  it('sizes the top scrollbar from the table and hides it when there is nothing to scroll', async () => {
+    const page = await createPage({ horizontalScrollPosition: 'top' });
+    const instance = getInstance(page);
+    const bar = page.root.shadowRoot.querySelector('.tk-table-top-scrollbar') as HTMLElement;
+    const content = page.root.shadowRoot.querySelector('.tk-table-top-scrollbar-content') as HTMLElement;
+    const holder = page.root.shadowRoot.querySelector('.table-holder') as HTMLElement;
+
+    Object.defineProperty(holder, 'clientWidth', { value: 400, configurable: true });
+    Object.defineProperty(holder, 'scrollWidth', { value: 1200, configurable: true });
+    instance.updateTopScrollbar();
+
+    expect(bar.style.width).toBe('400px');
+    expect(content.style.width).toBe('1200px');
+    expect(bar.classList.contains('hidden')).toBe(false);
+
+    Object.defineProperty(holder, 'scrollWidth', { value: 400, configurable: true });
+    instance.updateTopScrollbar();
+
+    expect(bar.classList.contains('hidden')).toBe(true);
+  });
+
   it('renders the empty-data slot when there is no data', async () => {
     const page = await createPage({ data: [] }, [h('div', { slot: 'empty-data' }, 'no rows')]);
 
