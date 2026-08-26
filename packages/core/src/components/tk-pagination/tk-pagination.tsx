@@ -32,6 +32,13 @@ export class TkPagination implements ComponentInterface {
   @Prop() rounded: boolean = false;
 
   /**
+   * Whether leaving the page input applies the typed page number.
+   * When false, the page only changes on Enter or on a click on the input's icon.
+   * @defaultValue true
+   */
+  @Prop() applyPageOnBlur: boolean = true;
+
+  /**
    * Number of items per page.
    * @defaultValue 10
    */
@@ -232,6 +239,23 @@ export class TkPagination implements ComponentInterface {
     }
   };
 
+  private handlePageInputMouseDown = (event: MouseEvent) => {
+    // Pressing the apply icon would blur the input first, resetting the typed value
+    // before the icon's click handler runs, so keep the focus where it is.
+    if ((event.target as HTMLElement)?.closest('tk-icon')) {
+      event.preventDefault();
+    }
+  };
+
+  private handlePageInputBlur = () => {
+    if (this.applyPageOnBlur) {
+      this.validateAndUpdatePage();
+      return;
+    }
+
+    this.updateInputValue(this.internalCurrentPage);
+  };
+
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
@@ -295,7 +319,7 @@ export class TkPagination implements ComponentInterface {
             value={this.inputValue}
             onTk-change={(event: CustomEvent) => this.handlePageInputChange(event.detail.toString())}
             onKeyDown={this.handlePageInputKeyDown}
-            onTk-blur={() => this.validateAndUpdatePage()}
+            onTk-blur={this.handlePageInputBlur}
             min={1}
             max={totalPages}
           />
@@ -365,11 +389,12 @@ export class TkPagination implements ComponentInterface {
         value={this.inputValue}
         icon={{ name: 'chevron_right', click: () => this.validateAndUpdatePage() }}
         iconPosition="right"
+        onMouseDown={this.handlePageInputMouseDown}
         onTk-change={(event: CustomEvent) => {
           this.handlePageInputChange(event.detail.toString());
         }}
         onKeyDown={this.handlePageInputKeyDown}
-        onTk-blur={() => this.validateAndUpdatePage()}
+        onTk-blur={this.handlePageInputBlur}
       />
     );
   }
