@@ -225,6 +225,13 @@ export class TkPagination implements ComponentInterface {
     this.inputValue = value.replace(/[^0-9]/g, '');
   }
 
+  private handlePageInputKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.validateAndUpdatePage();
+    }
+  };
+
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
@@ -287,6 +294,7 @@ export class TkPagination implements ComponentInterface {
             mode="text"
             value={this.inputValue}
             onTk-change={(event: CustomEvent) => this.handlePageInputChange(event.detail.toString())}
+            onKeyDown={this.handlePageInputKeyDown}
             onTk-blur={() => this.validateAndUpdatePage()}
             min={1}
             max={totalPages}
@@ -355,11 +363,12 @@ export class TkPagination implements ComponentInterface {
         min={1}
         max={totalPages}
         value={this.inputValue}
-        icon="chevron_right"
+        icon={{ name: 'chevron_right', click: () => this.validateAndUpdatePage() }}
         iconPosition="right"
         onTk-change={(event: CustomEvent) => {
           this.handlePageInputChange(event.detail.toString());
         }}
+        onKeyDown={this.handlePageInputKeyDown}
         onTk-blur={() => this.validateAndUpdatePage()}
       />
     );
