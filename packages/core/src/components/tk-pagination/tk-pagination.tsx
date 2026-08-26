@@ -119,6 +119,13 @@ export class TkPagination implements ComponentInterface {
     return Math.ceil(this.totalItems / this.rowsPerPage);
   }
 
+  /**
+   * Number of digits the page input has to be able to show without clipping.
+   */
+  private getPageDigitCount(totalPages: number): number {
+    return Math.max(1, totalPages).toString().length;
+  }
+
   private getPageNumbers(): (number | string)[] {
     const totalPages = this.getTotalPages();
     const currentPage = this.internalCurrentPage;
@@ -284,6 +291,8 @@ export class TkPagination implements ComponentInterface {
             <tk-icon {...getIconElementProps('chevron_left', { color: 'var(--icon-base)' })} />
           </button>
           <tk-input
+            class="tk-pagination-page-input"
+            style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
             mode="text"
             value={this.inputValue}
             onTk-change={(event: CustomEvent) => this.handlePageInputChange(event.detail.toString())}
@@ -350,7 +359,8 @@ export class TkPagination implements ComponentInterface {
   private renderInput(totalPages: number): HTMLTkInputElement {
     return (
       <tk-input
-        style={{ width: '70px' }}
+        class="tk-pagination-page-input"
+        style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
         mode="text"
         min={1}
         max={totalPages}
