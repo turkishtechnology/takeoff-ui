@@ -85,13 +85,24 @@ describe('tk-input', () => {
       expect(await readInput(page)).toEqual({ value: '2026-08-04 09:30 AM', caret: 16 });
     });
 
-    it('clamps the restored caret when a programmatic value is shorter', async () => {
-      const page = await setupMasked({ blocks: [4, 2, 2, 2, 2], delimiters: ['-', '-', ' ', ':'], numericOnly: true }, '2026-08-04 09:30', 16, 16);
+    it('keeps the caret inside the field when the reformatted value is shorter', async () => {
+      // A shorter value can only reach caret restoration through a range selection: with a
+      // collapsed caret the prefix guard in `writeNativeValue` already implies the incoming
+      // value reaches at least as far as the caret.
+      // Note this pins the observable outcome, not the `Math.min` in `restoreCaret` — an
+      // out-of-range `setSelectionRange` is clamped by the browser itself, so that guard
+      // cannot be distinguished from its absence through the DOM.
+      const page = await setupMasked({ blocks: [4, 2, 2, 2, 2], delimiters: ['-', '-', ' ', ':'], numericOnly: true }, '2026-08-04 09:3', 15, 15);
 
-      await page.$eval('tk-input', (el: any) => (el.value = '2026'));
+      // A real keystroke is what arms the caret-following; writing `value` alone never does.
+      await page.keyboard.type('0');
+      // Select from inside the untouched prefix to the end, so the prefix still matches while
+      // the caret (the end of the selection) lands beyond the shorter value.
+      await page.$eval('tk-input input', (el: HTMLInputElement) => el.setSelectionRange(4, 16));
+      await page.$eval('tk-input', (el: any) => (el.value = '2026-08'));
       await page.waitForChanges();
 
-      expect(await readInput(page)).toEqual({ value: '2026', caret: 4 });
+      expect(await readInput(page)).toEqual({ value: '2026-08', caret: 7 });
     });
   });
 });
