@@ -48,6 +48,12 @@
       "label": "Rounded",
       "type": "checkbox",
       "defaultValue": false
+    },
+    {
+      "key": "applyPageOnBlur",
+      "label": "Apply Page On Blur",
+      "type": "checkbox",
+      "defaultValue": true
     }
   ]
 }

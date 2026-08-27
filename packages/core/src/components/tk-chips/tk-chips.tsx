@@ -89,6 +89,12 @@ export class TkChips implements ComponentInterface {
   @Prop() fullWidth: boolean = false;
 
   /**
+   * Marks the chip as the one holding the keyboard inside a chips input, e.g. while the arrow keys walk them.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) focused: boolean = false;
+
+  /**
    * Sets the data-testid attribute on the root container element.
    */
   @Prop({ reflect: true }) dataTestid?: string;
@@ -118,6 +124,7 @@ export class TkChips implements ComponentInterface {
     const rootClasses = classNames('tk-chips', this.variant, this.size, this.type, {
       removable: this.removable,
       disabled: this.disabled,
+      focused: this.focused,
     });
     const { leftIcon, rightIcon } = renderIcons(
       this.icon,

@@ -84,7 +84,7 @@ const config: Config = {
       content:
         'Takeoff UI v2 is here — headless, accessible, React-only. New projects should start with <a target="_blank" rel="noopener noreferrer" href="https://takeoff-v2.app.turkishtechlab.com/">Takeoff UI v2</a>. v1 stays supported for existing projects.',
       backgroundColor: 'var(--primary-600)',
-      textColor: 'var(--static-light)',
+      textColor: 'var(--static-white)',
       isCloseable: true,
     },
     navbar: {

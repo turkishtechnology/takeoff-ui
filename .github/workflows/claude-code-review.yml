@@ -1,0 +1,53 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Runs automatically on PR open/update, or on demand when someone
+    # comments "/code-review" on a PR.
+    if: >
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft) ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '/code-review'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Review the changes in pull request #${{ github.event.pull_request.number || github.event.issue.number }}
+            of ${{ github.repository }}.
+
+            Steps:
+            1. Run `gh pr diff ${{ github.event.pull_request.number || github.event.issue.number }}` to read the changes.
+            2. Read the repository's CLAUDE.md (if present) and follow its conventions.
+            3. Look for correctness bugs, missed edge cases, and clear violations of repo conventions.
+               Ignore pure style nits already handled by the linter.
+            4. For each concrete issue, leave an inline comment with
+               mcp__github_inline_comment__create_inline_comment.
+            5. Finally, post one summary comment with
+               `gh pr comment ${{ github.event.pull_request.number || github.event.issue.number }} --body "..."`.
+               If you found nothing, say so briefly in that comment.
+
+            You MUST post the summary comment before finishing. Do not use the Agent or Skill tools.
+          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api:*),Read,Grep,Glob"'
