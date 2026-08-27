@@ -51,7 +51,7 @@
   "scripts": {
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e --detectOpenHandles --silent",
+    "test": "node --import ./scripts/resolve-browser-path.js ./node_modules/@stencil/core/bin/stencil test --spec --e2e --detectOpenHandles --silent",
     "test.coverage": "stencil test --spec --coverage --detectOpenHandles --silent",
     "test.watch": "stencil test --spec --watchAll --detectOpenHandles --silent",
     "generate": "stencil generate"
