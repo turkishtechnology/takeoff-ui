@@ -56,6 +56,9 @@ export class TkInput implements ComponentInterface {
   @State() isPassword = false;
   @State() passwordStrength: number = 0;
   @State() hasLabelSlot: boolean = false;
+  // The chip the keyboard is aimed at, set by the arrow keys or by Backspace out of an empty text
+  // field, and null while the text field itself owns the keyboard.
+  @State() focusedChipIndex: number | null = null;
 
   /**
    * the user cannot interact with the input.
@@ -213,16 +216,25 @@ export class TkInput implements ComponentInterface {
   @Prop({ mutable: true }) value?: string | string[] | number | any[];
   @Watch('value')
   protected valueChanged(newValue, oldValue) {
-    if (!isEqual(newValue, oldValue) && this.mode !== 'chips' && this.nativeInput) {
-      if (typeof newValue === 'object' && typeof oldValue === 'object') {
-        this.writeNativeValue(getNestedValue(newValue, this.chipLabelKey));
-      } else {
-        this.writeNativeValue(newValue);
-      }
-      // A programmatic value bypasses keystroke handling; keep the regex revert
-      // target in sync so a later rejected keystroke restores this value.
-      this.syncRegexAcceptedValue(this.nativeInput.value);
+    if (isEqual(newValue, oldValue)) return;
+
+    if (this.mode === 'chips') {
+      // An index into the previous chip list means nothing once that list changed. Removing a chip
+      // re-aims the focus itself, right after it has updated the value.
+      this.focusedChipIndex = null;
+      return;
     }
+
+    if (!this.nativeInput) return;
+
+    if (typeof newValue === 'object' && typeof oldValue === 'object') {
+      this.writeNativeValue(getNestedValue(newValue, this.chipLabelKey));
+    } else {
+      this.writeNativeValue(newValue);
+    }
+    // A programmatic value bypasses keystroke handling; keep the regex revert
+    // target in sync so a later rejected keystroke restores this value.
+    this.syncRegexAcceptedValue(this.nativeInput.value);
   }
 
   /**
@@ -637,6 +649,7 @@ export class TkInput implements ComponentInterface {
 
   private handleInputBlur = () => {
     this.hasFocus = false;
+    this.focusedChipIndex = null;
     this.validateMinMax();
     this.tkBlur.emit();
   };
@@ -703,6 +716,23 @@ export class TkInput implements ComponentInterface {
         }
       }
     }
+    if (this.mode === 'chips' && !e.isComposing) {
+      // Any key other than the ones driving the chip focus hands the keyboard back to the text field.
+      if (this.focusedChipIndex !== null && !['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete'].includes(e.key)) {
+        this.focusedChipIndex = null;
+      }
+
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && this.moveChipFocus(e.key === 'ArrowLeft' ? 'left' : 'right')) {
+        e.preventDefault();
+        return;
+      }
+
+      if ((e.key === 'Backspace' || e.key === 'Delete') && this.handleChipDeleteKey(e.key === 'Backspace' ? 'backward' : 'forward')) {
+        e.preventDefault();
+        return;
+      }
+    }
+
     if (
       e.key == 'Enter' &&
       this.nativeInput.value.trim() &&
@@ -835,18 +865,104 @@ export class TkInput implements ComponentInterface {
     return lines;
   }
 
+  // A chip carries a remove button only when it may actually go, so the keyboard uses the same rule.
+  private isChipRemovable(item: any): boolean {
+    if (this.chipDisabled?.(item) || this.disabled) return false;
+    if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) return item.removable;
+    return true;
+  }
+
+  // The chips can be walked wherever the text field itself takes input.
+  private isChipFocusNavigable(): boolean {
+    // A chips input can still be handed a plain string value, which has a length but no chips.
+    return this.mode === 'chips' && this.editable && !this.disabled && !this.readOnly && Array.isArray(this.value) && this.value.length > 0;
+  }
+
+  // A chip that cannot be removed is a dead end for the keyboard, so the walk steps over it - that
+  // covers disabled chips as well as indicator chips like the "+2 others" one.
+  private focusableChipIndexes(): number[] {
+    const focusable: number[] = [];
+    ((this.value as any[]) ?? []).forEach((item, index) => {
+      if (this.isChipRemovable(item)) focusable.push(index);
+    });
+    return focusable;
+  }
+
+  // Returns true when the key belonged to the chips, false when the text field should keep it.
+  private moveChipFocus(direction: 'left' | 'right'): boolean {
+    if (!this.isChipFocusNavigable()) return false;
+
+    const focusable = this.focusableChipIndexes();
+    if (focusable.length === 0) {
+      this.focusedChipIndex = null;
+      return false;
+    }
+
+    if (this.focusedChipIndex === null) {
+      // The chips sit before the text, so they are only entered by walking left out of its start.
+      if (direction === 'right') return false;
+      // Any caret position or selection other than a collapsed one at the very start is still text.
+      if (this.nativeInput?.value && (this.nativeInput.selectionStart !== 0 || this.nativeInput.selectionEnd !== 0)) return false;
+      this.focusedChipIndex = focusable[focusable.length - 1];
+      return true;
+    }
+
+    const position = focusable.indexOf(this.focusedChipIndex);
+    if (position === -1) {
+      // The focused chip is gone (the value changed underneath): restart from the edge.
+      this.focusedChipIndex = direction === 'left' ? focusable[focusable.length - 1] : null;
+      return true;
+    }
+
+    const next = direction === 'left' ? position - 1 : position + 1;
+    // The first chip is the end of the road; past the last one the text field takes over again.
+    if (next < 0) return true;
+    this.focusedChipIndex = next >= focusable.length ? null : focusable[next];
+    return true;
+  }
+
+  // Backspace and Delete both remove the focused chip and differ only in where they leave the
+  // focus. Nothing is ever removed unfocused: out of an empty text field the first Backspace only
+  // aims at the last chip, and the presses after it walk backwards removing one chip each.
+  private handleChipDeleteKey(direction: 'backward' | 'forward'): boolean {
+    if (!this.isChipFocusNavigable()) return false;
+
+    const focusable = this.focusableChipIndexes();
+    if (focusable.length === 0) {
+      // Nothing can be removed any more, so the ring must not stay drawn over the text field.
+      this.focusedChipIndex = null;
+      return false;
+    }
+
+    if (this.focusedChipIndex === null) {
+      // The text keeps both keys until it is empty: Delete has characters ahead of it, Backspace behind.
+      if (direction === 'forward' || this.nativeInput?.value) return false;
+      this.focusedChipIndex = focusable[focusable.length - 1];
+      return true;
+    }
+
+    const removedIndex = this.focusedChipIndex;
+    if (!focusable.includes(removedIndex)) {
+      this.focusedChipIndex = null;
+      return true;
+    }
+    this.handleChipsRemove(removedIndex);
+
+    const remaining = this.focusableChipIndexes();
+    const behind = remaining.filter(index => index < removedIndex).reverse();
+    const ahead = remaining.filter(index => index >= removedIndex);
+    // Backspace steps back onto the chip before the one it removed, Delete stays put and takes
+    // over whatever slid into the freed slot.
+    const preferred = direction === 'backward' ? [...behind, ...ahead] : [...ahead, ...behind];
+    this.focusedChipIndex = preferred.length > 0 ? preferred[0] : null;
+    return true;
+  }
+
   private renderChips() {
     if (this.mode == 'chips' && typeof this.value == 'object' && (this.value as any[])?.length > 0) {
       return (this.value as any[]).map((item, index) => {
         const itemChipOptions = this.chipOptions || {};
-        let isRemovable;
-        if (this.chipDisabled?.(item) || this.disabled) {
-          isRemovable = false;
-        } else if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) {
-          isRemovable = item.removable;
-        } else {
-          isRemovable = true;
-        }
+        const isRemovable = this.isChipRemovable(item);
         const baseProps = {
           ...itemChipOptions,
           removable: isRemovable,
@@ -857,6 +973,7 @@ export class TkInput implements ComponentInterface {
           type: (itemChipOptions.type ?? 'outlined') as IChipOptions['type'],
           size: (itemChipOptions.size ?? 'small') as IChipOptions['size'],
           disabled: this.disabled,
+          focused: this.focusedChipIndex === index,
         };
         const isIndicator = typeof item === 'object' && item !== null && (item.__isOthersIndicator || item.__isAllIndicator);
         const label = isIndicator ? item.label : typeof item === 'object' ? getNestedValue(item, this.chipLabelKey) : String(item);
@@ -998,7 +1115,13 @@ export class TkInput implements ComponentInterface {
       );
     }
 
-    const rootClasses = classNames('tk-input-container', this.size, { focus: this.hasFocus, counter: this.isCounter, chips: this.mode == 'chips' });
+    const rootClasses = classNames('tk-input-container', this.size, {
+      'focus': this.hasFocus,
+      'counter': this.isCounter,
+      'chips': this.mode == 'chips',
+      // While a chip holds the keyboard the text field must not blink a caret of its own.
+      'chips-focus-active': this.mode == 'chips' && this.focusedChipIndex != null,
+    });
     const prefixClass = classNames('tk-input-prefix-container', this.size);
 
     // Handle icon rendering using utility function
@@ -1021,7 +1144,7 @@ export class TkInput implements ComponentInterface {
     return (
       <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {this.renderLabel()}
-        <div class="tk-input" data-testid={getDataTestId(this.dataTestid, 'control')}>
+        <div class="tk-input" onMouseDown={() => (this.focusedChipIndex = null)} data-testid={getDataTestId(this.dataTestid, 'control')}>
           {this.renderChips()}
           {!_leftIcon && this.renderPasswordIcons().left}
           {_leftIcon}
