@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/angular",
-  "version": "0.11.13",
+  "version": "0.11.14",
   "scripts": {
     "build": "ng-packagr -p ng-package.json"
   },
