@@ -23,6 +23,13 @@ tk-pagination {
     }
   }
 
+  .tk-pagination-page-input {
+    flex: none;
+    font-size: var(--desktop-body-s-size);
+    min-width: 70px;
+    width: calc(48px + var(--tk-pagination-digits, 1) * 1ch);
+  }
+
   .tk-pagination-tag {
     display: flex;
     flex-direction: column;
@@ -159,8 +166,9 @@ tk-pagination {
         }
       }
 
-      tk-input {
-        width: 48px;
+      .tk-pagination-page-input {
+        min-width: 48px;
+        width: calc(24px + var(--tk-pagination-digits, 1) * 1ch);
         height: 40px;
       }
     }
