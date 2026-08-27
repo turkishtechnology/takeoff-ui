@@ -10,8 +10,16 @@
       { "id": "nvklal433", "name": "Black Watch", "category": "Onyama", "quantity": 42 },
       { "id": "zz21cz3c1", "name": "Blue Band", "category": "Accessories", "quantity": 87 },
       { "id": "244wgerg2", "name": "Blue T-Shirt", "category": "Fitness", "quantity": 12 },
-      { "id": "h456wer53", "name": "Bracelet", "category": "Clothing", "quantity": 45 }
-    ]
+      { "id": "h456wer53", "name": "Bracelet", "category": "Clothing", "quantity": 45 },
+      { "id": "av2231fwg", "name": "Brown Purse", "category": "Accessories", "quantity": 33 },
+      { "id": "bib36pfvm", "name": "Chakra Bracelet", "category": "Accessories", "quantity": 5 },
+      { "id": "mbvjkgip5", "name": "Galaxy Earrings", "category": "Clothing", "quantity": 23 },
+      { "id": "vbb124btr", "name": "Game Controller", "category": "Electronics", "quantity": 2 },
+      { "id": "cm230f032", "name": "Gaming Set", "category": "Electronics", "quantity": 63 },
+      { "id": "plb34234v", "name": "Gold Phone Case", "category": "Accessories", "quantity": 36 },
+      { "id": "4920nnc2d", "name": "Green Earbuds", "category": "Electronics", "quantity": 23 }
+    ],
+    "paginationMethod": "client"
   },
   "props": [
     {
@@ -68,6 +76,18 @@
         { "label": "Outlined", "value": "outlined" },
         { "label": "Text", "value": "text" }
       ]
+    },
+    {
+      "key": "rowsPerPage",
+      "label": "Rows Per Page",
+      "type": "text",
+      "defaultValue": 5
+    },
+    {
+      "key": "applyPageOnBlur",
+      "label": "Apply Page On Blur",
+      "type": "checkbox",
+      "defaultValue": true
     },
     {
       "key": "striped",

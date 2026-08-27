@@ -17,6 +17,10 @@ tk-pagination {
     margin-left: auto;
     display: flex;
     gap: var(--pagination-base-right-gap, 12px);
+
+    tk-input tk-icon {
+      cursor: pointer;
+    }
   }
 
   .tk-pagination-tag {

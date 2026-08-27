@@ -68,4 +68,49 @@ describe('tk-pagination', () => {
     expect(nextPage.rootInstance.currentPage).toBe(3);
     expect(nextSpy).toHaveBeenCalled();
   });
+  it('applies the typed page on blur by default', async () => {
+    const page = await newSpecPage({
+      components: [TkPagination],
+      html: `<tk-pagination total-items="50"></tk-pagination>`,
+    });
+
+    const input = page.root.querySelector('tk-input');
+    input.dispatchEvent(new CustomEvent('tk-change', { detail: '4' }));
+    await page.waitForChanges();
+    input.dispatchEvent(new CustomEvent('tk-blur'));
+    await page.waitForChanges();
+
+    expect(page.rootInstance.currentPage).toBe(4);
+  });
+
+  it('keeps the page on blur when applyPageOnBlur is false', async () => {
+    const page = await newSpecPage({
+      components: [TkPagination],
+      html: `<tk-pagination total-items="50" apply-page-on-blur="false"></tk-pagination>`,
+    });
+
+    const input = page.root.querySelector('tk-input');
+    input.dispatchEvent(new CustomEvent('tk-change', { detail: '4' }));
+    await page.waitForChanges();
+    input.dispatchEvent(new CustomEvent('tk-blur'));
+    await page.waitForChanges();
+
+    expect(page.rootInstance.currentPage).toBe(1);
+    expect(page.rootInstance.inputValue).toBe('1');
+  });
+
+  it('applies the typed page on Enter', async () => {
+    const page = await newSpecPage({
+      components: [TkPagination],
+      html: `<tk-pagination total-items="50" apply-page-on-blur="false"></tk-pagination>`,
+    });
+
+    const input = page.root.querySelector('tk-input');
+    input.dispatchEvent(new CustomEvent('tk-change', { detail: '4' }));
+    await page.waitForChanges();
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    await page.waitForChanges();
+
+    expect(page.rootInstance.currentPage).toBe(4);
+  });
 });
