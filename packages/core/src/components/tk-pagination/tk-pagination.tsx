@@ -32,6 +32,13 @@ export class TkPagination implements ComponentInterface {
   @Prop() rounded: boolean = false;
 
   /**
+   * Whether leaving the page input applies the typed page number.
+   * When false, the page only changes on Enter or on a click on the input's icon.
+   * @defaultValue true
+   */
+  @Prop() applyPageOnBlur: boolean = true;
+
+  /**
    * Number of items per page.
    * @defaultValue 10
    */
@@ -117,6 +124,13 @@ export class TkPagination implements ComponentInterface {
 
   private getTotalPages(): number {
     return Math.ceil(this.totalItems / this.rowsPerPage);
+  }
+
+  /**
+   * Number of digits the page input has to be able to show without clipping.
+   */
+  private getPageDigitCount(totalPages: number): number {
+    return Math.max(1, totalPages).toString().length;
   }
 
   private getPageNumbers(): (number | string)[] {
@@ -225,6 +239,30 @@ export class TkPagination implements ComponentInterface {
     this.inputValue = value.replace(/[^0-9]/g, '');
   }
 
+  private handlePageInputKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.validateAndUpdatePage();
+    }
+  };
+
+  private handlePageInputMouseDown = (event: MouseEvent) => {
+    // Pressing the apply icon would blur the input first, resetting the typed value
+    // before the icon's click handler runs, so keep the focus where it is.
+    if ((event.target as HTMLElement)?.closest('tk-icon')) {
+      event.preventDefault();
+    }
+  };
+
+  private handlePageInputBlur = () => {
+    if (this.applyPageOnBlur) {
+      this.validateAndUpdatePage();
+      return;
+    }
+
+    this.updateInputValue(this.internalCurrentPage);
+  };
+
   private createPageNumbers() {
     return this.getPageNumbers().map(pageNumber => {
       if (pageNumber === this.ellipsis) {
@@ -284,10 +322,13 @@ export class TkPagination implements ComponentInterface {
             <tk-icon {...getIconElementProps('chevron_left', { color: 'var(--icon-base)' })} />
           </button>
           <tk-input
+            class="tk-pagination-page-input"
+            style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
             mode="text"
             value={this.inputValue}
             onTk-change={(event: CustomEvent) => this.handlePageInputChange(event.detail.toString())}
-            onTk-blur={() => this.validateAndUpdatePage()}
+            onKeyDown={this.handlePageInputKeyDown}
+            onTk-blur={this.handlePageInputBlur}
             min={1}
             max={totalPages}
           />
@@ -350,17 +391,20 @@ export class TkPagination implements ComponentInterface {
   private renderInput(totalPages: number): HTMLTkInputElement {
     return (
       <tk-input
-        style={{ width: '70px' }}
+        class="tk-pagination-page-input"
+        style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
         mode="text"
         min={1}
         max={totalPages}
         value={this.inputValue}
-        icon="chevron_right"
+        icon={{ name: 'chevron_right', click: () => this.validateAndUpdatePage() }}
         iconPosition="right"
+        onMouseDown={this.handlePageInputMouseDown}
         onTk-change={(event: CustomEvent) => {
           this.handlePageInputChange(event.detail.toString());
         }}
-        onTk-blur={() => this.validateAndUpdatePage()}
+        onKeyDown={this.handlePageInputKeyDown}
+        onTk-blur={this.handlePageInputBlur}
       />
     );
   }

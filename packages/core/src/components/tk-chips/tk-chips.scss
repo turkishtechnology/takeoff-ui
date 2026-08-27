@@ -26,6 +26,14 @@
     user-select: none;
   }
 
+  &.focused {
+    box-shadow: var(--secondary-focus);
+
+    &.primary {
+      box-shadow: var(--primary-focus);
+    }
+  }
+
   &.disabled {
     color: var(--text-sub-base) !important;
     background-color: var(--frames-light) !important;

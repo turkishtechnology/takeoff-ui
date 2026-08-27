@@ -1,10 +1,13 @@
 import React from 'react';
 import { TkButton } from '@takeoff-ui/react';
-import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './v2-notice.module.css';
 
 export const TAKEOFF_V2_DOCS_URL = 'https://takeoff-v2.app.turkishtechlab.com/';
+
+export function openV2(url: string): void {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 /** Short-form selling points; the landing banner carries the longer versions. */
 const HIGHLIGHTS = [
@@ -27,16 +30,15 @@ interface IV2NoticeProps {
  * someone is most likely to be starting a brand new project.
  */
 export default function V2Notice({ title, children }: IV2NoticeProps): JSX.Element {
-  const { colorMode } = useColorMode();
   // useBaseUrl resolves against the site baseUrl; a bare relative path would
-  // 404 on nested doc routes like /docs/Introduction/.
-  const markLight = useBaseUrl('img/takeoff-v2-mark.svg');
-  const markDark = useBaseUrl('img/takeoff-v2-mark-dark.svg');
+  // 404 on nested doc routes like /docs/Introduction/. The mark stays red in
+  // both themes, like the site logo.
+  const mark = useBaseUrl('img/takeoff-v2-mark.svg');
 
   return (
     <aside className={styles.notice}>
       <div className={styles.mark}>
-        <img src={colorMode === 'dark' ? markDark : markLight} alt="Takeoff UI v2" />
+        <img src={mark} alt="Takeoff UI v2" />
       </div>
       <div className={styles.body}>
         <h3 className={styles.title}>{title ?? 'Starting a new project? Use Takeoff UI v2'}</h3>
@@ -62,8 +64,8 @@ export default function V2Notice({ title, children }: IV2NoticeProps): JSX.Eleme
         </p>
 
         <div className={styles.actions}>
-          <TkButton mode="link" href={TAKEOFF_V2_DOCS_URL} target="_blank" label="Go to Takeoff UI v2 docs" icon="arrow_outward" iconPosition="right" size="small" />
-          <TkButton mode="link" href={`${TAKEOFF_V2_DOCS_URL}docs/installation`} target="_blank" label="Installation guide" type="outlined" variant="neutral" size="small" />
+          <TkButton label="Go to Takeoff UI v2 docs" icon="arrow_outward" iconPosition="right" size="small" onTkClick={() => openV2(TAKEOFF_V2_DOCS_URL)} />
+          <TkButton label="Installation guide" type="outlined" variant="neutral" size="small" onTkClick={() => openV2(`${TAKEOFF_V2_DOCS_URL}docs/installation`)} />
         </div>
       </div>
     </aside>
