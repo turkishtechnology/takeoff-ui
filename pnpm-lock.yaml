@@ -82,7 +82,7 @@ importers:
         version: 9.39.5
       '@stencil/eslint-plugin':
         specifier: ^1.4.0
-        version: 1.4.0(@stencil/core@4.44.0)(@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+        version: 1.4.0(@stencil/core@4.44.1)(@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
       '@types/node':
         specifier: ^20.13.0
         version: 20.19.43
@@ -205,8 +205,8 @@ importers:
         specifier: ^19.2.8
         version: 19.2.8(react@19.2.8)
       react-hook-form:
-        specifier: ^7.85.0
-        version: 7.85.0(react@19.2.8)
+        specifier: ^7.86.0
+        version: 7.86.0(react@19.2.8)
       react-router:
         specifier: ^8.3.0
         version: 8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -471,19 +471,19 @@ importers:
     devDependencies:
       '@stencil/angular-output-target':
         specifier: 1.4.1
-        version: 1.4.1(@stencil/core@4.44.0)
+        version: 1.4.1(@stencil/core@4.44.1)
       '@stencil/core':
-        specifier: 4.44.0
-        version: 4.44.0
+        specifier: 4.44.1
+        version: 4.44.1
       '@stencil/react-output-target':
         specifier: 1.6.1
-        version: 1.6.1(@stencil/core@4.44.0)(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 1.6.1(@stencil/core@4.44.1)(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@stencil/sass':
         specifier: 3.2.3
-        version: 3.2.3(@stencil/core@4.44.0)
+        version: 3.2.3(@stencil/core@4.44.1)
       '@stencil/vue-output-target':
         specifier: 0.14.1
-        version: 0.14.1(@stencil/core@4.44.0)(vue@3.5.41(typescript@5.9.3))
+        version: 0.14.1(@stencil/core@4.44.1)(vue@3.5.41(typescript@5.9.3))
       '@types/d3-org-chart':
         specifier: ^3.1.2
         version: 3.1.2
@@ -513,7 +513,7 @@ importers:
     dependencies:
       '@stencil/react-output-target':
         specifier: 1.6.1
-        version: 1.6.1(@stencil/core@4.44.0)(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(@stencil/core@4.44.1)(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@takeoff-ui/core':
         specifier: workspace:*
         version: link:../core
@@ -544,7 +544,7 @@ importers:
     dependencies:
       '@stencil/vue-output-target':
         specifier: 0.14.1
-        version: 0.14.1(@stencil/core@4.44.0)(vue@3.5.41(typescript@5.9.3))
+        version: 0.14.1(@stencil/core@4.44.1)(vue@3.5.41(typescript@5.9.3))
       '@takeoff-ui/core':
         specifier: workspace:*
         version: link:../core
@@ -4263,8 +4263,8 @@ packages:
     peerDependencies:
       '@stencil/core': '>=2.0.0 || >=3 || >=4.0.0 || ^5.0.0 || >=5.0.0-alpha.17 <5.0.0-next.0'
 
-  '@stencil/core@4.44.0':
-    resolution: {integrity: sha512-A3kArg+80t9zJdul7FLUcxcjqvYrF76nDavfm2L8R7hGKWPbTTGM/tkOSf7MJqMd1ED0ztYoa9X90UlEXY3nLA==}
+  '@stencil/core@4.44.1':
+    resolution: {integrity: sha512-OaFtMODcDcKswPbJC6An6xAcNmeuBggxyUTVKSX1UY7bPtWgIR5mGy1jZ6JkyFGgIxZCj/9wp2r97KBQow9wOQ==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
 
@@ -10006,8 +10006,8 @@ packages:
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
-  react-hook-form@7.85.0:
-    resolution: {integrity: sha512-U2MTriFXnclmV4rOE20p2DcRFv5WEg3FIcBFOKcOLFHDVvGIMPvLTkTWefUsonmlaVy23khVDxDWym6uJVGOzw==}
+  react-hook-form@7.86.0:
+    resolution: {integrity: sha512-4kbWJrh5jPZt1+YqVcXcGKffGcXV/XVbozknLh0Yjh0KhpoAkus21TAQhzRYqNwFkkObmnSvRlZZ3GT+ehoIrA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -10800,6 +10800,7 @@ packages:
 
   stream-to-promise@2.2.0:
     resolution: {integrity: sha512-HAGUASw8NT0k8JvIVutB2Y/9iBk7gpgEyAudXwNJmZERdMITGdajOa4VJfD/kNiA3TppQpTP4J+CtcHwdzKBAw==}
+    deprecated: Deprecated. Use node:stream/promises and node:stream/consumers instead.
 
   streamroller@3.1.5:
     resolution: {integrity: sha512-KFxaM7XT+irxvdqSP1LGLgNWbYN7ay5owZ3r/8t77p+EtSUAfUgtl7be3xtqtOmGUl9K9YPO2ca8133RlTjvKw==}
@@ -16300,11 +16301,11 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@stencil/angular-output-target@1.4.1(@stencil/core@4.44.0)':
+  '@stencil/angular-output-target@1.4.1(@stencil/core@4.44.1)':
     dependencies:
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
 
-  '@stencil/core@4.44.0':
+  '@stencil/core@4.44.1':
     optionalDependencies:
       '@rollup/rollup-darwin-arm64': 4.44.0
       '@rollup/rollup-darwin-x64': 4.44.0
@@ -16315,9 +16316,9 @@ snapshots:
       '@rollup/rollup-win32-arm64-msvc': 4.44.0
       '@rollup/rollup-win32-x64-msvc': 4.44.0
 
-  '@stencil/eslint-plugin@1.4.0(@stencil/core@4.44.0)(@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)':
+  '@stencil/eslint-plugin@1.4.0(@stencil/core@4.44.1)(@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)':
     dependencies:
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
       eslint-utils: 3.0.0(eslint@9.39.5(jiti@2.7.0))
       jsdom: 27.4.0
       tsutils: 3.21.0(typescript@5.9.3)
@@ -16333,10 +16334,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@stencil/react-output-target@1.6.1(@stencil/core@4.44.0)(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@stencil/react-output-target@1.6.1(@stencil/core@4.44.1)(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@lit/react': 1.0.8(@types/react@18.3.31)
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
       html-react-parser: 5.2.17(@types/react@18.3.31)(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -16345,10 +16346,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@stencil/react-output-target@1.6.1(@stencil/core@4.44.0)(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@stencil/react-output-target@1.6.1(@stencil/core@4.44.1)(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@lit/react': 1.0.8(@types/react@19.2.18)
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
       html-react-parser: 5.2.17(@types/react@19.2.18)(react@19.2.8)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
@@ -16357,16 +16358,16 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@stencil/sass@3.2.3(@stencil/core@4.44.0)':
+  '@stencil/sass@3.2.3(@stencil/core@4.44.1)':
     dependencies:
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
       sass-embedded: 1.100.0
 
-  '@stencil/vue-output-target@0.14.1(@stencil/core@4.44.0)(vue@3.5.41(typescript@5.9.3))':
+  '@stencil/vue-output-target@0.14.1(@stencil/core@4.44.1)(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       vue: 3.5.41(typescript@5.9.3)
     optionalDependencies:
-      '@stencil/core': 4.44.0
+      '@stencil/core': 4.44.1
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.29.7)':
     dependencies:
@@ -17024,10 +17025,10 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  '@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)':
+  '@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
-      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/scope-manager': 8.67.0
       '@typescript-eslint/type-utils': 8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
@@ -23395,7 +23396,7 @@ snapshots:
 
   react-fast-compare@3.2.2: {}
 
-  react-hook-form@7.85.0(react@19.2.8):
+  react-hook-form@7.86.0(react@19.2.8):
     dependencies:
       react: 19.2.8
 
@@ -24866,7 +24867,7 @@ snapshots:
 
   typescript-eslint@8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
+      '@typescript-eslint/eslint-plugin': 8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/parser': 8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/typescript-estree': 8.67.0(typescript@5.9.3)
       '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(jiti@1.21.7))(typescript@5.9.3)

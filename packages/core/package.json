@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@stencil/angular-output-target": "1.4.1",
-    "@stencil/core": "4.44.0",
+    "@stencil/core": "4.44.1",
     "@stencil/react-output-target": "1.6.1",
     "@stencil/sass": "3.2.3",
     "@stencil/vue-output-target": "0.14.1",
