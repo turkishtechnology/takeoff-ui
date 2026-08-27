@@ -216,6 +216,13 @@ export class TkTable implements ComponentInterface {
   @Prop() paginationType: 'outlined' | 'text' | 'grouped' = 'outlined';
 
   /**
+   * Whether leaving the pagination page input applies the typed page number.
+   * When false, the page only changes on Enter or on a click on the input's icon.
+   * @defaultValue true
+   */
+  @Prop() applyPageOnBlur: boolean = true;
+
+  /**
    * Template string for current page report in pagination.
    * Available placeholders: {currentPage}, {totalPages}
    * @defaultValue 'page: {currentPage} of {totalPages}'
@@ -2637,6 +2644,7 @@ export class TkTable implements ComponentInterface {
           currentPage={this.currentPage}
           pageReportTemplate={this.pageReportTemplate}
           itemsReportTemplate={this.itemsReportTemplate}
+          applyPageOnBlur={this.applyPageOnBlur}
           data-testid={getDataTestId(this.dataTestid, 'pagination')}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
