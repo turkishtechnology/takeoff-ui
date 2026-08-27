@@ -1,8 +1,7 @@
 import React from 'react';
 import { TkButton } from '@takeoff-ui/react';
-import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import { TAKEOFF_V2_DOCS_URL } from '../../V2Notice/V2Notice';
+import { TAKEOFF_V2_DOCS_URL, openV2 } from '../../V2Notice/V2Notice';
 import styles from './v2-banner.module.css';
 
 /** Selling points of v2 over v1, shown as a grid under the headline. */
@@ -30,12 +29,10 @@ const HIGHLIGHTS = [
  * the hero so it is the first thing a visitor reads before the v1 sections.
  */
 export default function V2Banner(): JSX.Element {
-  const { colorMode } = useColorMode();
   // useBaseUrl resolves against the site baseUrl so the mark also loads when
-  // this component is reused outside the site root.
-  const markLight = useBaseUrl('img/takeoff-v2-mark.svg');
-  const markDark = useBaseUrl('img/takeoff-v2-mark-dark.svg');
-  const mark = colorMode === 'dark' ? markDark : markLight;
+  // this component is reused outside the site root. The mark stays red in both
+  // themes, like the site logo.
+  const mark = useBaseUrl('img/takeoff-v2-mark.svg');
 
   return (
     <section className={styles.section}>
@@ -72,7 +69,7 @@ export default function V2Banner(): JSX.Element {
 
           <div className={styles.footer}>
             <div className={styles.actions}>
-              <TkButton mode="link" href={TAKEOFF_V2_DOCS_URL} target="_blank" label="Explore Takeoff UI v2" icon="arrow_outward" iconPosition="right" type="filled" />
+              <TkButton label="Explore Takeoff UI v2" icon="arrow_outward" iconPosition="right" type="filled" onTkClick={() => openV2(TAKEOFF_V2_DOCS_URL)} />
             </div>
             <p className={styles.note}>Already building with Takeoff UI v1? It stays supported, and these docs remain the reference for your existing projects.</p>
           </div>
