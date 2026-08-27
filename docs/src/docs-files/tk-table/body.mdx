@@ -190,7 +190,9 @@ a height value through the `containerStyle` prop.
 This feature allows the horizontal scrollbar to be placed on top of the table
 with the `horizontalScrollPosition` prop, so it stays reachable without
 scrolling to the bottom of a long table. It defaults to `bottom`, and `both`
-renders it on top and at the bottom.
+renders it on top and at the bottom. Firefox cannot hide the bottom bar on its
+own when the table also scrolls vertically (a fixed `height` or `maxHeight`), so
+`top` keeps it there.
 
 <HorizontalScrollPosition />
 

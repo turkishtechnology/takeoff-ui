@@ -323,6 +323,65 @@ describe('tk-table rendering', () => {
     expect(bar.classList.contains('hidden')).toBe(true);
   });
 
+  it('keeps the table element when the horizontal scrollbar position changes at runtime', async () => {
+    const page = await createPage();
+    const holder = page.root.shadowRoot.querySelector('.table-holder');
+    const frame = page.root.shadowRoot.querySelector('.table-frame');
+    expect(frame.classList.contains('has-top-scrollbar')).toBe(false);
+
+    page.root.horizontalScrollPosition = 'top';
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.table-holder')).toBe(holder);
+    expect(page.root.shadowRoot.querySelector('.table-frame.has-top-scrollbar')).toBe(frame);
+    expect(frame.firstElementChild.classList.contains('tk-table-top-scrollbar')).toBe(true);
+
+    page.root.horizontalScrollPosition = 'bottom';
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.table-holder')).toBe(holder);
+    expect(page.root.shadowRoot.querySelector('.tk-table-top-scrollbar')).toBeFalsy();
+  });
+
+  it('only listens to scroll events when there is something to update', async () => {
+    const plain = await createPage();
+    expect(getInstance(plain).scrollListenerTarget).toBeFalsy();
+
+    const withTopScrollbar = await createPage({ horizontalScrollPosition: 'top' });
+    expect(getInstance(withTopScrollbar).scrollListenerTarget).toBe(withTopScrollbar.root.shadowRoot.querySelector('.table-holder'));
+
+    const withHeight = await createPage({ containerStyle: { height: '200px' } });
+    expect(getInstance(withHeight).scrollListenerTarget).toBe(withHeight.root.shadowRoot.querySelector('.table-holder'));
+    expect(withHeight.root.shadowRoot.querySelector('.tk-table-container.scrollable-container')).toBeTruthy();
+  });
+
+  it('defers the resize-driven top scrollbar update to the next frame', async () => {
+    let resizeCallback: () => void;
+    const observe = jest.fn();
+    const globalScope = globalThis as { ResizeObserver?: unknown };
+    globalScope.ResizeObserver = class {
+      constructor(cb: () => void) {
+        resizeCallback = cb;
+      }
+      observe = observe;
+      disconnect = jest.fn();
+    };
+    try {
+      const page = await createPage({ horizontalScrollPosition: 'top' });
+      const instance = getInstance(page);
+      const update = jest.spyOn(instance, 'updateTopScrollbar');
+      expect(observe).toHaveBeenCalled();
+
+      resizeCallback();
+      expect(update).not.toHaveBeenCalled();
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      expect(update).toHaveBeenCalledTimes(1);
+    } finally {
+      delete globalScope.ResizeObserver;
+    }
+  });
+
   it('renders the empty-data slot when there is no data', async () => {
     const page = await createPage({ data: [] }, [h('div', { slot: 'empty-data' }, 'no rows')]);
 

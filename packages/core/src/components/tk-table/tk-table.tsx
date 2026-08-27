@@ -47,6 +47,7 @@ export class TkTable implements ComponentInterface {
   private topScrollbarObserver: ResizeObserver;
   private scrollListenerTarget: HTMLElement;
   private resizeObserverTarget: HTMLElement;
+  private topScrollbarFrame: number;
 
   @Element() el: HTMLTkTableElement;
 
@@ -98,6 +99,17 @@ export class TkTable implements ComponentInterface {
 
   private get hasTopScrollbar() {
     return this.horizontalScrollPosition === 'top' || this.horizontalScrollPosition === 'both';
+  }
+
+  private get hasScrollableContainer() {
+    return !!(this.containerStyle?.height || this.containerStyle?.maxHeight);
+  }
+
+  // The scroll handler only has work to do for sticky shadows, the header shadow of a scrolling container and
+  // the top scrollbar; a plain table gets no listener at all.
+  private get needsScrollListener() {
+    const hasStickyColumns = this.columns.some(col => col.fixed === 'left' || col.fixed === 'right');
+    return hasStickyColumns || !!this.selectionMode || this.hasScrollableContainer || this.hasTopScrollbar;
   }
 
   /**
@@ -367,16 +379,14 @@ export class TkTable implements ComponentInterface {
 
   // Re-runs after the element is moved in the DOM, where disconnectedCallback has torn the listeners down.
   connectedCallback() {
-    this.setupScrollListener();
-    this.setupTopScrollbarObserver();
+    this.bindScrollTargets();
   }
 
   componentDidLoad() {
     const stickyColumns = this.columns.filter(col => col.fixed === 'left' || col.fixed === 'right');
     const hasSelectionMode = !!this.selectionMode;
-    const hasScrollableContainer = !!(this.containerStyle?.height || this.containerStyle?.maxHeight);
 
-    if (stickyColumns.length > 0 || hasSelectionMode || hasScrollableContainer) {
+    if (stickyColumns.length > 0 || hasSelectionMode || this.hasScrollableContainer) {
       this.updateStickyOffsets();
     }
   }
@@ -386,9 +396,9 @@ export class TkTable implements ComponentInterface {
     if (this.isSelectionUpdating) {
       this.isSelectionUpdating = false;
     }
-    // A render can replace the scrolling element, e.g. when the top scrollbar wraps the table in a frame.
-    this.setupScrollListener();
-    this.setupTopScrollbarObserver();
+    // Props that decide whether a listener is needed (sticky columns, container height, scrollbar position)
+    // can change between renders; the setup calls are no-ops while the bound element stays the same.
+    this.bindScrollTargets();
     this.updateTopScrollbar();
     this.refreshStickyShadows();
   }
@@ -453,6 +463,7 @@ export class TkTable implements ComponentInterface {
     this.scrollListenerTarget?.removeEventListener('scroll', this.handleScroll);
     this.scrollListenerTarget = null;
 
+    cancelAnimationFrame(this.topScrollbarFrame);
     this.topScrollbarObserver?.disconnect();
     this.topScrollbarObserver = null;
     this.resizeObserverTarget = null;
@@ -1816,6 +1827,11 @@ export class TkTable implements ComponentInterface {
     }
   };
 
+  private bindScrollTargets() {
+    if (this.needsScrollListener) this.setupScrollListener();
+    this.setupTopScrollbarObserver();
+  }
+
   private setupScrollListener() {
     const tableHolder = this.getTableHolder();
     if (!tableHolder || tableHolder === this.scrollListenerTarget) return;
@@ -1902,10 +1918,17 @@ export class TkTable implements ComponentInterface {
     if (!tableHolder || !table || this.resizeObserverTarget === tableHolder) return;
 
     this.topScrollbarObserver?.disconnect();
-    this.topScrollbarObserver = this.topScrollbarObserver || new ResizeObserver(() => this.updateTopScrollbar());
+    this.topScrollbarObserver = this.topScrollbarObserver || new ResizeObserver(() => this.scheduleTopScrollbarUpdate());
     this.resizeObserverTarget = tableHolder;
     this.topScrollbarObserver.observe(tableHolder);
     this.topScrollbarObserver.observe(table);
+  }
+
+  // Showing or hiding the bar changes the height of the observed holder in a fixed-height frame, which the
+  // browser reports as a ResizeObserver loop when it happens inside the callback; the next frame is late enough.
+  private scheduleTopScrollbarUpdate() {
+    cancelAnimationFrame(this.topScrollbarFrame);
+    this.topScrollbarFrame = requestAnimationFrame(() => this.updateTopScrollbar());
   }
 
   // Keeps the scrollbar as wide as the table's visible area and its content as wide as the table, so the
@@ -1927,7 +1950,7 @@ export class TkTable implements ComponentInterface {
   }
 
   private refreshStickyShadows() {
-    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder');
+    const tableHolder = this.getTableHolder();
     if (!tableHolder) return;
     this.handleScroll({ target: tableHolder } as unknown as Event);
   }
@@ -1937,7 +1960,7 @@ export class TkTable implements ComponentInterface {
     let globalIndex = 0;
 
     // Group headerın olduğu cellden sonra oluşan boşluk için genişlik hesaplaması
-    const tableHolder = this.el.shadowRoot?.querySelector('.table-holder') as HTMLElement;
+    const tableHolder = this.getTableHolder();
     if (tableHolder) {
       const tableHolderWidth = tableHolder.clientWidth;
       tableHolder.style.setProperty('--table-holder-width', `${tableHolderWidth}px`);
@@ -2550,10 +2573,9 @@ export class TkTable implements ComponentInterface {
   }
 
   private renderTopScrollbar() {
-    if (!this.hasTopScrollbar) return null;
-
     return (
       <div
+        key="top-scrollbar"
         class="tk-table-top-scrollbar hidden"
         ref={el => (this.refTopScrollbar = el as HTMLElement)}
         onScroll={this.handleTopScrollbarScroll}
@@ -2566,7 +2588,7 @@ export class TkTable implements ComponentInterface {
 
   private renderTable() {
     const table = (
-      <div class="table-holder" data-testid={getDataTestId(this.dataTestid, 'table-holder')}>
+      <div key="table-holder" class="table-holder" data-testid={getDataTestId(this.dataTestid, 'table-holder')}>
         <table data-testid={getDataTestId(this.dataTestid, 'content-table')}>
           {this.createHead()}
           {this.loading ? (
@@ -2591,12 +2613,14 @@ export class TkTable implements ComponentInterface {
       </div>
     );
 
-    if (!this.hasTopScrollbar) return table;
+    // The frame is always in the DOM so the holder (and the table inside it) survives a change of
+    // `horizontalScrollPosition` with its scroll position and focus intact. With the top scrollbar it takes over
+    // the table border so the bar sits inside it, just like the bottom one; without it, it draws nothing itself.
+    const frameClasses = classNames('table-frame', { 'has-top-scrollbar': this.hasTopScrollbar });
 
-    // The frame takes over the table border so the top scrollbar sits inside it, just like the bottom one.
     return (
-      <div class="table-frame" data-testid={getDataTestId(this.dataTestid, 'table-frame')}>
-        {this.renderTopScrollbar()}
+      <div class={frameClasses} data-testid={getDataTestId(this.dataTestid, 'table-frame')}>
+        {this.hasTopScrollbar && this.renderTopScrollbar()}
         {table}
       </div>
     );
@@ -2630,6 +2654,7 @@ export class TkTable implements ComponentInterface {
     const rootClasses = classNames('tk-table-container', this.size, {
       'striped': this.striped,
       'hide-bottom-scrollbar': this.horizontalScrollPosition === 'top',
+      'scrollable-container': this.hasScrollableContainer,
     });
 
     return (
