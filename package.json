@@ -47,7 +47,7 @@
     ]
   },
   "engines": {
-    "node": ">= 22.22.0",
+    "node": ">= 22.22.1",
     "pnpm": ">= 8.0.0"
   },
   "preinstall": "npx only-allow pnpm",
@@ -118,8 +118,8 @@
       "joi": "17.13.4",
       "form-data": "4.0.6",
       "launch-editor": "2.14.1",
-      "js-yaml@<4.0.0": "3.15.0",
-      "js-yaml@>=4.0.0 <5.0.0": "4.3.0",
+      "js-yaml@<4.0.0": ">=3.15.1 <4.0.0",
+      "js-yaml@>=4.0.0 <5.0.0": ">=4.3.1 <5.0.0",
       "linkify-it": "5.0.2",
       "read-yaml-file": "2.1.0",
       "markdown-it": "14.2.0",
@@ -127,10 +127,11 @@
       "websocket-driver": "0.7.5",
       "http-proxy-middleware": "2.0.10",
       "@babel/core": "7.29.7",
-      "dompurify": "3.4.12",
+      "dompurify": ">=3.4.13 <4.0.0",
       "piscina": "5.2.0",
       "esbuild": "0.28.1",
-      "vite": "8.2.0"
+      "vite": ">=8.2.2 <9.0.0",
+      "nanoid": ">=3.3.18 <4.0.0"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
