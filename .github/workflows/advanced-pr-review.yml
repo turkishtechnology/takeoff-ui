@@ -1,0 +1,461 @@
+# Advanced PR Review — adversarial lane review
+#
+# Deterministic harvest/classify first, then an orchestrator that runs a claim audit,
+# fans out one Task subagent per lane, consolidates, and attacks its own analysis.
+# Process kit: .github/review-prompts/ — advanced-pr-review.md (orchestrator),
+# agent-brief.md (shared mandate every lane agent reads in full), lanes.md
+# (lane catalog: required artefacts + standing questions).
+#
+# TRIGGERS: the 'advanced-review' label, an "@claude advanced-review" PR comment, or
+# manual dispatch. The lightweight claude-code-review.yml keeps handling the automatic
+# per-PR reviews.
+#
+# MERGE GATE: the parsed verdict is published as commit status advanced-review/verdict
+# on the reviewed SHA. Make that status a required check in branch protection to turn
+# this into a real gate — approve → mergeable, changes_requested/invalid → blocked, and
+# every push invalidates the previous verdict (status is per-SHA; re-trigger to re-earn
+# it).
+#
+# AUTO-APPROVE: an approve verdict additionally runs .github/scripts/risk-gate.sh; only
+# a PR that clears the deterministic gate receives an automated GitHub approval.
+# Auto-merge stays behind the repo variable LOOP_AUTO_MERGE (default off).
+name: Advanced PR Review
+
+on:
+  pull_request:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to review"
+        required: true
+        type: number
+
+concurrency:
+  group: advanced-review-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  advanced-review:
+    # The author_association gate keeps a long opus run behind org membership —
+    # contains() matches quoted text too, so anyone able to comment could otherwise
+    # trigger it. Bot guards prevent self-triggering.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'advanced-review') ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '@claude advanced-review') &&
+       (github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR') &&
+       github.actor != 'dependabot[bot]' &&
+       github.actor != 'github-actions[bot]' &&
+       github.actor != 'claude[bot]')
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+      # statuses:write — the verdict is published as the commit status
+      # advanced-review/verdict.
+      statuses: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          # Full history: the methodology crosses the diff boundary — git ls-tree
+          # origin/develop, sibling greps, and reading the kit from develop all need
+          # refs beyond the merge commit.
+          fetch-depth: 0
+
+      - name: Set PR number
+        id: pr-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PR_NUM="${{ github.event.inputs.pr_number }}"
+          elif [ "${{ github.event_name }}" = "issue_comment" ]; then
+            PR_NUM="${{ github.event.issue.number }}"
+          else
+            PR_NUM="${{ github.event.pull_request.number }}"
+          fi
+          echo "number=$PR_NUM" >> "$GITHUB_OUTPUT"
+          # Reviewing a merged/closed PR can only fail. Failing THIS step keeps every
+          # later step skipped, including the fail-safe (it requires this step's success).
+          STATE=$(gh pr view "$PR_NUM" --json state --jq .state)
+          if [ "$STATE" != "OPEN" ]; then
+            echo "::notice::PR #$PR_NUM is $STATE — nothing to review; ending the run."
+            gh run cancel "${{ github.run_id }}" || true
+            exit 1
+          fi
+          # The output-contract check only accepts comments newer than this — a stale
+          # advanced review from a previous round must not satisfy it.
+          echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+          # Pin the head SHA under review NOW. The verdict status is stamped on this
+          # exact SHA — if the author pushes mid-run, the stale verdict lands on the old
+          # commit and correctly does NOT vouch for the new one.
+          echo "head_sha=$(gh pr view "$PR_NUM" --json headRefOid --jq .headRefOid)" >> "$GITHUB_OUTPUT"
+
+      # Visible acknowledgment — concurrency silently supersedes queued duplicate runs,
+      # so without this a re-mention during an active run looks like a broken trigger.
+      - name: Acknowledge trigger comment
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X POST "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" \
+            -f content=eyes || true
+
+      # issue_comment and workflow_dispatch check out the DEFAULT branch, not the PR —
+      # switch to the PR head so file reads and greps see the code under review.
+      - name: Checkout PR head (comment/dispatch runs)
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr checkout "${{ steps.pr-number.outputs.number }}"
+
+      # Runbook phases A+B: everything deterministic runs BEFORE any model. Mechanical
+      # hits are emitted as ::warning annotations, so they surface even if the model
+      # step fails.
+      - name: Harvest and classify (deterministic phases A+B)
+        id: harvest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Run develop's copy of the script, never the working tree's: develop is the
+          # trusted source, and a PR must not rewrite the rules that judge it.
+          git show origin/develop:.github/scripts/advanced-review-harvest.sh > "$RUNNER_TEMP/harvest.sh"
+          bash "$RUNNER_TEMP/harvest.sh" "${{ steps.pr-number.outputs.number }}"
+
+      # Stage all three kit files from origin/develop into RUNNER_TEMP — outside the
+      # checkout, so a PR cannot rewrite the rules that judge it. No fallback: if
+      # develop lacks a file, fail loud and let the terminal fail-safe route the PR.
+      - name: Stage review kit from origin/develop
+        id: kit
+        run: |
+          mkdir -p "$RUNNER_TEMP/review-kit"
+          for f in advanced-pr-review.md agent-brief.md lanes.md; do
+            git show "origin/develop:.github/review-prompts/$f" > "$RUNNER_TEMP/review-kit/$f"
+          done
+          echo "dir=$RUNNER_TEMP/review-kit" >> "$GITHUB_OUTPUT"
+          # Notebook dir: orchestrator + lane agents continuously write working state
+          # here. RUNNER_TEMP is per-JOB, so these files survive the model step's death
+          # and the fail-safe below can publish them.
+          mkdir -p "$RUNNER_TEMP/lane-notes"
+          echo "notes_dir=$RUNNER_TEMP/lane-notes" >> "$GITHUB_OUTPUT"
+          {
+            echo "orchestrator<<KIT_EOF"
+            cat "$RUNNER_TEMP/review-kit/advanced-pr-review.md"
+            echo "KIT_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run Advanced Claude Review
+        id: claude-review
+        # Step-level timeout below the job's cap: a job-level timeout cancels
+        # everything including always() steps, which would skip verdict routing and the
+        # fail-safe. A step timeout fails just this step and lets the tail run.
+        timeout-minutes: 45
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "github-actions,claude"
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ steps.pr-number.outputs.number }}
+
+            CRITICAL: Review the FINAL state of the code only.
+            Use `gh pr diff ${{ steps.pr-number.outputs.number }}` for the cumulative diff
+            against the base branch. Do NOT report issues from early commits that later
+            commits fixed; do NOT use individual commit diffs as the basis for bug reports.
+
+            HARVEST DATA (computed deterministically before this run — trust it, do not redo it):
+            - total diff: ${{ steps.harvest.outputs.total_size }} lines
+            - regenerated artefacts: ${{ steps.harvest.outputs.generated_size }} lines (ignore these files)
+            - EFFECTIVE diff: ${{ steps.harvest.outputs.effective_size }} lines — judge scope on this number only
+            - lane hints from changed paths: ${{ steps.harvest.outputs.lane_hints }}
+            - mechanical check results (each hit is already a finding — carry it into the report):
+            ${{ steps.harvest.outputs.mechanical }}
+
+            REVIEW KIT DIR: ${{ steps.kit.outputs.dir }}
+            agent-brief.md and lanes.md are staged there from origin/develop by the
+            harness — read them from that directory (NOT from the checkout, which a
+            PR could have edited), and point every subagent at the same absolute paths.
+
+            LANE NOTES DIR: ${{ steps.kit.outputs.notes_dir }}
+            You and every lane agent maintain notebooks there as you work. If this run
+            dies, a script publishes those files as a partial review — nothing else
+            survives.
+
+            RUN ID: ${{ github.run_id }} (for the optional telemetry block only)
+
+            YOUR PROCESS — follow these instructions literally:
+
+            ${{ steps.kit.outputs.orchestrator }}
+
+          # Task enables the lane fan-out (subagents); git grep/ls-tree/log/show power
+          # the boundary-crossing moves; Write lets the orchestrator build the comment
+          # body file for `gh pr comment --body-file` — without it the model falls back
+          # to inline --body, where the REVIEW_METADATA JSON dies on shell quoting.
+          claude_args: '--model opus --allowed-tools "Task,Write,Read,Grep,Glob,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(git show:*),Bash(git diff:*),Bash(git grep:*),Bash(git ls-tree:*),Bash(git log:*)"'
+          additional_permissions: |
+            actions: read
+
+      # The lane fan-out happens inside the model, so nothing in the Actions UI
+      # distinguishes a full multi-lane pass from one paragraph plus a valid verdict
+      # block. This check makes the output contract observable.
+      - name: Verify output contract
+        id: contract
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          # Pipe through real jq: gh's builtin --jq accepts no --arg flag.
+          BODY=$(gh pr view "$PR_NUMBER" --json comments | \
+            jq -r --arg since "${{ steps.pr-number.outputs.started_at }}" \
+            '[.comments[] | select((.body | contains("## Advanced review")) and .createdAt >= $since)] | last | .body // ""')
+          if [ -z "$BODY" ]; then
+            echo "::error::No advanced review comment was published by this run"
+            exit 1
+          fi
+          MISSING=""
+          for marker in "### Claim audit" "### Findings" "### Checked and found FALSE" "### Lanes run" "### Verdict" "<!-- REVIEW_METADATA"; do
+            case "$BODY" in
+              *"$marker"*) ;;
+              *) MISSING="$MISSING · $marker" ;;
+            esac
+          done
+          # The metadata must be parseable JSON, not just present.
+          METADATA=$(echo "$BODY" | sed -n '/<!-- REVIEW_METADATA/,/REVIEW_METADATA -->/p' | grep '^{' | head -1 || echo '')
+          if [ -z "$METADATA" ] || ! echo "$METADATA" | jq -e '.verdict | test("^(approve|changes_requested)$")' >/dev/null 2>&1; then
+            MISSING="$MISSING · valid REVIEW_METADATA JSON"
+          fi
+          if [ -n "$MISSING" ]; then
+            echo "::error::Advanced review output contract violated — missing:$MISSING"
+            exit 1
+          fi
+          echo "Output contract satisfied (all sections + parseable verdict present)."
+
+      - name: Remove advanced-review label
+        if: always() && github.event.action == 'labeled'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit ${{ steps.pr-number.outputs.number }} --remove-label "advanced-review" || true
+
+      - name: Parse review verdict
+        id: verdict
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          COMMENT_BODY=$(gh pr view "$PR_NUMBER" --json comments \
+            --jq '[.comments[] | select(.body | contains("REVIEW_METADATA"))] | last | .body // ""')
+          METADATA=$(echo "$COMMENT_BODY" | sed -n '/<!-- REVIEW_METADATA/,/REVIEW_METADATA -->/p' | grep '^{' | head -1 || echo '')
+
+          VERDICT=""
+          if [ -n "$METADATA" ] && echo "$METADATA" | jq empty 2>/dev/null; then
+            VERDICT=$(echo "$METADATA" | jq -r '.verdict // ""')
+          fi
+          # Fallback for the plain "REVIEW_METADATA: verdict=..." variant the model
+          # occasionally emits instead of the HTML-comment JSON block.
+          if [ -z "$VERDICT" ]; then
+            KV_LINE=$(echo "$COMMENT_BODY" | grep -E '^ *REVIEW_METADATA:' | head -1 || echo '')
+            if [ -n "$KV_LINE" ]; then
+              VERDICT=$(echo "$KV_LINE" | grep -oE 'verdict=(approve|changes_requested)' | head -1 | cut -d= -f2 || echo '')
+              [ -n "$VERDICT" ] && echo "::notice::Parsed key=value fallback format of REVIEW_METADATA"
+            fi
+          fi
+          # Defense-in-depth: anything but the two known verdicts routes to a human —
+          # prompt injection cannot invent a third state that merges.
+          case "$VERDICT" in
+            approve|changes_requested) ;;
+            *)
+              echo "::warning::Missing or invalid REVIEW_METADATA — routing to human review"
+              VERDICT="invalid"
+              ;;
+          esac
+          echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
+
+      # Merge gate: publish the verdict as a commit status on the SHA that was
+      # reviewed. Make advanced-review/verdict a required check in branch protection
+      # to enforce it.
+      - name: Publish verdict as merge-gate status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          case "${{ steps.verdict.outputs.verdict }}" in
+            approve)
+              STATE=success; DESC="Advanced review approved this revision" ;;
+            changes_requested)
+              STATE=failure; DESC="Advanced review requests changes" ;;
+            *)
+              STATE=failure; DESC="No valid verdict — human review required" ;;
+          esac
+          gh api -X POST "repos/${{ github.repository }}/statuses/${{ steps.pr-number.outputs.head_sha }}" \
+            -f state="$STATE" \
+            -f context="advanced-review/verdict" \
+            -f description="$DESC" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Ensure review labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "needs-human-review" --color "b60205" --description "Advanced review stopped — human decision required" || true
+          gh label create "ai-approved" --color "0e8a16" --description "Advanced review verdict approve + risk gate passed" || true
+
+      - name: Route invalid verdict to human review
+        if: steps.verdict.outputs.verdict == 'invalid'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          gh pr edit "$PR_NUMBER" --add-label "needs-human-review"
+          gh pr comment "$PR_NUMBER" --body "The advanced review did not produce a valid machine-readable verdict — routing to human review (fail-safe)."
+
+      - name: Run deterministic risk gate
+        id: gate
+        if: steps.verdict.outputs.verdict == 'approve'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          # Always run develop's copy, never the PR's — otherwise a PR could rewrite
+          # the rules that judge it. Fetched via the API: the claude-code-action step
+          # scrubs git credentials, so `git fetch` would fail with auth errors here.
+          gh api "repos/${{ github.repository }}/contents/.github/scripts/risk-gate.sh?ref=develop" \
+            --jq '.content' | base64 -d > "$RUNNER_TEMP/risk-gate.sh"
+          set +e
+          REPORT=$(bash "$RUNNER_TEMP/risk-gate.sh" "$PR_NUMBER")
+          STATUS=$?
+          set -e
+          echo "$REPORT"
+          if [ "$STATUS" -eq 0 ]; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "report<<GATE_EOF"
+            echo "$REPORT"
+            echo "GATE_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Auto-approve eligible PR
+        if: steps.gate.outputs.eligible == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+          GATE_REPORT: ${{ steps.gate.outputs.report }}
+          LOOP_AUTO_MERGE: ${{ vars.LOOP_AUTO_MERGE }}
+        run: |
+          gh pr edit "$PR_NUMBER" --add-label "ai-approved"
+
+          MERGE_STATE="disabled (repo variable LOOP_AUTO_MERGE)"
+          [ "${LOOP_AUTO_MERGE:-false}" = "true" ] && MERGE_STATE="enabled"
+
+          {
+            echo "Advanced review verdict: **approve** — deterministic risk gate passed."
+            echo ""
+            echo '```'
+            echo "$GATE_REPORT"
+            echo '```'
+            echo ""
+            echo "Auto-merge is ${MERGE_STATE} for this repository."
+          } > "$RUNNER_TEMP/approve-body.md"
+
+          gh pr review "$PR_NUMBER" --approve --body-file "$RUNNER_TEMP/approve-body.md" \
+            || echo "::warning::Could not submit approval (org may disallow Actions approvals) — the ai-approved label still marks eligibility"
+
+      - name: Route ineligible PR to human review
+        if: steps.gate.outputs.eligible == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+          GATE_REPORT: ${{ steps.gate.outputs.report }}
+        run: |
+          gh pr edit "$PR_NUMBER" --add-label "needs-human-review"
+          {
+            echo "Advanced review verdict was **approve**, but the deterministic risk gate requires a human:"
+            echo ""
+            echo '```'
+            echo "$GATE_REPORT"
+            echo '```'
+          } > "$RUNNER_TEMP/gate-body.md"
+          gh pr comment "$PR_NUMBER" --body-file "$RUNNER_TEMP/gate-body.md"
+
+      - name: Auto-merge (feature-flagged)
+        if: steps.gate.outputs.eligible == 'true' && vars.LOOP_AUTO_MERGE == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          # --auto defers the merge until all REQUIRED branch-protection checks pass.
+          # Do NOT enable LOOP_AUTO_MERGE before develop's branch protection marks the
+          # real checks as required — without them --auto merges immediately.
+          if gh pr merge "$PR_NUMBER" --auto --squash; then
+            gh pr comment "$PR_NUMBER" --body "Auto-merge armed (squash) — will merge when all required checks pass."
+          else
+            echo "::warning::Could not arm auto-merge (missing branch protection or permissions)"
+          fi
+
+      # Terminal fail-safe: whatever killed the run, the PR must never be left silent.
+      # Salvage: the orchestrator and every lane agent write notebooks to the lane-notes
+      # dir. This step only FRAMES and POSTS them verbatim — no interpretation, and
+      # structurally no verdict: a dead run can never approve.
+      - name: Fail-safe — surface incomplete run
+        if: always() && steps.pr-number.outcome == 'success' && (steps.claude-review.outcome != 'success' || steps.contract.outcome != 'success')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+          MECHANICAL: ${{ steps.harvest.outputs.mechanical }}
+          NOTES_DIR: ${{ steps.kit.outputs.notes_dir }}
+        run: |
+          {
+            echo "The advanced review did not complete (review step: ${{ steps.claude-review.outcome }}, output contract: ${{ steps.contract.outcome }})."
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo ""
+            echo "Deterministic pre-checks still ran — their findings:"
+            echo '```'
+            echo "${MECHANICAL:-none}"
+            echo '```'
+            if [ -n "$NOTES_DIR" ] && ls "$NOTES_DIR"/*.md >/dev/null 2>&1; then
+              echo ""
+              echo "### Salvaged notebooks (written before the run died — unconsolidated, NO VERDICT)"
+              for f in "$NOTES_DIR"/orchestrator.md "$NOTES_DIR"/lane-*.md; do
+                [ -f "$f" ] || continue
+                echo ""
+                echo "<details><summary>$(basename "$f")</summary>"
+                echo ""
+                # Scrub verdict markers from the untrusted notebook payload: a model may
+                # draft its final REVIEW_METADATA block in a notebook, and the verdict
+                # parser reads the LAST comment carrying that marker — an embedded draft
+                # must never be parseable as a real verdict on a later run.
+                head -c 8000 "$f" | sed -E 's/REVIEW_(METADATA|TELEMETRY)/DRAFT_\1/g'
+                [ "$(wc -c < "$f")" -gt 8000 ] && echo "" && echo "_…truncated (full file only existed on the runner)_"
+                echo ""
+                echo "</details>"
+              done
+            fi
+            echo ""
+            echo "Re-trigger with the \`advanced-review\` label or an \`@claude advanced-review\` comment."
+          } > "$RUNNER_TEMP/failsafe-body.md"
+          gh pr comment "$PR_NUMBER" --body-file "$RUNNER_TEMP/failsafe-body.md" \
+            || echo "::error::Could not post fail-safe comment"
+          # Merge gate fails CLOSED: an incomplete run marks the reviewed SHA with an
+          # error status so a required-status ruleset keeps the PR unmergeable.
+          gh api -X POST "repos/${{ github.repository }}/statuses/${{ steps.pr-number.outputs.head_sha }}" \
+            -f state=error \
+            -f context="advanced-review/verdict" \
+            -f description="Advanced review did not complete — re-trigger it" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            || echo "::error::Could not publish error status"
