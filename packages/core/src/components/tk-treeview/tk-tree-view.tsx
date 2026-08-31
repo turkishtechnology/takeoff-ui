@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Prop, h, State, Element, Event, EventEmitter, Watch } from '@stencil/core';
 import classNames from 'classnames';
-import { ITreeItem } from './types';
+import { ITreeItem, ITreeLoad } from './types';
 import { IBadgeOptions } from '../../global/interfaces/IBadgeOptions';
 import { CSSStyleProperties } from '../../global/types';
 
@@ -18,6 +18,14 @@ import { CSSStyleProperties } from '../../global/types';
 })
 export class TkTreeView implements ComponentInterface {
   private isAllSelected: boolean = false;
+  private hasWarnedExpandAll: boolean = false;
+  /**
+   * Branches already asked for while they have been open. Requests are issued from a render sweep,
+   * so without this a branch would be asked for again on every render, and a failed fetch would
+   * turn into an endless retry. Entries are dropped when their branch closes, which is what makes
+   * reopening it the retry.
+   */
+  private requestedIds: Set<string> = new Set();
 
   @Element() el: HTMLElement;
 
@@ -183,7 +191,9 @@ export class TkTreeView implements ComponentInterface {
       });
 
       // Log invalid keys
-      if (invalidKeys.length > 0) {
+      // A lazy tree legitimately holds keys it has not fetched yet, so an unresolved key is only an
+      // error when the whole tree is known up front.
+      if (invalidKeys.length > 0 && !this.lazy) {
         console.error('Invalid keys given to expandedKeys prop:', invalidKeys);
       }
 
@@ -195,9 +205,45 @@ export class TkTreeView implements ComponentInterface {
   }
 
   /**
+   * If true, branches are loaded on demand rather than handed over up front. Expanding a branch
+   * whose children are missing emits `tk-load` instead of rendering nothing, and the fetch itself
+   * belongs to the consumer.
+   *
+   * <br /> **Note:** Branches that are not loaded yet have to be marked with `hasChildren: true`,
+   * otherwise they cannot be told apart from a leaf and cannot be expanded at all. Items also need
+   * a `key`, since `loadingKeys` and `loadedKeys` address them by key.
+   * <br />
+   * `expandAll` is ignored while this is set, because the tree it would expand is not loaded yet.
+   */
+  @Prop() lazy: boolean = false;
+
+  /**
+   * Keys of the branches whose children are being fetched right now. Each of them shows a spinner
+   * in place of its toggle icon until its key is taken off the list.
+   */
+  @Prop() loadingKeys: string[] = [];
+
+  /**
+   * Keys of the branches whose children have already been fetched. A branch listed here never emits
+   * `tk-load` again, and leaving a failed branch off the list is what allows it to be retried.
+   *
+   * <br /> **Note:** This is optional. A branch that came back with children is already recognised
+   * as loaded, so the only case that needs this list is a branch that came back empty and should
+   * still read as a branch. Marking such a branch `hasChildren: false` instead turns it into a leaf
+   * and takes its arrow away.
+   */
+  @Prop() loadedKeys: string[] = [];
+
+  /**
    * Event emitted when a tree item is clicked.
    */
   @Event({ eventName: 'tk-item-click' }) tkItemClick: EventEmitter<ITreeItem>;
+
+  /**
+   * Event emitted when an expanded branch needs its children. Only fires while `lazy` is set, and
+   * only for a branch that has no children and is listed in neither `loadingKeys` nor `loadedKeys`.
+   */
+  @Event({ eventName: 'tk-load' }) tkLoad: EventEmitter<ITreeLoad>;
 
   /**
    * Event emitted when the selected value changes.
@@ -219,6 +265,12 @@ export class TkTreeView implements ComponentInterface {
     this.isAllSelected = this.computeIsAllSelected();
   }
 
+  componentDidRender() {
+    // Asking after the render rather than from the toggle keeps every route into an expanded state
+    // on the same path, and means listeners are already attached when the first request goes out.
+    this.requestExpandedBranches();
+  }
+
   /**
    * Check if the component is in controlled mode.
    * Controlled mode is when the parent component manages expansion state via expandedKeys prop.
@@ -226,6 +278,96 @@ export class TkTreeView implements ComponentInterface {
    */
   private isControlled(): boolean {
     return Array.isArray(this.expandedKeys);
+  }
+
+  /**
+   * Decide whether an item is a branch. Loaded children answer this on their own, but a lazy branch
+   * has none yet, so hasChildren is what keeps it expandable until its first load.
+   */
+  private isBranch = (item: ITreeItem): boolean => {
+    if (this.lazy && item.hasChildren !== undefined) {
+      return item.hasChildren;
+    }
+    return !!(item.children && item.children.length > 0);
+  };
+
+  /**
+   * Check whether a branch is waiting on its children, which the consumer states through loadingKeys.
+   */
+  private isLoadingItem = (item: ITreeItem): boolean => {
+    return this.lazy && !!item.key && this.loadingKeys.includes(item.key);
+  };
+
+  /**
+   * Ask the consumer for a branch's children when it is expanded without them.
+   * Branches that already carry children, are already loaded, or are already loading are left alone,
+   * so this stays quiet on every expand after the first one.
+   */
+  private requestChildren = (pathStr: string, item: ITreeItem) => {
+    if (!this.lazy || !this.isBranch(item)) return;
+    if (item.children && item.children.length > 0) return;
+    if (item.key && (this.loadingKeys.includes(item.key) || this.loadedKeys.includes(item.key))) return;
+
+    // An item without a key is unreachable through loadingKeys and loadedKeys, so its path is what
+    // keeps it from being asked for more than once while it stays open.
+    const requestId = this.requestIdOf(item, pathStr);
+    if (this.requestedIds.has(requestId)) return;
+
+    this.requestedIds.add(requestId);
+    this.tkLoad.emit({ item, path: pathStr });
+  };
+
+  /**
+   * Identify a branch across renders. The key is what loadingKeys and loadedKeys speak, and the path
+   * stands in for an item that has none so it is still asked for only once per expansion.
+   */
+  private requestIdOf = (item: ITreeItem, pathStr: string): string => {
+    return item.key ?? `path:${pathStr}`;
+  };
+
+  /**
+   * Ask for every expanded branch that is still missing its children.
+   * Running this after each render is what makes an expansion coming from expandedKeys load just
+   * like a clicked one, since the prop writes expandedPaths without going through a toggle.
+   */
+  private requestExpandedBranches = () => {
+    if (!this.lazy) return;
+
+    const openBranches = new Map<string, { item: ITreeItem; pathStr: string }>();
+    this.expandedPaths.forEach(pathStr => {
+      const item = this.itemAtPath(pathStr);
+      if (item) {
+        openBranches.set(this.requestIdOf(item, pathStr), { item, pathStr });
+      }
+    });
+
+    // Forgetting a branch that is no longer open is the whole retry story: nothing else re-asks, so
+    // a fetch that failed while the branch stayed open is not repeated until the user reopens it.
+    this.requestedIds.forEach(id => {
+      if (!openBranches.has(id)) {
+        this.requestedIds.delete(id);
+      }
+    });
+
+    openBranches.forEach(({ item, pathStr }) => this.requestChildren(pathStr, item));
+  };
+
+  /**
+   * Resolve an index-based path to the item it points at, or null when the path no longer fits the
+   * tree. Example: "0-1-2" -> the third child of the second child of the first root.
+   */
+  private itemAtPath(indexPath: string): ITreeItem | null {
+    const indices = indexPath.split('-').map(Number);
+    let level = this.items;
+    let item: ITreeItem | null = null;
+
+    for (const index of indices) {
+      if (!level || index < 0 || index >= level.length) return null;
+      item = level[index];
+      level = item.children;
+    }
+
+    return item;
   }
 
   /**
@@ -366,7 +508,9 @@ export class TkTreeView implements ComponentInterface {
         }
       });
 
-      if (invalidKeys.length > 0) {
+      // A lazy tree legitimately holds keys it has not fetched yet, so an unresolved key is only an
+      // error when the whole tree is known up front.
+      if (invalidKeys.length > 0 && !this.lazy) {
         console.error('Invalid keys given to expandedKeys prop:', invalidKeys);
       }
 
@@ -376,6 +520,18 @@ export class TkTreeView implements ComponentInterface {
     }
 
     if (!this.expandAll) return;
+
+    // Expanding everything would only reach the branches that happen to be loaded, and the result
+    // would silently change as more of them arrive, so expandAll stays out of a lazy tree.
+    // Every load hands back a new items array and lands here again, so the warning is only worth
+    // saying once.
+    if (this.lazy) {
+      if (!this.hasWarnedExpandAll) {
+        this.hasWarnedExpandAll = true;
+        console.warn('The expandAll prop is ignored while lazy is set, because the tree is loaded on demand. Use expandedKeys instead.');
+      }
+      return;
+    }
 
     const expanded = new Set<string>();
 
@@ -579,12 +735,13 @@ export class TkTreeView implements ComponentInterface {
    */
   private getLeafKeys = (item: ITreeItem): string[] => {
     const keys: string[] = [];
-    const isLeaf = !item.children || item.children.length === 0;
-    if (isLeaf) {
+    // Emptiness cannot stand in for leafness here: a lazy branch has no children yet and would
+    // otherwise be collected as a leaf and selected as one.
+    if (!this.isBranch(item)) {
       if (item.key) keys.push(item.key);
       return keys;
     }
-    for (const child of item.children) {
+    for (const child of item.children ?? []) {
       keys.push(...this.getLeafKeys(child));
     }
     return keys;
@@ -625,12 +782,19 @@ export class TkTreeView implements ComponentInterface {
    * Check if all child nodes are selected and return checkbox state
    */
   private getCheckboxState = (item: ITreeItem): { checked: boolean; indeterminate: boolean } => {
-    const isLeaf = !item.children || item.children.length === 0;
     const isDirectlySelected = this.value?.includes(item.key) || false;
 
-    // Leaf nodes: direct selection matters in both strategies
-    if (isLeaf) {
+    // Leaf nodes: direct selection matters in both strategies.
+    // Emptiness cannot stand in for leafness here, otherwise a lazy branch would report a state its
+    // own selection handler disagrees with, and its checkbox would sit there doing nothing.
+    if (!this.isBranch(item)) {
       return { checked: isDirectlySelected, indeterminate: false };
+    }
+
+    // A lazy branch has no loaded descendants to derive a state from. Under 'all' its own key still
+    // carries the selection, under 'leaf' it is not selectable at all.
+    if (!item.children || item.children.length === 0) {
+      return { checked: this.selectionStrategy === 'all' && isDirectlySelected, indeterminate: false };
     }
 
     // Directory nodes: compute based on children
@@ -733,11 +897,26 @@ export class TkTreeView implements ComponentInterface {
     this.tkChange.emit(this.value);
   };
 
+  /**
+   * Render the spinner that stands in for the toggle icon while a branch loads.
+   * Tree sizes and spinner sizes do not share a scale, so the size is mapped onto the icon's footprint
+   * to keep the row from shifting when the icon is swapped out.
+   */
+  private renderToggleSpinner(isHighlighted: boolean) {
+    const spinnerSizes = { small: 'xxsmall', base: 'xsmall', large: 'small' } as const;
+
+    return <tk-spinner class="toggle-spinner" size={spinnerSizes[this.size]} type="rounded" variant={isHighlighted ? 'primary' : 'neutral'} />;
+  }
+
   private renderItem = (item: ITreeItem, basePath: string = '', index: number, depth: number = 0) => {
     const pathStr = basePath ? `${basePath}-${index}` : `${index}`;
-    const isDirectory = !!(item.children && item.children.length > 0);
+    const isDirectory = this.isBranch(item);
     const isExpanded = this.expandedPaths.has(pathStr);
-    const isHighlighted = this.highlightedPath === pathStr || (this.isInitialLoad && this.expandedKeys?.includes(item.key));
+    const isLoading = this.isLoadingItem(item);
+    // Under the leaf strategy a branch with nothing loaded has no leaves to select, so its checkbox
+    // could only sit there unresponsive. Disabling it says as much.
+    const isCheckboxDisabled = this.selectionStrategy === 'leaf' && this.isBranch(item) && !item.children?.length;
+    const isHighlighted = this.highlightedPath === pathStr || !!(this.isInitialLoad && item.key && this.expandedKeys?.includes(item.key));
     const isDisabled = this.disabled || item.disabled;
 
     const handleToggleIconClick =
@@ -774,9 +953,13 @@ export class TkTreeView implements ComponentInterface {
             this.handleItemClick(pathStr, item, isDisabled, isDirectory);
           }}
         >
-          {isDirectory && this.mode === 'basic' && (
-            <tk-icon onClick={handleToggleIconClick} variant={isHighlighted ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
-          )}
+          {isDirectory &&
+            this.mode === 'basic' &&
+            (isLoading ? (
+              this.renderToggleSpinner(isHighlighted)
+            ) : (
+              <tk-icon onClick={handleToggleIconClick} variant={isHighlighted ? 'primary' : 'neutral'} icon={isExpanded ? 'arrow_drop_down' : 'arrow_right'} size={this.size} />
+            ))}
           {this.selectable && (
             <tk-checkbox
               onClick={e => {
@@ -784,7 +967,7 @@ export class TkTreeView implements ComponentInterface {
               }}
               value={this.getCheckboxState(item).checked}
               indeterminate={this.getCheckboxState(item).indeterminate}
-              disabled={isDisabled}
+              disabled={isDisabled || isCheckboxDisabled}
               onTk-change={e => {
                 e.stopPropagation();
                 this.handleCheckboxChange(e.detail, item);
@@ -797,7 +980,9 @@ export class TkTreeView implements ComponentInterface {
             <span class={classNames('tk-tree-view', 'text', this.size)}>{item.label}</span>
             {(() => {
               const badgeCount = this.selectable ? selectedCount : item.children?.length;
-              const shouldShowBadge = isDirectory && this.showBadge && (this.showZeroCountBadges || badgeCount > 0);
+              // A lazy branch has no count to show before its children arrive, and a countless badge
+              // would otherwise render as an empty one.
+              const shouldShowBadge = isDirectory && this.showBadge && badgeCount !== undefined && (this.showZeroCountBadges || badgeCount > 0);
               return (
                 shouldShowBadge && (
                   <tk-badge
@@ -813,14 +998,18 @@ export class TkTreeView implements ComponentInterface {
               );
             })()}
           </div>
-          {this.mode === 'stepper' && isDirectory && item.children && item.children.length > 0 && (
-            <tk-icon
-              onClick={handleToggleIconClick}
-              variant={isHighlighted ? 'primary' : 'neutral'}
-              icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
-              size={this.size}
-            />
-          )}
+          {this.mode === 'stepper' &&
+            isDirectory &&
+            (isLoading ? (
+              this.renderToggleSpinner(isHighlighted)
+            ) : (
+              <tk-icon
+                onClick={handleToggleIconClick}
+                variant={isHighlighted ? 'primary' : 'neutral'}
+                icon={!isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}
+                size={this.size}
+              />
+            ))}
         </div>
         {this.mode === 'basic' && isDirectory && isExpanded && item.children && item.children.length > 0 && (
           <div class={classNames('tk-tree-view', 'children')}>{item.children.map((child, childIndex) => this.renderItem(child, pathStr, childIndex, depth + 1))}</div>

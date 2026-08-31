@@ -1,4 +1,4 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { TkTreeView } from '../tk-tree-view';
 import { TkCheckbox } from '../../tk-checkbox/tk-checkbox';
 
@@ -1057,6 +1057,391 @@ describe('tk-tree-view', () => {
       const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view></tk-tree-view>` });
 
       expect(page.root.querySelector('.tk-tree-view')).toBeNull();
+    });
+  });
+
+  describe('lazy loading', () => {
+    const lazyItems = [
+      { key: 'lazy', label: 'Lazy', hasChildren: true },
+      { key: 'plain', label: 'Plain' },
+    ];
+
+    const loadedItems = [
+      { key: 'lazy', label: 'Lazy', hasChildren: true, children: [{ key: 'child', label: 'Child' }] },
+      { key: 'plain', label: 'Plain' },
+    ];
+
+    const setupLazyTree = async (html = `<tk-tree-view lazy></tk-tree-view>`) => {
+      const page = await newSpecPage({ components: [TkTreeView], html });
+      page.root.items = lazyItems;
+      await page.waitForChanges();
+      return page;
+    };
+
+    const listenForLoad = (page: SpecPage) => {
+      const requests: any[] = [];
+      page.root.addEventListener('tk-load', (event: any) => requests.push(event.detail));
+      return requests;
+    };
+
+    const spinner = (page: SpecPage) => page.root.querySelector('.node.directory > .tk-tree-view.label > tk-spinner');
+
+    it('treats an item marked with hasChildren as a branch', async () => {
+      const page = await setupLazyTree();
+
+      expect(branchNode(page)).toBeTruthy();
+      expect(branchToggleIcon(page)).toBeTruthy();
+    });
+
+    it('ignores hasChildren when lazy is not set', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view></tk-tree-view>` });
+      page.root.items = lazyItems;
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.node.directory')).toBeNull();
+    });
+
+    it('emits tk-load with the item and its path when an unloaded branch is expanded', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+      expect(requests[0].item.key).toBe('lazy');
+      expect(requests[0].path).toBe('0');
+    });
+
+    it('does not emit tk-load for a branch that already carries children', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = loadedItems;
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(0);
+    });
+
+    it('does not emit tk-load for a branch listed in loadedKeys', async () => {
+      const page = await setupLazyTree(`<tk-tree-view lazy></tk-tree-view>`);
+      page.root.loadedKeys = ['lazy'];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(0);
+    });
+
+    it('does not emit tk-load again for a branch already listed in loadingKeys', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('replaces the toggle icon with a spinner for a key in loadingKeys', async () => {
+      const page = await setupLazyTree();
+
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+
+      expect(spinner(page)).toBeTruthy();
+      expect(branchToggleIcon(page)).toBeNull();
+
+      page.root.loadingKeys = [];
+      await page.waitForChanges();
+
+      expect(spinner(page)).toBeNull();
+      expect(branchToggleIcon(page)).toBeTruthy();
+    });
+
+    it('shows no spinner while lazy is not set', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view></tk-tree-view>` });
+      page.root.items = loadedItems;
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('tk-spinner')).toBeNull();
+    });
+
+    it('renders the children once they arrive in items', async () => {
+      const page = await setupLazyTree();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.items = loadedItems;
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('.node.directory > .tk-tree-view.children')).toBeTruthy();
+    });
+
+    it('hides the children count badge while the branch is not loaded', async () => {
+      const page = await setupLazyTree();
+
+      expect(page.root.querySelector('tk-badge')).toBeNull();
+    });
+
+    it('ignores expandAll while lazy is set', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const page = await setupLazyTree(`<tk-tree-view lazy expand-all></tk-tree-view>`);
+
+      expect(branchNode(page).classList.contains('expanded')).toBe(false);
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
+    it('warns about expandAll only once while items keep arriving', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const page = await setupLazyTree(`<tk-tree-view lazy expand-all></tk-tree-view>`);
+
+      page.root.items = loadedItems;
+      await page.waitForChanges();
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      warn.mockRestore();
+    });
+
+    it('does not log an error for expandedKeys it cannot resolve yet', async () => {
+      const error = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const page = await setupLazyTree();
+
+      page.root.expandedKeys = ['not-loaded-yet'];
+      await page.waitForChanges();
+
+      expect(error).not.toHaveBeenCalled();
+      error.mockRestore();
+    });
+
+    it('does not collect an unloaded branch as a leaf when selectAll uses the leaf strategy', async () => {
+      const page = await setupLazyTree(`<tk-tree-view lazy selectable select-all selection-strategy="leaf"></tk-tree-view>`);
+      const selected: string[][] = [];
+      page.root.addEventListener('tk-change', (event: any) => selected.push(event.detail));
+
+      (page.root.querySelector('.select-all') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(selected[0]).toEqual(['plain']);
+    });
+
+    it('selects nothing when an unloaded branch is checked under the leaf strategy', async () => {
+      const page = await setupLazyTree(`<tk-tree-view lazy selectable selection-strategy="leaf"></tk-tree-view>`);
+      const selected: string[][] = [];
+      page.root.addEventListener('tk-change', (event: any) => selected.push(event.detail));
+
+      page.root.querySelector('.node.directory tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true, bubbles: true }));
+      await page.waitForChanges();
+
+      expect(selected[0]).toEqual([]);
+    });
+
+    it('still selects an unloaded branch under the all strategy', async () => {
+      const page = await setupLazyTree(`<tk-tree-view lazy selectable select-all selection-strategy="all"></tk-tree-view>`);
+      const selected: string[][] = [];
+      page.root.addEventListener('tk-change', (event: any) => selected.push(event.detail));
+
+      (page.root.querySelector('.select-all') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(selected[0]).toEqual(['lazy', 'plain']);
+    });
+
+    it('requests a branch expanded through expandedKeys, not just a clicked one', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      page.root.expandedKeys = ['lazy'];
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+      expect(requests[0].item.key).toBe('lazy');
+    });
+
+    it('does not ask again when a branch is reopened while its fetch is still in flight', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('asks again when a branch is reopened, which is how a failed fetch is retried', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(2);
+    });
+
+    it('asks again once loadingKeys clears without children arriving', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['lazy'];
+      await page.waitForChanges();
+      // the fetch failed, so the key leaves the list with nothing to show for it
+      page.root.loadingKeys = [];
+      await page.waitForChanges();
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(2);
+    });
+
+    it('emits nothing from the render sweep while lazy is not set', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view expand-all></tk-tree-view>` });
+      page.root.items = loadedItems;
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(0);
+    });
+
+    // tk-checkbox has to be registered for its disabled property to mean anything
+    const setupCheckableLazyTree = async (html: string) => {
+      const page = await newSpecPage({ components: [TkTreeView, TkCheckbox], html });
+      page.root.items = lazyItems;
+      await page.waitForChanges();
+      return page;
+    };
+
+    it('disables the checkbox of an unloaded branch under the leaf strategy', async () => {
+      const page = await setupCheckableLazyTree(`<tk-tree-view lazy selectable selection-strategy="leaf"></tk-tree-view>`);
+
+      const checkbox: any = page.root.querySelector('.node.directory tk-checkbox');
+      expect(checkbox.disabled).toBe(true);
+    });
+
+    it('keeps the checkbox of an unloaded branch working under the all strategy', async () => {
+      const page = await setupCheckableLazyTree(`<tk-tree-view lazy selectable selection-strategy="all"></tk-tree-view>`);
+      const selected: string[][] = [];
+      page.root.addEventListener('tk-change', (event: any) => selected.push(event.detail));
+
+      const checkbox: any = page.root.querySelector('.node.directory tk-checkbox');
+      expect(checkbox.disabled).toBe(false);
+
+      checkbox.dispatchEvent(new CustomEvent('tk-change', { detail: true, bubbles: true }));
+      await page.waitForChanges();
+
+      expect(selected[0]).toEqual(['lazy']);
+      expect((page.root.querySelector('.node.directory tk-checkbox') as any).value).toBe(true);
+    });
+
+    it('does not keep re-asking while a branch stays open and its fetches keep failing', async () => {
+      const page = await setupLazyTree();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+
+      // the consumer's try/finally round-trip, five failures in a row
+      for (let attempt = 0; attempt < 5; attempt++) {
+        page.root.loadingKeys = ['lazy'];
+        await page.waitForChanges();
+        page.root.loadingKeys = [];
+        await page.waitForChanges();
+      }
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('does not re-ask for an empty branch while it stays open without loadedKeys', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [{ key: 'empty', label: 'Empty', hasChildren: true, children: [] }];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['empty'];
+      await page.waitForChanges();
+      page.root.loadingKeys = [];
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
+    });
+
+    it('leaves a branch still in flight alone when another branch gets its children', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [
+        { key: 'a', label: 'A', hasChildren: true },
+        { key: 'b', label: 'B', hasChildren: true },
+      ];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      const branches = Array.from(page.root.querySelectorAll('.node.directory > .tk-tree-view.label')) as HTMLElement[];
+      branches[0].click();
+      await page.waitForChanges();
+      branches[1].click();
+      await page.waitForChanges();
+      page.root.loadingKeys = ['a', 'b'];
+      await page.waitForChanges();
+
+      // A arrives while B is still being fetched
+      page.root.items = [
+        { key: 'a', label: 'A', hasChildren: true, children: [{ key: 'a1', label: 'A1' }] },
+        { key: 'b', label: 'B', hasChildren: true },
+      ];
+      page.root.loadingKeys = ['b'];
+      await page.waitForChanges();
+
+      expect(requests.map(request => request.item.key)).toEqual(['a', 'b']);
+    });
+
+    it('asks once for an item without a key rather than once per render', async () => {
+      const page = await newSpecPage({ components: [TkTreeView], html: `<tk-tree-view lazy></tk-tree-view>` });
+      page.root.items = [{ label: 'NoKey', hasChildren: true }];
+      await page.waitForChanges();
+      const requests = listenForLoad(page);
+
+      branchLabel(page).click();
+      await page.waitForChanges();
+      page.root.size = 'small';
+      await page.waitForChanges();
+      page.root.size = 'large';
+      await page.waitForChanges();
+
+      expect(requests).toHaveLength(1);
     });
   });
 });

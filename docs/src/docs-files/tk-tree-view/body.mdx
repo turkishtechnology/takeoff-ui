@@ -7,6 +7,7 @@ import Selectable from './examples/Selectable';
 import ExpandedKeys from './examples/ExpandedKeys';
 import ExpandAll from './examples/ExpandAll';
 import CollapseBehavior from './examples/CollapseBehavior';
+import LazyLoading from './examples/LazyLoading';
 import CustomStyles from './examples/CustomStyles';
 import { TkTreeView } from '@takeoff-ui/react';
 
@@ -79,6 +80,26 @@ the `item` trigger expands or collapses instead, so it keeps the highlight
 rather than blinking it on and off on alternating clicks.
 
 <CollapseBehavior />
+
+## Lazy Loading
+
+Set the `lazy` prop to fetch a branch's children only when it is expanded.
+Expanding a branch that has none emits `tk-load` with the item and its index
+path, and the fetch is yours to make — the same split as `tk-request` on the
+table.
+
+Branches that are not loaded yet have to be marked `hasChildren: true`,
+otherwise they cannot be told apart from a leaf and cannot be expanded at all.
+Put the children you fetch onto that branch in `items`, and list the keys in
+flight in `loadingKeys` to give them a spinner. Clear that list in a `finally`,
+or a failed fetch leaves one spinning forever.
+
+<LazyLoading />
+
+Reopening a branch asks again, which is how a failed fetch is retried.
+`expandAll` is ignored here, so `expandedKeys` is the way to expand a lazy
+branch programmatically, and a branch it opens is requested just like a clicked
+one. Selection only ever covers the branches that are loaded.
 
 ## Custom Styles
 
