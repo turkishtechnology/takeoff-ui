@@ -38,6 +38,13 @@ export class TkInput implements ComponentInterface {
   private regexMatcherSource?: string;
   /** Last value accepted by the regex mask, used to revert a rejected keystroke. */
   private lastRegexAcceptedValue = '';
+  /**
+   * Whether the field holds an edit the user has just typed. Armed by a keystroke and spent by
+   * the first programmatic write that changes the field - a consumer reformatting that very
+   * edit. Cleared on focus, so a value arriving from elsewhere (a day picked in a datepicker
+   * panel, which hands focus back to the input before writing) is not mistaken for one.
+   */
+  private caretFollowsUserEdit = false;
 
   @Element() el!: HTMLTkInputElement;
 
@@ -218,10 +225,12 @@ export class TkInput implements ComponentInterface {
       return;
     }
 
+    if (!this.nativeInput) return;
+
     if (typeof newValue === 'object' && typeof oldValue === 'object') {
-      this.nativeInput.value = getNestedValue(newValue, this.chipLabelKey);
+      this.writeNativeValue(getNestedValue(newValue, this.chipLabelKey));
     } else {
-      this.nativeInput.value = newValue;
+      this.writeNativeValue(newValue);
     }
     // A programmatic value bypasses keystroke handling; keep the regex revert
     // target in sync so a later rejected keystroke restores this value.
@@ -415,6 +424,82 @@ export class TkInput implements ComponentInterface {
   }
 
   /**
+   * Writes a programmatic value into the field without throwing the user out of it.
+   * Assigning `input.value` always parks the caret at the end, which is fine for an idle
+   * field but not while it has focus: a consumer that echoes `tk-change` back into `value`
+   * (a controlled datepicker normalising "09:30" to "09:30 AM", for instance) would send
+   * the caret to the end on every keystroke.
+   *
+   * Only that reformat keeps the caret. A value replacing what the user typed - the day picked
+   * in a datepicker panel, which hands focus back to the input before writing - keeps the
+   * native behaviour and lands the caret at the end, so the next keystroke appends instead of
+   * dropping into the middle of a value the user never typed.
+   */
+  private writeNativeValue(value: unknown): void {
+    const input = this.nativeInput;
+    if (!input) return;
+
+    const selection = this.getSelection(input);
+    const previousValue = input.value;
+    input.value = value as string;
+
+    // An unchanged field left the caret alone: this is the keystroke being echoed back into
+    // `value` by our own handler, so leave the edit armed for the reformat that follows it.
+    if (input.value === previousValue) return;
+
+    // Only the text after the caret may have been reformatted; anything else is a different
+    // value, where the captured offset no longer points at what the user was editing.
+    const isReformatOfUserEdit = !!selection && this.caretFollowsUserEdit && input.value.startsWith(previousValue.slice(0, selection[0]));
+    this.caretFollowsUserEdit = false;
+    if (isReformatOfUserEdit) this.restoreCaret(input, selection[1]);
+  }
+
+  /**
+   * Re-syncs Cleave (its own listener runs after this one, so it still holds the previous
+   * keystroke) and returns the formatted value. `setRawValue` writes the delimiter-less value
+   * into the field first, which parks the caret at the end, so restore the caret afterwards.
+   */
+  private resyncCleaveValue(input: HTMLInputElement, cleave: Cleave): string {
+    const selection = this.getSelection(input);
+    // The caret sits at the end of the selection, which is where it stays once the keystroke
+    // replaces a selected range.
+    const wasAtEnd = !!selection && selection[1] >= input.value.length;
+
+    cleave.setRawValue(cleave.getRawValue());
+    const formattedValue = cleave.getFormattedValue();
+
+    // At the end, follow any delimiter the mask appended ("2026" -> "2026-") - it belongs to
+    // the keystroke that just landed; otherwise stay put.
+    this.restoreCaret(input, wasAtEnd ? input.value.length : (selection?.[1] ?? null));
+
+    return formattedValue;
+  }
+
+  /**
+   * Current selection of a focused field, or null when there is nothing to preserve.
+   * Only the text-like types carry a selection: on the `type="number"` that `mode="number"`
+   * and `mode="counter"` render, `selectionStart` reads back as null and `setSelectionRange`
+   * throws an InvalidStateError.
+   */
+  private getSelection(input: HTMLInputElement): [number, number] | null {
+    const isFocused = (input.getRootNode() as Document | ShadowRoot)?.activeElement === input;
+    const isSelectable = input.type === 'text' || input.type === 'password';
+    if (!isFocused || !isSelectable || typeof input.setSelectionRange !== 'function') return null;
+    return isNil(input.selectionStart) || isNil(input.selectionEnd) ? null : [input.selectionStart, input.selectionEnd];
+  }
+
+  /**
+   * Puts the caret back where it was before the field was rewritten, clamped to the new value.
+   * Always collapsed, never a range: the text underneath was rewritten, so a restored range
+   * would cover an arbitrary slice of the new value and the next keystroke would delete it.
+   */
+  private restoreCaret(input: HTMLInputElement, caret: number | null): void {
+    if (isNil(caret)) return;
+    const position = Math.min(caret, input.value.length);
+    input.setSelectionRange(position, position);
+  }
+
+  /**
    * Whether a Cleave.js instance should back the current mask. Cleave is only used
    * for its own formatting options; a `regex` mask is handled by the incremental
    * matcher instead, so we never build a (useless and side-effecting) Cleave
@@ -481,6 +566,9 @@ export class TkInput implements ComponentInterface {
   }
 
   private handleInput = (ev: Event) => {
+    // The value about to be written back is the user's own edit; keep its caret when a
+    // controlled consumer echoes a reformatted version of it back into `value`.
+    this.caretFollowsUserEdit = true;
     if (this.mode != 'chips') {
       const input = ev.target as HTMLInputElement;
       let _value;
@@ -517,15 +605,22 @@ export class TkInput implements ComponentInterface {
         } else {
           if (this.maskOptions.letterOnly) {
             // If letterOnly option is enabled, filter out non-letters
-            _value = _value.replace(/[^a-zA-Z]/g, '');
-            input.value = _value;
+            const selection = this.getSelection(input);
+            const filtered = _value.replace(/[^a-zA-Z]/g, '');
+            if (filtered !== input.value) {
+              // Rewriting the field parks the caret at the end, so put it back where the user is
+              // typing, moved left by however many characters the filter dropped before it. Done
+              // here rather than after the Cleave re-sync, which captures the caret this leaves.
+              const lettersBefore = (offset: number) => _value.slice(0, offset).replace(/[^a-zA-Z]/g, '').length;
+              const caret = selection ? lettersBefore(selection[1]) : null;
+              input.value = filtered;
+              this.restoreCaret(input, caret);
+            }
+            _value = filtered;
           }
 
           if (this.cleaveInstance) {
-            // Re-apply the current raw value to force Cleave to re-sync its internal state before reading formatted output.
-            const rawValue = this.cleaveInstance.getRawValue();
-            this.cleaveInstance?.setRawValue(rawValue);
-            _value = this.cleaveInstance?.getFormattedValue();
+            _value = this.resyncCleaveValue(input, this.cleaveInstance);
           }
         }
       }
@@ -715,6 +810,8 @@ export class TkInput implements ComponentInterface {
 
   private handleInputFocus = () => {
     this.hasFocus = true;
+    // Focus arriving from outside ends the edit the caret was being kept for.
+    this.caretFollowsUserEdit = false;
 
     this.tkFocus.emit();
   };
