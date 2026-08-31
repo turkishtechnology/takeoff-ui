@@ -39,10 +39,10 @@
   },
   "sideEffects": false,
   "devDependencies": {
-    "@angular/common": "^21.2.21",
-    "@angular/compiler-cli": "^21.2.21",
-    "@angular/core": "^21.2.21",
-    "@angular/forms": "^21.2.21",
+    "@angular/common": "^21.2.22",
+    "@angular/compiler-cli": "^21.2.22",
+    "@angular/core": "^21.2.22",
+    "@angular/forms": "^21.2.22",
     "ng-packagr": "^21.2.5",
     "rxjs": "^7.8.2",
     "typescript": "~5.9.3"

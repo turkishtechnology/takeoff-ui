@@ -31,7 +31,7 @@
     "@takeoff-ui/core": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.5.40"
+    "vue": "^3.5.42"
   },
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf"
 }
