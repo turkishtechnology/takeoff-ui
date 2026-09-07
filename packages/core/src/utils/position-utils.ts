@@ -9,6 +9,16 @@ export interface FloatingElementOptions {
   size?: any;
 }
 
+function getShadowHost(element: HTMLElement): HTMLElement | null {
+  const rootNode = element.getRootNode();
+  return rootNode instanceof ShadowRoot ? (rootNode.host as HTMLElement) : null;
+}
+
+function setFloatingHidden(floatingElement: HTMLElement, hidden: boolean) {
+  floatingElement.classList.toggle('floating-hidden', hidden);
+  getShadowHost(floatingElement)?.classList.toggle('floating-hidden', hidden);
+}
+
 function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement?: HTMLElement, options?: FloatingElementOptions) {
   const { placement, offset: off = 8, size: sizeOptions } = options || {};
 
@@ -68,9 +78,9 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
 
     if (middlewareData.hide) {
       if (middlewareData.hide.referenceHidden) {
-        floatingElement.classList.add('floating-hidden');
+        setFloatingHidden(floatingElement, true);
       } else {
-        floatingElement.classList.remove('floating-hidden');
+        setFloatingHidden(floatingElement, false);
       }
     }
 
@@ -85,7 +95,7 @@ export function floatingElementAutoUpdate(
   options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
-  return autoUpdate(
+  const cleanup = autoUpdate(
     triggerElement,
     floatingElement,
     () => {
@@ -93,4 +103,9 @@ export function floatingElementAutoUpdate(
     },
     { animationFrame: true },
   );
+
+  return () => {
+    cleanup();
+    setFloatingHidden(floatingElement, false);
+  };
 }
