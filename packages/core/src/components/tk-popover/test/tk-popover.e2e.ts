@@ -48,4 +48,26 @@ describe('tk-popover', () => {
 
     expect(isInTopLayer).toBe(true);
   });
+
+  it('clears the host hidden state when a hidden panel closes', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent(
+      '<div style="height: 1200px; padding-top: 900px;"><tk-popover><button slot="trigger">Open</button><div slot="content"><tk-checkbox label="Checkbox"></tk-checkbox></div></tk-popover></div>',
+    );
+
+    const trigger = await page.find('tk-popover [slot="trigger"]');
+    await trigger.click();
+    await page.waitForChanges();
+
+    await page.evaluate(() => window.scrollTo(0, 1000));
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    expect(await page.evaluate(() => document.querySelector('tk-popover')?.classList.contains('floating-hidden'))).toBe(true);
+
+    await page.evaluate(() => document.querySelector('tk-popover')?.close());
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => document.querySelector('tk-popover')?.classList.contains('floating-hidden'))).toBe(false);
+  });
 });
