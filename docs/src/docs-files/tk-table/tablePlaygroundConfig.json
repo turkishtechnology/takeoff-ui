@@ -106,6 +106,13 @@
       "label": "Multi Sort",
       "type": "checkbox",
       "defaultValue": false
+    },
+    {
+      "key": "preserveSelectionOnPagination",
+      "label": "Preserve Selection On Pagination",
+      "type": "checkbox",
+      "defaultValue": false,
+      "tooltip": "Keeps selected rows when changing pagination pages. The header checkbox applies only to the current page."
     }
   ]
 }

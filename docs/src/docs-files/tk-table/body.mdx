@@ -4,6 +4,7 @@ import Basic from './Examples/Basic';
 import Striped from './Examples/Striped';
 import HeaderType from './Examples/HeaderType';
 import Selection from './Examples/Selection';
+import PreserveSelection from './Examples/PreserveSelection';
 import FilterAndSort from './Examples/FilterAndSort';
 import Pagination from './Examples/Pagination';
 import Localization from './Examples/Localization';
@@ -58,6 +59,14 @@ This feature allows users to select rows in the table. The selected rows are
 visually highlighted and can be used for various actions.
 
 <Selection />
+
+## Preserve Selection on Pagination
+
+Set `preserveSelectionOnPagination` to `true` to keep checkbox selections when
+moving between pagination pages or replacing server-side page data. The header
+checkbox remains scoped to the current page.
+
+<PreserveSelection />
 
 ## Filter and Sorting
 
