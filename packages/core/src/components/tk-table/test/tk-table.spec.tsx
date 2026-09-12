@@ -1,4 +1,5 @@
 jest.mock('lodash-es', () => ({
+  cloneDeep: value => JSON.parse(JSON.stringify(value)),
   isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right),
   some: (items: unknown[], predicate: (item: unknown) => boolean) => (items || []).some(predicate),
 }));
@@ -807,6 +808,90 @@ describe('tk-table pagination', () => {
     expect(instance.currentPage).toBe(2);
     expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
     expect(page.root.shadowRoot.querySelector('tbody tr')?.classList.contains('selected')).toBe(false);
+  });
+
+  it('clears selection when a server-side sort resets the page to 1', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+    const instance = getInstance(page);
+    const pagination = page.root.shadowRoot.querySelector('tk-pagination');
+    const selectionSpy = listen(page, 'tk-selection-change');
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+      { id: 4, name: 'Dave', status: 'passive', amount: 40 },
+    ];
+    await page.waitForChanges();
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+
+    instance.handleSingleSort({ icon: 'swap_vert' }, baseColumns()[2]);
+    await page.waitForChanges();
+    // tk-pagination re-emits tk-page-change when the table resets currentPage to 1
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 1 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    expect(instance.currentPage).toBe(1);
+    expect(page.root.selection).toEqual([]);
+    expect(selectionSpy).toHaveBeenLastCalledWith([]);
+  });
+
+  it('keeps preserving selection on page changes after a server-side sort request', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+    const instance = getInstance(page);
+
+    instance.handleSingleSort({ icon: 'swap_vert' }, baseColumns()[2]);
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 1, name: 'Alice', status: 'active', amount: 30 },
+      { id: 4, name: 'Dave', status: 'passive', amount: 40 },
+    ];
+    await page.waitForChanges();
+
+    expect(page.root.selection).toEqual([{ id: 2, name: 'Bob', status: 'passive', amount: 10 }]);
+  });
+
+  it('resets a stale header checkbox when the data is replaced', async () => {
+    const page = await createPage({ selectionMode: 'checkbox' });
+    const headCheckbox = page.root.shadowRoot.querySelector('thead tk-checkbox') as any;
+    headCheckbox.value = true;
+    headCheckbox.indeterminate = true;
+
+    page.root.data = [{ id: 9, name: 'Zed', status: 'active', amount: 5 }];
+    await page.waitForChanges();
+
+    expect(headCheckbox.value).toBe(false);
+    expect(headCheckbox.indeterminate).toBe(false);
   });
 
   it('clears selection when server data changes without a pagination request', async () => {

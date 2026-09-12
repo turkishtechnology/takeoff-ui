@@ -2,7 +2,7 @@ import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, E
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
-import { isEqual, some } from 'lodash-es';
+import { cloneDeep, isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
@@ -43,6 +43,7 @@ export class TkTable implements ComponentInterface {
   private isSelectionUpdating: boolean = false;
   private shouldSyncSelectAllState: boolean = false;
   private preserveSelectionForNextServerDataChange: boolean = false;
+  private lastRequestQuery: Pick<ITableRequest, 'filters' | 'sortField' | 'sortOrder' | 'sorts'>;
   private cleanup;
   private refTopScrollbar: HTMLElement;
   private refTopScrollbarContent: HTMLElement;
@@ -175,10 +176,10 @@ export class TkTable implements ComponentInterface {
 
       if (this.preserveSelectionForNextServerDataChange) {
         this.preserveSelectionForNextServerDataChange = false;
-        this.requestSelectAllStateSync();
       } else {
         this.clearSelection();
       }
+      this.requestSelectAllStateSync();
       this.expandedRows = [];
       // Invalidate cached custom cell elements on data change
       this.customCellCache.clear();
@@ -374,6 +375,7 @@ export class TkTable implements ComponentInterface {
     this.isControlledGrouping = this.groupBy !== undefined;
 
     this.internalRowsPerPage = this.rowsPerPage;
+    this.rememberRequestQuery();
 
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
@@ -511,6 +513,7 @@ export class TkTable implements ComponentInterface {
       requestData.data = this.data;
     }
 
+    this.rememberRequestQuery();
     this.tkRequest.emit(requestData);
   }
 
@@ -891,6 +894,7 @@ export class TkTable implements ComponentInterface {
         requestData.data = _data;
       }
 
+      this.rememberRequestQuery();
       this.tkRequest.emit(requestData);
     }
 
@@ -981,11 +985,16 @@ export class TkTable implements ComponentInterface {
     if (this.selection.length < selectableRows.length) return false;
 
     const rowsForDuplicateKeyCheck = this.paginationMethod === 'client' ? this.data : selectableRows;
+    const seenDataKeys = new Set();
     const hasDuplicateDataKeys =
       !!this.dataKey &&
-      rowsForDuplicateKeyCheck.some((row, rowIndex) =>
-        rowsForDuplicateKeyCheck.some((otherRow, otherRowIndex) => rowIndex !== otherRowIndex && row?.[this.dataKey] != null && row?.[this.dataKey] === otherRow?.[this.dataKey]),
-      );
+      rowsForDuplicateKeyCheck.some(row => {
+        const key = row?.[this.dataKey];
+        if (key == null) return false;
+        if (seenDataKeys.has(key)) return true;
+        seenDataKeys.add(key);
+        return false;
+      });
     const matchedSelectionIndexes = new Set<number>();
     return selectableRows.every(row => {
       const matchingSelectionIndex = this.selection.findIndex(
@@ -1142,7 +1151,8 @@ export class TkTable implements ComponentInterface {
 
   private handlePageChange(e) {
     if (this.preserveSelectionOnPagination && this.paginationMethod === 'server') {
-      this.preserveSelectionForNextServerDataChange = true;
+      // Filter/sort changes also reach here by resetting currentPage, so only keep the selection when the page alone changed
+      this.preserveSelectionForNextServerDataChange = isEqual(this.lastRequestQuery, this.getRequestQuery());
     }
     const tmpData = this.getTableViewData();
     this.generateRenderData(tmpData, Number(e.detail.page));
@@ -1150,6 +1160,15 @@ export class TkTable implements ComponentInterface {
     if (!this.preserveSelectionOnPagination) {
       this.handleSelectAll(false);
     }
+  }
+
+  private getRequestQuery() {
+    return { filters: this.filters, sortField: this.sortField, sortOrder: this.sortOrder, sorts: this.sorts };
+  }
+
+  private rememberRequestQuery() {
+    // Filters are mutated in place, so a deep copy is needed to detect later changes
+    this.lastRequestQuery = cloneDeep(this.getRequestQuery());
   }
 
   private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
