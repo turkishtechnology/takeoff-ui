@@ -187,6 +187,13 @@
       color: var(--text-darkest, #222530);
       background: var(--background-lightest, #f9fafc);
     }
+
+    /* Stands in for the toggle icon while a branch loads, so it has to sit in the row the same way. */
+    .toggle-spinner {
+      display: flex;
+      align-items: center;
+      flex: none;
+    }
   }
 
   &.text {
