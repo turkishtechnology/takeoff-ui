@@ -1746,7 +1746,8 @@ export class TkTable implements ComponentInterface {
 
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
-    const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
+    // `instanceof HTMLElement` misses elements from another realm (an iframe, or the test DOM).
+    const clickableElement = path.some(element => ['tk-popover', 'tk-dropdown'].includes((element as HTMLElement)?.tagName?.toLowerCase()));
 
     if (clickableElement) {
       e.stopPropagation();
