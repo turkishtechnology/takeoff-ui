@@ -1,4 +1,5 @@
 jest.mock('lodash-es', () => ({
+  cloneDeep: value => JSON.parse(JSON.stringify(value)),
   isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right),
   some: (items: unknown[], predicate: (item: unknown) => boolean) => (items || []).some(predicate),
 }));
@@ -551,6 +552,66 @@ describe('tk-table selection', () => {
     expect(page.root.selection.map((row: any) => row.id)).not.toContain(1);
   });
 
+  it('preserves a disabled selection when toggling the header in preserve mode', async () => {
+    const page = await createPage({
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+      selection: [{ id: 1, name: 'Alice', status: 'active', amount: 30 }],
+      selectionRowDisabled: (row: any) => row.id === 1,
+    });
+    const instance = getInstance(page);
+
+    instance.handleSelectAll(true);
+    expect(page.root.selection.map((row: any) => row.id)).toEqual([1, 2, 3, 4, 5]);
+
+    instance.handleSelectAll(false);
+    expect(page.root.selection.map((row: any) => row.id)).toEqual([1]);
+  });
+
+  it('does not treat rows with an undefined data key as the same row', async () => {
+    const page = await createPage({ data: [{ name: 'Alice' }, { name: 'Bob' }], dataKey: undefined, selectionMode: 'checkbox' });
+    const instance = getInstance(page);
+
+    instance.handleCheckboxSelectChange(true, instance.renderData[0]);
+
+    expect(instance.isRowSelected(instance.renderData[0])).toBe(true);
+    expect(instance.isRowSelected(instance.renderData[1])).toBe(false);
+  });
+
+  it('does not mark the header fully selected when duplicate keys have one selection', async () => {
+    const page = await createPage({
+      data: [
+        { id: 1, name: 'Alice' },
+        { id: 1, name: 'Bob' },
+      ],
+      selection: [{ id: 1, name: 'Alice' }],
+      selectionMode: 'checkbox',
+    });
+
+    expect(getInstance(page).isAllRowsSelected()).toBe(false);
+  });
+
+  it('does not use an off-page duplicate key as a current-page selection', async () => {
+    const page = await createPage({
+      data: [
+        { id: 1, name: 'Alice' },
+        { id: 1, name: 'Bob' },
+      ],
+      dataKey: 'id',
+      paginationMethod: 'client',
+      rowsPerPage: 1,
+      preserveSelectionOnPagination: true,
+      selection: [{ id: 1, name: 'Alice' }],
+      selectionMode: 'checkbox',
+    });
+    const pagination = page.root.shadowRoot.querySelector('tk-pagination');
+
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+
+    expect(getInstance(page).isAllRowsSelected()).toBe(false);
+  });
+
   it('adds and removes a single row through the row checkbox', async () => {
     const page = await createPage({ selectionMode: 'checkbox' });
     const instance = getInstance(page);
@@ -561,7 +622,7 @@ describe('tk-table selection', () => {
 
     expect(page.root.selection).toHaveLength(1);
     expect(page.root.selection[0].id).toBe(1);
-    expect(instance.refSelectAll.indeterminate).toBe(true);
+    expect(instance.hasPartiallySelectedRows()).toBe(true);
     expect(instance.isAllRowsSelected()).toBe(false);
 
     page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: false }));
@@ -645,6 +706,249 @@ describe('tk-table pagination', () => {
         filters: [],
       }),
     );
+  });
+
+  it('preserves checkbox selection when changing client pagination pages', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 2, selectionMode: 'checkbox', preserveSelectionOnPagination: true });
+    const instance = getInstance(page);
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+
+    expect(instance.currentPage).toBe(2);
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+    expect(instance.hasPartiallySelectedRows()).toBe(false);
+  });
+
+  it('resets the mutable header checkbox state when changing pages', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 2, selectionMode: 'checkbox' });
+    const instance = getInstance(page);
+    instance.refSelectAll = { value: true, indeterminate: true };
+
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+
+    expect(instance.refSelectAll.value).toBe(false);
+    expect(instance.refSelectAll.indeterminate).toBe(false);
+  });
+
+  it('clears only the current page selections when deselecting through the header checkbox', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 2, selectionMode: 'checkbox', preserveSelectionOnPagination: true });
+    const instance = getInstance(page);
+    const pagination = page.root.shadowRoot.querySelector('tk-pagination');
+    const headCheckbox = page.root.shadowRoot.querySelector('thead tk-checkbox');
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    expect(instance.hasPartiallySelectedRows()).toBe(false);
+
+    headCheckbox.dispatchEvent(new CustomEvent('tk-change', { detail: false }));
+    await page.waitForChanges();
+
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+    expect(instance.isAllRowsSelected()).toBe(false);
+    expect(instance.hasPartiallySelectedRows()).toBe(false);
+  });
+
+  it('keeps the current page header checked when another page is also selected', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 2, selectionMode: 'checkbox', preserveSelectionOnPagination: true });
+    const instance = getInstance(page);
+    const pagination = page.root.shadowRoot.querySelector('tk-pagination');
+
+    instance.handleCheckboxSelectChange(true, instance.renderData[0]);
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    instance.handleSelectAll(true);
+    await page.waitForChanges();
+
+    expect(page.root.selection).toHaveLength(3);
+    expect(instance.isAllRowsSelected()).toBe(true);
+    expect(instance.hasPartiallySelectedRows()).toBe(false);
+  });
+
+  it('removes only the matching keyless row through its checkbox', async () => {
+    const page = await createPage({ data: [{ name: 'Alice' }, { name: 'Bob' }], dataKey: undefined, selectionMode: 'checkbox' });
+    const instance = getInstance(page);
+
+    instance.handleCheckboxSelectChange(true, instance.renderData[0]);
+    instance.handleCheckboxSelectChange(true, instance.renderData[1]);
+    instance.handleCheckboxSelectChange(false, instance.renderData[0]);
+
+    expect(page.root.selection).toEqual([{ name: 'Bob' }]);
+  });
+
+  it('preserves checkbox selection when server pagination replaces page data', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+    const instance = getInstance(page);
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+
+    page.root.data = [
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+      { id: 4, name: 'Dave', status: 'passive', amount: 40 },
+    ];
+    await page.waitForChanges();
+
+    expect(instance.currentPage).toBe(2);
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+    expect(page.root.shadowRoot.querySelector('tbody tr')?.classList.contains('selected')).toBe(false);
+  });
+
+  it('clears selection when a server-side sort resets the page to 1', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+    const instance = getInstance(page);
+    const pagination = page.root.shadowRoot.querySelector('tk-pagination');
+    const selectionSpy = listen(page, 'tk-selection-change');
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+      { id: 4, name: 'Dave', status: 'passive', amount: 40 },
+    ];
+    await page.waitForChanges();
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+
+    instance.handleSingleSort({ icon: 'swap_vert' }, baseColumns()[2]);
+    await page.waitForChanges();
+    // tk-pagination re-emits tk-page-change when the table resets currentPage to 1
+    pagination.dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 1 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    expect(instance.currentPage).toBe(1);
+    expect(page.root.selection).toEqual([]);
+    expect(selectionSpy).toHaveBeenLastCalledWith([]);
+  });
+
+  it('keeps preserving selection on page changes after a server-side sort request', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+    const instance = getInstance(page);
+
+    instance.handleSingleSort({ icon: 'swap_vert' }, baseColumns()[2]);
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-page-change', { detail: { page: 2 } }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 1, name: 'Alice', status: 'active', amount: 30 },
+      { id: 4, name: 'Dave', status: 'passive', amount: 40 },
+    ];
+    await page.waitForChanges();
+
+    expect(page.root.selection).toEqual([{ id: 2, name: 'Bob', status: 'passive', amount: 10 }]);
+  });
+
+  it('resets a stale header checkbox when the data is replaced', async () => {
+    const page = await createPage({ selectionMode: 'checkbox' });
+    const headCheckbox = page.root.shadowRoot.querySelector('thead tk-checkbox') as any;
+    headCheckbox.value = true;
+    headCheckbox.indeterminate = true;
+
+    page.root.data = [{ id: 9, name: 'Zed', status: 'active', amount: 5 }];
+    await page.waitForChanges();
+
+    expect(headCheckbox.value).toBe(false);
+    expect(headCheckbox.indeterminate).toBe(false);
+  });
+
+  it('clears selection when server data changes without a pagination request', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+      selection: [{ id: 1, name: 'Alice', status: 'active', amount: 30 }],
+    });
+    const selectionSpy = listen(page, 'tk-selection-change');
+
+    page.root.data = [{ id: 9, name: 'Zed', status: 'active', amount: 5 }];
+    await page.waitForChanges();
+
+    expect(page.root.selection).toEqual([]);
+    expect(selectionSpy).toHaveBeenLastCalledWith([]);
+  });
+
+  it('clears selection and emits when client data is replaced wholesale', async () => {
+    const page = await createPage({
+      paginationMethod: 'client',
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+      selection: [{ id: 1, name: 'Alice', status: 'active', amount: 30 }],
+    });
+    const selectionSpy = listen(page, 'tk-selection-change');
+
+    page.root.data = [{ id: 9, name: 'Zed', status: 'active', amount: 5 }];
+    await page.waitForChanges();
+
+    expect(page.root.selection).toEqual([]);
+    expect(selectionSpy).toHaveBeenLastCalledWith([]);
+  });
+
+  it('preserves checkbox selection when server pagination changes the page size', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-rows-per-page-change', { detail: 3 }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 1, name: 'Alice', status: 'active', amount: 30 },
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    expect(getInstance(page).internalRowsPerPage).toBe(3);
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
   });
 
   it('updates the page size and clears the selection on tk-rows-per-page-change', async () => {
