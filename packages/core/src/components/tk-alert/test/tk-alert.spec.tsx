@@ -88,7 +88,8 @@ describe('event handling', () => {
     (button.shadowRoot.querySelector('button') as HTMLButtonElement).click();
 
     await page.waitForChanges();
-    expect(page.root).toBeNull;
+    // `page.root` keeps its reference after the element detaches, so query the document.
+    expect(page.body.querySelector('tk-alert')).toBeNull();
   });
   it('should call handleCloseButtonClick when close button is clicked', async () => {
     const page = await newSpecPage({
@@ -101,7 +102,7 @@ describe('event handling', () => {
 
     const instance = page.rootInstance;
 
-    expect(instance).toBeTruthy;
+    expect(instance).toBeTruthy();
 
     const spy = jest.spyOn(instance as any, 'handleCloseButtonClick');
     const button = page.root.shadowRoot.querySelector('tk-button');
@@ -113,7 +114,7 @@ describe('event handling', () => {
     await page.waitForChanges();
 
     expect(spy).toHaveBeenCalled();
-    expect(page.root).toBeNull;
+    expect(page.body.querySelector('tk-alert')).toBeNull();
   });
 });
 

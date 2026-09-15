@@ -22,14 +22,15 @@ describe('tk-breadcrumb', () => {
 describe('state handling', () => {
   it('should render slotted items', async () => {
     const page = await newSpecPage({
-      components: [TkBreadcrumb],
-      html: `<tk-breadcrumb ><slot/>
+      components: [TkBreadcrumb, TkBreadcrumbItem],
+      // The component only renders its slot when it finds a slotted `tk-breadcrumb-item`.
+      html: `<tk-breadcrumb><tk-breadcrumb-item></tk-breadcrumb-item>
         </tk-breadcrumb>`,
     });
 
     const slot = page.root.shadowRoot.querySelector('slot');
 
-    expect(slot).not.toBeNull;
+    expect(slot).not.toBeNull();
   });
   it('should render items when no slots provided', async () => {
     const page = await newSpecPage({
@@ -44,7 +45,7 @@ describe('state handling', () => {
 
     const slot = page.root.shadowRoot.querySelector('slot');
 
-    expect(slot).toBeNull;
+    expect(slot).toBeNull();
 
     const label = page.root.shadowRoot.querySelector('.tk-breadcrumb-item-label');
 
