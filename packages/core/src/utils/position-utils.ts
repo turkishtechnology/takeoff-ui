@@ -9,24 +9,7 @@ export interface FloatingElementOptions {
   size?: any;
 }
 
-function getShadowHost(element: HTMLElement): HTMLElement | null {
-  const rootNode = element.getRootNode();
-  return rootNode instanceof ShadowRoot ? (rootNode.host as HTMLElement) : null;
-}
-
-function setFloatingHidden(floatingElement: HTMLElement, hidden: boolean, shadowHost?: HTMLElement | null) {
-  floatingElement.classList.toggle('floating-hidden', hidden);
-  const host = shadowHost === undefined ? getShadowHost(floatingElement) : shadowHost;
-  host?.classList.toggle('floating-hidden', hidden);
-}
-
-function positionFloatingElement(
-  triggerElement: HTMLElement,
-  floatingElement: HTMLElement,
-  arrowElement?: HTMLElement,
-  options?: FloatingElementOptions,
-  shadowHost?: HTMLElement | null,
-) {
+function positionFloatingElement(triggerElement: HTMLElement, floatingElement: HTMLElement, arrowElement?: HTMLElement, options?: FloatingElementOptions) {
   const { placement, offset: off = 8, size: sizeOptions } = options || {};
 
   if (arrowElement) {
@@ -84,11 +67,7 @@ function positionFloatingElement(
     }
 
     if (middlewareData.hide) {
-      if (middlewareData.hide.referenceHidden) {
-        setFloatingHidden(floatingElement, true, shadowHost);
-      } else {
-        setFloatingHidden(floatingElement, false, shadowHost);
-      }
+      floatingElement.classList.toggle('floating-hidden', middlewareData.hide.referenceHidden);
     }
 
     return placement;
@@ -102,19 +81,18 @@ export function floatingElementAutoUpdate(
   options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
-  const shadowHost = getShadowHost(floatingElement);
   const cleanup = autoUpdate(
     triggerElement,
     floatingElement,
     () => {
-      positionFloatingElement(triggerElement, floatingElement, arrowElement, options, shadowHost).then(position => handlePlacement?.(position));
+      positionFloatingElement(triggerElement, floatingElement, arrowElement, options).then(position => handlePlacement?.(position));
     },
     { animationFrame: true },
   );
 
+  // Panels are reused across open/close cycles, so a stale hidden state would keep them invisible.
   return () => {
     cleanup();
     floatingElement.classList.remove('floating-hidden');
-    shadowHost?.classList.remove('floating-hidden');
   };
 }
