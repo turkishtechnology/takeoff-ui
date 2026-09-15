@@ -1150,15 +1150,19 @@ export class TkTable implements ComponentInterface {
   }
 
   private handlePageChange(e) {
-    if (this.preserveSelectionOnPagination && this.paginationMethod === 'server') {
-      // Filter/sort changes also reach here by resetting currentPage, so only keep the selection when the page alone changed
-      this.preserveSelectionForNextServerDataChange = isEqual(this.lastRequestQuery, this.getRequestQuery());
-    }
+    this.preserveSelectionForPaginationRequest();
     const tmpData = this.getTableViewData();
     this.generateRenderData(tmpData, Number(e.detail.page));
     this.requestSelectAllStateSync();
     if (!this.preserveSelectionOnPagination) {
       this.handleSelectAll(false);
+    }
+  }
+
+  private preserveSelectionForPaginationRequest() {
+    if (this.preserveSelectionOnPagination && this.paginationMethod === 'server') {
+      // Filter/sort changes also reach pagination handlers by resetting currentPage, so only keep the selection when the query is unchanged
+      this.preserveSelectionForNextServerDataChange = isEqual(this.lastRequestQuery, this.getRequestQuery());
     }
   }
 
@@ -2744,6 +2748,7 @@ export class TkTable implements ComponentInterface {
           data-testid={getDataTestId(this.dataTestid, 'pagination')}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
+            this.preserveSelectionForPaginationRequest();
             this.internalRowsPerPage = e.detail;
             const tmpData = this.getTableViewData();
             this.generateRenderData(tmpData, 1);

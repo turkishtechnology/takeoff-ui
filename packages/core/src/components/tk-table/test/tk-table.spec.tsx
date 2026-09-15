@@ -926,6 +926,31 @@ describe('tk-table pagination', () => {
     expect(selectionSpy).toHaveBeenLastCalledWith([]);
   });
 
+  it('preserves checkbox selection when server pagination changes the page size', async () => {
+    const page = await createPage({
+      paginationMethod: 'server',
+      rowsPerPage: 2,
+      totalItems: 5,
+      selectionMode: 'checkbox',
+      preserveSelectionOnPagination: true,
+    });
+
+    page.root.shadowRoot.querySelector('tbody tk-checkbox').dispatchEvent(new CustomEvent('tk-change', { detail: true }));
+    await page.waitForChanges();
+
+    page.root.shadowRoot.querySelector('tk-pagination').dispatchEvent(new CustomEvent('tk-rows-per-page-change', { detail: 3 }));
+    await page.waitForChanges();
+    page.root.data = [
+      { id: 1, name: 'Alice', status: 'active', amount: 30 },
+      { id: 2, name: 'Bob', status: 'passive', amount: 10 },
+      { id: 3, name: 'Carol', status: 'active', amount: 20 },
+    ];
+    await page.waitForChanges();
+
+    expect(getInstance(page).internalRowsPerPage).toBe(3);
+    expect(page.root.selection).toEqual([{ id: 1, name: 'Alice', status: 'active', amount: 30 }]);
+  });
+
   it('updates the page size and clears the selection on tk-rows-per-page-change', async () => {
     const page = await createPage({ paginationMethod: 'client', rowsPerPage: 2, selectionMode: 'checkbox' });
     const instance = getInstance(page);
