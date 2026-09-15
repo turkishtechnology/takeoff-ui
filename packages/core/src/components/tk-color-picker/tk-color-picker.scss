@@ -1,3 +1,6 @@
+// Shadow roots never receive the global bundle, so the rule has to be scoped here too.
+@use '../../global/sass/components/floating-hidden';
+
 :host {
   display: block;
 }

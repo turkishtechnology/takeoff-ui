@@ -67,11 +67,7 @@ function positionFloatingElement(triggerElement: HTMLElement, floatingElement: H
     }
 
     if (middlewareData.hide) {
-      if (middlewareData.hide.referenceHidden) {
-        floatingElement.classList.add('floating-hidden');
-      } else {
-        floatingElement.classList.remove('floating-hidden');
-      }
+      floatingElement.classList.toggle('floating-hidden', middlewareData.hide.referenceHidden);
     }
 
     return placement;
@@ -85,7 +81,7 @@ export function floatingElementAutoUpdate(
   options?: FloatingElementOptions,
   handlePlacement?: (placement: string) => void,
 ) {
-  return autoUpdate(
+  const cleanup = autoUpdate(
     triggerElement,
     floatingElement,
     () => {
@@ -93,4 +89,10 @@ export function floatingElementAutoUpdate(
     },
     { animationFrame: true },
   );
+
+  // Panels are reused across open/close cycles, so a stale hidden state would keep them invisible.
+  return () => {
+    cleanup();
+    floatingElement.classList.remove('floating-hidden');
+  };
 }

@@ -1,4 +1,6 @@
 @use '../../global/sass/mixins' as *;
+// Shadow roots never receive the global bundle, so the rule has to be scoped here too.
+@use '../../global/sass/components/floating-hidden';
 
 @mixin datepicker-small-typography {
   font-family: var(--desktop-body-xs-font);
