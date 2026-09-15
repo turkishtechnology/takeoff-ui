@@ -2,7 +2,7 @@ import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, E
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
-import { isEqual, some } from 'lodash-es';
+import { cloneDeep, isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJs from 'exceljs';
@@ -41,6 +41,9 @@ export class TkTable implements ComponentInterface {
   private startWidth: number = 0;
   private customCellCache: Map<string, HTMLElement> = new Map();
   private isSelectionUpdating: boolean = false;
+  private shouldSyncSelectAllState: boolean = false;
+  private preserveSelectionForNextServerDataChange: boolean = false;
+  private lastRequestQuery: Pick<ITableRequest, 'filters' | 'sortField' | 'sortOrder' | 'sorts'>;
   private cleanup;
   private refTopScrollbar: HTMLElement;
   private refTopScrollbarContent: HTMLElement;
@@ -123,6 +126,12 @@ export class TkTable implements ComponentInterface {
   @Prop({ mutable: true }) selection: any[] | any = [];
 
   /**
+   * Preserves selected rows when the pagination page or server-side page data changes.
+   * @defaultValue false
+   */
+  @Prop() preserveSelectionOnPagination: boolean = false;
+
+  /**
    * A function that returns true if the row should be disabled
    */
   @Prop() selectionRowDisabled: Function;
@@ -165,8 +174,12 @@ export class TkTable implements ComponentInterface {
         this.applyGrouping(groupField);
       }
 
-      if (this.refSelectAll) this.refSelectAll.value = false;
-      this.handleSelectAll(false);
+      if (this.preserveSelectionForNextServerDataChange) {
+        this.preserveSelectionForNextServerDataChange = false;
+      } else {
+        this.clearSelection();
+      }
+      this.requestSelectAllStateSync();
       this.expandedRows = [];
       // Invalidate cached custom cell elements on data change
       this.customCellCache.clear();
@@ -362,6 +375,7 @@ export class TkTable implements ComponentInterface {
     this.isControlledGrouping = this.groupBy !== undefined;
 
     this.internalRowsPerPage = this.rowsPerPage;
+    this.rememberRequestQuery();
 
     if (this.data?.length > 0) {
       this.generateRenderData(this.data, this.currentPage, true);
@@ -402,6 +416,10 @@ export class TkTable implements ComponentInterface {
     // Reset transient selection flag after a render cycle
     if (this.isSelectionUpdating) {
       this.isSelectionUpdating = false;
+    }
+    if (this.shouldSyncSelectAllState) {
+      this.shouldSyncSelectAllState = false;
+      this.syncSelectAllState();
     }
     // Props that decide whether a listener is needed (sticky columns, container height, scrollbar position)
     // can change between renders; the setup calls are no-ops while the bound element stays the same.
@@ -495,6 +513,7 @@ export class TkTable implements ComponentInterface {
       requestData.data = this.data;
     }
 
+    this.rememberRequestQuery();
     this.tkRequest.emit(requestData);
   }
 
@@ -875,6 +894,7 @@ export class TkTable implements ComponentInterface {
         requestData.data = _data;
       }
 
+      this.rememberRequestQuery();
       this.tkRequest.emit(requestData);
     }
 
@@ -963,7 +983,37 @@ export class TkTable implements ComponentInterface {
     const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
     if (selectableRows.length === 0) return false;
     if (this.selection.length < selectableRows.length) return false;
-    return selectableRows.every(row => this.selection.some(sel => sel?.[this.dataKey] === row?.[this.dataKey]));
+
+    const rowsForDuplicateKeyCheck = this.paginationMethod === 'client' ? this.data : selectableRows;
+    const seenDataKeys = new Set();
+    const hasDuplicateDataKeys =
+      !!this.dataKey &&
+      rowsForDuplicateKeyCheck.some(row => {
+        const key = row?.[this.dataKey];
+        if (key == null) return false;
+        if (seenDataKeys.has(key)) return true;
+        seenDataKeys.add(key);
+        return false;
+      });
+    const matchedSelectionIndexes = new Set<number>();
+    return selectableRows.every(row => {
+      const matchingSelectionIndex = this.selection.findIndex(
+        (selectedRow: any, selectionIndex: number) =>
+          !matchedSelectionIndexes.has(selectionIndex) && (hasDuplicateDataKeys ? isEqual(selectedRow, row) : this.areRowsEqual(selectedRow, row)),
+      );
+
+      if (matchingSelectionIndex === -1) return false;
+      matchedSelectionIndexes.add(matchingSelectionIndex);
+      return true;
+    });
+  }
+
+  private hasPartiallySelectedRows(): boolean {
+    if (!Array.isArray(this.selection)) return false;
+    const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
+    const selectedRows = selectableRows.filter(row => this.isRowSelected(row));
+
+    return selectedRows.length > 0 && selectedRows.length < selectableRows.length;
   }
 
   private setDataTestidAttribute(el: Element, ...suffixes: Array<string | undefined>) {
@@ -1053,31 +1103,43 @@ export class TkTable implements ComponentInterface {
 
   private handleSelectAll(value: boolean) {
     this.isSelectionUpdating = true;
+    const currentSelection = Array.isArray(this.selection) ? this.selection : [];
+    const selectableRows = this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true));
+    const isCurrentPageSelectableRow = (selectedRow: any) => selectableRows.some(row => this.areRowsEqual(selectedRow, row));
+
     if (value) {
-      this.selection = [...this.renderData.filter(row => (this.selectionRowDisabled ? !this.selectionRowDisabled(row) : true))];
+      if (this.preserveSelectionOnPagination) {
+        this.selection = [...currentSelection.filter(selectedRow => !isCurrentPageSelectableRow(selectedRow)), ...selectableRows];
+      } else {
+        this.selection = [...selectableRows];
+      }
     } else {
-      this.selection = [];
+      this.selection = this.preserveSelectionOnPagination ? currentSelection.filter(selectedRow => !isCurrentPageSelectableRow(selectedRow)) : [];
     }
+    this.tkSelectionChange.emit(this.selection);
+  }
+
+  private clearSelection() {
+    this.isSelectionUpdating = true;
+    this.selection = [];
     this.tkSelectionChange.emit(this.selection);
   }
 
   private handleCheckboxSelectChange(isSelect: boolean, row) {
     this.isSelectionUpdating = true;
     let tmpSelection = Array.isArray(this.selection) ? [...this.selection] : [];
-    const hasSelect = some(tmpSelection, item => isEqual(item, row));
+    const hasSelect = this.isRowSelected(row);
 
     if (isSelect == false && hasSelect) {
       // seçili ise ve silinmek isteniyor ise
-      tmpSelection = tmpSelection.filter(item => item[this.dataKey] !== row[this.dataKey]);
+      tmpSelection = tmpSelection.filter(item => !this.areRowsEqual(item, row));
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
-      this.refSelectAll.indeterminate = true;
     } else if (isSelect == true && !hasSelect) {
       // seçili değilse ve eklenmek isteniyor ise
       tmpSelection.push(row);
       this.selection = [...tmpSelection];
       this.tkSelectionChange.emit(this.selection);
-      this.refSelectAll.indeterminate = true;
     }
   }
 
@@ -1088,11 +1150,29 @@ export class TkTable implements ComponentInterface {
   }
 
   private handlePageChange(e) {
+    this.preserveSelectionForPaginationRequest();
     const tmpData = this.getTableViewData();
     this.generateRenderData(tmpData, Number(e.detail.page));
-    // sayfa değişikliğinde seçilen değerler sıfırlanır
-    if (this.refSelectAll) this.refSelectAll.value = false;
-    this.handleSelectAll(false);
+    this.requestSelectAllStateSync();
+    if (!this.preserveSelectionOnPagination) {
+      this.handleSelectAll(false);
+    }
+  }
+
+  private preserveSelectionForPaginationRequest() {
+    if (this.preserveSelectionOnPagination && this.paginationMethod === 'server') {
+      // Filter/sort changes also reach pagination handlers by resetting currentPage, so only keep the selection when the query is unchanged
+      this.preserveSelectionForNextServerDataChange = isEqual(this.lastRequestQuery, this.getRequestQuery());
+    }
+  }
+
+  private getRequestQuery() {
+    return { filters: this.filters, sortField: this.sortField, sortOrder: this.sortOrder, sorts: this.sorts };
+  }
+
+  private rememberRequestQuery() {
+    // Filters are mutated in place, so a deep copy is needed to detect later changes
+    this.lastRequestQuery = cloneDeep(this.getRequestQuery());
   }
 
   private handleSortIconClick(refSortIcon: HTMLTkIconElement, col: ITableColumn) {
@@ -1962,6 +2042,27 @@ export class TkTable implements ComponentInterface {
     this.handleScroll({ target: tableHolder } as unknown as Event);
   }
 
+  private areRowsEqual(leftRow: any, rightRow: any): boolean {
+    const leftKey = this.dataKey ? leftRow?.[this.dataKey] : undefined;
+    const rightKey = this.dataKey ? rightRow?.[this.dataKey] : undefined;
+    if (leftKey != null && rightKey != null) return leftKey === rightKey;
+    return isEqual(leftRow, rightRow);
+  }
+
+  private requestSelectAllStateSync() {
+    this.shouldSyncSelectAllState = true;
+  }
+
+  private syncSelectAllState() {
+    if (!this.refSelectAll) return;
+    this.refSelectAll.value = this.isAllRowsSelected();
+    this.refSelectAll.indeterminate = this.hasPartiallySelectedRows();
+  }
+
+  private isRowSelected(row: any): boolean {
+    return Array.isArray(this.selection) && some(this.selection, selectedRow => this.areRowsEqual(selectedRow, row));
+  }
+
   private createGroupedRows() {
     const rows = [];
     let globalIndex = 0;
@@ -2071,7 +2172,7 @@ export class TkTable implements ComponentInterface {
         >
           <tk-checkbox
             id={this.el.id ? `${this.el.id}-checkbox-${index}` : undefined}
-            value={some(this.selection, itemValue => isEqual(itemValue, row))}
+            value={this.isRowSelected(row)}
             disabled={isRowDisabled}
             onTk-change={e => this.handleCheckboxSelectChange(e.detail, row)}
             onClick={e => e.stopPropagation()}
@@ -2090,7 +2191,7 @@ export class TkTable implements ComponentInterface {
             id={this.el.id ? `${this.el.id}-radio-${index}` : undefined}
             value={row}
             name={this.el.id ? `${this.el.id}-selection` : 'selection'}
-            checked={isEqual(this.selection, row)}
+            checked={this.areRowsEqual(this.selection, row)}
             disabled={isRowDisabled}
             onTk-change={() => this.handleRadioSelectChange(row)}
             onClick={e => e.stopPropagation()}
@@ -2100,8 +2201,7 @@ export class TkTable implements ComponentInterface {
       );
     }
 
-    const isSelected =
-      this.selectionMode === 'checkbox' ? some(this.selection, itemValue => isEqual(itemValue, row)) : this.selectionMode === 'radio' ? isEqual(this.selection, row) : false;
+    const isSelected = this.selectionMode === 'checkbox' ? this.isRowSelected(row) : this.selectionMode === 'radio' ? this.areRowsEqual(this.selection, row) : false;
 
     return (
       <Fragment>
@@ -2341,7 +2441,7 @@ export class TkTable implements ComponentInterface {
             value={this.isAllRowsSelected()}
             disabled={!(this.renderData.length > 0)}
             ref={el => (this.refSelectAll = el)}
-            indeterminate={Array.isArray(this.selection) && this.selection.length > 0 && !this.isAllRowsSelected()}
+            indeterminate={this.hasPartiallySelectedRows()}
             onTk-change={e => this.handleSelectAll(e.detail)}
             data-testid={getDataTestId(this.dataTestid, 'head-selection-checkbox')}
           ></tk-checkbox>
@@ -2648,11 +2748,12 @@ export class TkTable implements ComponentInterface {
           data-testid={getDataTestId(this.dataTestid, 'pagination')}
           onTk-page-change={e => this.handlePageChange(e)}
           onTk-rows-per-page-change={e => {
+            this.preserveSelectionForPaginationRequest();
             this.internalRowsPerPage = e.detail;
             const tmpData = this.getTableViewData();
             this.generateRenderData(tmpData, 1);
-            if (this.refSelectAll) this.refSelectAll.value = false;
-            if (this.selection?.length > 0) this.handleSelectAll(false);
+            this.requestSelectAllStateSync();
+            if (!this.preserveSelectionOnPagination && this.selection?.length > 0) this.handleSelectAll(false);
           }}
         ></tk-pagination>
       );

@@ -103,6 +103,13 @@ updates:
       # Node runtime is 20; don't jump @types/node to 26, stay on the current major.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # @docsearch/react is a direct dep of docs/ only to hold a version; the search UI
+      # users actually see comes from @docusaurus/theme-search-algolia, which pins its own
+      # copy (3.10.2 → 4.7.0). Bumping the direct dep installs a second copy that nothing
+      # renders - while docs/src/css/custom.css keeps theming the v4 copy through its
+      # --docsearch-* variables. Upgrade only alongside Docusaurus itself.
+      - dependency-name: "@docsearch/react"
+        update-types: ["version-update:semver-major"]
 
   # ── GitHub Actions used in .github/workflows ──────────────────────────────
   - package-ecosystem: "github-actions"
