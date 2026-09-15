@@ -36,6 +36,7 @@
     "dev:docs": "turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/tailwind && cd docs && pnpm run start",
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache",
+    "format:check": "git ls-files -z '*.ts' '*.tsx' '*.js' '*.jsx' '*.vue' '*.scss' '*.css' '*.json' '*.md' '*.mdx' '*.yml' '*.yaml' '*.html' | xargs -0 prettier --check",
     "lint": "eslint --fix",
     "clean": "pnpm -r exec rimraf dist node_modules .vercel .stencil loader www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/tailwind --access public --no-git-checks",
