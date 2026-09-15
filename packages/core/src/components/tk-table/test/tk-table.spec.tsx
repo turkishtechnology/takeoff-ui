@@ -191,7 +191,8 @@ const baseData = () => [
 const createPage = async (props: Record<string, unknown> = {}, children: any[] = []) => {
   const page = await newSpecPage({
     components: [TkTable],
-    template: () => h('tk-table', { columns: baseColumns(), data: baseData(), dataKey: 'id', ...props }, ...children),
+    // `h` has no rest-parameter overload, so children go in as an array rather than spread.
+    template: () => h('tk-table', { columns: baseColumns(), data: baseData(), dataKey: 'id', ...props }, children),
   });
   await page.waitForChanges();
   return page;

@@ -1746,7 +1746,8 @@ export class TkTable implements ComponentInterface {
 
   private handleRowClick = (e: MouseEvent, row: any) => {
     const path = e.composedPath();
-    const clickableElement = path.some(element => element instanceof HTMLElement && ['tk-popover', 'tk-dropdown'].includes(element.tagName.toLowerCase()));
+    // `instanceof HTMLElement` misses elements from another realm (an iframe, or the test DOM).
+    const clickableElement = path.some(element => ['tk-popover', 'tk-dropdown'].includes((element as HTMLElement)?.tagName?.toLowerCase()));
 
     if (clickableElement) {
       e.stopPropagation();
@@ -2465,16 +2466,14 @@ export class TkTable implements ComponentInterface {
           {this.columns.map(col => {
             let refSortIcon: HTMLTkIconElement;
             let refSearchIcon: HTMLTkIconElement;
-            let _sortIcon;
             let _searchIcon;
-            let _headerStructure;
             let _customHeader;
 
             if (typeof col?.headerHtml == 'function') {
               _customHeader = col.headerHtml();
             }
 
-            _headerStructure = (
+            const _headerStructure = (
               <div
                 class="header-container"
                 data-testid={getDataTestId(this.dataTestid, 'head-cell-header-container', String(col.field))}
@@ -2532,7 +2531,7 @@ export class TkTable implements ComponentInterface {
             const iconType = sortObj ? (sortObj.order === 'asc' ? 'arrow_drop_up' : sortObj.order === 'desc' ? 'arrow_drop_down' : 'swap_vert') : 'swap_vert';
 
             const showBadge = sortIndex > -1 && this.sorts.length > 0 && this.multiSort;
-            _sortIcon = showBadge ? (
+            const _sortIcon = showBadge ? (
               <tk-badge count={sortIndex + 1} type="text" rounded size="small" dataTestid={getDataTestId(this.dataTestid, 'head-cell-sort-badge', String(col.field))}>
                 <tk-icon
                   {...getIconElementProps(iconType, {

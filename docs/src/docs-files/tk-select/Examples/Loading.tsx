@@ -14,8 +14,7 @@ const Example = () => {
   const fetchData = async (text: string) => {
     return new Promise(resolve => {
       setTimeout(() => {
-        let response;
-        response = options.filter(item => item.label?.toLowerCase().indexOf(text?.toLowerCase()) > -1);
+        const response = options.filter(item => item.label?.toLowerCase().indexOf(text?.toLowerCase()) > -1);
 
         resolve(response);
       }, 2000);

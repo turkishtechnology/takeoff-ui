@@ -1,0 +1,81 @@
+name: CI
+
+# The repo had no build/test gate: `changeset-check` only verified a changelog entry and
+# `publish-npm` was the first place `pnpm run build` ever ran - on a tag, i.e. during a
+# release. This runs the same checks on every PR instead.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Format, build, types, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          # Kept in step with the `publish-npm` workflow so a green CI can't hide a
+          # publish-time Node mismatch.
+          node-version: "22.22.1"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Checked against the committed files rather than a glob: the Stencil outputs
+      # (`packages/core/components/`, `packages/core/loader/`) and the Vue output target's
+      # `utils.ts` are generated, unformatted, and would fail a plain `prettier --check`.
+      - name: Validate formatting
+        run: pnpm run format:check
+
+      # Fails on errors only. The rules carrying an existing backlog are warnings in
+      # `eslint.config.ts`, so this blocks new violations without demanding that cleanup first.
+      - name: Validate lint
+        run: pnpm run lint:check
+
+      # Runs the `generate:interfaces` codegen too, and produces the `src/components.d.ts`
+      # that `check-types` needs - both are gitignored, so a fresh checkout has neither.
+      - name: Build publishable packages
+        run: pnpm exec turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --filter=@takeoff-ui/tailwind
+
+      - name: Validate types
+        run: pnpm run check-types
+
+      - name: Unit tests (spec)
+        run: pnpm --filter @takeoff-ui/core run test.spec
+
+  e2e:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22.22.1"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Not left to puppeteer's postinstall: once the pnpm store cache is warm, pnpm treats
+      # the package as already built and skips it, while the browser itself lives outside
+      # node_modules in ~/.cache/puppeteer and is gone. This is a no-op when it is present.
+      - name: Install the browser the e2e runner launches
+        run: pnpm --filter @takeoff-ui/core exec puppeteer browsers install chrome
+
+      # Separate job on purpose: these need a real browser, so their failures stay
+      # distinguishable from a type or unit-test failure.
+      - name: E2E tests
+        run: pnpm --filter @takeoff-ui/core run test.e2e

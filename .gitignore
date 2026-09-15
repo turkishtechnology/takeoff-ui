@@ -5,6 +5,7 @@
 /packages/core/src/components.d.ts
 /packages/core/src/interfaces.d.ts
 /packages/vue/lib/components.ts
+/packages/vue/lib/vue-component-lib/
 /packages/react/lib/components/stencil-generated
 /packages/angular/projects/library/src/directives
 .DS_Store

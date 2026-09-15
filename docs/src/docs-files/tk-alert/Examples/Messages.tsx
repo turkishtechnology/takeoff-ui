@@ -54,7 +54,7 @@ const Messages = () => {
   [message]="[
     'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
     'Dummy text of the printing and typesetting',
-    'Lorem Ipsum has been the industry\'s standard.'
+    'Lorem Ipsum has been the industry's standard.'
   ]"
 />
 `;

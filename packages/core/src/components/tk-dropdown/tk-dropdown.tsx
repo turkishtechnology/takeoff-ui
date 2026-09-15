@@ -162,7 +162,7 @@ export class TkDropdown implements ComponentInterface {
   }
 
   private isGrouped(): boolean {
-    return this.options?.length > 0 && this.options[0].hasOwnProperty(this.groupNameKey);
+    return this.options?.length > 0 && Object.prototype.hasOwnProperty.call(this.options[0], this.groupNameKey);
   }
 
   private getOptionLabel(item: any): string {

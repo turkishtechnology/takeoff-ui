@@ -571,7 +571,7 @@ export class TkDatePicker {
 
     try {
       const resolvedLocale = this.locale || 'en';
-      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Intl.Locale.prototype.hasOwnProperty('weekInfo')) {
+      if (typeof Intl !== 'undefined' && Intl.Locale && typeof Intl.Locale === 'function' && Object.prototype.hasOwnProperty.call(Intl.Locale.prototype, 'weekInfo')) {
         // @ts-ignore: Accessing weekInfo from potentially unknown Intl.Locale type
         const localeInfo = new Intl.Locale(resolvedLocale).getWeekInfo();
         if (localeInfo && localeInfo.firstDay !== undefined) {
@@ -902,7 +902,7 @@ export class TkDatePicker {
   private parseTimeString(timeString: string): Date | null {
     const base = new Date();
     const primaryFmt = this.getOnlyTimeFormat();
-    let parsed = parse(timeString, primaryFmt, base);
+    const parsed = parse(timeString, primaryFmt, base);
     if (isValid(parsed) && format(parsed, primaryFmt) === timeString) {
       return parsed;
     }
@@ -1777,7 +1777,7 @@ export class TkDatePicker {
     const startOfWeekForGetDay = (resolvedStartOfWeekIndex + 1) % 7;
 
     const firstDayOfWeek = firstDayOfMonth.getDay();
-    let emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
+    const emptyCells = (firstDayOfWeek - startOfWeekForGetDay + 7) % 7;
 
     // Previous month's days
     for (let i = emptyCells - 1; i >= 0; i--) {

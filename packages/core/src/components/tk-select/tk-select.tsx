@@ -1013,7 +1013,7 @@ export class TkSelect implements ComponentInterface {
       this.value = null;
     }
     this.tkChange.emit(this.value);
-    this.selectAll && this.multiple && this.isAllSelected() && this.tkSelectAll.emit(false);
+    if (this.selectAll && this.multiple && this.isAllSelected()) this.tkSelectAll.emit(false);
   }
 
   private createOptionItem(options: any[], startIndex: number = 0) {
@@ -1165,11 +1165,12 @@ export class TkSelect implements ComponentInterface {
                   ref={el => {
                     if (el) {
                       const htmlContent = this.panelTopHtml();
-                      if (htmlContent instanceof HTMLElement) {
+                      // `instanceof HTMLElement` misses elements from another realm (an iframe, or the test DOM).
+                      if ((htmlContent as Node)?.nodeType === 1) {
                         el.innerHTML = '';
-                        el.appendChild(htmlContent);
+                        el.appendChild(htmlContent as HTMLElement);
                       } else {
-                        el.innerHTML = htmlContent;
+                        el.innerHTML = htmlContent as string;
                       }
                     }
                   }}
