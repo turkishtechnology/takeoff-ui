@@ -67,9 +67,13 @@ jobs:
           node-version: "22.22.1"
           cache: pnpm
 
-      # Downloads the Chrome the Stencil e2e runner launches: `puppeteer` is listed in
-      # `pnpm.onlyBuiltDependencies`, so its postinstall is allowed to run.
       - run: pnpm install --frozen-lockfile
+
+      # Not left to puppeteer's postinstall: once the pnpm store cache is warm, pnpm treats
+      # the package as already built and skips it, while the browser itself lives outside
+      # node_modules in ~/.cache/puppeteer and is gone. This is a no-op when it is present.
+      - name: Install the browser the e2e runner launches
+        run: pnpm --filter @takeoff-ui/core exec puppeteer browsers install chrome
 
       # Separate job on purpose: these need a real browser, so their failures stay
       # distinguishable from a type or unit-test failure.
