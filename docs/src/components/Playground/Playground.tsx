@@ -51,7 +51,7 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
     const value = propValues[control.key];
 
     switch (control.type) {
-      case 'text':
+      case 'text': {
         const commonPropsforInput = {
           value: String(value || ''),
           onTkChange: e => {
@@ -68,8 +68,9 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
         } else {
           return <TkInput {...commonPropsforInput} />;
         }
+      }
 
-      case 'select':
+      case 'select': {
         const commonPropsforSelect = {
           value: control.options?.find(opt => String(opt.value) === String(value)) || '',
           onTkChange: e => {
@@ -88,8 +89,9 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
         } else {
           return <TkSelect {...commonPropsforSelect} />;
         }
+      }
 
-      case 'checkbox':
+      case 'checkbox': {
         const commonPropsforCheckbox = {
           value: Boolean(value),
           onTkChange: e => handlePropChange(control.key, e.detail),
@@ -105,6 +107,7 @@ export default function Playground({ configs, componentMap = {}, defaultConfigIn
         } else {
           return <TkCheckbox {...commonPropsforCheckbox} />;
         }
+      }
 
       case 'json': {
         const displayValue = jsonErrors[control.key] ? jsonRawValues[control.key] : JSON.stringify(value, null, 2);
