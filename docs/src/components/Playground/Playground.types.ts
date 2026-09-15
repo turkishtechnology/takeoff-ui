@@ -8,7 +8,7 @@ export interface ControlConfig {
   options?: { label: string; value: string | number | boolean }[];
   min?: number;
   max?: number;
-  tooltip?: string | {}; // Optional tooltip for the control
+  tooltip?: string | Record<string, unknown>; // Optional tooltip for the control
 }
 
 export interface ChildConfig {

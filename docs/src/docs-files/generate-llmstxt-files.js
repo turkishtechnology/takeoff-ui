@@ -173,8 +173,8 @@ function buildExamplesString(tag, localEscapeStringForKonsolLog) {
         const filePath = path.join(componentExamplesDir, file);
         const fileContent = fs.readFileSync(filePath, 'utf8');
 
-        const reactCodeMatch = fileContent.match(/const reactCode\s*=\s*\`([\s\S]*?)\`\s*;/);
-        const vueCodeMatch = fileContent.match(/const vueCode\s*=\s*\`([\s\S]*?)\`\s*;/);
+        const reactCodeMatch = fileContent.match(/const reactCode\s*=\s*`([\s\S]*?)`\s*;/);
+        const vueCodeMatch = fileContent.match(/const vueCode\s*=\s*`([\s\S]*?)`\s*;/);
 
         let codeFound = false;
         if (reactCodeMatch && reactCodeMatch[1]) {

@@ -4,7 +4,6 @@ const fetchFromServer = async (page: number, rowsPerPage: number, filters: any[]
   return new Promise(resolve => {
     setTimeout(() => {
       let newPageData;
-      let totalItem;
       newPageData = [...data].filter(row => filters.every(filter => row[filter.field].toString().toLowerCase().indexOf(filter.value.toLowerCase()) > -1));
 
       if (sortField?.length > 0) {
@@ -15,7 +14,7 @@ const fetchFromServer = async (page: number, rowsPerPage: number, filters: any[]
           return 0;
         });
       }
-      totalItem = newPageData.length;
+      const totalItem = newPageData.length;
 
       const startIndex = (page - 1) * rowsPerPage;
       const endIndex = startIndex + rowsPerPage;
@@ -33,7 +32,6 @@ export const fetchFromServerMultiSort = async (page: number, rowsPerPage: number
   return new Promise(resolve => {
     setTimeout(() => {
       let newPageData;
-      let totalItem;
       newPageData = [...data].filter(row => filters.every(filter => row[filter.field].toString().toLowerCase().indexOf(filter.value.toLowerCase()) > -1));
 
       if (sorts?.length > 0) {
@@ -46,7 +44,7 @@ export const fetchFromServerMultiSort = async (page: number, rowsPerPage: number
           return 0;
         });
       }
-      totalItem = newPageData.length;
+      const totalItem = newPageData.length;
 
       const startIndex = (page - 1) * rowsPerPage;
       const endIndex = startIndex + rowsPerPage;

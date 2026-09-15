@@ -771,7 +771,7 @@ export class TkInput implements ComponentInterface {
   // A chip carries a remove button only when it may actually go, so the keyboard uses the same rule.
   private isChipRemovable(item: any): boolean {
     if (this.chipDisabled?.(item) || this.disabled) return false;
-    if (typeof item === 'object' && item !== null && item.hasOwnProperty('removable')) return item.removable;
+    if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'removable')) return item.removable;
     return true;
   }
 

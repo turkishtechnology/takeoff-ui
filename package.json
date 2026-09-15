@@ -38,6 +38,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,d.ts,d.js,vue,scss,css,json,vue,md,mdx,yml,yaml,html}\" --cache",
     "format:check": "git ls-files -z '*.ts' '*.tsx' '*.js' '*.jsx' '*.vue' '*.scss' '*.css' '*.json' '*.md' '*.mdx' '*.yml' '*.yaml' '*.html' | xargs -0 prettier --check",
     "lint": "eslint --fix",
+    "lint:check": "eslint .",
     "clean": "pnpm -r exec rimraf dist node_modules .vercel .stencil loader www .angular .next .output .turbo build .docusaurus && rimraf node_modules .turbo .pnpm-store pnpm-lock.yaml",
     "publish": "pnpm run build && pnpm publish --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/tailwind --access public --no-git-checks",
     "clear:docs": "cd docs && pnpm run clear"
@@ -69,6 +70,7 @@
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.4",
     "husky": "^9.0.11",
     "jiti": "^2.7.0",
     "lint-staged": "^17.3.0",
