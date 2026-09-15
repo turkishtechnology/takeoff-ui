@@ -38,6 +38,11 @@ jobs:
       - name: Validate formatting
         run: pnpm run format:check
 
+      # Fails on errors only. The rules carrying an existing backlog are warnings in
+      # `eslint.config.ts`, so this blocks new violations without demanding that cleanup first.
+      - name: Validate lint
+        run: pnpm run lint:check
+
       # Runs the `generate:interfaces` codegen too, and produces the `src/components.d.ts`
       # that `check-types` needs - both are gitignored, so a fresh checkout has neither.
       - name: Build publishable packages
