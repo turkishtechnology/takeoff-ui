@@ -85,12 +85,14 @@ describe('tk-select options handling', () => {
     await openSelect(page);
     expect(page.root.querySelector('.dropdown-item-holder').textContent).toContain('No options available');
 
-    // BUG (tk-select.tsx:700): opening the dropdown after `options = null` throws because flatOptions is null,
-    // so the null case is only checked while the dropdown stays closed.
     await page.root.close();
     page.root.options = null;
     await page.waitForChanges();
     expect(instanceOf(page).renderOptions).toEqual([]);
+
+    await openSelect(page);
+    expect(page.root.querySelectorAll('.dropdown-item')).toHaveLength(0);
+    expect(page.root.querySelector('.dropdown-item-holder').textContent).toContain('No options available');
   });
 
   it('clears the input when a value is set while there are no options', async () => {

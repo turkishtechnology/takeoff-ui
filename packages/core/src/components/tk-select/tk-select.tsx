@@ -429,7 +429,7 @@ export class TkSelect implements ComponentInterface {
     if (this.isGrouped()) {
       this.flatOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
     } else {
-      this.flatOptions = this.options;
+      this.flatOptions = this.options ?? [];
     }
   }
 
