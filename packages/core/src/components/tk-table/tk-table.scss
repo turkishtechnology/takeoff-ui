@@ -147,8 +147,15 @@
               }
             }
 
-            &:last-child .tk-table-resize-handle {
+            &:last-child .tk-table-resize-handle,
+            &:has(+ .tk-table-filler) .tk-table-resize-handle {
               border-right-color: transparent;
+            }
+
+            // Takes whatever the fixed-width columns leave over; collapses to 0 when they overflow.
+            &.tk-table-filler {
+              width: 100%;
+              padding: 0;
             }
 
             .tk-table-head-cell {
@@ -263,6 +270,12 @@
             border: none;
 
             vertical-align: middle;
+
+            // Takes whatever the fixed-width columns leave over; collapses to 0 when they overflow.
+            &.tk-table-filler {
+              width: 100%;
+              padding: 0;
+            }
 
             &.non-text {
               padding: var(--table-items-body-base-nontext-v-padding) var(--table-items-body-base-nontext-h-padding);

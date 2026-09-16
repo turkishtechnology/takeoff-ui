@@ -2109,7 +2109,7 @@ export class TkTable implements ComponentInterface {
       // If this group overlaps with the visible range, show it
       if (groupEndIndex > startIndex && groupStartIndex < endIndex) {
         // Create group header row
-        const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
+        const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0) + (this.hasFillerColumn() ? 1 : 0);
         const groupHeaderRow = (
           <tr
             class={classNames(
@@ -2159,6 +2159,15 @@ export class TkTable implements ComponentInterface {
     });
 
     return rows;
+  }
+
+  /**
+   * When every column has a width and they add up to less than the holder, the browser leaves the slack
+   * as a bare, unstyled gap after the last cell. A filler column takes that slack instead so the rows,
+   * hover and header background keep spanning the full table width; it collapses to 0 when the columns overflow.
+   */
+  private hasFillerColumn(): boolean {
+    return this.columns.length > 0 && this.columns.every(col => this.columnWidths[col.field] || col.width);
   }
 
   private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
@@ -2341,6 +2350,9 @@ export class TkTable implements ComponentInterface {
               );
             }
           })}
+          {this.hasFillerColumn() && (
+            <td class="tk-table-filler" aria-hidden="true" style={styleRowObject} data-testid={getDataTestId(this.dataTestid, 'body-filler-cell', rowKey)}></td>
+          )}
         </tr>
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
           <tr data-testid={getDataTestId(this.dataTestid, 'body-expanded-row', rowKey)}>
@@ -2636,6 +2648,7 @@ export class TkTable implements ComponentInterface {
               </th>
             );
           })}
+          {this.hasFillerColumn() && <th class="tk-table-filler" aria-hidden="true" data-testid={getDataTestId(this.dataTestid, 'head-filler-cell')}></th>}
         </tr>
       </thead>
     );

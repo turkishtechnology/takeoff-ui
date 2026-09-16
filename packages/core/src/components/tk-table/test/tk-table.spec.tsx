@@ -1927,6 +1927,25 @@ describe('tk-table interactions', () => {
     expect(onResize).toHaveBeenCalledTimes(1);
   });
 
+  it('adds a filler column only when every column has a width', async () => {
+    const withWidths: ITableColumn[] = [
+      { field: 'name', header: 'Name', width: '100px' },
+      { field: 'status', header: 'Status', width: '80px' },
+    ];
+    let page = await createPage({ columns: withWidths, data: [{ id: 1, name: 'Alice', status: 'active' }] });
+    expect(page.root.shadowRoot.querySelectorAll('thead th')).toHaveLength(3);
+    expect(page.root.shadowRoot.querySelector('thead th:last-child').classList.contains('tk-table-filler')).toBe(true);
+    expect(page.root.shadowRoot.querySelector('tbody tr td:last-child').classList.contains('tk-table-filler')).toBe(true);
+
+    const mixed: ITableColumn[] = [
+      { field: 'name', header: 'Name', width: '100px' },
+      { field: 'status', header: 'Status' },
+    ];
+    page = await createPage({ columns: mixed, data: [{ id: 1, name: 'Alice', status: 'active' }] });
+    expect(page.root.shadowRoot.querySelectorAll('thead th')).toHaveLength(2);
+    expect(page.root.shadowRoot.querySelector('.tk-table-filler')).toBeNull();
+  });
+
   it('restores column widths passed on the column definitions', async () => {
     const columns: ITableColumn[] = [
       { field: 'name', header: 'Name', width: '240px' },
