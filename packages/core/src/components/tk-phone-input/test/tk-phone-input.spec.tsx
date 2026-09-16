@@ -552,3 +552,18 @@ describe('tk-phone-input edge cases', () => {
     expect(positionMock).not.toHaveBeenCalled();
   });
 });
+
+describe('tk-phone-input aria state', () => {
+  it('renders the container state flags as "true"/"false" strings', async () => {
+    const flagged = await createPage(`<tk-phone-input disabled="true" invalid="true"></tk-phone-input>`);
+    const flaggedContainer = flagged.root.querySelector('.tk-phone-input-container');
+    expect(flaggedContainer.getAttribute('aria-disabled')).toBe('true');
+    expect(flaggedContainer.getAttribute('aria-invalid')).toBe('true');
+    expect(flaggedContainer.getAttribute('aria-readonly')).toBe('false');
+
+    const plain = await createPage(`<tk-phone-input></tk-phone-input>`);
+    const plainContainer = plain.root.querySelector('.tk-phone-input-container');
+    expect(plainContainer.getAttribute('aria-disabled')).toBe('false');
+    expect(plainContainer.getAttribute('aria-invalid')).toBe('false');
+  });
+});

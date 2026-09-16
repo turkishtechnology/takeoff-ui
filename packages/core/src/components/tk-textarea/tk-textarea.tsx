@@ -268,7 +268,13 @@ export class TkTextarea implements ComponentInterface {
     ) : null;
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
+      <div
+        aria-readonly={String(this.readonly)}
+        aria-disabled={String(this.disabled)}
+        aria-invalid={String(this.invalid)}
+        class={rootClasses}
+        data-testid={getDataTestId(this.dataTestid, 'container')}
+      >
         {(this.label?.length > 0 || this.showCopyButton) && (
           <div class="tk-textarea-label-row" data-testid={getDataTestId(this.dataTestid, 'label-row')}>
             {this.renderLabel()}

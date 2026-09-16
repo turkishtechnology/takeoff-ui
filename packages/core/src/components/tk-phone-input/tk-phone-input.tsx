@@ -573,9 +573,9 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <div
         class={classNames('tk-phone-input-container', `tk-phone-input-container-${this.size}`)}
-        aria-invalid={this.invalid}
-        aria-disabled={this.disabled}
-        aria-readonly={this.readonly}
+        aria-invalid={String(this.invalid)}
+        aria-disabled={String(this.disabled)}
+        aria-readonly={String(this.readonly)}
       >
         {this.renderLabel()}
         <div class="tk-phone-input-wrapper">

@@ -301,13 +301,13 @@ describe('tk-color-picker popover', () => {
     const trigger = query(page, 'tk-input');
 
     expect(query(page, '.tk-color-picker-panel')).toBeNull();
-    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
 
     trigger.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     await page.waitForChanges();
 
     expect(query(page, '.tk-color-picker-panel')).toBeTruthy();
-    expect(query(page, 'tk-input').hasAttribute('aria-expanded')).toBe(true);
+    expect(query(page, 'tk-input').getAttribute('aria-expanded')).toBe('true');
     expect(mockedAutoUpdate).toHaveBeenCalledTimes(1);
 
     await page.root.close();

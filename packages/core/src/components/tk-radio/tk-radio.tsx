@@ -143,7 +143,7 @@ export class TkRadio implements ComponentInterface {
 
     return (
       <Host data-tk-radio-id={this.uniqueId} invalid={this.invalid} disabled={this.disabled}>
-        <label htmlFor={this.uniqueId} class={labelClass} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+        <label htmlFor={this.uniqueId} class={labelClass} aria-disabled={String(this.disabled)} aria-invalid={String(this.invalid)}>
           <input id={this.uniqueId} type="radio" name={this.name} value={this.value} checked={this.checked} disabled={this.disabled} onChange={() => this.handleInputChange()} />
           <div class="mask">
             <div></div>

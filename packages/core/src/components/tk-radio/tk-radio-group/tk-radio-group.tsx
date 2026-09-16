@@ -166,7 +166,7 @@ export class TkRadioGroup implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses} aria-invalid={this.invalid} data-testid={getDataTestId(this.dataTestid, 'container')}>
+      <div class={rootClasses} aria-invalid={String(this.invalid)} data-testid={getDataTestId(this.dataTestid, 'container')}>
         {_label}
         <div class={classNames('tk-radio-holder', this.type, { spread: this.spread })} data-testid={getDataTestId(this.dataTestid, 'holder')}>
           <slot onSlotchange={this.handleSlotChange.bind(this)} />

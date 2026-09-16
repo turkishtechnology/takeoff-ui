@@ -895,7 +895,7 @@ export class TkColorPicker implements ComponentInterface {
         }}
         value={displayValue}
         aria-describedby="dropdown"
-        aria-expanded={this.isOpen}
+        aria-expanded={String(this.isOpen)}
         onClick={this.handleTriggerClick}
         onTk-focus={this.handleTriggerInputFocus}
         onTk-blur={this.handleTriggerInputBlur}

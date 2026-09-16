@@ -346,3 +346,22 @@ describe('tk-select without a registered tk-input', () => {
     expect(inst.cleanup).toBeNull();
   });
 });
+
+describe('tk-select aria state', () => {
+  it('renders aria-expanded and the container state flags as "true"/"false" strings', async () => {
+    const page = await createSelect('readonly="true" invalid="true"', { options: ['A'] });
+    const inst = instanceOf(page);
+    const expanded = () => page.root.querySelector('[aria-expanded]').getAttribute('aria-expanded');
+    const container = page.root.querySelector('[aria-readonly]');
+
+    expect(expanded()).toBe('false');
+    expect(container.getAttribute('aria-readonly')).toBe('true');
+    expect(container.getAttribute('aria-invalid')).toBe('true');
+    expect(container.getAttribute('aria-disabled')).toBe('false');
+
+    inst.isOpen = true;
+    await page.waitForChanges();
+
+    expect(expanded()).toBe('true');
+  });
+});
