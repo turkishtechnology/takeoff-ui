@@ -76,6 +76,7 @@ export class TkPhoneInput implements ComponentInterface {
   protected valueChanged(newValue): void {
     if (!newValue || (typeof newValue === 'object' && Object.keys(newValue).length === 0)) {
       this.handleFormReset();
+      return;
     }
     if (!newValue.rawValue && !newValue.maskedValue) {
       this.inputValue = '';
@@ -202,9 +203,7 @@ export class TkPhoneInput implements ComponentInterface {
   componentWillLoad(): void {
     this.initializeCountries();
     if (this?.value && Object.keys(this?.value)?.length) {
-      if (this.value?.country?.id) {
-        this.setSelectedCountry(this.value.country.id);
-      }
+      this.setSelectedCountry(this.value?.country?.id || this.defaultCountry);
       this.inputValue = this.applyMask(this?.value?.rawValue, this?.selectedCountry.mask);
     } else {
       this.setSelectedCountry(this.defaultCountry);
