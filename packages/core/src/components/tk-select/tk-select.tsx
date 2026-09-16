@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { isEqual, some, remove } from 'lodash-es';
 import { IChipOptions } from '../tk-chips/types';
+import { IInputMaskOptions } from '../tk-input/types';
 import { IIconOptions } from '../../global/interfaces/IIconOptions';
 import { getNestedValue } from '../../utils/object-utils';
 import { applyStyles } from '../../utils/style-utils';
@@ -142,6 +143,14 @@ export class TkSelect implements ComponentInterface {
    * Defines the label for the element.
    */
   @Prop() label: string;
+
+  /**
+   * Masking configuration applied to the text the user types into the select input, using the
+   * same `IInputMaskOptions` as `tk-input` (Cleave.js options or a `regex`). It only takes
+   * effect when the input is `editable`, and it is not applied in `multiple` mode, where the
+   * input renders chips instead of a masked text field.
+   */
+  @Prop() maskOptions?: IInputMaskOptions;
 
   /**
    * If `true` the user can make multiple selections.
@@ -1129,6 +1138,7 @@ export class TkSelect implements ComponentInterface {
         error={this.error}
         icon={{ left: this.icon, right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
         mode={this.multiple ? 'chips' : 'text'}
+        maskOptions={this.multiple ? undefined : this.maskOptions}
         chipLabelKey={this.optionLabelKey}
         readonly={this.readonly}
         disabled={this.disabled}

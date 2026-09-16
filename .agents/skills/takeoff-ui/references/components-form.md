@@ -120,6 +120,7 @@ TkSelect component description.
 | invalid             | boolean                      | false                  | Indicates whether the input is in an invalid state                                                                       |
 | label               | string                       |                        | Defines the label for the element.                                                                                       |
 | loading             | boolean                      | false                  | Represents whether the options are fethecd from service or not. If true renders spinner in options dropdown.             |
+| maskOptions         | IInputMaskOptions            |                        | Masks the text typed into the editable select input; same `IInputMaskOptions` as `tk-input`. Ignored in `multiple` mode. |
 | multiple            | boolean                      |                        | If `true` the user can make multiple selections.                                                                         |
 | name                | string                       |                        | The name of the control, which is submitted with the form data.                                                          |
 | optionDisabled      | Function                     |                        | A function to determine whether an option should be disabled.                                                            |

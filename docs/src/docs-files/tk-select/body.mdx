@@ -14,6 +14,7 @@ import PanelHeader from './Examples/PanelHeader';
 import OptionValueKey from './Examples/OptionValueKey';
 import Clearable from './Examples/Clearable';
 import OptionDisabled from './Examples/OptionDisabled';
+import Mask from './Examples/Mask';
 import { TkAlert } from '@takeoff-ui/react';
 import Playground from '../../components/Playground/Playground';
 import selectPlaygroundConfig from './selectPlaygroundConfig.json';
@@ -52,6 +53,23 @@ You can perform filtering either server-side or client-side using the filter
 emit.
 
 <Filter />
+
+## Mask
+
+With `editable`, the text typed into the select input can be masked through the
+`maskOptions` prop. It accepts the same `IInputMaskOptions` as `tk-input`: any
+Cleave.js option (dates, numbers, fixed blocks, ...) or a `regex` that is
+validated as the user types. Filtering runs on the masked text, and with
+`allowCustomValue` the masked text becomes the value.
+
+<TkAlert
+  header="Note"
+  variant="info"
+  message="The mask only applies to the editable text field. It has no effect in `multiple` mode, where the input renders chips instead of a text field."
+  filledlight
+/>
+<br />
+<Mask />
 
 ## Loading
 
