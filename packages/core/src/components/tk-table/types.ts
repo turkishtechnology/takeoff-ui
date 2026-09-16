@@ -168,6 +168,16 @@ export interface ITableCellEdit {
   value: string;
 }
 
+/** It is the return type of the tkColumnResize event. */
+export interface ITableColumnResize {
+  /** The field of the column that was resized */
+  field: string;
+  /** The new width of the resized column, in px (e.g. '240px') */
+  width: string;
+  /** The current widths of every column that has one, keyed by field. Pass these back as `width` on the column definitions to restore the layout. */
+  widths: { [field: string]: string };
+}
+
 export interface ITableExportOptions {
   /** only works when type is `pdf`. Default value is `vertical` */
   orientation?: 'horizontal' | 'vertical';

@@ -1902,6 +1902,7 @@ describe('tk-table interactions', () => {
     ];
     const page = await createPage({ columns });
     const instance = getInstance(page);
+    const onResize = listen(page, 'tk-column-resize');
     const handle = page.root.shadowRoot.querySelector('.tk-table-resize-handle') as HTMLElement;
 
     instance.handleMouseMove({ preventDefault: jest.fn(), clientX: 500 } as any); // ignored while not resizing
@@ -1912,12 +1913,30 @@ describe('tk-table interactions', () => {
 
     instance.handleMouseMove({ preventDefault: jest.fn(), clientX: 160 } as any);
     expect(instance.columnWidths.name).toBe('160px');
+    expect(onResize).not.toHaveBeenCalled(); // only emitted when the drag ends
 
     instance.handleMouseMove({ preventDefault: jest.fn(), clientX: 20 } as any);
     expect(instance.columnWidths.name).toBe('50px');
 
     instance.handleMouseUp();
     expect(instance.isResizing).toBe(false);
+    expect(onResize).toHaveBeenCalledTimes(1);
+    expect(onResize).toHaveBeenCalledWith({ field: 'name', width: '50px', widths: { name: '50px' } });
+
+    instance.handleMouseUp(); // no-op when not resizing
+    expect(onResize).toHaveBeenCalledTimes(1);
+  });
+
+  it('restores column widths passed on the column definitions', async () => {
+    const columns: ITableColumn[] = [
+      { field: 'name', header: 'Name', width: '240px' },
+      { field: 'status', header: 'Status' },
+    ];
+    const page = await createPage({ columns });
+    const th = page.root.shadowRoot.querySelector('th[data-field="name"]') as HTMLElement;
+
+    expect(th.style.width).toBe('240px');
+    expect(page.root.shadowRoot.querySelector('th[data-field="status"]').getAttribute('style') || '').not.toContain('width');
   });
 
   it('toggles sticky shadows based on the scroll position', async () => {

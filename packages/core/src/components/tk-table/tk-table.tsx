@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption, ITableColumnResize } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { cloneDeep, isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -347,6 +347,13 @@ export class TkTable implements ComponentInterface {
    * @param groupBy The new groupBy field name (null if grouping is cleared)
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
+
+  /**
+   * Emitted once a column resize ends (on mouse up), not while dragging.
+   * Carries the resized column's field and width, plus the current widths of every column,
+   * so they can be persisted and passed back as `width` on the column definitions to restore the layout.
+   */
+  @Event({ eventName: 'tk-column-resize' }) tkColumnResize: EventEmitter<ITableColumnResize>;
 
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
@@ -1906,12 +1913,18 @@ export class TkTable implements ComponentInterface {
 
   private handleMouseUp = () => {
     if (this.isResizing) {
+      const column = this.columns[this.resizeColumnIndex];
       this.isResizing = false;
       this.resizeColumnIndex = -1;
       // Reset cursor styles on the table container
       this.el.style.cursor = '';
       this.el.style.userSelect = '';
       this.updateStickyOffsets();
+
+      const width = column && this.columnWidths[column.field];
+      if (width) {
+        this.tkColumnResize.emit({ field: column.field, width, widths: { ...this.columnWidths } });
+      }
     }
   };
 
