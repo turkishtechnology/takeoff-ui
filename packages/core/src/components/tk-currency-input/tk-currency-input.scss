@@ -94,6 +94,10 @@
       flex-direction: column;
       overflow: hidden;
 
+      .tk-currency-input-dropdown-menu-search {
+        padding: var(--spacing-m-base);
+      }
+
       .tk-currency-input-dropdown-menu-list {
         list-style: none;
         overflow-y: auto;

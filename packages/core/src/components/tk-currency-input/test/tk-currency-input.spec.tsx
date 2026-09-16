@@ -393,3 +393,91 @@ describe('tk-currency-input', () => {
     expect((page.rootInstance as any).currentNumericValue).toBe(1234.56);
   });
 });
+
+describe('tk-currency-input dropdown search', () => {
+  const openDropdown = async page => {
+    (page.root.querySelector('.tk-currency-input-dropdown-button') as HTMLElement).click();
+    await page.waitForChanges();
+  };
+
+  const getItems = page => Array.from(page.root.querySelectorAll('.tk-currency-input-dropdown-menu-list-item'));
+  const getCodes = page => getItems(page).map((el: Element) => el.querySelector('.tk-currency-input-dropdown-menu-list-dial-id')?.textContent);
+
+  it('renders a search input inside the open dropdown', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input></tk-currency-input>`,
+    });
+
+    expect(page.root.querySelector('.tk-currency-input-dropdown-menu-search')).toBeNull();
+    await openDropdown(page);
+    expect(page.root.querySelector('.tk-currency-input-dropdown-menu-search')).not.toBeNull();
+  });
+
+  it('filters currencies by code, name and symbol', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input></tk-currency-input>`,
+    });
+    const instance = page.rootInstance as any;
+    const allCurrencies = instance.getCurrencies();
+
+    await openDropdown(page);
+    expect(getItems(page)).toHaveLength(allCurrencies.length);
+
+    instance.handleSearchChange({ target: { value: 'usd' } });
+    await page.waitForChanges();
+    const byCode = getItems(page);
+    expect(byCode.length).toBeGreaterThan(0);
+    expect(byCode.length).toBeLessThan(allCurrencies.length);
+    expect(getCodes(page)).toContain(allCurrencies.find(c => c.code === 'USD')?.name);
+
+    instance.handleSearchChange({ target: { value: 'turkish' } });
+    await page.waitForChanges();
+    const byName = getCodes(page);
+    expect(byName.length).toBeGreaterThan(0);
+    byName.forEach(name => expect(name.toLowerCase()).toContain('turkish'));
+
+    instance.handleSearchChange({ target: { value: '€' } });
+    await page.waitForChanges();
+    expect(getCodes(page)).toContain(allCurrencies.find(c => c.code === 'EUR')?.name);
+
+    instance.handleSearchChange({ target: { value: 'zzzz-no-match' } });
+    await page.waitForChanges();
+    expect(getItems(page)).toHaveLength(0);
+
+    instance.handleSearchChange({ target: { value: '' } });
+    await page.waitForChanges();
+    expect(getItems(page)).toHaveLength(allCurrencies.length);
+  });
+
+  it('clears the search term when a currency is selected and when the dropdown is reopened', async () => {
+    const page = await newSpecPage({
+      components: [TkCurrencyInput],
+      html: `<tk-currency-input></tk-currency-input>`,
+    });
+    const instance = page.rootInstance as any;
+
+    await openDropdown(page);
+    instance.handleSearchChange({ target: { value: 'usd' } });
+    await page.waitForChanges();
+
+    (getItems(page)[0] as HTMLElement).click();
+    await page.waitForChanges();
+
+    expect(instance.isDropdownOpen).toBe(false);
+    expect(instance.searchTerm).toBe('');
+    expect(instance.selectedCurrency.code).toBe('USD');
+
+    await openDropdown(page);
+    instance.handleSearchChange({ target: { value: 'eur' } });
+    await page.waitForChanges();
+    expect(getItems(page).length).toBeLessThan(instance.getCurrencies().length);
+
+    // close via toggle, then reopen: the full list must be back
+    await openDropdown(page);
+    await openDropdown(page);
+    expect(instance.searchTerm).toBe('');
+    expect(getItems(page)).toHaveLength(instance.getCurrencies().length);
+  });
+});
