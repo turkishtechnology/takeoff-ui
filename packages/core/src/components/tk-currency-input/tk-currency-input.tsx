@@ -32,6 +32,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Reference to the dropdown element.
    */
   private dropdownEl?: HTMLElement;
+  /**
+   * Reference to the currency search input element.
+   */
+  private searchInput?: HTMLTkInputElement;
   private cleanup;
   private uniqueId = uuidv4();
 
@@ -49,6 +53,10 @@ export class TkCurrencyInput implements ComponentInterface {
    * Indicates whether the dropdown for currency selection is open.
    */
   @State() isDropdownOpen: boolean = false;
+  /**
+   * The current search term for filtering currencies in the dropdown.
+   */
+  @State() searchTerm: string = '';
   /**
    * Current numeric value of the input, used for calculations and formatting.
    * This is updated based on user input and can be used in form submissions.
@@ -563,6 +571,7 @@ export class TkCurrencyInput implements ComponentInterface {
     }
 
     this.isDropdownOpen = false;
+    this.searchTerm = '';
   };
 
   private toggleDropdown = (event: Event) => {
@@ -571,8 +580,33 @@ export class TkCurrencyInput implements ComponentInterface {
 
     if (!this.disabled && !this.readonly && !this.currencyDisabled) {
       this.isDropdownOpen = !this.isDropdownOpen;
+      this.searchTerm = '';
+      if (this.isDropdownOpen) {
+        this.searchInput?.focus();
+      }
     }
   };
+
+  /**
+   * Handle changes to the currency search input.
+   */
+  private handleSearchChange = (event: Event) => {
+    this.searchTerm = (event.target as HTMLInputElement).value;
+  };
+
+  /**
+   * Get the filtered list of currencies based on the search term.
+   * Matches against the currency code, name and symbol.
+   */
+  private getFilteredCurrencies(): ICurrency[] {
+    const currencies = this.getCurrencies();
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) return currencies;
+
+    return currencies.filter(
+      currency => currency.code?.toLowerCase().includes(term) || currency.name?.toLowerCase().includes(term) || currency.symbol?.toLowerCase().includes(term),
+    );
+  }
 
   private calculateNewCursorPosition(inputValue: string, formattedValue: string, oldCursorPosition: number): number {
     const decimalSeparator = this.getDecimalSeparator();
@@ -819,6 +853,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
       this.updateDisplayValue();
       this.isDropdownOpen = false;
+      this.searchTerm = '';
 
       if (this.inputElement) {
         this.inputElement.value = this.displayValue;
@@ -875,6 +910,7 @@ export class TkCurrencyInput implements ComponentInterface {
 
         {this.isDropdownOpen && (
           <div class="tk-currency-input-dropdown-menu" role="listbox" ref={el => (this.dropdownEl = el as HTMLDivElement)}>
+            {this.renderDropdownSearch()}
             {this.renderCurrencyList()}
           </div>
         )}
@@ -907,8 +943,27 @@ export class TkCurrencyInput implements ComponentInterface {
     );
   }
 
+  /**
+   * Render the search input for filtering currencies in the dropdown.
+   */
+  private renderDropdownSearch() {
+    return (
+      <tk-input
+        class="tk-currency-input-dropdown-menu-search"
+        size={this.size}
+        placeholder="Search"
+        value={this.searchTerm}
+        onTk-change={this.handleSearchChange}
+        ref={el => (this.searchInput = el as HTMLTkInputElement)}
+        icon="search"
+        iconPosition="right"
+        onClick={(e: MouseEvent) => e.stopPropagation()}
+      />
+    );
+  }
+
   private renderCurrencyList() {
-    const currencies = this.getCurrencies();
+    const currencies = this.getFilteredCurrencies();
 
     return (
       <ul class="tk-currency-input-dropdown-menu-list">
