@@ -408,3 +408,133 @@ describe('tk-phone-input', () => {
     });
   });
 });
+
+describe('tk-phone-input edge cases', () => {
+  beforeEach(() => {
+    positionMock.mockClear();
+  });
+
+  const customCountries = (): ICountry[] => [
+    { id: 'PH', label: 'Placeholder Land', dialCode: '+1', mask: '999 999', placeholder: 'type here' },
+    { id: 'NM', label: 'No Mask', dialCode: '+2' },
+    { id: 'ND', label: 'No Dial' },
+    { id: 'LT', label: 'Letters', dialCode: '+3', mask: 'ABC' },
+  ];
+
+  it('keeps the current country when a value without a country id is set', async () => {
+    const page = await createPage(`<tk-phone-input default-country="US"></tk-phone-input>`);
+
+    page.root.value = { rawValue: '5051112233', maskedValue: '' };
+    await page.waitForChanges();
+
+    expect(getInput(page).value).toBe('(505) 111-2233');
+    expect(page.root.querySelector('.tk-phone-input-dial-code')?.textContent).toBe('+1');
+  });
+
+  it('renders the label without an asterisk by default', async () => {
+    const page = await createPage(`<tk-phone-input label="Phone"></tk-phone-input>`);
+    const label = page.root.querySelector('.tk-phone-input-label');
+
+    expect(label?.textContent).toBe('Phone');
+    expect(label?.querySelector('.tk-phone-input-asterisk')).toBeNull();
+  });
+
+  it('prefers the country placeholder and leaves it empty for countries without a mask', async () => {
+    const withPlaceholder = await newSpecPage({
+      components: [TkPhoneInput],
+      template: () => <tk-phone-input countryList={customCountries()} defaultCountry="PH" placeholder="ignored"></tk-phone-input>,
+    });
+    expect(getInput(withPlaceholder).getAttribute('placeholder')).toBe('type here');
+
+    const withoutMask = await newSpecPage({
+      components: [TkPhoneInput],
+      template: () => <tk-phone-input countryList={customCountries()} defaultCountry="NM"></tk-phone-input>,
+    });
+    expect(getInput(withoutMask).getAttribute('placeholder')).toBeFalsy();
+  });
+
+  it('rejects every digit when the mask has no digit slots', async () => {
+    const page = await newSpecPage({
+      components: [TkPhoneInput],
+      template: () => <tk-phone-input countryList={customCountries()} defaultCountry="LT"></tk-phone-input>,
+    });
+    const changeSpy = jest.fn();
+    page.root.addEventListener('tk-change', changeSpy);
+    const input = getInput(page);
+
+    input.value = '1';
+    input.dispatchEvent(new Event('input'));
+    await page.waitForChanges();
+
+    expect(changeSpy).not.toHaveBeenCalled();
+    expect(input.value).toBe('');
+  });
+
+  it('matches countries without a dial code only by label while searching', async () => {
+    const page = await newSpecPage({
+      components: [TkPhoneInput],
+      template: () => <tk-phone-input countryList={customCountries()} defaultCountry="PH"></tk-phone-input>,
+    });
+    const instance = page.rootInstance as any;
+    await openDropdown(page);
+
+    instance.handleSearchChange({ target: { value: 'no' } });
+    await page.waitForChanges();
+    const labels = Array.from(page.root.querySelectorAll('.tk-phone-input-menu-country-label')).map(el => el.textContent);
+    expect(labels).toEqual(['No Mask', 'No Dial']);
+
+    instance.handleSearchChange({ target: { value: '+2' } });
+    await page.waitForChanges();
+    expect(Array.from(page.root.querySelectorAll('.tk-phone-input-menu-country-label')).map(el => el.textContent)).toEqual(['No Mask']);
+  });
+
+  it('renders a close icon instead of a flag for countries without a dial code', async () => {
+    const page = await newSpecPage({
+      components: [TkPhoneInput],
+      template: () => <tk-phone-input countryList={customCountries()} defaultCountry="PH"></tk-phone-input>,
+    });
+    await openDropdown(page);
+
+    const items = Array.from(page.root.querySelectorAll('.tk-phone-input-menu-item'));
+    const noDial = items.find(item => item.querySelector('.tk-phone-input-menu-country-label')?.textContent === 'No Dial');
+    expect(noDial.querySelector('.flag-none tk-icon')).toBeTruthy();
+    expect(noDial.querySelector('.tk-phone-input-menu-dial-id')).toBeNull();
+    expect(items[0].querySelector('.flag-ph')).toBeTruthy();
+    expect(items[0].hasAttribute('aria-selected')).toBe(true);
+    expect(noDial.hasAttribute('aria-selected')).toBe(false);
+  });
+
+  it('hides flags everywhere when hideFlag is set', async () => {
+    const page = await createPage(`<tk-phone-input hide-flag="true"></tk-phone-input>`);
+    await openDropdown(page);
+
+    expect(page.root.querySelector('.flag')).toBeNull();
+  });
+
+  it('keeps the dropdown open when the search input is clicked', async () => {
+    const page = await createPage(`<tk-phone-input></tk-phone-input>`);
+    await openDropdown(page);
+
+    const searchInput = page.root.querySelector('.tk-phone-input-dropdown-menu-search') as HTMLElement;
+    const event = new MouseEvent('click', { bubbles: true });
+    const stopPropagation = jest.spyOn(event, 'stopPropagation');
+    searchInput.dispatchEvent(event);
+    await page.waitForChanges();
+
+    expect(stopPropagation).toHaveBeenCalled();
+    expect(getMenu(page)).not.toBeNull();
+  });
+
+  it('tolerates being removed before the dropdown was ever opened', async () => {
+    const page = await createPage(`<tk-phone-input></tk-phone-input>`);
+    const instance = page.rootInstance as any;
+
+    page.root.readonly = true;
+    await page.waitForChanges();
+    expect(getMenu(page)).toBeNull();
+
+    expect(() => instance.disconnectedCallback()).not.toThrow();
+    expect(instance.cleanup).toBeNull();
+    expect(positionMock).not.toHaveBeenCalled();
+  });
+});

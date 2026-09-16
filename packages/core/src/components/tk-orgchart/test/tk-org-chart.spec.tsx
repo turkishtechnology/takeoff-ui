@@ -378,3 +378,103 @@ describe('tk-org-chart', () => {
     });
   });
 });
+
+describe('tk-org-chart layout', () => {
+  type LayoutNode = { y?: number; height?: number; parent?: { y: number; height: number } };
+  const bindingsPassedTo = (page: SpecPage) =>
+    chartOf(page)
+      .layoutBindings.mock.calls.filter((c: unknown[]) => c.length > 0)
+      .map((c: unknown[]) => c[0] as { top: Record<string, (n: LayoutNode) => number> });
+  const parentNode = { y: 100, height: 90, parent: { y: 100, height: 90 } };
+
+  it('lays the tree out top-down, expanded and non-compact', async () => {
+    const page = await setup();
+    const chart = chartOf(page);
+
+    expect(chart.layout).toHaveBeenCalledWith('top');
+    expect(chart.compact).toHaveBeenCalledWith(false);
+    expect(chart.initialExpandLevel).toHaveBeenCalledWith(Infinity);
+  });
+
+  it('sizes nodes, buttons and the gap between generations through accessors', async () => {
+    const page = await setup();
+    const chart = chartOf(page);
+    const accessor = (name: string) => chart[name].mock.calls[0][0]();
+
+    expect(accessor('nodeWidth')).toBe(160);
+    expect(accessor('nodeHeight')).toBe(90);
+    expect(accessor('nodeButtonWidth')).toBe(28.5);
+    expect(accessor('nodeButtonHeight')).toBe(27);
+    expect(accessor('nodeButtonX')).toBe(-14.25);
+    expect(accessor('childrenMargin')).toBe(84);
+  });
+
+  it('renders each node through the default node template', async () => {
+    const page = await setup();
+    const nodeContent = chartOf(page).nodeContent.mock.calls[0][0];
+
+    expect(nodeContent({ data: { name: 'Grace', title: 'Engineer' } })).toContain('Grace');
+    expect(nodeContent({ data: { name: 'Grace', title: 'Engineer' } })).toContain('Engineer');
+  });
+
+  it('renders empty name and title cells instead of "undefined" for sparse nodes', async () => {
+    const page = await setup();
+
+    expect(instanceOf(page).defaultNodeHTML({ data: {} })).not.toContain('undefined');
+  });
+
+  it('renders the chevron button through the default button template on load', async () => {
+    const page = await setup();
+    const initialButtonContent = chartOf(page).buttonContent.mock.calls[0][0];
+
+    expect(initialButtonContent()).toContain('<svg');
+  });
+
+  it('places expand buttons just below each node', async () => {
+    const page = await setup();
+
+    for (const binding of bindingsPassedTo(page)) {
+      expect(binding.top.buttonY({ height: 90 })).toBe(117);
+    }
+  });
+
+  it('starts parent links below the expand button and ends them just above the child when collapsible', async () => {
+    const page = await setup();
+    const collapsibleBindings = bindingsPassedTo(page).filter(b => b.top.linkY);
+
+    expect(collapsibleBindings.length).toBeGreaterThan(0);
+    for (const binding of collapsibleBindings) {
+      expect(binding.top.linkParentY(parentNode)).toBe(100 + 90 + 27 + 14);
+      expect(binding.top.linkY({ y: 300 })).toBe(296);
+    }
+  });
+
+  it('applies the initial link geometry before the collapsible pass runs', async () => {
+    const page = await setup();
+    const initialBindings = bindingsPassedTo(page).find(b => b.top.diagonal);
+
+    expect(initialBindings.top.buttonY({ height: 90 })).toBe(117);
+    expect(initialBindings.top.linkParentY(parentNode)).toBe(100 + 90 + 27 + 14);
+  });
+
+  it('starts parent links directly at the node edge when collapsing is disabled', async () => {
+    const page = await setup(`<tk-org-chart collapsible="false"></tk-org-chart>`);
+    const [binding] = bindingsPassedTo(page);
+
+    expect(binding.top.linkParentY(parentNode)).toBe(190);
+    expect(binding.top.buttonY({ height: 90 })).toBe(117);
+    expect(chartOf(page).buttonContent.mock.calls.slice(-1)[0][0]()).toBe('');
+  });
+
+  it('refresh() is a no-op once the chart instance is gone', async () => {
+    const page = await setup();
+    const chart = chartOf(page);
+    page.root.remove();
+    await page.waitForChanges();
+    const dataCalls = chart.data.mock.calls.length;
+
+    await expect(page.root.refresh()).resolves.toBeUndefined();
+
+    expect(chart.data.mock.calls.length).toBe(dataCalls);
+  });
+});
