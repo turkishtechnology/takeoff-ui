@@ -58,17 +58,17 @@ describe('tk-input rendering and native attribute passthrough', () => {
     const page = await render(`<tk-input readonly="true" disabled="true" invalid="true"></tk-input>`);
     const container = page.root.querySelector('.tk-input-container');
 
-    expect(container.hasAttribute('aria-readonly')).toBe(true);
-    expect(container.hasAttribute('aria-disabled')).toBe(true);
-    expect(container.hasAttribute('aria-invalid')).toBe(true);
+    expect(container.getAttribute('aria-readonly')).toBe('true');
+    expect(container.getAttribute('aria-disabled')).toBe('true');
+    expect(container.getAttribute('aria-invalid')).toBe('true');
     expect(nativeInputOf(page).hasAttribute('disabled')).toBe(true);
     expect(nativeInputOf(page).hasAttribute('readonly')).toBe(true);
 
     const plain = await render(`<tk-input></tk-input>`);
     const plainContainer = plain.root.querySelector('.tk-input-container');
-    expect(plainContainer.hasAttribute('aria-readonly')).toBe(false);
-    expect(plainContainer.hasAttribute('aria-disabled')).toBe(false);
-    expect(plainContainer.hasAttribute('aria-invalid')).toBe(false);
+    expect(plainContainer.getAttribute('aria-readonly')).toBe('false');
+    expect(plainContainer.getAttribute('aria-disabled')).toBe('false');
+    expect(plainContainer.getAttribute('aria-invalid')).toBe('false');
     expect(nativeInputOf(plain).hasAttribute('disabled')).toBe(false);
     expect(nativeInputOf(plain).hasAttribute('readonly')).toBe(false);
   });

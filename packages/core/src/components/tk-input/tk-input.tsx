@@ -503,10 +503,14 @@ export class TkInput implements ComponentInterface {
    * Whether a Cleave.js instance should back the current mask. Cleave is only used
    * for its own formatting options; a `regex` mask is handled by the incremental
    * matcher instead, so we never build a (useless and side-effecting) Cleave
-   * instance for it.
+   * instance for it. Likewise for options Cleave itself declares "no need to use
+   * this lib" for (e.g. `letterOnly` alone): its init then bails out before
+   * `maxLength` is derived, so every re-sync would truncate the value to nothing.
    */
   private shouldUseCleave(): boolean {
-    return this.mode === 'text' && !!this.maskOptions && !this.maskOptions.regex;
+    const options = this.maskOptions;
+    if (this.mode !== 'text' || !options || options.regex) return false;
+    return !!(options.numeral || options.phone || options.creditCard || options.time || options.date || options.blocks?.length || options.prefix);
   }
 
   /**
@@ -1142,7 +1146,13 @@ export class TkInput implements ComponentInterface {
     }
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
+      <div
+        aria-readonly={String(this.readonly)}
+        aria-disabled={String(this.disabled)}
+        aria-invalid={String(this.invalid)}
+        class={rootClasses}
+        data-testid={getDataTestId(this.dataTestid, 'container')}
+      >
         {this.renderLabel()}
         <div class="tk-input" onMouseDown={() => (this.focusedChipIndex = null)} data-testid={getDataTestId(this.dataTestid, 'control')}>
           {this.renderChips()}
