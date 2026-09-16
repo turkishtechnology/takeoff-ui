@@ -119,28 +119,20 @@ export class TkAccordion implements ComponentInterface {
     // if prop activeIndex is set, use it
     if (this.hasActiveIndex()) return (this.internalActiveIndex = this.normalizeActiveIndex());
     // else if accordion items have active prop, use them
-    this.getAccordionItems().forEach((item, index) => {
-      if (item.active) this.internalActiveIndex = [...this.internalActiveIndex, this.getItemKey(item, index)];
-    });
+    // collected first and assigned once: every assignment syncs the items, which would close the ones not collected yet
+    const activeKeys = this.getAccordionItems().reduce<(string | number)[]>((keys, item, index) => (item.active ? [...keys, this.getItemKey(item, index)] : keys), []);
+    this.internalActiveIndex = this.allowMultiple ? activeKeys : activeKeys.slice(0, 1);
   }
 
   private initEventListeners() {
-    this.getAccordionItems().forEach((item, index) => {
-      const itemKey = this.getItemKey(item, index);
+    // listen at the host so items appended after load are covered too
+    this.el.addEventListener('tk-active-change', (e: CustomEvent<boolean>) => {
+      const items = this.getAccordionItems();
+      const index = items.indexOf(e.target as HTMLTkAccordionItemElement);
+      // ignore items that are not direct children (e.g. of a nested accordion)
+      if (index === -1) return;
 
-      // listen to active change
-      item.addEventListener('tk-active-change', (e: CustomEvent) => {
-        this.handleItemActiveChange(itemKey, e.detail);
-        item.active = e.detail;
-
-        if (!this.allowMultiple && e.detail) {
-          this.getAccordionItems()
-            .filter(child => child !== item)
-            .forEach(otherItem => {
-              otherItem.active = false;
-            });
-        }
-      });
+      this.handleItemActiveChange(this.getItemKey(items[index], index), e.detail);
     });
   }
 
@@ -196,11 +188,12 @@ export class TkAccordion implements ComponentInterface {
   }
 
   private handleItemActiveChange(itemKey: string | number, active: boolean): void {
-    if (active && !this.internalActiveIndex.includes(itemKey)) {
-      this.internalActiveIndex = [...this.internalActiveIndex, itemKey];
-    }
+    // an item whose state already matches is only echoing the accordion's own sync, so nothing changes
+    if (active === this.internalActiveIndex.includes(itemKey)) return;
 
-    if (!active && this.internalActiveIndex.includes(itemKey)) {
+    if (active) {
+      this.internalActiveIndex = this.allowMultiple ? [...this.internalActiveIndex, itemKey] : [itemKey];
+    } else {
       this.internalActiveIndex = this.internalActiveIndex.filter(activeIndex => activeIndex !== itemKey);
     }
 
