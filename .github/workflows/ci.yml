@@ -51,8 +51,20 @@ jobs:
       - name: Validate types
         run: pnpm run check-types
 
-      - name: Unit tests (spec)
-        run: pnpm --filter @takeoff-ui/core run test.spec
+      # Runs the same spec suite as `test.spec`, but fails the build when coverage drops
+      # below the thresholds in `stencil.config.ts`.
+      - name: Unit tests (spec) with coverage
+        run: pnpm --filter @takeoff-ui/core run test.coverage
+
+      # Uploaded even on failure: when the threshold gate trips, the report is what tells
+      # you which file lost the lines.
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-coverage
+          path: packages/core/coverage/
+          retention-days: 7
 
   e2e:
     name: E2E tests
