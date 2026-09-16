@@ -21,6 +21,7 @@ import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
 import { TkAlert, TkTable } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
 import ColumnArrangement from './Examples/ColumnArrangement';
+import PersistColumnWidths from './Examples/PersistColumnWidths';
 import HeaderStyle from './Examples/HeaderStyle';
 import Size from './Examples/Size';
 import MultiSort from './Examples/MultiSort';
@@ -211,6 +212,18 @@ This feature allows the user to drag and drop the columns to the desired
 position.
 
 <ColumnArrangement />
+
+## Persist Column Widths
+
+Columns can be resized by dragging the edge of their header. The table does not
+store the result itself; it emits `tk-column-resize` when the drag ends, with
+the resized column's `field` and `width` and a `widths` map of every column.
+Save that map wherever suits your app (localStorage, user preferences on the
+server) and, on the next visit, merge it back into the `width` of the column
+definitions before the table first renders. Reload this page after resizing a
+column to see it come back with the saved width.
+
+<PersistColumnWidths />
 
 ## Size
 

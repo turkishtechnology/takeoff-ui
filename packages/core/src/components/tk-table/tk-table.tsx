@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
-import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption } from './types';
+import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption, ITableColumnResize } from './types';
 import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { cloneDeep, isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
@@ -347,6 +347,13 @@ export class TkTable implements ComponentInterface {
    * @param groupBy The new groupBy field name (null if grouping is cleared)
    */
   @Event({ eventName: 'tk-group-by-change' }) tkGroupByChange: EventEmitter<string | null>;
+
+  /**
+   * Emitted once a column resize ends (on mouse up), not while dragging.
+   * Carries the resized column's field and width, plus the current widths of every column,
+   * so they can be persisted and passed back as `width` on the column definitions to restore the layout.
+   */
+  @Event({ eventName: 'tk-column-resize' }) tkColumnResize: EventEmitter<ITableColumnResize>;
 
   // outside click of search tk-table-filter-panel for close
   @Listen('click', { target: 'window' })
@@ -1906,12 +1913,18 @@ export class TkTable implements ComponentInterface {
 
   private handleMouseUp = () => {
     if (this.isResizing) {
+      const column = this.columns[this.resizeColumnIndex];
       this.isResizing = false;
       this.resizeColumnIndex = -1;
       // Reset cursor styles on the table container
       this.el.style.cursor = '';
       this.el.style.userSelect = '';
       this.updateStickyOffsets();
+
+      const width = column && this.columnWidths[column.field];
+      if (width) {
+        this.tkColumnResize.emit({ field: column.field, width, widths: { ...this.columnWidths } });
+      }
     }
   };
 
@@ -2096,7 +2109,7 @@ export class TkTable implements ComponentInterface {
       // If this group overlaps with the visible range, show it
       if (groupEndIndex > startIndex && groupStartIndex < endIndex) {
         // Create group header row
-        const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0);
+        const totalColumns = this.columns.length + (this.selectionMode ? 1 : 0) + (this.hasFillerColumn() ? 1 : 0);
         const groupHeaderRow = (
           <tr
             class={classNames(
@@ -2146,6 +2159,15 @@ export class TkTable implements ComponentInterface {
     });
 
     return rows;
+  }
+
+  /**
+   * When every column has a width and they add up to less than the holder, the browser leaves the slack
+   * as a bare, unstyled gap after the last cell. A filler column takes that slack instead so the rows,
+   * hover and header background keep spanning the full table width; it collapses to 0 when the columns overflow.
+   */
+  private hasFillerColumn(): boolean {
+    return this.columns.length > 0 && this.columns.every(col => this.columnWidths[col.field] || col.width);
   }
 
   private createDataRow(row: Record<PropertyKey, unknown>, index: number) {
@@ -2328,6 +2350,9 @@ export class TkTable implements ComponentInterface {
               );
             }
           })}
+          {this.hasFillerColumn() && (
+            <td class="tk-table-filler" aria-hidden="true" style={styleRowObject} data-testid={getDataTestId(this.dataTestid, 'body-filler-cell', rowKey)}></td>
+          )}
         </tr>
         {this.expandedRows.length > 0 && this.expandedRows.findIndex(item => item[this.dataKey] == row[this.dataKey]) > -1 && (
           <tr data-testid={getDataTestId(this.dataTestid, 'body-expanded-row', rowKey)}>
@@ -2623,6 +2648,7 @@ export class TkTable implements ComponentInterface {
               </th>
             );
           })}
+          {this.hasFillerColumn() && <th class="tk-table-filler" aria-hidden="true" data-testid={getDataTestId(this.dataTestid, 'head-filler-cell')}></th>}
         </tr>
       </thead>
     );
