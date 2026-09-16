@@ -194,3 +194,80 @@ describe('dataTestid', () => {
     expect(icon.getAttribute('data-testid')).toBe('my-alert-left-icon');
   });
 });
+
+describe('tk-alert variants and slots', () => {
+  const create = (html: string) => newSpecPage({ components: [TkAlert, TkIcon, TkButton], html });
+
+  it('picks the default icon from the variant', async () => {
+    const iconFor = async (variant: string) => {
+      const page = await create(`<tk-alert variant="${variant}" message="m"></tk-alert>`);
+      return page.root.shadowRoot.querySelector('tk-icon')?.textContent ?? null;
+    };
+
+    expect(await iconFor('success')).toContain('check_circle');
+    expect(await iconFor('info')).toContain('info');
+    expect(await iconFor('danger')).toContain('error');
+    expect(await iconFor('warning')).toContain('warning');
+    expect(await iconFor('neutral')).toBeNull();
+  });
+
+  it('marks the content as message-only when there is no header', async () => {
+    const withHeader = await create(`<tk-alert header="Title" message="Body"></tk-alert>`);
+    expect(withHeader.root.shadowRoot.querySelector('.tk-alert-content').classList.contains('message-content')).toBe(false);
+
+    const withoutHeader = await create(`<tk-alert message="Body"></tk-alert>`);
+    expect(withoutHeader.root.shadowRoot.querySelector('.tk-alert-content').classList.contains('message-content')).toBe(true);
+    expect(withoutHeader.root.shadowRoot.querySelector('.tk-alert-header')).toBeNull();
+  });
+
+  it('applies the header style, alignment and type classes', async () => {
+    const page = await create(`<tk-alert header="Title" align-items="start" type="outlined"></tk-alert>`);
+    page.root.headerStyle = { color: 'red' };
+    page.root.containerStyle = { margin: '2px' };
+    await page.waitForChanges();
+
+    const container = page.root.shadowRoot.querySelector('.tk-alert-container') as HTMLElement;
+    expect(container.classList.contains('tk-alert-alignment-start')).toBe(true);
+    expect(container.classList.contains('outlined')).toBe(true);
+    expect(container.style.margin).toBe('2px');
+    expect((page.root.shadowRoot.querySelector('.tk-alert-header') as HTMLElement).style.color).toBe('red');
+  });
+
+  it('renders nothing for a message array that is not all strings', async () => {
+    const page = await create(`<tk-alert></tk-alert>`);
+    page.root.message = [1, 2];
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message')).toBeNull();
+    expect(page.root.shadowRoot.querySelector('.tk-alert-message-holder')).toBeNull();
+  });
+
+  it('renders the footer-action and right-action slots only when provided', async () => {
+    const plain = await create(`<tk-alert message="m"></tk-alert>`);
+    expect(plain.root.shadowRoot.querySelector('slot[name="footer-action"]')).toBeNull();
+    expect(plain.root.shadowRoot.querySelector('slot[name="right-action"]')).toBeNull();
+
+    const slotted = await create(`<tk-alert message="m"><button slot="footer-action">Undo</button><button slot="right-action">Go</button></tk-alert>`);
+    expect(slotted.root.shadowRoot.querySelector('.tk-alert-content slot[name="footer-action"]')).toBeTruthy();
+    expect(slotted.root.shadowRoot.querySelector('slot[name="right-action"]')).toBeTruthy();
+  });
+
+  it('replaces the icon and text with the content slot', async () => {
+    const page = await create(`<tk-alert variant="success" header="Hidden"><div slot="content">Custom</div></tk-alert>`);
+
+    expect(page.root.shadowRoot.querySelector('slot[name="content"]')).toBeTruthy();
+    expect(page.root.shadowRoot.querySelector('.tk-alert-content')).toBeNull();
+    expect(page.root.shadowRoot.querySelector('tk-icon')).toBeNull();
+  });
+
+  it('uses a white close button on filled alerts and a neutral one otherwise', async () => {
+    const filled = await create(`<tk-alert removable type="filled"></tk-alert>`);
+    expect((filled.root.shadowRoot.querySelector('tk-button') as any).variant).toBe('white');
+
+    const outlined = await create(`<tk-alert removable type="outlined"></tk-alert>`);
+    expect((outlined.root.shadowRoot.querySelector('tk-button') as any).variant).toBe('neutral');
+
+    const notRemovable = await create(`<tk-alert></tk-alert>`);
+    expect(notRemovable.root.shadowRoot.querySelector('tk-button')).toBeNull();
+  });
+});

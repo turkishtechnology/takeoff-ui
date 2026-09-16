@@ -118,10 +118,10 @@ export const config: Config = {
     // cannot quietly lower them. Raise these as the untested paths get covered.
     coverageThreshold: {
       global: {
-        statements: 85,
-        branches: 77,
-        functions: 84,
-        lines: 86,
+        statements: 97,
+        branches: 92,
+        functions: 97,
+        lines: 98,
       },
     },
   },

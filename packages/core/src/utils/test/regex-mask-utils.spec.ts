@@ -119,6 +119,149 @@ describe('regex-mask-utils', () => {
     });
   });
 
+  describe('escape sequences', () => {
+    const classify = (source: string, value: string): MatchState | null => {
+      const matcher = createIncrementalMatcher(stripAnchors(source));
+      return matcher ? matcher(value) : null;
+    };
+
+    it('matches \\D as any non-digit', () => {
+      expect(classify('^\\D$', 'a')).toBe(DONE);
+      expect(classify('^\\D$', '-')).toBe(DONE);
+      expect(classify('^\\D$', '5')).toBe(FAILED);
+    });
+
+    it('matches \\w and \\W as word and non-word characters', () => {
+      expect(classify('^\\w+$', 'ab_9')).toBe(DONE);
+      expect(classify('^\\w+$', 'a-')).toBe(FAILED);
+      expect(classify('^\\W$', '-')).toBe(DONE);
+      expect(classify('^\\W$', 'a')).toBe(FAILED);
+    });
+
+    it('matches \\s and \\S as whitespace and non-whitespace', () => {
+      expect(classify('^\\s$', ' ')).toBe(DONE);
+      expect(classify('^\\s$', 'x')).toBe(FAILED);
+      expect(classify('^\\S$', 'x')).toBe(DONE);
+      expect(classify('^\\S$', '\t')).toBe(FAILED);
+    });
+
+    it('matches \\n, \\t and \\r as the control characters they name', () => {
+      expect(classify('^a\\nb$', 'a\nb')).toBe(DONE);
+      expect(classify('^a\\tb$', 'a\tb')).toBe(DONE);
+      expect(classify('^a\\rb$', 'a\rb')).toBe(DONE);
+      expect(classify('^a\\nb$', 'anb')).toBe(FAILED);
+    });
+
+    it('matches an escaped metacharacter literally', () => {
+      expect(classify('^\\(\\d\\)$', '(1)')).toBe(DONE);
+      expect(classify('^\\(\\d\\)$', '1')).toBe(FAILED);
+      expect(classify('^a\\.b$', 'a.b')).toBe(DONE);
+      expect(classify('^a\\.b$', 'axb')).toBe(FAILED);
+    });
+
+    it('treats a lone . as any character except a newline', () => {
+      expect(classify('^a.b$', 'axb')).toBe(DONE);
+      expect(classify('^a.b$', 'a\nb')).toBe(FAILED);
+    });
+  });
+
+  describe('character classes', () => {
+    const classify = (source: string, value: string): MatchState | null => {
+      const matcher = createIncrementalMatcher(stripAnchors(source));
+      return matcher ? matcher(value) : null;
+    };
+
+    it('rejects the listed characters in a negated class and accepts everything else', () => {
+      expect(classify('^[^0-9]+$', 'ab-')).toBe(DONE);
+      expect(classify('^[^0-9]+$', 'a1')).toBe(FAILED);
+      expect(classify('^[^abc]$', 'b')).toBe(FAILED);
+      expect(classify('^[^abc]$', 'd')).toBe(DONE);
+    });
+
+    it('expands \\d, \\w and \\s inside a class', () => {
+      expect(classify('^[\\d-]+$', '12-34')).toBe(DONE);
+      expect(classify('^[\\d-]+$', '1a')).toBe(FAILED);
+      expect(classify('^[\\w.]+$', 'a_b.c')).toBe(DONE);
+      expect(classify('^[\\w.]+$', 'a b')).toBe(FAILED);
+      expect(classify('^[\\s,]+$', ' ,\t')).toBe(DONE);
+      expect(classify('^[\\s,]+$', 'x')).toBe(FAILED);
+    });
+
+    it('reads escaped literals inside a class', () => {
+      expect(classify('^[\\]\\-]+$', ']-')).toBe(DONE);
+      expect(classify('^[\\]\\-]+$', 'a')).toBe(FAILED);
+      expect(classify('^[\\n]$', '\n')).toBe(DONE);
+      expect(classify('^[\\n]$', 'n')).toBe(FAILED);
+      expect(classify('^[\\t\\r]$', '\r')).toBe(DONE);
+    });
+
+    it('keeps a trailing - in a class as a literal', () => {
+      expect(classify('^[a-]+$', 'a-a')).toBe(DONE);
+      expect(classify('^[a-]+$', 'b')).toBe(FAILED);
+    });
+  });
+
+  describe('groups, anchors and quantifier edge cases', () => {
+    const classify = (source: string, value: string): MatchState | null => {
+      const matcher = createIncrementalMatcher(stripAnchors(source));
+      return matcher ? matcher(value) : null;
+    };
+
+    it('treats a non-capturing group like a plain group', () => {
+      expect(classify('^(?:ab)+$', 'abab')).toBe(DONE);
+      expect(classify('^(?:ab)+$', 'aba')).toBe(MORE);
+      expect(classify('^(?:ab)+$', 'ac')).toBe(FAILED);
+    });
+
+    it('accepts anchors that survive stripping, inside a group or with surrounding whitespace', () => {
+      const matcher = createIncrementalMatcher('^[0-9]+$');
+      expect(matcher('12')).toBe(DONE);
+      expect(matcher('a')).toBe(FAILED);
+      expect(classify('^(^ab$)$', 'ab')).toBe(DONE);
+      expect(classify('^(^ab$)$', 'a')).toBe(MORE);
+    });
+
+    it('lets a repeated group carry an anchor and an optional tail', () => {
+      // Repeating a bounded group clones its already-expanded optional chain.
+      expect(classify('^(a{1,2}){2}$', 'aa')).toBe(DONE);
+      expect(classify('^(a{1,2}){2}$', 'aaaa')).toBe(DONE);
+      expect(classify('^(a{1,2}){2}$', 'aaaaa')).toBe(FAILED);
+      expect(classify('^(a$){2}$', 'aa')).toBe(DONE);
+    });
+
+    it('lets an empty alternative match the empty string', () => {
+      expect(classify('^(ab|)$', '')).toBe(DONE);
+      expect(classify('^(ab|)$', 'ab')).toBe(DONE);
+      expect(classify('^(ab|)$', 'x')).toBe(FAILED);
+      expect(classify('^()$', '')).toBe(DONE);
+    });
+
+    it('treats a { that does not open a quantifier as a literal', () => {
+      expect(classify('^a{x}$', 'a{x}')).toBe(DONE);
+      expect(classify('^a{x}$', 'aa')).toBe(FAILED);
+    });
+
+    it('ignores the lazy modifier on quantifiers', () => {
+      expect(classify('^a+?b$', 'aab')).toBe(DONE);
+      expect(classify('^a*?b$', 'b')).toBe(DONE);
+      expect(classify('^a??b$', 'ab')).toBe(DONE);
+      expect(classify('^a{1,2}?b$', 'aab')).toBe(DONE);
+      expect(classify('^a{1,2}?b$', 'aaab')).toBe(FAILED);
+    });
+
+    it('reads {n,} as at least n and {,m} as at most m', () => {
+      expect(classify('^a{2,}$', 'a')).toBe(MORE);
+      expect(classify('^a{2,}$', 'aaaa')).toBe(DONE);
+      expect(classify('^a{,2}$', '')).toBe(DONE);
+      expect(classify('^a{,2}$', 'aa')).toBe(DONE);
+      expect(classify('^a{,2}$', 'aaa')).toBe(FAILED);
+    });
+
+    it('returns null for an octal-style back-reference escape', () => {
+      expect(createIncrementalMatcher('(a)\\1')).toBeNull();
+    });
+  });
+
   describe('stripAnchors', () => {
     it('removes leading ^ and trailing $', () => {
       expect(stripAnchors('^[0-9]+$')).toBe('[0-9]+');
