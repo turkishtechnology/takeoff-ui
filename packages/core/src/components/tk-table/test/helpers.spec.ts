@@ -253,6 +253,16 @@ describe('tk-table helpers', () => {
 
         expect(filterAndSort(rows(), dateColumns(), filters)).toHaveLength(3);
       });
+
+      it("falls back to the filter panel's yyyy-MM-dd format when the column has no filterElements", () => {
+        const columns: ITableColumn[] = [{ field: 'date', header: 'Date', filterType: 'datepicker' }];
+
+        const single = filterAndSort(rows(), columns, [{ field: 'date', type: 'datepicker', value: '2024-05-12' }]);
+        const range = filterAndSort(rows(), columns, [{ field: 'date', type: 'datepicker', value: { start: '2024-05-10', end: '2024-05-12' } }]);
+
+        expect(single.map(row => row.id)).toEqual([2]);
+        expect(range.map(row => row.id)).toEqual([1, 2]);
+      });
     });
 
     describe('text filter', () => {

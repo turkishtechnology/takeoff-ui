@@ -107,7 +107,8 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
           if (!fieldValue) return false;
           // Get dateFormat and timeFormat from column definition
           const column = columns.find(col => col.field === filter.field);
-          const dateFormat = column?.filterElements?.optionsSearchDatepicker?.dateFormat;
+          // Same default the filter panel gives its tk-datepicker when the column has no filterElements.
+          const dateFormat = column?.filterElements?.optionsSearchDatepicker?.dateFormat ?? 'yyyy-MM-dd';
           const timeFormat = column?.filterElements?.optionsSearchDatepicker?.timeFormat;
           const formatType = dateFormat + (timeFormat === '24' ? ' HH:mm' : timeFormat === '12' ? ' hh:mm aa' : '');
 
