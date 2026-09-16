@@ -140,7 +140,7 @@ export class TkCheckbox implements ComponentInterface {
 
   render() {
     return (
-      <div class={classNames('tk-checkbox-container', this.type, this.size)} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+      <div class={classNames('tk-checkbox-container', this.type, this.size)} aria-disabled={String(this.disabled)} aria-invalid={String(this.invalid)}>
         <label htmlFor={this.uniqueId}>
           {this.renderInput()}
           <div class="mask">

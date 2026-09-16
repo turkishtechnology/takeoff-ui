@@ -521,6 +521,15 @@ export class TkDatePicker {
     return false;
   }
 
+  /** Derives the meridiem from a (re)seeded time without letting the internalAmPm watcher convert the hour. */
+  private syncAmPmWithTime(time: { hour: number; minute: number } | null) {
+    if (this.timeFormat !== '12' || !time) return;
+    const wasUpdating = this.isUpdatingAmPm;
+    this.isUpdatingAmPm = true;
+    this.internalAmPm = time.hour >= 12 ? 'PM' : 'AM';
+    this.isUpdatingAmPm = wasUpdating;
+  }
+
   private updateTimeBasedOnAmPm(newAmPm: 'AM' | 'PM') {
     if (this.timeFormat !== '12' || this.isUpdatingAmPm) {
       return;
@@ -695,16 +704,9 @@ export class TkDatePicker {
           startTime = { hour: parsed.getHours(), minute: parsed.getMinutes() };
         }
       }
-      // For initial load, set AM/PM based on actual time, but respect user changes after that
-      if (this.timeFormat === '12' && startTime) {
-        // Only set if this is the initial default state, otherwise respect user choice
-        if (this.internalAmPm === 'AM' && startTime.hour >= 12) {
-          this.internalAmPm = 'PM';
-        }
-      }
-
       this.internalStartTime = startTime;
       this.internalEndTime = startTime;
+      this.syncAmPmWithTime(startTime);
       // Do not set any dates in time-only mode
       this.internalSelectedDates = { start: null, end: null };
       this.inputValue = this.formatInputValue();
@@ -729,7 +731,7 @@ export class TkDatePicker {
       }
 
       if (startString) {
-        const parsedStartDateTime = this.showTimePicker ? this.parseFullDateTime(startString) : this.parseInputDate(startString);
+        const parsedStartDateTime = this.showTimePicker ? (this.parseFullDateTime(startString) ?? this.parseInputDate(startString)) : this.parseInputDate(startString);
 
         if (parsedStartDateTime && !this.isDateDisabled(parsedStartDateTime)) {
           startDate = this.normalizeDate(parsedStartDateTime);
@@ -748,7 +750,7 @@ export class TkDatePicker {
       }
 
       if (this.mode === 'range' && endString && startDate) {
-        const parsedEndDateTime = this.showTimePicker ? this.parseFullDateTime(endString) : this.parseInputDate(endString);
+        const parsedEndDateTime = this.showTimePicker ? (this.parseFullDateTime(endString) ?? this.parseInputDate(endString)) : this.parseInputDate(endString);
 
         if (parsedEndDateTime && !this.isDateDisabled(parsedEndDateTime)) {
           endDate = this.normalizeDate(parsedEndDateTime);
@@ -781,6 +783,7 @@ export class TkDatePicker {
     this.internalSelectedDates = { start: startDate, end: endDate };
     this.internalStartTime = startTime;
     this.internalEndTime = this.mode === 'range' ? endTime : startTime;
+    this.syncAmPmWithTime(this.mode === 'range' && endDate && endTime ? endTime : startTime);
 
     if (updateCurrentMonth && startDate) {
       this.currentMonth = new Date(startDate.getFullYear(), startDate.getMonth());
@@ -2300,7 +2303,7 @@ export class TkDatePicker {
         onKeyDown={this.handleInputKeyDown}
         onClick={this.handleInputClick}
         onTk-blur={this.handleInputBlur}
-        aria-expanded={!!this.isOpen}
+        aria-expanded={String(this.isOpen)}
         aria-haspopup="true"
         data-tk-datepicker-id={this.uniqueId}
         showAsterisk={this.showAsterisk}

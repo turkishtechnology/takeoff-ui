@@ -301,13 +301,13 @@ describe('tk-color-picker popover', () => {
     const trigger = query(page, 'tk-input');
 
     expect(query(page, '.tk-color-picker-panel')).toBeNull();
-    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
 
     trigger.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     await page.waitForChanges();
 
     expect(query(page, '.tk-color-picker-panel')).toBeTruthy();
-    expect(query(page, 'tk-input').hasAttribute('aria-expanded')).toBe(true);
+    expect(query(page, 'tk-input').getAttribute('aria-expanded')).toBe('true');
     expect(mockedAutoUpdate).toHaveBeenCalledTimes(1);
 
     await page.root.close();
@@ -385,7 +385,7 @@ describe('tk-color-picker popover', () => {
     const trigger = query(page, 'tk-input');
 
     trigger.dispatchEvent(new CustomEvent('tk-focus'));
-    instanceOf(page).triggerInputValue = '#00f';
+    tkChangeOn(trigger, '#00f');
     await page.waitForChanges();
     expect(query(page, 'tk-input').getAttribute('value')).toBe('#00f');
 
@@ -411,14 +411,14 @@ describe('tk-color-picker popover', () => {
     const onChange = listen(page, 'tk-change');
     const trigger = query(page, 'tk-input');
 
-    instanceOf(page).triggerInputValue = 'not-a-color';
+    tkChangeOn(trigger, 'not-a-color');
     trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     await page.waitForChanges();
 
     expect(page.root.value).toBe('#ff0000');
     expect(onChange).not.toHaveBeenCalled();
 
-    instanceOf(page).triggerInputValue = '#000000';
+    tkChangeOn(trigger, '#000000');
     trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     await page.waitForChanges();
 
@@ -430,7 +430,7 @@ describe('tk-color-picker popover', () => {
     const page = await setup(`<tk-color-picker value="#ff0000"></tk-color-picker>`);
     const trigger = query(page, 'tk-input');
 
-    instanceOf(page).triggerInputValue = 'garbage';
+    tkChangeOn(trigger, 'garbage');
     trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
     expect(instanceOf(page).triggerInputValue).toBe('garbage');
 
@@ -445,8 +445,9 @@ describe('tk-color-picker popover', () => {
     const page = await setup(`<tk-color-picker value="#ff0000" format="rgba"></tk-color-picker>`);
     const onChange = listen(page, 'tk-change');
 
-    instanceOf(page).triggerInputValue = '#00ff00';
-    query(page, 'tk-input').dispatchEvent(new CustomEvent('tk-blur'));
+    const trigger = query(page, 'tk-input');
+    tkChangeOn(trigger, '#00ff00');
+    tkBlurOn(trigger);
     await page.waitForChanges();
 
     expect(onChange.mock.calls[0][0].detail).toBe('rgba(0, 255, 0, 1.00)');

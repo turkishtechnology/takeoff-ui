@@ -429,7 +429,7 @@ export class TkSelect implements ComponentInterface {
     if (this.isGrouped()) {
       this.flatOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
     } else {
-      this.flatOptions = this.options;
+      this.flatOptions = this.options ?? [];
     }
   }
 
@@ -1147,7 +1147,7 @@ export class TkSelect implements ComponentInterface {
         chipOptions={this.chipOptions}
         chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
-        aria-expanded={!!this.isOpen}
+        aria-expanded={String(this.isOpen)}
         onClick={e => this.handleInputClick(e)}
         onTk-change={e => {
           e.stopPropagation();
@@ -1207,7 +1207,7 @@ export class TkSelect implements ComponentInterface {
     const rootClasses = classNames('tk-select-container', this.size);
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
+      <div aria-readonly={String(this.readonly)} aria-disabled={String(this.disabled)} aria-invalid={String(this.invalid)} class={rootClasses}>
         {this.renderInput()}
         {this.renderDropdown()}
       </div>

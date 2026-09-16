@@ -543,8 +543,7 @@ describe('tk-datepicker logic', () => {
   });
 
   describe('time picker', () => {
-    // The time state is a {hour, minute} pair, and a date-only `value` leaves it unset, so the
-    // fixture has to carry a time component.
+    // The fixture carries a time component so the {hour, minute} state does not depend on the clock.
     const withTime = `inline="true" show-time-picker="true" value="2024-03-15 10:00"`;
 
     it('reads the time out of the value', async () => {

@@ -382,14 +382,15 @@ describe('tk-datepicker input', () => {
   describe('opening from the input', () => {
     it('toggles the popup and mirrors the state on aria-expanded', async () => {
       const page = await setup();
+      expect(input(page).getAttribute('aria-expanded')).toBe('false');
 
       await openPanel(page);
       expect(byTestId(page, 'panel')).toBeTruthy();
-      expect(input(page).hasAttribute('aria-expanded')).toBe(true);
+      expect(input(page).getAttribute('aria-expanded')).toBe('true');
 
       await openPanel(page);
       expect(byTestId(page, 'panel')).toBeNull();
-      expect(input(page).hasAttribute('aria-expanded')).toBe(false);
+      expect(input(page).getAttribute('aria-expanded')).toBe('false');
     });
 
     it.each(['disabled="true"', 'readonly="true"'])('does not open when %s', async attr => {

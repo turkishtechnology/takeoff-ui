@@ -195,4 +195,16 @@ describe('tk-radio-group', () => {
     expect(page.root.shadowRoot.querySelector('[data-testid="my-group-holder"]')).toBeTruthy();
     expect(page.root.shadowRoot.querySelector('[data-testid="my-group-label"]')).toBeTruthy();
   });
+
+  it('exposes invalid as a "true"/"false" aria string on the container', async () => {
+    const page = await newSpecPage({
+      components: [TkRadioGroup, TkRadio],
+      html: `<tk-radio-group invalid="true"><tk-radio label="A" value="a"></tk-radio></tk-radio-group>`,
+    });
+    expect(page.root.shadowRoot.querySelector('.tk-radio-group-container').getAttribute('aria-invalid')).toBe('true');
+
+    page.root.invalid = false;
+    await page.waitForChanges();
+    expect(page.root.shadowRoot.querySelector('.tk-radio-group-container').getAttribute('aria-invalid')).toBe('false');
+  });
 });

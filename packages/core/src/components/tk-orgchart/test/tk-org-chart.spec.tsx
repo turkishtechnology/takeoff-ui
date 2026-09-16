@@ -376,6 +376,22 @@ describe('tk-org-chart', () => {
 
       clearSpy.mockRestore();
     });
+
+    it('ignores a collapsible change once the instance is gone', async () => {
+      const error = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+      const page = await setup();
+
+      page.root.remove();
+      await page.waitForChanges();
+      expect(chartOf(page)).toBeUndefined();
+
+      expect(() => instanceOf(page).collapsibleChanged()).not.toThrow();
+      page.root.collapsible = false;
+      await page.waitForChanges();
+
+      expect(error).not.toHaveBeenCalled();
+      error.mockRestore();
+    });
   });
 });
 

@@ -459,7 +459,7 @@ export class TkUpload implements ComponentInterface {
     }
 
     return (
-      <div class={rootClasses} aria-disabled={this.disabled} aria-invalid={this.invalid}>
+      <div class={rootClasses} aria-disabled={String(this.disabled)} aria-invalid={String(this.invalid)}>
         {label}
         {this.renderDropzone()}
         {renderHint(this.hint, this.error, this.invalid)}

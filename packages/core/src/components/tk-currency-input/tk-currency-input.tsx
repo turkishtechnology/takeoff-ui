@@ -932,7 +932,7 @@ export class TkCurrencyInput implements ComponentInterface {
         class="tk-currency-input-dropdown-button"
         onClick={event => this.toggleDropdown(event)}
         disabled={this.currencyDisabled || this.disabled}
-        aria-disabled={this.currencyDisabled || this.disabled}
+        aria-disabled={String(this.currencyDisabled || this.disabled)}
       >
         <div class="tk-currency-input-dropdown-button-selected">
           {!this.hideFlag && this.renderFlag(this.selectedCurrency)}
@@ -973,7 +973,7 @@ export class TkCurrencyInput implements ComponentInterface {
             key={currency.code}
             role="option"
             onClick={event => this.handleSelectCurrency(currency.code, event)}
-            aria-selected={this.selectedCurrency.code === currency.code}
+            aria-selected={String(this.selectedCurrency.code === currency.code)}
           >
             {!this.hideFlag && this.renderFlag(currency)}
             <span class="tk-currency-input-dropdown-menu-list-country-label">{currency.symbol}</span>
@@ -1002,9 +1002,9 @@ export class TkCurrencyInput implements ComponentInterface {
     return (
       <div
         class={classNames('tk-currency-input-container', `tk-currency-input-container-${this.size}`)}
-        aria-invalid={this.invalid}
-        aria-disabled={this.disabled}
-        aria-readonly={this.readonly}
+        aria-invalid={String(this.invalid)}
+        aria-disabled={String(this.disabled)}
+        aria-readonly={String(this.readonly)}
       >
         {this.renderLabel()}
         <div class="tk-currency-input-wrapper">

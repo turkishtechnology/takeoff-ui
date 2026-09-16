@@ -133,7 +133,7 @@ describe('tk-table selection edge cases', () => {
 
     expect(instance.isAllRowsSelected()).toBe(false);
     expect(shadow(page).querySelector('thead tk-checkbox').hasAttribute('value')).toBe(false);
-    expect(shadow(page).querySelector('tbody tr').hasAttribute('aria-disabled')).toBe(true);
+    expect(shadow(page).querySelector('tbody tr').getAttribute('aria-disabled')).toBe('true');
     expect(shadow(page).querySelector('tbody tk-checkbox').hasAttribute('disabled')).toBe(true);
 
     shadow(page)

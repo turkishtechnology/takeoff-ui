@@ -44,9 +44,9 @@ describe('tk-textarea', () => {
     const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
     const textarea = page.root.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
 
-    expect(container.getAttribute('aria-disabled')).toBe('');
-    expect(container.getAttribute('aria-readonly')).toBe('');
-    expect(container.getAttribute('aria-invalid')).toBe('');
+    expect(container.getAttribute('aria-disabled')).toBe('true');
+    expect(container.getAttribute('aria-readonly')).toBe('true');
+    expect(container.getAttribute('aria-invalid')).toBe('true');
     expect(textarea.getAttribute('disabled')).toBe('');
     expect(textarea.getAttribute('readonly')).toBe('');
   });

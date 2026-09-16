@@ -328,6 +328,17 @@ describe('tk-phone-input', () => {
       expect(page.root.querySelector('.tk-phone-input-dial-code')?.textContent).toBe('+90');
     });
 
+    it('falls back to the default country when the initial value has no country', async () => {
+      const page = await newSpecPage({
+        components: [TkPhoneInput],
+        template: () => <tk-phone-input defaultCountry="US" value={{ rawValue: '5051112233', maskedValue: '' }}></tk-phone-input>,
+      });
+
+      expect(getInput(page).value).toBe('(505) 111-2233');
+      expect(page.root.querySelector('.tk-phone-input-dial-code')?.textContent).toBe('+1');
+      expect((page.rootInstance as any).selectedCountry.id).toBe('US');
+    });
+
     it('updates the country and mask when the value is set programmatically', async () => {
       const page = await createPage(`<tk-phone-input></tk-phone-input>`);
 
@@ -367,24 +378,27 @@ describe('tk-phone-input', () => {
       expect(detail.country.id).toBe('TR');
     });
 
-    it('resets first but fails with a TypeError when the value is set to null (current behavior)', async () => {
+    it.each([null, undefined])('resets cleanly when the value is set to %s', async emptyValue => {
       const page = await createPage(`<tk-phone-input></tk-phone-input>`);
       const changeSpy = jest.fn();
-      page.root.addEventListener('tk-change', changeSpy);
+      const input = getInput(page);
 
-      // Bug: valueChanged dereferences newValue.rawValue after the null guard branch,
-      // so setting the value to null resets the input but then raises a TypeError
-      let caught: unknown;
-      try {
-        page.root.value = null;
-        await page.waitForChanges();
-      } catch (error) {
-        caught = error;
-      }
+      input.value = '5321234567';
+      input.dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      expect(input.value).toBe('(532) 123 4567');
+
+      page.root.addEventListener('tk-change', changeSpy);
+      page.root.value = emptyValue;
+      await page.waitForChanges();
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
-      expect(changeSpy.mock.calls[0][0].detail.rawValue).toBe('');
-      expect(caught).toBeInstanceOf(TypeError);
+      const detail = changeSpy.mock.calls[0][0].detail;
+      expect(detail.rawValue).toBe('');
+      expect(detail.maskedValue).toBe('');
+      expect(detail.country.id).toBe('TR');
+      expect(input.value).toBe('');
+      expect(page.root.value).toEqual(detail);
     });
 
     it('resets state through formResetCallback', async () => {
@@ -536,5 +550,20 @@ describe('tk-phone-input edge cases', () => {
     expect(() => instance.disconnectedCallback()).not.toThrow();
     expect(instance.cleanup).toBeNull();
     expect(positionMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('tk-phone-input aria state', () => {
+  it('renders the container state flags as "true"/"false" strings', async () => {
+    const flagged = await createPage(`<tk-phone-input disabled="true" invalid="true"></tk-phone-input>`);
+    const flaggedContainer = flagged.root.querySelector('.tk-phone-input-container');
+    expect(flaggedContainer.getAttribute('aria-disabled')).toBe('true');
+    expect(flaggedContainer.getAttribute('aria-invalid')).toBe('true');
+    expect(flaggedContainer.getAttribute('aria-readonly')).toBe('false');
+
+    const plain = await createPage(`<tk-phone-input></tk-phone-input>`);
+    const plainContainer = plain.root.querySelector('.tk-phone-input-container');
+    expect(plainContainer.getAttribute('aria-disabled')).toBe('false');
+    expect(plainContainer.getAttribute('aria-invalid')).toBe('false');
   });
 });

@@ -838,4 +838,23 @@ describe('public methods', () => {
 
     await page.waitForChanges();
   });
+
+  it('exposes aria-selected and aria-disabled as "true"/"false" strings on each tab', async () => {
+    const page = await newSpecPage({
+      components: [TkStepper, TkStep],
+      html: `
+        <tk-stepper active="0">
+          <tk-step header="Step 1"></tk-step>
+          <tk-step header="Step 2" disabled="true"></tk-step>
+        </tk-stepper>
+      `,
+    });
+
+    const tabs = page.root.shadowRoot.querySelectorAll('[role="tab"]');
+
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    expect(tabs[0].getAttribute('aria-disabled')).toBe('false');
+    expect(tabs[1].getAttribute('aria-selected')).toBe('false');
+    expect(tabs[1].getAttribute('aria-disabled')).toBe('true');
+  });
 });

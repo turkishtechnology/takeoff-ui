@@ -2231,7 +2231,7 @@ export class TkTable implements ComponentInterface {
         <tr
           class={isSelected ? 'selected' : ''}
           onClick={e => this.handleRowClick(e, row)}
-          aria-disabled={isRowDisabled}
+          aria-disabled={String(isRowDisabled)}
           data-testid={getDataTestId(this.dataTestid, 'body-row', rowKey)}
         >
           {selectionTd}

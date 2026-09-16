@@ -12,8 +12,7 @@ import { TkInput } from '../tk-input';
 import { IInputMaskOptions } from '../types';
 
 const DATE_MASK: IInputMaskOptions = { blocks: [2, 2, 4], delimiter: '/', numericOnly: true };
-// letterOnly is applied by tk-input before Cleave re-syncs; Cleave needs a block or it keeps nothing.
-const LETTERS_MASK: IInputMaskOptions = { letterOnly: true, blocks: [10] };
+const LETTERS_MASK: IInputMaskOptions = { letterOnly: true };
 
 const nativeInputOf = (page: SpecPage) => page.root.querySelector('input') as HTMLInputElement;
 
@@ -145,6 +144,29 @@ describe('tk-input Cleave mask', () => {
 
       expect(input.value).toBe('abc');
       expect(input.selectionStart).toBe(3);
+    });
+
+    it('keeps every letter typed when letterOnly is the only mask option', async () => {
+      const page = await renderMasked({ letterOnly: true });
+      const change = listenChange(page);
+
+      fireInput(page, 'a');
+      fireInput(page, 'ab');
+      fireInput(page, 'abc');
+
+      expect(nativeInputOf(page).value).toBe('abc');
+      expect(page.root.value).toBe('abc');
+      expect(change).toHaveBeenLastCalledWith('abc');
+    });
+
+    it('still filters letters when combined with Cleave blocks', async () => {
+      const page = await renderMasked({ letterOnly: true, blocks: [2, 2], delimiter: '-' });
+      const change = listenChange(page);
+
+      fireInput(page, 'ab1cd');
+
+      expect(nativeInputOf(page).value).toBe('ab-cd');
+      expect(change).toHaveBeenLastCalledWith('ab-cd');
     });
   });
 

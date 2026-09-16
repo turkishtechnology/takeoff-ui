@@ -242,8 +242,7 @@ describe('tk-carousel', () => {
       await clickButton(page, nextButton(page));
 
       expect(activeDotIndex(page)).toBe(1);
-      expect(change.details()).toContain(1);
-      expect(change.details().every(detail => detail === 1)).toBe(true);
+      expect(change.details()).toEqual([1]);
     });
 
     it('moves back to the previous item', async () => {
@@ -254,7 +253,7 @@ describe('tk-carousel', () => {
       await clickButton(page, prevButton(page));
 
       expect(activeDotIndex(page)).toBe(1);
-      expect(change.details().every(detail => detail === 1)).toBe(true);
+      expect(change.details()).toEqual([1]);
     });
 
     it('wraps from the last item to the first when circular', async () => {
@@ -390,6 +389,7 @@ describe('tk-carousel', () => {
   describe('keyboard navigation', () => {
     it('moves with the left and right arrows when horizontal and prevents the default', async () => {
       const page = await createCarousel();
+      const change = listenForChange(page);
 
       const right = await pressKey(page, 'ArrowRight');
       expect(right.defaultPrevented).toBe(true);
@@ -398,6 +398,7 @@ describe('tk-carousel', () => {
       const left = await pressKey(page, 'ArrowLeft');
       expect(left.defaultPrevented).toBe(true);
       expect(activeDotIndex(page)).toBe(0);
+      expect(change.details()).toEqual([1, 0]);
     });
 
     it('ignores the up and down arrows when horizontal', async () => {
@@ -627,7 +628,7 @@ describe('tk-carousel', () => {
 
       expect(dots(page)).toHaveLength(0);
       expect(instanceOf(page).activeIndex).toBe(0);
-      expect(change.details().every(detail => detail === 0)).toBe(true);
+      expect(change.calls()).toBe(0);
     });
   });
 });

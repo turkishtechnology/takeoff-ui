@@ -305,8 +305,8 @@ export class TkOrgChart implements ComponentInterface {
   </div>`;
 
   private updateButtonsState() {
-    const lb = this.orgChartInstance.layoutBindings();
     if (!this.orgChartInstance) return;
+    const lb = this.orgChartInstance.layoutBindings();
 
     if (this.buttonUpdateTimeout) {
       clearTimeout(this.buttonUpdateTimeout);
