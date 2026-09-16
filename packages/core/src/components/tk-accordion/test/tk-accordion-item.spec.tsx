@@ -1,11 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { TkAccordionItem } from '../tk-accordion-item';
 
-// Stub componentWillLoad to avoid :scope selector and missing parent issues
-jest.spyOn(TkAccordionItem.prototype as any, 'componentWillLoad').mockImplementation(function (this: TkAccordionItem) {
-  (this as any).hasHeaderSlot = false;
-});
-
 type TkAccordionItemTestInstance = TkAccordionItem & {
   tkActiveChange: { emit: (value: boolean) => void };
 };
@@ -19,6 +14,49 @@ describe('tk-accordion-item', () => {
     instance.activeChanged(true, false);
 
     expect(emit).toHaveBeenCalledWith(true);
+  });
+
+  describe('header slot detection', () => {
+    it('detects a direct header slot', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordionItem],
+        html: `<tk-accordion-item header="Title"><div slot="header">custom</div></tk-accordion-item>`,
+      });
+
+      expect((page.rootInstance as any).hasHeaderSlot).toBe(true);
+    });
+
+    it('reports no slot when none is provided', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordionItem],
+        html: `<tk-accordion-item header="Title"></tk-accordion-item>`,
+      });
+
+      expect((page.rootInstance as any).hasHeaderSlot).toBe(false);
+    });
+
+    it('does not claim a slot nested inside a child', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordionItem],
+        html: `<tk-accordion-item header="Title"><div><span slot="header">nested</span></div></tk-accordion-item>`,
+      });
+
+      expect((page.rootInstance as any).hasHeaderSlot).toBe(false);
+    });
+  });
+
+  describe('parent configuration', () => {
+    it('falls back to its own defaults without a parent accordion', async () => {
+      const page = await newSpecPage({
+        components: [TkAccordionItem],
+        html: `<tk-accordion-item header="Title"></tk-accordion-item>`,
+      });
+      const instance = page.rootInstance as any;
+
+      expect(instance.type).toBe('grouped');
+      expect(instance.arrowPosition).toBe('right');
+      expect(instance.hideArrows).toBe(false);
+    });
   });
 
   describe('dataTestid', () => {

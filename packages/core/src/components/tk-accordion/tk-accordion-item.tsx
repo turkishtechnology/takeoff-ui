@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { IIconOptions, IMultiIconOptions } from '../../global/interfaces/IIconOptions';
 import { getIconElementProps, renderIcons } from '../../utils/icon-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { hasDirectSlot } from '../../utils/has-slot';
 
 /**
  * @slot header - Custom header template that overrides the header prop if provided.
@@ -80,7 +81,7 @@ export class TkAccordionItem implements ComponentInterface {
       this.hideArrows = this.parentEl.hideArrows;
       this.mode = this.parentEl.mode;
     }
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
+    this.hasHeaderSlot = hasDirectSlot(this.el, 'header');
   }
   private renderCollapseIcon() {
     if (this.hideArrows) return null;

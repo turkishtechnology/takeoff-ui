@@ -25,3 +25,20 @@ export const hasSlot = (el: HTMLElement, name?: string): boolean => {
     return false;
   });
 };
+
+/**
+ * Checks if an element has a *direct child* assigned to the given slot.
+ *
+ * Unlike {@link hasSlot}, this does not match nested descendants, so a slotted element
+ * belonging to an inner component is not mistaken for this host's own content. Equivalent to
+ * `el.querySelector(':scope > [slot="name"]')`, which Stencil's mock-doc cannot parse.
+ *
+ * @param el - The host element to check.
+ * @param name - The slot name.
+ * @returns True if a direct child carries the slot, false otherwise.
+ */
+export const hasDirectSlot = (el: HTMLElement, name: string): boolean => {
+  if (!el) return false;
+
+  return Array.from(el.children).some(child => child.getAttribute('slot') === name);
+};

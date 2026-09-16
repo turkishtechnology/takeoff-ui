@@ -5,6 +5,7 @@ import { HSVA, parseColorToHsva, hsvaToCss, hsvaToHex, hsvaToRgb, rgbToHsva } fr
 import { ClickOutsideMixin } from '../../utils/clickoutside-mixin';
 import { floatingElementAutoUpdate } from '../../utils/position-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { hasDirectSlot } from '../../utils/has-slot';
 
 declare global {
   interface Window {
@@ -245,10 +246,10 @@ export class TkColorPicker implements ComponentInterface {
   componentWillLoad() {
     this.internalHSVA = parseColorToHsva(this.value || '#000000');
     this.currentFormat = this.format === 'hex' || this.format === 'rgba' ? this.format : 'hex';
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
-    this.hasHeaderActionsSlot = !!this.el.querySelector(':scope > [slot="header-actions"]');
-    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+    this.hasHeaderSlot = hasDirectSlot(this.el, 'header');
+    this.hasHeaderActionsSlot = hasDirectSlot(this.el, 'header-actions');
+    this.hasFooterSlot = hasDirectSlot(this.el, 'footer');
+    this.hasFooterActionsSlot = hasDirectSlot(this.el, 'footer-actions');
   }
 
   componentDidLoad() {

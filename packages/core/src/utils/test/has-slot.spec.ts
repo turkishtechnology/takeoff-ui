@@ -1,4 +1,4 @@
-import { hasSlot } from '../has-slot';
+import { hasSlot, hasDirectSlot } from '../has-slot';
 
 describe('has-slot', () => {
   describe('hasSlot', () => {
@@ -119,6 +119,70 @@ describe('has-slot', () => {
 
         expect(hasSlot(el)).toBe(true);
       });
+    });
+  });
+
+  describe('hasDirectSlot', () => {
+    it('returns false when el is null or undefined', () => {
+      expect(hasDirectSlot(null as any, 'footer')).toBe(false);
+      expect(hasDirectSlot(undefined as any, 'footer')).toBe(false);
+    });
+
+    it('returns true for a direct child carrying the slot', () => {
+      const el = document.createElement('div');
+      const child = document.createElement('span');
+      child.setAttribute('slot', 'footer');
+      el.appendChild(child);
+
+      expect(hasDirectSlot(el, 'footer')).toBe(true);
+    });
+
+    it('returns false when the slot name does not match', () => {
+      const el = document.createElement('div');
+      const child = document.createElement('span');
+      child.setAttribute('slot', 'header');
+      el.appendChild(child);
+
+      expect(hasDirectSlot(el, 'footer')).toBe(false);
+    });
+
+    it('returns false for an empty element', () => {
+      expect(hasDirectSlot(document.createElement('div'), 'footer')).toBe(false);
+    });
+
+    // The whole point of this helper over `hasSlot`: a nested component's slotted content
+    // must not be claimed by the outer host.
+    it('ignores slotted content nested deeper than a direct child', () => {
+      const el = document.createElement('div');
+      const wrapper = document.createElement('div');
+      const child = document.createElement('span');
+      child.setAttribute('slot', 'footer');
+      wrapper.appendChild(child);
+      el.appendChild(wrapper);
+
+      expect(hasDirectSlot(el, 'footer')).toBe(false);
+      expect(hasSlot(el, 'footer')).toBe(true);
+    });
+
+    it('ignores children with no slot attribute', () => {
+      const el = document.createElement('div');
+      el.appendChild(document.createElement('p'));
+
+      expect(hasDirectSlot(el, 'footer')).toBe(false);
+    });
+
+    it('finds the slot among several direct children', () => {
+      const el = document.createElement('div');
+      el.appendChild(document.createElement('p'));
+      const header = document.createElement('span');
+      header.setAttribute('slot', 'header');
+      el.appendChild(header);
+      const footer = document.createElement('span');
+      footer.setAttribute('slot', 'footer');
+      el.appendChild(footer);
+
+      expect(hasDirectSlot(el, 'footer')).toBe(true);
+      expect(hasDirectSlot(el, 'header')).toBe(true);
     });
   });
 });

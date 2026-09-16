@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Element, Fragment, Prop, State, h } from
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { hasDirectSlot } from '../../utils/has-slot';
 
 /**
  * TkCard component description.
@@ -143,12 +144,12 @@ export class TkCard implements ComponentInterface {
   @Prop({ reflect: true }) dataTestid?: string;
 
   componentWillLoad() {
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
-    this.hasAvatarSlot = !!this.el.querySelector(':scope > [slot="avatar"]');
-    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
-    this.hasHeaderActionSlot = !!this.el.querySelector(':scope > [slot="header-action"]');
+    this.hasHeaderSlot = hasDirectSlot(this.el, 'header');
+    this.hasAvatarSlot = hasDirectSlot(this.el, 'avatar');
+    this.hasContentSlot = hasDirectSlot(this.el, 'content');
+    this.hasFooterSlot = hasDirectSlot(this.el, 'footer');
+    this.hasFooterActionsSlot = hasDirectSlot(this.el, 'footer-actions');
+    this.hasHeaderActionSlot = hasDirectSlot(this.el, 'header-action');
     this.hasDefaultSlotBody = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
     });
@@ -263,17 +264,7 @@ export class TkCard implements ComponentInterface {
     const footer = this.createFooter();
     const imageOption = this.imageOptions.position;
 
-    if (imageOption === 'top') {
-      return (
-        <Fragment>
-          {this.headerPosition === 'top' && header}
-          {image}
-          {this.headerPosition === 'bottom' && header}
-          {content}
-          {footer}
-        </Fragment>
-      );
-    } else if (this.horizontal && (imageOption === 'left' || imageOption === 'right')) {
+    if (this.horizontal && (imageOption === 'left' || imageOption === 'right')) {
       return (
         <Fragment>
           {imageOption === 'left' && image}
@@ -286,6 +277,18 @@ export class TkCard implements ComponentInterface {
         </Fragment>
       );
     }
+
+    // Default stack: also covers a side image position without `horizontal`, and an
+    // imageOptions object that omits `position` - both used to render an empty card.
+    return (
+      <Fragment>
+        {this.headerPosition === 'top' && header}
+        {image}
+        {this.headerPosition === 'bottom' && header}
+        {content}
+        {footer}
+      </Fragment>
+    );
   }
 
   render() {

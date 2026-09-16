@@ -2,6 +2,7 @@ import { Component, Method, Prop, State, Watch, h, Event, EventEmitter, Element,
 import classNames from 'classnames';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
+import { hasDirectSlot } from '../../utils/has-slot';
 import { CSSStyleProperties } from '../../global/types';
 
 /**
@@ -138,11 +139,11 @@ export class TkDialog implements ComponentInterface {
   @Event({ eventName: 'tk-visible-change' }) tkVisibleChange: EventEmitter<boolean>;
 
   componentWillLoad() {
-    this.hasContainerSlot = !!this.el.querySelector(':scope > [slot="container"]');
-    this.hasHeaderSlot = !!this.el.querySelector(':scope > [slot="header"]');
-    this.hasContentSlot = !!this.el.querySelector(':scope > [slot="content"]');
-    this.hasFooterSlot = !!this.el.querySelector(':scope > [slot="footer"]');
-    this.hasFooterActionsSlot = !!this.el.querySelector(':scope > [slot="footer-actions"]');
+    this.hasContainerSlot = hasDirectSlot(this.el, 'container');
+    this.hasHeaderSlot = hasDirectSlot(this.el, 'header');
+    this.hasContentSlot = hasDirectSlot(this.el, 'content');
+    this.hasFooterSlot = hasDirectSlot(this.el, 'footer');
+    this.hasFooterActionsSlot = hasDirectSlot(this.el, 'footer-actions');
 
     this.hasDefaultSlotContent = Array.from(this.el.childNodes).some(node => {
       return node.nodeType === Node.ELEMENT_NODE && !(node as HTMLElement).hasAttribute('slot');
@@ -305,7 +306,8 @@ export class TkDialog implements ComponentInterface {
       'class': dialogClasses,
       'style': { display: 'flex', flexDirection: 'column', ...this.containerStyle },
       'role': 'dialog',
-      'aria-modal': true,
+      // Must be the literal string: a boolean renders as aria-modal="", which is invalid ARIA.
+      'aria-modal': 'true',
       'data-testid': getDataTestId(this.dataTestid, 'root'),
     };
 
