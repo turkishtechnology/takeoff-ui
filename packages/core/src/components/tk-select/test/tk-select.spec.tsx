@@ -1,5 +1,7 @@
 jest.mock('lodash-es', () => ({
   isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right),
+  // tk-input restores the caret after a Cleave.js mask reformats the field and checks the offset with isNil
+  isNil: (value: unknown) => value === null || value === undefined,
   // the component also calls some() with primitive single-select values; lodash tolerates that
   some: (items: unknown, predicate: (item: unknown) => boolean) => (Array.isArray(items) ? items.some(predicate) : false),
   remove: (items: unknown[], predicate: (item: unknown) => boolean) => {
@@ -1082,6 +1084,65 @@ describe('tk-select', () => {
       page.root.value = null;
       await page.waitForChanges();
       expect(instanceOf(page).inputRef.value).toBe(null);
+    });
+  });
+
+  describe('mask', () => {
+    // Simulates typing: appends one character at a time and fires an input event after each
+    // keystroke, the way a real <input> behaves.
+    const typeInto = (input: HTMLInputElement, text: string) => {
+      for (const ch of text) {
+        input.value = input.value + ch;
+        input.dispatchEvent(new Event('input'));
+      }
+    };
+
+    it('hands maskOptions to the inner tk-input', async () => {
+      const maskOptions = { regex: /^[A-Z]+$/ };
+      const page = await createSelect('editable="true"', { options: ['Alpha'], maskOptions });
+
+      expect(page.root.querySelector('tk-input').maskOptions).toEqual(maskOptions);
+    });
+
+    it('rejects characters the regex mask forbids and filters with the masked text', async () => {
+      const page = await createSelect('editable="true"', { options: ['ALPHA', 'BETA', 'Beta'], maskOptions: { regex: /^[A-Z]+$/ } });
+      const nativeInput = page.root.querySelector('input') as HTMLInputElement;
+
+      typeInto(nativeInput, 'B1e');
+      await page.waitForChanges();
+
+      expect(nativeInput.value).toBe('B');
+      expect(instanceOf(page).renderOptions).toEqual(['BETA', 'Beta']);
+    });
+
+    it('emits the masked text as the value when custom values are allowed', async () => {
+      const page = await createSelect('allow-custom-value="true"', { options: ['Alpha'], maskOptions: { regex: /^[0-9]{0,4}$/ } });
+      const nativeInput = page.root.querySelector('input') as HTMLInputElement;
+      const changes = listen(page, 'tk-change');
+
+      typeInto(nativeInput, '12a345');
+      await page.waitForChanges();
+
+      expect(nativeInput.value).toBe('1234');
+      expect(page.root.value).toBe('1234');
+      expect(changes[changes.length - 1]).toBe('1234');
+    });
+
+    it('formats the typed text through a Cleave.js mask', async () => {
+      const page = await createSelect('allow-custom-value="true"', { options: ['Alpha'], maskOptions: { blocks: [4, 4], numericOnly: true } });
+      const nativeInput = page.root.querySelector('input') as HTMLInputElement;
+
+      typeInto(nativeInput, '12345678');
+      await page.waitForChanges();
+
+      expect(nativeInput.value).toBe('1234 5678');
+      expect(page.root.value).toBe('1234 5678');
+    });
+
+    it('does not mask the chips input in multiple mode', async () => {
+      const page = await createSelect('multiple="true" editable="true"', { options: ['Alpha'], maskOptions: { regex: /^[A-Z]+$/ } });
+
+      expect(page.root.querySelector('tk-input').maskOptions).toBeUndefined();
     });
   });
 
