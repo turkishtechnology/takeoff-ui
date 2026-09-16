@@ -20,6 +20,9 @@ const listen = (page: SpecPage, eventName: string) => {
   return spy;
 };
 
+// The value prop type does not admit plain objects, but chipLabelKey reads them at runtime.
+const objectValue = (value: Record<string, string>) => value as unknown as HTMLTkInputElement['value'];
+
 describe('tk-input rendering and native attribute passthrough', () => {
   it('passes name, placeholder, min, max and step down to the native input', async () => {
     const page = await render(`<tk-input mode="number" name="qty" placeholder="Amount" min="1" max="9" step="0.5"></tk-input>`);
@@ -167,7 +170,7 @@ describe('tk-input rendering and native attribute passthrough', () => {
   it('shows the label of an object value using chipLabelKey', async () => {
     const page = await newSpecPage({
       components: [TkInput],
-      template: () => <tk-input chipLabelKey="name" value={{ name: 'Ada' }}></tk-input>,
+      template: () => <tk-input chipLabelKey="name" value={objectValue({ name: 'Ada' })}></tk-input>,
     });
 
     expect(nativeInputOf(page).value).toBe('Ada');
@@ -176,7 +179,7 @@ describe('tk-input rendering and native attribute passthrough', () => {
   it('rewrites the field when an object value is replaced by another object', async () => {
     const page = await newSpecPage({
       components: [TkInput],
-      template: () => <tk-input chipLabelKey="name" value={{ name: 'Ada' }}></tk-input>,
+      template: () => <tk-input chipLabelKey="name" value={objectValue({ name: 'Ada' })}></tk-input>,
     });
 
     page.root.value = { name: 'Grace' };

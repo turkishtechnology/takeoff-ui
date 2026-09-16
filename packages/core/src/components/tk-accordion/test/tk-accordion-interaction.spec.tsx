@@ -21,7 +21,8 @@ const createAccordion = async (
   });
 
 // activeIndex set through an attribute always arrives as a string, so numeric indexes go through props
-const createKeylessAccordion = async (props: Partial<HTMLTkAccordionElement>, headers = ['One', 'Two']): Promise<SpecPage> =>
+type AccordionProps = Partial<Pick<TkAccordion, 'activeIndex' | 'allowMultiple' | 'type' | 'mode' | 'arrowPosition' | 'expandIcon' | 'collapseIcon'>>;
+const createKeylessAccordion = async (props: AccordionProps, headers = ['One', 'Two']): Promise<SpecPage> =>
   newSpecPage({
     components,
     template: () => (

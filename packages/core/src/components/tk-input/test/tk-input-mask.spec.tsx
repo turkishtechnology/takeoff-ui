@@ -149,7 +149,7 @@ describe('tk-input Cleave mask', () => {
   });
 
   describe('deleting a delimiter', () => {
-    const pressAt = (page: SpecPage, key: 'Backspace' | 'Delete', caret: number, selectionEnd = caret) => {
+    const pressAt = (page: SpecPage, key: string, caret: number, selectionEnd = caret) => {
       const input = nativeInputOf(page);
       input.selectionStart = caret;
       input.selectionEnd = selectionEnd;
