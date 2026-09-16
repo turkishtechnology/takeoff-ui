@@ -1,6 +1,6 @@
 {
   "name": "@takeoff-ui/docs",
-  "version": "0.11.14",
+  "version": "0.12.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
