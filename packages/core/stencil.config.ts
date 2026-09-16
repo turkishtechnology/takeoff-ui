@@ -113,6 +113,17 @@ export const config: Config = {
     moduleNameMapper: {
       '^uuid$': '<rootDir>/jest-uuid-shim.js',
     },
+    coverageReporters: ['text-summary', 'lcov', 'json-summary'],
+    // Ratchet, not a target: set just under the numbers the suite already produces so a PR
+    // cannot quietly lower them. Raise these as the untested paths get covered.
+    coverageThreshold: {
+      global: {
+        statements: 85,
+        branches: 77,
+        functions: 84,
+        lines: 86,
+      },
+    },
   },
   plugins: [
     sass({
