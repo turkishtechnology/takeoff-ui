@@ -113,14 +113,14 @@
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-phone-input-wrapper {
       border-color: var(--states-danger-base);
     }
   }
 
-  &[aria-disabled],
-  &[aria-readonly] {
+  &[aria-disabled='true'],
+  &[aria-readonly='true'] {
     pointer-events: none;
     .tk-phone-input-wrapper {
       background-color: var(--background-lightest);
@@ -132,7 +132,7 @@
       color: var(--text-sub-base);
     }
   }
-  &[aria-disabled] {
+  &[aria-disabled='true'] {
     .tk-phone-input-input {
       color: var(--text-sub-base);
     }

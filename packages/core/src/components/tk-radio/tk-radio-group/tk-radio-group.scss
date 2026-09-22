@@ -40,7 +40,7 @@ tk-radio-group {
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-radio-holder.card tk-radio {
       border-color: var(--states-danger-base);
     }

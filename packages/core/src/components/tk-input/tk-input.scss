@@ -116,7 +116,7 @@ tk-input.tk-table-input {
       }
     }
 
-    &:hover:not(.tk-input-container[aria-disabled] .tk-input) {
+    &:hover:not(.tk-input-container[aria-disabled='true'] .tk-input) {
       background-color: var(--background-lightest);
     }
   }
@@ -208,7 +208,7 @@ tk-input.tk-table-input {
     border-color: var(--states-info-base);
   }
 
-  &[aria-disabled] {
+  &[aria-disabled='true'] {
     pointer-events: none;
     .label,
     .tk-input input {
@@ -221,7 +221,7 @@ tk-input.tk-table-input {
     }
   }
 
-  &[aria-readonly] {
+  &[aria-readonly='true'] {
     .label {
       color: var(--text-sub-base);
     }
@@ -231,7 +231,7 @@ tk-input.tk-table-input {
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-input {
       border-color: var(--states-danger-base);
     }

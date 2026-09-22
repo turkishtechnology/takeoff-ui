@@ -29,4 +29,6 @@ Fix the defects surfaced by the new component specs:
 - Boolean
   `aria-disabled`/`aria-invalid`/`aria-readonly`/`aria-selected`/`aria-expanded`
   attributes render as the literal `"true"`/`"false"` strings across the form
-  components.
+  components. The matching stylesheet selectors now check for `'true'`, so an
+  `aria-disabled="false"` element is no longer styled (and made unclickable) as
+  if it were disabled.

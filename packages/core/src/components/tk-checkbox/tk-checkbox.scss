@@ -89,7 +89,7 @@ tk-checkbox {
     background-color: var(--states-info-light);
   }
 
-  &[aria-disabled],
+  &[aria-disabled='true'],
   &[disabled] {
     pointer-events: none;
 
@@ -107,7 +107,7 @@ tk-checkbox {
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     label {
       .mask {
         border: 2px solid var(--states-danger-base);
