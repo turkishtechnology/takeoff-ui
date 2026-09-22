@@ -95,6 +95,22 @@ describe('tk-select options handling', () => {
     expect(page.root.querySelector('.dropdown-item-holder').textContent).toContain('No options available');
   });
 
+  it.each([null, undefined])('filters, blurs and clicks without throwing while options is %s', async emptyOptions => {
+    const page = await createSelect('editable="true"', { options: ['A', 'B'] });
+    const inst = instanceOf(page);
+    page.root.options = emptyOptions;
+    await page.waitForChanges();
+
+    await expect(inst.setRenderOptions('a')).resolves.toBeUndefined();
+    expect(inst.renderOptions).toEqual([]);
+
+    await expect(inst.setRenderOptions('')).resolves.toBeUndefined();
+    expect(inst.renderOptions).toEqual([]);
+
+    await expect(inst.handleInputBlur()).resolves.toBeUndefined();
+    expect(inst.renderOptions).toEqual([]);
+  });
+
   it('clears the input when a value is set while there are no options', async () => {
     const page = await createSelect('', { options: [] });
 

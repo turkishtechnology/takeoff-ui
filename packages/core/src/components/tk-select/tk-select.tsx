@@ -438,19 +438,20 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async defaultFilter(text: string, options: any[]) {
+    // options may be null/undefined while data is still loading
     if (!text) {
-      return [...this.options];
+      return [...(this.options ?? [])];
     }
 
     if (this.isGrouped()) {
-      return options
+      return (options ?? [])
         .map(group => ({
           ...group,
           [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option => this.getOptionLabel(option).toLowerCase().includes(text.toLowerCase())),
         }))
         .filter(group => group[this.groupOptionsKey].length > 0);
     } else {
-      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+      return (options ?? []).filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
     }
   }
 
