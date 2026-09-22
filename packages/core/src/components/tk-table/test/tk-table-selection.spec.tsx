@@ -145,6 +145,16 @@ describe('tk-table selection edge cases', () => {
     expect(selectionSpy).toHaveBeenCalledWith([]);
   });
 
+  it('still disables a row when the predicate returns a truthy non-boolean', async () => {
+    const page = await createPage({ selectionMode: 'checkbox', selectionRowDisabled: (row: any) => (row.id === 1 ? row.name : undefined) });
+    const rows = Array.from(shadow(page).querySelectorAll('tbody tr'));
+
+    expect(rows[0].getAttribute('aria-disabled')).toBe('true');
+    expect(rows[0].querySelector('tk-checkbox').hasAttribute('disabled')).toBe(true);
+    expect(rows[1].getAttribute('aria-disabled')).toBe('false');
+    expect(rows[1].querySelector('tk-checkbox').hasAttribute('disabled')).toBe(false);
+  });
+
   it('matches rows without a key value by content when checking the header state', async () => {
     const data = [{ id: 1, name: 'Alice' }, { name: 'NoKey' }, { name: 'Other' }];
     const page = await createPage({ data, selectionMode: 'checkbox', paginationMethod: 'client', rowsPerPage: 10 });

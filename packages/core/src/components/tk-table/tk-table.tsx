@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption, ITableColumnResize } from './types';
-import { filterAndSort, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
+import { filterAndSort, getFilterDatepickerProps, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { cloneDeep, isEqual, some } from 'lodash-es';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -1447,24 +1447,10 @@ export class TkTable implements ComponentInterface {
 
       const datepicker = document.createElement('tk-datepicker');
       datepicker.dataTestid = getDataTestId(this.dataTestid, 'filter-datepicker', field);
-      const defaultDatepickerProps = {
-        label: 'Select a date',
-        placeholder: 'Choose a date',
-        mode: 'single',
-        dateFormat: 'yyyy-MM-dd',
-        timeFormat: '24',
-        minDate: '',
-        maxDate: '',
-        hourStep: 1,
-        minuteStep: 1,
-        locale: 'en',
-        showTimePicker: false,
-        size: 'base',
-      };
       const currentFilter = this.filters.find(filter => filter.field === field);
       const currentValue = currentFilter?.value || null;
 
-      Object.assign(datepicker, { ...defaultDatepickerProps, ...column?.filterElements?.optionsSearchDatepicker, value: currentValue });
+      Object.assign(datepicker, { ...getFilterDatepickerProps(column), value: currentValue });
       datepicker.addEventListener('tk-change', (e: Event) => {
         datepicker.value = (e as CustomEvent).detail;
       });
@@ -2182,7 +2168,8 @@ export class TkTable implements ComponentInterface {
 
     let isRowDisabled = false;
     if (this.selectionRowDisabled) {
-      isRowDisabled = this.selectionRowDisabled(row);
+      // the predicate is consumer code and may return any truthy value; aria-disabled must end up as "true"/"false"
+      isRowDisabled = !!this.selectionRowDisabled(row);
     }
 
     let selectionTd;
