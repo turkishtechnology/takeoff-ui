@@ -46,6 +46,7 @@ import Upload from './components/Upload';
 import ColorPicker from './components/ColorPicker';
 import GanttChart from './components/GanttChart';
 import FloatingElements from './examples/FloatingElements';
+import LinkedFlightsTable from './examples/LinkedFlightsTable';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="examples/floatingElements" element={<FloatingElements />} />
+        <Route path="examples/linked-flights" element={<LinkedFlightsTable />} />
         <Route path="components" element={<Components />} />
         <Route path="components/stepper" element={<Stepper />} />
         <Route path="components/chart" element={<Chart />} />

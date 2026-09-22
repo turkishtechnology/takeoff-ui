@@ -20,6 +20,9 @@ function Examples() {
         <Link to="floatingElements" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
           Floating Elements
         </Link>
+        <Link to="linked-flights" className="p-4 border border-indigo-600 rounded-md text-center hover:bg-violet-100">
+          Linked Flights Table
+        </Link>
       </div>
     </TkCard>
   );
