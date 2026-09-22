@@ -1,6 +1,6 @@
 import { ITableColumn } from '@takeoff-ui/core';
 import { TkCard, TkTable } from '@takeoff-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 /**
  * Bağlı uçuşlar (linked flights) örneği.
@@ -233,10 +233,33 @@ function renderLinkCell(row: FlightRow): HTMLElement {
   return container;
 }
 
-function LinkedFlightsTable() {
-  const [lastAction, setLastAction] = useState('');
+/** Bağlı satır: hücre padding'i sıfırlanır, zemin ve çerçevenin üst/alt kenarı her hücreye uygulanır. */
+const rowStyle = (row: FlightRow) => {
+  if (!isLinked(row)) return undefined;
+  const tone = toneOf(row);
+  return {
+    padding: '0',
+    background: tone.background,
+    borderTop: `2px solid ${tone.border}`,
+    borderBottom: `2px solid ${tone.border}`,
+  };
+};
 
-  const columns: ITableColumn[] = [
+/** Çerçevenin sol ve sağ kenarı sadece sabitlenmiş (fixed) ilk ve son sütuna çizilir. */
+const cellStyle = (row: FlightRow, col: ITableColumn) => {
+  if (!isLinked(row)) return undefined;
+  const border = `2px solid ${toneOf(row).border}`;
+  if (col.fixed === 'left') return { borderLeft: border };
+  if (col.fixed === 'right') return { borderRight: border };
+  return undefined;
+};
+
+/**
+ * Sütunlar bileşen dışında kurulur: her render'da yeni bir dizi verilirse tk-table tüm gövdeyi
+ * (hücrelerdeki tk-dropdown'lar dahil) yeniden kurar ve açık olan menü kapanır.
+ */
+function buildColumns(onAction: (action: string) => void): ITableColumn[] {
+  return [
     {
       header: '',
       field: 'link',
@@ -337,34 +360,19 @@ function LinkedFlightsTable() {
           dropdown.options = ACTIONS;
           dropdown.addEventListener('tk-item-click', (event: Event) => {
             const item = (event as CustomEvent<{ label: string }>).detail;
-            setLastAction(`${dropdown.dataset.flight}: ${item.label}`);
+            onAction(`${dropdown.dataset.flight}: ${item.label}`);
           });
         });
         return cell;
       },
     },
   ];
+}
 
-  /** Bağlı satır: hücre padding'i sıfırlanır, zemin ve çerçevenin üst/alt kenarı her hücreye uygulanır. */
-  const rowStyle = (row: FlightRow) => {
-    if (!isLinked(row)) return undefined;
-    const tone = toneOf(row);
-    return {
-      padding: '0',
-      background: tone.background,
-      borderTop: `2px solid ${tone.border}`,
-      borderBottom: `2px solid ${tone.border}`,
-    };
-  };
-
-  /** Çerçevenin sol ve sağ kenarı sadece ilk ve son sütuna çizilir. */
-  const cellStyle = (row: FlightRow, col: ITableColumn) => {
-    if (!isLinked(row)) return undefined;
-    const border = `2px solid ${toneOf(row).border}`;
-    if (col.field === columns[0].field) return { borderLeft: border };
-    if (col.field === columns[columns.length - 1].field) return { borderRight: border };
-    return undefined;
-  };
+function LinkedFlightsTable() {
+  const [lastAction, setLastAction] = useState('');
+  // setLastAction kimliği sabittir, bu yüzden sütunlar bir kez kurulur.
+  const columns = useMemo(() => buildColumns(setLastAction), []);
 
   return (
     <TkCard>
