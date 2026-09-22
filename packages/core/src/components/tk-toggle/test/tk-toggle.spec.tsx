@@ -107,3 +107,110 @@ describe('tk-toggle', () => {
     expect(errorText.textContent).toBe('Something went wrong');
   });
 });
+
+describe('tk-toggle state handling', () => {
+  it('ignores change events while disabled', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle disabled="true"></tk-toggle>`,
+    });
+    const changeSpy = jest.fn();
+    page.root.addEventListener('tk-change', changeSpy);
+    const input = page.root.shadowRoot.querySelector('input') as HTMLInputElement;
+
+    input.checked = true;
+    input.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(changeSpy).not.toHaveBeenCalled();
+    expect(page.root.value).toBe(false);
+  });
+
+  it('resets to unchecked on form reset and emits the new value', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle value="true" invalid="true"></tk-toggle>`,
+    });
+    const changeSpy = jest.fn();
+    page.root.addEventListener('tk-change', (e: CustomEvent) => changeSpy(e.detail));
+
+    page.rootInstance.formResetCallback();
+    await page.waitForChanges();
+
+    expect(changeSpy).toHaveBeenCalledWith(false);
+    expect(page.root.value).toBe(false);
+    expect(page.root.invalid).toBe(false);
+    expect(page.root.shadowRoot.querySelector('input').getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('syncs the checked state when the value prop changes', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle></tk-toggle>`,
+    });
+    const input = () => page.root.shadowRoot.querySelector('input');
+    expect(input().getAttribute('aria-checked')).toBe('false');
+
+    page.root.value = true;
+    await page.waitForChanges();
+    expect(input().getAttribute('aria-checked')).toBe('true');
+
+    page.root.value = false;
+    await page.waitForChanges();
+    expect(input().getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('shows a close icon when checked and invalid, and no icon when unchecked', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle invalid="true"></tk-toggle>`,
+    });
+    const icon = () => page.root.shadowRoot.querySelector('tk-icon') as any;
+    expect(icon().icon).toBeUndefined();
+    expect(icon().textContent).toBe('');
+
+    page.root.value = true;
+    await page.waitForChanges();
+    expect(icon().icon).toBe('close');
+    expect(icon().variant).toBe('danger');
+  });
+
+  it('hides the thumb icon when showIcon is false', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle show-icon="false" value="true"></tk-toggle>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('tk-icon')).toBeNull();
+  });
+
+  it('maps large sizes to a medium icon and dims the icon when disabled', async () => {
+    const xlarge = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle size="xlarge" value="true" disabled="true"></tk-toggle>`,
+    });
+    const xlargeIcon = xlarge.root.shadowRoot.querySelector('tk-icon') as any;
+    expect(xlargeIcon.size).toBe('medium');
+    expect(xlargeIcon.color).toBe('var(--icon-lightest)');
+
+    const small = await newSpecPage({
+      components: [TkToggle, TkIcon],
+      html: `<tk-toggle size="small" value="true" variant="success"></tk-toggle>`,
+    });
+    const smallIcon = small.root.shadowRoot.querySelector('tk-icon') as any;
+    expect(smallIcon.size).toBe('small');
+    expect(smallIcon.variant).toBe('success');
+    expect(smallIcon.color).toBe('');
+  });
+
+  it('leaves the native input without a tabindex when the host has none', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle aria-labelledby="lbl"></tk-toggle>`,
+    });
+
+    const input = page.root.shadowRoot.querySelector('input');
+    expect(input.hasAttribute('tabindex')).toBe(false);
+    expect(input.getAttribute('aria-labelledby')).toBe('lbl');
+  });
+});
