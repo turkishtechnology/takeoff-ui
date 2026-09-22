@@ -259,7 +259,7 @@ export class TkTextarea implements ComponentInterface {
         class="copy-button"
         role="button"
         aria-label={this.copied ? 'Copied!' : 'Copy'}
-        aria-disabled={this.disabled ? 'true' : undefined}
+        aria-disabled={String(this.disabled)}
         tabindex={this.disabled ? -1 : 0}
         onClick={this.handleCopy}
         onKeyDown={this.handleCopyKeyDown}

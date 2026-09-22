@@ -227,6 +227,6 @@ describe('tk-toggle state handling', () => {
     page.root.invalid = false;
     await page.waitForChanges();
     expect(input.getAttribute('aria-disabled')).toBe('false');
-    expect(input.hasAttribute('aria-invalid')).toBe(false);
+    expect(input.getAttribute('aria-invalid')).toBe('false');
   });
 });

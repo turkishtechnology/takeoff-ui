@@ -184,7 +184,7 @@ export class TkToggle implements ComponentInterface {
         tabIndex={this.tabindex}
         aria-checked={this.checked.toString()}
         aria-disabled={String(this.disabled)}
-        aria-invalid={this.invalid ? 'true' : undefined}
+        aria-invalid={String(this.invalid)}
         aria-label={this.name}
         aria-labelledby={this.ariaLabelledby}
         data-testid={getDataTestId(this.dataTestid, 'native-input')}

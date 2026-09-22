@@ -388,6 +388,7 @@ describe('tk-phone-input', () => {
       await page.waitForChanges();
       expect(input.value).toBe('(532) 123 4567');
 
+      const focus = jest.spyOn(input, 'focus');
       page.root.addEventListener('tk-change', changeSpy);
       page.root.value = emptyValue;
       await page.waitForChanges();
@@ -399,6 +400,8 @@ describe('tk-phone-input', () => {
       expect(detail.country.id).toBe('TR');
       expect(input.value).toBe('');
       expect(page.root.value).toEqual(detail);
+      // a programmatic clear must not pull focus into the field
+      expect(focus).not.toHaveBeenCalled();
     });
 
     it('resets state through formResetCallback', async () => {
@@ -514,8 +517,8 @@ describe('tk-phone-input edge cases', () => {
     expect(noDial.querySelector('.flag-none tk-icon')).toBeTruthy();
     expect(noDial.querySelector('.tk-phone-input-menu-dial-id')).toBeNull();
     expect(items[0].querySelector('.flag-ph')).toBeTruthy();
-    expect(items[0].hasAttribute('aria-selected')).toBe(true);
-    expect(noDial.hasAttribute('aria-selected')).toBe(false);
+    expect(items[0].getAttribute('aria-selected')).toBe('true');
+    expect(noDial.getAttribute('aria-selected')).toBe('false');
   });
 
   it('hides flags everywhere when hideFlag is set', async () => {

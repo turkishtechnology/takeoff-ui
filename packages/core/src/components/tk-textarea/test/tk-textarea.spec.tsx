@@ -137,11 +137,17 @@ describe('tk-textarea', () => {
         html: `<tk-textarea value="hello" show-copy-button="true" disabled="true"></tk-textarea>`,
       });
 
-      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      const copyButton = page.root.shadowRoot.querySelector('.copy-button');
+      expect(copyButton.getAttribute('aria-disabled')).toBe('true');
+      copyButton.dispatchEvent(new MouseEvent('click'));
       await page.waitForChanges();
 
       expect(writeText).not.toHaveBeenCalled();
       expect(page.rootInstance.copied).toBe(false);
+
+      page.root.disabled = false;
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('.copy-button').getAttribute('aria-disabled')).toBe('false');
     });
 
     it('stays un-copied when the clipboard write fails', async () => {
