@@ -171,6 +171,63 @@ describe('tk-accordion interaction', () => {
       expect(activeIndexChange.details()).toEqual([2, 0]);
     });
 
+    it('closes an item that was appended already active when its header is clicked', async () => {
+      const page = await createAccordion('allow-multiple');
+      const activeIndexChange = listen<number[]>(page, 'tk-active-index-change');
+      const selected = listen<IAccordionItemSelect>(page, 'tk-accordion-item-selected');
+
+      const appended = page.doc.createElement('tk-accordion-item');
+      appended.setAttribute('header', 'Three');
+      appended.active = true;
+      page.root.appendChild(appended);
+      await page.waitForChanges();
+      expect(openStates(page)).toEqual([false, false, true]);
+
+      await clickHeader(page, 2);
+
+      expect(openStates(page)).toEqual([false, false, false]);
+      expect(items(page)[2].active).toBe(false);
+      expect(selected.details()).toEqual([{ index: 2, active: false }]);
+      // the accordion never held the appended item, so the reported index does not change
+      expect(activeIndexChange.calls()).toBe(0);
+
+      await clickHeader(page, 2);
+      expect(openStates(page)).toEqual([false, false, true]);
+      expect(activeIndexChange.details()).toEqual([[2]]);
+    });
+
+    it('keeps keyless items clickable after an item before them is removed', async () => {
+      const page = await createAccordion('', ['One', 'Two', 'Three'].map(header => `<tk-accordion-item header="${header}"></tk-accordion-item>`).join(''));
+      await clickHeader(page, 1);
+      expect(openStates(page)).toEqual([false, true, false]);
+      const activeIndexChange = listen<number>(page, 'tk-active-index-change');
+
+      items(page)[0].remove();
+      await page.waitForChanges();
+      expect(openStates(page)).toEqual([true, false]);
+
+      await clickHeader(page, 1);
+      expect(openStates(page)).toEqual([false, true]);
+      // the open item is still the one at index 1, so the reported index does not change
+      expect(activeIndexChange.calls()).toBe(0);
+
+      await clickHeader(page, 1);
+      expect(openStates(page)).toEqual([false, false]);
+      expect(activeIndexChange.details()).toEqual([undefined]);
+    });
+
+    it('adopts an item that is opened programmatically through its active prop', async () => {
+      const page = await createAccordion();
+      const activeIndexChange = listen<number>(page, 'tk-active-index-change');
+      await clickHeader(page, 0);
+
+      items(page)[1].active = true;
+      await page.waitForChanges();
+
+      expect(openStates(page)).toEqual([false, true]);
+      expect(activeIndexChange.details()).toEqual([0, 1]);
+    });
+
     it('ignores active changes from items of a nested accordion', async () => {
       const page = await createAccordion(
         '',
@@ -300,11 +357,11 @@ describe('tk-accordion interaction', () => {
       expect(openStates(page)).toEqual([false, false, true]);
     });
 
-    it('keeps only the first initially active item open without allowMultiple', async () => {
+    it('keeps only the last initially active item open without allowMultiple, like activeIndex does', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined);
       const page = await createAccordion('', `<tk-accordion-item active></tk-accordion-item><tk-accordion-item></tk-accordion-item><tk-accordion-item active></tk-accordion-item>`);
 
-      expect(openStates(page)).toEqual([true, false, false]);
+      expect(openStates(page)).toEqual([false, false, true]);
       (console.error as jest.Mock).mockRestore();
     });
 
