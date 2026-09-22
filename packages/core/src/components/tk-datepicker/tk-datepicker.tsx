@@ -319,10 +319,8 @@ export class TkDatePicker {
   timeFormatChanged() {
     if (this.timeOnly || this.showTimePicker) {
       this.updateMaskOptions();
-      // Sync AM/PM with the current hour when switching to 12h
-      if (this.timeFormat === '12' && this.internalStartTime) {
-        this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
-      }
+      // Sync AM/PM with the hour the toggle currently governs when switching to 12h
+      this.syncAmPmWithTime(this.getGovernedTime());
     }
   }
 
@@ -456,7 +454,7 @@ export class TkDatePicker {
       const defaultTime = this.getDefaultTime();
       this.internalStartTime = defaultTime;
       this.internalEndTime = null;
-      if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
+      this.syncAmPmWithTime(defaultTime);
     } else {
       this.internalStartTime = null;
       this.internalEndTime = null;
@@ -519,6 +517,11 @@ export class TkDatePicker {
     if (minBound !== null && total < minBound) return true;
     if (maxBound !== null && total > maxBound) return true;
     return false;
+  }
+
+  /** The time the AM/PM toggle currently applies to: the range end once one is picked, otherwise the start. */
+  private getGovernedTime(): { hour: number; minute: number } | null {
+    return this.mode === 'range' && this.internalSelectedDates.end && this.internalEndTime ? this.internalEndTime : this.internalStartTime;
   }
 
   /** Derives the meridiem from a (re)seeded time without letting the internalAmPm watcher convert the hour. */
@@ -593,6 +596,12 @@ export class TkDatePicker {
     }
 
     return 0;
+  }
+
+  /** Parses a `value` string; with the time picker on, a date-only string is accepted too and gets the default time later. */
+  private parseValueString(value: string): Date | null {
+    if (!this.showTimePicker) return this.parseInputDate(value);
+    return this.parseFullDateTime(value) ?? this.parseInputDate(value);
   }
 
   private getFullDateTimeFormat(): string {
@@ -731,7 +740,7 @@ export class TkDatePicker {
       }
 
       if (startString) {
-        const parsedStartDateTime = this.showTimePicker ? (this.parseFullDateTime(startString) ?? this.parseInputDate(startString)) : this.parseInputDate(startString);
+        const parsedStartDateTime = this.parseValueString(startString);
 
         if (parsedStartDateTime && !this.isDateDisabled(parsedStartDateTime)) {
           startDate = this.normalizeDate(parsedStartDateTime);
@@ -750,7 +759,7 @@ export class TkDatePicker {
       }
 
       if (this.mode === 'range' && endString && startDate) {
-        const parsedEndDateTime = this.showTimePicker ? (this.parseFullDateTime(endString) ?? this.parseInputDate(endString)) : this.parseInputDate(endString);
+        const parsedEndDateTime = this.parseValueString(endString);
 
         if (parsedEndDateTime && !this.isDateDisabled(parsedEndDateTime)) {
           endDate = this.normalizeDate(parsedEndDateTime);
@@ -783,7 +792,7 @@ export class TkDatePicker {
     this.internalSelectedDates = { start: startDate, end: endDate };
     this.internalStartTime = startTime;
     this.internalEndTime = this.mode === 'range' ? endTime : startTime;
-    this.syncAmPmWithTime(this.mode === 'range' && endDate && endTime ? endTime : startTime);
+    this.syncAmPmWithTime(this.getGovernedTime());
 
     if (updateCurrentMonth && startDate) {
       this.currentMonth = new Date(startDate.getFullYear(), startDate.getMonth());
@@ -820,7 +829,7 @@ export class TkDatePicker {
     if (this.showTimePicker && !this.internalStartTime && this.internalSelectedDates.start) {
       const defaultTime = this.getDefaultTime();
       this.internalStartTime = defaultTime;
-      if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
+      this.syncAmPmWithTime(defaultTime);
       if (this.mode === 'range' && !this.internalEndTime && this.internalSelectedDates.end) {
         this.internalEndTime = this.internalStartTime;
       } else if (this.mode === 'single') {
@@ -1074,7 +1083,7 @@ export class TkDatePicker {
         const resolvedTime = parsedFromInput ? { hour: parsedFromInput.getHours(), minute: parsedFromInput.getMinutes() } : this.getDefaultTime();
         this.internalStartTime = resolvedTime;
         this.internalEndTime = resolvedTime;
-        if (this.timeFormat === '12') this.internalAmPm = resolvedTime.hour >= 12 ? 'PM' : 'AM';
+        this.syncAmPmWithTime(resolvedTime);
       }
       return;
     }
@@ -1091,7 +1100,7 @@ export class TkDatePicker {
       const defaultTime = this.getDefaultTime();
       if (type === 'start' && !this.internalStartTime) {
         this.internalStartTime = defaultTime;
-        if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
+        this.syncAmPmWithTime(defaultTime);
       }
       if (type === 'end' && this.mode === 'range' && this.internalSelectedDates.end && !this.internalEndTime) {
         this.internalEndTime = this.internalStartTime || defaultTime;
@@ -1474,7 +1483,7 @@ export class TkDatePicker {
   };
   private handleInputBlur = () => {
     if ((this.timeOnly || this.showTimePicker) && this.timeFormat === '12' && this.internalStartTime) {
-      this.internalAmPm = this.internalStartTime.hour >= 12 ? 'PM' : 'AM';
+      this.syncAmPmWithTime(this.getGovernedTime());
       this.inputValue = this.formatInputValue();
     }
   };
@@ -1498,10 +1507,8 @@ export class TkDatePicker {
     if (this.mode === 'single') {
       this.internalSelectedDates = { start: normalizedDate, end: null };
       if (this.showTimePicker) {
-        if (!this.internalStartTime) {
-          this.internalStartTime = defaultTime;
-          if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
-        }
+        if (!this.internalStartTime) this.internalStartTime = defaultTime;
+        this.syncAmPmWithTime(this.internalStartTime);
       } else {
         this.internalStartTime = null;
       }
@@ -1516,11 +1523,10 @@ export class TkDatePicker {
       if (!start || (start && end)) {
         this.internalSelectedDates = { start: normalizedDate, end: null };
         if (this.showTimePicker) {
-          if (!this.internalStartTime) {
-            this.internalStartTime = defaultTime;
-            if (this.timeFormat === '12') this.internalAmPm = defaultTime.hour >= 12 ? 'PM' : 'AM';
-          }
+          if (!this.internalStartTime) this.internalStartTime = defaultTime;
           this.internalEndTime = null;
+          // the toggle governs the start again now that the end is gone, so re-derive it from the start hour
+          this.syncAmPmWithTime(this.internalStartTime);
         } else {
           this.internalStartTime = null;
           this.internalEndTime = null;
@@ -1546,6 +1552,7 @@ export class TkDatePicker {
           }
         }
         this.internalSelectedDates = { start: newStart, end: newEnd };
+        if (this.showTimePicker) this.syncAmPmWithTime(this.internalEndTime);
 
         this.hoverDate = null;
 
