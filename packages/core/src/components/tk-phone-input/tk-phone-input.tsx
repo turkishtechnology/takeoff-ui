@@ -75,7 +75,9 @@ export class TkPhoneInput implements ComponentInterface {
   @Watch('value')
   protected valueChanged(newValue): void {
     if (!newValue || (typeof newValue === 'object' && Object.keys(newValue).length === 0)) {
-      this.handleFormReset();
+      // a programmatic clear resets the field without moving focus to it
+      this.handleFormReset({ focus: false });
+      return;
     }
     if (!newValue.rawValue && !newValue.maskedValue) {
       this.inputValue = '';
@@ -202,9 +204,7 @@ export class TkPhoneInput implements ComponentInterface {
   componentWillLoad(): void {
     this.initializeCountries();
     if (this?.value && Object.keys(this?.value)?.length) {
-      if (this.value?.country?.id) {
-        this.setSelectedCountry(this.value.country.id);
-      }
+      this.setSelectedCountry(this.value?.country?.id || this.defaultCountry);
       this.inputValue = this.applyMask(this?.value?.rawValue, this?.selectedCountry.mask);
     } else {
       this.setSelectedCountry(this.defaultCountry);
@@ -419,7 +419,7 @@ export class TkPhoneInput implements ComponentInterface {
     this.tkFocus.emit();
   };
 
-  private handleFormReset = () => {
+  private handleFormReset = ({ focus = true }: { focus?: boolean } = {}) => {
     this.value = {
       rawValue: '',
       maskedValue: '',
@@ -434,9 +434,9 @@ export class TkPhoneInput implements ComponentInterface {
     this.tkChange.emit(this.value);
     this.isDropdownOpen = false;
     this.inputValue = '';
-    this.inputRef.value = '';
+    if (this.inputRef) this.inputRef.value = '';
     this.searchTerm = '';
-    this.inputRef?.focus();
+    if (focus) this.inputRef?.focus();
   };
 
   private renderLabel() {
@@ -521,7 +521,7 @@ export class TkPhoneInput implements ComponentInterface {
             onClick={() => this.handleCountrySelect(country)}
             key={country.id}
             role="option"
-            aria-selected={country.id === this.selectedCountry.id}
+            aria-selected={String(country.id === this.selectedCountry.id)}
           >
             {!this.hideFlag && this.renderFlag(country)}
             {country.label && <span class="tk-phone-input-menu-country-label">{country.label}</span>}
@@ -574,9 +574,9 @@ export class TkPhoneInput implements ComponentInterface {
     return (
       <div
         class={classNames('tk-phone-input-container', `tk-phone-input-container-${this.size}`)}
-        aria-invalid={this.invalid}
-        aria-disabled={this.disabled}
-        aria-readonly={this.readonly}
+        aria-invalid={String(this.invalid)}
+        aria-disabled={String(this.disabled)}
+        aria-readonly={String(this.readonly)}
       >
         {this.renderLabel()}
         <div class="tk-phone-input-wrapper">

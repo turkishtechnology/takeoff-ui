@@ -241,4 +241,22 @@ describe('tk-radio', () => {
     expect(removeSpy).toHaveBeenCalledWith('click', (page.rootInstance as any).windowClickHandler);
     removeSpy.mockRestore();
   });
+
+  it('exposes disabled and invalid as "true"/"false" aria strings on the label', async () => {
+    const page = await newSpecPage({
+      components: [TkRadio],
+      html: `<tk-radio disabled="true" invalid="true" label="Flagged"></tk-radio>`,
+    });
+    const label = page.root.querySelector('label');
+    expect(label.getAttribute('aria-disabled')).toBe('true');
+    expect(label.getAttribute('aria-invalid')).toBe('true');
+
+    const plain = await newSpecPage({
+      components: [TkRadio],
+      html: `<tk-radio label="Plain"></tk-radio>`,
+    });
+    const plainLabel = plain.root.querySelector('label');
+    expect(plainLabel.getAttribute('aria-disabled')).toBe('false');
+    expect(plainLabel.getAttribute('aria-invalid')).toBe('false');
+  });
 });

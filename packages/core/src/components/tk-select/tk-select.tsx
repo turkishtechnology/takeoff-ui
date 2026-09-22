@@ -429,7 +429,7 @@ export class TkSelect implements ComponentInterface {
     if (this.isGrouped()) {
       this.flatOptions = this.options.flatMap(group => group[this.groupOptionsKey]);
     } else {
-      this.flatOptions = this.options;
+      this.flatOptions = this.options ?? [];
     }
   }
 
@@ -438,19 +438,20 @@ export class TkSelect implements ComponentInterface {
   }
 
   private async defaultFilter(text: string, options: any[]) {
+    // options may be null/undefined while data is still loading
     if (!text) {
-      return [...this.options];
+      return [...(this.options ?? [])];
     }
 
     if (this.isGrouped()) {
-      return options
+      return (options ?? [])
         .map(group => ({
           ...group,
           [this.groupOptionsKey]: group[this.groupOptionsKey].filter(option => this.getOptionLabel(option).toLowerCase().includes(text.toLowerCase())),
         }))
         .filter(group => group[this.groupOptionsKey].length > 0);
     } else {
-      return options.filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
+      return (options ?? []).filter(item => this.getOptionLabel(item).toLowerCase().indexOf(text.toLowerCase()) > -1);
     }
   }
 
@@ -1147,7 +1148,7 @@ export class TkSelect implements ComponentInterface {
         chipOptions={this.chipOptions}
         chipDisabled={this.optionDisabled}
         aria-describedby="dropdown"
-        aria-expanded={!!this.isOpen}
+        aria-expanded={String(this.isOpen)}
         onClick={e => this.handleInputClick(e)}
         onTk-change={e => {
           e.stopPropagation();
@@ -1207,7 +1208,7 @@ export class TkSelect implements ComponentInterface {
     const rootClasses = classNames('tk-select-container', this.size);
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses}>
+      <div aria-readonly={String(this.readonly)} aria-disabled={String(this.disabled)} aria-invalid={String(this.invalid)} class={rootClasses}>
         {this.renderInput()}
         {this.renderDropdown()}
       </div>

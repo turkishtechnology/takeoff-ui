@@ -114,7 +114,7 @@ describe('tk-upload', () => {
       const dropzone = page.root.querySelector('.tk-upload-dropzone');
       expect(dropzone.classList.contains('centered')).toBe(true);
       expect(dropzone.classList.contains('disabled')).toBe(true);
-      expect(page.root.querySelector('.tk-upload-container').hasAttribute('aria-disabled')).toBe(true);
+      expect(page.root.querySelector('.tk-upload-container').getAttribute('aria-disabled')).toBe('true');
     });
 
     it('does not render the file holder when showFiles is false', async () => {
@@ -219,7 +219,7 @@ describe('tk-upload', () => {
       const state = page.root.querySelector('.tk-upload-state');
       expect(state.classList.contains('failed')).toBe(true);
       expect(state.textContent).toContain('Hata');
-      expect(page.root.querySelector('.tk-upload-container').hasAttribute('aria-invalid')).toBe(true);
+      expect(page.root.querySelector('.tk-upload-container').getAttribute('aria-invalid')).toBe('true');
     });
   });
 

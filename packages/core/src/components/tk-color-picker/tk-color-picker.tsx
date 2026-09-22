@@ -558,9 +558,8 @@ export class TkColorPicker implements ComponentInterface {
     this.applyTriggerInputValue();
   };
 
-  private handleTriggerInputChange = (e: CustomEvent) => {
-    const input = e.detail;
-    this.triggerInputValue = input.value;
+  private handleTriggerInputChange = (e: CustomEvent<string>) => {
+    this.triggerInputValue = e.detail;
   };
 
   private handleTriggerInputKeyDown = (e: KeyboardEvent) => {
@@ -896,7 +895,7 @@ export class TkColorPicker implements ComponentInterface {
         }}
         value={displayValue}
         aria-describedby="dropdown"
-        aria-expanded={this.isOpen}
+        aria-expanded={String(this.isOpen)}
         onClick={this.handleTriggerClick}
         onTk-focus={this.handleTriggerInputFocus}
         onTk-blur={this.handleTriggerInputBlur}

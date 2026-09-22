@@ -214,12 +214,10 @@ export class TkCarousel implements ComponentInterface {
 
   private handlePrevClick = () => {
     this.changeItem(this.activeIndex - 1);
-    this.tkChange.emit(this.activeIndex);
   };
 
   private handleNextClick = () => {
     this.changeItem(this.activeIndex + 1);
-    this.tkChange.emit(this.activeIndex);
   };
 
   private handleIndicatorClick = (index: number) => {

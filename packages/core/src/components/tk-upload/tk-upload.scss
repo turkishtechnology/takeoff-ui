@@ -21,7 +21,7 @@
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-upload-dropzone {
       border-color: var(--states-danger-base);
     }

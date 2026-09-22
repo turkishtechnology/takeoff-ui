@@ -253,6 +253,49 @@ describe('tk-table helpers', () => {
 
         expect(filterAndSort(rows(), dateColumns(), filters)).toHaveLength(3);
       });
+
+      it("falls back to the filter panel's yyyy-MM-dd format when the column has no filterElements", () => {
+        const columns: ITableColumn[] = [{ field: 'date', header: 'Date', filterType: 'datepicker' }];
+
+        const single = filterAndSort(rows(), columns, [{ field: 'date', type: 'datepicker', value: '2024-05-12' }]);
+        const range = filterAndSort(rows(), columns, [{ field: 'date', type: 'datepicker', value: { start: '2024-05-10', end: '2024-05-12' } }]);
+
+        expect(single.map(row => row.id)).toEqual([2]);
+        expect(range.map(row => row.id)).toEqual([1, 2]);
+      });
+
+      it('ignores timeFormat while showTimePicker is off, like the filter panel does', () => {
+        const columns: ITableColumn[] = [{ field: 'date', header: 'Date', filterElements: { optionsSearchDatepicker: { timeFormat: '12' } } }];
+
+        const result = filterAndSort(rows(), columns, [{ field: 'date', type: 'datepicker', value: '2024-05-12' }]);
+
+        expect(result.map(row => row.id)).toEqual([2]);
+      });
+
+      it('parses date-time values with the panel default 24-hour pattern when showTimePicker is on', () => {
+        const data = [
+          { id: 1, date: '2024-05-10 09:30' },
+          { id: 2, date: '2024-05-12 14:00' },
+          { id: 3, date: '2024-05-15 23:59' },
+        ];
+        const columns: ITableColumn[] = [{ field: 'date', header: 'Date', filterElements: { optionsSearchDatepicker: { showTimePicker: true } } }];
+
+        const single = filterAndSort(data, columns, [{ field: 'date', type: 'datepicker', value: '2024-05-12 14:00' }]);
+        const range = filterAndSort(data, columns, [{ field: 'date', type: 'datepicker', value: { start: '2024-05-10 00:00', end: '2024-05-12 23:59' } }]);
+
+        expect(single.map(row => row.id)).toEqual([2]);
+        expect(range.map(row => row.id)).toEqual([1, 2]);
+      });
+
+      it('filters out rows whose value does not parse instead of throwing', () => {
+        const data = [...rows(), { id: 4, name: 'Dave', date: 'not a date' }];
+
+        const single = filterAndSort(data, dateColumns(), [{ field: 'date', type: 'datepicker', value: '2024-05-12' }]);
+        const range = filterAndSort(data, dateColumns(), [{ field: 'date', type: 'datepicker', value: { start: '2024-05-10', end: '2024-05-12' } }]);
+
+        expect(single.map(row => row.id)).toEqual([2]);
+        expect(range.map(row => row.id)).toEqual([1, 2]);
+      });
     });
 
     describe('text filter', () => {

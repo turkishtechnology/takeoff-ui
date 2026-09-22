@@ -571,7 +571,7 @@ describe('tk-currency-input currency selection', () => {
     const page = await setup('default-currency="EUR"');
 
     await openDropdown(page);
-    const selected = Array.from(page.root.querySelectorAll('[role="option"]')).filter(item => item.hasAttribute('aria-selected'));
+    const selected = Array.from(page.root.querySelectorAll('[role="option"]')).filter(item => item.getAttribute('aria-selected') === 'true');
 
     expect(selected).toHaveLength(1);
     expect(selected[0].querySelector('.tk-currency-input-dropdown-menu-list-dial-id').textContent).toBe('Euro');
@@ -747,9 +747,9 @@ describe('tk-currency-input rendering', () => {
 
     const container = page.root.querySelector('.tk-currency-input-container');
     expect(container.classList.contains('tk-currency-input-container-small')).toBe(true);
-    expect(container.hasAttribute('aria-invalid')).toBe(true);
-    expect(container.hasAttribute('aria-disabled')).toBe(true);
-    expect(container.hasAttribute('aria-readonly')).toBe(true);
+    expect(container.getAttribute('aria-invalid')).toBe('true');
+    expect(container.getAttribute('aria-disabled')).toBe('true');
+    expect(container.getAttribute('aria-readonly')).toBe('true');
   });
 
   it('does not flag the container when the state props are off', async () => {
@@ -757,9 +757,9 @@ describe('tk-currency-input rendering', () => {
 
     const container = page.root.querySelector('.tk-currency-input-container');
     expect(container.classList.contains('tk-currency-input-container-base')).toBe(true);
-    expect(container.hasAttribute('aria-invalid')).toBe(false);
-    expect(container.hasAttribute('aria-disabled')).toBe(false);
-    expect(container.hasAttribute('aria-readonly')).toBe(false);
+    expect(container.getAttribute('aria-invalid')).toBe('false');
+    expect(container.getAttribute('aria-disabled')).toBe('false');
+    expect(container.getAttribute('aria-readonly')).toBe('false');
   });
 
   it('passes placeholder and name through to the native input', async () => {

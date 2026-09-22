@@ -25,13 +25,7 @@ export class TkAccordion implements ComponentInterface {
     // Exit early if the active index hasn't changed
     if (isEqual(newValue, oldValue)) return;
     this.updateActiveIndex();
-
-    this.getAccordionItems().forEach((item, index) => {
-      const itemKey = this.getItemKey(item, index);
-
-      const isActive = newValue.some(activeIndex => activeIndex === itemKey);
-      item.active = isActive;
-    });
+    this.syncItemsWithActiveIndex();
   }
 
   /**
@@ -119,28 +113,27 @@ export class TkAccordion implements ComponentInterface {
     // if prop activeIndex is set, use it
     if (this.hasActiveIndex()) return (this.internalActiveIndex = this.normalizeActiveIndex());
     // else if accordion items have active prop, use them
-    this.getAccordionItems().forEach((item, index) => {
-      if (item.active) this.internalActiveIndex = [...this.internalActiveIndex, this.getItemKey(item, index)];
-    });
+    // collected first and assigned once: every assignment syncs the items, which would close the ones not collected yet
+    this.internalActiveIndex = this.limitToMode(this.getActiveItemKeys(this.getAccordionItems()));
   }
 
   private initEventListeners() {
-    this.getAccordionItems().forEach((item, index) => {
+    // listen at the host so items appended after load are covered too
+    this.el.addEventListener('tk-active-change', (e: CustomEvent<boolean>) => {
+      const items = this.getAccordionItems();
+      const item = e.target as HTMLTkAccordionItemElement;
+      const index = items.indexOf(item);
+      // ignore items that are not direct children (e.g. of a nested accordion)
+      if (index === -1) return;
+
       const itemKey = this.getItemKey(item, index);
+      // A header click emits the opposite of the item's current state. The item's `active` watcher re-emits the
+      // value that was just written to it; when that value is what the accordion holds, it is only our own sync
+      // echoing back. A programmatic `item.active = x` the accordion does not hold yet is adopted like a click.
+      const isEcho = e.detail === item.active && e.detail === this.internalActiveIndex.includes(itemKey);
+      if (isEcho) return;
 
-      // listen to active change
-      item.addEventListener('tk-active-change', (e: CustomEvent) => {
-        this.handleItemActiveChange(itemKey, e.detail);
-        item.active = e.detail;
-
-        if (!this.allowMultiple && e.detail) {
-          this.getAccordionItems()
-            .filter(child => child !== item)
-            .forEach(otherItem => {
-              otherItem.active = false;
-            });
-        }
-      });
+      this.handleItemActiveChange(items, itemKey, e.detail);
     });
   }
 
@@ -181,9 +174,22 @@ export class TkAccordion implements ComponentInterface {
   private normalizeActiveIndex(): (string | number)[] {
     if (!this.activeIndex && this.activeIndex !== 0) return [];
     if (!Array.isArray(this.activeIndex)) return [this.activeIndex];
-    if (this.allowMultiple) return this.activeIndex as (string | number)[];
-    const lastItem = (this.activeIndex as (string | number)[]).at(-1);
-    return lastItem ? [lastItem] : [];
+    return this.limitToMode(this.activeIndex as (string | number)[]);
+  }
+
+  /** Without allowMultiple only one item can be open; the last one wins, as documented on `activeIndex`. */
+  private limitToMode(keys: (string | number)[]): (string | number)[] {
+    return this.allowMultiple ? keys : keys.slice(-1);
+  }
+
+  private getActiveItemKeys(items: HTMLTkAccordionItemElement[]): (string | number)[] {
+    return items.flatMap((item, index) => (item.active ? [this.getItemKey(item, index)] : []));
+  }
+
+  private syncItemsWithActiveIndex() {
+    this.getAccordionItems().forEach((item, index) => {
+      item.active = this.internalActiveIndex.includes(this.getItemKey(item, index));
+    });
   }
 
   private getActiveIndex(): string | number | (string | number)[] {
@@ -195,13 +201,18 @@ export class TkAccordion implements ComponentInterface {
     if (!isEqual(activeIndex, this.activeIndex)) this.tkActiveIndexChange.emit(activeIndex);
   }
 
-  private handleItemActiveChange(itemKey: string | number, active: boolean): void {
-    if (active && !this.internalActiveIndex.includes(itemKey)) {
-      this.internalActiveIndex = [...this.internalActiveIndex, itemKey];
-    }
+  private handleItemActiveChange(items: HTMLTkAccordionItemElement[], itemKey: string | number, active: boolean): void {
+    // Rebuild the open set from the items themselves rather than from the held state: an item appended with
+    // `active` after load, or keyless items re-indexed by a DOM insertion/removal, would otherwise leave the
+    // state stale and the click without effect.
+    const otherOpenKeys = this.getActiveItemKeys(items).filter(key => key !== itemKey);
+    const nextActiveIndex = active ? this.limitToMode([...otherOpenKeys, itemKey]) : otherOpenKeys;
 
-    if (!active && this.internalActiveIndex.includes(itemKey)) {
-      this.internalActiveIndex = this.internalActiveIndex.filter(activeIndex => activeIndex !== itemKey);
+    if (isEqual(nextActiveIndex, this.internalActiveIndex)) {
+      // the index is already right but an item disagrees with it (e.g. it was appended already open), so realign the items
+      this.syncItemsWithActiveIndex();
+    } else {
+      this.internalActiveIndex = nextActiveIndex;
     }
 
     this.tkAccordionItemSelected.emit({

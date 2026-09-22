@@ -183,8 +183,8 @@ export class TkToggle implements ComponentInterface {
         onChange={this.handleInputChange}
         tabIndex={this.tabindex}
         aria-checked={this.checked.toString()}
-        aria-disabled={this.disabled}
-        aria-invalid={this.invalid || undefined}
+        aria-disabled={String(this.disabled)}
+        aria-invalid={String(this.invalid)}
         aria-label={this.name}
         aria-labelledby={this.ariaLabelledby}
         data-testid={getDataTestId(this.dataTestid, 'native-input')}

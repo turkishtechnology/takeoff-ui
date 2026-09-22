@@ -218,14 +218,15 @@ describe('tk-datepicker input', () => {
       expect(changes).toEqual(['2024-03-20 02:30 PM']);
     });
 
-    it('resyncs AM/PM and reformats the text when the input loses focus in 12-hour mode', async () => {
+    it('keeps AM/PM in step with a typed 24-hour time and reformats the text when the input loses focus', async () => {
       const page = await setup(`show-time-picker="true" time-format="12"`);
       await typeAndSettle(page, '2024-03-20 14:30');
-      expect(internals(page).internalAmPm).toBe('AM');
+      expect(internals(page).internalAmPm).toBe('PM');
 
       input(page).dispatchEvent(new CustomEvent('tk-blur'));
       await page.waitForChanges();
 
+      expect(internals(page).internalStartTime).toEqual({ hour: 14, minute: 30 });
       expect(internals(page).internalAmPm).toBe('PM');
       expect(input(page).getAttribute('value')).toBe('2024-03-20 02:30 PM');
     });
@@ -382,14 +383,15 @@ describe('tk-datepicker input', () => {
   describe('opening from the input', () => {
     it('toggles the popup and mirrors the state on aria-expanded', async () => {
       const page = await setup();
+      expect(input(page).getAttribute('aria-expanded')).toBe('false');
 
       await openPanel(page);
       expect(byTestId(page, 'panel')).toBeTruthy();
-      expect(input(page).hasAttribute('aria-expanded')).toBe(true);
+      expect(input(page).getAttribute('aria-expanded')).toBe('true');
 
       await openPanel(page);
       expect(byTestId(page, 'panel')).toBeNull();
-      expect(input(page).hasAttribute('aria-expanded')).toBe(false);
+      expect(input(page).getAttribute('aria-expanded')).toBe('false');
     });
 
     it.each(['disabled="true"', 'readonly="true"'])('does not open when %s', async attr => {

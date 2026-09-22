@@ -18,6 +18,8 @@ export interface IInputMaskOptions {
   delimiters?: any[];
   initValue?: string;
   letterOnly?: boolean;
+  /** Cleave's option is `lowercase`; `lowerCase` is kept for consumers already using it. */
+  lowercase?: boolean;
   lowerCase?: boolean;
   maxLength?: number;
   noImmediatePrefix?: boolean;

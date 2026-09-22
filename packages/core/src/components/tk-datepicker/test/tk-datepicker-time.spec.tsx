@@ -307,6 +307,16 @@ describe('tk-datepicker time selection', () => {
       expect(internals(page).internalAmPm).toBe(new Date().getHours() >= 12 ? 'PM' : 'AM');
     });
 
+    it('gives a date-only value the current time', async () => {
+      pinClock('2024-03-15T22:21:00');
+      const page = await inlineWith('2024-03-15');
+
+      expect(internals(page).internalSelectedDates.start).toEqual(d(2024, 3, 15));
+      expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).inputValue).toBe('2024-03-15 22:21');
+      expect(hourCell(page, 22).classList.contains('selected')).toBe(true);
+    });
+
     it('warns when the min and max time leave no selectable slot', async () => {
       const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -318,15 +328,37 @@ describe('tk-datepicker time selection', () => {
   });
 
   describe('12-hour mode', () => {
-    // Loads a 24-hour value and then switches to the 12-hour format, which syncs the meridiem with the
-    // hour. Loading a "hh:mm a" value directly does not sync it (the toggle stays on AM for an
-    // afternoon value), so the fixtures avoid that path.
+    // Loads a 24-hour value and then switches to the 12-hour format so the fixtures can stay in 24-hour notation.
     const twelveHour = async (value24: string, extra = '') => {
       const page = await setup(`inline="true" show-time-picker="true" first-day-of-week-index="0" value="${value24}" ${extra}`);
       page.root.timeFormat = '12';
       await page.waitForChanges();
       return page;
     };
+
+    it('loads a 12-hour PM value with the PM toggle', async () => {
+      const page = await setup(`inline="true" show-time-picker="true" time-format="12" first-day-of-week-index="0" value="2024-03-15 02:30 PM"`);
+
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(internals(page).internalStartTime).toEqual({ hour: 14, minute: 30 });
+      expect(toggle(page).getAttribute('value')).toBe('PM');
+      expect(hourCell(page, 2).classList.contains('selected')).toBe(true);
+
+      const changes = listen(page, 'tk-change');
+      tkClick(stepper(page, 'hours-increase'));
+      await page.waitForChanges();
+
+      expect(changes).toEqual(['2024-03-15 03:30 PM']);
+    });
+
+    it('loads a date-only value with the meridiem of the current time', async () => {
+      pinClock('2024-03-15T22:21:00');
+      const page = await setup(`inline="true" show-time-picker="true" time-format="12" value="2024-03-15"`);
+
+      expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(internals(page).inputValue).toBe('2024-03-15 10:21 PM');
+    });
 
     it('lists 12-hour labels around the selected hour', async () => {
       const page = await twelveHour('2024-03-15 14:30');
@@ -411,9 +443,20 @@ describe('tk-datepicker time selection', () => {
       expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
     });
 
-    // processDateValue seeds internalStartTime from the clock at load without syncing internalAmPm, so a PM
-    // default time renders with the AM toggle. Enable this once the component keeps the two in step.
-    it.todo('syncs the meridiem with a PM default time when a day is first picked');
+    it('syncs the meridiem with a PM default time when a day is first picked', async () => {
+      pinClock('2024-03-15T22:21:00');
+      const page = await setup(`inline="true" show-time-picker="true" time-format="12" default-date="2024-03"`);
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(toggle(page).getAttribute('value')).toBe('PM');
+      const changes = listen(page, 'tk-change');
+
+      click(dayCell(page, 2024, 3, 15));
+      await page.waitForChanges();
+
+      expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(changes).toEqual(['2024-03-15 10:21 PM']);
+    });
 
     it('picks an hour from the list in the current meridiem', async () => {
       const page = await twelveHour('2024-03-15 14:30');
@@ -505,6 +548,22 @@ describe('tk-datepicker time selection', () => {
       expect(internals(page).internalStartTime).toEqual({ hour: 14, minute: 30 });
       expect(internals(page).internalSelectedDates).toEqual({ start: null, end: null });
       expect(hourCell(page, 14).classList.contains('selected')).toBe(true);
+    });
+
+    it('loads a 12-hour PM value with the PM toggle without emitting a change', async () => {
+      pinClock('2024-03-15T09:00:00');
+      const changes: unknown[] = [];
+      const page = await newSpecPage({
+        components: [TkDatePicker, MockTkInput],
+        template: () =>
+          h('tk-datepicker', { 'inline': true, 'timeOnly': true, 'timeFormat': '12', 'value': '02:00 PM', 'onTk-change': (e: CustomEvent) => changes.push(e.detail) }),
+      });
+
+      expect(changes).toEqual([]);
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(internals(page).internalStartTime).toEqual({ hour: 14, minute: 0 });
+      expect(internals(page).inputValue).toBe('02:00 PM');
+      expect(toggle(page).getAttribute('value')).toBe('PM');
     });
 
     it('emits a time string when an hour or minute is picked', async () => {
@@ -631,7 +690,6 @@ describe('tk-datepicker time selection', () => {
     });
 
     it('interprets typed 12-hour text without a meridiem using the current toggle', async () => {
-      // Switching the format syncs the meridiem; loading a PM value directly can leave it on AM.
       const page = await setup(`time-only="true" value="14:00"`);
       page.root.timeFormat = '12';
       await page.waitForChanges();

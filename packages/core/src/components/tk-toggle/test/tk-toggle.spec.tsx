@@ -213,4 +213,20 @@ describe('tk-toggle state handling', () => {
     expect(input.hasAttribute('tabindex')).toBe(false);
     expect(input.getAttribute('aria-labelledby')).toBe('lbl');
   });
+
+  it('exposes disabled and invalid as aria strings on the native input', async () => {
+    const page = await newSpecPage({
+      components: [TkToggle],
+      html: `<tk-toggle disabled="true" invalid="true"></tk-toggle>`,
+    });
+    const input = page.root.shadowRoot.querySelector('input');
+    expect(input.getAttribute('aria-disabled')).toBe('true');
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+
+    page.root.disabled = false;
+    page.root.invalid = false;
+    await page.waitForChanges();
+    expect(input.getAttribute('aria-disabled')).toBe('false');
+    expect(input.getAttribute('aria-invalid')).toBe('false');
+  });
 });

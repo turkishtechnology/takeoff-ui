@@ -44,9 +44,9 @@ describe('tk-textarea', () => {
     const container = page.root.shadowRoot.querySelector('.tk-textarea-container');
     const textarea = page.root.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
 
-    expect(container.getAttribute('aria-disabled')).toBe('');
-    expect(container.getAttribute('aria-readonly')).toBe('');
-    expect(container.getAttribute('aria-invalid')).toBe('');
+    expect(container.getAttribute('aria-disabled')).toBe('true');
+    expect(container.getAttribute('aria-readonly')).toBe('true');
+    expect(container.getAttribute('aria-invalid')).toBe('true');
     expect(textarea.getAttribute('disabled')).toBe('');
     expect(textarea.getAttribute('readonly')).toBe('');
   });
@@ -137,11 +137,17 @@ describe('tk-textarea', () => {
         html: `<tk-textarea value="hello" show-copy-button="true" disabled="true"></tk-textarea>`,
       });
 
-      page.root.shadowRoot.querySelector('.copy-button').dispatchEvent(new MouseEvent('click'));
+      const copyButton = page.root.shadowRoot.querySelector('.copy-button');
+      expect(copyButton.getAttribute('aria-disabled')).toBe('true');
+      copyButton.dispatchEvent(new MouseEvent('click'));
       await page.waitForChanges();
 
       expect(writeText).not.toHaveBeenCalled();
       expect(page.rootInstance.copied).toBe(false);
+
+      page.root.disabled = false;
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('.copy-button').getAttribute('aria-disabled')).toBe('false');
     });
 
     it('stays un-copied when the clipboard write fails', async () => {

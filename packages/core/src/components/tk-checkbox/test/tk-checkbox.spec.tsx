@@ -51,7 +51,7 @@ describe('state handling', () => {
 
     const container = page.root.querySelector('.tk-checkbox-container');
 
-    expect(container.getAttribute('aria-invalid')).not.toBeNull();
+    expect(container.getAttribute('aria-invalid')).toBe('true');
   });
   it('handles indeterminate state', async () => {
     const page = await newSpecPage({

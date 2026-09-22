@@ -1,6 +1,31 @@
 import { getNestedValue } from '../../utils/object-utils';
 import { ITableColumn, ITableFilter, ITableSort } from './types';
-import { parse, isWithinInterval } from 'date-fns';
+import { parse, isValid, isWithinInterval } from 'date-fns';
+
+/** Props the filter panel gives its tk-datepicker; a column's `filterElements.optionsSearchDatepicker` overrides them. */
+export const DEFAULT_FILTER_DATEPICKER_PROPS = {
+  label: 'Select a date',
+  placeholder: 'Choose a date',
+  mode: 'single',
+  dateFormat: 'yyyy-MM-dd',
+  timeFormat: '24',
+  minDate: '',
+  maxDate: '',
+  hourStep: 1,
+  minuteStep: 1,
+  locale: 'en',
+  showTimePicker: false,
+  size: 'base',
+};
+
+export const getFilterDatepickerProps = (column?: ITableColumn) => ({ ...DEFAULT_FILTER_DATEPICKER_PROPS, ...column?.filterElements?.optionsSearchDatepicker });
+
+/** The pattern the filter panel's tk-datepicker emits its value in, so row values are parsed the same way. */
+export const getFilterDateFormat = (column?: ITableColumn): string => {
+  const { dateFormat, timeFormat, showTimePicker } = getFilterDatepickerProps(column);
+  if (!showTimePicker) return dateFormat;
+  return `${dateFormat} ${timeFormat === '12' ? 'hh:mm a' : 'HH:mm'}`;
+};
 
 /**
  * Calculates the optimal starting width for column resizing
@@ -105,13 +130,11 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
         } else {
           const fieldValue = getNestedValue(row, filter.field);
           if (!fieldValue) return false;
-          // Get dateFormat and timeFormat from column definition
-          const column = columns.find(col => col.field === filter.field);
-          const dateFormat = column?.filterElements?.optionsSearchDatepicker?.dateFormat;
-          const timeFormat = column?.filterElements?.optionsSearchDatepicker?.timeFormat;
-          const formatType = dateFormat + (timeFormat === '24' ? ' HH:mm' : timeFormat === '12' ? ' hh:mm aa' : '');
+          // Parse with the same pattern the filter panel's tk-datepicker emits for this column
+          const formatType = getFilterDateFormat(columns.find(col => col.field === filter.field));
 
           const rowDate = parse(fieldValue, formatType, new Date());
+          if (!isValid(rowDate)) return false;
           // Range mode
           if (
             typeof filter.value === 'object' &&
@@ -126,12 +149,12 @@ export const filterAndSort = (data: any[], columns: ITableColumn[], filters: ITa
             const startDate = parse(filter.value.start, formatType, new Date());
             const endDate = parse(filter.value.end, formatType, new Date());
 
-            if (!rowDate || !startDate || !endDate) return false;
+            if (!isValid(startDate) || !isValid(endDate)) return false;
             return isWithinInterval(rowDate, { start: startDate, end: endDate });
           } else if (typeof filter.value == 'string' && filter.value !== '') {
             // Single date mode
             const filterDate = parse(filter.value, formatType, new Date());
-            return rowDate.getTime() == filterDate.getTime();
+            return isValid(filterDate) && rowDate.getTime() == filterDate.getTime();
           }
         }
       }

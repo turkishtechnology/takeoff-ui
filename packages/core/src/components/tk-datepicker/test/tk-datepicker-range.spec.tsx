@@ -33,6 +33,7 @@ type DatepickerInternals = {
   isOpen: boolean;
   hoverDate: Date | null;
   inputValue: string;
+  internalAmPm: 'AM' | 'PM';
   internalSelectedDates: { start: Date | null; end: Date | null };
   internalStartTime: Time;
   internalEndTime: Time;
@@ -441,9 +442,75 @@ describe('tk-datepicker range mode', () => {
       expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
     });
 
-    // processDateValue seeds internalStartTime from the clock at load without syncing internalAmPm, so a PM
-    // default time renders with the AM toggle. Enable this once the component keeps the two in step.
-    it.todo('syncs the meridiem with a PM default time when a range is first started');
+    it('syncs the meridiem with a PM default time when a range is first started', async () => {
+      pinClock('2024-03-15T22:21:00');
+      const page = await setup(`${withTimes} time-format="12" default-date="2024-03"`);
+      expect(internals(page).internalAmPm).toBe('PM');
+      const changes = listen(page, 'tk-change');
+
+      click(dayCell(page, 10));
+      await page.waitForChanges();
+
+      expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(page.root.shadowRoot.querySelector('.tk-datepicker-ampm-toggle').getAttribute('value')).toBe('PM');
+      expect(changes).toEqual([{ start: '2024-03-10 10:21 PM', end: undefined }]);
+    });
+
+    it('keeps the end time when the input blurs with a 12-hour range loaded', async () => {
+      const page = await setup(`show-time-picker="true" time-format="12"`);
+      page.root.value = { start: '2024-03-10 09:00 AM', end: '2024-03-12 02:00 PM' };
+      await page.waitForChanges();
+      expect(internals(page).internalAmPm).toBe('PM');
+      const changes = listen(page, 'tk-change');
+      const timeChanges = listen(page, 'tk-time-change');
+
+      input(page).dispatchEvent(new CustomEvent('tk-blur'));
+      await page.waitForChanges();
+
+      expect(internals(page).internalStartTime).toEqual({ hour: 9, minute: 0 });
+      expect(internals(page).internalEndTime).toEqual({ hour: 14, minute: 0 });
+      expect(internals(page).internalAmPm).toBe('PM');
+      expect(internals(page).inputValue).toBe('2024-03-10 09:00 AM - 2024-03-12 02:00 PM');
+      expect(changes).toEqual([]);
+      expect(timeChanges).toEqual([]);
+    });
+
+    it('follows the start time again when a new range is started after a 12-hour range was loaded', async () => {
+      const page = await setup(`${withTimes} time-format="12"`);
+      page.root.value = { start: '2024-03-10 09:00 AM', end: '2024-03-12 02:00 PM' };
+      await page.waitForChanges();
+      expect(internals(page).internalAmPm).toBe('PM');
+      const changes = listen(page, 'tk-change');
+
+      click(dayCell(page, 20));
+      await page.waitForChanges();
+
+      expect(internals(page).internalSelectedDates).toEqual({ start: d(2024, 3, 20), end: null });
+      expect(internals(page).internalStartTime).toEqual({ hour: 9, minute: 0 });
+      expect(internals(page).internalAmPm).toBe('AM');
+      expect(page.root.shadowRoot.querySelector('.tk-datepicker-ampm-toggle').getAttribute('value')).toBe('AM');
+      expect(changes).toEqual([{ start: '2024-03-20 09:00 AM', end: undefined }]);
+
+      click(dayCell(page, 25));
+      await page.waitForChanges();
+
+      // the end is picked, so the toggle governs (and shows) the end time again
+      expect(internals(page).internalEndTime).toEqual({ hour: 9, minute: 0 });
+      expect(internals(page).internalAmPm).toBe('AM');
+    });
+
+    it('gives date-only range ends the current time', async () => {
+      pinClock('2024-03-15T22:21:00');
+      const page = await setup(withTimes);
+      page.root.value = { start: '2024-03-10', end: '2024-03-12' };
+      await page.waitForChanges();
+
+      expect(internals(page).internalSelectedDates).toEqual({ start: d(2024, 3, 10), end: d(2024, 3, 12) });
+      expect(internals(page).internalStartTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).internalEndTime).toEqual({ hour: 22, minute: 21 });
+      expect(internals(page).inputValue).toBe('2024-03-10 22:21 - 2024-03-12 22:21');
+    });
 
     it('gives a fresh range start the current time and drops the end time', async () => {
       const page = await setup(`${withTimes} default-date="2024-03"`);

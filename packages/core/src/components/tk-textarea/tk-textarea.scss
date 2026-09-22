@@ -62,7 +62,7 @@
       }
     }
 
-    &:hover:not(.tk-textarea-container[aria-disabled] .tk-textarea) {
+    &:hover:not(.tk-textarea-container[aria-disabled='true'] .tk-textarea) {
       background-color: var(--background-lightest);
     }
 
@@ -154,7 +154,7 @@
     border: var(--spacing-px) solid var(--states-info-base);
   }
 
-  &[aria-disabled] {
+  &[aria-disabled='true'] {
     pointer-events: none;
     .label,
     .tk-textarea textarea {
@@ -167,7 +167,7 @@
     }
   }
 
-  &[aria-readonly] {
+  &[aria-readonly='true'] {
     .label {
       color: var(--text-sub-base);
     }
@@ -177,7 +177,7 @@
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-textarea {
       border-color: var(--states-danger-base);
       background-color: var(--background-lightest);

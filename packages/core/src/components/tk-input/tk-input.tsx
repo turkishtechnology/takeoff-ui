@@ -503,10 +503,34 @@ export class TkInput implements ComponentInterface {
    * Whether a Cleave.js instance should back the current mask. Cleave is only used
    * for its own formatting options; a `regex` mask is handled by the incremental
    * matcher instead, so we never build a (useless and side-effecting) Cleave
-   * instance for it.
+   * instance for it. Likewise for options Cleave itself declares "no need to use
+   * this lib" for (e.g. `letterOnly` alone): its init then bails out before
+   * `maxLength` is derived, so every re-sync would truncate the value to nothing.
    */
   private shouldUseCleave(): boolean {
-    return this.mode === 'text' && !!this.maskOptions && !this.maskOptions.regex;
+    const options = this.maskOptions;
+    if (this.mode !== 'text' || !options || options.regex) return false;
+    return !!(options.numeral || options.phone || options.creditCard || options.time || options.date || options.blocks?.length || options.prefix);
+  }
+
+  /**
+   * The character-class and case options are applied by tk-input itself, so they keep working
+   * when they are the only mask options and Cleave is not used. `letterOnly` is tk-input's own
+   * option and is always applied here; the others are Cleave's, which handles them itself
+   * whenever an instance is active.
+   */
+  private getCharacterOptionsFilter(): ((value: string) => string) | null {
+    const options = this.maskOptions;
+    if (this.mode !== 'text') return null;
+    const steps: ((value: string) => string)[] = [];
+    if (options.letterOnly) steps.push(value => value.replace(/[^a-zA-Z]/g, ''));
+    if (!this.cleaveInstance) {
+      if (options.numericOnly) steps.push(value => value.replace(/[^0-9]/g, ''));
+      if (options.uppercase) steps.push(value => value.toUpperCase());
+      if (options.lowercase || options.lowerCase) steps.push(value => value.toLowerCase());
+    }
+    if (steps.length === 0) return null;
+    return value => steps.reduce((current, step) => step(current), value);
   }
 
   /**
@@ -603,16 +627,15 @@ export class TkInput implements ComponentInterface {
             }
           }
         } else {
-          if (this.maskOptions.letterOnly) {
-            // If letterOnly option is enabled, filter out non-letters
+          const applyCharacterOptions = this.getCharacterOptionsFilter();
+          if (applyCharacterOptions) {
             const selection = this.getSelection(input);
-            const filtered = _value.replace(/[^a-zA-Z]/g, '');
+            const filtered = applyCharacterOptions(_value);
             if (filtered !== input.value) {
               // Rewriting the field parks the caret at the end, so put it back where the user is
               // typing, moved left by however many characters the filter dropped before it. Done
               // here rather than after the Cleave re-sync, which captures the caret this leaves.
-              const lettersBefore = (offset: number) => _value.slice(0, offset).replace(/[^a-zA-Z]/g, '').length;
-              const caret = selection ? lettersBefore(selection[1]) : null;
+              const caret = selection ? applyCharacterOptions(_value.slice(0, selection[1])).length : null;
               input.value = filtered;
               this.restoreCaret(input, caret);
             }
@@ -1142,7 +1165,13 @@ export class TkInput implements ComponentInterface {
     }
 
     return (
-      <div aria-readonly={this.readonly} aria-disabled={this.disabled} aria-invalid={this.invalid} class={rootClasses} data-testid={getDataTestId(this.dataTestid, 'container')}>
+      <div
+        aria-readonly={String(this.readonly)}
+        aria-disabled={String(this.disabled)}
+        aria-invalid={String(this.invalid)}
+        class={rootClasses}
+        data-testid={getDataTestId(this.dataTestid, 'container')}
+      >
         {this.renderLabel()}
         <div class="tk-input" onMouseDown={() => (this.focusedChipIndex = null)} data-testid={getDataTestId(this.dataTestid, 'control')}>
           {this.renderChips()}

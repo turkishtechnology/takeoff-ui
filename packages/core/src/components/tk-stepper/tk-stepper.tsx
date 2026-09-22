@@ -340,8 +340,8 @@ export class TkStepper implements ComponentInterface {
           tabIndex={step.isClickable && !step.disabled ? 0 : -1}
           onClick={() => this.handleStepClick(index)}
           aria-label={step.header}
-          aria-selected={step.isActive}
-          aria-disabled={!this.canStepBeSelected(index)}
+          aria-selected={String(!!step.isActive)}
+          aria-disabled={String(!this.canStepBeSelected(index))}
           data-testid={getDataTestId(stepDataTestid)}
         >
           <div class={containerClasses} data-index={index} data-clickable={step.isClickable && !step.disabled} data-testid={getDataTestId(stepDataTestid, 'container')}>

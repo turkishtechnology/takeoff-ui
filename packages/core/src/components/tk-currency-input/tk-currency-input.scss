@@ -70,7 +70,7 @@
       background-color: transparent;
       padding: 0;
 
-      &:not([aria-disabled]) {
+      &:not([aria-disabled='true']) {
         cursor: pointer;
       }
 
@@ -120,14 +120,14 @@
     }
   }
 
-  &[aria-invalid] {
+  &[aria-invalid='true'] {
     .tk-currency-input-wrapper {
       border-color: var(--states-danger-base);
     }
   }
 
-  &[aria-disabled],
-  &[aria-readonly] {
+  &[aria-disabled='true'],
+  &[aria-readonly='true'] {
     pointer-events: none;
     .tk-currency-input-wrapper {
       background-color: var(--background-lightest);
@@ -139,7 +139,7 @@
     }
   }
 
-  &[aria-disabled] {
+  &[aria-disabled='true'] {
     .tk-currency-input-input {
       color: var(--text-sub-base);
     }
