@@ -63,6 +63,13 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "zone.js"
         update-types: ["version-update:semver-major"]
+      # jasmine-core 7 blocks monkey patching, which breaks zone.js's zone-testing
+      # patch of describe/it ("Cannot assign to read only property 'describe'")
+      # before a single spec runs (verified 2026-09-22 with zone.js 0.16.2 and
+      # 0.16.3). Angular CLI itself still scaffolds jasmine-core ~6; move it
+      # together with Angular, never piecemeal.
+      - dependency-name: "jasmine-core"
+        update-types: ["version-update:semver-major"]
       # commitlint 21 requires Node 22 (this repo is on Node 20).
       - dependency-name: "@commitlint/*"
         update-types: ["version-update:semver-major"]
