@@ -514,6 +514,26 @@ export class TkInput implements ComponentInterface {
   }
 
   /**
+   * The character-class and case options are applied by tk-input itself, so they keep working
+   * when they are the only mask options and Cleave is not used. `letterOnly` is tk-input's own
+   * option and is always applied here; the others are Cleave's, which handles them itself
+   * whenever an instance is active.
+   */
+  private getCharacterOptionsFilter(): ((value: string) => string) | null {
+    const options = this.maskOptions;
+    if (this.mode !== 'text') return null;
+    const steps: ((value: string) => string)[] = [];
+    if (options.letterOnly) steps.push(value => value.replace(/[^a-zA-Z]/g, ''));
+    if (!this.cleaveInstance) {
+      if (options.numericOnly) steps.push(value => value.replace(/[^0-9]/g, ''));
+      if (options.uppercase) steps.push(value => value.toUpperCase());
+      if (options.lowercase || options.lowerCase) steps.push(value => value.toLowerCase());
+    }
+    if (steps.length === 0) return null;
+    return value => steps.reduce((current, step) => step(current), value);
+  }
+
+  /**
    * Re-seeds `lastRegexAcceptedValue` from a value that bypassed keystroke handling
    * (initial render, programmatic `value` set, mask change). Keeps the revert target
    * in sync so a later rejected keystroke restores the displayed value, not a stale one.
@@ -607,16 +627,15 @@ export class TkInput implements ComponentInterface {
             }
           }
         } else {
-          if (this.maskOptions.letterOnly) {
-            // If letterOnly option is enabled, filter out non-letters
+          const applyCharacterOptions = this.getCharacterOptionsFilter();
+          if (applyCharacterOptions) {
             const selection = this.getSelection(input);
-            const filtered = _value.replace(/[^a-zA-Z]/g, '');
+            const filtered = applyCharacterOptions(_value);
             if (filtered !== input.value) {
               // Rewriting the field parks the caret at the end, so put it back where the user is
               // typing, moved left by however many characters the filter dropped before it. Done
               // here rather than after the Cleave re-sync, which captures the caret this leaves.
-              const lettersBefore = (offset: number) => _value.slice(0, offset).replace(/[^a-zA-Z]/g, '').length;
-              const caret = selection ? lettersBefore(selection[1]) : null;
+              const caret = selection ? applyCharacterOptions(_value.slice(0, selection[1])).length : null;
               input.value = filtered;
               this.restoreCaret(input, caret);
             }

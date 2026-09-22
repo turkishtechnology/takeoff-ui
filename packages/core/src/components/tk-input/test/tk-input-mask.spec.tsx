@@ -159,6 +159,32 @@ describe('tk-input Cleave mask', () => {
       expect(change).toHaveBeenLastCalledWith('abc');
     });
 
+    it.each([
+      ['numericOnly', { numericOnly: true }, 'a1b2c3', '123'],
+      ['uppercase', { uppercase: true }, 'abC1', 'ABC1'],
+      ['lowercase', { lowercase: true }, 'AbC1', 'abc1'],
+      ['lowerCase', { lowerCase: true }, 'AbC1', 'abc1'],
+    ] as const)('applies %s itself when it is the only mask option', async (_name, maskOptions, typed, expected) => {
+      const page = await renderMasked({ ...maskOptions });
+      const change = listenChange(page);
+
+      fireInput(page, typed);
+
+      expect(nativeInputOf(page).value).toBe(expected);
+      expect(page.root.value).toBe(expected);
+      expect(change).toHaveBeenLastCalledWith(expected);
+    });
+
+    it('keeps the caret in place when numericOnly drops characters before it', async () => {
+      const page = await renderMasked({ numericOnly: true });
+      const input = focusWithCaret(page, 3);
+
+      fireInput(page, '1a2b');
+
+      expect(input.value).toBe('12');
+      expect(input.selectionStart).toBe(2);
+    });
+
     it('still filters letters when combined with Cleave blocks', async () => {
       const page = await renderMasked({ letterOnly: true, blocks: [2, 2], delimiter: '-' });
       const change = listenChange(page);
