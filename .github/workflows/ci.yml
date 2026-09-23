@@ -91,3 +91,40 @@ jobs:
       # distinguishable from a type or unit-test failure.
       - name: E2E tests
         run: pnpm --filter @takeoff-ui/core run test.e2e
+
+  consumer-audit:
+    name: Consumer audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22.22.1"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build core
+        run: pnpm exec turbo run build --filter=@takeoff-ui/core
+
+      # `pnpm audit` in this repo sees the root `pnpm.overrides`, which never reach a
+      # consumer. Packing the tarball and installing it into an empty project is the only
+      # view that matches what `npm audit` reports in a downstream app.
+      - name: Pack the publishable tarball
+        run: pnpm --filter @takeoff-ui/core pack --pack-destination "$RUNNER_TEMP/pack"
+
+      - name: Install it the way a consumer does
+        working-directory: ${{ runner.temp }}
+        run: |
+          mkdir consumer && cd consumer
+          npm init -y > /dev/null
+          npm install "$RUNNER_TEMP"/pack/takeoff-ui-core-*.tgz --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      # Fails on high/critical only; moderate findings stay visible in the log so a
+      # metadata-only advisory does not block every PR.
+      - name: Audit the consumer's dependency tree
+        working-directory: ${{ runner.temp }}/consumer
+        run: npm audit --package-lock-only --audit-level=high
