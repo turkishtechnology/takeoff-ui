@@ -80,7 +80,8 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@types/jest"
         update-types: ["version-update:semver-major"]
-      # Tiptap v3: the whole @tiptap/* family must be migrated together.
+      # Tiptap majors: the whole @tiptap/* family must move together (v3 landed with
+      # TKP24605-102); a future v4 needs the same coordinated PR.
       - dependency-name: "@tiptap/*"
         update-types: ["version-update:semver-major"]
       # React 19: the published wrapper packages target React 18 (peer).

@@ -33,10 +33,10 @@ jest.mock('@tiptap/core', () => ({
       destroy: jest.fn(),
       chain: jest.fn(() => chain),
       commands: {
-        // mirrors Tiptap v2: onUpdate fires only when emitUpdate is true
-        setContent: jest.fn((content: string, emitUpdate?: boolean) => {
+        // mirrors Tiptap 3: onUpdate fires unless { emitUpdate: false } is passed
+        setContent: jest.fn((content: string, setOptions?: { emitUpdate?: boolean }) => {
           html = content;
-          if (emitUpdate) {
+          if (setOptions?.emitUpdate ?? true) {
             options.onUpdate?.({ editor: instance });
           }
         }),
@@ -62,8 +62,11 @@ jest.mock('@tiptap/core', () => ({
   }),
 }));
 
-jest.mock('@tiptap/extension-placeholder', () => ({ __esModule: true, default: { configure: jest.fn(() => ({ name: 'placeholder' })) } }));
-jest.mock('@tiptap/extension-character-count', () => ({ __esModule: true, default: { configure: jest.fn(() => ({ name: 'characterCount' })) } }));
+jest.mock('@tiptap/extensions', () => ({
+  __esModule: true,
+  Placeholder: { configure: jest.fn(() => ({ name: 'placeholder' })) },
+  CharacterCount: { configure: jest.fn(() => ({ name: 'characterCount' })) },
+}));
 jest.mock('@tiptap/starter-kit', () => ({ __esModule: true, default: { configure: jest.fn(() => ({ name: 'starterKit' })) } }));
 jest.mock('@tiptap/extension-text-align', () => ({ __esModule: true, default: { configure: jest.fn(() => ({ name: 'textAlign' })) } }));
 jest.mock('@tiptap/extension-underline', () => ({ __esModule: true, default: { configure: jest.fn(() => ({ name: 'underline' })) } }));
@@ -73,8 +76,7 @@ jest.mock('@tiptap/extension-image', () => ({ __esModule: true, default: { confi
 import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { h } from '@stencil/core';
 import { Editor, AnyExtension } from '@tiptap/core';
-import Placeholder from '@tiptap/extension-placeholder';
-import CharacterCount from '@tiptap/extension-character-count';
+import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
@@ -82,6 +84,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { TkEditor } from '../tk-editor';
 import { TkEditorCustomButton } from '../types';
+import { STARTER_KIT_OVERRIDES } from '../defaults';
 
 interface MockEditor {
   getHTML(): string;
@@ -154,7 +157,7 @@ describe('tk-editor', () => {
     // parent sets the value programmatically (e.g. reverting after a length guard)
     (page.root as HTMLTkEditorElement).value = '<p>reverted</p>';
     await page.waitForChanges();
-    expect(editorMock.commands.setContent).toHaveBeenCalledWith('<p>reverted</p>', true);
+    expect(editorMock.commands.setContent).toHaveBeenCalledWith('<p>reverted</p>', { emitUpdate: true });
     expect(onTkChange).not.toHaveBeenCalled();
 
     // the next real user edit fires Tiptap's onUpdate and must not be swallowed
@@ -375,7 +378,8 @@ describe('tk-editor', () => {
       await page.waitForChanges();
 
       expect(page.root.value).toBe('<p>set</p>');
-      expect(editor.commands.setContent).toHaveBeenCalledWith('<p>set</p>');
+      // Tiptap 3 emits by default, so the programmatic path has to opt out explicitly
+      expect(editor.commands.setContent).toHaveBeenCalledWith('<p>set</p>', { emitUpdate: false });
       expect(onChange).not.toHaveBeenCalled();
     });
 
@@ -723,7 +727,10 @@ describe('tk-editor', () => {
     it('loads the default extensions when none are provided', async () => {
       const { editor } = await setup();
 
-      expect(configureOf(StarterKit)).toHaveBeenCalledWith({});
+      // Tiptap 3's StarterKit bundles link/underline and enables ListKeymap and TrailingNode;
+      // all four stay off so the editor keeps its Tiptap 2 output and keyboard behaviour
+      expect(configureOf(StarterKit)).toHaveBeenCalledWith(STARTER_KIT_OVERRIDES);
+      expect(STARTER_KIT_OVERRIDES).toEqual({ link: false, underline: false, listKeymap: false, trailingNode: false });
       expect(configureOf(Underline)).toHaveBeenCalled();
       expect(configureOf(TextAlign)).toHaveBeenCalled();
       expect(configureOf(Link)).toHaveBeenCalled();
@@ -735,7 +742,7 @@ describe('tk-editor', () => {
       const custom = { name: 'bold' } as AnyExtension;
       const { editor } = await setupWithExtensions([custom]);
 
-      expect(configureOf(StarterKit)).toHaveBeenCalledWith({ bold: false });
+      expect(configureOf(StarterKit)).toHaveBeenCalledWith({ bold: false, ...STARTER_KIT_OVERRIDES });
       expect(editor.__options.extensions.slice(-1)[0]).toBe(custom);
     });
 
