@@ -1,5 +1,14 @@
 @use '../../global/sass/mixins' as *;
 
+// `scrollbarSize` presets. Set on the host so slotted content picks them up as well.
+:host(.tk-scrollbar-thin) {
+  @include takeoff-scrollbar-preset(thin);
+}
+
+:host(.tk-scrollbar-large) {
+  @include takeoff-scrollbar-preset(large);
+}
+
 // The box the table is drawn in: either the holder itself, or the frame that wraps it and the top scrollbar.
 @mixin table-border {
   border-radius: var(--radius-m-base);
@@ -48,10 +57,10 @@
     }
   }
 
-  // Mirrors the scrollbar the table draws at its bottom: same mixin, same 4px track.
+  // Mirrors the scrollbar the table draws at its bottom: same mixin, same track size.
   .tk-table-top-scrollbar {
     // The content is 1px tall, so the box needs its own height to leave room for the scrollbar.
-    height: 4px;
+    height: var(--tk-scrollbar-size, 10px);
     overflow-x: auto;
     overflow-y: hidden;
     @include takeoff-scrollbar;
@@ -77,7 +86,7 @@
   @supports (-moz-appearance: none) {
     .tk-table-top-scrollbar {
       height: auto;
-      min-height: 4px;
+      min-height: var(--tk-scrollbar-size, 10px);
       scrollbar-width: thin;
     }
 

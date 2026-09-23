@@ -444,6 +444,22 @@ describe('tk-table rendering', () => {
     expect(page.root.shadowRoot.querySelector('thead').classList.contains('dark')).toBe(true);
   });
 
+  it('marks the host with the scrollbar size so the scrollbar preset reaches slotted content', async () => {
+    const page = await createPage({ scrollbarSize: 'large' });
+    expect(page.root.classList.contains('tk-scrollbar-large')).toBe(true);
+    expect(page.root.classList.contains('tk-scrollbar-thin')).toBe(false);
+
+    page.root.scrollbarSize = 'thin';
+    await page.waitForChanges();
+    expect(page.root.classList.contains('tk-scrollbar-thin')).toBe(true);
+    expect(page.root.classList.contains('tk-scrollbar-large')).toBe(false);
+
+    page.root.scrollbarSize = 'base';
+    await page.waitForChanges();
+    expect(page.root.classList.contains('tk-scrollbar-thin')).toBe(false);
+    expect(page.root.classList.contains('tk-scrollbar-large')).toBe(false);
+  });
+
   it('renders editable cells and emits tk-cell-edit on blur', async () => {
     const columns: ITableColumn[] = [
       { field: 'name', header: 'Name', editable: true },

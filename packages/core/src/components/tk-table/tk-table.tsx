@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
+import { Component, ComponentInterface, h, Host, Element, Prop, State, Watch, Event, EventEmitter, Listen, Fragment, Method } from '@stencil/core';
 import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption, ITableColumnResize } from './types';
 import { filterAndSort, getFilterDatepickerProps, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
@@ -138,6 +138,11 @@ export class TkTable implements ComponentInterface {
    * Sets size for the component.
    */
   @Prop() size: 'xsmall' | 'small' | 'base' = 'base';
+
+  /**
+   * Size of the table scrollbars. Every size keeps a thin bar that widens on hover; larger sizes leave a bigger area to grab.
+   */
+  @Prop() scrollbarSize: 'thin' | 'base' | 'large' = 'base';
 
   /**
    * Property of each row that defines the unique key of each row
@@ -2783,11 +2788,13 @@ export class TkTable implements ComponentInterface {
     });
 
     return (
-      <div class={rootClasses} style={this.containerStyle} data-testid={getDataTestId(this.dataTestid, 'container')}>
-        {this.renderHeader()}
-        {this.renderTable()}
-        {this.renderPagination()}
-      </div>
+      <Host class={{ 'tk-scrollbar-thin': this.scrollbarSize === 'thin', 'tk-scrollbar-large': this.scrollbarSize === 'large' }}>
+        <div class={rootClasses} style={this.containerStyle} data-testid={getDataTestId(this.dataTestid, 'container')}>
+          {this.renderHeader()}
+          {this.renderTable()}
+          {this.renderPagination()}
+        </div>
+      </Host>
     );
   }
 }

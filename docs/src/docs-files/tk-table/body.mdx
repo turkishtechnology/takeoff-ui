@@ -17,6 +17,7 @@ import Export from './Examples/Export';
 import StickyColumn from './Examples/StickyColumn';
 import StickyHeader from './Examples/StickyHeader';
 import HorizontalScrollPosition from './Examples/HorizontalScrollPosition';
+import ScrollbarSize from './Examples/ScrollbarSize';
 import ClearFiltersAndSort from './Examples/ClearFiltersAndSort';
 import { TkAlert, TkTable } from '@takeoff-ui/react';
 import CustomHeader from './Examples/CustomHeader';
@@ -205,6 +206,18 @@ own when the table also scrolls vertically (a fixed `height` or `maxHeight`), so
 `top` keeps it there.
 
 <HorizontalScrollPosition />
+
+## Scrollbar Size
+
+The scrollbars look thin but can be grabbed across a wider strip, and the thumb
+widens while the pointer is over it. `scrollbarSize` picks both: `thin` draws a
+2px bar in an 8px strip, `base` (default) a 4px bar in a 10px strip and `large`
+an 8px bar in a 14px strip. `large` suits dense tables and touch screens.
+Applications can also set the `--tk-scrollbar-size`, `--tk-scrollbar-inset` and
+`--tk-scrollbar-hover-inset` custom properties on any ancestor to tune every
+Takeoff component at once.
+
+<ScrollbarSize />
 
 ## Column Arrangement
 
