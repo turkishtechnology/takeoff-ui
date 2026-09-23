@@ -1,23 +1,66 @@
-/* ===== Scrollbar Mixin ===== */
+@use 'sass:map';
+
+// Scrollbar presets: the box the browser reserves, and how much of it the track/thumb leave transparent.
+// The visible strip is `size - 2 * inset`: thin looks 2px (6px on hover), base 4px (8px), large 8px (12px),
+// while the whole box stays grabbable (8px / 10px / 14px).
+$takeoff-scrollbar-presets: (
+  thin: (
+    size: 8px,
+    inset: 3px,
+    hover-inset: 1px,
+  ),
+  base: (
+    size: 10px,
+    inset: 3px,
+    hover-inset: 1px,
+  ),
+  large: (
+    size: 14px,
+    inset: 3px,
+    hover-inset: 1px,
+  ),
+);
+
+// Writes the custom properties the scrollbar mixin reads, for a preset from the map above.
+@mixin takeoff-scrollbar-preset($name) {
+  $preset: map.get($takeoff-scrollbar-presets, $name);
+  --tk-scrollbar-size: #{map.get($preset, size)};
+  --tk-scrollbar-inset: #{map.get($preset, inset)};
+  --tk-scrollbar-hover-inset: #{map.get($preset, hover-inset)};
+}
+
+// Custom scrollbar for WebKit browsers. Firefox ignores ::-webkit-scrollbar and keeps its native bar.
+// The bar is drawn inside a transparent border so it looks thin while the whole box stays clickable,
+// and the thumb widens on hover so it is easy to grab. Layout never shifts because the box is fixed.
+// Consumers can override `--tk-scrollbar-size` / `--tk-scrollbar-inset` / `--tk-scrollbar-hover-inset`
+// on any ancestor (defaults match the `base` preset).
 @mixin takeoff-scrollbar {
   &::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: var(--tk-scrollbar-size, 10px);
+    height: var(--tk-scrollbar-size, 10px);
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--background-lightest);
-    border-radius: 2px;
+    background-color: var(--background-lightest);
+    background-clip: padding-box;
+    border: var(--tk-scrollbar-inset, 3px) solid transparent;
+    border-radius: 999px;
   }
 
   &::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: var(--secondary-sub-base);
-    &:hover {
-      background: var(--secondary-dark);
+    background-color: var(--secondary-sub-base);
+    background-clip: padding-box;
+    border: var(--tk-scrollbar-inset, 3px) solid transparent;
+    border-radius: 999px;
+
+    &:hover,
+    &:active {
+      background-color: var(--secondary-dark);
+      border-width: var(--tk-scrollbar-hover-inset, 1px);
     }
   }
+
   &::-webkit-scrollbar-corner {
-    background: var(--background-lightest);
+    background: transparent;
   }
 }
