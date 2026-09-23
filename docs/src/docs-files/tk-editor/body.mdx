@@ -44,6 +44,44 @@ example shows how to add a highlight feature and customize the toolbar layout.
 
 <ToolbarTemplate />
 
+## Custom Extensions and the Tiptap Version
+
+`TkEditor` bundles [Tiptap](https://tiptap.dev/) **3.x**. Anything you pass
+through the `extensions` prop, and anything you run against the instance
+returned by `getEditor()`, has to come from the same major:
+
+```bash
+npm install @tiptap/core@^3 @tiptap/extension-highlight@^3
+```
+
+<TkAlert
+  variant="warning"
+  header="Upgrading from Takeoff UI 0.12 or earlier"
+  message="Those versions bundled Tiptap 2. If your project installs @tiptap/* packages for custom extensions, move them to 3.x together with this upgrade; mixing Tiptap majors is not supported. Projects that only use the component's own props, events and methods need no change."
+/>
+<br />
+
+What stays the same: the toolbar, `value`, `tk-change`, `getContent()` and
+`setContent()` behave exactly as before. Where Tiptap 3 changed its defaults,
+the editor keeps the Tiptap 2 behaviour: no empty paragraph is appended after a
+trailing heading, list or image, list keyboard shortcuts are unchanged, and the
+built-in link and underline still come from the dedicated extensions with the
+`tk-editor-link` class. Pass your own `ListKeymap` or `TrailingNode` from
+`@tiptap/extensions` through `extensions` if you want the new behaviour.
+
+What changed if you work with `getEditor()` directly:
+
+- `editor.commands.setContent(html, true)` became
+  `editor.commands.setContent(html, { emitUpdate: true })`.
+- `editor.commands.clearContent()` now emits an update by default, so it
+  triggers `tk-change`. Pass `false` to keep it silent.
+- `editor.storage` is kept per editor instance instead of per extension.
+
+Tiptap's own [upgrade guide](https://tiptap.dev/docs/guides/upgrade-tiptap-v2)
+covers the rest, including the packages that moved into `@tiptap/extensions` and
+`@tiptap/extension-list`, and `history` being renamed to `undoRedo` in the
+StarterKit options.
+
 ## Placeholder
 
 Shows how the placeholder is displayed only when the editor is empty.

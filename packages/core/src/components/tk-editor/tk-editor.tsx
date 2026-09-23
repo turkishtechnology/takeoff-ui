@@ -1,7 +1,6 @@
 import { Component, Prop, h, State, Event, EventEmitter, Element, Watch, Method } from '@stencil/core';
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
-import Placeholder from '@tiptap/extension-placeholder';
-import CharacterCount from '@tiptap/extension-character-count';
+import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
@@ -9,13 +8,13 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { TOOLBAR_ICONS } from './constants';
 import { TkEditorDefaultButton, TkEditorCustomButton, TkEditorToolbarConfig, HeadingLevel } from './types';
-import { STARTER_KIT_EXTENSION_NAMES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
+import { STARTER_KIT_EXTENSION_NAMES, STARTER_KIT_OVERRIDES, DEFAULT_TOOLBAR_CONFIG } from './defaults';
 import classNames from 'classnames';
 import { CSSStyleProperties } from '../../global/types';
 import { renderHint } from '../../utils/hint-utils';
 
 /**
- * TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
+ * TkEditor is a WYSIWYG editor component that wraps the Tiptap 3 editor. Extensions passed through `extensions` and code that uses `getEditor()` must target Tiptap 3.x.
  */
 @Component({
   tag: 'tk-editor',
@@ -53,9 +52,9 @@ export class TkEditor {
   valueChanged(newValue: string) {
     if (this.editor && newValue !== this.editor.getHTML()) {
       this.isExternalUpdate = true;
-      // emitUpdate must be true; otherwise onUpdate never fires and the flag
+      // emitUpdate must stay true; otherwise onUpdate never fires and the flag
       // stays armed, swallowing the next real user edit's tk-change
-      this.editor.commands.setContent(newValue, true);
+      this.editor.commands.setContent(newValue, { emitUpdate: true });
     }
   }
 
@@ -210,7 +209,9 @@ export class TkEditor {
   async setContent(content: string) {
     if (this.editor) {
       this.value = content;
-      this.editor.commands.setContent(content);
+      // Tiptap 3 emits an update by default; keep this programmatic path silent so
+      // tk-change stays a user-edit signal, as it was on Tiptap 2.
+      this.editor.commands.setContent(content, { emitUpdate: false });
     }
   }
 
@@ -228,7 +229,11 @@ export class TkEditor {
 
     const starterKitExclusions = STARTER_KIT_EXTENSION_NAMES.filter(name => userExtensionNames.has(name)).reduce((acc, name) => ({ ...acc, [name]: false }), {});
 
-    const defaultExtensions: AnyExtension[] = [Placeholder.configure({ placeholder: this.placeholder || '' }), StarterKit.configure(starterKitExclusions)];
+    // STARTER_KIT_OVERRIDES keeps Tiptap 2 behaviour; see defaults.ts for the reasons.
+    const defaultExtensions: AnyExtension[] = [
+      Placeholder.configure({ placeholder: this.placeholder || '' }),
+      StarterKit.configure({ ...starterKitExclusions, ...STARTER_KIT_OVERRIDES }),
+    ];
 
     if (!userExtensionNames.has('underline')) {
       defaultExtensions.push(Underline.configure({}));
