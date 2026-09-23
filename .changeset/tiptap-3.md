@@ -1,5 +1,5 @@
 ---
-'@takeoff-ui/core': minor
+'@takeoff-ui/core': major
 ---
 
 `tk-editor` now runs on Tiptap 3 (3.31.3). This closes the `@tiptap/core`
