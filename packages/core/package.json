@@ -39,7 +39,8 @@
   "files": [
     "dist/",
     "loader/",
-    "components/"
+    "components/",
+    "!dist/collection/assets/"
   ],
   "repository": {
     "type": "git",
@@ -64,14 +65,14 @@
     "@stencil/react-output-target": "1.6.1",
     "@stencil/sass": "3.2.3",
     "@stencil/vue-output-target": "0.14.1",
+    "@types/cleave.js": "^1.4.12",
     "@types/d3-org-chart": "^3.1.2",
     "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^16.18.11",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
-    "puppeteer": "^25.11.0",
-    "rollup": "^4.63.4"
+    "puppeteer": "^25.11.0"
   },
   "license": "Apache-2.0",
   "gitHead": "54e0da7a11b39a044f31dcc384caa2e5c402d1bf",
@@ -85,7 +86,6 @@
     "@tiptap/extension-text-align": "^2.27.3",
     "@tiptap/extension-underline": "^2.27.3",
     "@tiptap/starter-kit": "^2.27.3",
-    "@types/cleave.js": "^1.4.12",
     "chart.js": "^4.4.9",
     "classnames": "^2.5.1",
     "cleave.js": "^1.6.0",
@@ -93,7 +93,6 @@
     "date-fns": "^4.4.0",
     "exceljs": "^4.4.0",
     "filesize": "^11.0.24",
-    "json-server": "^1.0.0-beta.2",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "lodash-es": "^4.18.1",

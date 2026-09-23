@@ -3,15 +3,8 @@ import classNames from 'classnames';
 import { ITableColumn, ITableFilter, ITableCellEdit, ITableRequest, ITableExportOptions, ITableSort, ITableGroup, IFilterOption, ITableColumnResize } from './types';
 import { filterAndSort, getFilterDatepickerProps, handleInputKeydown, calculateColumnStartWidth, calculateNewColumnWidth } from './helpers';
 import { cloneDeep, isEqual, some } from 'lodash-es';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import ExcelJs from 'exceljs';
 import { getIconElementProps } from '../../utils/icon-utils';
 import { getDataTestId } from '../../utils/test-id-utils';
-import '../../global/sass/fonts/tk-font/tk-text-regular';
-import '../../global/sass/fonts/tk-font/tk-text-bold';
-import '../../global/sass/fonts/geologica/geologica-regular';
-import '../../global/sass/fonts/geologica/geologica-bold';
 import { getNestedValue } from '../../utils/object-utils';
 import { showElement, hideElement } from '../../utils/style-utils';
 import { CSSStyleProperties } from '../../global/types';
@@ -549,6 +542,16 @@ export class TkTable implements ComponentInterface {
     }
 
     if (options.type == 'pdf') {
+      // Loaded on demand: jsPDF, its table plugin and the embedded PDF fonts (about 3 MB of
+      // base64 TTF data that register themselves on jsPDF) are only needed to write a PDF.
+      const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+        import('../../global/sass/fonts/tk-font/tk-text-regular'),
+        import('../../global/sass/fonts/tk-font/tk-text-bold'),
+        import('../../global/sass/fonts/geologica/geologica-regular'),
+        import('../../global/sass/fonts/geologica/geologica-bold'),
+      ]);
       const doc = new jsPDF(options.orientation === 'horizontal' ? 'l' : 'p');
 
       const fontFamily = getComputedStyle(this.el).getPropertyValue('--family-body').trim().replace(/['"]/g, '');
@@ -574,6 +577,7 @@ export class TkTable implements ComponentInterface {
 
       doc.save(`${options.fileName ?? 'tk-table'}.pdf`);
     } else if (options.type == 'excel') {
+      const { default: ExcelJs } = await import('exceljs');
       const workbook = new ExcelJs.Workbook();
       const worksheet = workbook.addWorksheet('Sheet 1');
 
