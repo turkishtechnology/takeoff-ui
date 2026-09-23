@@ -86,7 +86,10 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' }],
+      copy: [
+        { src: 'global/sass/fonts/assets/fonts', dest: 'assets/fonts' },
+        { src: 'global/sass/assets/img', dest: 'assets/img' },
+      ],
       esmLoaderPath: '../loader',
     },
     {
@@ -105,7 +108,10 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null, // disable service workers
-      copy: [{ src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' }],
+      copy: [
+        { src: 'global/sass/fonts/assets/fonts', dest: 'build/assets/fonts' },
+        { src: 'global/sass/assets/img', dest: 'build/assets/img' },
+      ],
     },
   ],
   testing: {
