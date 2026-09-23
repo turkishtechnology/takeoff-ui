@@ -1647,6 +1647,9 @@ export class TkDatePicker {
               const time = { hour: parsedDate.getHours(), minute: parsedDate.getMinutes() };
               this.internalStartTime = time;
               this.internalEndTime = time;
+              // Typed 24-hour text ("14:30") must move the AM/PM toggle too; otherwise it keeps
+              // the meridiem seeded from the wall clock until the input loses focus.
+              this.syncAmPmWithTime(time);
               formattedValue = format(parsedDate, this.getFullDateTimeFormat());
             } else {
               this.internalStartTime = null;
