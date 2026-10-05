@@ -9,6 +9,15 @@ Takeoff UI provides an MCP server so that AI coding assistants can look up
 component APIs, integration guides, and code examples on the fly — straight from
 the official documentation.
 
+:::tip[Also install the Agent Skills]
+
+The MCP server works best together with the Takeoff UI Agent Skills, which put
+the full component API inside your project. See
+[AI Assistants](./AI-Assistants.mdx) for how the two compare and how to install
+the skills.
+
+:::
+
 ## What is MCP?
 
 [MCP](https://modelcontextprotocol.io) is an open protocol that lets AI
@@ -38,36 +47,48 @@ hosted server — no local installation required.
 
 ### VS Code (Copilot)
 
-Open your MCP configuration and add the following:
+Create `.vscode/mcp.json` in your project (or run **MCP: Open User
+Configuration** to add it for every project) with the following:
 
 ```json
-"mcp": {
+{
   "servers": {
     "takeoff-ui-mcp": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "https://takeoffui.turkishtechlab.com/mcp"
     }
   }
 }
 ```
 
-Make sure Agent mode is enabled for Copilot Chat and add the following to your
-`settings.json`:
+Use Copilot Chat in Agent mode so it can call the server's tools.
+
+### Cursor
+
+Create `.cursor/mcp.json` in your project (or `~/.cursor/mcp.json` for every
+project) with the following:
 
 ```json
-"chat.mcp.enabled": true,
-"chat.mcp.discovery.enabled": true
+{
+  "mcpServers": {
+    "takeoff-ui-mcp": {
+      "url": "https://takeoffui.turkishtechlab.com/mcp"
+    }
+  }
+}
 ```
 
-### Cursor / Windsurf
+### Windsurf
 
-Open **Settings** > **MCP** > **Add Server** and add the following:
+Open the MCP settings of Cascade, edit `mcp_config.json` and add the following.
+Windsurf reads the address from `serverUrl`, not `url`:
 
 ```json
-"mcpServers": {
-  "takeoff-ui-mcp": {
-    "type": "streamable-http",
-    "url": "https://takeoffui.turkishtechlab.com/mcp"
+{
+  "mcpServers": {
+    "takeoff-ui-mcp": {
+      "serverUrl": "https://takeoffui.turkishtechlab.com/mcp"
+    }
   }
 }
 ```
@@ -88,13 +109,13 @@ Click **OK** and **Apply**.
 Add the Takeoff UI MCP server via the command line:
 
 ```bash
-claude mcp add takeoff-ui-mcp -t streamable-http https://takeoffui.turkishtechlab.com/mcp
+claude mcp add --transport http takeoff-ui-mcp https://takeoffui.turkishtechlab.com/mcp
 ```
 
 To make it available across all projects, install with user scope:
 
 ```bash
-claude mcp add takeoff-ui-mcp -s user -t streamable-http https://takeoffui.turkishtechlab.com/mcp
+claude mcp add --transport http --scope user takeoff-ui-mcp https://takeoffui.turkishtechlab.com/mcp
 ```
 
 ### Claude Desktop
@@ -216,5 +237,6 @@ the expected location.
 
 ## Related links
 
+- [AI Assistants](./AI-Assistants.mdx): Agent Skills and component text files
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
