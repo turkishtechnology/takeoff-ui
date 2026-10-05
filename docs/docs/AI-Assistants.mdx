@@ -1,0 +1,86 @@
+---
+sidebar_position: 3
+title: AI Assistants
+---
+
+# Using Takeoff UI with AI Assistants
+
+AI coding assistants such as Claude Code, Cursor, GitHub Copilot and Codex often
+answer Takeoff UI questions from their training data. That data is usually out
+of date: props get invented, events get the wrong name, and examples mix
+conventions from other libraries. Installing the Takeoff UI Agent Skills in your
+project gives your assistant the real API instead.
+
+## Agent Skills
+
+[Agent Skills](https://agentskills.io) are folders with a `SKILL.md` file that
+assistants load when a task matches the skill's description. Takeoff UI ships
+two:
+
+| Skill              | Loaded when you…                                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `takeoff-ui`       | mention a `tk-*` component or a `@takeoff-ui` package, or build UI with Takeoff UI in React, Vue or Angular |
+| `takeoff-ui-theme` | work on design tokens, the Tailwind plugin, colors, theming or dark mode                                    |
+
+The `takeoff-ui` skill includes an API reference for every component (props,
+events, methods and slots), the mapping from common names to Takeoff UI tags
+(for example "modal" → `tk-dialog`), event naming for each framework, and the
+common mistakes to avoid. The component reference is generated from the
+component source on every release, so it matches the code.
+
+### Install
+
+Run this in the root of your project:
+
+```bash
+npx skills add turkishtechnology/takeoff-ui
+```
+
+The [`skills`](https://skills.sh) CLI asks which skills to install and which
+assistants you use. To skip the prompts, name them:
+
+```bash
+npx skills add turkishtechnology/takeoff-ui --skill '*' -a claude-code -a cursor -a github-copilot -y
+```
+
+The skills are written to `.agents/skills/`. Cursor, Codex and GitHub Copilot
+read that folder directly; for Claude Code the CLI adds links under
+`.claude/skills/`. Commit these folders and the generated `skills-lock.json` so
+everyone on the team gets the same skills.
+
+To install the skills for your user account instead of a single project, add
+`-g`.
+
+<details>
+<summary>Installing without the CLI</summary>
+
+Copy the
+[`.agents/skills`](https://github.com/turkishtechnology/takeoff-ui/tree/develop/.agents/skills)
+folder from the Takeoff UI repository into the root of your project. For Claude
+Code, copy the two skill folders into `.claude/skills/` instead.
+
+</details>
+
+### Keep them up to date
+
+The skills are installed from the repository's default branch, which can be a
+little ahead of the latest npm release. The skill tells the assistant to check
+the Takeoff UI version in your `package.json`, so it will not rely on a prop
+your installed version does not have yet. After you upgrade the `@takeoff-ui`
+packages, update the skills as well:
+
+```bash
+npx skills update
+```
+
+### Check that it works
+
+Ask your assistant something that needs the current API, for example:
+
+- _"Which props does tk-gantt-chart have?"_
+- _"Add a tk-select with search and multiple selection to this form"_
+- _"Which event fires when a row is selected in tk-table, in Vue?"_
+
+Most assistants show when they load a skill. The last answer should be
+`@tk-selection-change`. An assistant that guesses `@tk-select` is not using the
+skill.

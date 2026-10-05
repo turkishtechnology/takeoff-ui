@@ -142,6 +142,10 @@ const config: Config = {
               label: 'Tailwind Plugin',
               href: '/docs/Tailwind',
             },
+            {
+              label: 'AI Assistants',
+              href: '/docs/AI-Assistants',
+            },
           ],
         },
         {
