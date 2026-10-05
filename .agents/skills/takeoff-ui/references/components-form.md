@@ -613,7 +613,28 @@ A range slider component for selecting numeric values within a defined range.
 
 ### tk-editor
 
-TkEditor is a WYSIWYG editor component that wraps Tiptap editor.
+TkEditor is a WYSIWYG editor component that wraps the Tiptap 3 editor.
+
+**Tiptap version:** Takeoff UI 1.0+ bundles Tiptap **3.x** (0.12 and earlier
+bundled Tiptap 2). Anything passed through `extensions`, and any code that runs
+against `getEditor()`, must come from `@tiptap/*` 3.x
+(`npm install @tiptap/core@^3 @tiptap/extension-highlight@^3`); mixing Tiptap
+majors is not supported. Projects that only use the component's own props,
+events and methods need no change: the toolbar, `value`, `tk-change`,
+`getContent()` and `setContent()` behave as before, and the editor keeps the
+Tiptap 2 defaults (no TrailingNode, no ListKeymap, link and underline from the
+dedicated extensions with the `tk-editor-link` class).
+
+Changes when working with the raw editor from `getEditor()`:
+
+- `editor.commands.setContent(html, true)` is now
+  `editor.commands.setContent(html, { emitUpdate: true })`.
+- `editor.commands.clearContent()` emits an update by default, so it triggers
+  `tk-change`; pass `false` to keep it silent.
+- `editor.storage` is per editor instance instead of per extension.
+- StarterKit's `history` option is now `undoRedo`; several extensions moved into
+  `@tiptap/extensions` and `@tiptap/extension-list`. See Tiptap's
+  [upgrade guide](https://tiptap.dev/docs/guides/upgrade-tiptap-v2).
 
 **Props**
 

@@ -415,3 +415,8 @@ const [name, setName] = useState('');
    - React: `useRef()` + `ref.current.methodName()`
    - Vue: template ref + `ref.value.methodName()`
    - Angular: `@ViewChild()` + `this.element.methodName()`
+
+8. **Editor extensions need Tiptap 3**: `tk-editor` bundles Tiptap 3.x since
+   Takeoff UI 1.0. Custom `extensions` and code using `getEditor()` must use
+   `@tiptap/*` 3.x, never 2.x. See the `tk-editor` section in
+   `references/components-form.md` for the raw-editor API changes.

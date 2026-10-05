@@ -23,7 +23,7 @@ Quick-reference catalog of all 48 Takeoff UI components, organized by category.
 | `tk-upload`              | `TkUpload`            | File upload interface for selecting and uploading files.                         | `value`, `accept`, `multiple`, `maxFileSize`, `dragDrop`      |
 | `tk-color-picker`        | `TkColorPicker`       | Color selection interface with various input formats.                            | `value`, `label`, `format`, `presets`, `inline`               |
 | `tk-slider`              | `TkSlider`            | Slider control for selecting numeric values or ranges.                           | `value`, `min`, `max`, `step`, `range`                        |
-| `tk-editor`              | `TkEditor`            | WYSIWYG editor component wrapping Tiptap editor.                                 | `value`, `label`, `toolbar`, `placeholder`, `disabled`        |
+| `tk-editor`              | `TkEditor`            | WYSIWYG editor component wrapping the Tiptap 3 editor.                           | `value`, `label`, `toolbar`, `placeholder`, `disabled`        |
 | `tk-rating`              | `TkRating`            | Customizable rating input element for selecting a value from a series.           | `value`, `maxRating`, `type`, `disabled`, `readonly`          |
 | `tk-button`              | `TkButton`            | Extension to standard button element with icons and theming.                     | `label`, `type`, `variant`, `icon`, `disabled`                |
 
