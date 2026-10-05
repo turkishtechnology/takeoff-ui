@@ -1,0 +1,64 @@
+name: Deploy Docs
+
+# Deploys the docs site to Vercel production without publishing anything to npm.
+# `publish-npm` still deploys the docs on every release tag; this covers docs-only
+# changes between releases. Run it from the Actions tab and pick the branch or tag
+# to deploy under "Use workflow from". Manual on purpose: `develop` can document
+# features that are not on npm yet.
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          # Kept in step with `ci` and `publish-npm`.
+          node-version: "22.22.1"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Builds core, react and tailwind (what the docs import), regenerates the
+      # component MDX and llms text files, and runs a local docs build.
+      - name: Build packages and docs
+        run: pnpm run build:docs
+
+      - name: Install Vercel CLI
+        run: pnpm install -g vercel
+
+      - name: Build with Vercel
+        working-directory: ./docs
+        run: vercel build --token=$VERCEL_TOKEN --prod --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_SEARCH_API_KEY: ${{ secrets.ALGOLIA_SEARCH_API_KEY }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
+
+      - name: Deploy to Vercel
+        working-directory: ./docs
+        run: vercel deploy --prebuilt --token=$VERCEL_TOKEN --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_SEARCH_API_KEY: ${{ secrets.ALGOLIA_SEARCH_API_KEY }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
