@@ -138,7 +138,6 @@ Takeoff UI custom events use the `@tk-event-name` format in Vue templates
 | `tk-blur`           | `@tk-blur`           |
 | `tk-focus`          | `@tk-focus`          |
 | `tk-input`          | `@tk-input`          |
-| `tk-select`         | `@tk-select`         |
 | `tk-close`          | `@tk-close`          |
 
 ### Event Handler
@@ -373,7 +372,11 @@ const handleRowSelect = (e: CustomEvent) => {
 </script>
 
 <template>
-  <tk-table :columns="columns" :data="data" @tk-select="handleRowSelect" />
+  <tk-table
+    :columns="columns"
+    :data="data"
+    @tk-selection-change="handleRowSelect"
+  />
 </template>
 ```
 

@@ -4,7 +4,7 @@ description:
   Configure Takeoff UI theming, design tokens, and Tailwind CSS integration.
   Activate when user mentions design tokens, Tailwind setup, color palette,
   theming, or dark mode for Takeoff UI.
-compatibility: Requires Node.js >= 20.12.2 and pnpm >= 8.0.0
+compatibility: Projects that use @takeoff-ui/core with @takeoff-ui/tailwind
 argument-hint: '[token-type or question]'
 license: Apache-2.0
 metadata:
@@ -332,7 +332,7 @@ For runtime theming, override CSS custom properties:
   </div>
   <div>
     <label class="label-base text-neutral-700 mb-xxs">Email</label>
-    <tk-input type="email" placeholder="Enter email"></tk-input>
+    <tk-input placeholder="Enter email"></tk-input>
   </div>
   <tk-button variant="primary" label="Submit"></tk-button>
 </div>

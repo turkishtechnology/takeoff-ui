@@ -221,7 +221,6 @@ function InputExample() {
         label="Email"
         value={email}
         placeholder="Enter your email"
-        type="email"
         onTkChange={(e: CustomEvent) => setEmail(e.detail)}
         onTkBlur={() => console.log('Email field lost focus')}
       />

@@ -48,6 +48,12 @@ jobs:
       - name: Build publishable packages
         run: pnpm exec turbo run build --filter=@takeoff-ui/core --filter=@takeoff-ui/react --filter=@takeoff-ui/vue --filter=@takeoff-ui/angular --filter=@takeoff-ui/tailwind
 
+      # The core build regenerates `docs/src/docs-files/docs.json`; the agent skill's
+      # component references are generated from it, so a prop added without rerunning
+      # the generator fails here instead of shipping a stale skill.
+      - name: Validate skill references
+        run: node docs/src/docs-files/generate-skill-references.js --check
+
       - name: Validate types
         run: pnpm run check-types
 

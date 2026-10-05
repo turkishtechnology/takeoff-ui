@@ -15,9 +15,10 @@ as success, warnings, informational notices, and errors.
 | Name           | Type                                                      | Default   | Description                                                                                    |
 | -------------- | --------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------- |
 | alignItems     | "center" \| "end" \| "start"                              | 'center'  | Alignment of the alert content ('start', 'center', or 'end').                                  |
-| containerStyle | CSSProperties                                             | null      | The style attribute of container element                                                       |
+| containerStyle | CSSStyleProperties                                        | null      | The style attribute of container element                                                       |
 | header         | string                                                    |           | The header text displayed at the top of the alert.                                             |
-| icon           | IIconOptions \| string                                    |           | The icon displayed in the alert. If not provided, a default icon is used based on the variant. |
+| headerStyle    | CSSStyleProperties                                        |           | The style attribute of header element                                                          |
+| icon           | IIconOptions \| IMultiIconOptions \| string               |           | The icon displayed in the alert. If not provided, a default icon is used based on the variant. |
 | iconSize       | "base" \| "large" \| "small" \| "xlarge"                  | 'large'   | Size of the icon displayed in the alert ('small', 'base', or 'large').                         |
 | message        | string \| string[]                                        |           | The message text displayed within the alert.                                                   |
 | removable      | boolean                                                   | false     | The alert can be closed by the user.                                                           |
@@ -28,6 +29,7 @@ as success, warnings, informational notices, and errors.
 
 | Name          | Description                                |
 | ------------- | ------------------------------------------ |
+| content       |                                            |
 | footer-action | Custom actions template to default footer. |
 | right-action  | Custom actions template to right content.  |
 
@@ -36,13 +38,15 @@ as success, warnings, informational notices, and errors.
 ### tk-dialog
 
 The `TkDialog` component provides a customizable modal dialog for displaying
-important information or requesting user input.
+important information or requesting user input. It supports various
+configurations including different header types, variants, and customizable
+content.
 
 **Props**
 
 | Name            | Type                                                   | Default | Description                                                  |
 | --------------- | ------------------------------------------------------ | ------- | ------------------------------------------------------------ |
-| containerStyle  | CSSProperties                                          | null    | The style attribute of container element                     |
+| containerStyle  | CSSStyleProperties                                     | null    | The style attribute of container element                     |
 | header          | string                                                 |         | The header text                                              |
 | headerType      | "basic" \| "dark" \| "divided" \| "light" \| "primary" | 'basic' | Header type                                                  |
 | hideBackdrop    | boolean                                                | false   | Controls whether the backdrop is shown                       |
@@ -66,15 +70,16 @@ important information or requesting user input.
 
 **Methods**
 
-| Name  | Signature                | Description                                                                                                              |
-| ----- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| close | close() => Promise<void> | Requests to close the dialog by emitting a tk-close event. Note: This method only emits an event. The dialog will onl... |
-| open  | open() => Promise<void>  | Requests to open the dialog by emitting a tk-open event. Note: This method only emits an event. The dialog will only ... |
+| Name  | Signature                | Description                                                                                                                                                                                                          |
+| ----- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| close | close() => Promise<void> | Requests to close the dialog by emitting a tk-close event. Note: This method only emits an event. The dialog will only close if the parent component listens for this event and updates the 'visible' prop to false. |
+| open  | open() => Promise<void>  | Requests to open the dialog by emitting a tk-open event. Note: This method only emits an event. The dialog will only open if the parent component listens for this event and updates the 'visible' prop to true.     |
 
 **Slots**
 
 | Name           | Description                                    |
 | -------------- | ---------------------------------------------- |
+| (default)      | The default slot                               |
 | container      | Custom container template.                     |
 | content        | Custom content template.                       |
 | default        | Default slot to detect child to inner content. |
@@ -86,13 +91,15 @@ important information or requesting user input.
 
 ### tk-drawer
 
-The `TkDrawer` is a container component displayed as an overlay.
+The `TkDrawer` is a container component displayed as an overlay. It supports
+various features such as different header and footer types, multiple variants,
+and flexible positioning, making it suitable for a wide range of use cases.
 
 **Props**
 
 | Name           | Type                                                    | Default | Description                                                   |
 | -------------- | ------------------------------------------------------- | ------- | ------------------------------------------------------------- |
-| containerStyle | CSSProperties                                           | null    | The style attribute of container element                      |
+| containerStyle | CSSStyleProperties                                      | null    | The style attribute of container element                      |
 | footerType     | "basic" \| "divided" \| "light"                         | 'basic' | The mode of the footer                                        |
 | header         | string                                                  |         | Text to display in the drawer header                          |
 | headerType     | "basic" \| "dark" \| "divided" \| "light" \| "primary"  | 'basic' | The type of the header                                        |
@@ -116,20 +123,21 @@ The `TkDrawer` is a container component displayed as an overlay.
 
 **Methods**
 
-| Name  | Signature                | Description                                                                                                              |
-| ----- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| close | close() => Promise<void> | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the o... |
-| show  | show() => Promise<void>  | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the ope... |
+| Name  | Signature                | Description                                                                                                                   |
+| ----- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| close | close() => Promise<void> | Closes the drawer by emitting a tk-drawer-close event Parent components should listen for this event and update the open prop |
+| show  | show() => Promise<void>  | Opens the drawer by emitting a tk-drawer-open event Parent components should listen for this event and update the open prop   |
 
 **Slots**
 
-| Name          | Description                        |
-| ------------- | ---------------------------------- |
-| container     | Custom container template.         |
-| content       | Custom inner body template.        |
-| footer        | Custom footer template.            |
-| header        | Custom header template.            |
-| header-action | Custom actions template of header. |
+| Name           | Description                        |
+| -------------- | ---------------------------------- |
+| container      | Custom container template.         |
+| content        | Custom inner body template.        |
+| footer         | Custom footer template.            |
+| header         | Custom header template.            |
+| header-action  | Custom actions template of header. |
+| header-actions |                                    |
 
 ---
 
@@ -139,12 +147,13 @@ The `TkSpinner` component description.
 
 **Props**
 
-| Name        | Type                                                                  | Default    | Description                                        |
-| ----------- | --------------------------------------------------------------------- | ---------- | -------------------------------------------------- |
-| label       | string                                                                |            | Sets the label of the spinner component.           |
-| orientation | "horizontal" \| "vertical"                                            | 'vertical' | Controls the orientation of the spinner component. |
-| size        | "base" \| "large" \| "small" \| "xlarge" \| "xsmall" \| "xxsmall"     | 'base'     | Controls the size of the spinner component.        |
-| type        | "dots" \| "lines" \| "loader" \| "pulse" \| "rounded" \| "three-dots" | 'rounded'  | Sets the style of spinner component.               |
+| Name        | Type                                                                            | Default    | Description                                        |
+| ----------- | ------------------------------------------------------------------------------- | ---------- | -------------------------------------------------- |
+| label       | string                                                                          |            | Sets the label of the spinner component.           |
+| orientation | "horizontal" \| "vertical"                                                      | 'vertical' | Controls the orientation of the spinner component. |
+| size        | "base" \| "large" \| "small" \| "xlarge" \| "xsmall" \| "xxsmall"               | 'base'     | Controls the size of the spinner component.        |
+| type        | "dots" \| "lines" \| "loader" \| "logo" \| "pulse" \| "rounded" \| "three-dots" | 'rounded'  | Sets the style of spinner component.               |
+| variant     | "danger" \| "info" \| "neutral" \| "primary" \| "success" \| "warning"          | 'neutral'  | Sets the color variant of spinner component.       |
 
 ---
 
@@ -157,7 +166,7 @@ over.
 
 | Name           | Type                                                                                                                                                               | Default   | Description                                     |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------- |
-| containerStyle | CSSProperties                                                                                                                                                      | null      | The style attribute of container element        |
+| containerStyle | CSSStyleProperties                                                                                                                                                 | null      | The style attribute of container element        |
 | description    | string                                                                                                                                                             |           | Sets description text for the tooltip.          |
 | header         | string                                                                                                                                                             |           | Sets header text for the tooltip.               |
 | icon           | IIconOptions \| IMultiIconOptions \| string                                                                                                                        |           | Specifies a material icon name to be displayed. |
@@ -175,13 +184,14 @@ over.
 
 ### tk-popover
 
-The TkPopover displays additional information when triggered.
+The TkPopover displays additional information when triggered. By default, it
+opens when clicked, but can also be configured to open on hover.
 
 **Props**
 
 | Name           | Type                                                                                                                                                               | Default | Description                              |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | ---------------------------------------- |
-| containerStyle | CSSProperties                                                                                                                                                      | null    | The style attribute of container element |
+| containerStyle | CSSStyleProperties                                                                                                                                                 | null    | The style attribute of container element |
 | position       | "bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start" |         | Sets the position of the popover.        |
 | trigger        | "click" \| "hover"                                                                                                                                                 | 'click' | Sets the action of the popover.          |
 | type           | "basic" \| "dark" \| "white"                                                                                                                                       | 'basic' | Sets the type of the popover.            |
@@ -200,10 +210,10 @@ The TkPopover displays additional information when triggered.
 
 **Slots**
 
-| Name    | Description                                                                                                  |
-| ------- | ------------------------------------------------------------------------------------------------------------ |
-| default | Default slot for content without a specific name                                                             |
-| content | Define custom HTML content for the Popover, which replaces the default header, description and icon elements |
-| trigger | The trigger slot defines the element that will trigger the Popover                                           |
+| Name      | Description                                                                                                  |
+| --------- | ------------------------------------------------------------------------------------------------------------ |
+| (default) | Default slot for content without a specific name                                                             |
+| content   | Define custom HTML content for the Popover, which replaces the default header, description and icon elements |
+| trigger   | The trigger slot defines the element that will trigger the Popover                                           |
 
 ---

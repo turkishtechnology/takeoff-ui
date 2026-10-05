@@ -197,7 +197,6 @@ available on `$event.detail`.
 | `tk-blur`           | `(tkBlur)`      |
 | `tk-focus`          | `(tkFocus)`     |
 | `tk-input`          | `(tkInput)`     |
-| `tk-select`         | `(tkSelect)`    |
 | `tk-close`          | `(tkClose)`     |
 
 ### Event Handler
@@ -504,7 +503,7 @@ import { TkTable } from '@takeoff-ui/angular';
     <tk-table
       [columns]="columns"
       [data]="data"
-      (tkSelect)="onRowSelect($event)"
+      (tkSelectionChange)="onRowSelect($event)"
     ></tk-table>
   `,
 })
