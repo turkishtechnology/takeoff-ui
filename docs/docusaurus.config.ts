@@ -108,7 +108,7 @@ const config: Config = {
         },
         {
           to: 'https://github.com/turkishtechnology/takeoff-ui/releases',
-          label: 'v0.12.0',
+          label: 'v1.0.0',
           position: 'right',
         },
         {

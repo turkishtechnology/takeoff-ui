@@ -1,5 +1,102 @@
 # @takeoff-ui/core
 
+## 1.0.0
+
+### Major Changes
+
+- a89deea: `tk-editor` now runs on Tiptap 3 (3.31.3). This closes the
+  `@tiptap/core` advisory GHSA-cp6q-959q-f8rh together with the audit noise its
+  stale metadata kept producing on 2.x.
+
+  **Breaking for projects that pass their own Tiptap extensions or use
+  `getEditor()`:** install `@tiptap/*` 3.x alongside this version, mixing majors
+  is not supported. On the raw editor, `setContent(html, true)` is now
+  `setContent(html, { emitUpdate: true })` and `clearContent()` emits an update
+  (and therefore `tk-change`) by default. The Custom Extensions section of the
+  Editor docs lists the details.
+
+  Everything reachable through the component's own props, events and methods is
+  unchanged: Tiptap 3's new StarterKit defaults (TrailingNode, ListKeymap,
+  bundled Link and Underline) are switched off, so the emitted HTML and the
+  keyboard behaviour stay exactly as they were.
+
+### Minor Changes
+
+- b9d216d: Scrollbars in every component keep their thin look but can now be
+  grabbed across a 10px strip, and the thumb widens while hovered. `tk-table`
+  gets a `scrollbarSize` prop (`thin` | `base` | `large`); the
+  `--tk-scrollbar-size`, `--tk-scrollbar-inset` and `--tk-scrollbar-hover-inset`
+  custom properties tune all components at once.
+
+### Patch Changes
+
+- 6d43792: `tk-datepicker`: typing a 24-hour time such as `14:30` in 12-hour
+  mode now moves the AM/PM toggle immediately instead of leaving the meridiem
+  seeded from the wall clock until the input loses focus.
+- cc04c12: Trim what the package drags into consumer projects, without changing
+  any component API:
+
+  - `json-server` is no longer a runtime dependency (it was never imported) and
+    `@types/cleave.js` moved to devDependencies; together they pulled 45
+    packages into every install.
+  - `tk-table` now loads `jspdf`, `jspdf-autotable`, `exceljs` and the embedded
+    PDF fonts on demand inside `exportFile()`, so pages that never export no
+    longer download about 4.6 MB of export code with the table.
+  - The Material Symbols `@font-face` rules are declared once in the global
+    stylesheet instead of being duplicated into every component's own stylesheet
+    (141 copies across 35 components).
+  - The country-flag sprite used by `tk-phone-input` and `tk-currency-input`
+    ships inside the package (`assets/img/flags.png`) instead of being fetched
+    from cdn.turkishairlines.com at runtime.
+  - The published tarball no longer contains a second copy of the font files
+    under `dist/collection/assets`.
+
+- 6bed935: Fix the defects surfaced by the new component specs:
+
+  - `tk-datepicker`: a 12-hour value now loads with the matching AM/PM toggle
+    (time-only mode no longer emits a spurious `tk-change` during load), a
+    date-only value is accepted when `showTimePicker` is on and gets the default
+    time, and `aria-expanded` renders `"true"`/`"false"`. The AM/PM toggle now
+    always follows the time it governs (the range end once one is picked,
+    otherwise the start), so blurring the input or restarting a range no longer
+    shifts a time by twelve hours.
+  - `tk-accordion`: every initially `active` item stays open with
+    `allowMultiple` (without it the last one wins, as `activeIndex` already
+    did), items appended after load are wired up even when they start `active`,
+    keyless items stay clickable after items before them are removed, and
+    `tk-active-index-change` / `tk-accordion-item-selected` fire once per user
+    action (the deprecated selected event no longer reports the sibling being
+    closed in single mode).
+  - `tk-carousel`: arrow buttons and arrow keys emit `tk-change` once per step.
+  - `tk-color-picker`: a colour typed into the trigger input is applied on
+    blur/Enter.
+  - `tk-input`: `maskOptions` with only `letterOnly`, `numericOnly`, `uppercase`
+    or `lowercase` no longer clears the field on every keystroke; these options
+    are applied by the input itself when Cleave is not needed.
+  - `tk-phone-input`: an initial value without a country falls back to
+    `defaultCountry`, setting the value to `null` resets cleanly (without moving
+    focus) instead of throwing, and the country list's `aria-selected` renders
+    `"true"`/`"false"`.
+  - `tk-select`: opening, typing into, blurring or clicking the dropdown after
+    `options` was set to `null` no longer throws.
+  - `tk-table`: a `filterType: 'datepicker'` column filters with the same
+    `dateFormat`/`timeFormat`/`showTimePicker` defaults the filter panel gives
+    its datepicker (exported as `DEFAULT_FILTER_DATEPICKER_PROPS`), unparsable
+    values are filtered out instead of throwing, and a `selectionRowDisabled`
+    predicate returning a non-boolean still disables the row.
+  - `tk-org-chart`: changing `collapsible` after the element was removed no
+    longer throws.
+  - Boolean
+    `aria-disabled`/`aria-invalid`/`aria-readonly`/`aria-selected`/`aria-expanded`
+    attributes render as the literal `"true"`/`"false"` strings across the form
+    components. The matching stylesheet selectors now check for `'true'`, so an
+    `aria-disabled="false"` element is no longer styled (and made unclickable)
+    as if it were disabled.
+
+- 7267ced: `tk-table` with client pagination now counts only the filtered rows
+  when new data arrives while a filter is active, even if `totalItems` is bound
+  to the full data length.
+
 ## 0.12.0
 
 ### Minor Changes

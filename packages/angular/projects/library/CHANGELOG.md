@@ -1,5 +1,17 @@
 # @takeoff-ui/angular
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [6d43792]
+- Updated dependencies [cc04c12]
+- Updated dependencies [b9d216d]
+- Updated dependencies [6bed935]
+- Updated dependencies [7267ced]
+- Updated dependencies [a89deea]
+  - @takeoff-ui/core@1.0.0
+
 ## 0.12.0
 
 ### Patch Changes
