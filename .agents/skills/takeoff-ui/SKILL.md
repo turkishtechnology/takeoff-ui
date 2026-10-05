@@ -5,7 +5,9 @@ description:
   Activate when the user mentions any tk-* component, references @takeoff-ui
   packages, asks about Stencil.js web components in this design system, or wants
   to build UI using Takeoff UI.
-compatibility: Requires Node.js >= 20.12.2 and pnpm >= 8.0.0
+compatibility:
+  Projects that use @takeoff-ui/core directly or through the React, Vue or
+  Angular wrapper
 argument-hint: '[component-name or question]'
 license: Apache-2.0
 metadata:
@@ -17,7 +19,7 @@ metadata:
 # Takeoff UI Component Guide
 
 You are helping a developer use **Takeoff UI**, a production design system built
-with Stencil.js web components. It provides 48 components with first-class
+with Stencil.js web components. It provides 49 components with first-class
 wrappers for React, Vue, and Angular.
 
 ## Key Facts
@@ -184,6 +186,7 @@ String. Display text for buttons, inputs, and form components.
 | `tk-table`         | `TkTable`        | Data table with sorting, filtering, pagination, grouping |
 | `tk-pagination`    | `TkPagination`   | Page navigation control                                  |
 | `tk-chart`         | `TkChart`        | Chart component (bar, line, pie, etc.)                   |
+| `tk-gantt-chart`   | `TkGanttChart`   | Gantt chart for task timelines                           |
 | `tk-org-chart`     | `TkOrgChart`     | Organization chart                                       |
 | `tk-tree-view`     | `TkTreeView`     | Hierarchical tree view                                   |
 | `tk-badge`         | `TkBadge`        | Status badge/tag                                         |
@@ -233,49 +236,37 @@ String. Display text for buttons, inputs, and form components.
 
 Load the appropriate reference file based on what the user needs:
 
-| User Needs                                                                | Load Reference                        |
-| ------------------------------------------------------------------------- | ------------------------------------- |
-| React-specific patterns, imports, events                                  | `references/react-guide.md`           |
-| Vue-specific patterns, v-model, events                                    | `references/vue-guide.md`             |
-| Angular-specific patterns, NgModule, events                               | `references/angular-guide.md`         |
-| Form component APIs (input, select, datepicker, button, rating, etc.)     | `references/components-form.md`       |
-| Data component APIs (table, chart, carousel, chips, icon, timeline, etc.) | `references/components-data.md`       |
-| Feedback component APIs (alert, dialog, drawer, spinner, etc.)            | `references/components-feedback.md`   |
-| Navigation component APIs (tabs, stepper, breadcrumb, etc.)               | `references/components-navigation.md` |
-| Layout component APIs (accordion, card, divider)                          | `references/components-layout.md`     |
-| All components quick list                                                 | `references/component-index.md`       |
-| Design tokens, colors, spacing, Tailwind classes                          | `references/tailwind-tokens.md`       |
+| User Needs                                                                       | Load Reference                        |
+| -------------------------------------------------------------------------------- | ------------------------------------- |
+| React-specific patterns, imports, events                                         | `references/react-guide.md`           |
+| Vue-specific patterns, v-model, events                                           | `references/vue-guide.md`             |
+| Angular-specific patterns, NgModule, events                                      | `references/angular-guide.md`         |
+| Form component APIs (input, select, datepicker, button, rating, etc.)            | `references/components-form.md`       |
+| Data component APIs (table, chart, gantt, carousel, chips, icon, timeline, etc.) | `references/components-data.md`       |
+| Feedback component APIs (alert, dialog, drawer, spinner, etc.)                   | `references/components-feedback.md`   |
+| Navigation component APIs (tabs, stepper, breadcrumb, etc.)                      | `references/components-navigation.md` |
+| Layout component APIs (accordion, card, divider)                                 | `references/components-layout.md`     |
+| All components quick list                                                        | `references/component-index.md`       |
+| Design tokens, colors, spacing, Tailwind classes                                 | `references/tailwind-tokens.md`       |
 
 ---
 
 ## Getting Detailed Component API
 
-For the most up-to-date and complete component API, use the extraction script:
+The `references/components-*.md` files are generated from the component source
+on every release, so their props, events, methods and slots match the published
+version. When you need more than they show:
 
-```bash
-node .agents/skills/takeoff-ui/scripts/get-component-api.mjs <tag-name>
-```
-
-Example:
-
-```bash
-node .agents/skills/takeoff-ui/scripts/get-component-api.mjs tk-table
-```
-
-This reads from the build-generated `docs.json` and returns:
-
-- All props with types, defaults, and descriptions
-- All events with detail types
-- All methods with signatures
-- All slots
-- Framework event name mappings
-- Component dependencies
-
-**Use this script when**:
-
-- The reference files don't have enough detail
-- You need the exact type signature for a complex prop
-- You want to verify the API is current
+- **Interface shapes** (`ITableColumn`, `IGanttTask`, ...): read the type
+  definitions in the user's project at
+  `node_modules/@takeoff-ui/core/dist/types/components.d.ts` and the interface
+  files next to it under `dist/types/components/<tag>/`.
+- **Examples and guides**: if the Takeoff UI MCP server is connected, call its
+  `get-components-info` tool; otherwise point the user to
+  `https://takeoffui.com`.
+- **Version check**: compare the version in the user's `package.json` with this
+  skill's version. If the project is on an older release, a prop listed here may
+  not exist there yet.
 
 ---
 
