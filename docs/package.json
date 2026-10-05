@@ -15,7 +15,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "generate-docs": "node ./src/docs-files/generate-mdx.js",
-    "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js"
+    "generate-llms-txt": "node ./src/docs-files/generate-llmstxt-files.js",
+    "generate-skill-references": "node ./src/docs-files/generate-skill-references.js"
   },
   "dependencies": {
     "@docsearch/react": "^4.7.0",

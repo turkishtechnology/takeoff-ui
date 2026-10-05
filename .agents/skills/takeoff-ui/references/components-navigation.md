@@ -15,11 +15,11 @@ TkTabs is a navigation component that displays menu items as tab headers.
 | -------------------- | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------- |
 | activeIndex          | number                                                | 0            | Controls the currently active tab index. Can be controlled programmatically from outside. |
 | alignHeaders         | "center" \| "end" \| "start"                          | 'start'      | Sets the alignment of the header.                                                         |
-| containerStyle       | CSSProperties                                         | null         | The style attribute of container element                                                  |
-| contentStyle         | CSSProperties                                         | null         | The style attribute of tabs item element                                                  |
+| containerStyle       | CSSStyleProperties                                    | null         | The style attribute of container element                                                  |
+| contentStyle         | CSSStyleProperties                                    | null         | The style attribute of tabs item element                                                  |
 | controlled           | boolean                                               | false        | Controls if the tabs component is controlled.                                             |
 | defaultActiveIndex   | number                                                | 0            | Default Active Index for tabs component.                                                  |
-| headerContainerStyle | CSSProperties                                         | null         | The style attribute of headers container element                                          |
+| headerContainerStyle | CSSStyleProperties                                    | null         | The style attribute of headers container element                                          |
 | isClosable           | boolean                                               | false        | Controls if tabs are closable.                                                            |
 | isExtendable         | boolean                                               | false        | Controls if new tabs can be added or not.                                                 |
 | orientation          | "horizontal" \| "vertical"                            | 'horizontal' | Controls the orientation of the tabs component.                                           |
@@ -43,16 +43,22 @@ Individual tab item within a tk-tabs container.
 
 **Props**
 
-| Name           | Type                   | Default | Description                                    |
-| -------------- | ---------------------- | ------- | ---------------------------------------------- |
-| badgeCount     | number \| string       |         | Sets badge component's count.                  |
-| badgeLabel     | string                 |         | Sets badge component's label.                  |
-| badgeOptions   | IBadgeOptions          |         | Sets badge component's options.                |
-| badged         | boolean                | false   | Checks if tab item has badge component or not. |
-| disabled       | boolean                |         | Whether the tab item is disabled.              |
-| icon           | IIconOptions \| string |         | Icon for tabs item component.                  |
-| label          | string                 |         | Label for the tab item.                        |
-| tooltipOptions | ITooltipOptions        |         | Sets tooltip options for the tab item.         |
+| Name           | Type                                        | Default | Description                                    |
+| -------------- | ------------------------------------------- | ------- | ---------------------------------------------- |
+| badgeCount     | number \| string                            |         | Sets badge component's count.                  |
+| badgeLabel     | string                                      |         | Sets badge component's label.                  |
+| badgeOptions   | IBadgeOptions                               |         | Sets badge component's options.                |
+| badged         | boolean                                     | false   | Checks if tab item has badge component or not. |
+| disabled       | boolean                                     |         | Whether the tab item is disabled.              |
+| icon           | IIconOptions \| IMultiIconOptions \| string |         | Icon for tabs item component.                  |
+| label          | string                                      |         | Label for the tab item.                        |
+| tooltipOptions | ITooltipOptions                             |         | Sets tooltip options for the tab item.         |
+
+**Slots**
+
+| Name      | Description      |
+| --------- | ---------------- |
+| (default) | The default slot |
 
 ---
 
@@ -62,25 +68,25 @@ TkStepper component for managing a series of steps.
 
 **Props**
 
-| Name              | Type                                     | Default      | Description                                                                                                              |
-| ----------------- | ---------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| active            | number                                   | 0            | Currently active step index                                                                                              |
-| activeIcon        | IIconOptions \| string                   |              | Specifies a material icon or icon options for active steps.                                                              |
-| completeIcon      | IIconOptions \| string                   |              | Specifies a material icon or icon options for completed steps.                                                           |
-| containerStyle    | CSSProperties                            | null         | The style attribute of container element                                                                                 |
-| contentStyle      | CSSProperties                            | null         | The style attribute of content elements                                                                                  |
-| controlled        | boolean                                  | false        | Controls if the tabs component is controlled.                                                                            |
-| errorIcon         | IIconOptions \| string                   |              | Specifies a material icon or icon options for error steps.                                                               |
-| inactiveIcon      | IIconOptions \| string                   |              | Specifies a material icon or icon options for inactive steps.                                                            |
-| linear            | boolean                                  | false        | Whether the steps follow a linear progression (can only navigate to the next step when current step is completed).       |
-| mode              | "compact" \| "default"                   | 'default'    | Controls the display mode of the stepper component.                                                                      |
-| orientation       | "horizontal" \| "vertical"               | 'horizontal' | Controls the orientation of the stepper component.                                                                       |
-| railStyle         | CSSProperties                            | null         | The style attribute of rail elements                                                                                     |
-| reverse           | boolean                                  | false        | Whether the step headers and content should be reversed.                                                                 |
-| showCompleteState | boolean                                  | true         | Whether to show completed steps with the complete state. If false, completed steps will appear as just passed and not... |
-| signStyle         | CSSProperties                            | null         | The style attribute of step sign elements                                                                                |
-| size              | "base" \| "large" \| "small" \| "xsmall" | 'base'       | The size of the stepper component.                                                                                       |
-| stepMode          | "basic" \| "number"                      | 'basic'      | Controls the step mode of the stepper component.                                                                         |
+| Name              | Type                                     | Default      | Description                                                                                                                                  |
+| ----------------- | ---------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| active            | number                                   | 0            | Currently active step index                                                                                                                  |
+| activeIcon        | IIconOptions \| string                   |              | Specifies a material icon or icon options for active steps.                                                                                  |
+| completeIcon      | IIconOptions \| string                   |              | Specifies a material icon or icon options for completed steps.                                                                               |
+| containerStyle    | CSSStyleProperties                       | null         | The style attribute of container element                                                                                                     |
+| contentStyle      | CSSStyleProperties                       | null         | The style attribute of content elements                                                                                                      |
+| controlled        | boolean                                  | false        | Controls if the tabs component is controlled.                                                                                                |
+| errorIcon         | IIconOptions \| string                   |              | Specifies a material icon or icon options for error steps.                                                                                   |
+| inactiveIcon      | IIconOptions \| string                   |              | Specifies a material icon or icon options for inactive steps.                                                                                |
+| linear            | boolean                                  | false        | Whether the steps follow a linear progression (can only navigate to the next step when current step is completed).                           |
+| mode              | "compact" \| "default"                   | 'default'    | Controls the display mode of the stepper component.                                                                                          |
+| orientation       | "horizontal" \| "vertical"               | 'horizontal' | Controls the orientation of the stepper component.                                                                                           |
+| railStyle         | CSSStyleProperties                       | null         | The style attribute of rail elements                                                                                                         |
+| reverse           | boolean                                  | false        | Whether the step headers and content should be reversed.                                                                                     |
+| showCompleteState | boolean                                  | true         | Whether to show completed steps with the complete state. If false, completed steps will appear as just passed and not with complete styling. |
+| signStyle         | CSSStyleProperties                       | null         | The style attribute of step sign elements                                                                                                    |
+| size              | "base" \| "large" \| "small" \| "xsmall" | 'base'       | The size of the stepper component.                                                                                                           |
+| stepMode          | "basic" \| "number"                      | 'basic'      | Controls the step mode of the stepper component.                                                                                             |
 
 **Events**
 
@@ -99,7 +105,7 @@ TkStepper component for managing a series of steps.
 
 ### tk-step
 
-Individual step within a tk-stepper container.
+TkStep sub-component for individual steps in TkStepper.
 
 **Props**
 
@@ -121,6 +127,12 @@ Individual step within a tk-stepper container.
 | stepMode      | "basic" \| "number"    | 'basic'    | Controls the step mode of the stepper component.                                                 |
 | subheader     | string                 |            | Optional subheader text to provide additional context for the step.                              |
 
+**Slots**
+
+| Name      | Description      |
+| --------- | ---------------- |
+| (default) | The default slot |
+
 ---
 
 ### tk-breadcrumb
@@ -139,9 +151,10 @@ their location within the application's hierarchy.
 
 **Slots**
 
-| Name    | Description                                         |
-| ------- | --------------------------------------------------- |
-| default | Default slot to detect TkBreadcrumbItem components. |
+| Name      | Description                                         |
+| --------- | --------------------------------------------------- |
+| (default) | The default slot                                    |
+| default   | Default slot to detect TkBreadcrumbItem components. |
 
 ---
 
@@ -159,11 +172,18 @@ Individual item within a tk-breadcrumb navigation trail.
 | isExternal | boolean                | false   | Whether the item is an external url   |
 | label      | string                 |         | Label text for the breadcrumb item    |
 
+**Slots**
+
+| Name      | Description      |
+| --------- | ---------------- |
+| (default) | The default slot |
+
 ---
 
 ### tk-dropdown
 
-TkDropdown creates a dropdown with a trigger element.
+TkDropdown creates a dropdown with a trigger element. Items in the options prop
+can be listed and templated.
 
 **Props**
 

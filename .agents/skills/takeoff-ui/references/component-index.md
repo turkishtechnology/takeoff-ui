@@ -1,6 +1,6 @@
 # Takeoff UI Component Index
 
-Quick-reference catalog of all 48 Takeoff UI components, organized by category.
+Quick-reference catalog of all 49 Takeoff UI components, organized by category.
 
 ---
 
@@ -34,6 +34,7 @@ Quick-reference catalog of all 48 Takeoff UI components, organized by category.
 | `tk-table`         | `TkTable`        | Displays data in a tabular format with sorting, pagination, and selection.                                                                    | `data`, `columns`, `selectionMode`, `rowsPerPage`, `loading`        |
 | `tk-pagination`    | `TkPagination`   | Pagination control for navigating paged data.                                                                                                 | `currentPage`, `totalItems`, `rowsPerPage`, `mode`, `type`          |
 | `tk-chart`         | `TkChart`        | Visualizes data in various chart formats using Chart.js.                                                                                      | `data`, `type`, `options`, `height`, `width`                        |
+| `tk-gantt-chart`   | `TkGanttChart`   | Display-only Gantt chart with expandable tasks, weekly to yearly views, indicators and holiday highlighting.                                  | `tasks`, `columns`, `viewType`, `indicators`, `holidays`            |
 | `tk-org-chart`     | `TkOrgChart`     | Visualizes organizational data using d3-org-chart.                                                                                            | `data`, `options`, `collapsible`, `accessibilityLabel`              |
 | `tk-tree-view`     | `TkTreeView`     | Displays hierarchical data in a tree structure with expandable/collapsible nodes.                                                             | `items`, `value`, `selectable`, `expandAll`, `type`                 |
 | `tk-badge`         | `TkBadge`        | Small badge for adding contextual information such as counts or labels.                                                                       | `label`, `type`, `size`, `count`, `dot`                             |
