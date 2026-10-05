@@ -724,3 +724,43 @@ describe('tk-table treeview filter branches', () => {
     expect(document.body.querySelector('.tk-table-filter-panel')).toBeNull();
   });
 });
+
+describe('tk-table client pagination total with an active filter', () => {
+  const applyNameFilter = async (page: SpecPage, value: string) => {
+    const panel = await openFilterPanel(page, 'name');
+    (panel.querySelector('tk-input') as any).value = value;
+    getInstance(page).handleSearchButtonClick('name');
+    await page.waitForChanges();
+  };
+  // tk-pagination is not registered here; this is the value renderPagination hands to it.
+  const paginationTotal = (page: SpecPage) => page.root.totalItems;
+
+  it('counts only the filtered rows when new data arrives', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 10 });
+    await applyNameFilter(page, 'a');
+    expect(paginationTotal(page)).toBe(3);
+
+    page.root.data = [baseData()[0], baseData()[1]];
+    await page.waitForChanges();
+
+    expect(getInstance(page).renderData.map((row: any) => row.name)).toEqual(['Alice']);
+    expect(paginationTotal(page)).toBe(1);
+  });
+
+  it('ignores a totalItems binding of the unfiltered length set after the data', async () => {
+    const page = await createPage({ paginationMethod: 'client', rowsPerPage: 10, totalItems: 5 });
+    await applyNameFilter(page, 'carol');
+    expect(paginationTotal(page)).toBe(1);
+
+    // Vue patches `data` before `total-items`, so the watcher runs before the binding lands.
+    page.root.data = [];
+    page.root.totalItems = 0;
+    await page.waitForChanges();
+    page.root.data = baseData();
+    page.root.totalItems = 5;
+    await page.waitForChanges();
+
+    expect(getInstance(page).renderData.map((row: any) => row.name)).toEqual(['Carol']);
+    expect(paginationTotal(page)).toBe(1);
+  });
+});

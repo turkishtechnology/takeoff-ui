@@ -162,6 +162,7 @@ export class TkTable implements ComponentInterface {
         const startIndex = (this.currentPage - 1) * this.internalRowsPerPage;
         const endIndex = startIndex + this.internalRowsPerPage;
         this.renderData = [...tmpData]?.slice(startIndex, endIndex) || [];
+        this.totalItems = tmpData.length;
       } else {
         this.renderData = newValue?.length > 0 ? [...newValue] : [];
       }
@@ -214,6 +215,16 @@ export class TkTable implements ComponentInterface {
    * Number of total items.
    */
   @Prop({ mutable: true }) totalItems: number;
+  @Watch('totalItems')
+  totalItemsChanged(newValue: number) {
+    // Client pagination counts the filtered rows itself. A binding such as `data.length` lands after
+    // the data watcher (Vue patches props in template order) and would otherwise report unfiltered rows.
+    if (this.paginationMethod !== 'client') return;
+    const filteredTotal = this.getTableViewData().length;
+    if (newValue !== filteredTotal) {
+      this.totalItems = filteredTotal;
+    }
+  }
 
   /**
    * Defines whether pagination is handled on the client or server side.
