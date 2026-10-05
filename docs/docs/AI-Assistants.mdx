@@ -8,22 +8,8 @@ title: AI Assistants
 AI coding assistants such as Claude Code, Cursor, GitHub Copilot and Codex often
 answer Takeoff UI questions from their training data. That data is usually out
 of date: props get invented, events get the wrong name, and examples mix
-conventions from other libraries. Takeoff UI gives your assistant three ways to
-work from the real API instead. They work together, so you can use more than
-one.
-
-## Which one should I use?
-
-|                   | Agent Skills                                                                          | MCP server                                                                                     | Component text files                       |
-| ----------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| What it is        | Instructions and API reference files inside your project                              | A hosted server your assistant queries while it works                                          | Plain-text docs for each component, by URL |
-| Setup             | One command per project                                                               | A config snippet per editor                                                                    | None                                       |
-| Needs at run time | Nothing, the files are local                                                          | Network access and an assistant with MCP support                                               | An assistant that can fetch a URL          |
-| Covers            | Every component's props, events, methods and slots; framework patterns; design tokens | Component docs and examples, framework and Tailwind guides, refactor and Figma-to-code prompts | One component or guide page at a time      |
-| Best for          | Everyday coding in a project that uses Takeoff UI                                     | Looking up examples and guides, converting designs                                             | Pasting into a chat without tools          |
-
-**Recommended:** install the Agent Skills in every project that uses Takeoff UI,
-and add the MCP server as well if your editor supports it.
+conventions from other libraries. Installing the Takeoff UI Agent Skills in your
+project gives your assistant the real API instead.
 
 ## Agent Skills
 
@@ -98,34 +84,3 @@ Ask your assistant something that needs the current API, for example:
 Most assistants show when they load a skill. The last answer should be
 `@tk-selection-change`. An assistant that guesses `@tk-select` is not using the
 skill.
-
-## MCP server
-
-The Takeoff UI MCP server lets your assistant fetch component docs, examples and
-integration guides while it works. It also provides prompts for refactoring code
-to Takeoff UI conventions and for turning Figma designs into Takeoff UI code.
-
-For example, in Claude Code:
-
-```bash
-claude mcp add --transport http takeoff-ui-mcp https://takeoffui.turkishtechlab.com/mcp
-```
-
-Setup for VS Code, Cursor, Windsurf, JetBrains, Claude Desktop and Continue, the
-list of tools and prompts, and troubleshooting are on the
-[MCP Server](./MCP.mdx) page.
-
-## Component text files
-
-Every component page and the main guide pages are also published as plain text,
-which you can paste into a chat or give to an assistant that can fetch URLs:
-
-```text
-https://takeoffui.com/llmstxt-files/<tag>.txt
-```
-
-For example,
-[`tk-button.txt`](https://takeoffui.com/llmstxt-files/tk-button.txt) or
-[`tk-table.txt`](https://takeoffui.com/llmstxt-files/tk-table.txt). The guide
-pages are available as `installation.txt`, `tailwind.txt`, `introduction.txt`,
-`coding-standards.txt`, `contributing.txt` and `security.txt`.

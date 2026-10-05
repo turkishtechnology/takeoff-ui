@@ -261,8 +261,7 @@ version. When you need more than they show:
   definitions in the user's project at
   `node_modules/@takeoff-ui/core/dist/types/components.d.ts` and the interface
   files next to it under `dist/types/components/<tag>/`.
-- **Examples and guides**: if the Takeoff UI MCP server is connected, call its
-  `get-components-info` tool; otherwise point the user to
+- **Examples and guides**: point the user to the component pages on
   `https://takeoffui.com`.
 - **Version check**: compare the version in the user's `package.json` with this
   skill's version. If the project is on an older release, a prop listed here may
