@@ -397,6 +397,14 @@ describe('tk-pagination jump to page input', () => {
     expect(input.getAttribute('value')).toBe('4');
   });
 
+  it('keeps non-digits out of the page inputs in both modes', async () => {
+    const page = await createPagination('total-items="50" current-page="2"');
+    expect(pageInput(page).maskOptions).toEqual({ numericOnly: true });
+
+    const compact = await createPagination('total-items="50" current-page="2" mode="compact"');
+    expect(query<HTMLTkInputElement>(compact, 'tk-input').maskOptions).toEqual({ numericOnly: true });
+  });
+
   it('restores the current page when the typed value is not a number', async () => {
     const page = await createPagination('total-items="50" current-page="2"');
     const input = pageInput(page);
