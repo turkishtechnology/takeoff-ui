@@ -15,6 +15,9 @@ import { formatTemplate, getTemplateValues } from './helpers';
 })
 export class TkPagination implements ComponentInterface {
   private ellipsis = '...';
+  // Filters non-digits in the native input itself; sanitizing only `inputValue` leaves a typed
+  // "-" on screen whenever the digits are unchanged, as there is no re-render to write it back.
+  private pageInputMaskOptions = { numericOnly: true };
 
   @State() inputValue: string;
   @State() internalCurrentPage: number = 1;
@@ -325,6 +328,7 @@ export class TkPagination implements ComponentInterface {
             class="tk-pagination-page-input"
             style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
             mode="text"
+            maskOptions={this.pageInputMaskOptions}
             value={this.inputValue}
             onTk-change={(event: CustomEvent) => this.handlePageInputChange(event.detail.toString())}
             onKeyDown={this.handlePageInputKeyDown}
@@ -394,6 +398,7 @@ export class TkPagination implements ComponentInterface {
         class="tk-pagination-page-input"
         style={{ '--tk-pagination-digits': `${this.getPageDigitCount(totalPages)}` }}
         mode="text"
+        maskOptions={this.pageInputMaskOptions}
         min={1}
         max={totalPages}
         value={this.inputValue}
