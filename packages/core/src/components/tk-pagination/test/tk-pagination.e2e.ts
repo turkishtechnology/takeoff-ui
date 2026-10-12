@@ -24,4 +24,24 @@ describe('tk-pagination', () => {
       endItem: 20,
     });
   });
+
+  it('drops a minus typed in front of the page number', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<tk-pagination total-items="30" rows-per-page="10"></tk-pagination>');
+    await page.waitForChanges();
+
+    const input = await page.find('tk-pagination tk-input.tk-pagination-page-input input');
+    await input.focus();
+    await page.keyboard.press('Home');
+    await page.keyboard.type('-');
+    await page.waitForChanges();
+
+    expect(await input.getProperty('value')).toBe('1');
+
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+
+    expect(await input.getProperty('value')).toBe('1');
+  });
 });
