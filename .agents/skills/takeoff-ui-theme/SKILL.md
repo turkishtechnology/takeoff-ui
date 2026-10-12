@@ -9,7 +9,7 @@ argument-hint: '[token-type or question]'
 license: Apache-2.0
 metadata:
   author: turkishtechnology
-  version: '1.0.0'
+  version: '1.0.1'
   homepage: 'https://takeoffui.com'
 ---
 

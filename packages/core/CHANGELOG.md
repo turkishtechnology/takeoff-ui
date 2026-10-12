@@ -1,5 +1,13 @@
 # @takeoff-ui/core
 
+## 1.0.1
+
+### Patch Changes
+
+- 02ad49e: `tk-pagination` (and so `tk-table`) no longer keeps a minus or any
+  other non-digit on screen when it is typed in front of the page number in the
+  page input; the field only ever shows digits.
+
 ## 1.0.0
 
 ### Major Changes
