@@ -254,6 +254,16 @@ export class TkSelect implements ComponentInterface {
   @Prop() optionDisabled: Function;
 
   /**
+   * In multiple mode, hides the chips of selected options that `optionDisabled` disables. They stay in `value` and are submitted.
+   * @defaultValue false
+   */
+  @Prop() hideDisabledChips: boolean = false;
+  @Watch('hideDisabledChips')
+  protected hideDisabledChipsChanged() {
+    this.setValue();
+  }
+
+  /**
    * The value of the input.
    */
   @Prop({ mutable: true }) value?: any | any[];
@@ -516,7 +526,29 @@ export class TkSelect implements ComponentInterface {
     return this.showSelectAllChip && this.multiple && this.selectAll && !this.allowCustomValue && this.isAllSelected();
   }
 
-  private getDisplayValueForMultiple(selectedItems: any[]): any[] {
+  private isChipHidden(item: any): boolean {
+    return this.hideDisabledChips && !!this.optionDisabled?.(item);
+  }
+
+  // Values hidden from the chips never reach tk-input, so the chip list it emits lacks them. Put
+  // them back in their original position; without this, removing any chip would drop them too.
+  private mergeHiddenValues(resolvedValues: any[]): any[] {
+    if (!this.hideDisabledChips) return resolvedValues;
+    const hiddenValues = this.getSelectedDisabledValues();
+    if (hiddenValues.length === 0) return resolvedValues;
+    const kept = (this.value as any[]).filter(val => hiddenValues.some(h => isEqual(h, val)) || resolvedValues.some(r => isEqual(r, val)));
+    const added = resolvedValues.filter(r => !kept.some(val => isEqual(val, r)));
+    return [...kept, ...added];
+  }
+
+  private hasVisibleSelection(): boolean {
+    if (!this.multiple || !this.hideDisabledChips || !Array.isArray(this.value)) return this.value?.length > 0;
+    return this.isAllChipActive() || this.value.length > this.getSelectedDisabledValues().length;
+  }
+
+  private getDisplayValueForMultiple(allSelectedItems: any[]): any[] {
+    const selectedItems = allSelectedItems.filter(item => !this.isChipHidden(item));
+
     if (this.isAllChipActive()) {
       return [
         {
@@ -828,7 +860,7 @@ export class TkSelect implements ComponentInterface {
       }
 
       if (value == null) {
-        this.value = [];
+        this.value = this.mergeHiddenValues([]);
       } else {
         const incomingChips = Array.isArray(value) ? value : [value];
 
@@ -836,7 +868,7 @@ export class TkSelect implements ComponentInterface {
         const validChips = incomingChips.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
 
         // When visibleItemCount is active and we have reordered display, we need to handle removals carefully
-        if (this.visibleItemCount && this.selectedItem && this.selectedItem.length > this.visibleItemCount) {
+        if (this.visibleItemCount && this.selectedItem && this.selectedItem.filter(item => !this.isChipHidden(item)).length > this.visibleItemCount) {
           // Get the current display value (what the user sees)
           const currentDisplayValue = this.getDisplayValueForMultiple(this.selectedItem);
           const currentValidDisplayChips = currentDisplayValue.filter(val => !(typeof val === 'object' && val !== null && val.__isOthersIndicator));
@@ -877,7 +909,7 @@ export class TkSelect implements ComponentInterface {
           }
           return val;
         });
-        this.value = resolvedValues;
+        this.value = this.mergeHiddenValues(resolvedValues);
       }
       this.tkChange.emit(this.value);
     } else {
@@ -1134,7 +1166,7 @@ export class TkSelect implements ComponentInterface {
         size={this.size}
         showAsterisk={this.showAsterisk}
         hint={this.hint}
-        placeholder={this.value?.length > 0 ? '' : this.placeholder}
+        placeholder={this.hasVisibleSelection() ? '' : this.placeholder}
         invalid={this.invalid}
         error={this.error}
         icon={{ left: this.icon, right: this.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}

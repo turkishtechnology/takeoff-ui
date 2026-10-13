@@ -265,6 +265,145 @@ describe('tk-select multiple chip changes', () => {
   });
 });
 
+describe('tk-select hideDisabledChips', () => {
+  const isThreeDisabled = (item: any) => item.value === 3;
+  const chipValues = (page: SpecPage) => (instanceOf(page).inputRef.value as any[]).map(chip => chip.value ?? chip.label);
+
+  it('renders disabled selections as chips by default', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value"', { options: objectOptions, optionDisabled: isThreeDisabled });
+    page.root.value = [1, 3];
+    await page.waitForChanges();
+
+    expect(chipValues(page)).toEqual([1, 3]);
+  });
+
+  it('leaves disabled selections out of the chips but keeps them in value', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" hide-disabled-chips="true"', { options: objectOptions, optionDisabled: isThreeDisabled });
+    page.root.value = [1, 3];
+    await page.waitForChanges();
+
+    expect(chipValues(page)).toEqual([1]);
+    expect(page.root.value).toEqual([1, 3]);
+  });
+
+  it('keeps hidden values in place when another chip is removed or added', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" hide-disabled-chips="true"', { options: objectOptions, optionDisabled: isThreeDisabled });
+    page.root.value = [1, 3, 2];
+    await page.waitForChanges();
+    const changes = listen(page, 'tk-change');
+
+    await instanceOf(page).handleInputChange([objectOptions[1]]);
+    expect(page.root.value).toEqual([3, 2]);
+
+    await instanceOf(page).handleInputChange([objectOptions[1], objectOptions[0]]);
+    expect(page.root.value).toEqual([3, 2, 1]);
+
+    await instanceOf(page).handleInputChange(null);
+    expect(page.root.value).toEqual([3]);
+    expect(changes).toEqual([[3, 2], [3, 2, 1], [3]]);
+  });
+
+  it('keeps hidden option objects without an optionValueKey', async () => {
+    const page = await createSelect('multiple="true" hide-disabled-chips="true"', { options: objectOptions, optionDisabled: isThreeDisabled });
+    page.root.value = [objectOptions[0], objectOptions[2]];
+    await page.waitForChanges();
+
+    expect(chipValues(page)).toEqual([1]);
+
+    await instanceOf(page).handleInputChange([]);
+    expect(page.root.value).toEqual([objectOptions[2]]);
+  });
+
+  it('shows the placeholder when every selection is hidden', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" placeholder="Pick" hide-disabled-chips="true"', {
+      options: objectOptions,
+      optionDisabled: isThreeDisabled,
+    });
+    page.root.value = [3];
+    await page.waitForChanges();
+    const input = page.root.querySelector('tk-input') as any;
+
+    expect(input.placeholder).toBe('Pick');
+
+    page.root.value = [1, 3];
+    await page.waitForChanges();
+    expect(input.placeholder).toBe('');
+  });
+
+  it('counts only visible chips towards visibleItemCount', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" visible-item-count="1" hide-disabled-chips="true"', {
+      options: objectOptions,
+      optionDisabled: isThreeDisabled,
+    });
+    page.root.value = [1, 2, 3];
+    await page.waitForChanges();
+    expect(chipValues(page)).toEqual([1, '+1']);
+
+    await instanceOf(page).handleInputChange([{ __isOthersIndicator: true, label: '+1', removable: false }]);
+    expect(page.root.value).toEqual([2, 3]);
+    expect(chipValues(page)).toEqual([2]);
+  });
+
+  it('works with plain string options', async () => {
+    const page = await createSelect('multiple="true" hide-disabled-chips="true"', { options: ['A', 'B', 'C'], optionDisabled: (item: any) => item === 'B' });
+    page.root.value = ['A', 'B', 'C'];
+    await page.waitForChanges();
+
+    expect(instanceOf(page).inputRef.value).toEqual(['A', 'C']);
+
+    await instanceOf(page).handleInputChange(['C']);
+    expect(page.root.value).toEqual(['B', 'C']);
+  });
+
+  it('works with grouped options', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" hide-disabled-chips="true"', {
+      options: [
+        { label: 'Odd', options: [objectOptions[0], objectOptions[2]] },
+        { label: 'Even', options: [objectOptions[1]] },
+      ],
+      optionDisabled: isThreeDisabled,
+    });
+    page.root.value = [1, 2, 3];
+    await page.waitForChanges();
+
+    expect(chipValues(page)).toEqual([1, 2]);
+
+    await instanceOf(page).handleInputChange([objectOptions[1]]);
+    expect(page.root.value).toEqual([2, 3]);
+  });
+
+  it('keeps custom values visible next to hidden options', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value" allow-custom-value="true" hide-disabled-chips="true"', {
+      options: objectOptions,
+      optionDisabled: isThreeDisabled,
+    });
+    page.root.value = [3, 'custom'];
+    await page.waitForChanges();
+
+    expect(instanceOf(page).inputRef.value).toEqual(['custom']);
+
+    await instanceOf(page).handleInputChange(['custom', 'new']);
+    expect(page.root.value).toEqual([3, 'custom', 'new']);
+
+    await instanceOf(page).handleInputChange([]);
+    expect(page.root.value).toEqual([3]);
+  });
+
+  it('re-renders the chips when the prop is toggled', async () => {
+    const page = await createSelect('multiple="true" option-value-key="value"', { options: objectOptions, optionDisabled: isThreeDisabled });
+    page.root.value = [1, 3];
+    await page.waitForChanges();
+
+    page.root.hideDisabledChips = true;
+    await page.waitForChanges();
+    expect(chipValues(page)).toEqual([1]);
+
+    page.root.hideDisabledChips = false;
+    await page.waitForChanges();
+    expect(chipValues(page)).toEqual([1, 3]);
+  });
+});
+
 describe('tk-select select all and clearing', () => {
   it('reports select-all as cleared when the clear button empties a full selection', async () => {
     const page = await createSelect('multiple="true" select-all="true" option-value-key="value" clearable="true"', { options: objectOptions });
