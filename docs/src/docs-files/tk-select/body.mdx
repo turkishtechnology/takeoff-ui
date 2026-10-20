@@ -14,6 +14,7 @@ import PanelHeader from './Examples/PanelHeader';
 import OptionValueKey from './Examples/OptionValueKey';
 import Clearable from './Examples/Clearable';
 import OptionDisabled from './Examples/OptionDisabled';
+import HideDisabledChips from './Examples/HideDisabledChips';
 import Mask from './Examples/Mask';
 import { TkAlert } from '@takeoff-ui/react';
 import Playground from '../../components/Playground/Playground';
@@ -169,6 +170,23 @@ Sets options for all chips rendered in `multiple` selection mode.
 Sets disabled state for specific options using `optionDisabled` prop.
 
 <OptionDisabled />
+
+## Hide Disabled Chips
+
+In `multiple` mode, selected options that `optionDisabled` marks as disabled are
+still listed as chips, without a remove button. Set `hideDisabledChips` to
+`true` to leave them out of the input. They stay in `value`, keep their place
+when other chips are added or removed, survive clearing, and are submitted with
+the form. They remain visible as checked, disabled rows in the dropdown.
+
+<TkAlert
+  header="Note"
+  variant="info"
+  message="Hidden values do not count towards `visibleItemCount`, and the placeholder shows again when every selected value is hidden."
+  filledlight
+/>
+<br />
+<HideDisabledChips />
 
 ## State
 
