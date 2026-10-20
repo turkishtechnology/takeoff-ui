@@ -1,5 +1,14 @@
 # @takeoff-ui/core
 
+## 1.1.0
+
+### Minor Changes
+
+- 17a17b3: feat(tk-select): Add `hideDisabledChips` to keep selected options
+  that `optionDisabled` disables out of the chips in `multiple` mode. Hidden
+  values stay in `value`, keep their position when other chips change, survive
+  clearing and do not count towards `visibleItemCount`.
+
 ## 1.0.1
 
 ### Patch Changes
