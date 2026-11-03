@@ -84,6 +84,7 @@ const sampleData = [
 const Selectable = () => {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [selectionStrategy, setSelectionStrategy] = useState<'all' | 'leaf'>('all');
+  const [mode, setMode] = useState<'basic' | 'stepper'>('basic');
   const reactCode = `
 const [selectedItems, setSelectedItems] = useState([]);
 
@@ -137,6 +138,7 @@ const treeData = [
 ];
 
 <TkTreeView 
+  mode="${mode}"
   type="light"
   size="base"
   items={treeData}
@@ -220,6 +222,7 @@ const treeData = [
 
 <template>
   <TkTreeView 
+    mode="${mode}"
     type="light"
     size="base"
     :items="treeData"
@@ -244,13 +247,18 @@ const treeData = [
 
   const demo = (
     <div className="w-full space-y-4">
-      <div className="flex flex-wrap mb-4">
+      <div className="flex flex-wrap gap-8 mb-4">
+        <TkRadioGroup label="Mode" value={mode} onTkChange={e => setMode(e.detail)}>
+          <TkRadio value="basic" label="Basic" />
+          <TkRadio value="stepper" label="Stepper" />
+        </TkRadioGroup>
         <TkRadioGroup label="Selection Strategy" value={selectionStrategy} onTkChange={e => setSelectionStrategy(e.detail)}>
           <TkRadio value="all" label="All" />
           <TkRadio value="leaf" label="Leaf" />
         </TkRadioGroup>
       </div>
       <TkTreeView
+        mode={mode}
         selectAll
         selectAllLabel="Select All"
         type="light"

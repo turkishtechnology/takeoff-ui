@@ -137,6 +137,7 @@ export class TkTreeView implements ComponentInterface {
 
   /**
    * If true, shows a "Select All" checkbox above the tree items. Only effective when `selectable` is true.
+   * In stepper mode it heads the first column, with the root items nested under it.
    */
   @Prop() selectAll: boolean = false;
 
