@@ -1053,12 +1053,18 @@ export class TkTreeView implements ComponentInterface {
       const columns = this.getStepperColumns();
       return (
         <div class={classNames('tk-tree-view', 'stepper')} style={this.containerStyle}>
-          {this.renderSelectAll()}
-          {columns.map((column, idx) => (
-            <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx} style={this.stepStyle}>
-              {column.items.map((item, itemIndex) => this.renderItem(item, column.basePath, itemIndex))}
-            </div>
-          ))}
+          {columns.map((column, idx) => {
+            const columnItems = column.items.map((item, itemIndex) => this.renderItem(item, column.basePath, itemIndex));
+            // The select all control heads the first column, with the root items nested under it, so it
+            // reads as the parent of everything rather than as one more leaf standing beside the columns.
+            const selectAll = idx === 0 && this.renderSelectAll();
+            return (
+              <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx} style={this.stepStyle}>
+                {selectAll}
+                {selectAll ? <div class={classNames('tk-tree-view', 'select-all-group', this.size)}>{columnItems}</div> : columnItems}
+              </div>
+            );
+          })}
         </div>
       );
     } else {

@@ -407,6 +407,25 @@ describe('tk-tree-view', () => {
       expect(page.root.querySelector('.select-all')).toBeTruthy();
     });
 
+    it('heads the first stepper column with the root items nested under it', async () => {
+      const page = await setupTree(`<tk-tree-view mode="stepper" selectable select-all expand-all></tk-tree-view>`);
+
+      const columns = page.root.querySelectorAll('.column');
+      expect(columns.length).toBeGreaterThan(1);
+      expect(columns[0].firstElementChild.classList.contains('select-all')).toBe(true);
+      expect(page.root.querySelectorAll('.column:first-child > .select-all-group > .node').length).toBe(treeItems.length);
+      expect(page.root.querySelectorAll('.select-all').length).toBe(1);
+      expect(page.root.querySelector('.stepper > .select-all')).toBeNull();
+      expect(columns[1].querySelector('.select-all, .select-all-group')).toBeNull();
+    });
+
+    it('keeps the stepper root items unwrapped when select all is off', async () => {
+      const page = await setupTree(`<tk-tree-view mode="stepper" selectable></tk-tree-view>`);
+
+      expect(page.root.querySelector('.select-all-group')).toBeNull();
+      expect(page.root.querySelectorAll('.column:first-child > .node').length).toBe(treeItems.length);
+    });
+
     it('does not render select-all row when selectable is false', async () => {
       const page = await newSpecPage({
         components: [TkTreeView],

@@ -14,7 +14,27 @@
     gap: var(--tree-gap, 12px);
     overflow-x: auto;
     .select-all {
-      width: auto;
+      box-sizing: border-box;
+    }
+
+    // Root items sit one step in under the select all control that heads the first column
+    .select-all-group {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      width: 100%;
+
+      &.large {
+        padding-left: 28px;
+      }
+
+      &.base {
+        padding-left: 24px;
+      }
+
+      &.small {
+        padding-left: 20px;
+      }
     }
 
     .column .node .tk-tree-view.pointer {
