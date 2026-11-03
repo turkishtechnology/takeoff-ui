@@ -1062,7 +1062,7 @@ export class TkTreeView implements ComponentInterface {
             return (
               <div class={classNames('tk-tree-view', 'column', 'divided')} key={idx} style={this.stepStyle}>
                 {selectAll}
-                {selectAll ? <div class={classNames('tk-tree-view', 'select-all-group', this.size)}>{columnItems}</div> : columnItems}
+                {selectAll ? <div class={classNames('tk-tree-view', 'select-all-group')}>{columnItems}</div> : columnItems}
               </div>
             );
           })}
