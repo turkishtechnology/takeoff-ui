@@ -43,8 +43,9 @@ functionality. Use the `value` prop to control selected items and listen to
 `tk-change` events for selection updates.
 
 The `selectAll` prop displays a "Select All" checkbox above the tree with a
-badge counter showing the total number of selected items. The selection behavior
-respects the `selectionStrategy` prop:
+badge counter showing the total number of selected items. In `stepper` mode it
+heads the first column, with the root items nested under it. The selection
+behavior respects the `selectionStrategy` prop:
 
 - `all`: Selects both branches and leaf nodes
 - `leaf`: Selects only leaf nodes (file nodes)

@@ -33,6 +33,44 @@ describe('tk-tree-view', () => {
   });
 
   describe('selectAll', () => {
+    it('heads the first stepper column and selects everything from there', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<tk-tree-view mode="stepper" selectable select-all></tk-tree-view>');
+      await page.$eval(
+        'tk-tree-view',
+        (el: HTMLTkTreeViewElement, items) => {
+          el.items = items as any;
+        },
+        treeItems,
+      );
+      await page.waitForChanges();
+
+      const layout = await page.$eval('tk-tree-view', (el: HTMLElement) => {
+        const column = el.querySelector('.column');
+        const row = el.querySelector('.select-all');
+        const columnBox = column.getBoundingClientRect();
+        const rows = Array.from(column.querySelectorAll('.select-all, .tk-tree-view.label')).map(r => r.getBoundingClientRect());
+        return {
+          firstChild: column.firstElementChild === row,
+          nestedRoots: column.querySelectorAll('.select-all-group > .node').length,
+          fitsColumn: rows.every(r => r.left >= columnBox.left && r.right <= columnBox.right),
+        };
+      });
+      expect(layout).toEqual({ firstChild: true, nestedRoots: treeItems.length, fitsColumn: true });
+
+      const changeSpy = await page.spyOnEvent('tk-change');
+      await (await page.find('tk-tree-view .select-all')).click();
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveReceivedEventTimes(1);
+      expect(await page.$eval('tk-tree-view', (el: HTMLTkTreeViewElement) => el.value)).toEqual(['a', 'a1', 'a2', 'b']);
+
+      await (await page.find('tk-tree-view .select-all')).click();
+      await page.waitForChanges();
+
+      expect(await page.$eval('tk-tree-view', (el: HTMLTkTreeViewElement) => el.value)).toEqual([]);
+    });
+
     it('selects all keys with default all strategy when select-all row is clicked', async () => {
       const page = await newE2EPage();
       await page.setContent('<tk-tree-view selectable select-all></tk-tree-view>');

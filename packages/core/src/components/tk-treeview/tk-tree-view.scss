@@ -13,8 +13,16 @@
     align-items: flex-start;
     gap: var(--tree-gap, 12px);
     overflow-x: auto;
-    .select-all {
-      width: auto;
+
+    // Root items sit one step in under the select all control that heads the first column. Rows and
+    // the select all row share their padding, so an indent of the select all checkbox plus its gap
+    // (22px, the same at every size) puts each root checkbox right under the select all label.
+    .select-all-group {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      width: 100%;
+      padding-left: var(--tree-select-all-indent, 22px);
     }
 
     .column .node .tk-tree-view.pointer {
@@ -53,6 +61,7 @@
     color: var(--text-dark);
     user-select: none;
     width: 100%;
+    box-sizing: border-box;
 
     &.large {
       padding: var(--items-tree-large-v-padding, 10px) var(--items-tree-large-h-padding, 12px);
@@ -159,6 +168,8 @@
     user-select: none;
     border-radius: 4px;
     width: 100%;
+    // Keeps the padding inside the full width, so the row fits its column without a global reset
+    box-sizing: border-box;
     justify-content: space-between;
 
     &.large {
