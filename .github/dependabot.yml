@@ -37,7 +37,8 @@ updates:
           - "major"
 
     # ── Version HOLD list ─────────────────────────────────────────────────────
-    # Mostly majors, plus a few minor/patch holds where noted.
+    # Mostly major-only holds; some entries also block minor/patch or all
+    # updates (see each entry's comment).
     # Keep these off auto/piecemeal bumps; upgrade only in a coordinated, manual PR.
     # Rationale: each was tested in this repo and found broken or incompatible.
     ignore:
