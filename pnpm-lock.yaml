@@ -50,16 +50,16 @@ overrides:
   esbuild: 0.28.1
   vite: '>=8.3.5 <9.0.0'
   nanoid: '>=3.3.18 <4.0.0'
-  tinypool: '>=2.1.2'
-  proxy-addr: '>=2.0.8'
-  compression: '>=1.8.2'
-  image-size: '>=2.0.3'
+  tinypool: '>=2.1.2 <3.0.0'
+  proxy-addr: '>=2.0.8 <3.0.0'
+  compression: '>=1.8.2 <2.0.0'
+  image-size: '>=2.0.3 <3.0.0'
   svgo@>=3.0.0 <4.0.0: '>=3.3.5 <4.0.0'
-  follow-redirects: '>=1.16.2'
-  probe-image-size: '>=7.4.0'
+  follow-redirects: '>=1.16.2 <2.0.0'
+  probe-image-size: '>=7.4.0 <8.0.0'
   zod@>=4.0.0 <5.0.0: '>=4.6.6 <5.0.0'
-  source-map-js: '>=1.2.2'
-  '@modelcontextprotocol/sdk': '>=1.32.0'
+  source-map-js: '>=1.2.2 <2.0.0'
+  '@modelcontextprotocol/sdk': '>=1.32.0 <2.0.0'
 
 importers:
 
