@@ -36,7 +36,8 @@ updates:
         update-types:
           - "major"
 
-    # ── Major-version HOLD list ───────────────────────────────────────────────
+    # ── Version HOLD list ─────────────────────────────────────────────────────
+    # Mostly majors, plus a few minor/patch holds where noted.
     # Keep these off auto/piecemeal bumps; upgrade only in a coordinated, manual PR.
     # Rationale: each was tested in this repo and found broken or incompatible.
     ignore:
@@ -56,10 +57,12 @@ updates:
         versions: [">=3.3.0"]
       # @stencil/core 4.45.1+ changed how form-associated components read boolean
       # attributes: the string "false" now parses as true. That changes runtime
-      # behavior for our 10 formAssociated components (for example,
+      # behavior for every `formAssociated: true` component (for example,
       # <tk-input disabled="false"> becomes disabled) and breaks the tk-toggle
       # showIcon spec (seen in #669). It's a PATCH bump, so block by version and
       # stay on 4.45.0 until we upgrade in a dedicated PR.
+      # This also blocks Dependabot SECURITY updates for Stencil: check Stencil
+      # advisories manually while this hold is in place (added 2026-11-06).
       - dependency-name: "@stencil/core"
         versions: [">=4.45.1"]
       # Angular family: 21→22 only via a coordinated `ng update`, never piecemeal.
