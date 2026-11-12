@@ -692,6 +692,30 @@ describe('tk-select', () => {
       await page.waitForChanges();
       expect(page.root.value).toEqual(['Alpha']);
     });
+
+    // Removing the last chip also hides the clear button, which used to make tk-input recreate
+    // its native input; the select kept its filter listener on the detached element.
+    it.each([
+      ['the chip remove button', (page: SpecPage) => page.root.querySelector('tk-chips').dispatchEvent(new CustomEvent('tk-remove'))],
+      ['the clear button', (page: SpecPage) => (page.root.querySelector('.tk-input-clear-button') as HTMLElement).click()],
+    ])('keeps filtering in clearable multiple editable mode after clearing the last chip with %s', async (_, clear) => {
+      const page = await createSelect('multiple="true" editable="true" clearable="true"', { options: ['Alpha', 'Beta'], value: ['Alpha'] });
+      const nativeInputBefore = page.root.querySelector('input');
+
+      clear(page);
+      await page.waitForChanges();
+      expect(page.root.value ?? []).toEqual([]);
+
+      const nativeInput = page.root.querySelector('input') as HTMLInputElement;
+      expect(nativeInput === nativeInputBefore).toBe(true);
+      expect(instanceOf(page).nativeInputRef === nativeInput).toBe(true);
+
+      nativeInput.value = 'be';
+      nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
+
+      expect(instanceOf(page).renderOptions).toEqual(['Beta']);
+    });
   });
 
   describe('keyboard navigation', () => {

@@ -1016,6 +1016,9 @@ export class TkInput implements ComponentInterface {
   private renderInput(): HTMLInputElement {
     return (
       <input
+        // Siblings such as the chips and the clear button come and go; a stable key keeps the same
+        // element so focus, typed text and listeners attached from outside (tk-select) survive.
+        key="native-input"
         id={this.uniqueId}
         ref={el => (this.nativeInput = el)}
         disabled={this.disabled}

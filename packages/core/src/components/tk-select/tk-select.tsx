@@ -341,6 +341,12 @@ export class TkSelect implements ComponentInterface {
       }
     }
     if (this.multiple && this.editable) {
+      // componentDidRender runs before componentDidUpdate, so refresh the ref here in case tk-input replaced its input
+      const nativeInput = this.inputRef?.querySelector('input');
+      if (nativeInput && nativeInput !== this.nativeInputRef) {
+        this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
+        this.nativeInputRef = nativeInput;
+      }
       this.nativeInputRef?.removeEventListener('input', this.boundRunFilterForMultiple);
       this.nativeInputRef?.addEventListener('input', this.boundRunFilterForMultiple);
     }
